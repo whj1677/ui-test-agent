@@ -1,0 +1,1574 @@
+
+> deepseek-ui-test-agent@0.3.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: revalidate a retained bare-plan response without a model call, approval, or rewriting the source
+ok 1 - revalidate a retained bare-plan response without a model call, approval, or rewriting the source
+  ---
+  duration_ms: 91.9409
+  type: 'test'
+  ...
+# Subtest: plan revision is bounded, revokes approval and preserves original case and prior candidate
+ok 2 - plan revision is bounded, revokes approval and preserves original case and prior candidate
+  ---
+  duration_ms: 68.3912
+  type: 'test'
+  ...
+# Subtest: legacy tasks expose truthful basic diagnostics without fabricated model history
+ok 3 - legacy tasks expose truthful basic diagnostics without fabricated model history
+  ---
+  duration_ms: 28.6365
+  type: 'test'
+  ...
+# Subtest: accepted plan links request, transport and decision, with no implicit plan approval
+ok 4 - accepted plan links request, transport and decision, with no implicit plan approval
+  ---
+  duration_ms: 329.1823
+  type: 'test'
+  ...
+# Subtest: invalid plan is rejected with the validator code and unrelated planning continues
+ok 5 - invalid plan is rejected with the validator code and unrelated planning continues
+  ---
+  duration_ms: 524.0045
+  type: 'test'
+  ...
+# Subtest: model blocked reason and every persisted request/response/decision mask configured key echoes
+ok 6 - model blocked reason and every persisted request/response/decision mask configured key echoes
+  ---
+  duration_ms: 283.3539
+  type: 'test'
+  ...
+# Subtest: cancelled late model output is diagnostic only and cannot publish a plan
+ok 7 - cancelled late model output is diagnostic only and cannot publish a plan
+  ---
+  duration_ms: 110.1461
+  type: 'test'
+  ...
+# Subtest: provider failure logs rejection and halts the remaining batch
+ok 8 - provider failure logs rejection and halts the remaining batch
+  ---
+  duration_ms: 63.4971
+  type: 'test'
+  ...
+# Subtest: diagnostic write failure before dispatch performs no model call and stops batch
+ok 9 - diagnostic write failure before dispatch performs no model call and stops batch
+  ---
+  duration_ms: 28.5625
+  type: 'test'
+  ...
+# Subtest: diagnostic read polling and a concurrent launch do not duplicate model requests or lose records
+ok 10 - diagnostic read polling and a concurrent launch do not duplicate model requests or lose records
+  ---
+  duration_ms: 110.1986
+  type: 'test'
+  ...
+# Subtest: a repair logging failure swallowed by the browser still seals facts and stops before the next case
+ok 11 - a repair logging failure swallowed by the browser still seals facts and stops before the next case
+  ---
+  duration_ms: 79.2272
+  type: 'test'
+  ...
+# Subtest: page capture holds the preparation reservation until its commit
+ok 12 - page capture holds the preparation reservation until its commit
+  ---
+  duration_ms: 43.7378
+  type: 'test'
+  ...
+# Subtest: server close retains instance lock until launch validation has stopped
+ok 13 - server close retains instance lock until launch validation has stopped
+  ---
+  duration_ms: 68.3099
+  type: 'test'
+  ...
+# Subtest: server close waits for preparation before releasing instance lock
+ok 14 - server close waits for preparation before releasing instance lock
+  ---
+  duration_ms: 49.8513
+  type: 'test'
+  ...
+# Subtest: server close during plan rejects late output and retains its instance lock until settled
+ok 15 - server close during plan rejects late output and retains its instance lock until settled
+  ---
+  duration_ms: 212.6505
+  type: 'test'
+  ...
+# Subtest: server close during plan_audit rejects late output and retains its instance lock until settled
+ok 16 - server close during plan_audit rejects late output and retains its instance lock until settled
+  ---
+  duration_ms: 287.8578
+  type: 'test'
+  ...
+# Subtest: both domain plans validate against exact case baseline
+ok 17 - both domain plans validate against exact case baseline
+  ---
+  duration_ms: 12.4632
+  type: 'test'
+  ...
+# Subtest: rejects foreign origin
+ok 18 - rejects foreign origin
+  ---
+  duration_ms: 1.5134
+  type: 'test'
+  ...
+# Subtest: rejects arbitrary script
+ok 19 - rejects arbitrary script
+  ---
+  duration_ms: 1.1362
+  type: 'test'
+  ...
+# Subtest: rejects missing original step
+ok 20 - rejects missing original step
+  ---
+  duration_ms: 1.3042
+  type: 'test'
+  ...
+# Subtest: rejects rewritten expected text
+ok 21 - rejects rewritten expected text
+  ---
+  duration_ms: 1.1959
+  type: 'test'
+  ...
+# Subtest: rejects missing assertion
+ok 22 - rejects missing assertion
+  ---
+  duration_ms: 0.9961
+  type: 'test'
+  ...
+# Subtest: rejects invented oracle
+ok 23 - rejects invented oracle
+  ---
+  duration_ms: 0.8229
+  type: 'test'
+  ...
+# Subtest: rejects arbitrary CSS
+ok 24 - rejects arbitrary CSS
+  ---
+  duration_ms: 1.6456
+  type: 'test'
+  ...
+# Subtest: rejects wrong case hash
+ok 25 - rejects wrong case hash
+  ---
+  duration_ms: 1.4807
+  type: 'test'
+  ...
+# Subtest: mutation cannot omit cleanup
+ok 26 - mutation cannot omit cleanup
+  ---
+  duration_ms: 1.5023
+  type: 'test'
+  ...
+# Subtest: visible assertion cannot silently ignore an expected false value
+ok 27 - visible assertion cannot silently ignore an expected false value
+  ---
+  duration_ms: 0.9137
+  type: 'test'
+  ...
+# Subtest: repair may patch only the failed action locator, never its input or assertion target
+ok 28 - repair may patch only the failed action locator, never its input or assertion target
+  ---
+  duration_ms: 3.0142
+  type: 'test'
+  ...
+# Subtest: URLs retain SPA routes and reject credentials in query or fragment
+ok 29 - URLs retain SPA routes and reject credentials in query or fragment
+  ---
+  duration_ms: 0.9048
+  type: 'test'
+  ...
+# Subtest: original baseline and confirmations remain distinct; per-task updates serialize
+ok 30 - original baseline and confirmations remain distinct; per-task updates serialize
+  ---
+  duration_ms: 107.1129
+  type: 'test'
+  ...
+# Subtest: changed baseline and facts are rejected; facts cannot be overwritten
+ok 31 - changed baseline and facts are rejected; facts cannot be overwritten
+  ---
+  duration_ms: 33.0703
+  type: 'test'
+  ...
+# Subtest: restart marks a running mutation as interrupted and needing recovery
+ok 32 - restart marks a running mutation as interrupted and needing recovery
+  ---
+  duration_ms: 22.1457
+  type: 'test'
+  ...
+# Subtest: concurrent progress reads do not replay or drop committed events
+ok 33 - concurrent progress reads do not replay or drop committed events
+  ---
+  duration_ms: 1396.907
+  type: 'test'
+  ...
+# Subtest: mechanical review finds missing oracle without altering case
+ok 34 - mechanical review finds missing oracle without altering case
+  ---
+  duration_ms: 0.9828
+  type: 'test'
+  ...
+# Subtest: JSON, CSV, and actual Excel import preserve identifiers and steps
+ok 35 - JSON, CSV, and actual Excel import preserve identifiers and steps
+  ---
+  duration_ms: 1601.2613
+  type: 'test'
+  ...
+# Subtest: DeepSeek adapter sends JSON mode and keeps key out of returned metadata
+ok 36 - DeepSeek adapter sends JSON mode and keeps key out of returned metadata
+  ---
+  duration_ms: 4.6118
+  type: 'test'
+  ...
+# Subtest: DeepSeek handles 401
+ok 37 - DeepSeek handles 401
+  ---
+  duration_ms: 0.5516
+  type: 'test'
+  ...
+# Subtest: DeepSeek handles truncated
+ok 38 - DeepSeek handles truncated
+  ---
+  duration_ms: 0.5644
+  type: 'test'
+  ...
+# Subtest: DeepSeek handles empty
+ok 39 - DeepSeek handles empty
+  ---
+  duration_ms: 0.3628
+  type: 'test'
+  ...
+# Subtest: DeepSeek handles non-JSON
+ok 40 - DeepSeek handles non-JSON
+  ---
+  duration_ms: 0.3959
+  type: 'test'
+  ...
+# Subtest: DeepSeek HTTP retry is bounded to two attempts
+ok 41 - DeepSeek HTTP retry is bounded to two attempts
+  ---
+  duration_ms: 815.6348
+  type: 'test'
+  ...
+# Subtest: bad model plan blocks only that case; unrelated plan continues
+ok 42 - bad model plan blocks only that case; unrelated plan continues
+  ---
+  duration_ms: 259.6397
+  type: 'test'
+  ...
+# Subtest: a returned evidence I/O failure is sealed once without model repair or full-case replay
+ok 43 - a returned evidence I/O failure is sealed once without model repair or full-case replay
+  ---
+  duration_ms: 60.0364
+  type: 'test'
+  ...
+# Subtest: a valid model response arriving after cancellation cannot publish a plan
+ok 44 - a valid model response arriving after cancellation cannot publish a plan
+  ---
+  duration_ms: 51.9492
+  type: 'test'
+  ...
+# Subtest: concurrent launch is rejected while the first launch is still reading its task
+ok 45 - concurrent launch is rejected while the first launch is still reading its task
+  ---
+  duration_ms: 49.1853
+  type: 'test'
+  ...
+# Subtest: one authentication starts autonomous discovery then prepares an unapproved plan without changing the baseline
+ok 46 - one authentication starts autonomous discovery then prepares an unapproved plan without changing the baseline
+  ---
+  duration_ms: 570.6676
+  type: 'test'
+  ...
+# Subtest: unreviewed cases receive discovery observations but no generated or approved plan
+ok 47 - unreviewed cases receive discovery observations but no generated or approved plan
+  ---
+  duration_ms: 222.8057
+  type: 'test'
+  ...
+# Subtest: unknown discovery candidate is never dispatched or converted into a plan
+ok 48 - unknown discovery candidate is never dispatched or converted into a plan
+  ---
+  duration_ms: 157.9361
+  type: 'test'
+  ...
+# Subtest: cancelled late action response cannot dispatch UI or generate a plan
+ok 49 - cancelled late action response cannot dispatch UI or generate a plan
+  ---
+  duration_ms: 115.9577
+  type: 'test'
+  ...
+# Subtest: cancelled late done response cannot dispatch UI or generate a plan
+ok 50 - cancelled late done response cannot dispatch UI or generate a plan
+  ---
+  duration_ms: 104.7578
+  type: 'test'
+  ...
+# Subtest: the same observed state and action is removed so the model can finish instead of looping
+ok 51 - the same observed state and action is removed so the model can finish instead of looping
+  ---
+  duration_ms: 147.9139
+  type: 'test'
+  ...
+# Subtest: discovery model budget is capped at 24 across Cases and releases the explorer
+ok 52 - discovery model budget is capped at 24 across Cases and releases the explorer
+  ---
+  duration_ms: 1390.3681
+  type: 'test'
+  ...
+# Subtest: diagnostic I/O failure before an approved discovery dispatch stops the job and closes the explorer
+ok 53 - diagnostic I/O failure before an approved discovery dispatch stops the job and closes the explorer
+  ---
+  duration_ms: 89.6947
+  type: 'test'
+  ...
+# Subtest: a blocked Case does not prevent later Cases from being discovered and prepared
+ok 54 - a blocked Case does not prevent later Cases from being discovered and prepared
+  ---
+  duration_ms: 291.965
+  type: 'test'
+  ...
+# Subtest: one action timeout is isolated to its Case and every Case starts a fresh loop allowance
+ok 55 - one action timeout is isolated to its Case and every Case starts a fresh loop allowance
+  ---
+  duration_ms: 270.2688
+  type: 'test'
+  ...
+# Subtest: automatic discovery reports FIXTURE_PRESET instead of opening an explorer
+ok 56 - automatic discovery reports FIXTURE_PRESET instead of opening an explorer
+  ---
+  duration_ms: 24.0172
+  type: 'test'
+  ...
+# Subtest: automatic discovery reports DEEPSEEK_KEY_REQUIRED instead of opening an explorer
+ok 57 - automatic discovery reports DEEPSEEK_KEY_REQUIRED instead of opening an explorer
+  ---
+  duration_ms: 16.5413
+  type: 'test'
+  ...
+# Subtest: automatic discovery reports NO_UNEXECUTED_CASES instead of opening an explorer
+ok 58 - automatic discovery reports NO_UNEXECUTED_CASES instead of opening an explorer
+  ---
+  duration_ms: 20.2046
+  type: 'test'
+  ...
+# Subtest: automatic discovery reports CLEANUP_REQUIRED instead of opening an explorer
+ok 59 - automatic discovery reports CLEANUP_REQUIRED instead of opening an explorer
+  ---
+  duration_ms: 21.3906
+  type: 'test'
+  ...
+# Subtest: explicit discovery refuses selected executed Cases and any unresolved cleanup
+ok 60 - explicit discovery refuses selected executed Cases and any unresolved cleanup
+  ---
+  duration_ms: 32.5349
+  type: 'test'
+  ...
+# Subtest: a replaced target refreshes observation and asks again without replaying a dispatched action
+ok 61 - a replaced target refreshes observation and asks again without replaying a dispatched action
+  ---
+  duration_ms: 323.1262
+  type: 'test'
+  ...
+# Subtest: the discovery deadline also rejects a late generated plan before publication
+ok 62 - the discovery deadline also rejects a late generated plan before publication
+  ---
+  duration_ms: 189.3245
+  type: 'test'
+  ...
+# Subtest: dynamic discovery contracts require explicit reviewed non-write evidence and bounded values
+ok 63 - dynamic discovery contracts require explicit reviewed non-write evidence and bounded values
+  ---
+  duration_ms: 7.928
+  type: 'test'
+  ...
+# Subtest: real Chromium exposes dynamic fields only through fixed case-bound input and DOM option candidates
+ok 64 - real Chromium exposes dynamic fields only through fixed case-bound input and DOM option candidates
+  ---
+  duration_ms: 4135.8175
+  type: 'test'
+  ...
+# Subtest: without an operator contract inputs remain unavailable, and the next case cannot reuse a capability
+ok 65 - without an operator contract inputs remain unavailable, and the next case cannot reuse a capability
+  ---
+  duration_ms: 3795.5839
+  type: 'test'
+  ...
+# Subtest: a dynamic capability is confined to its normalized path, query and hash even when testids are reused
+ok 66 - a dynamic capability is confined to its normalized path, query and hash even when testids are reused
+  ---
+  duration_ms: 4748.8134
+  type: 'test'
+  ...
+# Subtest: explicit clear capabilities work without empty case text and repeat budgets distinguish semantic input state
+ok 67 - explicit clear capabilities work without empty case text and repeat budgets distinguish semantic input state
+  ---
+  duration_ms: 5656.0911
+  type: 'test'
+  ...
+# Subtest: field values and DOM option changes invalidate previously observed dynamic candidates
+ok 68 - field values and DOM option changes invalidate previously observed dynamic candidates
+  ---
+  duration_ms: 2135.905
+  type: 'test'
+  ...
+# Subtest: an autosave POST triggered by an approved local input is blocked before reaching the server
+ok 69 - an autosave POST triggered by an approved local input is blocked before reaching the server
+  ---
+  duration_ms: 1654.7033
+  type: 'test'
+  ...
+# Subtest: a select change cannot bypass the form-submit guard even with a reviewed interaction
+ok 70 - a select change cannot bypass the form-submit guard even with a reviewed interaction
+  ---
+  duration_ms: 1656.3587
+  type: 'test'
+  ...
+# Subtest: POST queries work only with an existing exact read-only endpoint authorization
+ok 71 - POST queries work only with an existing exact read-only endpoint authorization
+  ---
+  duration_ms: 2191.6121
+  type: 'test'
+  ...
+# Subtest: discovery contracts reject unknown Cases, unsupported operations, missing provenance and arbitrary source values
+ok 72 - discovery contracts reject unknown Cases, unsupported operations, missing provenance and arbitrary source values
+  ---
+  duration_ms: 5.9837
+  type: 'test'
+  ...
+# Subtest: a validated contract is detached from caller mutation and supports an explicitly permitted empty query
+ok 73 - a validated contract is detached from caller mutation and supports an explicitly permitted empty query
+  ---
+  duration_ms: 1.9025
+  type: 'test'
+  ...
+# Subtest: duplicate values are rejected during configuration instead of failing only at browser start
+ok 74 - duplicate values are rejected during configuration instead of failing only at browser start
+  ---
+  duration_ms: 0.4409
+  type: 'test'
+  ...
+# Subtest: JSON property names are not approved Case input data
+ok 75 - JSON property names are not approved Case input data
+  ---
+  duration_ms: 0.4005
+  type: 'test'
+  ...
+# Subtest: contracts require an explicit same-origin non-sensitive path
+ok 76 - contracts require an explicit same-origin non-sensitive path
+  ---
+  duration_ms: 1.6069
+  type: 'test'
+  ...
+# Subtest: state/action/value identity retains changes but ignores opaque candidate IDs
+ok 77 - state/action/value identity retains changes but ignores opaque candidate IDs
+  ---
+  duration_ms: 1.5289
+  type: 'test'
+  ...
+# Subtest: returning to a prior state does not hide a different relevant next action
+ok 78 - returning to a prior state does not hide a different relevant next action
+  ---
+  duration_ms: 0.6979
+  type: 'test'
+  ...
+# Subtest: source-only locators do not become DOM observations or business results
+ok 79 - source-only locators do not become DOM observations or business results
+  ---
+  duration_ms: 1.1097
+  type: 'test'
+  ...
+# Subtest: inferred and unresolved Handoff locators cannot be relabeled source-confirmed
+ok 80 - inferred and unresolved Handoff locators cannot be relabeled source-confirmed
+  ---
+  duration_ms: 1.0517
+  type: 'test'
+  ...
+# Subtest: repeated observations keep a finite unique state record and preserve the transition back
+ok 81 - repeated observations keep a finite unique state record and preserve the transition back
+  ---
+  duration_ms: 1.3976
+  type: 'test'
+  ...
+# Subtest: planning consumes only the current Case latest discovery job and matching memory
+ok 82 - planning consumes only the current Case latest discovery job and matching memory
+  ---
+  duration_ms: 1.0454
+  type: 'test'
+  ...
+# Subtest: an explicitly authorized empty fill remains available to undo a query
+ok 83 - an explicitly authorized empty fill remains available to undo a query
+  ---
+  duration_ms: 3062.6456
+  type: 'test'
+  ...
+# Subtest: a contract cannot be reused on a different route with the same locator or by a different Case
+ok 84 - a contract cannot be reused on a different route with the same locator or by a different Case
+  ---
+  duration_ms: 3196.9439
+  type: 'test'
+  ...
+# Subtest: new current_value snapshots exclude private fields that discovery cannot manipulate
+ok 85 - new current_value snapshots exclude private fields that discovery cannot manipulate
+  ---
+  duration_ms: 1109.3101
+  type: 'test'
+  ...
+# Subtest: discovery selects an exact current candidate and returns the original object
+ok 86 - discovery selects an exact current candidate and returns the original object
+  ---
+  duration_ms: 4.2285
+  type: 'test'
+  ...
+# Subtest: discovery terminal response remains a technical result with empty candidates
+ok 87 - discovery terminal response remains a technical result with empty candidates
+  ---
+  duration_ms: 0.3361
+  type: 'test'
+  ...
+# Subtest: discovery terminal response remains a technical result with empty candidates
+ok 88 - discovery terminal response remains a technical result with empty candidates
+  ---
+  duration_ms: 0.1653
+  type: 'test'
+  ...
+# Subtest: discovery rejects unknown candidate
+ok 89 - discovery rejects unknown candidate
+  ---
+  duration_ms: 0.9047
+  type: 'test'
+  ...
+# Subtest: discovery rejects stale observation
+ok 90 - discovery rejects stale observation
+  ---
+  duration_ms: 0.209
+  type: 'test'
+  ...
+# Subtest: discovery rejects locator injection
+ok 91 - discovery rejects locator injection
+  ---
+  duration_ms: 0.1963
+  type: 'test'
+  ...
+# Subtest: discovery rejects route injection
+ok 92 - discovery rejects route injection
+  ---
+  duration_ms: 0.2775
+  type: 'test'
+  ...
+# Subtest: discovery rejects code injection
+ok 93 - discovery rejects code injection
+  ---
+  duration_ms: 0.1466
+  type: 'test'
+  ...
+# Subtest: discovery rejects fill injection
+ok 94 - discovery rejects fill injection
+  ---
+  duration_ms: 0.4182
+  type: 'test'
+  ...
+# Subtest: discovery rejects new oracle
+ok 95 - discovery rejects new oracle
+  ---
+  duration_ms: 0.4797
+  type: 'test'
+  ...
+# Subtest: discovery rejects mixed result
+ok 96 - discovery rejects mixed result
+  ---
+  duration_ms: 0.241
+  type: 'test'
+  ...
+# Subtest: discovery rejects false done
+ok 97 - discovery rejects false done
+  ---
+  duration_ms: 0.2314
+  type: 'test'
+  ...
+# Subtest: discovery rejects nonboolean blocked
+ok 98 - discovery rejects nonboolean blocked
+  ---
+  duration_ms: 0.2168
+  type: 'test'
+  ...
+# Subtest: discovery rejects empty reason
+ok 99 - discovery rejects empty reason
+  ---
+  duration_ms: 0.1384
+  type: 'test'
+  ...
+# Subtest: discovery rejects oversize reason
+ok 100 - discovery rejects oversize reason
+  ---
+  duration_ms: 0.1446
+  type: 'test'
+  ...
+# Subtest: discovery rejects control characters
+ok 101 - discovery rejects control characters
+  ---
+  duration_ms: 0.1287
+  type: 'test'
+  ...
+# Subtest: discovery rejects arbitrary operation
+ok 102 - discovery rejects arbitrary operation
+  ---
+  duration_ms: 0.1118
+  type: 'test'
+  ...
+# Subtest: discovery rejects invalid current Case or duplicate candidate identities
+ok 103 - discovery rejects invalid current Case or duplicate candidate identities
+  ---
+  duration_ms: 0.2787
+  type: 'test'
+  ...
+# Subtest: handoff routes are restricted to current Case mapped source-confirmed actions and deduplicated
+ok 104 - handoff routes are restricted to current Case mapped source-confirmed actions and deduplicated
+  ---
+  duration_ms: 2.0031
+  type: 'test'
+  ...
+# Subtest: handoff preserves valid SPA route, query and fragment while ignoring arbitrary source links
+ok 105 - handoff preserves valid SPA route, query and fragment while ignoring arbitrary source links
+  ---
+  duration_ms: 1.4277
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "https://evil.example/path"
+ok 106 - handoff rejects unsafe bound entry path "https://evil.example/path"
+  ---
+  duration_ms: 0.4003
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "//evil.example/path"
+ok 107 - handoff rejects unsafe bound entry path "//evil.example/path"
+  ---
+  duration_ms: 0.1393
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/\\\\evil.example/path"
+ok 108 - handoff rejects unsafe bound entry path "/\\\\evil.example/path"
+  ---
+  duration_ms: 0.1249
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/%2F%2Fevil.example/path"
+ok 109 - handoff rejects unsafe bound entry path "/%2F%2Fevil.example/path"
+  ---
+  duration_ms: 0.1768
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/tasks/../admin"
+ok 110 - handoff rejects unsafe bound entry path "/tasks/../admin"
+  ---
+  duration_ms: 0.2159
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/%252e%252e/admin"
+ok 111 - handoff rejects unsafe bound entry path "/%252e%252e/admin"
+  ---
+  duration_ms: 0.1886
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/\#//evil.example"
+ok 112 - handoff rejects unsafe bound entry path "/\#//evil.example"
+  ---
+  duration_ms: 0.2695
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/tasks?token=abc"
+ok 113 - handoff rejects unsafe bound entry path "/tasks?token=abc"
+  ---
+  duration_ms: 1.4466
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/\#/tasks?session_id=abc"
+ok 114 - handoff rejects unsafe bound entry path "/\#/tasks?session_id=abc"
+  ---
+  duration_ms: 0.2657
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/tasks?%2574oken=abc"
+ok 115 - handoff rejects unsafe bound entry path "/tasks?%2574oken=abc"
+  ---
+  duration_ms: 0.1968
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/tasks%0Adelete"
+ok 116 - handoff rejects unsafe bound entry path "/tasks%0Adelete"
+  ---
+  duration_ms: 0.1308
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/tasks%250Ddelete"
+ok 117 - handoff rejects unsafe bound entry path "/tasks%250Ddelete"
+  ---
+  duration_ms: 0.1183
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "/bad%zz"
+ok 118 - handoff rejects unsafe bound entry path "/bad%zz"
+  ---
+  duration_ms: 0.1335
+  type: 'test'
+  ...
+# Subtest: handoff rejects unsafe bound entry path "relative/tasks"
+ok 119 - handoff rejects unsafe bound entry path "relative/tasks"
+  ---
+  duration_ms: 0.081
+  type: 'test'
+  ...
+# Subtest: unresolved steps do not contribute routes and broken current bindings are rejected
+ok 120 - unresolved steps do not contribute routes and broken current bindings are rejected
+  ---
+  duration_ms: 0.497
+  type: 'test'
+  ...
+# Subtest: unified report keeps supplemental observations out of Agent execution counts
+ok 121 - unified report keeps supplemental observations out of Agent execution counts
+  ---
+  duration_ms: 118.6593
+  type: 'test'
+  ...
+# Subtest: F05 report derives counts from verified facts and exposes mutable status conflict
+ok 122 - F05 report derives counts from verified facts and exposes mutable status conflict
+  ---
+  duration_ms: 54.0633
+  type: 'test'
+  ...
+# Subtest: frozen selected-case denominator ignores previous scope results and later mutable selections
+ok 123 - frozen selected-case denominator ignores previous scope results and later mutable selections
+  ---
+  duration_ms: 97.8545
+  type: 'test'
+  ...
+# Subtest: whole-task projection derives earlier and latest batch results from each own frozen scope
+ok 124 - whole-task projection derives earlier and latest batch results from each own frozen scope
+  ---
+  duration_ms: 149.6333
+  type: 'test'
+  ...
+# Subtest: whole-task projection rejects missing or corrupt own scope without hiding untouched preparation
+ok 125 - whole-task projection rejects missing or corrupt own scope without hiding untouched preparation
+  ---
+  duration_ms: 108.7503
+  type: 'test'
+  ...
+# Subtest: changed scope cannot supply a trusted denominator or a passing result
+ok 126 - changed scope cannot supply a trusted denominator or a passing result
+  ---
+  duration_ms: 72.961
+  type: 'test'
+  ...
+# Subtest: corrupt or missing final facts cannot fall back to an older passing attempt
+ok 127 - corrupt or missing final facts cannot fall back to an older passing attempt
+  ---
+  duration_ms: 95.4178
+  type: 'test'
+  ...
+# Subtest: missing media yields a usable PARTIAL report without erasing verified business observations
+ok 128 - missing media yields a usable PARTIAL report without erasing verified business observations
+  ---
+  duration_ms: 56.2371
+  type: 'test'
+  ...
+# Subtest: business, cleanup and partial-evidence dimensions remain independent
+ok 129 - business, cleanup and partial-evidence dimensions remain independent
+  ---
+  duration_ms: 66.1869
+  type: 'test'
+  ...
+# Subtest: execution events are serialized, chained, sealed into facts, and cannot be appended after sealing
+ok 130 - execution events are serialized, chained, sealed into facts, and cannot be appended after sealing
+  ---
+  duration_ms: 207.4486
+  type: 'test'
+  ...
+# Subtest: cached event head avoids full rescans but seal still detects a changed last event
+ok 131 - cached event head avoids full rescans but seal still detects a changed last event
+  ---
+  duration_ms: 241.7258
+  type: 'test'
+  ...
+# Subtest: event persistence errors propagate instead of manufacturing a committed intent
+ok 132 - event persistence errors propagate instead of manufacturing a committed intent
+  ---
+  duration_ms: 19.8027
+  type: 'test'
+  ...
+# Subtest: unsealed intent after interruption is evidence-incomplete, never silently unexecuted
+ok 133 - unsealed intent after interruption is evidence-incomplete, never silently unexecuted
+  ---
+  duration_ms: 53.5134
+  type: 'test'
+  ...
+# Subtest: orphan fact remains unverified until an authentic receipt exists
+ok 134 - orphan fact remains unverified until an authentic receipt exists
+  ---
+  duration_ms: 29.1684
+  type: 'test'
+  ...
+# Subtest: facts determine attempt ordering even when mutable receipt array is reversed
+ok 135 - facts determine attempt ordering even when mutable receipt array is reversed
+  ---
+  duration_ms: 59.0885
+  type: 'test'
+  ...
+# Subtest: a mutable pass without an execution fact is not counted as a pass
+ok 136 - a mutable pass without an execution fact is not counted as a pass
+  ---
+  duration_ms: 18.8794
+  type: 'test'
+  ...
+# Subtest: writer lock prevents another instance and only the owner releases it
+ok 137 - writer lock prevents another instance and only the owner releases it
+  ---
+  duration_ms: 31.9725
+  type: 'test'
+  ...
+# Subtest: confirmed obligations propagate without mutating baseline or confirmation objects
+ok 138 - confirmed obligations propagate without mutating baseline or confirmation objects
+  ---
+  duration_ms: 0.505
+  type: 'test'
+  ...
+# Subtest: planning projects referenced anchors and dependencies, keeps original artifact unchanged and removes stale block
+ok 139 - planning projects referenced anchors and dependencies, keeps original artifact unchanged and removes stale block
+  ---
+  duration_ms: 5.4606
+  type: 'test'
+  ...
+# Subtest: new declarative checks remain bounded and do not accept selectors, code or wrong types
+ok 140 - new declarative checks remain bounded and do not accept selectors, code or wrong types
+  ---
+  duration_ms: 19.2082
+  type: 'test'
+  ...
+# Subtest: real browser distinguishes focus, exact class and row order from existence
+ok 141 - real browser distinguishes focus, exact class and row order from existence
+  ---
+  duration_ms: 1333.9064
+  type: 'test'
+  ...
+# Subtest: discovery excludes background under modal and rechecks newly added overlays before dispatch
+ok 142 - discovery excludes background under modal and rechecks newly added overlays before dispatch
+  ---
+  duration_ms: 2915.1971
+  type: 'test'
+  ...
+# Subtest: input review preserves the original conflict, grounds both quotes and returns inspectable paths
+ok 143 - input review preserves the original conflict, grounds both quotes and returns inspectable paths
+  ---
+  duration_ms: 4.3677
+  type: 'test'
+  ...
+# Subtest: empty issues is a valid review response without confirming or changing a Case
+ok 144 - empty issues is a valid review response without confirming or changing a Case
+  ---
+  duration_ms: 1.1525
+  type: 'test'
+  ...
+# Subtest: forged source quotes, JSON keys and quotes from unrelated steps are rejected
+ok 145 - forged source quotes, JSON keys and quotes from unrelated steps are rejected
+  ---
+  duration_ms: 0.9401
+  type: 'test'
+  ...
+# Subtest: review issues require known steps, finite schema and actual quotes
+ok 146 - review issues require known steps, finite schema and actual quotes
+  ---
+  duration_ms: 2.3447
+  type: 'test'
+  ...
+# Subtest: current clarification and overrides are cloned separately from the original source
+ok 147 - current clarification and overrides are cloned separately from the original source
+  ---
+  duration_ms: 1.5521
+  type: 'test'
+  ...
+# Subtest: preconditions, nested test data and clarification values are quote sources, not source code or metadata
+ok 148 - preconditions, nested test data and clarification values are quote sources, not source code or metadata
+  ---
+  duration_ms: 2.5362
+  type: 'test'
+  ...
+# Subtest: operator data overrides only replace existing leaves and safely preserve nested siblings
+ok 149 - operator data overrides only replace existing leaves and safely preserve nested siblings
+  ---
+  duration_ms: 1.2748
+  type: 'test'
+  ...
+# Subtest: overrides reject new fields and replacing existing object or array structures
+ok 150 - overrides reject new fields and replacing existing object or array structures
+  ---
+  duration_ms: 0.9972
+  type: 'test'
+  ...
+# Subtest: overrides reject prototype-polluting names and never invoke property getters
+ok 151 - overrides reject prototype-polluting names and never invoke property getters
+  ---
+  duration_ms: 1.0078
+  type: 'test'
+  ...
+# Subtest: overrides enforce finite depth, size and JSON values instead of silently truncating
+ok 152 - overrides enforce finite depth, size and JSON values instead of silently truncating
+  ---
+  duration_ms: 1.4841
+  type: 'test'
+  ...
+# Subtest: plan envelope adaptation never strips contradictory flags or extra fields
+ok 153 - plan envelope adaptation never strips contradictory flags or extra fields
+  ---
+  duration_ms: 2.6525
+  type: 'test'
+  ...
+# Subtest: hash navigation observes delayed list response instead of previous networkidle
+ok 154 - hash navigation observes delayed list response instead of previous networkidle
+  ---
+  duration_ms: 2306.4499
+  type: 'test'
+  ...
+# Subtest: actual nested explanation is normalized without mutating raw evidence or allowing new targets
+ok 155 - actual nested explanation is normalized without mutating raw evidence or allowing new targets
+  ---
+  duration_ms: 1.4281
+  type: 'test'
+  ...
+# Subtest: reload preserves real cookie session; simultaneous predicates measure actual state and table data rows
+ok 156 - reload preserves real cookie session; simultaneous predicates measure actual state and table data rows
+  ---
+  duration_ms: 762.5106
+  type: 'test'
+  ...
+# Subtest: curated v2 synthetic plans and specific unsupported decisions match their fixtures
+ok 157 - curated v2 synthetic plans and specific unsupported decisions match their fixtures
+  ---
+  duration_ms: 35.4691
+  type: 'test'
+  ...
+# Subtest: train, dev and holdout have disjoint domains and positive/negative outcomes
+ok 158 - train, dev and holdout have disjoint domains and positive/negative outcomes
+  ---
+  duration_ms: 4.2789
+  type: 'test'
+  ...
+# Subtest: blocking all supported cases cannot receive plan-quality reward
+ok 159 - blocking all supported cases cannot receive plan-quality reward
+  ---
+  duration_ms: 1.603
+  type: 'test'
+  ...
+# Subtest: omitted compound obligation and changed oracle values get no reward
+ok 160 - omitted compound obligation and changed oracle values get no reward
+  ---
+  duration_ms: 2.0834
+  type: 'test'
+  ...
+# Subtest: locator retargeting, sequential sampling and longer timing cannot win
+ok 161 - locator retargeting, sequential sampling and longer timing cannot win
+  ---
+  duration_ms: 2.2278
+  type: 'test'
+  ...
+# Subtest: arbitrary capability request is a hard safety failure even if it claims blocked
+ok 162 - arbitrary capability request is a hard safety failure even if it claims blocked
+  ---
+  duration_ms: 0.7582
+  type: 'test'
+  ...
+# Subtest: unknown and duplicate response ids reject; absent samples stay in denominator
+ok 163 - unknown and duplicate response ids reject; absent samples stay in denominator
+  ---
+  duration_ms: 3.3376
+  type: 'test'
+  ...
+# Subtest: reordering JSON keys does not change grader decision
+ok 164 - reordering JSON keys does not change grader decision
+  ---
+  duration_ms: 2.095
+  type: 'test'
+  ...
+# Subtest: complete audit is accepted only as a model finding, not execution approval
+ok 165 - complete audit is accepted only as a model finding, not execution approval
+  ---
+  duration_ms: 6.0069
+  type: 'test'
+  ...
+# Subtest: audit input keeps originals and candidate hashes authoritative and clones evidence
+ok 166 - audit input keeps originals and candidate hashes authoritative and clones evidence
+  ---
+  duration_ms: 1.3481
+  type: 'test'
+  ...
+# Subtest: missing semantic coverage becomes a bounded repair finding
+ok 167 - missing semantic coverage becomes a bounded repair finding
+  ---
+  duration_ms: 0.7504
+  type: 'test'
+  ...
+# Subtest: Oracle ambiguity wins over repairable findings without rewriting original
+ok 168 - Oracle ambiguity wins over repairable findings without rewriting original
+  ---
+  duration_ms: 0.7205
+  type: 'test'
+  ...
+# Subtest: action-level ambiguity also needs clarification when assertion checks are covered
+ok 169 - action-level ambiguity also needs clarification when assertion checks are covered
+  ---
+  duration_ms: 0.5508
+  type: 'test'
+  ...
+# Subtest: audit rejects missing obligation
+ok 170 - audit rejects missing obligation
+  ---
+  duration_ms: 1.128
+  type: 'test'
+  ...
+# Subtest: audit rejects fabricated obligation
+ok 171 - audit rejects fabricated obligation
+  ---
+  duration_ms: 0.56
+  type: 'test'
+  ...
+# Subtest: audit rejects fabricated step
+ok 172 - audit rejects fabricated step
+  ---
+  duration_ms: 0.3571
+  type: 'test'
+  ...
+# Subtest: audit rejects duplicate obligation instead of another
+ok 173 - audit rejects duplicate obligation instead of another
+  ---
+  duration_ms: 0.778
+  type: 'test'
+  ...
+# Subtest: audit rejects negative index
+ok 174 - audit rejects negative index
+  ---
+  duration_ms: 0.7809
+  type: 'test'
+  ...
+# Subtest: audit rejects fractional index
+ok 175 - audit rejects fractional index
+  ---
+  duration_ms: 1.1611
+  type: 'test'
+  ...
+# Subtest: audit rejects string index
+ok 176 - audit rejects string index
+  ---
+  duration_ms: 0.3177
+  type: 'test'
+  ...
+# Subtest: audit rejects outside index
+ok 177 - audit rejects outside index
+  ---
+  duration_ms: 0.2432
+  type: 'test'
+  ...
+# Subtest: audit rejects index belongs to another obligation
+ok 178 - audit rejects index belongs to another obligation
+  ---
+  duration_ms: 0.3789
+  type: 'test'
+  ...
+# Subtest: audit rejects covered with no index
+ok 179 - audit rejects covered with no index
+  ---
+  duration_ms: 0.3711
+  type: 'test'
+  ...
+# Subtest: audit rejects duplicate assertion index
+ok 180 - audit rejects duplicate assertion index
+  ---
+  duration_ms: 0.2689
+  type: 'test'
+  ...
+# Subtest: audit rejects unknown top-level field
+ok 181 - audit rejects unknown top-level field
+  ---
+  duration_ms: 0.3328
+  type: 'test'
+  ...
+# Subtest: audit rejects unknown check field
+ok 182 - audit rejects unknown check field
+  ---
+  duration_ms: 0.4477
+  type: 'test'
+  ...
+# Subtest: audit rejects unknown issue field
+ok 183 - audit rejects unknown issue field
+  ---
+  duration_ms: 0.4626
+  type: 'test'
+  ...
+# Subtest: audit rejects unknown finding code
+ok 184 - audit rejects unknown finding code
+  ---
+  duration_ms: 0.3859
+  type: 'test'
+  ...
+# Subtest: audit rejects issue references another case step
+ok 185 - audit rejects issue references another case step
+  ---
+  duration_ms: 0.448
+  type: 'test'
+  ...
+# Subtest: audit rejects empty reason
+ok 186 - audit rejects empty reason
+  ---
+  duration_ms: 0.3198
+  type: 'test'
+  ...
+# Subtest: audit rejects oversized reason
+ok 187 - audit rejects oversized reason
+  ---
+  duration_ms: 0.3731
+  type: 'test'
+  ...
+# Subtest: audit rejects UNCLEAR without question issue
+ok 188 - audit rejects UNCLEAR without question issue
+  ---
+  duration_ms: 0.3839
+  type: 'test'
+  ...
+# Subtest: audit rejects MISSING without gap issue
+ok 189 - audit rejects MISSING without gap issue
+  ---
+  duration_ms: 0.3104
+  type: 'test'
+  ...
+# Subtest: audit rejects gap contradicts covered checks
+ok 190 - audit rejects gap contradicts covered checks
+  ---
+  duration_ms: 0.3522
+  type: 'test'
+  ...
+# Subtest: missing checks may cite partial but only relevant same-step assertions
+ok 191 - missing checks may cite partial but only relevant same-step assertions
+  ---
+  duration_ms: 0.5453
+  type: 'test'
+  ...
+# Subtest: stale candidate or changed source mapping cannot be audited as current
+ok 192 - stale candidate or changed source mapping cannot be audited as current
+  ---
+  duration_ms: 0.7993
+  type: 'test'
+  ...
+# Subtest: candidate error whitelist repairs structure/types/mapping but never runtime or external failures
+ok 193 - candidate error whitelist repairs structure/types/mapping but never runtime or external failures
+  ---
+  duration_ms: 0.3341
+  type: 'test'
+  ...
+# Subtest: structural validator does not pretend to prove truth of a covered audit
+ok 194 - structural validator does not pretend to prove truth of a covered audit
+  ---
+  duration_ms: 0.4665
+  type: 'test'
+  ...
+# Subtest: v2 fixture plans validate in both synthetic domains
+ok 195 - v2 fixture plans validate in both synthetic domains
+  ---
+  duration_ms: 8.2094
+  type: 'test'
+  ...
+# Subtest: canonical semantic hashes ignore object key order and preserve arrays and strings
+ok 196 - canonical semantic hashes ignore object key order and preserve arrays and strings
+  ---
+  duration_ms: 0.7991
+  type: 'test'
+  ...
+# Subtest: canonical encoding rejects values outside JSON rather than dropping semantic fields
+ok 197 - canonical encoding rejects values outside JSON rather than dropping semantic fields
+  ---
+  duration_ms: 1.8662
+  type: 'test'
+  ...
+# Subtest: v1 hash interpretation stays legacy and v1 execution demands reapproval
+ok 198 - v1 hash interpretation stays legacy and v1 execution demands reapproval
+  ---
+  duration_ms: 1.0829
+  type: 'test'
+  ...
+# Subtest: reordering v2 plan or case keys does not invalidate canonical approval
+ok 199 - reordering v2 plan or case keys does not invalidate canonical approval
+  ---
+  duration_ms: 1.9583
+  type: 'test'
+  ...
+# Subtest: obligation drafts preserve original wording and never mutate the supplied case
+ok 200 - obligation drafts preserve original wording and never mutate the supplied case
+  ---
+  duration_ms: 1.9236
+  type: 'test'
+  ...
+# Subtest: compound expectation cannot lose its quantity obligation
+ok 201 - compound expectation cannot lose its quantity obligation
+  ---
+  duration_ms: 1.0665
+  type: 'test'
+  ...
+# Subtest: confirmation cannot silently omit a second original clause
+ok 202 - confirmation cannot silently omit a second original clause
+  ---
+  duration_ms: 0.846
+  type: 'test'
+  ...
+# Subtest: repeated quoted phrases cover every exact occurrence and keep surrounding clauses required
+ok 203 - repeated quoted phrases cover every exact occurrence and keep surrounding clauses required
+  ---
+  duration_ms: 0.832
+  type: 'test'
+  ...
+# Subtest: source coverage ignores punctuation and whitespace but never numeric or mathematical content
+ok 204 - source coverage ignores punctuation and whitespace but never numeric or mathematical content
+  ---
+  duration_ms: 0.9778
+  type: 'test'
+  ...
+# Subtest: draft splitting retains thousands separators and decimal points inside numbers
+ok 205 - draft splitting retains thousands separators and decimal points inside numbers
+  ---
+  duration_ms: 0.5299
+  type: 'test'
+  ...
+# Subtest: business assertions require mapped confirmed obligations
+ok 206 - business assertions require mapped confirmed obligations
+  ---
+  duration_ms: 1.2106
+  type: 'test'
+  ...
+# Subtest: invented obligation ids and unrelated quotes cannot satisfy coverage
+ok 207 - invented obligation ids and unrelated quotes cannot satisfy coverage
+  ---
+  duration_ms: 1.2445
+  type: 'test'
+  ...
+# Subtest: obligation text cannot invent business requirements
+ok 208 - obligation text cannot invent business requirements
+  ---
+  duration_ms: 0.6237
+  type: 'test'
+  ...
+# Subtest: obligation ids are unique across all steps
+ok 209 - obligation ids are unique across all steps
+  ---
+  duration_ms: 1.526
+  type: 'test'
+  ...
+# Subtest: v2 only supports simultaneous assertions with an explicit bounded deadline
+ok 210 - v2 only supports simultaneous assertions with an explicit bounded deadline
+  ---
+  duration_ms: 1.6728
+  type: 'test'
+  ...
+# Subtest: action ids cannot alias across business and cleanup actions
+ok 211 - action ids cannot alias across business and cleanup actions
+  ---
+  duration_ms: 0.6195
+  type: 'test'
+  ...
+# Subtest: mutation cleanup requires a read-only identity observation
+ok 212 - mutation cleanup requires a read-only identity observation
+  ---
+  duration_ms: 0.8883
+  type: 'test'
+  ...
+# Subtest: locator patch returns only the failed approved action with replaced target
+ok 213 - locator patch returns only the failed approved action with replaced target
+  ---
+  duration_ms: 1.1394
+  type: 'test'
+  ...
+# Subtest: repair rejects an entire plan, extra edits and another action id
+ok 214 - repair rejects an entire plan, extra edits and another action id
+  ---
+  duration_ms: 1.0416
+  type: 'test'
+  ...
+# Subtest: repair only accepts locator resolution failures before dispatch
+ok 215 - repair only accepts locator resolution failures before dispatch
+  ---
+  duration_ms: 1.2404
+  type: 'test'
+  ...
+# Subtest: repair requires approved independent anchor and the current locator digest
+ok 216 - repair requires approved independent anchor and the current locator digest
+  ---
+  duration_ms: 1.0814
+  type: 'test'
+  ...
+# Subtest: repair fingerprint includes every action locator and preserves approval fields
+ok 217 - repair fingerprint includes every action locator and preserves approval fields
+  ---
+  duration_ms: 0.5706
+  type: 'test'
+  ...
+# Subtest: cleanup actions are excluded from model locator repair
+ok 218 - cleanup actions are excluded from model locator repair
+  ---
+  duration_ms: 0.6095
+  type: 'test'
+  ...
+# Subtest: unified report shows self repair without manufacturing execution or passing results
+ok 219 - unified report shows self repair without manufacturing execution or passing results
+  ---
+  duration_ms: 65.5652
+  type: 'test'
+  ...
+# Subtest: clarification issues and originals are visible while legacy records remain compatible
+ok 220 - clarification issues and originals are visible while legacy records remain compatible
+  ---
+  duration_ms: 48.4382
+  type: 'test'
+  ...
+# Subtest: console presents bounded repair progress and marks accepted candidate as still awaiting review
+ok 221 - console presents bounded repair progress and marks accepted candidate as still awaiting review
+  ---
+  duration_ms: 6.3694
+  type: 'test'
+  ...
+# Subtest: data corrections omit untouched or blank values and submit only changed existing keys
+ok 222 - data corrections omit untouched or blank values and submit only changed existing keys
+  ---
+  duration_ms: 6.7216
+  type: 'test'
+  ...
+# Subtest: data corrections reject malformed JSON, unknown keys and nested keys
+ok 223 - data corrections reject malformed JSON, unknown keys and nested keys
+  ---
+  duration_ms: 3.4812
+  type: 'test'
+  ...
+# Subtest: a malformed boolean candidate is repaired before audit, without automatic approval or execution
+ok 224 - a malformed boolean candidate is repaired before audit, without automatic approval or execution
+  ---
+  duration_ms: 288.6023
+  type: 'test'
+  ...
+# Subtest: semantic coverage failure repairs the candidate then audits the complete replacement again
+ok 225 - semantic coverage failure repairs the candidate then audits the complete replacement again
+  ---
+  duration_ms: 194.357
+  type: 'test'
+  ...
+# Subtest: repair cannot adopt a rewritten expectation or modify the confirmed baseline
+ok 226 - repair cannot adopt a rewritten expectation or modify the confirmed baseline
+  ---
+  duration_ms: 194.1638
+  type: 'test'
+  ...
+# Subtest: grounded unresolved input conflict stops before planning and requests operator clarification
+ok 227 - grounded unresolved input conflict stops before planning and requests operator clarification
+  ---
+  duration_ms: 66.9255
+  type: 'test'
+  ...
+# Subtest: unclear business scope reported by plan audit is not sent to technical self-repair
+ok 228 - unclear business scope reported by plan audit is not sent to technical self-repair
+  ---
+  duration_ms: 113.1759
+  type: 'test'
+  ...
+# Subtest: an identical rejected candidate stops early rather than consuming all remaining repair attempts
+ok 229 - an identical rejected candidate stops early rather than consuming all remaining repair attempts
+  ---
+  duration_ms: 139.2058
+  type: 'test'
+  ...
+# Subtest: an unchanged semantically rejected candidate cannot become accepted merely because a second audit changes its answer
+ok 230 - an unchanged semantically rejected candidate cannot become accepted merely because a second audit changes its answer
+  ---
+  duration_ms: 140.4669
+  type: 'test'
+  ...
+# Subtest: two repairs are durable across controller restart, a timestamp refresh and identical reconfirmation
+ok 231 - two repairs are durable across controller restart, a timestamp refresh and identical reconfirmation
+  ---
+  duration_ms: 213.0925
+  type: 'test'
+  ...
+# Subtest: a real observation change gets a new finite budget and keeps the prior repair history
+ok 232 - a real observation change gets a new finite budget and keeps the prior repair history
+  ---
+  duration_ms: 220.1086
+  type: 'test'
+  ...
+# Subtest: approval requires the accepted audit for the exact current candidate and technical input
+ok 233 - approval requires the accepted audit for the exact current candidate and technical input
+  ---
+  duration_ms: 102.3358
+  type: 'test'
+  ...
+# Subtest: execution also rejects a stale audit even if an approval receipt is already present
+ok 234 - execution also rejects a stale audit even if an approval receipt is already present
+  ---
+  duration_ms: 99.4811
+  type: 'test'
+  ...
+# Subtest: stop during semantic audit retains late output only in diagnostics and never publishes the plan
+ok 235 - stop during semantic audit retains late output only in diagnostics and never publishes the plan
+  ---
+  duration_ms: 114.7053
+  type: 'test'
+  ...
+# Subtest: a reserved interrupted repair round remains spent after restart and only one final attempt is available
+ok 236 - a reserved interrupted repair round remains spent after restart and only one final attempt is available
+  ---
+  duration_ms: 156.5885
+  type: 'test'
+  ...
+# Subtest: diagnostic failure after a model result stops self-repair and the remaining batch
+ok 237 - diagnostic failure after a model result stops self-repair and the remaining batch
+  ---
+  duration_ms: 87.1532
+  type: 'test'
+  ...
+# Subtest: data overrides are explicit operator records, preserve baseline bytes and invalidate an old audit
+ok 238 - data overrides are explicit operator records, preserve baseline bytes and invalidate an old audit
+  ---
+  duration_ms: 107.6531
+  type: 'test'
+  ...
+# Subtest: log scrub preserves useful structures and types while removing nested and echoed credentials
+ok 239 - log scrub preserves useful structures and types while removing nested and echoed credentials
+  ---
+  duration_ms: 6.2185
+  type: 'test'
+  ...
+# Subtest: oversized diagnostic text is visibly truncated and prototype fields cannot mutate objects
+ok 240 - oversized diagnostic text is visibly truncated and prototype fields cannot mutate objects
+  ---
+  duration_ms: 0.3483
+  type: 'test'
+  ...
+# Subtest: escaped and URL-encoded configured keys are also scrubbed
+ok 241 - escaped and URL-encoded configured keys are also scrubbed
+  ---
+  duration_ms: 0.3164
+  type: 'test'
+  ...
+# Subtest: repeated scrubbing is stable for nested keys, quoted text, bearer values and truncation markers
+ok 242 - repeated scrubbing is stable for nested keys, quoted text, bearer values and truncation markers
+  ---
+  duration_ms: 1.711
+  type: 'test'
+  ...
+# Subtest: diagnostic append serializes concurrent records, masks secrets, and survives a new reader
+ok 243 - diagnostic append serializes concurrent records, masks secrets, and survives a new reader
+  ---
+  duration_ms: 146.7077
+  type: 'test'
+  ...
+# Subtest: diagnostic reader detects mutation in the latest entry
+ok 244 - diagnostic reader detects mutation in the latest entry
+  ---
+  duration_ms: 32.6122
+  type: 'test'
+  ...
+# Subtest: diagnostic reader detects a missing middle entry
+ok 245 - diagnostic reader detects a missing middle entry
+  ---
+  duration_ms: 43.3969
+  type: 'test'
+  ...
+# Subtest: progress reads and appends share one queue and retain every entry
+ok 246 - progress reads and appends share one queue and retain every entry
+  ---
+  duration_ms: 430.2112
+  type: 'test'
+  ...
+# Subtest: DeepSeek success traces model, timing, token usage and masked output without changing executable value
+ok 247 - DeepSeek success traces model, timing, token usage and masked output without changing executable value
+  ---
+  duration_ms: 30.7822
+  type: 'test'
+  ...
+# Subtest: DeepSeek keeps safe diagnostics for invalid envelope
+ok 248 - DeepSeek keeps safe diagnostics for invalid envelope
+  ---
+  duration_ms: 1.2855
+  type: 'test'
+  ...
+# Subtest: DeepSeek keeps safe diagnostics for invalid model JSON
+ok 249 - DeepSeek keeps safe diagnostics for invalid model JSON
+  ---
+  duration_ms: 0.9678
+  type: 'test'
+  ...
+# Subtest: DeepSeek keeps safe diagnostics for truncated completion
+ok 250 - DeepSeek keeps safe diagnostics for truncated completion
+  ---
+  duration_ms: 0.7925
+  type: 'test'
+  ...
+# Subtest: DeepSeek keeps safe diagnostics for empty completion
+ok 251 - DeepSeek keeps safe diagnostics for empty completion
+  ---
+  duration_ms: 0.835
+  type: 'test'
+  ...
+# Subtest: DeepSeek missing usage stays unknown instead of zero
+ok 252 - DeepSeek missing usage stays unknown instead of zero
+  ---
+  duration_ms: 1.7304
+  type: 'test'
+  ...
+# Subtest: transport trace captures the parameters and actual adapter-expanded messages digest
+ok 253 - transport trace captures the parameters and actual adapter-expanded messages digest
+  ---
+  duration_ms: 1.4412
+  type: 'test'
+  ...
+# Subtest: DeepSeek 401 records sanitized response and makes no retry
+ok 254 - DeepSeek 401 records sanitized response and makes no retry
+  ---
+  duration_ms: 1.2163
+  type: 'test'
+  ...
+# Subtest: DeepSeek failed connection records a safe error without exception message or retry
+ok 255 - DeepSeek failed connection records a safe error without exception message or retry
+  ---
+  duration_ms: 1.3536
+  type: 'test'
+  ...
+# Subtest: DeepSeek transport retry remains bounded and separately recorded
+ok 256 - DeepSeek transport retry remains bounded and separately recorded
+  ---
+  duration_ms: 806.309
+  type: 'test'
+  ...
+# Subtest: a logging failure before request never adds a model request
+ok 257 - a logging failure before request never adds a model request
+  ---
+  duration_ms: 0.6542
+  type: 'test'
+  ...
+# Subtest: a logging failure after response never adds a model request
+ok 258 - a logging failure after response never adds a model request
+  ---
+  duration_ms: 0.6512
+  type: 'test'
+  ...
+# Subtest: a logging failure after parse never adds a model request
+ok 259 - a logging failure after parse never adds a model request
+  ---
+  duration_ms: 0.9019
+  type: 'test'
+  ...
+# Subtest: a failure while logging retryable HTTP status prevents the second request
+ok 260 - a failure while logging retryable HTTP status prevents the second request
+  ---
+  duration_ms: 1.0711
+  type: 'test'
+  ...
+1..260
+# tests 260
+# suites 0
+# pass 260
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26913.6082

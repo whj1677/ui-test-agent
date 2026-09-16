@@ -1,0 +1,63 @@
+{
+  "verified_at": "2026-09-15",
+  "package": "agentlightning",
+  "version": "0.3.0",
+  "python": ">=3.10",
+  "wheel": "agentlightning-0.3.0-py3-none-any.whl",
+  "wheel_sha256": "ede4cf7de78368326aa97cdd1cbb5e976fd826ed94ad2de04810b8013db8bf87",
+  "wheel_api": {
+    "VersionedPromptTemplate": {},
+    "APO": {
+      "__init__": {
+        "args": [
+          "self",
+          "async_openai_client"
+        ],
+        "keyword_args": [
+          "gradient_model",
+          "apply_edit_model",
+          "diversity_temperature",
+          "gradient_batch_size",
+          "val_batch_size",
+          "beam_width",
+          "branch_factor",
+          "beam_rounds",
+          "rollout_batch_timeout",
+          "run_initial_validation",
+          "_poml_trace"
+        ],
+        "async": false
+      },
+      "compute_textual_gradient": {
+        "args": [
+          "self",
+          "current_prompt",
+          "rollout_results"
+        ],
+        "keyword_args": [
+          "prefix"
+        ],
+        "async": true
+      },
+      "textual_gradient_and_apply_edit": {
+        "args": [
+          "self",
+          "current_prompt",
+          "rollout"
+        ],
+        "keyword_args": [
+          "prefix"
+        ],
+        "async": true
+      }
+    }
+  },
+  "verification_scope": "Downloaded wheel bytes matched PyPI SHA256; AST inspected. Package imports and APO execution were not run.",
+  "official_sources": [
+    "https://pypi.org/project/agentlightning/0.3.0/",
+    "https://github.com/microsoft/agent-lightning/blob/v0.3.0/agentlightning/algorithm/apo/apo.py",
+    "https://github.com/microsoft/agent-lightning/blob/v0.3.0/examples/apo/room_selector_apo.py",
+    "https://github.com/microsoft/agent-lightning",
+    "https://api-docs.deepseek.com/"
+  ]
+}

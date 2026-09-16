@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="__CSRF__"><title>UI 测试 Agent</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script></head>
+<body><aside class="sidebar"><a class="brand" href="/">◈ <span>UI TEST AGENT<small>通用 Web 测试工作台</small></span></a><button id="new-task" class="primary wide">＋ 导入测试用例</button><p class="eyebrow">项目与测试轮次</p><div id="task-list"></div><div class="side-bottom"><button id="demo" class="wide">体验跨业务演示</button><p>本机商品查询 + 任务管理<br>使用合成数据与预制计划</p><button id="settings" class="wide">DeepSeek 连接设置</button><small id="provider-status">正在读取配置…</small></div></aside>
+<main><header class="topbar"><span>LOCAL WORKSPACE <i></i> 本地运行</span><span id="connection">DeepSeek 官方接口</span></header><div id="workspace"></div></main>
+<dialog id="modal"><button class="modal-close" aria-label="关闭">×</button><div id="modal-body"></div></dialog><div id="toast" role="status" hidden></div><input id="handoff-file" type="file" accept=".json" hidden><input id="discovery-contract-file" type="file" accept=".json" hidden>
+</body></html>

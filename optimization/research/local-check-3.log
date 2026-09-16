@@ -1,0 +1,36 @@
+{"phase": "initializing", "calls": 1, "max_calls": 1}
+{"phase": "baseline-train", "calls": 1, "max_calls": 30}
+{"phase": "baseline-train", "calls": 2, "max_calls": 30}
+{"phase": "baseline-train", "calls": 3, "max_calls": 30}
+{"phase": "baseline-train", "calls": 4, "max_calls": 30}
+{"phase": "baseline-train", "calls": 5, "max_calls": 30}
+{"phase": "baseline-train", "calls": 6, "max_calls": 30}
+{"phase": "baseline-dev", "calls": 7, "max_calls": 30}
+{"phase": "baseline-dev", "calls": 8, "max_calls": 30}
+{"phase": "baseline-dev", "calls": 9, "max_calls": 30}
+{"phase": "baseline-dev", "calls": 10, "max_calls": 30}
+{"phase": "candidate-1-apo", "calls": 11, "max_calls": 30}
+{"phase": "candidate-1-apo", "calls": 12, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 13, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 14, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 15, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 16, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 17, "max_calls": 30}
+{"phase": "candidate-1-train", "calls": 18, "max_calls": 30}
+{"phase": "candidate-1-dev", "calls": 19, "max_calls": 30}
+{"phase": "candidate-1-dev", "calls": 20, "max_calls": 30}
+{"phase": "candidate-1-dev", "calls": 21, "max_calls": 30}
+{"phase": "candidate-1-dev", "calls": 22, "max_calls": 30}
+{"phase": "baseline-holdout", "calls": 23, "max_calls": 30}
+{"phase": "baseline-holdout", "calls": 24, "max_calls": 30}
+{"phase": "baseline-holdout", "calls": 25, "max_calls": 30}
+{"phase": "baseline-holdout", "calls": 26, "max_calls": 30}
+{"phase": "selected-holdout", "calls": 27, "max_calls": 30}
+{"phase": "selected-holdout", "calls": 28, "max_calls": 30}
+{"phase": "selected-holdout", "calls": 29, "max_calls": 30}
+{"phase": "selected-holdout", "calls": 30, "max_calls": 30}
+...
+----------------------------------------------------------------------
+Ran 3 tests in 3.280s
+
+OK

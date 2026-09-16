@@ -1,0 +1,297 @@
+import {chromium} from 'playwright';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {handoffLocator} from '../vendor/manual-ui/handoff_runtime.mjs';
+import {validateLocator,planHash,caseHash} from './plans.mjs';
+import {fail,relativeURL,redact,poll,now,uid,hash} from './common.mjs';
+
+export class BrowserSession {
+  constructor({headless=false}={}){this.headless=headless;this.browser=null;this.taskId=null;this.authenticated=false;this.storage=null;}
+  async open(task){
+    if(this.browser&&this.taskId===task.id&&this.browser.isConnected()){await this.loginPage.bringToFront();return;}
+    await this.close();this.taskId=task.id;this.target=task.target;
+    this.browser=await chromium.launch({headless:this.headless});
+    this.browser.on('disconnected',()=>{this.authenticated=false;});
+    this.loginContext=await this.browser.newContext({viewport:{width:1360,height:900},serviceWorkers:'block'});
+    this.loginPage=await this.loginContext.newPage();await this.loginPage.goto(task.target,{waitUntil:'domcontentloaded',timeout:30000});
+  }
+  async close(){if(this.browser)await this.browser.close().catch(()=>{});this.browser=null;this.taskId=null;this.authenticated=false;this.storage=null;this.sessionStorage=null;this.marker=null;}
+  active(id){return !!(this.browser?.isConnected()&&this.taskId===id);}
+  async snapshot(){if(!this.loginPage||this.loginPage.isClosed())fail('BROWSER_REQUIRED',409);return snapshot(this.loginPage,{marker:this.marker});}
+  async authenticate(task,marker){
+    if(!this.active(task.id))fail('BROWSER_REQUIRED',409);validateLocator(marker);
+    if(new URL(this.loginPage.url()).origin!==new URL(task.target).origin)fail('OUTSIDE_TARGET_ORIGIN');
+    await assertUnique(this.loginPage,marker);
+    this.marker=marker;this.storage=await this.loginContext.storageState();this.sessionStorage=await this.loginPage.evaluate(()=>Object.fromEntries(Object.entries(sessionStorage)));
+    this.authenticated=true;
+  }
+  async context(task,{recordVideo,guard}={}){
+    const context=await this.browser.newContext({viewport:{width:1360,height:900},storageState:this.storage??undefined,recordVideo,serviceWorkers:'block'});
+    if(this.sessionStorage)await context.addInitScript(({origin,values})=>{if(location.origin===origin)for(const[k,v]of Object.entries(values))sessionStorage.setItem(k,v);},{origin:new URL(task.target).origin,values:this.sessionStorage});
+    const origin=new URL(task.target).origin;
+    await context.route('**/*',async route=>{
+      const req=route.request();let url;try{url=new URL(req.url());}catch{return route.abort();}
+      if(req.isNavigationRequest()&&url.origin!==origin){guard&&(guard.blocked='OUTSIDE_TARGET_ORIGIN');return route.abort();}
+      if(!['GET','HEAD','OPTIONS'].includes(req.method())){
+        const readOnly=task.authorization.readOnlyEndpoints.some(e=>e.method===req.method()&&e.path===url.pathname&&url.origin===origin);
+        if(!readOnly){if(!guard?.allowWrites||url.origin!==origin){guard&&(guard.blocked='WRITE_NOT_AUTHORIZED');return route.abort();}guard.dirty=true;}
+      }
+      return route.continue();
+    });
+    if(typeof context.routeWebSocket==='function')await context.routeWebSocket('**/*',socket=>socket.close());
+    return context;
+  }
+  async execute(task,c,plan,runDirectory,{signal,onEvent=()=>{},onRepair,run_scope_id,approved_plan_hash}={}){
+    const result={schema_version:'ui-agent-facts/v2',id:path.basename(runDirectory),case_id:c.case_id,case_hash:caseHash(c),plan_hash:planHash(plan),approved_plan_hash:approved_plan_hash??planHash(plan),run_scope_id,executed_case:structuredClone(c),executed_plan:structuredClone(plan),started_at:now(),finished_at:null,status:'RUNNING',business_status:'NOT_EXECUTED',cleanup_status:'NOT_REQUIRED',evidence_status:'COMPLETE',preconditions:[],actions:[],assertions:[],repairs:[],cleanup_actions:[],media:[],baseline_sha256:task.baseline_sha256,fixture:task.fixture===true};
+    await fs.mkdir(runDirectory,{recursive:true});let context,page,guard={allowWrites:false,dirty:false,blocked:null};
+    let phase='PREFLIGHT',repairCalls=0;
+    const emit=async(type,detail)=>{try{return await onEvent({type,case_id:c.case_id,...detail});}catch(error){error.execution_phase='EVIDENCE';throw error;}};
+    try{
+      if(!this.active(task.id)||!this.authenticated)fail('AUTH_REQUIRED',409);
+      const check=await this.context(task,{guard});
+      try{
+        const pre=await check.newPage();await pre.goto(task.target,{waitUntil:'domcontentloaded',timeout:20000});
+        if(!await poll(()=>visibleUnique(pre,this.marker),8000)){
+          if(await isLoginPage(pre,this.marker)){this.authenticated=false;fail('AUTH_REQUIRED');}
+          fail('SESSION_UNVERIFIED');
+        }
+        if(signal?.aborted)fail('STOPPED');
+        await pre.goto(relativeURL(plan.entry_path,task.target),{waitUntil:'domcontentloaded',timeout:20000});
+        for(const condition of plan.preconditions){const observation=await checkAssertion(pre,condition);result.preconditions.push({stage:'PREFLIGHT',...observation});if(!observation.passed){result.precondition=observation;fail('PRECONDITION_FAILED');}}
+        if(guard.blocked)fail(guard.blocked);
+        this.storage=await check.storageState();this.sessionStorage=await pre.evaluate(()=>Object.fromEntries(Object.entries(sessionStorage)));
+      }finally{await check.close();}
+      guard={allowWrites:plan.data_effect==='mutation'&&task.authorization.writes,dirty:false,blocked:null};
+      context=await this.context(task,{recordVideo:{dir:runDirectory,size:{width:1360,height:900}},guard});
+      page=await context.newPage();page.setDefaultTimeout(8000);page.on('dialog',dialog=>{guard.blocked='NATIVE_DIALOG_UNSUPPORTED';dialog.dismiss().catch(()=>{});});
+      await page.goto(relativeURL(plan.entry_path,task.target),{waitUntil:'domcontentloaded',timeout:20000});
+      for(const condition of plan.preconditions){const observation=await checkAssertion(page,condition);result.preconditions.push({stage:'BEFORE_ACTIONS',...observation});if(!observation.passed){result.precondition=observation;fail('PRECONDITION_FAILED');}}
+      for(const step of plan.steps){
+        let lastActionCompletedAt=Date.now();
+        await emit('STEP_STARTED',{step_id:step.step_id,action:step.source_action});
+        for(const [actionIndex,approvedAction] of step.actions.entries()){
+          let a=structuredClone(approvedAction),target;
+          while(true){
+            if(signal?.aborted)fail('STOPPED');
+            if(await isLoginPage(page,this.marker)){this.authenticated=false;fail('AUTH_REQUIRED');}
+            phase='RESOLVE';
+            await emit('ACTION_RESOLVING',{step_id:step.step_id,action_id:a.action_id,operation:a.op,target:a.target??null});
+            try{target=await resolveAction(page,a);break;}catch(error){
+              const failure={action_id:a.action_id,code:error.code,phase:'RESOLVE',dispatched:false,current_target:a.target};
+              const eligible=['LOCATOR_NOT_VISIBLE','LOCATOR_NOT_UNIQUE'].includes(error.code)&&a.repair_anchor&&plan.data_effect==='read_only'&&!guard.dirty&&repairCalls<2&&onRepair&&!signal?.aborted;
+              if(!eligible){result.actions.push({at:now(),step_id:step.step_id,action_id:a.action_id,operation:a.op,target:a.target,status:'FAILED',phase:'RESOLVE',dispatched:false,error:error.code});throw error;}
+              repairCalls++;result.repair_requests=repairCalls;
+              await emit('LOCATOR_REPAIR_REQUESTED',{step_id:step.step_id,action_id:a.action_id,code:error.code,repair_number:repairCalls});
+              phase='REPAIR';
+              const proposal=await onRepair({...failure,page:await snapshot(page,{marker:this.marker}),repair_number:repairCalls});
+              if(signal?.aborted)fail('STOPPED');
+              if(!proposal){result.actions.push({at:now(),step_id:step.step_id,action_id:a.action_id,operation:a.op,target:a.target,status:'FAILED',phase:'RESOLVE',dispatched:false,error:error.code});throw error;}
+              // A validated patch must also refer to the same unique approved DOM anchor.
+              const repairedTarget=await assertUnique(page,proposal.target),anchor=await assertUnique(page,approvedAction.repair_anchor);
+              if(!await sameElement(repairedTarget,anchor))fail('REPAIR_TARGET_IDENTITY_MISMATCH');
+              result.repairs.push({at:now(),action_id:a.action_id,previous_target:a.target,target:proposal.target,repair_number:repairCalls});
+              a=proposal;result.executed_plan.steps.find(s=>s.step_id===step.step_id).actions[actionIndex]=structuredClone(a);result.plan_hash=planHash(result.executed_plan);
+              await emit('LOCATOR_REPAIR_ACCEPTED',{step_id:step.step_id,action_id:a.action_id,target:a.target,repair_number:repairCalls});
+            }
+          }
+          if(signal?.aborted)fail('STOPPED');
+          phase='INTENT';
+          const event={at:now(),step_id:step.step_id,action_id:a.action_id,operation:a.op,target:a.target??null,value:a.value===undefined?null:redact(a.value)};
+          // Persist the intent before dispatch. Failure here never authorizes a browser retry.
+          try{await emit('ACTION_STARTED',event);}catch(error){await target?.dispose();throw error;}
+          const receipt={...event,status:'UNKNOWN',phase:'DISPATCH',dispatched:true};result.actions.push(receipt);
+          if(plan.data_effect==='mutation'&&!['wait','hover','navigate'].includes(a.op))guard.dirty=true;
+          phase='DISPATCH';
+          try{await dispatchAction(page,a,task.target,target);lastActionCompletedAt=Date.now();receipt.completed_at=new Date(lastActionCompletedAt).toISOString();receipt.status='EXECUTED';}catch(error){receipt.error=error.code??error.name;throw error;}finally{await target?.dispose();}
+          if(guard.blocked)fail(guard.blocked);
+          if(new URL(page.url()).origin!==new URL(task.target).origin)fail('OUTSIDE_TARGET_ORIGIN');
+          await emit('ACTION_EXECUTED',event);
+        }
+        phase='ASSERTION';if(signal?.aborted)fail('STOPPED');
+        const observations=await checkAssertionGroup(page,step.assertions,{timeout:step.within_ms??8000,deadline:lastActionCompletedAt+(step.within_ms??8000),signal});
+        for(const observation of observations){result.assertions.push({step_id:step.step_id,...observation});await emit('ASSERTION_OBSERVED',{step_id:step.step_id,...observation});}
+        if(observations.some(o=>!o.window_observed))fail('ASSERTION_OBSERVATION_LATE');
+        if(observations.some(o=>!o.passed))fail('BUSINESS_ASSERTION_FAILED');
+        phase='EVIDENCE';
+        const filename=`step-${result.media.length+1}.png`;await page.screenshot({path:path.join(runDirectory,filename),mask:[page.locator('input[type=password]')]});
+        const bytes=await fs.readFile(path.join(runDirectory,filename));result.media.push({file:filename,sha256:hash(bytes),step_id:step.step_id});
+        await emit('STEP_FINISHED',{step_id:step.step_id});
+      }
+      result.status='PASS_ASSERTIONS';result.business_status='ASSERTIONS_PASSED';
+    }catch(error){
+      const code=guard.blocked??error.code??(error.name==='TimeoutError'?'LOCATOR_TIMEOUT':'BROWSER_OPERATION_FAILED');
+      result.error=code;result.error_phase=error.execution_phase??phase;
+      if(result.error_phase==='EVIDENCE')result.evidence_status='PARTIAL';
+      result.status=code==='BUSINESS_ASSERTION_FAILED'?'FAIL_ASSERTION':code==='AUTH_REQUIRED'?'AUTH_REQUIRED':code==='SESSION_UNVERIFIED'?'SESSION_UNVERIFIED':code==='PRECONDITION_FAILED'?'BLOCKED_DATA':code==='STOPPED'?'STOPPED':code==='WRITE_NOT_AUTHORIZED'?'BLOCKED_WRITE':'TECHNICAL_FAILED';
+      result.business_status=code==='BUSINESS_ASSERTION_FAILED'?'ASSERTION_MISMATCH':result.actions.length?'PARTIAL':'NOT_EXECUTED';
+      if(page&&!page.isClosed()&&!await hasPassword(page).catch(()=>true)){
+        try{result.failure_snapshot=await snapshot(page,{marker:this.marker});}catch{}
+        try{await page.screenshot({path:path.join(runDirectory,'failure.png'),mask:[page.locator('input[type=password]')]});result.media.push({file:'failure.png',sha256:hash(await fs.readFile(path.join(runDirectory,'failure.png')))});}catch{}
+      }
+    }finally{
+      result.dirty=guard.dirty;
+      if(guard.dirty){
+        result.cleanup_status='PENDING';
+        if(plan.cleanup&&context&&page&&!page.isClosed())try{
+          await emit('CLEANUP_STARTED',{});
+          guard.blocked=null;guard.allowWrites=task.authorization.writes;
+          const alreadyClean=await checkAssertionGroup(page,plan.cleanup.assertions,{timeout:100});
+          result.cleanup_initial_observations=alreadyClean;
+          if(alreadyClean.some(o=>!o.passed)){
+            if(!plan.cleanup.ownership?.length)fail('CLEANUP_OWNERSHIP_REQUIRED');
+            result.cleanup_ownership=await checkAssertionGroup(page,plan.cleanup.ownership,{timeout:2000});
+            await emit('CLEANUP_OWNERSHIP_OBSERVED',{observations:result.cleanup_ownership});
+            if(result.cleanup_ownership.some(o=>!o.passed))fail('CLEANUP_OWNERSHIP_UNVERIFIED');
+            for(const a of plan.cleanup.actions){
+              const target=await resolveAction(page,a),event={at:now(),action_id:a.action_id,operation:a.op,target:a.target??null};
+              try{await emit('CLEANUP_ACTION_STARTED',event);}catch(error){await target?.dispose();throw error;}
+              const receipt={...event,status:'UNKNOWN',dispatched:true};result.cleanup_actions.push(receipt);
+              try{await dispatchAction(page,a,task.target,target);receipt.status='EXECUTED';}finally{await target?.dispose();}await emit('CLEANUP_ACTION_EXECUTED',event);
+            }
+          }
+          if(guard.blocked)fail(guard.blocked);
+          result.cleanup_observations=await checkAssertionGroup(page,plan.cleanup.assertions);
+          if(result.cleanup_observations.some(o=>!o.passed))fail('CLEANUP_ASSERTION_FAILED');
+          result.cleanup_status='CLEAN';await emit('CLEANUP_FINISHED',{});
+        }catch(e){result.cleanup_status='FAILED';result.cleanup_error=e.code??'CLEANUP_OPERATION_FAILED';if(e.execution_phase==='EVIDENCE')result.evidence_status='PARTIAL';}
+        else result.cleanup_status='FAILED';
+        if(result.cleanup_status!=='CLEAN')result.status='CLEANUP_REQUIRED';
+      }
+      if(context){
+        try{this.storage=await context.storageState();if(page&&!page.isClosed()&&new URL(page.url()).origin===new URL(task.target).origin)this.sessionStorage=await page.evaluate(()=>Object.fromEntries(Object.entries(sessionStorage)));}catch{}
+        const video=page?.video();await context.close().catch(()=>{});
+        if(video){try{const videoPath=await video.path();const bytes=await fs.readFile(videoPath);if(bytes.length)result.media.push({file:path.basename(videoPath),sha256:hash(bytes),type:'video'});}catch{result.media_warning='VIDEO_UNAVAILABLE';result.evidence_status='PARTIAL';}}
+      }
+      result.finished_at=now();result.semantic_acceptance='PENDING_REVIEW';
+    }
+    return result;
+  }
+}
+async function hasPassword(page){return await page.locator('input[type=password]:visible').count()>0;}
+async function isLoginPage(page,marker){
+  if(marker&&await visibleUnique(page,marker))return false;
+  return await hasPassword(page)||await page.locator('form[action*="login"]:visible,form[action*="signin"]:visible').count()>0;
+}
+async function visibleUnique(page,l){try{const x=handoffLocator(page,l);return await x.count()===1&&await x.isVisible();}catch{return false;}}
+export async function assertUnique(page,l){validateLocator(l);const x=handoffLocator(page,l);if(await x.count()>1)fail('LOCATOR_NOT_UNIQUE');try{await x.waitFor({state:'visible',timeout:8000});}catch{fail('LOCATOR_NOT_VISIBLE');}if(await x.count()!==1)fail('LOCATOR_NOT_UNIQUE');return x;}
+async function sameElement(first,second){const handle=await second.elementHandle();try{return !!handle&&await first.evaluate((element,anchor)=>element===anchor,handle);}finally{await handle?.dispose();}}
+async function resolveAction(page,a){
+  if(['navigate','reload','wait'].includes(a.op))return null;
+  const target=await assertUnique(page,a.target);
+  // Dispatch this exact node. A live Locator could silently resolve to a replacement
+  // object while the intent is being persisted.
+  const handle=await target.elementHandle();if(!handle)fail('LOCATOR_NOT_VISIBLE');
+  try{
+    if(a.repair_anchor){const anchor=await assertUnique(page,a.repair_anchor);if(!await anchor.evaluate((element,expected)=>element===expected,handle))fail('ACTION_TARGET_IDENTITY_MISMATCH');}
+    if(['fill','press'].includes(a.op)&&await handle.getAttribute('type')==='password')fail('SENSITIVE_CONTROL_FORBIDDEN');
+    return handle;
+  }catch(error){await handle.dispose();throw error;}
+}
+export async function perform(page,a,base){const target=await resolveAction(page,a);try{return await dispatchAction(page,a,base,target);}finally{await target?.dispose();}}
+async function dispatchAction(page,a,base,target){
+  if(a.op==='reload'){await page.reload({waitUntil:'domcontentloaded',timeout:20000});return;}
+  if(a.op==='navigate'){await page.goto(relativeURL(a.value,base),{waitUntil:'domcontentloaded',timeout:20000});return;}
+  if(a.op==='wait'){
+    const x=handoffLocator(page,a.target);if(await x.count()>1)fail('LOCATOR_NOT_UNIQUE');
+    if(a.state==='enabled'){if(!await poll(async()=>await x.count()===1&&await x.isVisible()&&await x.isEnabled()))fail('WAIT_FAILED');}
+    else try{await x.waitFor({state:a.state,timeout:8000});}catch{fail('WAIT_FAILED');}return;
+  }
+  switch(a.op){
+    case 'click':await target.click();break;case 'fill':await target.fill(a.value);break;
+    case 'select':await target.selectOption({label:a.value});break;case 'press':await target.press(a.value);break;
+    case 'check':await target.check();break;case 'uncheck':await target.uncheck();break;case 'hover':await target.hover();break;default:fail('ACTION_NOT_ALLOWED');
+  }
+}
+export async function checkAssertion(page,a,options){return (await checkAssertionGroup(page,[a],options))[0];}
+export async function checkAssertionGroup(page,assertions,{timeout=8000,deadline=Date.now()+timeout,signal}={}){
+  const observerKey='__ui_agent_observer_'+uid().replaceAll('-','');
+  const sample_id=uid();let sampled=null,last=null,timedOut=false,windowObserved=false;
+  // A mutation epoch covers locator collection too, so count and node identities
+  // cannot come from different DOM revisions. Predicate values are read in one JS turn.
+  await page.evaluate(key=>{const state={revision:0};state.observer=new MutationObserver(()=>state.revision++);state.observer.observe(document,{subtree:true,childList:true,attributes:true,characterData:true});window[key]=state;},observerKey);
+  try{
+    do{
+      if(signal?.aborted)fail('STOPPED');
+      const revision=await page.evaluate(key=>window[key].revision,observerKey);
+      const handles=[];
+      try{
+        for(const a of assertions)handles.push(await handoffLocator(page,a.target).elementHandles());
+        sampled=await page.evaluate(({key,revision,assertions,handles})=>{
+          if(!window[key]||window[key].revision!==revision||handles.some(rows=>rows.some(e=>!e.isConnected)))return null;
+          const visible=e=>{const style=getComputedStyle(e),rect=e.getBoundingClientRect();return style.visibility!=='hidden'&&style.visibility!=='collapse'&&rect.width>0&&rect.height>0;};
+          return {at:new Date().toISOString(),observations:assertions.map((a,i)=>{
+            const rows=handles[i],count=rows.length,e=rows[0];let actual=null,passed=false,error;
+            if(a.check==='count'){actual=count;passed=count===a.expected;}
+            else if(count>1)error='LOCATOR_NOT_UNIQUE';
+            else if(a.check==='hidden'){actual=count===0||!visible(e);passed=actual;}
+            else if(count===0)actual='MISSING';
+            else if(a.check==='visible'){actual=visible(e);passed=actual;}
+            else if(!visible(e))actual='HIDDEN';
+            else if(a.check==='focused'){actual=document.activeElement===e;passed=actual===a.expected;}
+            else if(a.check==='has_class'){actual=e.classList.contains(a.expected);passed=actual;}
+            else if(a.check==='row_sequence'){
+              if(e.tagName!=='TABLE')error='ASSERTION_TARGET_TYPE';
+              else{const rows=Array.from(e.tBodies).flatMap(b=>Array.from(b.rows));
+                const texts=rows.map(r=>(r.innerText??r.textContent??'').trim());
+                passed=texts.length===a.expected.length&&texts.every((text,i)=>text.includes(a.expected[i]));
+                actual=texts.slice(0,101).map(text=>text.slice(0,3000));}
+            }
+            else if(a.check==='checked'){actual=!!e.checked;passed=actual===a.expected;}
+            else if(a.check==='enabled'){actual=!e.matches(':disabled')&&!e.closest('[aria-disabled="true"]');passed=actual===a.expected;}
+            else if(a.check==='selected_label'){if(e.tagName!=='SELECT')error='ASSERTION_TARGET_TYPE';else{actual=Array.from(e.selectedOptions).map(o=>o.label).join(',');passed=actual===a.expected;}}
+            else if(a.check==='row_count'){if(e.tagName!=='TABLE')error='ASSERTION_TARGET_TYPE';else{actual=Array.from(e.tBodies).reduce((n,b)=>n+b.rows.length,0);passed=actual===a.expected;}}
+            else if(a.check==='value'){if(e.type==='password')error='SENSITIVE_CONTROL_FORBIDDEN';else{actual=e.value;passed=actual===a.expected;}}
+            else{
+              actual=(e.innerText??e.textContent??'').trim();
+              if(a.check==='text')passed=actual===a.expected;
+              if(a.check==='contains')passed=actual.includes(a.expected);
+              if(a.check==='number'){const number=actual.replaceAll(',','');passed=number!==''&&Number.isFinite(Number(number))&&Number(number)===a.expected;}
+            }
+            return {actual,passed,error};
+          })};
+        },{key:observerKey,revision,assertions,handles});
+        if(sampled&&Date.now()>deadline){
+          timedOut=true;
+          if(last)sampled=null;
+          else sampled.observations=sampled.observations.map(o=>({...o,condition_matches:o.passed,passed:false}));
+        }else if(sampled)windowObserved=true;
+      }finally{await Promise.allSettled(handles.flat().map(h=>h.dispose()));}
+      if(sampled){
+        last=sampled;const error=sampled.observations.find(o=>o.error)?.error;if(error)fail(error);
+        if(sampled.observations.every(o=>o.passed))break;
+      }
+      const remaining=deadline-Date.now();if(remaining>0)await new Promise(resolve=>setTimeout(resolve,Math.min(100,remaining)));
+    }while(Date.now()<deadline);
+  }finally{await page.evaluate(key=>{window[key]?.observer.disconnect();delete window[key];},observerKey).catch(()=>{});}
+  if(!last)fail('ASSERTION_SNAPSHOT_UNSTABLE');
+  const groupPassed=last.observations.every(o=>o.passed);
+  return assertions.map((a,i)=>({check:a.check,target:a.target,expected:a.expected??null,oracle_quote:a.oracle_quote??null,obligation_ids:a.obligation_ids??[],actual:typeof last.observations[i].actual==='string'?redact(last.observations[i].actual).slice(0,3000):Array.isArray(last.observations[i].actual)?last.observations[i].actual.map(v=>redact(v).slice(0,3000)):last.observations[i].actual,passed:last.observations[i].passed,group_passed:groupPassed,window_observed:windowObserved,timed_out:timedOut||!groupPassed&&Date.now()>=deadline,sample_id,at:last.at,deadline_at:new Date(deadline).toISOString(),mode:'simultaneous',within_ms:timeout}));
+}
+export async function snapshot(page,{marker}={}){
+  if(await isLoginPage(page,marker))return {url:page.url().split('?')[0],login_page:true,controls:[],text:'请在可见浏览器中完成登录，再读取页面。'};
+  const raw=await page.evaluate(()=>{
+    const visible=e=>!!(e.getClientRects().length)&&getComputedStyle(e).visibility!=='hidden';
+    const controls=[];
+    for(const e of document.querySelectorAll('button,a,input,textarea,select,[role],h1,h2,h3,table,[data-testid],[data-test],[id]')){
+      if(!visible(e)||e.type==='password'||controls.length>=150)continue;
+      const label=e.getAttribute('aria-label')||e.labels?.[0]?.innerText?.trim();const text=(e.innerText??'').trim().slice(0,150);
+      const role=e.getAttribute('role')||({BUTTON:'button',A:'link',SELECT:'combobox',H1:'heading',H2:'heading',TEXTAREA:'textbox',INPUT:e.type==='checkbox'?'checkbox':e.type==='radio'?'radio':'textbox'}[e.tagName]);
+      let locator;
+      if(e.dataset.testid)locator={kind:'testid',value:e.dataset.testid};
+      else if(label)locator={kind:'label',value:label,exact:true};
+      else if(e.getAttribute('placeholder'))locator={kind:'placeholder',value:e.getAttribute('placeholder'),exact:true};
+      else if(role&&text)locator={kind:'role',role,name:text,exact:true};
+      else if(e.id&&/^[A-Za-z][\w-]*$/.test(e.id))locator={kind:'css',value:'#'+e.id};
+      if(locator)controls.push({role:role??e.tagName.toLowerCase(),name:label||text||e.getAttribute('placeholder')||e.id,locator,
+        ...((['INPUT','TEXTAREA'].includes(e.tagName)&&!['password','file','hidden','email','tel'].includes(e.type)&&!/(?:password|passwd|secret|token|credential|api.?key|authorization|cookie|session|one.?time|passcode|credit.?card|email|phone|\botp\b|cc-|密码|口令|密钥|验证码|银行卡|身份证|手机号|账号|账户|邮箱)/iu.test([e.name,e.id,label,e.getAttribute('autocomplete')].join(' ')))?{current_value:String(e.value??'').slice(0,500)}:{}),
+        ...(e.closest('[role="dialog"],[aria-modal="true"],dialog')?{dialog_context:(e.closest('[role="dialog"],[aria-modal="true"],dialog').getAttribute('aria-label')||e.closest('[role="dialog"],[aria-modal="true"],dialog').id||'dialog').slice(0,150)}:{}),
+        ...(e.closest('tr')?{row_context:e.closest('tr').innerText.trim().slice(0,400)}:{}),
+        ...(e.tagName==='SELECT'?{options:Array.from(e.options).map(o=>({label:o.label,value:o.value})),selected_label:e.selectedOptions[0]?.label}:{}),
+        ...(e.tagName==='TABLE'?{row_count:Array.from(e.tBodies).reduce((n,b)=>n+b.rows.length,0),headers:Array.from(e.querySelectorAll('th')).map(h=>h.innerText.trim())}:{}),
+        ...(['BUTTON','INPUT','SELECT','TEXTAREA'].includes(e.tagName)?{enabled:!e.matches(':disabled')&&e.getAttribute('aria-disabled')!=='true'}:{})});
+    }
+    return {title:document.title,text:document.body.innerText.slice(0,16000),controls};
+  });
+  const controls=[];for(const c of raw.controls){try{validateLocator(c.locator);if(await handoffLocator(page,c.locator).count()===1)controls.push(c);}catch{}}
+  return {url:page.url().split('?')[0],title:redact(raw.title),text:redact(raw.text),controls:JSON.parse(redact(JSON.stringify(controls))),login_page:false};
+}

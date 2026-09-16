@@ -1,0 +1,57 @@
+{
+  "at": "2026-09-15T09:01:18.137068+00:00",
+  "scope": "8 Node evaluator regression tests; 14 gold synthetic fixture checks; 3 Python bridge tests with fake API; Python compile and offline config. No installed Agent Lightning runtime, DeepSeek API, browser or product test.",
+  "real_api_calls": 0,
+  "checks": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "tests/optimization.test.mjs"
+      ],
+      "exit_code": 0,
+      "log": "local-check-1.log"
+    },
+    {
+      "command": [
+        "node",
+        "optimization/evaluate.mjs",
+        "fixtures"
+      ],
+      "exit_code": 0,
+      "log": "local-check-2.log"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "optimization",
+        "-p",
+        "test_apo_bridge.py"
+      ],
+      "exit_code": 0,
+      "log": "local-check-3.log"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "py_compile",
+        "optimization/apo_deepseek.py"
+      ],
+      "exit_code": 0,
+      "log": "local-check-4.log"
+    },
+    {
+      "command": [
+        "python",
+        "optimization/apo_deepseek.py"
+      ],
+      "exit_code": 0,
+      "log": "local-check-5.log"
+    }
+  ]
+}

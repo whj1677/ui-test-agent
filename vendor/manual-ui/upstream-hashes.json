@@ -1,0 +1,58 @@
+[
+  {
+    "Hash": "B3B69BFCC919148C047CE7BF2BC6B1A046FDD8B67C79B818597AEB64346AC80C",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\offline_html_report.mjs"
+  },
+  {
+    "Hash": "9698A7232F7E248ECE294FAC1AA3957D2366FA16C43307A1924A98120E736F47",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\portable-ui-workflow.mjs"
+  },
+  {
+    "Hash": "27B90BBBE39B59AA87B233A696D975446E2C6375BA3339B45E118FD7FF9F5953",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\portable_xlsx_rows.py"
+  },
+  {
+    "Hash": "4E723CA8DD9825272A0DE6269DAE60E49C99EEC7BE84B58962FA19A5FCCBCFFF",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\generic_playwright_orchestrator.mjs"
+  },
+  {
+    "Hash": "A96CB0B628E6E66362CE0DE91149F7029D76FB4B71E7958AE10B13CD48E44C37",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\step_evidence_contract.mjs"
+  },
+  {
+    "Hash": "5EF305CE3571ACC9DBE9D5CA328DEAC6528483790673F45477FE4BF745FCE151",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\readonly_playwright_discovery.mjs"
+  },
+  {
+    "Hash": "BEEBF183B5EE9EF911A2ED03CF711877CC4C4188025618890D2299B11B976855",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\semantic_inventory_binder.mjs"
+  },
+  {
+    "Hash": "79D968A404790318CD351FCB4861EA9871EE989F8F05AE122EAF7263F7837A57",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\portable_auth.mjs"
+  },
+  {
+    "Hash": "055D60B7E3E637D82FE80CCB630F27F211A279B18DF0D1D20E1D6B6A0F8B0C3C",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\agent_repair_contract.mjs"
+  },
+  {
+    "Hash": "09658068427AEFAEEEEBBB89C1FFE316A72C1578BF4BC3A6A1840C017B8D47F7",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\session_command_file.mjs"
+  },
+  {
+    "Hash": "6F11254AA94A05D480D6032373B51B66D11462EF3A555ADE0AA008B083C5DE93",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\session_module_snapshot.mjs"
+  },
+  {
+    "Hash": "29154826BC28B3209AD30EC2543B2A8BF63853512EC23993773771A33D098D78",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\confirmed_expectations.mjs"
+  },
+  {
+    "Hash": "50F889F710058B6D525DDEF9E10C027F63736F09693629A60A89D0BBE21A741C",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\case_handoff.mjs"
+  },
+  {
+    "Hash": "942F27E52BC7CA57D910716581DD3A3BACEBC224BA6D1E24A3692A55697120B0",
+    "Path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-11\\new-chat\\ui-test-agent\\vendor\\manual-ui\\handoff_runtime.mjs"
+  }
+]

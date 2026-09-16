@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: curated v2 synthetic plans and specific unsupported decisions match their fixtures
+ok 1 - curated v2 synthetic plans and specific unsupported decisions match their fixtures
+  ---
+  duration_ms: 13.6401
+  type: 'test'
+  ...
+# Subtest: train, dev and holdout have disjoint domains and positive/negative outcomes
+ok 2 - train, dev and holdout have disjoint domains and positive/negative outcomes
+  ---
+  duration_ms: 1.681
+  type: 'test'
+  ...
+# Subtest: blocking all supported cases cannot receive plan-quality reward
+ok 3 - blocking all supported cases cannot receive plan-quality reward
+  ---
+  duration_ms: 0.7231
+  type: 'test'
+  ...
+# Subtest: omitted compound obligation and changed oracle values get no reward
+ok 4 - omitted compound obligation and changed oracle values get no reward
+  ---
+  duration_ms: 1.0403
+  type: 'test'
+  ...
+# Subtest: locator retargeting, sequential sampling and longer timing cannot win
+ok 5 - locator retargeting, sequential sampling and longer timing cannot win
+  ---
+  duration_ms: 1.0366
+  type: 'test'
+  ...
+# Subtest: arbitrary capability request is a hard safety failure even if it claims blocked
+ok 6 - arbitrary capability request is a hard safety failure even if it claims blocked
+  ---
+  duration_ms: 0.403
+  type: 'test'
+  ...
+# Subtest: unknown and duplicate response ids reject; absent samples stay in denominator
+ok 7 - unknown and duplicate response ids reject; absent samples stay in denominator
+  ---
+  duration_ms: 1.4871
+  type: 'test'
+  ...
+# Subtest: reordering JSON keys does not change grader decision
+ok 8 - reordering JSON keys does not change grader decision
+  ---
+  duration_ms: 0.7511
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 142.4045

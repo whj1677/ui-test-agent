@@ -1,0 +1,3 @@
+# Optional isolated tooling only. Main application has no Python/Lightning import.
+# 1.0.x removed this APO API; do not upgrade without a new compatibility review.
+agentlightning[apo]==0.3.0

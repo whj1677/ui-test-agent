@@ -1,0 +1,19 @@
+{
+  "status": "OFFLINE_CONFIGURATION_CHECKED",
+  "api_calls": 0,
+  "agentlightning_version": "0.3.0",
+  "models": {
+    "planner": "deepseek-flash",
+    "gradient": "deepseek-flash",
+    "edit": "deepseek-flash"
+  },
+  "samples": {
+    "train": 6,
+    "dev": 4,
+    "holdout": 4
+  },
+  "worst_case_calls": 30,
+  "max_calls": 40,
+  "key_present": false,
+  "scope": "No dependency import or network access"
+}
