@@ -1,0 +1,330 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0006",
+  "title": "原用例绑定的只读入口探索",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-17"
+  },
+  "original_input": "REQ-0001持续发布目标：多种复杂UI自主探索/规划，修改前建需求包，发现问题修复并独立Git同步；保持原预期和授权。",
+  "user_requirements": [
+    {
+      "id": "UN-0006-01",
+      "status": "已确认",
+      "goal": "当前原用例明确点名的普通分页、帮助说明和读取故障重试，可进入产品探索候选，不依赖外部code agent代点。",
+      "constraints": "冻结原24例/页面；不新增任意点击、业务提交、表单推进、预期修改或网络授权，不重启4179。",
+      "success_criteria": "真实产品探针先复现候选缺失，修复后准确进入后续观察；否定语境、错Case、危险/提交/身份变化拒绝；全量和原冻结摘要保持。"
+    }
+  ],
+  "confirmed_facts": [
+    "起点78fa525，git工作树干净；REQ-0005范围定位已同步。",
+    "真实Chromium产品探针：工单页上一页/下一页可观察但候选为空；详情内处理记录页签为候选而服务说明按钮不是。",
+    "现有candidateKind拒绝危险名称、业务submit和非限定open按钮；普通分页/说明/重试缺关键入口。",
+    "多步业务表单输入及submit型查询仍依赖另外的技术能力，是另一个待验证断点，不在本包暗中放开。",
+    "新增11项检查包含于非暂停程序425项；实际全部退出0、无失败/跳过。3个浏览器集成文件的6个TAP检查退出0；不将TAP/场景/业务用例混加。",
+    "acceptance原17文件/24例摘要保持；本包没有DeepSeek请求、4179重启或旧任务操作。",
+    "初始validation/REQ-0006-before.log三项失败中第三项实际卡在submit查询；独立读取失败组件复现保存在REQ-0006-reading-before.log。未以人工代查掩盖原WORK-006缺口。",
+    "首版直接使用全量DOM revision误拒同值菜单属性赋值，2项正例失败保存在REQ-0006-first.log；独立真实变化epoch修复后复验，原有revision仍保留。"
+  ],
+  "inferences_and_open_questions": [
+    "Kimi仅通用最小摘要只读会诊；原文点名绑定范围但不能证明处理器无副作用。",
+    "本包采用正向原文引用+限定阅读类型+现场上下文+既有执行保护；不采用仅扩词表、模型任意点击或人工逐站代导航。",
+    "Kimi会诊session_3a39bbb6-ce6d-4885-904c-e115ad2504f7提醒否定语境、GET副作用及业务重试风险，已加反例；不采纳整Case同按钮只点一次及将同义用例解释成精确按钮引用的建议。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0006-01",
+      "status": "已确认",
+      "requirement": "原文绑定与分类",
+      "acceptance_criteria": "仅非生产、精确点名的正向点击/打开语句，有限分页/说明/帮助/重试类别，候选包含Case/步骤/原文证据。",
+      "constraints": "不从expected/页面文本/模型说明派生授权；否定、条件未确认、模糊同义、无原文引用均不能获得新能力。"
+    },
+    {
+      "id": "DR-0006-02",
+      "status": "已确认",
+      "requirement": "当前DOM资格",
+      "acceptance_criteria": "仅可见唯一普通原生button且不属于表单；重试需要最近独立区域的可见读取失败证据，不能重试业务写入。",
+      "constraints": "已有危险词/敏感/禁用/下载/遮挡限制继续；DOM线索不等于处理器纯读取证明，不根据fixture ID/名称硬编码。"
+    },
+    {
+      "id": "DR-0006-03",
+      "status": "已确认",
+      "requirement": "派发重验与预算",
+      "acceptance_criteria": "新增候选绑定当前Case原文、路径及观察；事件派发前重验，相关上下文变更拒绝，使用原有有限步数/循环预算。",
+      "constraints": "不清除网络阻断、不跟随任意二次确认、不修改原文或自动审批；同页状态无进展仍按原预算终止。"
+    },
+    {
+      "id": "DR-0006-04",
+      "status": "已确认",
+      "requirement": "验证与归档",
+      "acceptance_criteria": "通过冻结复杂UI实际产品探索和对抗变体验证，模块文档与正式证据同步，独立提交推送。",
+      "constraints": "不改冻结页面/用例；本包不调用DeepSeek，不将工程候选驱动当真实模型自主通过。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0006-01",
+      "dr_ids": [
+        "DR-0006-01"
+      ],
+      "status": "已确认",
+      "summary": "独立纯文本绑定函数只读当前Case.steps[].action；精确引用且正向动作，不推断同义按钮。",
+      "rationale": "补真实复杂UI缺口，风险限定并以反例验证，不靠放宽安全或改用例。"
+    },
+    {
+      "id": "DD-0006-02",
+      "dr_ids": [
+        "DR-0006-02"
+      ],
+      "status": "已确认",
+      "summary": "固定DOM检查最近独立阅读区域；普通BUTTON无form，重试有可见read/load失败语义，危险语境拒绝。",
+      "rationale": "补真实复杂UI缺口，风险限定并以反例验证，不靠放宽安全或改用例。"
+    },
+    {
+      "id": "DD-0006-03",
+      "dr_ids": [
+        "DR-0006-03"
+      ],
+      "status": "已确认",
+      "summary": "候选附reading证据与原文hash，_unchanged重算资格；新增候选按真实变化epoch在事件时拒绝页面变化，属性同值重复赋值不算真实变化，原有mutation revision保持；沿用原有限预算。",
+      "rationale": "补真实复杂UI缺口，风险限定并以反例验证，不靠放宽安全或改用例。"
+    },
+    {
+      "id": "DD-0006-04",
+      "dr_ids": [
+        "DR-0006-04"
+      ],
+      "status": "已确认",
+      "summary": "运行产品DiscoveryBrowser而非仅页面参考脚本；原case预期不做探索判定，验收数据与模型输入隔离。",
+      "rationale": "补真实复杂UI缺口，风险限定并以反例验证，不靠放宽安全或改用例。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "原Case动作+当前按钮/区域 -> 固定reading证据 -> 不透明候选 -> 当前Case/DOM重验 -> 原Playwright动作/同源网络保护 -> 新观察。",
+    "新增内部候选kind/evidence，不更改用例导入、计划、审批或业务网络授权API。"
+  ],
+  "module_document_impact": [
+    "更新docs/modules/release_runtime.md：阅读入口候选、边界、证据和未覆盖表单问题。"
+  ],
+  "risks_and_rollback": [
+    "黑盒DOM与名称不能证明GET幂等、客户端状态或业务处理器无副作用；只在明确非生产授权下探索，错误立即保留证据，有界恢复，不声称全部副作用已阻断。",
+    "事件revision保守：点击前任意DOM变化可能使候选过期；重新观察而不沿旧候选强行点击。",
+    "逐包独立Git提交便于定位/回滚；原失败和用户历史保留，不强推。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0006-01",
+      "dr_ids": [
+        "DR-0006-01"
+      ],
+      "dd_ids": [
+        "DD-0006-01"
+      ],
+      "status": "已实现",
+      "task": "原文绑定与分类",
+      "verification_ids": [
+        "VT-0006-01"
+      ]
+    },
+    {
+      "id": "TK-0006-02",
+      "dr_ids": [
+        "DR-0006-02"
+      ],
+      "dd_ids": [
+        "DD-0006-02"
+      ],
+      "status": "已实现",
+      "task": "当前DOM资格",
+      "verification_ids": [
+        "VT-0006-02"
+      ]
+    },
+    {
+      "id": "TK-0006-03",
+      "dr_ids": [
+        "DR-0006-03"
+      ],
+      "dd_ids": [
+        "DD-0006-03"
+      ],
+      "status": "已实现",
+      "task": "派发重验与预算",
+      "verification_ids": [
+        "VT-0006-03"
+      ]
+    },
+    {
+      "id": "TK-0006-04",
+      "dr_ids": [
+        "DR-0006-04"
+      ],
+      "dd_ids": [
+        "DD-0006-04"
+      ],
+      "status": "已实现",
+      "task": "验证与归档",
+      "verification_ids": [
+        "VT-0006-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0006-01",
+      "dr_ids": [
+        "DR-0006-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "原文绑定与分类",
+      "evidence_standard": "仅非生产、精确点名的正向点击/打开语句，有限分页/说明/帮助/重试类别，候选包含Case/步骤/原文证据。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 425,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0006-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0006-02",
+      "dr_ids": [
+        "DR-0006-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "当前DOM资格",
+      "evidence_standard": "仅可见唯一普通原生button且不属于表单；重试需要最近独立区域的可见读取失败证据，不能重试业务写入。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 425,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0006-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0006-03",
+      "dr_ids": [
+        "DR-0006-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "派发重验与预算",
+      "evidence_standard": "新增候选绑定当前Case原文、路径及观察；事件派发前重验，相关上下文变更拒绝，使用原有有限步数/循环预算。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 425,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0006-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0006-04",
+      "dr_ids": [
+        "DR-0006-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "验证与归档",
+      "evidence_standard": "通过冻结复杂UI实际产品探索和对抗变体验证，模块文档与正式证据同步，独立提交推送。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 425,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0006-runtime.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/reading-actions.test.mjs",
+      "node tests/runtime-regression.mjs",
+      "node --test tests/discovery-browser.integration.mjs tests/discovery-redirects.integration.mjs tests/optional-dialog-flow.integration.mjs"
+    ],
+    "environment": [
+      "Windows Node22/Chromium；本机独立合成服务器"
+    ],
+    "conclusion": [
+      "限定阅读入口已实现并通过11项新增检查（包含在425项非暂停工程内），全量0失败/跳过；集成3文件6TAP退出0，见validation/REQ-0006-integration.log。",
+      "正式门禁和独立Git同步按随后实际结果记录；不代表真实模型自主运行、原24例全部执行或发布就绪。",
+      "submit型查询与多步表单保持未覆盖，不为让本包通过而放开；本机真实模型工具策略仍未恢复。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0006-01",
+      "dr_id": "DR-0006-01",
+      "dd_id": "DD-0006-01",
+      "tk_id": "TK-0006-01",
+      "vt_id": "VT-0006-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0006-01",
+      "dr_id": "DR-0006-02",
+      "dd_id": "DD-0006-02",
+      "tk_id": "TK-0006-02",
+      "vt_id": "VT-0006-02",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0006-01",
+      "dr_id": "DR-0006-03",
+      "dd_id": "DD-0006-03",
+      "tk_id": "TK-0006-03",
+      "vt_id": "VT-0006-03",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0006-01",
+      "dr_id": "DR-0006-04",
+      "dd_id": "DD-0006-04",
+      "tk_id": "TK-0006-04",
+      "vt_id": "VT-0006-04",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness",
+      "status": "进行中",
+      "notes": "冻结复杂UI的当前产品探针触发，先建包再改代码。"
+    }
+  ],
+  "open_questions": [
+    "真实模型工具策略阻塞未解除，本包仅本机工程修复；后续仍需真实模型两轮/干净Windows/独立人员验收。"
+  ],
+  "prohibited_implementation": [
+    "不允许任意按钮点击、表单submit/推进、放行写接口、硬编码冻结样本、改原预期、增加模型权限或绕过工具策略。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "缺陷包创建",
+      "description": "记录实际可见阅读按钮没有探索候选的缺陷与限定修复边界。",
+      "impact": "探索候选/派发与证据，不改变业务执行授权",
+      "confirmed_by": "用户持续发布目标与本机实际产品探针"
+    },
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "限定实现与工程验证",
+      "description": "冻结工单分页/叠层说明和申请原生说明通过产品候选操作；原文、DOM、非生产、危险/提交、网络和循环反例验证。11项新增/425项全量/3文件6TAP通过。",
+      "impact": "阅读入口与内部证据/事件守卫；未修改冻结用例，不放开submit型查询或表单。",
+      "confirmed_by": "实际代码diff与本机日志；Kimi建议经独立筛选，不是验收依据。"
+    }
+  ]
+}

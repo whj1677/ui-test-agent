@@ -5,6 +5,7 @@ import { fail, hash, redact, relativeURL, uid } from './common.mjs';
 import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
 import { queryScopeFacts, queryValues } from './query-capability.mjs';
+import { readingBinding, readingDOMFacts } from './reading-actions.mjs';
 import {
   dismissButtonFacts,
   conditionalDismissSource,
@@ -152,16 +153,35 @@ function checkedURL(value, base) {
 // This script is fixed application code. No model text is ever evaluated.
 function installRuntime(key) {
   if (window[key]) return;
-  const state = { document_id: crypto.randomUUID(), revision: 0, permit: null, blocked: null };
-  state.observer = new MutationObserver(() => state.revision++);
+  const state = {
+    document_id: crypto.randomUUID(),
+    revision: 0,
+    reading_revision: 0,
+    permit: null,
+    blocked: null,
+  };
+  const track = (records) => {
+    if (!records.length) return;
+    state.revision++;
+    // Setting an already-closed menu's same attributes on focus is not a new
+    // identity. Preserve the original revision and keep a separate effect epoch.
+    if (
+      records.some(
+        (r) => r.type !== 'attributes' || r.oldValue !== r.target.getAttribute(r.attributeName),
+      )
+    )
+      state.reading_revision++;
+  };
+  state.observer = new MutationObserver(track);
   state.observer.observe(document, {
     subtree: true,
     childList: true,
     attributes: true,
+    attributeOldValue: true,
     characterData: true,
   });
   state.flush = () => {
-    if (state.observer.takeRecords().length) state.revision++;
+    track(state.observer.takeRecords());
     return state.revision;
   };
   state.receivesEvents = (element) => {
@@ -271,7 +291,9 @@ function installRuntime(key) {
           permit.element.isConnected &&
           permit.element.contains(event.target) &&
           permit.url === location.href &&
-          permit.metadata === JSON.stringify(state.metadata(permit.element));
+          permit.metadata === JSON.stringify(state.metadata(permit.element)) &&
+          (permit.readingRevision === undefined ||
+            (state.flush(), permit.readingRevision === state.reading_revision));
         if (!allowed) {
           event.preventDefault();
           event.stopImmediatePropagation();
@@ -292,7 +314,7 @@ async function metadata(handle, key) {
   return handle.evaluate((element, key) => window[key]?.metadata(element), key);
 }
 
-function candidateKind(meta, name, base, optionalDismiss = false) {
+function candidateKind(meta, name, base, optionalDismiss = false, reading = false) {
   if (
     !meta.connected ||
     !meta.visible ||
@@ -339,6 +361,7 @@ function candidateKind(meta, name, base, optionalDismiss = false) {
   if (meta.tag === 'SUMMARY' || meta.expanded || meta.popup) return 'expand';
   if ((meta.tag === 'BUTTON' || meta.role === 'button') && OPEN_NAME.test(name + ' ' + meta.name))
     return 'open';
+  if (reading && meta.tag === 'BUTTON') return 'reading';
   return null;
 }
 
@@ -516,6 +539,7 @@ export class DiscoveryBrowser {
         ? {
             document_id: s.document_id,
             revision: s.flush(),
+            reading_revision: s.reading_revision,
             url: location.href,
             blocked: s.blocked,
           }
@@ -786,6 +810,17 @@ export class DiscoveryBrowser {
     }
     return candidates;
   }
+  async _readingEvidence(handle, name) {
+    if (this.task.authorization?.nonproduction !== true) return null;
+    const binding = readingBinding(this.caseDefinition, name);
+    if (!binding) return null;
+    const facts = await handle.evaluate(readingDOMFacts, {
+      category: binding.category,
+      dangerSource: DANGEROUS_NAME.source,
+    });
+    if (!facts) return null;
+    return { binding, facts };
+  }
   async _observe() {
     this._check();
     await this._release();
@@ -828,7 +863,8 @@ export class DiscoveryBrowser {
           if (!handle) continue;
           const meta = await metadata(handle, this.runtimeKey),
             dismissAction = await this._dismissAction(handle, meta),
-            kind = candidateKind(meta, control.name, this.page.url(), !!dismissAction);
+            reading = await this._readingEvidence(handle, control.name),
+            kind = candidateKind(meta, control.name, this.page.url(), !!dismissAction, !!reading);
           if (!kind) {
             const inputs = await this._inputCandidates(handle, meta, control);
             if (inputs.length) {
@@ -840,6 +876,7 @@ export class DiscoveryBrowser {
           const candidate = {
             candidate_id: uid(),
             kind,
+            ...(kind === 'reading' ? { evidence: reading.binding } : {}),
             ...(kind === 'dismiss' ? { dismissAction } : {}),
             name: redact(control.name).slice(0, 200),
             locator: structuredClone(control.locator),
@@ -848,7 +885,12 @@ export class DiscoveryBrowser {
               ? { href: safeURL(checkedURL(meta.href, this.page.url())) }
               : {}),
           };
-          this.candidates.set(candidate.candidate_id, { ...candidate, handle, meta });
+          this.candidates.set(candidate.candidate_id, {
+            ...candidate,
+            handle,
+            meta,
+            ...(kind === 'reading' ? { reading, readingRevision: before.reading_revision } : {}),
+          });
           candidates.push(candidate);
           handle = null;
         } catch {
@@ -912,9 +954,16 @@ export class DiscoveryBrowser {
         fail('DISCOVERY_STALE_PAGE');
     }
     const dismissAction = await this._dismissAction(candidate.handle, meta);
+    if (
+      candidate.reading &&
+      (state.reading_revision !== candidate.readingRevision ||
+        JSON.stringify(await this._readingEvidence(candidate.handle, candidate.name)) !==
+          JSON.stringify(candidate.reading))
+    )
+      fail('DISCOVERY_STALE_PAGE');
     const kind = candidate.contract
       ? interactionKind(meta, candidate.name, candidate.contract)
-      : candidateKind(meta, candidate.name, state.url, !!dismissAction);
+      : candidateKind(meta, candidate.name, state.url, !!dismissAction, !!candidate.reading);
     if (
       JSON.stringify(meta) !== JSON.stringify(candidate.meta) ||
       !kind ||
@@ -972,6 +1021,7 @@ export class DiscoveryBrowser {
         page_id: this.current.page_id,
         kind: candidate.kind,
         name: candidate.name,
+        ...(candidate.reading ? { evidence: candidate.evidence } : {}),
         ...(candidate.operation
           ? {
               operation: candidate.operation,
@@ -988,14 +1038,16 @@ export class DiscoveryBrowser {
         this._check();
         await this._unchanged(candidate);
         const armed = await candidate.handle.evaluate(
-          (element, { key, expected, meta, optionalDismiss }) => {
+          (element, { key, expected, meta, optionalDismiss, readingRevision }) => {
             const state = window[key];
             if (
               !state ||
               state.document_id !== expected.document_id ||
               location.href !== expected.url ||
               !element.isConnected ||
-              JSON.stringify(state.metadata(element)) !== JSON.stringify(meta)
+              JSON.stringify(state.metadata(element)) !== JSON.stringify(meta) ||
+              (readingRevision !== undefined &&
+                (state.flush(), state.reading_revision !== readingRevision))
             )
               return false;
             state.permit = {
@@ -1003,6 +1055,7 @@ export class DiscoveryBrowser {
               url: location.href,
               metadata: JSON.stringify(meta),
               optionalDismiss,
+              readingRevision,
             };
             return true;
           },
@@ -1011,6 +1064,7 @@ export class DiscoveryBrowser {
             expected: this.current,
             meta: candidate.meta,
             optionalDismiss: candidate.kind === 'dismiss',
+            readingRevision: candidate.readingRevision,
           },
         );
         if (!armed) fail('DISCOVERY_STALE_PAGE');
