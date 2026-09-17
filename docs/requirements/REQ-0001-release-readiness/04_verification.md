@@ -13,11 +13,12 @@
 | VT-0001-02 | DR-0001-02 | 已确认 | 未运行 | 多界面真实链路 | 冻结样本/真值/页面SHA、模型请求/计划/批准/执行事实及技术干预记录 | 真实模型启动被工具拒绝，本轮0调用。REQ-0004仅完成合成基线/独立参考验证，不能计为本VT真实链路验收。 | - | - | - | - | - | - |
 | VT-0001-03 | DR-0001-03 | 已确认 | 集成测试通过 | 现阶段工程安全与恢复（最终候选须复验） | 真实命令/退出码/统计/日志及浏览器和进程事实 | 命令：node tests/runtime-regression.mjs；退出码：0；测试数量：593；失败数量：0；跳过数量：0；证据：validation/REQ-0012-delivery-final.log | node tests/runtime-regression.mjs | 0 | 593 | 0 | 0 | validation/REQ-0012-delivery-final.log |
 | VT-0001-04 | DR-0001-04 | 已确认 | 未运行 | 独立可安装可使用 | 干净环境说明、安装/升级日志、独立试用记录、媒体检查 | 本机子集：REQ-0010安装/维护；两真实Git旧版本14项升级回退（REQ-0001-upgrade-final.log）；REQ-0011实际浏览器报告/两段视频中文可读且媒体缺失不抹失败，详细SHA/观察见子包browser-review.md。file://直接打开被策略拒绝未绕过；干净Windows、独立人员和最终同版报告仍未验收。 | - | - | - | - | - | - |
-| VT-0001-05 | DR-0001-05 | 已确认 | 未运行 | 可追溯发布候选 | SHA清单、模型用量、包内清单、秘密扫描和全部门槛证据 | 上轮9b7f待验ZIP已完成84个文件逐项SHA、解包清单/限定秘密模式、隔离HTTP身份及静态资源字节验证；详情candidate-check.md，日志validation/REQ-0001-candidate-zip.log和REQ-0001-candidate-runtime.log。此旧包不含当前739f经验库功能。共享依赖，不是干净安装，未重启4179、未调用模型；PENDING_ACCEPTANCE不变，最终同版打包/两轮/独立使用/成本门槛未齐全，本VT整体未验收。 | - | - | - | - | - | - |
+| VT-0001-05 | DR-0001-05 | 已确认 | 未运行 | 可追溯发布候选 | SHA清单、模型用量、包内清单、秘密扫描和全部门槛证据 | 当前739f待验ZIP完成87项字节SHA、精确清单/有限秘密模式、三模式隔离HTTP身份/静态响应/正常关闭检查；4TAP条目0失败/跳过，日志validation/REQ-0001-candidate-739f-runtime-final.log；ZIP摘要及限制见candidate-check.md。共享依赖不是干净安装，旧4179未切换，模型请求0。旧9b7f包保留；PENDING_ACCEPTANCE不变，最终同版两轮/独立使用/成本门槛未齐全，本VT整体未验收。 | - | - | - | - | - | - |
 
 ## 本轮命令与环境
 
 - 工作目录：D:/01_AI工程/01_工程项目/ui-test-agent
+- 命令：node tests/release-candidate-runtime.integration.mjs validation/REQ-0001-extracted-20260918-739f82ba/REQ-0001-candidate-20260918-739f82ba：4TAP（1父项+3模式）0失败/跳过，仅包内HTTP和关闭，不是4条业务用例。
 - 命令：node tests/runtime-regression.mjs
 - 命令：按影响运行真实Chromium集成文件；真实模型必须经过产品自身链路。
 - 命令：node --test tests/release-upgrade.integration.mjs
@@ -35,3 +36,4 @@
 - 最新字幕呈现修复570项程序、10项重叠专项、6项报告集成无失败；实际播放与中文目视检查不代替file://直开、独立人员或真实模型验收。
 - 上轮9b7f代码已形成带SHA的待验ZIP，解包HTTP运行身份一致且正常关闭；不含当前739f经验能力，不将共享依赖运行视为干净安装或整体可发布。
 - 最新REQ-0012已形成有限技术经验闭环：593项程序与52项重叠受影响验证0失败/跳过，默认observe。真实模型配对对照尚未运行，不能宣称学习收益或发布就绪。
+- 当前739f已补对应新待验ZIP及包内三模式HTTP实际验证，旧包仍保留。本轮只增加可复跑包验证/证据；模型0调用、4179未动，不把共享主机依赖当作干净环境验收。

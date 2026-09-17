@@ -4,40 +4,45 @@
 
 ## 身份与本机产物
 
-- 源码提交：`bc9b14d2c3f635f7b9547aeaf7586d258c94a93b`；此后本轮只更新需求与证据文档。
+- 源码提交：`7e9f3382d51c688d6672a6d310ab20d1a5a2f76e`（经验库实现提交`03f9650`）；本轮只新增验证脚本、更新需求/索引与证据，没有产品修改。
 - 版本：`0.4.0-beta.1`。
-- 构建：`9b7f132246fa2cc5a17a0d286abc508c5325d57e26adb0ab0216d52d94c058f2`。
-- ZIP：`validation/ui-test-agent-0.4.0-beta.1-9b7f132246fa-pending.zip`，345888字节。
-- ZIP SHA256：`8026bae30da2c97e78bf32e2b3674caf7eaf46655cc0717e721cebad39b2f6be`。
-- 原始候选：`validation/REQ-0001-candidate-20260918-9b7f1322`。
-- 解包根：`validation/REQ-0001-extracted-20260918-9b7f1322/REQ-0001-candidate-20260918-9b7f1322`。
-- 数据目录：`validation/REQ-0001-package-runtime-L5Cnt6`，仅本次空任务测试使用。
+- 构建：`739f82bac7bad3ead6d81cff2fa39ca344298ffceeafb0fc93ba09355ee68ba2`。
+- ZIP：`validation/ui-test-agent-0.4.0-beta.1-739f82bac7ba-pending.zip`，354765字节。
+- ZIP SHA256：`5ecb303cbcb6635f00b1f21088c3baf4b2e75757662396ad01c2cacee91b63e5`。
+- 原始候选：`validation/REQ-0001-candidate-20260918-739f82ba`。
+- 解包根：`validation/REQ-0001-extracted-20260918-739f82ba/REQ-0001-candidate-20260918-739f82ba`。
+- 首次成功数据与摘要：`validation/candidate-runtime-7xWBnD`，其中observe/off/assist仅为空任务隔离测试使用。正式collector复验另建数据目录，见交付日志。
 
 以上路径相对仓库根。ZIP和运行日志属于本机忽略产物，不上传GitHub或创建Release。
 
 ## 实际执行与结果
 
-1. 运行既有 `node src/distribution.mjs validation/REQ-0001-candidate-20260918-9b7f1322`，退出0，源与复制后构建相同。
-2. PowerShell `Compress-Archive` 创建新ZIP；用 .NET ZipArchive逐项读取字节并计算SHA256，与83项清单及清单本身摘要比较。84项一致，无未知、缺失或重复文件；`ExtractToDirectory` 提取到新目录成功。日志：`validation/REQ-0001-candidate-zip.log`。
+1. 运行既有 `node src/distribution.mjs validation/REQ-0001-candidate-20260918-739f82ba`，退出0，源与复制后构建相同。清单包含经验库三个运行模块。
+2. PowerShell `Compress-Archive` 创建新ZIP；用 .NET ZipArchive逐项读取字节并计算SHA256，与86项清单及清单本身摘要比较。87项一致，无未知、缺失或重复文件；`ExtractToDirectory` 提取到新目录成功。日志：`validation/REQ-0001-candidate-739f-zip.log`。
 3. Node动态导入解包内的 `verifyCandidate` / `readBuildInfo` / `server.start`，断言源构建=包构建=服务构建，解包文件集合与清单精确一致且无符号链接。
-4. 解包内 `server.start({port:0, dataDir, headless:true, provider})` 启动随机端口；provider显式空Key、注入拒绝联网的fetch。`/api/config` 身份及新数据目录摘要一致；`/`、`/app.js`、`/styles.css` 返回200，后两者响应字节与包内文件SHA相同。任务目录为空、configured=false、active=null、模型调用计数0。
-5. `finally` 中关闭隔离服务；核对监听器关闭、`.writer.lock` 不存在、包完整性仍一致。日志：`validation/REQ-0001-candidate-runtime.log`。没有启动目标浏览器或执行业务动作。
-6. 正式collector实际执行 `node --test tests/release-integrity.test.mjs`：48个TAP条目、0失败/跳过，退出0；包括清单损坏、文件缺失、重复/非法路径和链接反例。日志：`validation/REQ-0001-candidate-integrity.log`。它验证打包器既有行为，不是48条真实业务用例，也不与前轮570项相加。
+4. 解包内 `server.start({port:0, dataDir, headless:true, provider, experienceMode})` 分别以observe/off/assist启动随机端口；provider是未配置且任何模型调用都抛错的本机替身，不读取Key。`/api/config`身份、经验模式及新数据目录摘要一致；三个静态路由均返回200，首页仅允许唯一CSRF占位替换，其余字节及JS/CSS与包内文件一致。任务为空、configured=false、active=null、模型调用0。
+5. 每个模式均在`finally`中关闭服务；核对监听器关闭、`.writer.lock`不存在、旧URL连接被拒、没有创建经验文件、包完整性仍一致。未启动目标浏览器或执行业务动作。
+6. 可复跑命令：`node tests/release-candidate-runtime.integration.mjs validation/REQ-0001-extracted-20260918-739f82ba/REQ-0001-candidate-20260918-739f82ba`，4TAP（1父项+3模式）0失败/跳过。首份成功日志：`validation/REQ-0001-candidate-739f-runtime-final.log`；不是4条业务用例，不与593项程序回归相加。
+7. 首轮脚本把动态首页直接与磁盘模板比较，4项失败记录保留在`validation/REQ-0001-candidate-739f-runtime.log`；查明既有CSRF替换合同后修正测试，未改包、产品或保护。正式检查首轮因验证/模块影响记录尚未回填拒绝，原交付记录保留在`validation/REQ-0001-candidate-739f-checker-first.md`。
 
 日志SHA256：
 
-- ZIP检查：`e3dee02a474de7fde86816245f6bec0c08852352c544b9c3c8fbbf3cf55eaa25`。
-- 解包运行：`f1c3a795e6c25946ab00e0602a0b987d20315a2af1854ceee9260d30c320058a`。
-- 完整性专项：`ae0b734a44c3a5ddf5cc0d05532ee497369bc34f9a59cfefd35321e92be38ba5`。
+- 创建日志：`efd3106056285efedc628b26e50549ba7bb95e2acac4600e57cb47aa285f330c`。
+- ZIP检查：`6986005f5048f6768f2db11a9b112071bbcd4df5f5c0430451f5d5900cd5f6d4`。
+- 首份解包成功日志：`13dcc0d9eae3209365ea6b04e403704c6c10230d9565a6a3bb8e793ae304a978`。
 
 ## 数据排除与扫描范围
 
-逐文件核对候选精确清单；没有 `data`、`work`、`validation`、`node_modules`、`.git`、`.env*`、`.browsers`、`.python-venv` 目录或文件。对84文件检查长 `sk-`、GitHub经典token及私钥头模式，0命中。不记录扫描命中的原文，不把有限模式检查称为全面秘密审计。
+逐文件核对候选精确清单；没有 `data`、`work`、`validation`、`node_modules`、`.git`、`.env*`、`.browsers`、`.python-venv` 目录或文件。对87文件检查长 `sk-`、GitHub经典token及私钥头模式，0命中。不记录扫描命中的原文，不把有限模式检查称为全面秘密审计。
 
 ## 不得推导的结论
 
 - Node依赖从祖先工作区 `node_modules` 解析；未对这个新包重做安装器、Chromium下载或Python导入。不是干净Windows安装验收。
-- 570项非暂停工程回归来自同一产品构建的上一轮日志 `validation/REQ-0011-runtime.log`；本轮没有重复执行，不与归档文件数相加。
+- 593项非暂停工程回归及TTL测试补强后的52项重叠专项来自同产品构建上一轮日志`validation/REQ-0012-delivery-final.log`、`validation/REQ-0012-delivery-scoped.log`；本轮没有重复执行，不与归档文件数或4TAP相加。
 - 本轮真实模型调用0。不能证明自主探索、计划、运行效果，也不是两轮24例真实Agent验收。
-- 4179旧实例未切换；当前知识库尚未实现，多步表单A/B审批选择未确认。
+- 4179旧实例未切换；经验库已有有限工程实现但真实模型收益未验证，多步表单A/B审批选择未确认。
 - 真实模型执行策略阻塞、直接file报告打开、干净环境及独立人员验收仍待解决。摘要用于检查交付物字节，不是可信发行方签名。
+
+## 上一候选保留
+
+旧`9b7f132246fa` ZIP、解包和原日志均未覆盖或删除。旧ZIP为345888字节，SHA256 `8026bae30da2c97e78bf32e2b3674caf7eaf46655cc0717e721cebad39b2f6be`；84文件及旧包HTTP验证见`validation/REQ-0001-candidate-zip.log`、`validation/REQ-0001-candidate-runtime.log`。旧包不含经验库，不用于代表当前代码；当时的48项打包器反例检查也不当作本次重跑结果。

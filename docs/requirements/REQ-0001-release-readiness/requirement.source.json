@@ -19,6 +19,10 @@
     }
   ],
   "confirmed_facts": [
+    "739f待验ZIP已生成并核验：validation/ui-test-agent-0.4.0-beta.1-739f82bac7ba-pending.zip，354765字节，SHA256=5ecb303cbcb6635f00b1f21088c3baf4b2e75757662396ad01c2cacee91b63e5；87项归档字节与86项清单及清单本身一致，精确文件集合/限定凭据模式检查无异常。解包从自身src启动HTTP，源/包/config身份一致，三模式实例分别正常关闭、锁释放、旧URL不可再连接；模型请求0、没有目标浏览器/业务执行。4TAP通过，日志validation/REQ-0001-candidate-739f-runtime-final.log及summary validation/candidate-runtime-7xWBnD/summary.json。",
+    "本轮包和验证依赖仍从当前主机/祖先工作区解析，不是新包完整安装、干净Windows或真实模型验收；未切换4179。既有同产品构建593项与52项专项不重复，旧包/失败日志全部保留。本次正式检查曾因先收集结果、尚未回填当前验证/模块无变化说明而拒绝，保留validation/REQ-0001-candidate-739f-checker-first.md，随后按实际结果补齐，不改检查器。",
+    "739f解包测试首轮4个TAP条目失败，保留validation/REQ-0001-candidate-739f-runtime.log：测试错误地要求首页原字节与磁盘模板一致，而服务既有协议会替换唯一__CSRF__占位符。修正仅允许该单一已知实例值替换，其他首页字节、JS/CSS和完整包清单继续严格比较；不改产品CSRF保护或包内容。",
+    "2026-09-18当前候选更新状态卡：上一目标轮为实际进展（经验库实现03f9650/进展7e9f338已推送）；本轮阶段=发布候选一致性验证，唯一目标=739f代码生成对应待验ZIP并核验解包运行；输入=当前干净提交、固定打包器与原验收基线；交付=新包/清单/可复跑包内HTTP验证/证据；不做=修改业务或审批、模型外发、重启4179、覆盖旧包/任务、公开Release；停止=包与源码/HTTP身份一致且模式和关闭行为证据齐全，实际缺陷先另建子包。",
     "2026-09-18 REQ-0012经验库实现03f965037547ecbc901bd884553c891952adedec已提交、推送并独立核对GitHub main SHA。前置设计3c50f86先同步；四类固定观察建议和限定scoped_repeat技术学习已接入产品，原24例17文件未变。默认observe，assist可独立配置，不扩大审批/候选/预算/原预期，不等于真实模型收益。",
     "REQ-0012当前build739f82bac7bad3ead6d81cff2fa39ca344298ffceeafb0fc93ba09355ee68ba2：非暂停593项0失败/跳过（REQ-0012-delivery-final.log），随后只加强TTL测试独立性，52项受影响组合0失败/跳过（REQ-0012-delivery-scoped.log）；集合重叠不相加。真实Chromium验证跨job积累、独立进程重载、产品反证撤回及原错误保持。辅助模式注入模型联调11次协议请求、两条只读断言满足、业务写请求0，仍不是真实模型验收。",
     "保留REQ-0012未派发动作误记正向的原始反例并修复；旧调度测试300ms窗口在完整并发回归中有1失败，保留日志并只调整测试时间尺度，产品预算未改。TTL反例先证有效再推进时间，避免已撤回记录掩盖失效逻辑。原检查器两次把反例说明识别为运行失败的记录保留，修正文档区分历史与当前结果，最终正式检查成功。",
@@ -168,6 +172,7 @@
     "本次无需设计变更，原因：仅运行既有createCandidate/verifyCandidate并检查归档与解包后程序，应用/依赖/协议未修改；运行时依赖明确复用本工作区，不冒充干净安装。"
   ],
   "module_document_impact": [
+    "本次无需模块文档变更，原因：新增tests/release-candidate-runtime.integration.mjs仅核验现有包内协议/静态资源/三模式和正常关闭，产品设计及模块能力不变；REQ-0012索引同步为已实现有限能力，发布状态不提升。",
     "后续子需求依实际影响维护release_runtime等模块文档；当前仅新增发布验证/追踪。",
     "本次无需模块文档变更，原因：此次仅新增tests/release-discovery-chains.test.mjs及验证记录，未改变现有产品模块能力或配置；模块仍由已完成REQ-0005/0006/0007说明约束。",
     "本次无需模块文档变更，原因：仅增加tests/release-upgrade.integration.mjs，既有Store、服务与备份协议不变；如实测发现缺陷，另建子需求后修改产品。",
@@ -245,7 +250,7 @@
         "DD-0001-05"
       ],
       "status": "进行中",
-      "task": "上轮9b7f待验ZIP、逐项摘要与解包HTTP验证已有证据，但不含当前739f经验库实现；最终同版打包/真实复验、完整成本报告和发布结论仍待完成。",
+      "task": "当前739f待验ZIP/87文件摘要和解包三模式HTTP验证已有证据，包含经验库；旧9b7f包保留但不当作当前候选。最终同版真实复验、干净安装/独立操作、完整成本报告和发布结论仍待完成。",
       "verification_ids": [
         "VT-0001-05"
       ]
@@ -312,12 +317,13 @@
       "execution_status": "未运行",
       "item": "可追溯发布候选",
       "evidence_standard": "SHA清单、模型用量、包内清单、秘密扫描和全部门槛证据",
-      "current_evidence": "上轮9b7f待验ZIP已完成84个文件逐项SHA、解包清单/限定秘密模式、隔离HTTP身份及静态资源字节验证；详情candidate-check.md，日志validation/REQ-0001-candidate-zip.log和REQ-0001-candidate-runtime.log。此旧包不含当前739f经验库功能。共享依赖，不是干净安装，未重启4179、未调用模型；PENDING_ACCEPTANCE不变，最终同版打包/两轮/独立使用/成本门槛未齐全，本VT整体未验收。"
+      "current_evidence": "当前739f待验ZIP完成87项字节SHA、精确清单/有限秘密模式、三模式隔离HTTP身份/静态响应/正常关闭检查；4TAP条目0失败/跳过，日志validation/REQ-0001-candidate-739f-runtime-final.log；ZIP摘要及限制见candidate-check.md。共享依赖不是干净安装，旧4179未切换，模型请求0。旧9b7f包保留；PENDING_ACCEPTANCE不变，最终同版两轮/独立使用/成本门槛未齐全，本VT整体未验收。"
     }
   ],
   "verification_environment": {
     "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
+      "node tests/release-candidate-runtime.integration.mjs validation/REQ-0001-extracted-20260918-739f82ba/REQ-0001-candidate-20260918-739f82ba：4TAP（1父项+3模式）0失败/跳过，仅包内HTTP和关闭，不是4条业务用例。",
       "node tests/runtime-regression.mjs",
       "按影响运行真实Chromium集成文件；真实模型必须经过产品自身链路。",
       "node --test tests/release-upgrade.integration.mjs"
@@ -335,7 +341,8 @@
       "两固定旧Git运行时的本机合成升级/回退已有14项专项结果；产品源码未变、原17文件/24例冻结摘要保持，不代表干净Windows、真实模型或独立使用验收。",
       "最新字幕呈现修复570项程序、10项重叠专项、6项报告集成无失败；实际播放与中文目视检查不代替file://直开、独立人员或真实模型验收。",
       "上轮9b7f代码已形成带SHA的待验ZIP，解包HTTP运行身份一致且正常关闭；不含当前739f经验能力，不将共享依赖运行视为干净安装或整体可发布。",
-      "最新REQ-0012已形成有限技术经验闭环：593项程序与52项重叠受影响验证0失败/跳过，默认observe。真实模型配对对照尚未运行，不能宣称学习收益或发布就绪。"
+      "最新REQ-0012已形成有限技术经验闭环：593项程序与52项重叠受影响验证0失败/跳过，默认observe。真实模型配对对照尚未运行，不能宣称学习收益或发布就绪。",
+      "当前739f已补对应新待验ZIP及包内三模式HTTP实际验证，旧包仍保留。本轮只增加可复跑包验证/证据；模型0调用、4179未动，不把共享主机依赖当作干净环境验收。"
     ]
   },
   "trace_current": [
@@ -381,6 +388,12 @@
     }
   ],
   "trace_history": [
+    {
+      "version": 1,
+      "link": "DR-0001-05 / TK-0001-05 / VT-0001-05",
+      "status": "进行中",
+      "notes": "当前739f候选打包前登记，新增可复跑tests/release-candidate-runtime.integration.mjs只验证解包身份、静态资源、三模式空任务配置及关闭；共享依赖，非干净安装/真实模型验收。模块和产品设计不变。"
+    },
     {
       "version": 1,
       "link": "REQ-0012-ui-experience-memory / 03f965037547ecbc901bd884553c891952adedec",
@@ -459,6 +472,14 @@
     "禁止持久化凭据或绕过工具策略；禁止未经确认公开发布。"
   ],
   "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "当前经验库构建候选更新",
+      "description": "生成739f待验ZIP，87项精确归档/包清单/有限凭据模式核验，新增包内HTTP验证4TAP无失败/跳过；首轮测试忽略CSRF动态占位导致的失败已保留并修正。",
+      "impact": "仅验证脚本、需求进展、索引与候选证据；产品源码、原24例和4179不变。",
+      "confirmed_by": "实际ZIP摘要、解包源/包/HTTP身份、三模式空任务检查及正常关闭；非发布验收。"
+    },
     {
       "date": "2026-09-18",
       "version": 1,

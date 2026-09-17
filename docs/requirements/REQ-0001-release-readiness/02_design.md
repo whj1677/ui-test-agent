@@ -22,6 +22,7 @@
 
 ## 模块文档影响
 
+- 本次无需模块文档变更，原因：新增tests/release-candidate-runtime.integration.mjs仅核验现有包内协议/静态资源/三模式和正常关闭，产品设计及模块能力不变；REQ-0012索引同步为已实现有限能力，发布状态不提升。
 - 后续子需求依实际影响维护release_runtime等模块文档；当前仅新增发布验证/追踪。
 - 本次无需模块文档变更，原因：此次仅新增tests/release-discovery-chains.test.mjs及验证记录，未改变现有产品模块能力或配置；模块仍由已完成REQ-0005/0006/0007说明约束。
 - 本次无需模块文档变更，原因：仅增加tests/release-upgrade.integration.mjs，既有Store、服务与备份协议不变；如实测发现缺陷，另建子需求后修改产品。
