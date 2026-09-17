@@ -1,0 +1,326 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0004",
+  "title": "多结构复杂UI验收夹具与独立真值",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-17"
+  },
+  "original_input": "REQ-0001发布目标的多界面验证子包：用户要求大量不同复杂UI测试、每问题先需求后修复/Git同步；保留原8难例，建立至少3结构24例及独立真值。",
+  "user_requirements": [
+    {
+      "id": "UN-0004-01",
+      "status": "已确认",
+      "goal": "提供可独立复跑、不为Agent降低难度的复杂UI验收基线。",
+      "constraints": "原8例/原页面保持；测试夹具自检不计为Agent真实执行成功；不引入真实业务数据和外部服务。",
+      "success_criteria": "3种不同DOM/交互结构共24例、分类真值/权限、可启动页面、独立浏览器自检、冻结摘要齐备。"
+    }
+  ],
+  "confirmed_facts": [
+    "现有受控产品版本fdd94af；原8复杂样本仅在本机work目录，需字节一致副本进入版本控制。",
+    "原8为多页原生表格，CPLX-008预置480与840差异必须保留；不得删失败或修改期望。",
+    "真实模型当前受执行环境策略限制且恢复服务未配置连接；本包只提供夹具基线和工程验证。"
+  ],
+  "inferences_and_open_questions": [
+    "新增两站采用卡片SPA/自定义叠层和多步表单/原生对话框；不用同一DOM换皮。",
+    "19正常、3预置产品错误、2授权边界合计24；真实执行前冻结，每组分别判定，不能把预期失败算成误报或剔除。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0004-01",
+      "status": "已确认",
+      "requirement": "原8页面和导入JSON字节保留，新建两组各8条，统一列明动作/期望/前置/清理/授权分类。",
+      "acceptance_criteria": "原8摘要完全一致，24唯一CaseID，可通过现有导入器；不更改期望适配结果。",
+      "constraints": "所有材料纯合成；独立真值不暴露为可导航HTTP资源。"
+    },
+    {
+      "id": "DR-0004-02",
+      "status": "已确认",
+      "requirement": "建设结构不同的两站：卡片列表/异步筛选/抽屉与内层弹窗；多步表单/联动/原生模态/受控CRUD。",
+      "acceptance_criteria": "每站有正常和错误路径，重复名称/按钮及遮挡保留；写入仅隔离合成服务器，精确对象清理有旁证。",
+      "constraints": "无外部CDN/字体/模型调用，不修改Agent实现。"
+    },
+    {
+      "id": "DR-0004-03",
+      "status": "已确认",
+      "requirement": "独立于Agent实现的真实Chromium参考检查验证页面行为及预置错误，再做导入/安全/桌面窄屏检查。",
+      "acceptance_criteria": "有真正浏览器操作、断言、异常/失败反例和截图；不使用手写计划注入Agent。",
+      "constraints": "参考驱动仅是夹具真值检验，不作为自主成功、业务执行收据或干净Windows验收。"
+    },
+    {
+      "id": "DR-0004-04",
+      "status": "已确认",
+      "requirement": "冻结页面/用例/分类真值SHA与重置说明、有限服务器/版本说明，随单独提交同步。",
+      "acceptance_criteria": "清单可检查漂移、原样本哈希不变；秘密扫描无命中；测试结果与最终文件同版。",
+      "constraints": "不替用户批准真实模型计划，不发布公开Release，不自动分发。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0004-01",
+      "dr_ids": [
+        "DR-0004-01"
+      ],
+      "status": "已确认",
+      "summary": "原8字节副本与分站导入文件分离，分类真值单独保存。",
+      "rationale": "区分被测Agent、夹具实现、独立判定和发布证据，避免自证成功。"
+    },
+    {
+      "id": "DD-0004-02",
+      "dr_ids": [
+        "DR-0004-02"
+      ],
+      "status": "已确认",
+      "summary": "本机3独立origin；原站4190不动，新站4191/4192，允许临时端口做自检。",
+      "rationale": "区分被测Agent、夹具实现、独立判定和发布证据，避免自证成功。"
+    },
+    {
+      "id": "DD-0004-03",
+      "dr_ids": [
+        "DR-0004-03"
+      ],
+      "status": "已确认",
+      "summary": "原生Playwright参考检查直接按冻结业务断言操作，源测试不被站点服务。",
+      "rationale": "区分被测Agent、夹具实现、独立判定和发布证据，避免自证成功。"
+    },
+    {
+      "id": "DD-0004-04",
+      "dr_ids": [
+        "DR-0004-04"
+      ],
+      "status": "已确认",
+      "summary": "原素材/新素材分别记SHA，最后冻结manifest再核对并Git同步。",
+      "rationale": "区分被测Agent、夹具实现、独立判定和发布证据，避免自证成功。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "acceptance/fixtures只提供浏览器页面和其必要同源API；用例/期望分类/参考驱动不挂载到HTTP路由。",
+    "本包不改src/public产品链路；新服务器仅绑定127.0.0.1，非生产合成数据，CRUD状态限定单实例内存。"
+  ],
+  "module_document_impact": [
+    "本次无需模块文档变更，原因：仅增加独立合成夹具、参考测试和针对这些文件的字节归档属性，不改src/public或任何产品模块契约；启动/重置/隔离/参考验收边界已记录在acceptance/README。"
+  ],
+  "risks_and_rollback": [
+    "保留所有失败样本；只有夹具本身不符合冻结原文时才能修夹具并记录，不能改样本降难度。",
+    "原4190/4179运行实例和data/v02不操作；参考检查使用临时端口与临时浏览器。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0004-01",
+      "dr_ids": [
+        "DR-0004-01"
+      ],
+      "dd_ids": [
+        "DD-0004-01"
+      ],
+      "status": "已实现",
+      "task": "冻结24用例及分类真值并归档原8。",
+      "verification_ids": [
+        "VT-0004-01"
+      ]
+    },
+    {
+      "id": "TK-0004-02",
+      "dr_ids": [
+        "DR-0004-02"
+      ],
+      "dd_ids": [
+        "DD-0004-02"
+      ],
+      "status": "已实现",
+      "task": "构建两个不同结构的复杂合成UI站点。",
+      "verification_ids": [
+        "VT-0004-02"
+      ]
+    },
+    {
+      "id": "TK-0004-03",
+      "dr_ids": [
+        "DR-0004-03"
+      ],
+      "dd_ids": [
+        "DD-0004-03"
+      ],
+      "status": "已实现",
+      "task": "独立验真、导入校验和视觉/交互检查。",
+      "verification_ids": [
+        "VT-0004-03"
+      ]
+    },
+    {
+      "id": "TK-0004-04",
+      "dr_ids": [
+        "DR-0004-04"
+      ],
+      "dd_ids": [
+        "DD-0004-04"
+      ],
+      "status": "已实现",
+      "task": "冻结摘要、使用说明、正式检查和Git同步。",
+      "verification_ids": [
+        "VT-0004-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0004-01",
+      "dr_ids": [
+        "DR-0004-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "24例输入/分类/原文保留",
+      "evidence_standard": "原8摘要完全一致，24唯一CaseID，可通过现有导入器；不更改期望适配结果。",
+      "current_evidence": {
+        "command": "node --test tests/acceptance-fixtures.test.mjs tests/acceptance-fixtures.integration.mjs",
+        "exit_code": 0,
+        "test_count": 32,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0004-reference.log"
+      }
+    },
+    {
+      "id": "VT-0004-02",
+      "dr_ids": [
+        "DR-0004-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "多结构页面行为",
+      "evidence_standard": "每站有正常和错误路径，重复名称/按钮及遮挡保留；写入仅隔离合成服务器，精确对象清理有旁证。",
+      "current_evidence": {
+        "command": "node --test tests/acceptance-fixtures.test.mjs tests/acceptance-fixtures.integration.mjs",
+        "exit_code": 0,
+        "test_count": 32,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0004-reference.log"
+      }
+    },
+    {
+      "id": "VT-0004-03",
+      "dr_ids": [
+        "DR-0004-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "独立参考/反例及视觉检查",
+      "evidence_standard": "有真正浏览器操作、断言、异常/失败反例和截图；不使用手写计划注入Agent。",
+      "current_evidence": {
+        "command": "node --test tests/acceptance-fixtures.test.mjs tests/acceptance-fixtures.integration.mjs",
+        "exit_code": 0,
+        "test_count": 32,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0004-reference.log"
+      }
+    },
+    {
+      "id": "VT-0004-04",
+      "dr_ids": [
+        "DR-0004-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "冻结清单与提交",
+      "evidence_standard": "清单可检查漂移、原样本哈希不变；秘密扫描无命中；测试结果与最终文件同版。",
+      "current_evidence": {
+        "command": "node --test tests/acceptance-fixtures.test.mjs tests/acceptance-fixtures.integration.mjs",
+        "exit_code": 0,
+        "test_count": 32,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0004-reference.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/acceptance-fixtures.test.mjs",
+      "node --test tests/acceptance-fixtures.integration.mjs",
+      "node tests/runtime-regression.mjs"
+    ],
+    "environment": [
+      "Windows/Node22/Chromium；本机临时端口；不调用模型"
+    ],
+    "conclusion": [
+      "同版参考32项/0失败/0跳过：24条参考行为（权限2条仅可达性和无副作用）、7项摘要/导入/HTTP/CRUD检查、1项两站三尺寸视觉检查；不代表Agent自主结果。",
+      "17文件摘要冻结，原8页面/用例摘要不变；12张桌面/窄屏/短屏截图，主管抽检7张无裁切和遮挡错误；不改变3处预置产品差异。",
+      "初轮失败保留在REQ-0004-reference-initial.log：参考脚本未判断已展开的侧栏，误点击收起。另首次Host反例使用fetch被规范化，已改原生HTTP实际发送；未改用例期望或夹具业务规则。",
+      "现有非暂停工程回归397项/0失败/0跳过，日志validation/REQ-0004-runtime.log；与参考集重叠7项，不相加汇报。",
+      "真实模型/干净Windows和独立用户验收仍未完成；本包不作发布判断。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0004-01",
+      "dr_id": "DR-0004-01",
+      "dd_id": "DD-0004-01",
+      "tk_id": "TK-0004-01",
+      "vt_id": "VT-0004-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0004-01",
+      "dr_id": "DR-0004-02",
+      "dd_id": "DD-0004-02",
+      "tk_id": "TK-0004-02",
+      "vt_id": "VT-0004-02",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0004-01",
+      "dr_id": "DR-0004-03",
+      "dd_id": "DD-0004-03",
+      "tk_id": "TK-0004-03",
+      "vt_id": "VT-0004-03",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0004-01",
+      "dr_id": "DR-0004-04",
+      "dd_id": "DD-0004-04",
+      "tk_id": "TK-0004-04",
+      "vt_id": "VT-0004-04",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness",
+      "status": "进行中",
+      "notes": "多界面真实验证的夹具基线，不绕过模型阻塞。"
+    }
+  ],
+  "open_questions": [
+    "真实模型复测依旧须恢复执行许可和本机安全连接；本包不通过其他路径调用。"
+  ],
+  "prohibited_implementation": [
+    "不得向Agent提供参考驱动、隐藏预置错误答案或手写计划。",
+    "不修改原8/业务期待，不将夹具自检称为Agent成功。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "子包建立",
+      "description": "在夹具修改前明确24例结构/真值/隔离和验证边界。",
+      "impact": "验收材料与合成页面，不改产品代码",
+      "confirmed_by": "用户发布目标授权"
+    },
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "夹具建设与独立验证",
+      "description": "归档原8，新增卡片SPA与原生向导两站16例；冻结17文件。32项真实浏览器/工程参考检查完成，边界与产品错误单独判定，不注入Agent计划。",
+      "impact": "新增本机合成基线和字节归档属性；不改src/public或原任务",
+      "confirmed_by": "实际命令、日志、截图与原始摘要"
+    }
+  ]
+}

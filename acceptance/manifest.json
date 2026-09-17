@@ -1,0 +1,30 @@
+{
+  "schema_version": "ui-fixture-freeze/v1",
+  "frozen_at": "2026-09-17",
+  "case_count": 24,
+  "classifications": {
+    "SUCCESS": 19,
+    "PRODUCT_DEFECT": 3,
+    "AUTHORIZATION_BLOCK": 2
+  },
+  "scope": "Synthetic targets and reference checks only; no Agent outcome inferred",
+  "files": {
+    "acceptance/README.md": "9c52c0fd30040abec26ad453e05cf871a55c2515fda9c04ba5cce45f510fb4d2",
+    "acceptance/check.mjs": "581209ddf4945382bed2e108042cb4217fba7180931ce3e26c62ccbd2ea13d8d",
+    "acceptance/serve.mjs": "35cb11eac2f291b5a2a7406c5e53c0946501b17d82a71882097644a781199ee5",
+    "acceptance/oracle.json": "3422dca79dc3eb21a20069d4d4370ef3457757296ce5cb5a2483509947dd53a3",
+    "acceptance/design-system/MASTER.md": "bcb3665ae903cb7615b56182b6b872a17f2cb928c1dddc8c8c4493ac20da439a",
+    "acceptance/cases/devices.json": "3770932d3cf997faaf56f9d6a565b4012f53eeea80b033e4e46183aa22f4efbb",
+    "acceptance/cases/work-orders.json": "723b2d21b5aa9e09b6ec95b646b4b88a13e070f18d21d1e86d0bd4ed4019fe87",
+    "acceptance/cases/requests.json": "0d72147a81a3e1448975dd5863ccb90a8d191141c63cac22a0df79f6f0419acf",
+    "acceptance/fixtures/devices/index.html": "0f59e366d120a49e9718c59c582a712e9e117d8def4cc95acc89c1bdc1841775",
+    "acceptance/fixtures/work-orders/index.html": "5015368e1f05a1c6ee3450d17ab45b1024bf8b2d37e9b7974fff85c0e5aa21b0",
+    "acceptance/fixtures/work-orders/app.js": "1546b70d5bf0450c2e41dee704c62c06acf1d2e1462f98f187a25a6361ddd819",
+    "acceptance/fixtures/work-orders/style.css": "c0e0466a60450507a5e54910581540c24120dd5fa0fa2f03511af0dd1a7a0975",
+    "acceptance/fixtures/requests/index.html": "6959ba8000081f82f25ad7ba9ba7500db5c4298ab483ae85d5d57fbee584ab5d",
+    "acceptance/fixtures/requests/app.js": "dc88870e2a7f84c0ce577449a6ad07a06c5b5faef01c28dc43ba624a287fc41d",
+    "acceptance/fixtures/requests/style.css": "f91a65efa6d1d850c4d1d15be5ee2865121b2c5152847f918c2f15b6d71649d1",
+    "tests/acceptance-fixtures.test.mjs": "9e589072df394087a7c2b1c0f41dd136b4f71c9a41e982eee7d6c5eb4ab570a2",
+    "tests/acceptance-fixtures.integration.mjs": "de6e5fe02e6832c2714541ac237e0fc8cc214d436cc069f37d540d2332224fe9"
+  }
+}

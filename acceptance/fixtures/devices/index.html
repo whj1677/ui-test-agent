@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>园区设备运维工作台</title>
+<style>
+:root{
+  --bg:#f3f6fa; --panel:#ffffff; --line:#d8e0ea; --ink:#24344d; --muted:#5b6b82;
+  --accent:#2f6fb2; --accent-dark:#245a91; --danger:#c0392b; --ok:#1e7e46;
+  --side:#e8eef6; --side-active:#d3e2f3;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none!important;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  background:var(--bg); color:var(--ink); font-size:14px; line-height:1.55;
+}
+button{font:inherit;cursor:pointer;}
+a{color:var(--accent);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+/* 布局 */
+.app{display:flex;min-height:100vh;}
+.sidebar{
+  width:224px;flex:0 0 224px;background:var(--side);border-right:1px solid var(--line);
+  padding:16px 0;
+}
+.brand{padding:0 20px 14px;font-weight:700;font-size:15px;color:var(--ink);border-bottom:1px solid var(--line);}
+.nav-group{margin-top:8px;}
+.nav-item,.nav-parent{
+  display:block;width:100%;text-align:left;padding:10px 20px;border:0;background:transparent;
+  color:var(--ink);text-decoration:none;font-size:14px;
+}
+.nav-item:hover,.nav-parent:hover{background:#dde7f2;}
+.nav-item.active{background:var(--side-active);border-left:3px solid var(--accent);padding-left:17px;font-weight:600;}
+.nav-parent{font-weight:600;}
+.nav-parent .caret{display:inline-block;margin-right:6px;transition:transform .15s;}
+.nav-parent[aria-expanded="true"] .caret{transform:rotate(90deg);}
+.submenu{margin:0;padding:0;list-style:none;}
+.submenu .nav-item{padding-left:38px;font-size:13px;}
+.main-col{flex:1;min-width:0;display:flex;flex-direction:column;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--panel);border-bottom:1px solid var(--line);padding:10px 24px;
+}
+.breadcrumb{font-size:13px;color:var(--muted);}
+.breadcrumb strong{color:var(--ink);font-weight:600;}
+.account{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);}
+.btn{
+  border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:4px;
+  padding:7px 16px;font-size:14px;
+}
+.btn:hover{background:var(--accent-dark);}
+.btn.secondary{background:#fff;color:var(--accent);}
+.btn.secondary:hover{background:#eaf2fa;}
+.btn.small{padding:4px 12px;font-size:13px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.view{padding:24px;flex:1;}
+h1.page-title{font-size:18px;margin:0 0 16px;}
+/* 卡片 */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:20px;}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;
+}
+.card .num{font-size:26px;font-weight:700;color:var(--accent);}
+.card .lbl{color:var(--muted);font-size:13px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+/* 筛选区 */
+.filter-row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:13px;color:var(--muted);}
+select,input[type="text"]{
+  border:1px solid var(--line);border-radius:4px;padding:7px 10px;font:inherit;background:#fff;color:var(--ink);min-width:150px;
+}
+select:disabled{background:#eef1f5;color:var(--muted);}
+/* 表格 */
+.table-wrap{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;min-width:760px;background:var(--panel);}
+caption{text-align:left;font-weight:600;padding:8px 0;color:var(--ink);}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;white-space:nowrap;}
+th{background:#eef3f9;font-size:13px;}
+tbody tr:nth-child(even){background:#f7fafd;}
+table.readonly tbody tr{background:#eceff3;color:#6a7789;}
+table.readonly th{background:#e2e7ee;color:#6a7789;}
+.badge-old{
+  display:inline-block;background:#9aa7b8;color:#fff;border-radius:3px;font-size:12px;
+  padding:0 6px;margin-right:6px;
+}
+.sort-btn{border:0;background:transparent;font:inherit;font-weight:600;color:var(--ink);padding:0;}
+.loading-row td,.empty-row td{text-align:center;color:var(--muted);padding:20px;}
+/* 分页 */
+.pager{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.pager .info{color:var(--muted);font-size:13px;margin-right:auto;}
+.pager button{
+  border:1px solid var(--line);background:#fff;border-radius:4px;padding:5px 11px;font-size:13px;color:var(--ink);
+}
+.pager button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff;}
+.pager button:disabled{opacity:.45;cursor:not-allowed;}
+/* 状态徽标 */
+.st-run{color:var(--ok);font-weight:600;}
+.st-maint{color:#b9770e;font-weight:600;}
+.st-stop{color:var(--danger);font-weight:600;}
+/* 弹窗 */
+dialog{
+  border:1px solid var(--line);border-radius:8px;padding:0;max-width:520px;width:calc(100% - 48px);
+  box-shadow:0 12px 32px rgba(31,51,80,.22);
+}
+dialog::backdrop{background:rgba(31,51,80,.35);}
+.dlg-head{padding:14px 20px;border-bottom:1px solid var(--line);font-size:16px;font-weight:700;margin:0;}
+.dlg-body{padding:16px 20px;}
+.dlg-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;}
+.tabs{display:flex;gap:4px;padding:8px 20px 0;border-bottom:1px solid var(--line);}
+.tab{
+  border:1px solid transparent;border-bottom:0;background:transparent;padding:8px 16px;font-size:14px;
+  border-radius:6px 6px 0 0;color:var(--muted);
+}
+.tab[aria-selected="true"]{background:#fff;border-color:var(--line);color:var(--accent);font-weight:600;margin-bottom:-1px;}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:8px 16px;margin:0 0 16px;}
+.kv dt{color:var(--muted);}
+.kv dd{margin:0;font-weight:600;}
+.maint-err{color:var(--danger);margin:0 0 12px;}
+.maint-rec{margin:0;padding:10px 14px;background:#f2f7fd;border:1px solid var(--line);border-radius:4px;}
+/* 表单 */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px 24px;max-width:760px;}
+.err{color:var(--danger);font-size:12px;min-height:16px;}
+input[aria-invalid="true"],select[aria-invalid="true"]{border-color:var(--danger);}
+.summary{
+  display:none;border:1px solid var(--danger);background:#fdf1ef;color:var(--danger);
+  border-radius:4px;padding:10px 14px;margin-bottom:16px;max-width:760px;
+}
+.summary.show{display:block;}
+.summary ul{margin:6px 0 0;padding-left:18px;}
+.form-actions{margin-top:20px;display:flex;gap:12px;}
+.hint{color:var(--muted);font-size:13px;}
+/* 登录 */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:36px 40px;max-width:380px;width:100%;text-align:center;}
+.login-card h1{font-size:20px;margin:0 0 8px;}
+.login-card p{color:var(--muted);margin:0 0 24px;font-size:13px;}
+/* toast */
+.toast{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:10px 22px;border-radius:4px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:99;
+}
+.toast.show{opacity:1;}
+.placeholder-box{background:var(--panel);border:1px dashed var(--line);border-radius:6px;padding:48px;text-align:center;color:var(--muted);font-size:15px;}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important;}
+}
+@media (max-width:760px){
+  .sidebar{width:180px;flex-basis:180px;}
+  .view{padding:14px;}
+}
+@media (max-width:600px){
+  .app{display:block;}
+  .sidebar{width:100%;border-right:0;border-bottom:1px solid var(--line);padding:12px 0;}
+  .topbar{padding:12px 14px;flex-wrap:wrap;}
+  .form-grid{grid-template-columns:minmax(0,1fr);}
+  .field{min-width:0;}
+  .field select,.field input{min-width:0;width:100%;}
+  .filter-row .field{flex:1 1 180px;}
+  .placeholder-box{padding:24px;}
+}
+</style>
+</head>
+<body>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="loginView" class="login-wrap" hidden>
+  <div class="login-card">
+    <h1>园区设备运维工作台</h1>
+    <p>本机演示环境，点击按钮即可进入，无需账号密码。</p>
+    <button id="loginBtn" class="btn" type="button">进入演示</button>
+  </div>
+</div>
+
+<div id="app" class="app" hidden>
+  <aside class="sidebar">
+    <div class="brand">园区设备运维工作台</div>
+    <nav aria-label="主导航">
+      <div class="nav-group">
+        <a class="nav-item" href="/home" data-nav data-route="/home">工作台</a>
+      </div>
+      <div class="nav-group">
+        <button class="nav-parent" id="devCenterToggle" type="button" aria-expanded="false" aria-controls="devSubmenu">
+          <span class="caret" aria-hidden="true">▸</span>设备中心
+        </button>
+        <ul class="submenu" id="devSubmenu" hidden>
+          <li><a class="nav-item" href="/devices" data-nav data-route="/devices">设备台账</a></li>
+          <li><a class="nav-item" href="/devices/legacy" data-nav data-route="/devices/legacy">设备台账（旧）</a></li>
+          <li><a class="nav-item" href="/inspect" data-nav data-route="/inspect">设备巡检</a></li>
+          <li><a class="nav-item" href="/overview" data-nav data-route="/overview">设备总览</a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+  <div class="main-col">
+    <header class="topbar">
+      <div class="breadcrumb" id="breadcrumb" aria-label="面包屑">工作台</div>
+      <div class="account">
+        <span>演示账号</span>
+        <button id="logoutBtn" class="btn secondary small" type="button">退出登录</button>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<dialog id="detailDialog" aria-labelledby="detailTitle">
+  <h2 class="dlg-head" id="detailTitle">设备详情</h2>
+  <div class="tabs" role="tablist" aria-label="设备详情页签">
+    <button class="tab" id="tabBasic" role="tab" type="button" aria-selected="true" aria-controls="panelBasic">基本信息</button>
+    <button class="tab" id="tabMaint" role="tab" type="button" aria-selected="false" aria-controls="panelMaint">维保记录</button>
+  </div>
+  <div class="dlg-body">
+    <div id="panelBasic" role="tabpanel" aria-labelledby="tabBasic">
+      <dl class="kv">
+        <dt>编号</dt><dd id="dId"></dd>
+        <dt>园区</dt><dd id="dPark"></dd>
+        <dt>负责人</dt><dd id="dOwner"></dd>
+        <dt>状态</dt><dd id="dStatus"></dd>
+        <dt>容量</dt><dd><span id="dCap"></span> kW</dd>
+      </dl>
+      <button id="noteBtn" class="btn secondary small" type="button">查看说明</button>
+    </div>
+    <div id="panelMaint" role="tabpanel" aria-labelledby="tabMaint" hidden></div>
+  </div>
+  <div class="dlg-foot">
+    <button id="closeDetail" class="btn" type="button">关闭详情</button>
+  </div>
+</dialog>
+
+<dialog id="noteDialog" aria-labelledby="noteTitle">
+  <h2 class="dlg-head" id="noteTitle">设备说明</h2>
+  <div class="dlg-body">
+    <p style="margin:0;">本设备纳入季度巡检范围</p>
+  </div>
+  <div class="dlg-foot">
+    <button id="closeNote" class="btn" type="button">关闭说明</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+/* ================= 固定数据 ================= */
+var PARKS = ["云杉园","梧桐园","枫林园"];
+var PARK_TYPES = {
+  "云杉园":["冷却塔","空压机","配电柜","水泵"],
+  "梧桐园":["冷却塔","水泵","配电柜"],
+  "枫林园":["冷却塔","空压机","配电柜"]
+};
+var STATUSES = ["运行","维保","停机"];
+var SEED = [
+  {id:"SB-2026-001",name:"一号冷却塔",park:"云杉园",type:"冷却塔",status:"运行",owner:"陈启",capacity:320},
+  {id:"SB-2026-002",name:"一号空压机",park:"云杉园",type:"空压机",status:"运行",owner:"林蔚",capacity:150},
+  {id:"SB-2026-003",name:"二号配电柜",park:"云杉园",type:"配电柜",status:"维保",owner:"周衡",capacity:480},
+  {id:"SB-2026-004",name:"一号水泵",park:"梧桐园",type:"水泵",status:"运行",owner:"陈启",capacity:90},
+  {id:"SB-2026-005",name:"二号冷却塔",park:"梧桐园",type:"冷却塔",status:"停机",owner:"林蔚",capacity:260},
+  {id:"SB-2026-006",name:"一号冷却塔",park:"梧桐园",type:"冷却塔",status:"运行",owner:"赵岚",capacity:320},
+  {id:"SB-2026-007",name:"一号配电柜",park:"枫林园",type:"配电柜",status:"运行",owner:"周衡",capacity:500},
+  {id:"SB-2026-008",name:"三号水泵",park:"枫林园",type:"水泵",status:"维保",owner:"赵岚",capacity:75},
+  {id:"SB-2026-009",name:"二号空压机",park:"枫林园",type:"空压机",status:"运行",owner:"陈启",capacity:180},
+  {id:"SB-2026-010",name:"三号冷却塔",park:"枫林园",type:"冷却塔",status:"停机",owner:"林蔚",capacity:300},
+  {id:"SB-2026-011",name:"二号水泵",park:"云杉园",type:"水泵",status:"运行",owner:"赵岚",capacity:110},
+  {id:"SB-2026-012",name:"备用配电柜",park:"梧桐园",type:"配电柜",status:"停机",owner:"周衡",capacity:420}
+];
+/* 每次页面加载初始化一次；刷新即重置业务数据 */
+var devices = [];
+var fault007 = true;
+function initData(){
+  devices = SEED.map(function(d){ return Object.assign({}, d); });
+  fault007 = true;
+}
+initData();
+
+/* ================= 工具 ================= */
+function $(s){ return document.querySelector(s); }
+function el(tag, attrs, text){
+  var n = document.createElement(tag);
+  if(attrs){ Object.keys(attrs).forEach(function(k){ n.setAttribute(k, attrs[k]); }); }
+  if(text !== undefined && text !== null){ n.textContent = String(text); }
+  return n;
+}
+function isAuthed(){ return sessionStorage.getItem("demo_auth") === "1"; }
+var toastTimer = null;
+function toast(msg){
+  var t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  if(toastTimer){ clearTimeout(toastTimer); }
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+function statusClass(s){
+  if(s === "运行"){ return "st-run"; }
+  if(s === "维保"){ return "st-maint"; }
+  return "st-stop";
+}
+
+/* ================= 路由 ================= */
+var BREADCRUMBS = {
+  "/home":"工作台",
+  "/devices":"设备中心 / 设备台账",
+  "/devices/new":"设备中心 / 设备台账 / 新增设备",
+  "/devices/legacy":"设备中心 / 设备台账（旧）",
+  "/inspect":"设备中心 / 设备巡检",
+  "/overview":"设备中心 / 设备总览"
+};
+function navigate(path, replace){
+  if(replace){ history.replaceState({}, "", path); }
+  else { history.pushState({}, "", path); }
+  renderRoute();
+}
+function closeAllDialogs(){
+  document.querySelectorAll("dialog[open]").forEach(function(d){ d.close(); });
+}
+function renderRoute(){
+  closeAllDialogs();
+  var p = location.pathname;
+  if(!isAuthed() && p !== "/login"){
+    history.replaceState({}, "", "/login"); p = "/login";
+  } else if(isAuthed() && p === "/login"){
+    history.replaceState({}, "", "/home"); p = "/home";
+  }
+  var known = ["/login","/home","/devices","/devices/new","/devices/legacy","/inspect","/overview"];
+  if(known.indexOf(p) < 0){
+    p = isAuthed() ? "/home" : "/login";
+    history.replaceState({}, "", p);
+  }
+  $("#loginView").hidden = (p !== "/login");
+  $("#app").hidden = (p === "/login");
+  if(p !== "/login"){
+    $("#breadcrumb").textContent = BREADCRUMBS[p] || "工作台";
+    document.querySelectorAll(".nav-item[data-route]").forEach(function(a){
+      a.classList.toggle("active", a.getAttribute("data-route") === p);
+    });
+  }
+  if(p === "/home"){ renderHome(); }
+  else if(p === "/devices"){ renderDevices(); }
+  else if(p === "/devices/new"){ renderNew(); }
+  else if(p === "/devices/legacy"){ renderLegacy(); }
+  else if(p === "/inspect"){ renderInspect(); }
+  else if(p === "/overview"){ renderOverview(); }
+}
+window.addEventListener("popstate", renderRoute);
+document.addEventListener("click", function(e){
+  var a = e.target.closest("a[data-nav]");
+  if(a){
+    e.preventDefault();
+    navigate(a.getAttribute("href"));
+  }
+});
+
+/* ================= 登录 / 退出 ================= */
+$("#loginBtn").addEventListener("click", function(){
+  sessionStorage.setItem("demo_auth", "1");
+  navigate("/home");
+});
+$("#logoutBtn").addEventListener("click", function(){
+  sessionStorage.removeItem("demo_auth");
+  navigate("/login");
+});
+$("#devCenterToggle").addEventListener("click", function(){
+  var btn = this;
+  var open = btn.getAttribute("aria-expanded") === "true";
+  btn.setAttribute("aria-expanded", String(!open));
+  $("#devSubmenu").hidden = open;
+});
+
+/* ================= 首页 ================= */
+function statCard(label, value){
+  var c = el("div", {"class":"card"});
+  c.appendChild(el("div", {"class":"num"}, value));
+  c.appendChild(el("div", {"class":"lbl"}, label));
+  return c;
+}
+function renderHome(){
+  var v = $("#view");
+  v.textContent = "";
+  var h = el("h1", {"class":"page-title"}, "欢迎使用园区设备运维工作台");
+  v.appendChild(h);
+  var cards = el("div", {"class":"cards"});
+  cards.appendChild(statCard("设备总数", devices.length));
+  cards.appendChild(statCard("运行中", devices.filter(function(d){return d.status==="运行";}).length));
+  cards.appendChild(statCard("维保中", devices.filter(function(d){return d.status==="维保";}).length));
+  cards.appendChild(statCard("停机", devices.filter(function(d){return d.status==="停机";}).length));
+  v.appendChild(cards);
+  var p = el("div", {"class":"panel"});
+  p.appendChild(el("p", {"class":"hint"}, "请通过左侧「设备中心 → 设备台账」管理园区设备；数据仅保存在本页内存，刷新后重置。"));
+  v.appendChild(p);
+}
+
+/* ================= 设备台账 ================= */
+var listState = {
+  draft: {park:"", status:"", keyword:""},
+  q: {park:"", status:"", keyword:""},
+  page: 1,
+  sortDir: "asc"
+};
+var listToken = 0;
+var PAGE_SIZE = 4;
+
+function filteredDevices(){
+  var q = listState.q;
+  var rows = devices.filter(function(d){
+    if(q.park && d.park !== q.park){ return false; }
+    if(q.status && d.status !== q.status){ return false; }
+    if(q.keyword && d.name.indexOf(q.keyword) < 0){ return false; }
+    return true;
+  });
+  rows.sort(function(a, b){
+    return listState.sortDir === "asc" ? (a.id < b.id ? -1 : 1) : (a.id < b.id ? 1 : -1);
+  });
+  return rows;
+}
+
+function renderDevices(){
+  var v = $("#view");
+  v.textContent = "";
+  v.appendChild(el("h1", {"class":"page-title"}, "设备台账"));
+
+  /* 筛选卡 */
+  var panel = el("div", {"class":"panel"});
+  var row = el("div", {"class":"filter-row"});
+
+  var fPark = el("div", {"class":"field"});
+  fPark.appendChild(el("label", {"for":"fltPark"}, "园区"));
+  var selPark = el("select", {id:"fltPark"});
+  selPark.appendChild(el("option", {value:""}, "全部园区"));
+  PARKS.forEach(function(p){ selPark.appendChild(el("option", {value:p}, p)); });
+  selPark.value = listState.draft.park;
+  fPark.appendChild(selPark);
+
+  var fStatus = el("div", {"class":"field"});
+  fStatus.appendChild(el("label", {"for":"fltStatus"}, "状态"));
+  var selStatus = el("select", {id:"fltStatus"});
+  selStatus.appendChild(el("option", {value:""}, "全部状态"));
+  STATUSES.forEach(function(s){ selStatus.appendChild(el("option", {value:s}, s)); });
+  selStatus.value = listState.draft.status;
+  fStatus.appendChild(selStatus);
+
+  var fKw = el("div", {"class":"field"});
+  fKw.appendChild(el("label", {"for":"fltKw"}, "名称关键字"));
+  var inpKw = el("input", {id:"fltKw", type:"text", placeholder:"按名称包含匹配"});
+  inpKw.value = listState.draft.keyword;
+  fKw.appendChild(inpKw);
+
+  var btnQuery = el("button", {"class":"btn", type:"button"}, "查询");
+  var btnReset = el("button", {"class":"btn secondary", type:"button"}, "重置");
+  var btnNew = el("button", {"class":"btn", type:"button"}, "+ 新增设备");
+
+  row.appendChild(fPark); row.appendChild(fStatus); row.appendChild(fKw);
+  row.appendChild(btnQuery); row.appendChild(btnReset); row.appendChild(btnNew);
+  panel.appendChild(row);
+  v.appendChild(panel);
+
+  /* 表格卡 */
+  var tpanel = el("div", {"class":"panel"});
+  var wrap = el("div", {"class":"table-wrap"});
+  var table = el("table");
+  table.appendChild(el("caption", null, "园区设备台账列表"));
+  var thead = el("thead");
+  var htr = el("tr");
+  var thId = el("th", {scope:"col"});
+  thId.setAttribute("aria-sort", listState.sortDir === "asc" ? "ascending" : "descending");
+  var sortBtn = el("button", {"class":"sort-btn", type:"button", id:"sortIdBtn"},
+    "编号 " + (listState.sortDir === "asc" ? "↑" : "↓"));
+  thId.appendChild(sortBtn);
+  htr.appendChild(thId);
+  ["名称","园区","类型","状态","负责人","容量(kW)","操作"].forEach(function(t){
+    htr.appendChild(el("th", {scope:"col"}, t));
+  });
+  thead.appendChild(htr);
+  table.appendChild(thead);
+  var tbody = el("tbody", {id:"devTbody"});
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  tpanel.appendChild(wrap);
+  var pager = el("div", {"class":"pager", id:"devPager"});
+  tpanel.appendChild(pager);
+  v.appendChild(tpanel);
+
+  /* 事件 */
+  selPark.addEventListener("change", function(){ listState.draft.park = selPark.value; });
+  selStatus.addEventListener("change", function(){ listState.draft.status = selStatus.value; });
+  inpKw.addEventListener("input", function(){ listState.draft.keyword = inpKw.value; });
+  btnQuery.addEventListener("click", function(){
+    listState.q = {
+      park: listState.draft.park,
+      status: listState.draft.status,
+      keyword: listState.draft.keyword.trim()
+    };
+    listState.page = 1;
+    loadList();
+  });
+  btnReset.addEventListener("click", function(){
+    listState.draft = {park:"", status:"", keyword:""};
+    listState.q = {park:"", status:"", keyword:""};
+    listState.page = 1;
+    selPark.value = ""; selStatus.value = ""; inpKw.value = "";
+    loadList();
+  });
+  btnNew.addEventListener("click", function(){ navigate("/devices/new"); });
+  sortBtn.addEventListener("click", function(){
+    listState.sortDir = (listState.sortDir === "asc") ? "desc" : "asc";
+    thId.setAttribute("aria-sort", listState.sortDir === "asc" ? "ascending" : "descending");
+    sortBtn.textContent = "编号 " + (listState.sortDir === "asc" ? "↑" : "↓");
+    loadList();
+  });
+
+  loadList();
+}
+
+function loadList(){
+  var token = ++listToken;
+  var tbody = $("#devTbody");
+  var pager = $("#devPager");
+  if(!tbody){ return; }
+  tbody.textContent = "";
+  var ltr = el("tr", {"class":"loading-row"});
+  ltr.appendChild(el("td", {colspan:"8"}, "数据加载中…"));
+  tbody.appendChild(ltr);
+  pager.textContent = "";
+  setTimeout(function(){
+    if(token !== listToken){ return; }              /* 防止旧异步结果覆盖新状态 */
+    if(location.pathname !== "/devices"){ return; }
+    renderListRows();
+  }, 600);
+}
+
+function renderListRows(){
+  var tbody = $("#devTbody");
+  var pager = $("#devPager");
+  if(!tbody){ return; }
+  var rows = filteredDevices();
+  var total = rows.length;
+  var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if(listState.page > totalPages){ listState.page = totalPages; }
+  var start = (listState.page - 1) * PAGE_SIZE;
+  var pageRows = rows.slice(start, start + PAGE_SIZE);
+
+  tbody.textContent = "";
+  if(pageRows.length === 0){
+    var tr = el("tr", {"class":"empty-row"});
+    tr.appendChild(el("td", {colspan:"8"}, "暂无数据"));
+    tbody.appendChild(tr);
+  } else {
+    pageRows.forEach(function(d){
+      var tr = el("tr");
+      tr.appendChild(el("td", null, d.id));
+      tr.appendChild(el("td", null, d.name));
+      tr.appendChild(el("td", null, d.park));
+      tr.appendChild(el("td", null, d.type));
+      var stTd = el("td");
+      stTd.appendChild(el("span", {"class":statusClass(d.status)}, d.status));
+      tr.appendChild(stTd);
+      tr.appendChild(el("td", null, d.owner));
+      tr.appendChild(el("td", null, d.capacity));
+      var opTd = el("td");
+      var btn = el("button", {"class":"btn secondary small", type:"button"}, "详情");
+      btn.addEventListener("click", function(){ openDetail(d); });
+      opTd.appendChild(btn);
+      tr.appendChild(opTd);
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* 分页器 */
+  pager.textContent = "";
+  pager.appendChild(el("span", {"class":"info"},
+    "共 " + total + " 条，第 " + listState.page + " / " + totalPages + " 页"));
+  var prev = el("button", {type:"button"}, "上一页");
+  prev.disabled = (listState.page <= 1);
+  prev.addEventListener("click", function(){
+    if(listState.page > 1){ listState.page--; loadList(); }
+  });
+  pager.appendChild(prev);
+  for(var i = 1; i <= totalPages; i++){
+    (function(pageNo){
+      var b = el("button", {type:"button"}, String(pageNo));
+      if(pageNo === listState.page){ b.setAttribute("aria-current", "page"); }
+      b.addEventListener("click", function(){
+        if(listState.page !== pageNo){ listState.page = pageNo; loadList(); }
+      });
+      pager.appendChild(b);
+    })(i);
+  }
+  var next = el("button", {type:"button"}, "下一页");
+  next.disabled = (listState.page >= totalPages);
+  next.addEventListener("click", function(){
+    if(listState.page < totalPages){ listState.page++; loadList(); }
+  });
+  pager.appendChild(next);
+}
+
+/* ================= 详情弹窗 ================= */
+var currentDev = null;
+function setTab(which){
+  var basic = (which === "basic");
+  $("#tabBasic").setAttribute("aria-selected", String(basic));
+  $("#tabMaint").setAttribute("aria-selected", String(!basic));
+  $("#panelBasic").hidden = !basic;
+  $("#panelMaint").hidden = basic;
+  if(!basic && currentDev){ renderMaint(currentDev); }
+}
+function renderMaint(dev){
+  var panel = $("#panelMaint");
+  panel.textContent = "";
+  if(dev.id === "SB-2026-007" && fault007){
+    panel.appendChild(el("p", {"class":"maint-err"}, "维保记录读取失败，请重试"));
+    var retry = el("button", {"class":"btn small", type:"button"}, "重试");
+    retry.addEventListener("click", function(){
+      fault007 = false;
+      renderMaint(dev);
+    });
+    panel.appendChild(retry);
+  } else {
+    var text = (dev.id === "SB-2026-007") ? "2026-08-12 更换指示灯" : "2026-08-01 例行保养";
+    panel.appendChild(el("p", {"class":"maint-rec"}, text));
+  }
+}
+function openDetail(dev){
+  currentDev = dev;
+  $("#detailTitle").textContent = dev.name;
+  $("#dId").textContent = dev.id;
+  $("#dPark").textContent = dev.park;
+  $("#dOwner").textContent = dev.owner;
+  $("#dStatus").textContent = dev.status;
+  /* 详情页容量读取（独立字段来源） */
+  $("#dCap").textContent = (dev.id === "SB-2026-003") ? 840 : dev.capacity;
+  $("#panelMaint").textContent = "";
+  setTab("basic");
+  $("#detailDialog").showModal();
+}
+$("#tabBasic").addEventListener("click", function(){ setTab("basic"); });
+$("#tabMaint").addEventListener("click", function(){ setTab("maint"); });
+$("#closeDetail").addEventListener("click", function(){
+  if($("#noteDialog").open){ $("#noteDialog").close(); }
+  $("#detailDialog").close();
+});
+$("#noteBtn").addEventListener("click", function(){ $("#noteDialog").showModal(); });
+$("#closeNote").addEventListener("click", function(){ $("#noteDialog").close(); });
+
+/* ================= 旧台账（只读干扰项） ================= */
+function renderLegacy(){
+  var v = $("#view");
+  v.textContent = "";
+  v.appendChild(el("h1", {"class":"page-title"}, "设备台账（旧）"));
+  var panel = el("div", {"class":"panel"});
+  panel.appendChild(el("p", {"class":"hint"}, "旧版台账已归档，仅供查阅，数据为灰色只读。"));
+  var wrap = el("div", {"class":"table-wrap"});
+  var table = el("table", {"class":"readonly"});
+  table.appendChild(el("caption", null, "旧版设备台账（只读归档）"));
+  var thead = el("thead");
+  var htr = el("tr");
+  ["编号","名称","园区","类型","状态","负责人","容量(kW)"].forEach(function(t){
+    htr.appendChild(el("th", {scope:"col"}, t));
+  });
+  thead.appendChild(htr);
+  table.appendChild(thead);
+  var tbody = el("tbody");
+  devices.forEach(function(d){
+    var tr = el("tr");
+    var idTd = el("td");
+    idTd.appendChild(el("span", {"class":"badge-old"}, "（旧）"));
+    idTd.appendChild(document.createTextNode(d.id));
+    tr.appendChild(idTd);
+    var nameTd = el("td");
+    nameTd.appendChild(document.createTextNode(d.name));
+    tr.appendChild(nameTd);
+    tr.appendChild(el("td", null, d.park));
+    tr.appendChild(el("td", null, d.type));
+    tr.appendChild(el("td", null, d.status));
+    tr.appendChild(el("td", null, d.owner));
+    tr.appendChild(el("td", null, d.capacity));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  panel.appendChild(wrap);
+  v.appendChild(panel);
+}
+
+/* ================= 巡检 / 总览 ================= */
+function renderInspect(){
+  var v = $("#view");
+  v.textContent = "";
+  v.appendChild(el("h1", {"class":"page-title"}, "设备巡检"));
+  v.appendChild(el("div", {"class":"placeholder-box"}, "巡检计划建设中"));
+}
+function renderOverview(){
+  var v = $("#view");
+  v.textContent = "";
+  v.appendChild(el("h1", {"class":"page-title"}, "设备总览"));
+  var cards = el("div", {"class":"cards"});
+  cards.appendChild(statCard("设备总数", devices.length));
+  cards.appendChild(statCard("运行中", devices.filter(function(d){return d.status==="运行";}).length));
+  cards.appendChild(statCard("维保中", devices.filter(function(d){return d.status==="维保";}).length));
+  cards.appendChild(statCard("停机", devices.filter(function(d){return d.status==="停机";}).length));
+  v.appendChild(cards);
+  var panel = el("div", {"class":"panel"});
+  panel.appendChild(el("h2", {style:"font-size:15px;margin:0 0 10px;"}, "按园区分布"));
+  var ul = el("ul", {style:"margin:0;padding-left:20px;"});
+  PARKS.forEach(function(p){
+    var n = devices.filter(function(d){ return d.park === p; }).length;
+    ul.appendChild(el("li", null, p + "：" + n + " 台"));
+  });
+  panel.appendChild(ul);
+  v.appendChild(panel);
+}
+
+/* ================= 新增设备 ================= */
+function renderNew(){
+  var v = $("#view");
+  v.textContent = "";
+  v.appendChild(el("h1", {"class":"page-title"}, "新增设备"));
+
+  var summary = el("div", {"class":"summary", id:"formSummary", role:"alert", tabindex:"-1"});
+  v.appendChild(summary);
+
+  var panel = el("div", {"class":"panel"});
+  var form = el("form", {id:"newForm", novalidate:"novalidate"});
+  var grid = el("div", {"class":"form-grid"});
+
+  function field(labelText, id, control){
+    var f = el("div", {"class":"field"});
+    control.setAttribute("aria-describedby", "err-" + id);
+    f.appendChild(el("label", {"for":id}, labelText));
+    f.appendChild(control);
+    f.appendChild(el("div", {"class":"err", id:"err-" + id, "aria-live":"polite"}));
+    return f;
+  }
+
+  var selPark = el("select", {id:"fPark"});
+  selPark.appendChild(el("option", {value:""}, "请选择园区"));
+  PARKS.forEach(function(p){ selPark.appendChild(el("option", {value:p}, p)); });
+
+  var selType = el("select", {id:"fType", disabled:"disabled"});
+  selType.appendChild(el("option", {value:""}, "请先选择园区"));
+
+  var inpName = el("input", {id:"fName", type:"text", maxlength:"40"});
+  var inpCap = el("input", {id:"fCap", type:"text", inputmode:"numeric", placeholder:"1-500 的整数"});
+  var inpOwner = el("input", {id:"fOwner", type:"text", maxlength:"20"});
+
+  grid.appendChild(field("园区", "fPark", selPark));
+  grid.appendChild(field("设备类型", "fType", selType));
+  grid.appendChild(field("设备名称", "fName", inpName));
+  grid.appendChild(field("容量(kW)", "fCap", inpCap));
+  grid.appendChild(field("负责人", "fOwner", inpOwner));
+  form.appendChild(grid);
+
+  var actions = el("div", {"class":"form-actions"});
+  var btnOk = el("button", {"class":"btn", type:"submit"}, "确定");
+  var btnCancel = el("button", {"class":"btn secondary", type:"button"}, "取消");
+  actions.appendChild(btnOk);
+  actions.appendChild(btnCancel);
+  form.appendChild(actions);
+  panel.appendChild(form);
+  v.appendChild(panel);
+
+  /* ---- 校验 ---- */
+  function setErr(id, msg){
+    var box = $("#err-" + id);
+    var ctl = $("#" + id);
+    box.textContent = msg || "";
+    if(msg){ ctl.setAttribute("aria-invalid", "true"); }
+    else { ctl.removeAttribute("aria-invalid"); }
+    return !msg;
+  }
+  function valPark(){ return selPark.value ? "" : "园区为必选项"; }
+  function valType(){ return selType.value ? "" : "设备类型为必选项"; }
+  function valName(){
+    var s = inpName.value.trim();
+    if(!s){ return "设备名称为必填项"; }
+    if(s.length < 2 || s.length > 20){ return "设备名称需为2-20个字符"; }
+    return "";
+  }
+  function valCap(){
+    var s = inpCap.value.trim();
+    if(!s){ return "容量为必填项"; }
+    if(!/^\d+$/.test(s)){ return "容量需为1-500的整数"; }
+    var n = parseInt(s, 10);
+    if(n < 1 || n > 500){ return "容量需为1-500的整数"; }
+    return "";
+  }
+  function valOwner(){
+    var s = inpOwner.value.trim();
+    if(!s){ return "负责人为必填项"; }
+    if(s.length < 2 || s.length > 10){ return "负责人需为2-10个字符"; }
+    return "";
+  }
+  var validators = {fPark:valPark, fType:valType, fName:valName, fCap:valCap, fOwner:valOwner};
+  function checkField(id){ return setErr(id, validators[id]()); }
+
+  selPark.addEventListener("blur", function(){ checkField("fPark"); });
+  selType.addEventListener("blur", function(){ checkField("fType"); });
+  inpName.addEventListener("blur", function(){ checkField("fName"); });
+  inpCap.addEventListener("blur", function(){ checkField("fCap"); });
+  inpOwner.addEventListener("blur", function(){ checkField("fOwner"); });
+
+  /* 园区 → 类型联动 */
+  selPark.addEventListener("change", function(){
+    var park = selPark.value;
+    var prev = selType.value;
+    selType.textContent = "";
+    if(!park){
+      selType.disabled = true;
+      selType.appendChild(el("option", {value:""}, "请先选择园区"));
+    } else {
+      selType.disabled = false;
+      selType.appendChild(el("option", {value:""}, "请选择类型"));
+      PARK_TYPES[park].forEach(function(t){
+        selType.appendChild(el("option", {value:t}, t));
+      });
+      /* 已选类型在新园区无效则清空 */
+      if(prev && PARK_TYPES[park].indexOf(prev) >= 0){ selType.value = prev; }
+      else { selType.value = ""; }
+    }
+    checkField("fPark");
+    setErr("fType", "");
+  });
+
+  btnCancel.addEventListener("click", function(){
+    navigate("/devices");   /* 取消：不保存、无成功提示 */
+  });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var ids = ["fPark","fType","fName","fCap","fOwner"];
+    var errs = [];
+    ids.forEach(function(id){
+      var msg = validators[id]();
+      setErr(id, msg);
+      if(msg){ errs.push({id:id, msg:msg}); }
+    });
+    if(errs.length){
+      summary.textContent = "";
+      summary.appendChild(el("strong", null, "表单存在 " + errs.length + " 项错误，请修正后重新提交："));
+      var ul = el("ul");
+      errs.forEach(function(er){ ul.appendChild(el("li", null, er.msg)); });
+      summary.appendChild(ul);
+      summary.classList.add("show");
+      summary.focus();
+      return;
+    }
+    summary.classList.remove("show");
+    summary.textContent = "";
+    /* 生成唯一编号 */
+    var maxN = 0;
+    devices.forEach(function(d){
+      var m = /^SB-2026-(\d+)$/.exec(d.id);
+      if(m){ maxN = Math.max(maxN, parseInt(m[1], 10)); }
+    });
+    var newId = "SB-2026-" + String(maxN + 1).padStart(3, "0");
+    devices.push({
+      id:newId,
+      name:inpName.value.trim(),
+      park:selPark.value,
+      type:selType.value,
+      status:"运行",
+      owner:inpOwner.value.trim(),
+      capacity:parseInt(inpCap.value.trim(), 10)
+    });
+    toast("新增成功");
+    navigate("/devices");
+  });
+}
+
+/* ================= 启动 ================= */
+renderRoute();
+</script>
+</body>
+</html>

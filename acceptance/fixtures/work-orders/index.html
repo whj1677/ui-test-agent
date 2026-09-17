@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta http-equiv="x-dns-prefetch-control" content="off" />
+    <title>工单协作台</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div id="application">
+      <a class="skip-link" href="#main">跳到主要内容</a>
+      <header class="topbar">
+        <a class="brand" href="#/home" aria-label="工单协作台首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3" />
+            </svg>
+          </span>
+          <span>工单协作台<small>设施运维 · 协同工作空间</small></span>
+        </a>
+        <nav class="top-nav" aria-label="主导航">
+          <div class="service-menu">
+            <button
+              id="service-menu-toggle"
+              class="nav-button"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-menu-links"
+            >
+              服务台 <span aria-hidden="true">⌄</span>
+            </button>
+            <div id="service-menu-links" class="menu-links" hidden>
+              <a href="#/orders">工单中心</a>
+              <a href="#/announcements">知识公告</a>
+            </div>
+          </div>
+          <a class="external-link" href="https://external.invalid/ops" rel="noopener noreferrer"
+            >外部运维平台 <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+        <div class="account">
+          <span class="demo-badge">演示空间</span>
+          <button id="logout" class="text-button" type="button" hidden>退出登录</button>
+        </div>
+      </header>
+      <main id="main" tabindex="-1"></main>
+      <footer class="site-footer">
+        <span>工单协作台</span><span>合成演示数据 · 只读工作空间</span>
+      </footer>
+    </div>
+
+    <div id="drawer-layer" class="overlay drawer-layer" hidden>
+      <section
+        id="order-dialog"
+        class="drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-title"
+        tabindex="-1"
+      >
+        <header class="dialog-header">
+          <div>
+            <p class="eyebrow">WORK ORDER</p>
+            <h2 id="drawer-title">工单详情</h2>
+          </div>
+          <button id="close-drawer" class="secondary-button" type="button">关闭</button>
+        </header>
+        <div class="drawer-scroll">
+          <div id="order-summary" class="order-summary"></div>
+          <div class="tabs" role="tablist" aria-label="工单信息">
+            <button
+              id="basic-tab"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="basic-panel"
+            >
+              基本信息
+            </button>
+            <button
+              id="records-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="records-panel"
+              tabindex="-1"
+            >
+              处理记录
+            </button>
+          </div>
+          <section
+            id="basic-panel"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="basic-tab"
+            tabindex="0"
+          ></section>
+          <section
+            id="records-panel"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="records-tab"
+            tabindex="0"
+            hidden
+          ></section>
+        </div>
+        <footer class="drawer-footer">
+          <span>工单信息仅供查阅</span
+          ><button id="show-service" class="secondary-button" type="button">服务说明</button>
+        </footer>
+      </section>
+    </div>
+
+    <!-- A sibling portal: its scrim physically covers the entire drawer. -->
+    <div id="service-layer" class="overlay service-layer" hidden>
+      <section
+        id="service-dialog"
+        class="service-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="service-title"
+        aria-describedby="service-description"
+        tabindex="-1"
+      >
+        <p class="eyebrow">SERVICE GUIDE</p>
+        <h2 id="service-title">服务说明</h2>
+        <p id="service-description">仅关闭说明，不改变工单状态</p>
+        <p class="muted">
+          响应时限以工单详情为准。查看说明后，可继续阅读当前工单的基本信息和处理记录。
+        </p>
+        <footer>
+          <button id="close-service" class="primary-button" type="button">关闭</button>
+        </footer>
+      </section>
+    </div>
+    <noscript>工单协作台需要启用 JavaScript 才能使用。</noscript>
+  </body>
+</html>

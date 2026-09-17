@@ -1,2 +1,6 @@
 # Windows CMD requires CRLF, especially across an in-script codepage switch.
 *.cmd text eol=crlf
+# Frozen acceptance evidence is byte-addressed; preserve historical CRLF and new LF.
+acceptance/** -text
+tests/acceptance-fixtures.test.mjs -text
+tests/acceptance-fixtures.integration.mjs -text
