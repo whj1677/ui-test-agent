@@ -56,7 +56,9 @@ const time = (v) => (v ? new Date(v).toLocaleString('zh-CN', { hour12: false }) 
 const target = (t) =>
   ['row', 'cell'].includes(t?.kind)
     ? `${target(t.table)} · ${t.key?.column}=${t.key?.value} · ${t.kind === 'cell' ? t.column : t.target ? target(t.target) : '整行'}`
-    : (t?.name ?? t?.value ?? t?.role ?? '当前页面');
+    : t?.kind === 'within'
+      ? `${t.scope?.role} · ${t.scope?.name ?? t.scope?.heading} · ${t.target ? target(t.target) : '整个范围'}`
+      : (t?.name ?? t?.value ?? t?.role ?? '当前页面');
 const duration = (f) =>
   f?.started_at && f?.finished_at
     ? `${Math.max(0, (Date.parse(f.finished_at) - Date.parse(f.started_at)) / 1000).toFixed(1)} 秒`

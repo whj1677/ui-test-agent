@@ -1,11 +1,13 @@
 import { validateLocator, validateAssertion, validateAction } from './plans.mjs';
 
-const kinds = ['role', 'testid', 'label', 'placeholder', 'text', 'css', 'row', 'cell'];
+const kinds = ['role', 'testid', 'label', 'placeholder', 'text', 'css', 'row', 'cell', 'within'];
 const schema = {
   role: '{kind:"role",role:"button|link|heading|table|...",name:string,exact:true}',
   simple: '{kind:"testid|label|placeholder|text|css",value:string,exact:true}',
   row: '{kind:"row",table:baseLocator,key:{column:string,value:string},target?:baseLocator}',
   cell: '{kind:"cell",table:baseLocator,key:{column:string,value:string},column:string}',
+  within:
+    '{kind:"within",scope:{role:"article|listitem|dialog",name:string OR heading:string,exact:true},target?:baseLocator}',
 };
 
 // Visit only protocol fields. Never interpolate arbitrary model keys/values into diagnostics.
@@ -47,7 +49,9 @@ export function describePlanError(error, plan, original, base) {
             : []),
           entry,
         ]
-      : [entry];
+      : entry.locator?.kind === 'within' && entry.locator.target
+        ? [{ locator: entry.locator.target, path: entry.path + '.target' }, entry]
+        : [entry];
     for (const { locator, path } of candidates) {
       try {
         validateLocator(locator);
@@ -59,7 +63,7 @@ export function describePlanError(error, plan, original, base) {
           actual_type: locator?.kind === undefined ? 'missing' : typeof locator.kind,
           allowed_kinds: kinds,
           expected_schema: schema,
-          reason: `${path}${invalidKind ? '.kind' : ''} 定位格式不合法；kind 必须使用固定枚举，button/link/heading 等是 role 的值，不是 kind。行内目标使用 row/cell，不能增加索引或任意选择器。`,
+          reason: `${path}${invalidKind ? '.kind' : ''} 定位格式不合法；kind 必须使用固定枚举，button/link/heading 等是 role 的值，不是 kind。表格用row/cell，卡片/列表/弹窗用单层within；范围身份name/heading二选一，内部必须为基础定位，不能增加索引或任意选择器。`,
         };
       }
     }

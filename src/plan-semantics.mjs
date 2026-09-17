@@ -37,6 +37,57 @@ export function requirePlanSemantics(plan, c, context = {}) {
         path + '.key.value',
         '行身份必须来自原用例或已确认测试数据；页面观察只能提供定位事实，不能自行挑选业务记录。',
       );
+    if (locator?.kind === 'within') {
+      const identity = locator.scope.name ?? locator.scope.heading;
+      const business = locator.scope.role !== 'dialog';
+      const literal = source.includes(identity);
+      const namedParts = locator.scope.name?.split(/\s+/).filter(Boolean) ?? [];
+      if (
+        business &&
+        !literal &&
+        !(
+          namedParts.length > 1 &&
+          namedParts.every((word) => word.length > 1 && source.includes(word))
+        )
+      )
+        reject(
+          'PLAN_SCOPE_IDENTITY_UNSUPPORTED',
+          path + '.scope',
+          '容器身份必须绑定原用例的完整对象，不得根据页面选择另一个或近似名称对象。',
+        );
+      const observed = (context.pages ?? [])
+        .flatMap((p) => p.controls ?? [])
+        .map((c) => c.locator)
+        .filter((l) => l?.kind === 'within');
+      const known = observed.some((l) => semanticHash(l) === semanticHash(locator));
+      const headingTemplate =
+        business &&
+        literal &&
+        locator.scope.heading !== undefined &&
+        observed.some(
+          (l) =>
+            l.scope.role === locator.scope.role &&
+            l.scope.heading !== undefined &&
+            semanticHash(l.target ?? null) === semanticHash(locator.target ?? null),
+        );
+      if (!known && !headingTemplate)
+        reject(
+          'PLAN_SCOPE_EVIDENCE_MISSING',
+          path,
+          '需要已观察的完整范围定位，或相同结构/内部目标与原文完整标题的列表项模板；不能猜测范围或后端ID。',
+        );
+      if (
+        path.startsWith('plan.cleanup') &&
+        business &&
+        plan.cleanup?.identity &&
+        identity !== plan.cleanup.identity
+      )
+        reject(
+          'CLEANUP_SCOPE_IDENTITY_MISMATCH',
+          path + '.scope',
+          '清理范围必须与已声明归属身份精确相同，不能选择同名前缀或种子记录。',
+        );
+    }
   }
   const tableLocators = new Set(
     (context.pages ?? [])
@@ -106,7 +157,7 @@ export function requirePlanSemantics(plan, c, context = {}) {
     for (const [j, assertion] of stepAssertions(step).entries()) {
       const field = `plan.steps[${i}].assertions_flat[${j}]`;
       if (
-        ['row', 'cell'].includes(assertion.target?.kind) &&
+        ['row', 'cell', 'within'].includes(assertion.target?.kind) &&
         ['text', 'contains', 'number'].includes(assertion.check) &&
         /^[-+]?\d+(?:\.\d+)?$/.test(String(assertion.expected))
       ) {

@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { runtimeLocator as handoffLocator, assertRowIdentity } from './row-locator.mjs';
+import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
 import {
   validateLocator,
   validatePlan,
@@ -20,6 +21,14 @@ import {
   recheckOptionalDialog,
   dispatchOptionalDialog,
 } from './optional-dialog.mjs';
+
+const actionScopeGuards = new WeakMap();
+async function disposeActionTarget(target) {
+  if (!target) return;
+  await releaseWithinGuard(actionScopeGuards.get(target));
+  actionScopeGuards.delete(target);
+  await target.dispose();
+}
 
 export class BrowserSession {
   constructor({ headless = false } = {}) {
@@ -500,20 +509,15 @@ export class BrowserSession {
                     operation: a.op,
                     target: a.target ?? null,
                   };
-                await recording?.beforeAction(a, target);
                 try {
+                  await recording?.beforeAction(a, target);
                   await emit('CLEANUP_ACTION_STARTED', event);
-                } catch (error) {
-                  await target?.dispose();
-                  throw error;
-                }
-                const receipt = { ...event, status: 'UNKNOWN', dispatched: true };
-                result.cleanup_actions.push(receipt);
-                try {
+                  const receipt = { ...event, status: 'UNKNOWN', dispatched: true };
+                  result.cleanup_actions.push(receipt);
                   await dispatchAction(page, a, task.target, target);
                   receipt.status = 'EXECUTED';
                 } finally {
-                  await target?.dispose();
+                  await disposeActionTarget(target);
                 }
                 await emit('CLEANUP_ACTION_EXECUTED', event);
               }
@@ -780,50 +784,45 @@ export class BrowserSession {
           });
         }
       }
-      if (signal?.aborted) fail('STOPPED');
-      budget.remaining();
-      await recording.beforeAction(a, target);
-      if (signal?.aborted) {
-        await target?.dispose();
-        fail('STOPPED');
-      }
-      budget.remaining();
-      setPhase('INTENT');
-      const event = {
-        at: now(),
-        step_id: step.step_id,
-        ...(point.checkpoint_id ? { checkpoint_id: point.checkpoint_id } : {}),
-        action_id: a.action_id,
-        operation: a.op,
-        target: a.target ?? null,
-        value: a.value === undefined ? null : redact(a.value),
-      };
-      // Persist the intent before dispatch. Failure here never authorizes a browser retry.
       try {
+        if (signal?.aborted) fail('STOPPED');
+        budget.remaining();
+        await recording.beforeAction(a, target);
+        if (signal?.aborted) fail('STOPPED');
+        budget.remaining();
+        setPhase('INTENT');
+        const event = {
+          at: now(),
+          step_id: step.step_id,
+          ...(point.checkpoint_id ? { checkpoint_id: point.checkpoint_id } : {}),
+          action_id: a.action_id,
+          operation: a.op,
+          target: a.target ?? null,
+          value: a.value === undefined ? null : redact(a.value),
+        };
+        // Persist the intent before dispatch. Failure here never authorizes a browser retry.
         await emit('ACTION_STARTED', event);
-      } catch (error) {
-        await target?.dispose();
-        throw error;
-      }
-      const receipt = { ...event, status: 'UNKNOWN', phase: 'DISPATCH', dispatched: true };
-      result.actions.push(receipt);
-      if (plan.data_effect === 'mutation' && !['wait', 'hover', 'navigate'].includes(a.op))
-        guard.dirty = true;
-      setPhase('DISPATCH');
-      try {
-        await dispatchAction(page, a, task.target, target, budget.remaining(20000));
-        lastActionCompletedAt = Date.now();
-        receipt.completed_at = new Date(lastActionCompletedAt).toISOString();
-        receipt.status = 'EXECUTED';
-      } catch (error) {
-        receipt.error = error.code ?? error.name;
-        throw error;
+        const receipt = { ...event, status: 'UNKNOWN', phase: 'DISPATCH', dispatched: true };
+        result.actions.push(receipt);
+        if (plan.data_effect === 'mutation' && !['wait', 'hover', 'navigate'].includes(a.op))
+          guard.dirty = true;
+        setPhase('DISPATCH');
+        try {
+          await dispatchAction(page, a, task.target, target, budget.remaining(20000));
+          lastActionCompletedAt = Date.now();
+          receipt.completed_at = new Date(lastActionCompletedAt).toISOString();
+          receipt.status = 'EXECUTED';
+        } catch (error) {
+          receipt.error = error.code ?? error.name;
+          throw error;
+        }
+        if (guard.blocked) fail(guard.blocked);
+        if (new URL(page.url()).origin !== new URL(task.target).origin)
+          fail('OUTSIDE_TARGET_ORIGIN');
+        await emit('ACTION_EXECUTED', event);
       } finally {
-        await target?.dispose();
+        await disposeActionTarget(target);
       }
-      if (guard.blocked) fail(guard.blocked);
-      if (new URL(page.url()).origin !== new URL(task.target).origin) fail('OUTSIDE_TARGET_ORIGIN');
-      await emit('ACTION_EXECUTED', event);
     }
 
     return lastActionCompletedAt;
@@ -975,6 +974,8 @@ async function resolveAction(page, a, timeout = 8000) {
     }
     if (['fill', 'press'].includes(a.op) && (await handle.getAttribute('type')) === 'password')
       fail('SENSITIVE_CONTROL_FORBIDDEN');
+    const guard = await captureWithinGuard(page, a.target, handle);
+    if (guard) actionScopeGuards.set(handle, guard);
     return handle;
   } catch (error) {
     await handle.dispose();
@@ -986,10 +987,25 @@ export async function perform(page, a, base) {
   try {
     return await dispatchAction(page, a, base, target);
   } finally {
-    await target?.dispose();
+    await disposeActionTarget(target);
   }
 }
 async function dispatchAction(page, a, base, target, timeout = 20000) {
+  const guard = target && actionScopeGuards.get(target);
+  try {
+    if (guard && !(await guard.evaluate((state) => state.arm()))) fail('WITHIN_SCOPE_CHANGED');
+    await dispatchVerifiedAction(page, a, base, target, timeout);
+    if (guard && (await guard.evaluate((state) => state.blocked()).catch(() => false)))
+      fail('WITHIN_SCOPE_CHANGED');
+  } catch (error) {
+    if (guard && (await guard.evaluate((state) => state.blocked()).catch(() => false)))
+      fail('WITHIN_SCOPE_CHANGED');
+    throw error;
+  } finally {
+    if (guard) await guard.evaluate((state) => state.disarm()).catch(() => {});
+  }
+}
+async function dispatchVerifiedAction(page, a, base, target, timeout = 20000) {
   const actionTimeout = Math.min(timeout, 8000);
   if (target) await assertRowIdentity(page, a.target, target);
   if (a.op === 'reload') {
@@ -1316,7 +1332,7 @@ export async function snapshot(
       text: '请在可见浏览器中完成登录，再读取页面。',
     };
   const selector =
-    'button,a,input,textarea,select,[role],h1,h2,h3,table,tr,td,th,[data-testid],[data-test],[id],nav span,aside span,[role="menu"] span';
+    'button,a,input,textarea,select,[role],h1,h2,h3,article,li,dialog,table,tr,td,th,[data-testid],[data-test],[id],nav span,aside span,[role="menu"] span';
   const captured = await page.evaluateHandle((selector) => {
     const visible = (e) =>
       !!e.getClientRects().length &&
@@ -1376,6 +1392,37 @@ export async function snapshot(
       };
     };
     const controls = [];
+    const scopeRole = (e) =>
+      e.getAttribute('role') || { ARTICLE: 'article', LI: 'listitem', DIALOG: 'dialog' }[e.tagName];
+    const scopeOwner = (e) => {
+      for (let n = e; n; n = n.parentElement)
+        if (['article', 'listitem', 'dialog'].includes(scopeRole(n))) return n;
+      return null;
+    };
+    const scopeHint = (e) => {
+      const root = scopeOwner(e);
+      if (!root) return null;
+      const referenced = (root.getAttribute('aria-labelledby') || '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent || '')
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const name = referenced || root.getAttribute('aria-label')?.trim();
+      const headings = [...root.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]')].filter(
+        (h) => visible(h) && scopeOwner(h) === root,
+      );
+      const heading =
+        headings.length === 1 ? nameText(headings[0]).replace(/\s+/g, ' ').trim() : '';
+      if (!name && !heading) return null;
+      const identity = name || heading;
+      if (identity.length > 150) return null;
+      return {
+        scope: { role: scopeRole(root), ...(name ? { name } : { heading }), exact: true },
+        self: root === e,
+      };
+    };
     const elements = [...document.querySelectorAll(selector)];
     for (const [dom_index, e] of elements.entries()) {
       if (!visible(e) || e.type === 'password' || controls.length >= 300) continue;
@@ -1407,6 +1454,9 @@ export async function snapshot(
           TD: 'cell',
           TH: 'columnheader',
           TEXTAREA: 'textbox',
+          ARTICLE: 'article',
+          LI: 'listitem',
+          DIALOG: 'dialog',
           INPUT:
             e.type === 'checkbox'
               ? 'checkbox'
@@ -1440,6 +1490,7 @@ export async function snapshot(
         dom_index,
         node: e,
         row_hint: rowHint(e),
+        scope_hint: scopeHint(e),
         in_navigation: !!e.closest('nav,aside,[role="menu"],[role="navigation"],[role="tree"]'),
         ...(['INPUT', 'TEXTAREA'].includes(e.tagName) &&
         !['password', 'file', 'hidden', 'email', 'tel'].includes(e.type) &&
@@ -1492,6 +1543,11 @@ export async function snapshot(
       adapter_gaps = [];
     for (const [index, c] of raw.controls.entries()) {
       let locator = mapped.locators[index];
+      if (!c.row_hint && c.scope_hint && adapterSource === DEFAULT_ADAPTER_SOURCE) {
+        const { scope, self } = c.scope_hint;
+        if (self || locator)
+          locator = { kind: 'within', scope, ...(!self ? { target: locator } : {}) };
+      }
       if (c.row_hint) {
         const { table, key, column } = c.row_hint;
         if (c.adapter_input.tag === 'TR') locator = { kind: 'row', table, key };
@@ -1524,18 +1580,21 @@ export async function snapshot(
         // semantics (e.g. labels wrapping a select). Only the fixed default
         // adapter gets this semantic fallback; custom programs are still
         // independently rejected if they propose the wrong destination.
+        const baseLocator = locator.kind === 'within' ? locator.target : locator;
         if (
           adapterSource === DEFAULT_ADAPTER_SOURCE &&
-          locator.kind === 'label' &&
+          baseLocator?.kind === 'label' &&
           ['INPUT', 'SELECT', 'TEXTAREA'].includes(c.adapter_input.tag) &&
           (await target.count()) !== 1
         ) {
-          const roleLocator = {
+          const roleBase = {
             kind: 'role',
             role: c.adapter_input.role,
             name: c.adapter_input.label,
             exact: true,
           };
+          const roleLocator =
+            locator.kind === 'within' ? { ...locator, target: roleBase } : roleBase;
           validateLocator(roleLocator);
           const roleTarget = handoffLocator(page, roleLocator);
           if ((await roleTarget.count()) === 1) {
@@ -1564,10 +1623,18 @@ export async function snapshot(
         } finally {
           await handle?.dispose();
         }
-        const { adapter_input, dom_index, row_hint, ...fact } = c;
-        controls.push({ ...fact, locator });
+        const { adapter_input, dom_index, row_hint, scope_hint, ...fact } = c;
+        controls.push({
+          ...fact,
+          ...(scope_hint ? { scope_context: scope_hint.scope } : {}),
+          locator,
+        });
       } catch (error) {
-        gap(/^ROW_[A-Z_]+$/.test(error.code ?? '') ? error.code : 'ADAPTER_LOCATOR_REJECTED');
+        gap(
+          /^(?:ROW|WITHIN)_[A-Z_]+$/.test(error.code ?? '')
+            ? error.code
+            : 'ADAPTER_LOCATOR_REJECTED',
+        );
       }
     }
     return {

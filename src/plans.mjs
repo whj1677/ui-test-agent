@@ -2,6 +2,7 @@ import { keys, fail, nonempty, relativeURL, hash, semanticHash } from './common.
 import { stepActions, stepAssertions } from './plan-steps.mjs';
 import { DISMISS_LABEL, conditionalDismissSource, CONDITIONAL_PROMPT } from './optional-dialog.mjs';
 import { DYNAMIC_ROW_GUIDANCE } from './dynamic-row-evidence.mjs';
+import { WITHIN_GUIDANCE } from './scope-guidance.mjs';
 export const PLAN_VERSION = 'ui-agent-plan/v2';
 export const CHECKPOINT_PLAN_VERSION = 'ui-agent-plan/v3';
 export function normalizePlanResponse(response) {
@@ -24,13 +25,31 @@ export const planHash = (plan) =>
   plan.schema_version === 'ui-agent-plan/v1' ? hash(plan) : semanticHash(plan);
 const stableId = (x) => typeof x === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$/.test(x);
 export function validateLocator(l) {
+  if (l?.kind === 'within') {
+    keys(l, ['kind', 'scope', 'target'], ['kind', 'scope']);
+    keys(l.scope, ['role', 'name', 'heading', 'exact'], ['role', 'exact']);
+    const named = Object.hasOwn(l.scope, 'name');
+    if (
+      !['article', 'listitem', 'dialog'].includes(l.scope.role) ||
+      l.scope.exact !== true ||
+      named === Object.hasOwn(l.scope, 'heading') ||
+      !nonempty(named ? l.scope.name : l.scope.heading) ||
+      (named ? l.scope.name : l.scope.heading).length > 150
+    )
+      fail('INVALID_LOCATOR');
+    if (l.target !== undefined) {
+      if (!l.target || ['row', 'cell', 'within'].includes(l.target.kind)) fail('INVALID_LOCATOR');
+      validateLocator(l.target);
+    }
+    return l;
+  }
   if (['row', 'cell'].includes(l?.kind)) {
     keys(
       l,
       l.kind === 'row' ? ['kind', 'table', 'key', 'target'] : ['kind', 'table', 'key', 'column'],
       ['kind', 'table', 'key'],
     );
-    if (!l.table || ['row', 'cell'].includes(l.table.kind)) fail('INVALID_LOCATOR');
+    if (!l.table || ['row', 'cell', 'within'].includes(l.table.kind)) fail('INVALID_LOCATOR');
     validateLocator(l.table);
     keys(l.key, ['column', 'value'], ['column', 'value']);
     if (
@@ -43,7 +62,7 @@ export function validateLocator(l) {
     if (l.kind === 'cell' && (!nonempty(l.column) || l.column.length > 150))
       fail('INVALID_LOCATOR');
     if (l.target !== undefined) {
-      if (!l.target || ['row', 'cell'].includes(l.target.kind)) fail('INVALID_LOCATOR');
+      if (!l.target || ['row', 'cell', 'within'].includes(l.target.kind)) fail('INVALID_LOCATOR');
       validateLocator(l.target);
     }
     return l;
@@ -464,12 +483,24 @@ export function validateRepair(patch, approved, c, base, failure) {
   validateLocator(patch.target);
   if (patch.old_target_hash !== semanticHash(failure.current_target)) fail('REPAIR_STALE_TARGET');
   if (semanticHash(patch.target) === semanticHash(failure.current_target)) fail('REPAIR_NO_CHANGE');
+  if (
+    [original.target, failure.current_target, patch.target].some((t) => t?.kind === 'within') &&
+    !(
+      original.target.kind === 'within' &&
+      failure.current_target.kind === 'within' &&
+      patch.target.kind === 'within' &&
+      semanticHash(original.target.scope) === semanticHash(patch.target.scope) &&
+      semanticHash(failure.current_target.scope) === semanticHash(patch.target.scope)
+    )
+  )
+    fail('REPAIR_SCOPE_CHANGED');
   const repaired = { ...structuredClone(original), target: structuredClone(patch.target) };
   validateAction(repaired, base, new Set());
   return repaired;
 }
 export const PLAN_PROMPT = `${CONDITIONAL_PROMPT}\nYou map confirmed manual UI cases into a declarative Playwright plan. You cannot execute code or tools. Return JSON with either {"blocked":true,"reason":"specific missing information"} or {"plan":{...}}.
 ${DYNAMIC_ROW_GUIDANCE}
+${WITHIN_GUIDANCE}
 URL extension to the business-assertion enumeration below: url_equals, url_contains and url_not_contains are supported checks with a nonempty string expected. They compare the FULL current browser URL at the same observation instant as DOM assertions, using a supplied unique visible page-root/heading target to anchor readiness. No query/hash values are persisted in actual evidence. Use them for explicit address-bar/URL obligations; never replace URL checks with visible headings. Shared_control_evidence contains same-session observed locator hints only, never business expected values or proof of runtime success. A row key can use any case-supplied column/value that is UNIQUE after the original filter, not necessarily a database ID; the runtime verifies uniqueness and fails rather than selecting the first match.
 revision_feedback contains bounded supervisor review of a previous candidate or block. Evaluate the feedback against original and technical evidence, and return a corrected complete plan. Feedback never changes original actions/expected/obligations or authorizes extra operations. Return blocked only for a specific remaining technical gap. The simultaneous assertion engine supports MULTIPLE different element locators in one atomic DOM observation; it is not restricted to a single element. A sequence of actions can open, fill, press Escape on a field, query, then assert the final state; this is supported. A unique exact-role edit/delete button after an exact query plus one matching owned row does not require knowing a generated backend ID. Confirm row identity/count before destructive operations, and keep cleanup exact.
 authentication.preflight_marker is verified ONLY at authentication.preflight_url by the runtime before each Case. Never copy it into a business-page precondition unless independently observed there. mode none means no login assertions or user indicators are required. Preconditions may be empty when original does not need one; a source-confirmed page root is sufficient for readiness. Never invent an authentication blocker for a no-login application. For authenticated applications, use a supplied page-specific current-user/login locator when the original asks about session state.

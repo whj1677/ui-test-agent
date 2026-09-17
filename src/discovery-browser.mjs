@@ -1,5 +1,6 @@
 import { snapshot } from './browser.mjs';
 import { runtimeLocator as handoffLocator } from './row-locator.mjs';
+import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
 import { fail, hash, redact, relativeURL, uid } from './common.mjs';
 import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
@@ -22,7 +23,7 @@ const DOWNLOAD_PATH =
 const SENSITIVE_CONTROL =
   /(?:password|passwd|secret|token|credential|api.?key|authorization|cookie|session|one.?time|passcode|credit.?card|\botp\b|cc-|密码|口令|密钥|验证码|银行卡|身份证|手机号|账号|账户|邮箱)/iu;
 const SAFE_ERROR =
-  /^(?:DISCOVERY_[A-Z_]+|ADAPTER_[A-Z_]+|ROW_[A-Z_]+|OPTIONAL_[A-Z_]+|STOPPED|AUTH_REQUIRED|BROWSER_REQUIRED|OUTSIDE_TARGET_ORIGIN|SENSITIVE_URL|INVALID_ROUTE|INVALID_TARGET_URL|WRITE_NOT_AUTHORIZED|NATIVE_DIALOG_UNSUPPORTED)$/;
+  /^(?:DISCOVERY_[A-Z_]+|ADAPTER_[A-Z_]+|ROW_[A-Z_]+|WITHIN_[A-Z_]+|OPTIONAL_[A-Z_]+|STOPPED|AUTH_REQUIRED|BROWSER_REQUIRED|OUTSIDE_TARGET_ORIGIN|SENSITIVE_URL|INVALID_ROUTE|INVALID_TARGET_URL|WRITE_NOT_AUTHORIZED|NATIVE_DIALOG_UNSUPPORTED)$/;
 const safeError = (error) =>
   SAFE_ERROR.test(error?.code ?? '')
     ? error.code
@@ -980,76 +981,95 @@ export class DiscoveryBrowser {
             }
           : {}),
       };
-      await this._emit('DISCOVERY_ACTION_BEFORE', detail);
-      // An evidence callback may take time or change the page. Recheck before dispatch.
-      this._check();
-      await this._unchanged(candidate);
-      const armed = await candidate.handle.evaluate(
-        (element, { key, expected, meta, optionalDismiss }) => {
-          const state = window[key];
-          if (
-            !state ||
-            state.document_id !== expected.document_id ||
-            location.href !== expected.url ||
-            !element.isConnected ||
-            JSON.stringify(state.metadata(element)) !== JSON.stringify(meta)
-          )
-            return false;
-          state.permit = {
-            element,
-            url: location.href,
-            metadata: JSON.stringify(meta),
-            optionalDismiss,
-          };
-          return true;
-        },
-        {
-          key: this.runtimeKey,
-          expected: this.current,
-          meta: candidate.meta,
-          optionalDismiss: candidate.kind === 'dismiss',
-        },
-      );
-      if (!armed) fail('DISCOVERY_STALE_PAGE');
+      const scopedGuard = await captureWithinGuard(this.page, candidate.locator, candidate.handle);
       try {
-        const options = { timeout: Math.min(this.timeoutMs, 8000) };
-        if (candidate.kind === 'dismiss') {
-          const binding = await resolveOptionalDialog(this.page, candidate.dismissAction, {
-            timeout: 0,
-            signal: this.signal,
-          });
-          try {
+        await this._emit('DISCOVERY_ACTION_BEFORE', detail);
+        // An evidence callback may take time or change the page. Recheck before dispatch.
+        this._check();
+        await this._unchanged(candidate);
+        const armed = await candidate.handle.evaluate(
+          (element, { key, expected, meta, optionalDismiss }) => {
+            const state = window[key];
             if (
-              binding.absent ||
-              !(await binding.target.evaluate((e, old) => e === old, candidate.handle))
+              !state ||
+              state.document_id !== expected.document_id ||
+              location.href !== expected.url ||
+              !element.isConnected ||
+              JSON.stringify(state.metadata(element)) !== JSON.stringify(meta)
             )
-              fail('DISCOVERY_STALE_PAGE');
-            await dispatchOptionalDialog(this.page, binding, options.timeout);
-          } finally {
-            await binding.target?.dispose();
-            await binding.dialog?.dispose();
-          }
-        } else if (candidate.operation === 'fill')
-          await candidate.handle.fill(candidate.value, options);
-        else if (candidate.operation === 'select')
-          await candidate.handle.selectOption({ value: candidate.value }, options);
-        else await candidate.handle.click(options);
-      } finally {
-        await this.page
-          .evaluate((key) => {
-            if (window[key]) {
-              window[key].permit = null;
-              window[key].dialogSubmit = null;
+              return false;
+            state.permit = {
+              element,
+              url: location.href,
+              metadata: JSON.stringify(meta),
+              optionalDismiss,
+            };
+            return true;
+          },
+          {
+            key: this.runtimeKey,
+            expected: this.current,
+            meta: candidate.meta,
+            optionalDismiss: candidate.kind === 'dismiss',
+          },
+        );
+        if (!armed) fail('DISCOVERY_STALE_PAGE');
+        try {
+          if (scopedGuard && !(await scopedGuard.evaluate((state) => state.arm())))
+            fail('WITHIN_SCOPE_CHANGED');
+          const options = { timeout: Math.min(this.timeoutMs, 8000) };
+          if (candidate.kind === 'dismiss') {
+            const binding = await resolveOptionalDialog(this.page, candidate.dismissAction, {
+              timeout: 0,
+              signal: this.signal,
+            });
+            try {
+              if (
+                binding.absent ||
+                !(await binding.target.evaluate((e, old) => e === old, candidate.handle))
+              )
+                fail('DISCOVERY_STALE_PAGE');
+              await dispatchOptionalDialog(this.page, binding, options.timeout);
+            } finally {
+              await binding.target?.dispose();
+              await binding.dialog?.dispose();
             }
-          }, this.runtimeKey)
-          .catch(() => {});
+          } else if (candidate.operation === 'fill')
+            await candidate.handle.fill(candidate.value, options);
+          else if (candidate.operation === 'select')
+            await candidate.handle.selectOption({ value: candidate.value }, options);
+          else await candidate.handle.click(options);
+          if (
+            scopedGuard &&
+            (await scopedGuard.evaluate((state) => state.blocked()).catch(() => false))
+          )
+            fail('WITHIN_SCOPE_CHANGED');
+        } catch (error) {
+          if (
+            scopedGuard &&
+            (await scopedGuard.evaluate((state) => state.blocked()).catch(() => false))
+          )
+            fail('WITHIN_SCOPE_CHANGED');
+          throw error;
+        } finally {
+          await this.page
+            .evaluate((key) => {
+              if (window[key]) {
+                window[key].permit = null;
+                window[key].dialogSubmit = null;
+              }
+            }, this.runtimeKey)
+            .catch(() => {});
+        }
+        this._check();
+        const state = await this._state();
+        if (state?.blocked) fail(state.blocked);
+        checkedURL(this.page.url(), this.task.target);
+        await this._emit('DISCOVERY_ACTION_AFTER', detail);
+        return this._observe();
+      } finally {
+        await releaseWithinGuard(scopedGuard);
       }
-      this._check();
-      const state = await this._state();
-      if (state?.blocked) fail(state.blocked);
-      checkedURL(this.page.url(), this.task.target);
-      await this._emit('DISCOVERY_ACTION_AFTER', detail);
-      return this._observe();
     });
   }
 

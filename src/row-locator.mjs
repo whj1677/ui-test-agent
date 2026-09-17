@@ -1,6 +1,7 @@
 import { handoffLocator } from '../vendor/manual-ui/handoff_runtime.mjs';
 import { validateLocator } from './plans.mjs';
 import { fail } from './common.mjs';
+import { withinHandles } from './within-locator.mjs';
 
 export const isRowLocator = (l) => ['row', 'cell'].includes(l?.kind);
 
@@ -133,10 +134,12 @@ async function scopedHandles(page, spec) {
 
 // Compatibility surface used by observation, discovery, actions and atomic assertions.
 export function runtimeLocator(page, spec) {
-  if (!isRowLocator(spec)) return handoffLocator(page, spec);
+  if (!isRowLocator(spec) && spec?.kind !== 'within') return handoffLocator(page, spec);
   validateLocator(spec);
+  const handlesFor = () =>
+    spec.kind === 'within' ? withinHandles(page, spec) : scopedHandles(page, spec);
   const use = async (fn) => {
-    const handles = await scopedHandles(page, spec);
+    const handles = await handlesFor();
     try {
       return await fn(handles);
     } finally {
@@ -144,9 +147,9 @@ export function runtimeLocator(page, spec) {
     }
   };
   return {
-    elementHandles: () => scopedHandles(page, spec),
+    elementHandles: handlesFor,
     async elementHandle() {
-      const handles = await scopedHandles(page, spec);
+      const handles = await handlesFor();
       if (handles.length <= 1) return handles[0] ?? null;
       await Promise.allSettled(handles.map((h) => h.dispose()));
       fail('ROW_TARGET_NOT_UNIQUE');
@@ -176,12 +179,12 @@ export function runtimeLocator(page, spec) {
 }
 
 export async function assertRowIdentity(page, spec, original) {
-  if (!isRowLocator(spec)) return;
+  if (!isRowLocator(spec) && spec?.kind !== 'within') return;
   const current = runtimeLocator(page, spec);
   if (
     !original ||
     (await current.count()) !== 1 ||
     !(await current.evaluate((element, old) => element === old && old.isConnected, original))
   )
-    fail('ROW_SCOPE_CHANGED');
+    fail(spec.kind === 'within' ? 'WITHIN_SCOPE_CHANGED' : 'ROW_SCOPE_CHANGED');
 }

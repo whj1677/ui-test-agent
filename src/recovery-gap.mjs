@@ -13,7 +13,7 @@ function named(value, reason) {
 export function recoveryKind(row) {
   const code = row.self_repair?.rounds?.at(-1)?.code ?? '';
   if (
-    /^(?:INVALID_|ASSERTION_|ACTION_|OPTIONAL_DIALOG_(?:SCHEMA|SOURCE|CLEANUP)|PLAN_(?:CONDITIONAL|OBSTRUCTION|ASSERTION|ROW_IDENTITY|RECORD_FIELD)|LOCATOR_EXACT|UNSAFE_CSS)/u.test(
+    /^(?:INVALID_|ASSERTION_|ACTION_|CLEANUP_SCOPE_IDENTITY|OPTIONAL_DIALOG_(?:SCHEMA|SOURCE|CLEANUP)|PLAN_(?:CONDITIONAL|OBSTRUCTION|ASSERTION|ROW_IDENTITY|SCOPE_IDENTITY|RECORD_FIELD)|LOCATOR_EXACT|UNSAFE_CSS)/u.test(
       code,
     )
   )
@@ -27,6 +27,8 @@ function relevant(locator, name, reason) {
     named(name, reason) ||
     named(locator?.column, reason) ||
     named(locator?.key?.value, reason) ||
+    named(locator?.scope?.name, reason) ||
+    named(locator?.scope?.heading, reason) ||
     named(locator?.target?.name, reason)
   );
 }
