@@ -1,0 +1,210 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0003",
+  "title": "Windows状态文件读写竞争与提交恢复",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-17"
+  },
+  "original_input": "REQ-0001发布目标下实际回归发现Windows状态替换EPERM；先建立本包，再修复验证，独立提交同步。",
+  "user_requirements": [
+    {
+      "id": "UN-0003-01",
+      "status": "已确认",
+      "goal": "进度轮询与任务状态提交不能相互争用导致无故中止，文件提交重试不能重复执行业务。",
+      "constraints": "不删除旧状态、不重放回调、不无限重试、不改变原审批或安全边界。",
+      "success_criteria": "确定性竞争/故障注入、实际并发压力和回归检查齐备，失败旧状态完整且后续可读可恢复。"
+    }
+  ],
+  "confirmed_facts": [
+    "validation/REQ-0002-runtime.log：383项中382通过1失败，core并发读取state.json期间rename遭EPERM，现有9次提交尝试仍失败；未修改Store代码。",
+    "同一原测试孤立运行通过，表明故障非每次必现；具体Windows持有文件的进程尚无证据，不断言为杀毒程序。",
+    "现有Store仅协调update间顺序，read绕过此队列；写回调在rename前调用一次，之后仅重试提交。",
+    "确定性延迟读/分享冲突注入在修复前失败1项（rename与自身读交叠1次）；修复后7项专项通过，实际文件8读者/100提交，记录1429次完成读取。",
+    "第一轮非暂停运行时回归390通过0失败0跳过，validation/REQ-0003-runtime.log；与之前383项相比新增7项存储检查。"
+  ],
+  "inferences_and_open_questions": [
+    "新增同任务窄范围文件I/O队列可消除本Store自身读/替换交叠，不承诺解决外部进程长期占锁。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0003-01",
+      "status": "已确认",
+      "requirement": "同任务状态文件读与替换按到达顺序协调，写回调保持现有串行语义。",
+      "acceptance_criteria": "受控延迟读取与提交不交叠；持续并发轮询下全部事件按序提交，无丢失/重放。",
+      "constraints": "不延长现有重试次数/时长，不锁住业务回调。"
+    },
+    {
+      "id": "DR-0003-02",
+      "status": "已确认",
+      "requirement": "提交瞬时/持续故障不重放回调、不覆盖为半写状态、不阻塞后续读取或其他任务。",
+      "acceptance_criteria": "暂时冲突只重试rename；永久错误限次拒绝且旧JSON完整；回调内读取不死锁、不同任务可独立进展。",
+      "constraints": "保留失败临时文件用于诊断，不以先删目标后写绕开原子性。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0003-01",
+      "dr_ids": [
+        "DR-0003-01"
+      ],
+      "status": "已确认",
+      "summary": "新增每任务文件I/O队列，readFile与rename临界区共享；业务update队列保留。",
+      "rationale": "公平排队排除本进程读句柄对提交竞争，回调内读取不会递归占锁。"
+    },
+    {
+      "id": "DD-0003-02",
+      "dr_ids": [
+        "DR-0003-02"
+      ],
+      "status": "已确认",
+      "summary": "已有9次有界rename重试保留，失败放开I/O队列并保留旧文件及临时文件。",
+      "rationale": "外部长期占锁应如实失败；不删除数据或重复潜在业务动作。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "Store.read→每任务I/O队列→状态文件快照→原baseline摘要校验；Store.update→原业务队列→read→回调一次→临时文件→I/O队列内有界原子rename。",
+    "公开Store方法签名、持久化数据格式、revision语义和服务接口不改变。"
+  ],
+  "module_document_impact": [
+    "release_runtime补充自身读写协调、外部锁及重试边界。"
+  ],
+  "risks_and_rollback": [
+    "长期外部占锁仍可能失败，保留旧状态与错误，不虚报提交成功。",
+    "队列只覆盖文件操作，避免回调读自身状态死锁；不同任务不共享I/O锁。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0003-01",
+      "dr_ids": [
+        "DR-0003-01"
+      ],
+      "dd_ids": [
+        "DD-0003-01"
+      ],
+      "status": "已实现",
+      "task": "补充稳定竞争复现并实现文件I/O协调，跑真实文件并发压力。",
+      "verification_ids": [
+        "VT-0003-01"
+      ]
+    },
+    {
+      "id": "TK-0003-02",
+      "dr_ids": [
+        "DR-0003-02"
+      ],
+      "dd_ids": [
+        "DD-0003-02"
+      ],
+      "status": "已实现",
+      "task": "故障注入、死锁/公平性反例和受影响回归；验证后单独Git同步。",
+      "verification_ids": [
+        "VT-0003-02"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0003-01",
+      "dr_ids": [
+        "DR-0003-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "受控读写竞争与真实文件并发",
+      "evidence_standard": "失败复现、修复后全部事件/revision/回调次数和命令日志",
+      "current_evidence": {
+        "command": "node --test tests/store-coordination.test.mjs",
+        "exit_code": 0,
+        "test_count": 7,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0003-focused.log"
+      }
+    },
+    {
+      "id": "VT-0003-02",
+      "dr_ids": [
+        "DR-0003-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "有界错误恢复和完整回归",
+      "evidence_standard": "暂时/持续/非重试错误、回调读取、跨任务独立、全量回归及正式门禁",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 390,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0003-runtime.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/store-coordination.test.mjs",
+      "node tests/runtime-regression.mjs"
+    ],
+    "environment": [
+      "Windows/Node22；独立临时数据，不触碰4179原任务，不调用模型"
+    ],
+    "conclusion": [
+      "本Store自身读/提交协调及有界失败已验证；Windows原现场具体外部持有者未归因，不承诺消除一切EPERM。",
+      "完整390项工程回归已执行；真实DeepSeek仍未运行，4179未重启，不代表发布就绪。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0003-01",
+      "dr_id": "DR-0003-01",
+      "dd_id": "DD-0003-01",
+      "tk_id": "TK-0003-01",
+      "vt_id": "VT-0003-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0003-01",
+      "dr_id": "DR-0003-02",
+      "dd_id": "DD-0003-02",
+      "tk_id": "TK-0003-02",
+      "vt_id": "VT-0003-02",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness / REQ-0002-runtime.log",
+      "status": "进行中",
+      "notes": "由真实383项回归的存储失败触发，不混入上一控件修复。"
+    }
+  ],
+  "open_questions": [
+    "Windows瞬时持有者未独立确认，本包只保证本进程协调与外部占锁有界失败。"
+  ],
+  "prohibited_implementation": [
+    "禁止扩大无限重试、重放回调、先删原文件、改测试预期隐藏失败。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "新增缺陷包",
+      "description": "在存储修改前建立竞争复现/有界恢复验收。",
+      "impact": "Store状态文件I/O协调",
+      "confirmed_by": "用户发布目标授权与回归失败证据"
+    },
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "修复和验证",
+      "description": "新增窄I/O队列，保留回调一次和9次提交上限。专项7项及首轮全量390项通过；保留REQ-0002全量失败与本包修复前失败。",
+      "impact": "状态读写协调，不更改持久化格式或业务预期",
+      "confirmed_by": "实际日志"
+    }
+  ]
+}

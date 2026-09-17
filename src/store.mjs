@@ -8,6 +8,7 @@ export class Store {
   constructor(root) {
     this.root = path.resolve(root);
     this.locks = new Map();
+    this.stateFileLocks = new Map();
     this.eventLocks = new Map();
     this.eventHeads = new Map();
     this.writerLock = null;
@@ -124,13 +125,30 @@ export class Store {
   async read(id) {
     let state;
     try {
-      state = JSON.parse(await fs.readFile(path.join(this.dir(id), 'state.json'), 'utf8'));
+      state = JSON.parse(
+        await this._stateFileIO(id, () =>
+          fs.readFile(path.join(this.dir(id), 'state.json'), 'utf8'),
+        ),
+      );
     } catch {
       fail('TASK_NOT_FOUND', 404);
     }
     const bytes = await fs.readFile(path.join(this.dir(id), 'baseline.json'));
     if (hash(bytes) !== state.baseline_sha256) fail('BASELINE_CHANGED', 409);
     return state;
+  }
+  async _stateFileIO(id, operation) {
+    // Queue only reads/atomic replacement, not business callbacks. This keeps
+    // our pollers from competing with Windows rename while allowing an update
+    // callback to read the last committed state without a recursive lock.
+    const previous = this.stateFileLocks.get(id) ?? Promise.resolve();
+    const next = previous.catch(() => {}).then(operation);
+    this.stateFileLocks.set(id, next);
+    try {
+      return await next;
+    } finally {
+      if (this.stateFileLocks.get(id) === next) this.stateFileLocks.delete(id);
+    }
   }
   async baseline(id) {
     await this.read(id);
@@ -179,15 +197,17 @@ export class Store {
         await fs.writeFile(temp, JSON.stringify(state, null, 2));
         // Windows readers/virus scanners can briefly hold the destination. Retry only the file commit,
         // never the business operation which produced the event.
-        for (let attempt = 0; ; attempt++) {
-          try {
-            await fs.rename(temp, path.join(this.dir(id), 'state.json'));
-            break;
-          } catch (e) {
-            if (!['EPERM', 'EBUSY', 'EACCES'].includes(e.code) || attempt >= 8) throw e;
-            await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
+        await this._stateFileIO(id, async () => {
+          for (let attempt = 0; ; attempt++) {
+            try {
+              await fs.rename(temp, path.join(this.dir(id), 'state.json'));
+              break;
+            } catch (e) {
+              if (!['EPERM', 'EBUSY', 'EACCES'].includes(e.code) || attempt >= 8) throw e;
+              await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
+            }
           }
-        }
+        });
         return result ?? state;
       });
     this.locks.set(id, next);
