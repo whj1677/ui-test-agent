@@ -18,8 +18,10 @@ export async function start({
   port = 4179,
   dataDir = path.join(ROOT, 'data', 'v02'),
   headless = false,
+  experienceMode = process.env.UI_AGENT_EXPERIENCE ?? 'observe',
   provider = new DeepSeek(),
 } = {}) {
+  if (!['off', 'observe', 'assist'].includes(experienceMode)) fail('EXPERIENCE_MODE_INVALID');
   if ((await readBuildInfo(ROOT)).build_id !== RUNTIME_BUILD.build_id)
     fail('BUILD_SOURCE_CHANGED', 409);
   const store = new Store(dataDir);
@@ -38,6 +40,7 @@ export async function start({
       provider,
       browser,
       planningMode: process.env.UI_AGENT_PLANNING ?? 'single',
+      experienceMode,
     });
   const csrf = uid();
   const instance = {
@@ -95,6 +98,7 @@ export async function start({
           plan_self_repair: true,
           input_quality_review: true,
           planning_mode: controller.planningMode,
+          ui_experience_mode: controller.experience.mode,
           configured: provider.configured(),
           model: provider.model,
           base_url: provider.baseURL,

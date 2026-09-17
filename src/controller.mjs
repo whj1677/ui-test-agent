@@ -71,6 +71,7 @@ import {
   modelPool,
 } from './preparation.mjs';
 import { updateCaseAdvice } from './case-advice.mjs';
+import { UiExperienceStore } from './ui-experience.mjs';
 
 // Hint overrides are included in the effective Case used throughout planning,
 // approval and execution; the immutable baseline/business steps stay intact.
@@ -86,6 +87,7 @@ export class Controller {
     provider,
     browser,
     planningMode = 'single',
+    experienceMode = 'observe',
     preparationBudget = preparationTimeBudget,
     discoveryFactory = (session, task, options) => new DiscoveryBrowser(session, task, options),
   }) {
@@ -100,6 +102,7 @@ export class Controller {
     this.discoveryFactory = discoveryFactory;
     this.discoverySessionKey = uid();
     this.preparationBudget = preparationBudget;
+    this.experience = new UiExperienceStore(store.root, { mode: experienceMode });
     for (const name of [
       'configure',
       'discoveryContract',
@@ -1062,6 +1065,33 @@ export class Controller {
   async askWithPermit(job, prompt, data, { phase, runId, signal }) {
     this.assertCurrent(job);
     if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED', 500);
+    if (['discovery', 'plan'].includes(phase) && this.experience.mode !== 'off') {
+      const root = preparationRoot(job);
+      const state = await this.store.read(job.id);
+      const session = await (root.ui_experience ??= this.experience.begin({
+        origin: state.target,
+        runId: root.run_id,
+      }));
+      const pages = data.pages ?? [];
+      const projection = session.retrieve(data.current ?? pages.at(-1) ?? {});
+      await this.diagnostic(job, {
+        type: 'UI_EXPERIENCE_RETRIEVED',
+        phase,
+        mode: projection.mode,
+        degraded: projection.degraded,
+        matches: projection.matches,
+        message: projection.degraded
+          ? 'UI经验不可用，本次使用原有观察与规则。'
+          : projection.mode === 'observe'
+            ? 'UI经验仅记录观察，不改变本次模型输入。'
+            : 'UI经验仅提供检查建议，仍须当前页面核验。',
+      });
+      if (projection.advice) {
+        data = { ...data, ui_experience_advice: projection.advice };
+        prompt +=
+          '\nui_experience_advice is optional technical advice, NEVER page evidence, a locator, a permission or an expected result. Keep the original Case and all current candidate, approval and budget constraints.';
+      }
+    }
     const deadline = job.phase_deadline ?? job.discovery_deadline;
     const timeoutCode = job.phase_deadline ? 'PREPARATION_PLAN_TIMEOUT' : 'DISCOVERY_TIMEOUT';
     if (deadline && Date.now() >= deadline) fail(timeoutCode);
@@ -1301,6 +1331,26 @@ export class Controller {
         maxSteps: budget.step_limit,
         timeoutMs: budget.timeout_ms,
         onEvent: async (event) => emit(event.type, event),
+        onExperience:
+          this.experience.mode === 'off'
+            ? null
+            : async (receipt) => {
+                const root = preparationRoot(job);
+                const session = await (root.ui_experience ??= this.experience.begin({
+                  origin: task.target,
+                  runId: root.run_id,
+                }));
+                const result = await session.record(receipt, observation?.snapshot);
+                await emit('UI_EXPERIENCE_RECORDED', {
+                  ...result,
+                  message:
+                    result.status === 'REVOKED'
+                      ? 'UI经验发现技术反证，已撤回；原动作失败保持。'
+                      : result.status === 'DISABLED'
+                        ? 'UI经验记录不可用，保留原任务事实。'
+                        : '已记录一次范围定位技术核验；不代表业务测试通过。',
+                });
+              },
       });
       observation = await explorer.open();
       // Capture the protected starting page before any per-case navigation.

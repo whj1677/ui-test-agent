@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G2",
-    "version": 1,
+    "version": 2,
     "last_updated": "2026-09-18"
   },
   "original_input": "用户提出：给Agent外挂知识库，记录常见UI问题、组合方式、窗口叠层信息，让Agent越运行越聪明。承接REQ-0001持续发布目标、修改前建需求包和验证后逐项Git同步的授权；不扩展为修改业务预期、审批或任意执行页面指令。",
@@ -19,8 +19,13 @@
     }
   ],
   "confirmed_facts": [
-    "状态卡：阶段=架构及实施前需求冻结；唯一目标=可验真的UI经验闭环；输入=现有执行器/单轮记忆/原验收基线；有限交付=模式目录、类型化技术回执、本机经验存储、受约束检索、对照证据；不做=向量服务、自由文本自动入库、答案学习、模型训练或改变REQ-0008审批；停止=限定能力及父发布门槛有实际证据，或真实外部条件阻塞。无需新增业务审批即可继续工程实现，模型策略限制仍有效。",
-    "discovery-memory.mjs只有单Case观察与状态转移；planning-input.mjs只接收同job记忆。目前没有跨运行库。原memory含用例目标，不能整份复制。",
+    "工程回归历史：validation/REQ-0012-delivery.log的593项中1失败，第7条调度替身被300ms压缩预算误伤；临时任务047f9e15-cd0f-4597-96e0-530e781bf50b诊断显示采证/经验日志耗时338ms，后续第8条完成。只将该测试窗口改3000ms、首条延迟3200ms，保留全部原断言，不改产品分钟级预算。复验12项及之后完整593项均0失败/跳过；失败日志保留。",
+    "正式记录检查历史：593项成功日志为REQ-0012-delivery-final.log，但文档检查器将验证说明中的超时反例字样误当运行失败。原记录保留在validation/REQ-0012-checker-first.md；历史原因归入本事实栏，当前验证栏仅列真实命令结果，不改检查器或丢弃失败。",
+    "测试复核补强：原TTL检查使用已撤回的库，不能独立证明过期。改为全新库经3次真实回执、先断言可用，再推进31天验证失效；产品源码不变，最终重新执行受影响专项与调度/范围定位组合，旧完整593项是补强前同一产品构建的工程回归，不能假称补强后再次全量运行。",
+    "状态卡：阶段=工程实现与有限集成验证；唯一目标=可验真的UI经验闭环；输入=现有执行器/单轮记忆/原验收基线；有限交付=模式目录、类型化技术回执、本机经验存储、受约束检索、对照证据；不做=向量服务、自由文本自动入库、答案学习、模型训练或改变REQ-0008审批；停止=限定能力及父发布门槛有实际证据，或真实外部条件阻塞。真实模型执行限制仍有效，不以注入测试结案。",
+    "实施状态卡补充：本轮进入工程实现，先实现目录/本机存储/产品检索及同名范围定位的可信技术回执；叠层/异步/未来字段无可靠判定时只给观察提示，不自动正反馈。配置UI_AGENT_EXPERIENCE=off|observe|assist，默认observe；无公开写入口，不改4179，真实模型仍不运行。",
+    "技术回执限定谓词：执行前全页基础定位多匹配，但原within定位唯一且匹配原DOM；既有范围守卫记录真实可信click/input/change事件；动作后原目标/容器身份和范围定位仍一致才记POSITIVE。对象正常消失/页面跳转、未派发或页面伪造事件记UNKNOWN，实际范围守卫拒绝记COUNTEREXAMPLE。此回执仅证明该次范围消歧技术条件保持，不证明业务正确、相关性或因果效率收益。",
+    "原discovery-memory.mjs只有单Case观察与状态转移，含用例目标，不能整份复制。新增ui-experience独立存储只接收执行器一次性进程内回执，controller在discovery/plan请求入口添加独立建议，不修改原planning-input或修复预算指纹。",
     "controller.mjs要求当前候选ID，排除同状态重复动作；DISCOVERY_FACTS_UPDATED中的新增控件/状态数量不证明相关性、恢复或业务成功。",
     "discovery-browser.mjs的DISCOVERY_ACTION_AFTER发生在派发、身份及网络检查后，不含恢复谓词的前后对照。EXECUTED不能直接转换为经验成功。",
     "browser.mjs快照已有role/dialog_context/within局部结构，但最近弹窗文字不等于完整叠层/遮挡图；DOM顺序或z-index不证明原生top-layer实际层级。",
@@ -73,45 +78,35 @@
   "design_decisions": [
     {
       "id": "DD-0012-01",
-      "dr_ids": [
-        "DR-0012-01"
-      ],
+      "dr_ids": ["DR-0012-01"],
       "status": "已确认",
       "summary": "代码模式目录与运行统计分离，不晋升自由文本。",
       "rationale": "采用Kimi的可枚举边界，避免模型审模型及页面注入成为长期指令；覆盖缺口不能由自动文本填补。"
     },
     {
       "id": "DD-0012-02",
-      "dr_ids": [
-        "DR-0012-02"
-      ],
+      "dr_ids": ["DR-0012-02"],
       "status": "已确认",
       "summary": "先补前后技术条件/尝试身份，再计分；无判定器不自学习。",
       "rationale": "代码确认现有AFTER回执不足，控件增量不证明进展，唯一可编辑不证明对象正确。"
     },
     {
       "id": "DD-0012-03",
-      "dr_ids": [
-        "DR-0012-03"
-      ],
+      "dr_ids": ["DR-0012-03"],
       "status": "已确认",
       "summary": "沿用单目录单写进程，独立有限JSON/原子写/有界队列，不引入向量服务。",
       "rationale": "枚举经验无需额外服务；校验未知字段/枚举/计数/大小/文件类型，不接受任意路径。摘要不保证防本机管理员伪造。"
     },
     {
       "id": "DD-0012-04",
-      "dr_ids": [
-        "DR-0012-04"
-      ],
+      "dr_ids": ["DR-0012-04"],
       "status": "已确认",
       "summary": "正向版本按job冻结，负向撤回实时收紧；三模式支撑退出和对照。",
       "rationale": "仅启动校验不足，任务内反证必须立即失效；不得任务内越学越激进或静默掩盖失败。"
     },
     {
       "id": "DD-0012-05",
-      "dr_ids": [
-        "DR-0012-05"
-      ],
+      "dr_ids": ["DR-0012-05"],
       "status": "已确认",
       "summary": "工程之后真实配对对照，有收益证据后才默认assist。",
       "rationale": "训练/评估隔离，避免熟题自证；文件与测试数量不代表学习能力。"
@@ -120,12 +115,12 @@
   "interfaces_and_data_flow": [
     "原Case→真实观察/当前候选→模型选择→固定执行器→下一观察保持。新增支路：有限结构特征→目录/经验检索→独立建议；不回写DOM事实、原Case或候选。",
     "真实技术尝试→前后谓词判定→去重隔离统计→门槛满足且无反证→下job排序；反证/不适用/超期→撤回或不检索。只有执行器可产生回执，模型无写入口。",
-    "拟在既有data内保存ui-experience.json及本机随机salt；不复制discovery_memory。原任务留模式版本、状态、降级与回执来源摘要；salt不是API凭据，不传模型/日志。",
+    "在既有data内保存ui-experience.json及ui-experience.salt；不复制discovery_memory。原任务诊断留命中模式版本、结果和降级，库内仅保存带盐site/run摘要、四位结构摘要、模式枚举、时间和结果；salt不是API凭据，不传模型/日志。",
     "目录ID/版本是代码允许值，不接受经验自带selector/URL/代码/关闭命令。通用提示与站点统计分开读取。",
-    "不新增经验管理HTTP写入口或改变审批。三模式从本机受控配置提供，进入实现时冻结具体字段/错误码。"
+    "不新增经验管理HTTP写入口或改变审批。UI_AGENT_EXPERIENCE=off|observe|assist，默认observe；config返回ui_experience_mode；非法配置EXPERIENCE_MODE_INVALID在获取写锁前拒绝。损坏/外部替换/写入失败标EXPERIENCE_UNAVAILABLE并停用本进程经验，保留原任务错误；人工处理后需重启。"
   ],
   "module_document_impact": [
-    "实现将影响controller输入、DiscoveryBrowser回执、本机持久化与诊断，届时更新release_runtime；本次仅设计，未改模块实现。"
+    "已更新release_runtime和试用说明：controller输入、DiscoveryBrowser回执、范围守卫可信事件计数、本机持久化与中文诊断；无UI重新设计、依赖新增或4179实例切换。"
   ],
   "risks_and_rollback": [
     "最危险的是错误奖励循环；存疑记未知，不靠重复次数掩盖判定器不足。",
@@ -136,125 +131,113 @@
   "tasks": [
     {
       "id": "TK-0012-01",
-      "dr_ids": [
-        "DR-0012-01"
-      ],
-      "dd_ids": [
-        "DD-0012-01"
-      ],
-      "status": "进行中",
-      "task": "目录与适用性设计已明确；待实现四类模式、结构投影和确定性检索。",
-      "verification_ids": [
-        "VT-0012-01"
-      ]
+      "dr_ids": ["DR-0012-01"],
+      "dd_ids": ["DD-0012-01"],
+      "status": "已实现，验证已记录",
+      "task": "已实现四类固定模式、有限布尔结构投影、最多3条/3000字符确定性检索；提示不是页面或业务事实。",
+      "verification_ids": ["VT-0012-01"]
     },
     {
       "id": "TK-0012-02",
-      "dr_ids": [
-        "DR-0012-02"
-      ],
-      "dd_ids": [
-        "DD-0012-02"
-      ],
-      "status": "待实现",
-      "task": "补技术尝试前后回执及可信判定，不直接用动作完成计成功。",
-      "verification_ids": [
-        "VT-0012-02"
-      ]
+      "dr_ids": ["DR-0012-02"],
+      "dd_ids": ["DD-0012-02"],
+      "status": "已实现，验证已记录",
+      "task": "已实现同名范围定位的前后身份及真实派发回执、一次性令牌与未知/反证；其他三类没有可靠判定器，只给 authored 提示，不自动正反馈。",
+      "verification_ids": ["VT-0012-02"]
     },
     {
       "id": "TK-0012-03",
-      "dr_ids": [
-        "DR-0012-03"
-      ],
-      "dd_ids": [
-        "DD-0012-03"
-      ],
-      "status": "待实现",
-      "task": "本机原子存储、晋升/去重/撤回/损坏降级。",
-      "verification_ids": [
-        "VT-0012-03"
-      ]
+      "dr_ids": ["DR-0012-03"],
+      "dd_ids": ["DD-0012-03"],
+      "status": "已实现，验证已记录",
+      "task": "已实现本机原子存储、origin带盐隔离、每job去重、3独立job晋升、反证撤回、30天过期及损坏降级；保留错误文件，不覆盖外部替换。",
+      "verification_ids": ["VT-0012-03"]
     },
     {
       "id": "TK-0012-04",
-      "dr_ids": [
-        "DR-0012-04"
-      ],
-      "dd_ids": [
-        "DD-0012-04"
-      ],
-      "status": "待实现",
-      "task": "产品接入和诊断，验证三模式、冻结和撤回，不扩大候选/审批。",
-      "verification_ids": [
-        "VT-0012-04"
-      ]
+      "dr_ids": ["DR-0012-04"],
+      "dd_ids": ["DD-0012-04"],
+      "status": "已实现，验证已记录",
+      "task": "已接入产品探索/规划和诊断；真实Chromium验证observe写入、assist重启命中/反证撤回、off及损坏回退，候选/原例/审批不变，模型为注入替身。",
+      "verification_ids": ["VT-0012-04"]
     },
     {
       "id": "TK-0012-05",
-      "dr_ids": [
-        "DR-0012-05"
-      ],
-      "dd_ids": [
-        "DD-0012-05"
-      ],
-      "status": "待实现",
-      "task": "工程及真实对照，依据收益/反例决定assist默认值，独立Git同步。",
-      "verification_ids": [
-        "VT-0012-05"
-      ]
+      "dr_ids": ["DR-0012-05"],
+      "dd_ids": ["DD-0012-05"],
+      "status": "进行中",
+      "task": "工程反例与产品集成已执行；真实模型对照仍因工具策略限制未运行，默认保持observe；本修复独立Git同步，不作发布或收益结论。",
+      "verification_ids": ["VT-0012-05"]
     }
   ],
   "verification_items": [
     {
       "id": "VT-0012-01",
-      "dr_ids": [
-        "DR-0012-01"
-      ],
+      "dr_ids": ["DR-0012-01"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "单元测试通过",
       "item": "四类目录匹配、确定性及数据/长度边界",
       "evidence_standard": "真实单元正反例；无原页面/Case内容、未知模式或可执行动作。",
-      "current_evidence": "设计完成，未实现或运行。"
+      "current_evidence": {
+        "command": "node --test tests/ui-experience.test.mjs tests/ui-experience-flow.test.mjs tests/semantic-scope.test.mjs",
+        "exit_code": 0,
+        "test_count": 39,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0012-targeted.log"
+      }
     },
     {
       "id": "VT-0012-02",
-      "dr_ids": [
-        "DR-0012-02"
-      ],
+      "dr_ids": ["DR-0012-02"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "真实浏览器回执与错误奖励/重复尝试反例",
-      "evidence_standard": "原目标/范围/阻挡前后事实；假增量/错对象/超时/缺证据不计成功。",
-      "current_evidence": "已核对现有事件缺结果谓词，未新增测试。"
+      "evidence_standard": "原目标/范围/阻挡前后事实；假增量/错对象/超过时间窗口/缺证据不计成功。",
+      "current_evidence": {
+        "command": "node --test tests/ui-experience.test.mjs tests/ui-experience-flow.test.mjs tests/semantic-scope.test.mjs",
+        "exit_code": 0,
+        "test_count": 39,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0012-targeted.log"
+      }
     },
     {
       "id": "VT-0012-03",
-      "dr_ids": [
-        "DR-0012-03"
-      ],
+      "dr_ids": ["DR-0012-03"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "持久化隔离/晋升/撤回/重放与损坏容错",
       "evidence_standard": "真实目录/重启、原子写故障及超限输入；原历史摘要保持。",
-      "current_evidence": "未运行。"
+      "current_evidence": {
+        "command": "node --test tests/ui-experience.test.mjs tests/ui-experience-flow.test.mjs tests/semantic-scope.test.mjs",
+        "exit_code": 0,
+        "test_count": 39,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0012-targeted.log"
+      }
     },
     {
       "id": "VT-0012-04",
-      "dr_ids": [
-        "DR-0012-04"
-      ],
+      "dr_ids": ["DR-0012-04"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "产品集成与三模式边界",
       "evidence_standard": "产品observe写入、assist命中/撤回；off/observe输入/候选不变，降级仍保留失败。注入模型只验协议。",
-      "current_evidence": "未运行，独立库测试不等于产品接入。"
+      "current_evidence": {
+        "command": "node --test tests/ui-experience-flow.test.mjs",
+        "exit_code": 0,
+        "test_count": 7,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0012-flow-revocation.log"
+      }
     },
     {
       "id": "VT-0012-05",
-      "dr_ids": [
-        "DR-0012-05"
-      ],
+      "dr_ids": ["DR-0012-05"],
       "confirmation_status": "已确认",
       "execution_status": "未运行",
       "item": "真实模型配对对照及发布回归",
@@ -265,13 +248,22 @@
   "verification_environment": {
     "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
-      "设计阶段不运行测试、sync、collector或正式checker；实现后按实际影响选择Node/Chromium命令。"
+      "node --test tests/preparation.test.mjs：validation/REQ-0012-preparation-timing.log，12项0失败0跳过；调度及原预期边界验证，初始失败/调整依据见本包00_user_requirement的已确认事实。",
+      "node tests/runtime-regression.mjs：validation/REQ-0012-delivery-final.log，593项0失败0跳过；同一产品构建的完整工程回归，TTL测试独立性补强前，受影响最终专项另记collector。",
+      "node --test tests/ui-experience.test.mjs tests/ui-experience-flow.test.mjs tests/semantic-scope.test.mjs tests/preparation.test.mjs：validation/REQ-0012-final-targeted.log，52项0失败0跳过，包含独立TTL正向前置；与593项重叠不相加。仅记录检查因把VT02的失败反例要求字样识别为实际运行失败而拒绝，修正文案区分要求与结果，原失败日志保留；未修改测试判定。",
+      "node tests/runtime-regression.mjs：validation/REQ-0012-runtime-first.log，592项0失败0跳过；随后补充产品撤回测试7项0失败0跳过，两者范围重叠不相加。",
+      "UI_AGENT_EXPERIENCE=assist node tests/discovery.integration.mjs：validation/REQ-0012-assist-verified.log，退出0；discovery-OSGtLa保存模型协议/诊断/事实；11次注入调用，其中4次含建议、2次是计划，原审批后两条只读断言满足、业务写请求0。不是真实模型结果。",
+      "node acceptance/check.mjs：冻结24例/17文件未变，只证明原合成资产摘要。正式sync/collector/checker记录当前实际结果。"
     ],
     "environment": [
-      "Windows/Node现有产品；4179旧实例未变。Kimi CLI本次退出0，不等于产品成功。"
+      "Windows/Node22.19.0/真实Chromium/独立localhost和validation数据；4179未重启、不改旧任务。真实模型调用0。"
     ],
     "conclusion": [
-      "仅设计及关键证据缺口确认，知识库未实现/未启用，无学习收益结论。"
+      "经验闭环已实际接入并经本机工程反例验证；只对scoped_repeat进行可信技术正反馈，其余为人工编写的观察建议。",
+      "默认observe不改变模型输入；assist仅排序和提示，不扩充候选/预算/权限/原预期。真实模型泛化和效率收益未验证，父发布目标未完成。",
+      "VT01-03共用targeted.log的39项结果，不能按VT累加。覆盖目录无正文回显、JSON回执伪造/重放、隔离/冻结/撤回/TTL/版本/损坏/未知字段/链接/外部替换/原子rename失败/并发写。未宣称所有容量边界已压力验收。",
+      "保留REQ-0012-no-dispatch-before.log中未实际派发却误记正向的失败；修复后idle与页面合成事件UNKNOWN。错误对象COUNTEREXAMPLE、DOM增长/目标消失UNKNOWN。",
+      "flow-first.log首次6项中3失败，原因是测试复用同任务已有采证检查点；改为独立新任务验证，不关闭产品复用。最终flow-revocation.log为7项0失败0跳过，包含独立Node进程重载、产品反证撤回且WITHIN_SCOPE_CHANGED原错误保留、off和损坏回退；所有baseline字节不变，业务写请求0。"
     ]
   },
   "trace_current": [
@@ -281,7 +273,7 @@
       "dd_id": "DD-0012-01",
       "tk_id": "TK-0012-01",
       "vt_id": "VT-0012-01",
-      "status": "进行中"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0012-01",
@@ -289,7 +281,7 @@
       "dd_id": "DD-0012-02",
       "tk_id": "TK-0012-02",
       "vt_id": "VT-0012-02",
-      "status": "待实现"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0012-01",
@@ -297,7 +289,7 @@
       "dd_id": "DD-0012-03",
       "tk_id": "TK-0012-03",
       "vt_id": "VT-0012-03",
-      "status": "待实现"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0012-01",
@@ -305,7 +297,7 @@
       "dd_id": "DD-0012-04",
       "tk_id": "TK-0012-04",
       "vt_id": "VT-0012-04",
-      "status": "待实现"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0012-01",
@@ -313,7 +305,7 @@
       "dd_id": "DD-0012-05",
       "tk_id": "TK-0012-05",
       "vt_id": "VT-0012-05",
-      "status": "待实现"
+      "status": "进行中"
     }
   ],
   "trace_history": [
@@ -335,6 +327,14 @@
     "不以默认关闭的空壳或孤立测试宣称学习能力，不以离线回放宣称真实模型无退化。"
   ],
   "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 2,
+      "type": "工程实现与反例修复",
+      "description": "实现有限目录、可信事件及一次性回执、跨job经验持久化、三模式检索和中文诊断。修复未实际派发动作也会正反馈的反例，产品验证撤回保留原错误；无可靠叠层/分页谓词不自学习。",
+      "impact": "源代码/专项测试/试用配置说明/相关模块，原基线和4179不变；真实模型收益与发布仍待验证。",
+      "confirmed_by": "沿用用户发布目标及UI知识库授权，不改变业务预期或待决审批选择。"
+    },
     {
       "date": "2026-09-18",
       "version": 1,

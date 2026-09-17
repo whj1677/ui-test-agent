@@ -445,6 +445,24 @@ try {
   );
   assert.equal(modelCalls.filter((call) => call.purpose === 'case_ui_discovery').length, 5);
   assert.equal(modelCalls.filter((call) => call.purpose === 'case_plan').length, 2);
+  const experienceMode = process.env.UI_AGENT_EXPERIENCE ?? 'observe';
+  const config = await (await fetch(app.url + '/api/config')).json();
+  assert.equal(config.ui_experience_mode, experienceMode);
+  const adviceCalls = modelCalls.filter((call) => call.input.ui_experience_advice);
+  if (experienceMode === 'assist') {
+    assert.equal(adviceCalls.filter((call) => call.purpose === 'case_plan').length, 2);
+    assert.ok(adviceCalls.some((call) => call.purpose === 'case_ui_discovery'));
+    for (const call of adviceCalls) {
+      assert.ok(['case_plan', 'case_ui_discovery'].includes(call.purpose));
+      assert.equal(call.input.ui_experience_advice.kind, 'UI_ADVICE_NOT_EVIDENCE');
+      assert.ok(call.input.ui_experience_advice.patterns.length <= 3);
+      assert.ok(
+        call.input.ui_experience_advice.patterns.every(
+          (p) => p.experience === 'AUTHORED_PATTERN_ONLY',
+        ),
+      );
+    }
+  } else assert.equal(adviceCalls.length, 0);
   const chosen = modelCalls
     .filter((call) => call.response?.action)
     .map(
@@ -586,6 +604,8 @@ try {
       'Independent authenticated localhost fixture; real Chromium; injected DeepSeek HTTP replies. Covers UI authentication triggering autonomous menu/dialog exploration, automatic candidate plans, UI plan approval and two view-only executions. Not a real DeepSeek or product acceptance result.',
     task_id: taskId,
     model_calls: modelCalls.length,
+    experience_mode: experienceMode,
+    experience_advice_calls: adviceCalls.length,
     input_review_calls: modelCalls.filter((call) => call.purpose === 'input_review').length,
     plan_audit_calls: modelCalls.filter((call) => call.purpose === 'plan_audit').length,
     discovery_calls: 5,

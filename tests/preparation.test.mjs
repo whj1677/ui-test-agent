@@ -247,15 +247,22 @@ test('first Case timeout preserves partial evidence and does not prevent the rem
   const h = await setup(t, {
     count: 8,
     reviewed: false,
-    time: 300,
+    // This is a scheduling-isolation test, not a sub-second disk benchmark.
+    // Under the concurrent browser suite, a healthy worker took 338ms and
+    // exceeded the old 300ms injected window. Keep a real first-case timeout
+    // and all isolation assertions, with headroom for the other seven workers.
+    time: 3000,
     open: async (id) => {
-      if (id === 'P-1') await sleep(360);
+      if (id === 'P-1') await sleep(3200);
     },
   });
   const s = await h.run();
   assert.equal(s.cases[0].status, 'BLOCKED_BUDGET');
   assert.equal(s.cases[0].case_advice.category, 'TIME_BUDGET');
-  assert.ok(s.cases.slice(1).every((c) => c.discovery.status === 'CAPTURED'));
+  assert.ok(
+    s.cases.slice(1).every((c) => c.discovery.status === 'CAPTURED'),
+    JSON.stringify({ directory: h.directory, workers: s.preparation.workers }),
+  );
   assert.equal(s.events.filter((e) => e.type === 'JOB_BATCH_FINISHED').length, 2);
   assert.equal(h.runtime.closes.length, 8);
   assert.equal(h.runtime.active, 0);

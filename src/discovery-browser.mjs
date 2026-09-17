@@ -1,6 +1,7 @@
 import { snapshot } from './browser.mjs';
 import { runtimeLocator as handoffLocator } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
+import { beginScopeExperience } from './ui-experience-evidence.mjs';
 import { fail, hash, redact, relativeURL, uid } from './common.mjs';
 import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
@@ -468,7 +469,7 @@ export class DiscoveryBrowser {
   constructor(
     session,
     task,
-    { signal, onEvent = () => {}, maxSteps = 24, timeoutMs = 120000 } = {},
+    { signal, onEvent = () => {}, onExperience = null, maxSteps = 24, timeoutMs = 120000 } = {},
   ) {
     if (
       !Number.isInteger(maxSteps) ||
@@ -483,6 +484,7 @@ export class DiscoveryBrowser {
     this.task = task;
     this.signal = signal;
     this.onEvent = onEvent;
+    this.onExperience = onExperience;
     this.maxSteps = maxSteps;
     this.timeoutMs = timeoutMs;
     this.interactions = interactionContracts(task.discovery_interactions);
@@ -1167,7 +1169,12 @@ export class DiscoveryBrowser {
           : {}),
       };
       const scopedGuard = await captureWithinGuard(this.page, candidate.locator, candidate.handle);
+      let finishExperience;
       try {
+        if (this.onExperience)
+          finishExperience = await beginScopeExperience(this.page, candidate, scopedGuard).catch(
+            () => null,
+          );
         await this._emit('DISCOVERY_ACTION_BEFORE', detail);
         // An evidence callback may take time or change the page. Recheck before dispatch.
         this._check();
@@ -1281,7 +1288,14 @@ export class DiscoveryBrowser {
         if (state?.blocked) fail(state.blocked);
         checkedURL(this.page.url(), this.task.target);
         await this._emit('DISCOVERY_ACTION_AFTER', detail);
-        return this._observe();
+        const observed = await this._observe();
+        const receipt = await finishExperience?.();
+        if (receipt) await this.onExperience(receipt);
+        return observed;
+      } catch (error) {
+        const receipt = await finishExperience?.(error);
+        if (receipt) await this.onExperience(receipt).catch(() => {});
+        throw error;
       } finally {
         await releaseWithinGuard(scopedGuard);
       }

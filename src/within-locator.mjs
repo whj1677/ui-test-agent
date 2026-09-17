@@ -148,7 +148,8 @@ export async function captureWithinGuard(page, spec, target) {
       );
     };
     let blocked = false,
-      armed = false;
+      armed = false,
+      verifiedEvents = 0;
     const events = [
       'pointerdown',
       'mousedown',
@@ -175,6 +176,8 @@ export async function captureWithinGuard(page, spec, target) {
         blocked = true;
         event.preventDefault();
         event.stopImmediatePropagation();
+      } else if (event.isTrusted && ['click', 'input', 'change'].includes(event.type)) {
+        verifiedEvents++;
       }
     };
     return {
@@ -192,6 +195,9 @@ export async function captureWithinGuard(page, spec, target) {
       },
       blocked() {
         return blocked;
+      },
+      verifiedEvents() {
+        return verifiedEvents;
       },
     };
   }, spec.scope);

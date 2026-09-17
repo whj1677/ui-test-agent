@@ -15,13 +15,13 @@
 
 - 原Case→真实观察/当前候选→模型选择→固定执行器→下一观察保持。新增支路：有限结构特征→目录/经验检索→独立建议；不回写DOM事实、原Case或候选。
 - 真实技术尝试→前后谓词判定→去重隔离统计→门槛满足且无反证→下job排序；反证/不适用/超期→撤回或不检索。只有执行器可产生回执，模型无写入口。
-- 拟在既有data内保存ui-experience.json及本机随机salt；不复制discovery_memory。原任务留模式版本、状态、降级与回执来源摘要；salt不是API凭据，不传模型/日志。
+- 在既有data内保存ui-experience.json及ui-experience.salt；不复制discovery_memory。原任务诊断留命中模式版本、结果和降级，库内仅保存带盐site/run摘要、四位结构摘要、模式枚举、时间和结果；salt不是API凭据，不传模型/日志。
 - 目录ID/版本是代码允许值，不接受经验自带selector/URL/代码/关闭命令。通用提示与站点统计分开读取。
-- 不新增经验管理HTTP写入口或改变审批。三模式从本机受控配置提供，进入实现时冻结具体字段/错误码。
+- 不新增经验管理HTTP写入口或改变审批。UI_AGENT_EXPERIENCE=off|observe|assist，默认observe；config返回ui_experience_mode；非法配置EXPERIENCE_MODE_INVALID在获取写锁前拒绝。损坏/外部替换/写入失败标EXPERIENCE_UNAVAILABLE并停用本进程经验，保留原任务错误；人工处理后需重启。
 
 ## 模块文档影响
 
-- 实现将影响controller输入、DiscoveryBrowser回执、本机持久化与诊断，届时更新release_runtime；本次仅设计，未改模块实现。
+- 已更新release_runtime和试用说明：controller输入、DiscoveryBrowser回执、范围守卫可信事件计数、本机持久化与中文诊断；无UI重新设计、依赖新增或4179实例切换。
 
 ## 风险与回滚
 
