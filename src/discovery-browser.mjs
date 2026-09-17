@@ -6,6 +6,7 @@ import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
 import { queryScopeFacts, queryValues } from './query-capability.mjs';
 import { readingBinding, readingDOMFacts } from './reading-actions.mjs';
+import { queryFormFacts, queryFormBinding, queryFormValues } from './query-forms.mjs';
 import {
   dismissButtonFacts,
   conditionalDismissSource,
@@ -270,6 +271,19 @@ function installRuntime(key) {
     document.addEventListener(
       type,
       (event) => {
+        if (type === 'submit' && state.querySubmit) {
+          const p = state.querySubmit;
+          state.querySubmit = null;
+          if (
+            event.isTrusted &&
+            event.submitter === p.element &&
+            event.target === p.queryForm &&
+            p.url === location.href &&
+            p.metadata === JSON.stringify(state.metadata(p.element)) &&
+            p.queryCheck()
+          )
+            return;
+        }
         if (type === 'submit' && state.dialogSubmit) {
           const p = state.dialogSubmit;
           state.dialogSubmit = null;
@@ -292,6 +306,7 @@ function installRuntime(key) {
           permit.element.contains(event.target) &&
           permit.url === location.href &&
           permit.metadata === JSON.stringify(state.metadata(permit.element)) &&
+          (!permit.queryRequired || (event.isTrusted && permit.queryCheck?.() === true)) &&
           (permit.readingRevision === undefined ||
             (state.flush(), permit.readingRevision === state.reading_revision));
         if (!allowed) {
@@ -302,6 +317,7 @@ function installRuntime(key) {
         }
         if (type === 'click') {
           if (permit.optionalDismiss) state.dialogSubmit = permit;
+          if (permit.queryRequired) state.querySubmit = permit;
           state.permit = null;
         }
       },
@@ -314,7 +330,7 @@ async function metadata(handle, key) {
   return handle.evaluate((element, key) => window[key]?.metadata(element), key);
 }
 
-function candidateKind(meta, name, base, optionalDismiss = false, reading = false) {
+function candidateKind(meta, name, base, optionalDismiss = false, reading = false, query = false) {
   if (
     !meta.connected ||
     !meta.visible ||
@@ -345,7 +361,7 @@ function candidateKind(meta, name, base, optionalDismiss = false, reading = fals
     meta.tag === 'BUTTON' &&
     ((meta.type !== 'button' && meta.form) || meta.declaredType === 'submit')
   )
-    return optionalDismiss ? 'dismiss' : null;
+    return optionalDismiss ? 'dismiss' : query ? 'query' : null;
   if (meta.tag === 'BUTTON' && meta.type === 'reset') return null;
   if (meta.href !== null) {
     if (meta.target && meta.target !== '_self') return null;
@@ -741,9 +757,12 @@ export class DiscoveryBrowser {
     );
     // Ordinary, case-grounded query inputs should not need a human-authored
     // source contract. Other forms still require the reviewed contract path.
-    const queryBindings = queryValues(this.caseDefinition, meta, control.name);
+    const scope = await this._queryScope(handle);
+    const queryBindings =
+      scope?.kind === 'native_get_query'
+        ? queryFormValues(this.caseDefinition, scope, meta, control.name)
+        : queryValues(this.caseDefinition, meta, control.name);
     if (this.task.authorization?.nonproduction === true && queryBindings.length) {
-      const scope = await handle.evaluate(queryScopeFacts);
       if (scope) {
         const url = new URL(this.page.url());
         for (const binding of queryBindings) {
@@ -759,7 +778,7 @@ export class DiscoveryBrowser {
               ref: `${this.caseId}/${binding.step_id}`,
               source_quote: binding.source_quote,
               boundary:
-                'Fixed original query input; network and submit guards enforced. Not proof of handler purity or business success.',
+                'Fixed original query input; guarded query submits and network boundaries enforced. Not proof of handler purity or business success.',
             },
           });
         }
@@ -809,6 +828,36 @@ export class DiscoveryBrowser {
       }
     }
     return candidates;
+  }
+  async _queryScope(handle) {
+    const ordinary = await handle.evaluate(queryScopeFacts);
+    if (ordinary) return ordinary;
+    const facts = await handle.evaluate(queryFormFacts);
+    if (!facts) return null;
+    try {
+      checkedURL(facts.action, this.task.target);
+    } catch {
+      return null;
+    }
+    return facts;
+  }
+  async _queryEvidence(handle, meta) {
+    if (
+      this.task.authorization?.nonproduction !== true ||
+      meta.tag !== 'BUTTON' ||
+      meta.type !== 'submit' ||
+      !meta.form
+    )
+      return null;
+    const facts = await handle.evaluate(queryFormFacts);
+    if (!facts) return null;
+    try {
+      checkedURL(facts.action, this.task.target);
+    } catch {
+      return null;
+    }
+    const binding = queryFormBinding(this.caseDefinition, facts);
+    return binding ? { binding, facts } : null;
   }
   async _readingEvidence(handle, name) {
     if (this.task.authorization?.nonproduction !== true) return null;
@@ -864,7 +913,15 @@ export class DiscoveryBrowser {
           const meta = await metadata(handle, this.runtimeKey),
             dismissAction = await this._dismissAction(handle, meta),
             reading = await this._readingEvidence(handle, control.name),
-            kind = candidateKind(meta, control.name, this.page.url(), !!dismissAction, !!reading);
+            queryForm = await this._queryEvidence(handle, meta),
+            kind = candidateKind(
+              meta,
+              control.name,
+              this.page.url(),
+              !!dismissAction,
+              !!reading,
+              !!queryForm,
+            );
           if (!kind) {
             const inputs = await this._inputCandidates(handle, meta, control);
             if (inputs.length) {
@@ -877,6 +934,7 @@ export class DiscoveryBrowser {
             candidate_id: uid(),
             kind,
             ...(kind === 'reading' ? { evidence: reading.binding } : {}),
+            ...(kind === 'query' ? { evidence: queryForm.binding } : {}),
             ...(kind === 'dismiss' ? { dismissAction } : {}),
             name: redact(control.name).slice(0, 200),
             locator: structuredClone(control.locator),
@@ -890,6 +948,7 @@ export class DiscoveryBrowser {
             handle,
             meta,
             ...(kind === 'reading' ? { reading, readingRevision: before.reading_revision } : {}),
+            ...(kind === 'query' ? { queryForm, queryRevision: before.reading_revision } : {}),
           });
           candidates.push(candidate);
           handle = null;
@@ -942,8 +1001,11 @@ export class DiscoveryBrowser {
       fail('DISCOVERY_STALE_PAGE');
     const meta = await metadata(candidate.handle, this.runtimeKey);
     if (candidate.contract?.query_scope) {
-      const scope = await candidate.handle.evaluate(queryScopeFacts);
-      const bindings = queryValues(this.caseDefinition, meta, candidate.name);
+      const scope = await this._queryScope(candidate.handle);
+      const bindings =
+        scope?.kind === 'native_get_query'
+          ? queryFormValues(this.caseDefinition, scope, meta, candidate.name)
+          : queryValues(this.caseDefinition, meta, candidate.name);
       if (
         this.task.authorization?.nonproduction !== true ||
         JSON.stringify(scope) !== JSON.stringify(candidate.contract.query_scope) ||
@@ -955,6 +1017,13 @@ export class DiscoveryBrowser {
     }
     const dismissAction = await this._dismissAction(candidate.handle, meta);
     if (
+      candidate.queryForm &&
+      (state.reading_revision !== candidate.queryRevision ||
+        JSON.stringify(await this._queryEvidence(candidate.handle, meta)) !==
+          JSON.stringify(candidate.queryForm))
+    )
+      fail('DISCOVERY_STALE_PAGE');
+    if (
       candidate.reading &&
       (state.reading_revision !== candidate.readingRevision ||
         JSON.stringify(await this._readingEvidence(candidate.handle, candidate.name)) !==
@@ -963,7 +1032,14 @@ export class DiscoveryBrowser {
       fail('DISCOVERY_STALE_PAGE');
     const kind = candidate.contract
       ? interactionKind(meta, candidate.name, candidate.contract)
-      : candidateKind(meta, candidate.name, state.url, !!dismissAction, !!candidate.reading);
+      : candidateKind(
+          meta,
+          candidate.name,
+          state.url,
+          !!dismissAction,
+          !!candidate.reading,
+          !!candidate.queryForm,
+        );
     if (
       JSON.stringify(meta) !== JSON.stringify(candidate.meta) ||
       !kind ||
@@ -1021,7 +1097,7 @@ export class DiscoveryBrowser {
         page_id: this.current.page_id,
         kind: candidate.kind,
         name: candidate.name,
-        ...(candidate.reading ? { evidence: candidate.evidence } : {}),
+        ...(candidate.reading || candidate.queryForm ? { evidence: candidate.evidence } : {}),
         ...(candidate.operation
           ? {
               operation: candidate.operation,
@@ -1038,7 +1114,7 @@ export class DiscoveryBrowser {
         this._check();
         await this._unchanged(candidate);
         const armed = await candidate.handle.evaluate(
-          (element, { key, expected, meta, optionalDismiss, readingRevision }) => {
+          (element, { key, expected, meta, optionalDismiss, readingRevision, queryRequired }) => {
             const state = window[key];
             if (
               !state ||
@@ -1056,6 +1132,7 @@ export class DiscoveryBrowser {
               metadata: JSON.stringify(meta),
               optionalDismiss,
               readingRevision,
+              queryRequired,
             };
             return true;
           },
@@ -1065,10 +1142,20 @@ export class DiscoveryBrowser {
             meta: candidate.meta,
             optionalDismiss: candidate.kind === 'dismiss',
             readingRevision: candidate.readingRevision,
+            queryRequired: !!candidate.queryForm,
           },
         );
         if (!armed) fail('DISCOVERY_STALE_PAGE');
         try {
+          if (
+            candidate.queryForm &&
+            !(await candidate.handle.evaluate(queryFormFacts, {
+              key: this.runtimeKey,
+              expected: candidate.queryForm.facts,
+              revision: candidate.queryRevision,
+            }))
+          )
+            fail('DISCOVERY_STALE_PAGE');
           if (scopedGuard && !(await scopedGuard.evaluate((state) => state.arm())))
             fail('WITHIN_SCOPE_CHANGED');
           const options = { timeout: Math.min(this.timeoutMs, 8000) };
@@ -1111,6 +1198,7 @@ export class DiscoveryBrowser {
               if (window[key]) {
                 window[key].permit = null;
                 window[key].dialogSubmit = null;
+                window[key].querySubmit = null;
               }
             }, this.runtimeKey)
             .catch(() => {});

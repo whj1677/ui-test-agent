@@ -73,7 +73,7 @@ export function queryValues(c, meta, name) {
           ? '(?:输入|填写|填入|enter|input|fill)'
           : '(?:下拉)?(?:选择|选为|选|select|choose)';
       const pattern = new RegExp(
-        `(?:^|[\\s，,。；;、]|在|将|把)[「“"']?${escaped}[」”"']?\\s*(?:框|下拉框)?\\s*${verb}\\s*[:：]?\\s*[「“"']([^」”"'\\r\\n]{1,200})[」”"']`,
+        `(?:^|[\\s，,。；;、]|在|将|把|的)[「“"']?${escaped}[」”"']?\\s*(?:框|下拉框)?\\s*${verb}\\s*[:：]?\\s*[「“"']([^」”"'\\r\\n]{1,200})[」”"']`,
         'giu',
       );
       for (const match of action.matchAll(pattern)) {

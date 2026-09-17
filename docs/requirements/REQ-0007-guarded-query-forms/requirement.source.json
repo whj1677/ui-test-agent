@@ -1,0 +1,348 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0007",
+  "title": "原用例绑定的GET查询表单探索",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-18"
+  },
+  "original_input": "REQ-0001用户发布目标的限定缺陷子包：修改前建需求，实际测试驱动修复，逐修复Git同步；不把密钥或用户业务原文写入包。",
+  "user_requirements": [
+    {
+      "id": "UN-0007-01",
+      "status": "已确认",
+      "goal": "探索能够使用原用例指定的普通查询表单，不因按钮采用submit而要求人工代筛选。",
+      "constraints": "维持非生产、网络、审批与原期望边界；不开放向导下一步、保存、CRUD提交。",
+      "success_criteria": "限定查询通过真实Chromium产品能力验证，反例正确阻止，冻结用例不修改。"
+    }
+  ],
+  "confirmed_facts": [
+    "当前queryScopeFacts仅识别type=button；DiscoveryBrowser候选和事件层均拦截submit。",
+    "冻结工单与申请站筛选区是默认GET form和submit查询按钮；原字面查询无法生成输入/查询候选。REQ-0006失败日志保留这一前置缺口。",
+    "REQ-0006/f4a6de3与父进展90d017c已同步；本包不扩大上一包阅读能力、不修改冻结资产。",
+    "修复前两站查询组件检查均失败于输入候选缺失，validation/REQ-0007-before.log保留。首版基本查询成功后，新增原句后续改值和观察后同值换字段反例再次暴露缺陷；两个实际问题使7项TAP出现3失败（含父项），日志REQ-0007-counterexamples-before.log未删除。",
+    "修复后专项和原查询能力组合命令node --test tests/query-forms.test.mjs tests/query-capability.test.mjs，退出0，57项、失败0/跳过0，validation/REQ-0007-verified.log。只验证冻结两站查询段及隔离组件，不是完整WORK/REQS用例自主运行。",
+    "Kimi仅收通用最小设计摘要，session_44ab73af-e1a3-4ff3-85d1-a21ed73b4d87，无工具/源码/业务资料/Key。采纳submit终验、拒绝按钮覆盖属性、字段歧义/禁用/默认值反例；不采纳直接试探click或手工拼GET，因为会扩大未知处理器执行或改变页面行为。意见不是验收。",
+    "最终代码复核新增命名控件遮蔽DOM方法反例：点击时将name改为getAttribute，旧检查抛错但本机模拟submit处理器执行1次，REQ-0007-clobber-reproduction.log保留；guard内部异常转false后同反例处理器0次、DISCOVERY_DISPATCH_BLOCKED，REQ-0007-clobber-verified.log。此前474全量通过只是中间版，不冒充最终结论。",
+    "否定前缀别在/不在输入也曾被绑定；REQ-0007-negative-source-before.log保留失败。引号外否定动作保守拒绝后，原文/协议/方法遮蔽3项复验退出0，REQ-0007-last-counterexamples.log。正向原文解析为有限保守语法，不支持任意自然语言或同义改写。",
+    "冻结产品版本程序回归476项、退出0、失败0/跳过0（validation/REQ-0007-runtime-release.log）；3个Chromium集成文件6项TAP同为0失败/跳过（REQ-0007-integration-release.log）。专项与工程集合重叠不相加，既有24例17文件摘要再次核验不变。"
+  ],
+  "inferences_and_open_questions": [
+    "受控查询需要不同于业务提交的能力，名称和GET只提供保守资格，不证明黑盒处理器无副作用。",
+    "原句省略引号的查询动词可按固定语法绑定，但不得当任意同义词推断；必须有同句字段原值。",
+    "多步表单/读取失败重试等剩余问题独立，不用本包测试冒充其完成。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0007-01",
+      "status": "已确认",
+      "requirement": "仅补充非生产原生GET查询表单；当前原action正向查询及字段字面值绑定，不从预期/页面/模型推导授权。",
+      "acceptance_criteria": "两种冻结页面筛选可通过产品候选完成，原文和页面不改。",
+      "constraints": "有限查询词和字段值，不能变成通用表单提交能力。"
+    },
+    {
+      "id": "DR-0007-02",
+      "status": "已确认",
+      "requirement": "唯一查询按钮、同源安全action/self目标、少量可见非敏感text/search/单选select；拒绝隐藏、外置、未知和业务表单。",
+      "acceptance_criteria": "方法/按钮覆盖属性/敏感字段/重复及混合业务按钮反例无候选，输入值仍固定。",
+      "constraints": "GET不是纯读证明；保留网络路由和已有授权保护。"
+    },
+    {
+      "id": "DR-0007-03",
+      "status": "已确认",
+      "requirement": "原用例字段条件齐备才提供点击；派发前及点击到submit重核form/button/field身份、结构与值，仅该按钮一次可信submit。",
+      "acceptance_criteria": "换form/action/value/节点/submitter、隐式/重复提交被拒，finally清理许可。",
+      "constraints": "不自动requestSubmit或脚本代点，不允许业务POST/写授权升级。"
+    },
+    {
+      "id": "DR-0007-04",
+      "status": "已确认",
+      "requirement": "保存修复前失败及最终专项/受影响/程序回归，需求先建、修复独立Git同步。",
+      "acceptance_criteria": "保留原24例17文件摘要和旧4179；结果、统计、commit可追溯。",
+      "constraints": "本机组件能力不代替真实模型、完整用例或发布验收。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0007-01",
+      "dr_ids": [
+        "DR-0007-01"
+      ],
+      "status": "已确认",
+      "summary": "原查询绑定",
+      "rationale": "有限查询词和字段值，不能变成通用表单提交能力。"
+    },
+    {
+      "id": "DD-0007-02",
+      "dr_ids": [
+        "DR-0007-02"
+      ],
+      "status": "已确认",
+      "summary": "表单资格",
+      "rationale": "GET不是纯读证明；保留网络路由和已有授权保护。"
+    },
+    {
+      "id": "DD-0007-03",
+      "dr_ids": [
+        "DR-0007-03"
+      ],
+      "status": "已确认",
+      "summary": "一次事件许可",
+      "rationale": "复用真实变化epoch使观察后换字段失效；arm时再验，事件内固定函数捕获原form/控件对象并比对实际值与结构，一次可信submit且finally清空。原句未绑定的后续输入指令保守拒绝，不猜最终值。"
+    },
+    {
+      "id": "DD-0007-04",
+      "dr_ids": [
+        "DR-0007-04"
+      ],
+      "status": "已确认",
+      "summary": "回归与归档",
+      "rationale": "本机组件能力不代替真实模型、完整用例或发布验收。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "DOM查询表单事实+原action字面值→当前Case受限输入/查询候选→派发/submit身份重验→原网络保护→新观察；模型只能选择candidate_id。",
+    "公开动作协议和业务写授权不变；内部候选/事件追加查询原文及作用域证据。",
+    "探索模型提示明确kind=query只代表原文绑定且浏览器核验的查询，不是任意submit权限；回复仍只能选择当前candidate_id。"
+  ],
+  "module_document_impact": [
+    "release_runtime.md记录受限GET查询表单、单次submit能力及真实限制。"
+  ],
+  "risks_and_rollback": [
+    "GET可能副作用、页面处理器可在事件中运行；不声称恶意页面隔离或纯读证明。",
+    "仅当前明确原值可输入；不读取/传输真实业务、密钥或验收oracle；不重启4179。",
+    "独立commit便于定位和回退，不强推、不删除历史失败。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0007-01",
+      "dr_ids": [
+        "DR-0007-01"
+      ],
+      "dd_ids": [
+        "DD-0007-01"
+      ],
+      "status": "已实现",
+      "task": "仅补充非生产原生GET查询表单；当前原action正向查询及字段字面值绑定，不从预期/页面/模型推导授权。",
+      "verification_ids": [
+        "VT-0007-01"
+      ]
+    },
+    {
+      "id": "TK-0007-02",
+      "dr_ids": [
+        "DR-0007-02"
+      ],
+      "dd_ids": [
+        "DD-0007-02"
+      ],
+      "status": "已实现",
+      "task": "唯一查询按钮、同源安全action/self目标、少量可见非敏感text/search/单选select；拒绝隐藏、外置、未知和业务表单。",
+      "verification_ids": [
+        "VT-0007-02"
+      ]
+    },
+    {
+      "id": "TK-0007-03",
+      "dr_ids": [
+        "DR-0007-03"
+      ],
+      "dd_ids": [
+        "DD-0007-03"
+      ],
+      "status": "已实现",
+      "task": "原用例字段条件齐备才提供点击；派发前及点击到submit重核form/button/field身份、结构与值，仅该按钮一次可信submit。",
+      "verification_ids": [
+        "VT-0007-03"
+      ]
+    },
+    {
+      "id": "TK-0007-04",
+      "dr_ids": [
+        "DR-0007-04"
+      ],
+      "dd_ids": [
+        "DD-0007-04"
+      ],
+      "status": "已实现",
+      "task": "保存修复前失败及最终专项/受影响/程序回归，需求先建、修复独立Git同步。",
+      "verification_ids": [
+        "VT-0007-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0007-01",
+      "dr_ids": [
+        "DR-0007-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "两种冻结页面筛选可通过产品候选完成，原文和页面不改。",
+      "evidence_standard": "真实命令、退出码、非零统计和日志；区分组件/模型/业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 476,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0007-runtime-release.log"
+      }
+    },
+    {
+      "id": "VT-0007-02",
+      "dr_ids": [
+        "DR-0007-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "方法/按钮覆盖属性/敏感字段/重复及混合业务按钮反例无候选，输入值仍固定。",
+      "evidence_standard": "真实命令、退出码、非零统计和日志；区分组件/模型/业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 476,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0007-runtime-release.log"
+      }
+    },
+    {
+      "id": "VT-0007-03",
+      "dr_ids": [
+        "DR-0007-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "换form/action/value/节点/submitter、隐式/重复提交被拒，finally清理许可。",
+      "evidence_standard": "真实命令、退出码、非零统计和日志；区分组件/模型/业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 476,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0007-runtime-release.log"
+      }
+    },
+    {
+      "id": "VT-0007-04",
+      "dr_ids": [
+        "DR-0007-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "保留原24例17文件摘要和旧4179；结果、统计、commit可追溯。",
+      "evidence_standard": "真实命令、退出码、非零统计和日志；区分组件/模型/业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 476,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0007-runtime-release.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/query-forms.test.mjs",
+      "node tests/runtime-regression.mjs",
+      "node acceptance/check.mjs"
+    ],
+    "environment": [
+      "Windows11 / Node22 / 已安装Chromium；新实例动态端口、无模型调用"
+    ],
+    "conclusion": [
+      "限定GET查询实现已完成；冻结版本非暂停程序476项、3集成文件6TAP无失败/跳过。正式专项由collector实际执行并单独记录，不与全量相加。",
+      "保留所有先前失败，模型提示仅做协议/文本测试；未调用真实模型、不重启4179，不修改原用例/冻结页面。",
+      "查询以有限保守语法及严格DOM条件提供；POST表单、多步向导、业务提交仍未由本包支持。GET和黑盒处理器纯读无法保证；不能宣布发布。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0007-01",
+      "dr_id": "DR-0007-01",
+      "dd_id": "DD-0007-01",
+      "tk_id": "TK-0007-01",
+      "vt_id": "VT-0007-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0007-01",
+      "dr_id": "DR-0007-02",
+      "dd_id": "DD-0007-02",
+      "tk_id": "TK-0007-02",
+      "vt_id": "VT-0007-02",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0007-01",
+      "dr_id": "DR-0007-03",
+      "dd_id": "DD-0007-03",
+      "tk_id": "TK-0007-03",
+      "vt_id": "VT-0007-03",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0007-01",
+      "dr_id": "DR-0007-04",
+      "dd_id": "DD-0007-04",
+      "tk_id": "TK-0007-04",
+      "vt_id": "VT-0007-04",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness",
+      "status": "限定缺陷子包",
+      "notes": "提交型查询不应与业务提交混为一谈；先建包后实现。"
+    }
+  ],
+  "open_questions": [
+    "真实模型受工具策略限制，未恢复；本包不绕过限制。"
+  ],
+  "prohibited_implementation": [
+    "不得修改冻结页面/原预期、硬编码业务ID、开放任意submit、自动声明POST只读或把组件验证算模型自主成功。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "新建",
+      "description": "基于明确submit查询缺口，冻结受限能力和安全反例。",
+      "impact": "query能力和discovery事件许可，保留公开审批语义。",
+      "confirmed_by": "用户已授权发布目标内修复及逐项Git；实现证据待验。"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "限定实现与专项复验",
+      "description": "接入原文绑定GET查询及单次submit许可；保留两轮缺陷复现并修正原句后续输入歧义、观察后字段替换。57项组合通过，正式交付及Git待完成。",
+      "impact": "有限探索能力，不开放业务提交/真实模型权限。",
+      "confirmed_by": "实际源码、日志、原页面摘要与本机Chromium。"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "安全反例补正及提示衔接",
+      "description": "事件检查异常失败关闭；原句否定前缀拒绝；模型提示区分受控查询候选与业务提交。中间版全量结果保留，当前产品源冻结做最终回归。",
+      "impact": "同包约束内修正，不开启业务提交或真实模型。",
+      "confirmed_by": "原始反例日志与3项复验，最终回归待收集。"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "冻结版工程复验",
+      "description": "476项程序与3文件6项浏览器集成无失败/跳过；原24例17文件未变。正式交付专项独立记录，随后单独Git同步，不打公开Release。",
+      "impact": "本包限定能力已实现，真实模型和发布门槛不升级。",
+      "confirmed_by": "实际命令、退出码、TAP统计、保留失败日志及冻结摘要。"
+    }
+  ]
+}
