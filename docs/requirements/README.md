@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0012-ui-experience-memory](REQ-0012-ui-experience-memory/current_state.md)：跨运行UI经验库；已明确模式、技术回执、隔离晋升/撤回与真实对照，尚未实现，不绕过多步表单审批。
+
 - [REQ-0011-recording-caption-readability](REQ-0011-recording-caption-readability/current_state.md)：REQ-0001实测子问题；修复新录像字幕与底部控制条相交、报告缩放过小，保留原执行与事实语义。
 
 - [REQ-0010-candidate-file-integrity](REQ-0010-candidate-file-integrity/current_state.md)：REQ-0001子问题；说明损坏仍被自检报摘要一致，限定增加清单元数据/路径集合/逐文件核验，不代替签名或发布验收。
