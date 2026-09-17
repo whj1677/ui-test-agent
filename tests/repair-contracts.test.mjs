@@ -6,6 +6,32 @@ import { recoveryEvidence, recoveryKind, usefulProbe } from '../src/recovery-gap
 import { requireEntryNavigation } from '../src/case-entry-url.mjs';
 import { planningInput } from '../src/planning-input.mjs';
 
+test('address-bar obligations need URL evidence, not a visible heading; data URL fields are unaffected', () => {
+  const c = {
+    steps: [
+      {
+        action: '点击目录',
+        expected: '页面URL包含 /devices',
+        obligations: [{ id: 'O1', text: '页面URL包含 /devices' }],
+      },
+    ],
+  };
+  const assertion = {
+    target: { kind: 'testid', value: 'heading' },
+    check: 'visible',
+    obligation_ids: ['O1'],
+  };
+  const plan = { steps: [{ assertions: [assertion] }] };
+  assert.throws(() => requirePlanSemantics(plan, c), { code: 'PLAN_URL_UNPROVEN' });
+  assertion.check = 'url_contains';
+  assertion.expected = '/devices';
+  assert.doesNotThrow(() => requirePlanSemantics(plan, c));
+  assertion.check = 'visible';
+  delete assertion.expected;
+  c.steps[0].obligations[0].text = '显示回调URL字段';
+  assert.doesNotThrow(() => requirePlanSemantics(plan, c));
+});
+
 test('illegal kind diagnostics name each known protocol path without echoing arbitrary content', () => {
   const bad = { kind: 'secret-raw-not-to-log', value: 'private-content' };
   const samples = [

@@ -1,4 +1,5 @@
 import { caseEntryURL, entryNavigationSteps, withoutEntryHints } from './case-entry-url.mjs';
+import { dynamicRowEvidence } from './dynamic-row-evidence.mjs';
 
 // Only already captured, safe same-origin routes are promoted.
 // Page prose and model suggestions are never route evidence.
@@ -63,7 +64,7 @@ export function planningInput(state, c, row, inputHash) {
           (!row.discovery?.job_id || p.discovery_job_id === row.discovery.job_id))),
   );
   const navigationSteps = entryNavigationSteps(c);
-  const start = state.navigation_start;
+  const start = row.navigation_start ?? state.navigation_start;
   const startPath = observedEntryPath(start, state.target);
   if (
     navigationSteps.length &&
@@ -102,6 +103,8 @@ export function planningInput(state, c, row, inputHash) {
     blocked_requests_notice:
       '被拦截请求不代表只读查询；相关页面可能缺少数据，不能据此断言业务数据为空或自动扩大权限。可以继续寻找不依赖该请求的页面。',
     runtime_confirmation_required: true,
+    dynamic_row_bindings: dynamicRowEvidence(pages),
+    shared_control_evidence: row.shared_control_evidence ?? [],
     recovery_probes: (row.evidence_recoveries ?? []).flatMap((r) => r.useful_probes ?? []),
     ...(c.page_entry_url
       ? {

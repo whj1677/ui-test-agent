@@ -274,13 +274,15 @@ test('unsafe persisted hint is never navigated or sent to model; missing hint re
   assert.equal(absent.calls[0].remaining.steps, 12);
 });
 
-test('direct entry and fallback consume Case budget without expanding job step budget', async (t) => {
+test('direct entry and fallback exhaust only the Case step budget', async (t) => {
   const h = await harness(t, '/catalog', { repeat: true });
   const s = await h.run();
   assert.equal(s.discovery.steps, 12);
   assert.equal(h.calls.length, 11);
   assert.equal(h.calls.at(-1).remaining.steps, 0);
-  assert.equal(s.discovery.reason, 'DISCOVERY_STEP_LIMIT');
+  assert.equal(s.discovery.reason, null);
+  assert.equal(s.cases[0].status, 'BLOCKED_BUDGET');
+  assert.equal(s.cases[0].discovery.reason, 'DISCOVERY_CASE_STEP_LIMIT');
 });
 
 test('changing or clearing hint changes effective hash and invalidates old plan/evidence while retaining baseline', async (t) => {

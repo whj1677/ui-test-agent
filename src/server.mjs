@@ -89,6 +89,8 @@ export async function start({
           auto_discovery: true,
           autonomous_preparation: true,
           plan_revision: true,
+          preparation_controls: true,
+          case_advice: true,
           plan_revalidation: true,
           plan_self_repair: true,
           input_quality_review: true,
@@ -248,12 +250,23 @@ export async function start({
             case 'confirm':
               keys(
                 body,
-                ['case_id', 'steps', 'note', 'data_overrides', 'page_entry_url'],
+                [
+                  'case_id',
+                  'steps',
+                  'note',
+                  'data_overrides',
+                  'page_entry_url',
+                  'advice_id',
+                  'expected_case_hash',
+                ],
                 ['case_id', 'steps'],
               );
               result = await controller.confirmCase(id, body.case_id, {
                 steps: body.steps,
                 note: body.note,
+                ...(body.advice_id
+                  ? { advice_id: body.advice_id, expected_case_hash: body.expected_case_hash }
+                  : {}),
                 ...(Object.hasOwn(body, 'page_entry_url')
                   ? { page_entry_url: body.page_entry_url }
                   : {}),
@@ -266,6 +279,10 @@ export async function start({
               keys(body, ['case_id', 'plan_hash'], ['case_id', 'plan_hash']);
               result = await controller.approvePlan(id, body.case_id, body.plan_hash);
               break;
+            case 'reject-case-advice':
+              keys(body, ['case_id', 'advice_id'], ['case_id', 'advice_id']);
+              result = await controller.rejectCaseAdvice(id, body.case_id, body.advice_id);
+              break;
             case 'revalidate-plan':
               keys(body, ['case_id'], ['case_id']);
               result = await controller.revalidatePlan(id, body.case_id);
@@ -277,8 +294,8 @@ export async function start({
               });
               break;
             case 'job':
-              keys(body, ['kind', 'case_ids'], ['kind', 'case_ids']);
-              result = await controller.launch(id, body.kind, body.case_ids);
+              keys(body, ['kind', 'case_ids', 'options'], ['kind', 'case_ids']);
+              result = await controller.launch(id, body.kind, body.case_ids, body.options ?? {});
               break;
             case 'stop':
               result = await controller.stop(id);

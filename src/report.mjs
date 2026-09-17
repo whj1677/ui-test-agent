@@ -8,6 +8,7 @@ export const labels = {
   NEEDS_REVIEW: '待审查确认',
   NEEDS_MAPPING: '待生成计划',
   BLOCKED_MAPPING: '页面或计划待补充',
+  BLOCKED_BUDGET: '本批预算待续跑',
   PLAN_REVIEW: '待确认计划',
   READY: '可执行',
   RUNNING: '执行中',

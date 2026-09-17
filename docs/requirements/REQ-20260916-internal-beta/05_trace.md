@@ -1,6 +1,16 @@
 # REQ-20260916-internal-beta 追踪
 
+本次查询/计划修复：UN-1 → DR-2 → DD-2查询与未来行绑定增量 → T-A1/T-A4/T-A5 → VT-2工程子证据（query-capability、preparation、self-repair及原003固定浏览器回归）。真实模型复验另记，不改变原发布待验状态。
+
 ## 当前有效链路
+
+当前准备调度增量：UN-1 → DR-2/DR-4/DR-5 → DD-8 → T-D1..T-D4 → preparation.test、preparation.integration、preparation-ui.integration与repair-contracts中的URL反例。工程子证据不改变原真实模型/独立操作/发布验收待确认状态。
+
+- DR-2 → VT-2：取证/规划隔离、版本绑定及URL断言的工程子证据；真实模型项仍按原验收。
+- DR-4 → VT-4：准备状态、设置和人工修订交互的工程子证据；独立人员验收另行判断。
+- DR-5 → VT-5：预算/停止/历史消耗和脱敏的工程子证据；真实成本及发布完整性另行判断。
+
+本轮UI顺序增量：UN-1 → DR-2/DR-4 → DD-7 → T-C1/T-C2/T-C3 → `tests/workflow.integration.mjs`、`tests/agent-output.integration.mjs`、`tests/console.integration.mjs`、`tests/model-flow.integration.mjs`。依据本地控制台操作与服务端确认状态判定步骤衔接，工作进程注入状态与真实演示执行分别记录。
 
 本轮条件提示增量：UN-1 → DR-2/DR-4 → DD-2/DD-4条件动作/命中观察 → T-A1/T-A3/T-A4/T-A5 → tests/optional-dialog.test.mjs、tests/optional-dialog.integration.mjs、tests/optional-dialog-flow.integration.mjs及新版原例复验。各证据层次独立，原发布验收表不因工程成功改为已完成。
 
@@ -23,3 +33,7 @@
 | 版本 | 链路 | 状态 | 说明 |
 |---:|---|---|---|
 | 1 | UN-1 → DR/DD/T/VT 各5项 | 计划已确认 | 用户授权实施，详细边界见 current_state.md |
+
+## 当前增量链路（2026-09-17）
+
+UN-1（复杂用例集可持续准备）→ DR-2/DR-4（按Case预算、续跑和可观测性）→ DD-6（分批预算状态机）→ T-B1..T-B4 → `tests/job-budget.test.mjs`、`tests/discovery-controller.test.mjs`、`tests/case-entry-url.test.mjs`、`tests/agent-output.integration.mjs`、`npm test`。这是本地工程验证链路；不替代VT-2真实模型或VT-4独立试用。

@@ -54,7 +54,12 @@ export function repairInputHash(state, c, row) {
   return semanticHash(context);
 }
 export function requireCurrentAudit(state, c, row, plan = row.plan) {
-  requireEntryNavigation(plan, c, state.target, state.navigation_start?.url);
+  requireEntryNavigation(
+    plan,
+    c,
+    state.target,
+    row.navigation_start?.url ?? state.navigation_start?.url,
+  );
   requireCompletePageEvidence(planningInput(state, c, row, caseHash(c)), plan);
   requirePlanSemantics(plan, c, planningInput(state, c, row, caseHash(c)));
   // Imported historical plans remain readable; every newly generated plan uses this gate.
@@ -308,7 +313,12 @@ export async function prepareWithRepair(controller, job, baseline, c) {
         keys(response, ['plan'], ['plan']);
         candidate = response.plan;
         validatePlan(candidate, c, state.target);
-        requireEntryNavigation(candidate, c, state.target, state.navigation_start?.url);
+        requireEntryNavigation(
+          candidate,
+          c,
+          state.target,
+          row.navigation_start?.url ?? state.navigation_start?.url,
+        );
         requireCompletePageEvidence(context, candidate);
         requirePlanSemantics(candidate, c, context);
       }

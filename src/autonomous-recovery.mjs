@@ -6,6 +6,7 @@ import { ADAPTER_REPAIR_PROMPT, DEFAULT_ADAPTER_SOURCE } from './adapter-program
 import { prepareWithRepair } from './plan-repair.mjs';
 import { recoveryKind, recoveryEvidence, usefulProbe } from './recovery-gap.mjs';
 import { planningInput } from './planning-input.mjs';
+import { discoveryActionKey, observationKey } from './discovery-memory.mjs';
 import {
   DISCOVERY_PROMPT,
   validateDiscoveryResponse,
@@ -18,6 +19,15 @@ const RECOVERY_PROMPT =
 This is TECHNICAL RECOVERY of a blocked plan, not a new business task. missing_fact is the specific diagnosed obstacle. First seek fresh evidence instead of repeating a plan on unchanged input. Use safe supplied menu candidates to find the relevant page. You may additionally return exactly {"probe":{"target":locator},"reason":"Chinese explanation"} to inspect uniqueness and visibility of a locator grounded in the observed page. A probe never clicks and never reads input values. prior_probes are facts, not business outcomes. Do not repeat failed probes or transitions. If the obstacle is a real oracle/permission gap, explain it instead of changing expectations or authorizations.`;
 
 export async function repairObservedAdapter(controller, job, explorer, observation) {
+  const root = job.parent ?? job;
+  const previous = root.adapterRepairTail ?? Promise.resolve();
+  const pending = previous
+    .catch(() => {})
+    .then(() => repairObservedAdapterExclusive(controller, job, explorer, observation));
+  root.adapterRepairTail = pending;
+  return pending;
+}
+async function repairObservedAdapterExclusive(controller, job, explorer, observation) {
   const mappingGaps =
     observation.snapshot.adapter_gaps?.filter((g) => !g.code?.startsWith('ROW_')) ?? [];
   if (!mappingGaps.length || !explorer.repairAdapter) return observation;
@@ -152,52 +162,61 @@ export async function prepareAutonomously(controller, job, baseline, c, supplied
       outcome = 'NO_PROGRESS';
     const probes = [],
       visited = new Set(repairs.flatMap((r) => r.visited ?? []));
+    const maxSteps = Math.min(12, Math.max(6, c.steps.length + 2));
+    // Recovery consumes the remaining planning phase and existing call/candidate
+    // budgets; it is not an independent budget reset.
+    const timeoutMs = Math.min(maxSteps * 10000, (job.phase_deadline ?? Infinity) - Date.now());
+    const deadline = Date.now() + timeoutMs;
+    const capture = async () => {
+      controller.assertCurrent(job);
+      const newFacts = recoveryEvidence([observation.snapshot], reason).filter(
+        (f) => !knownFacts.has(f),
+      );
+      if (!newFacts.length) return;
+      await controller.store.update(job.id, (s) => {
+        controller.assertInput(job, s, baseline, c.case_id, caseHash(c));
+        const page = {
+          ...observation.snapshot,
+          captured_at: now(),
+          discovery_case_id: c.case_id,
+          discovery_job_id:
+            s.cases.find((r) => r.case_id === c.case_id).discovery?.job_id ?? job.run_id,
+        };
+        if (page.login_page) fail('AUTH_REQUIRED');
+        if (
+          !s.snapshots.some(
+            (p) =>
+              p.discovery_case_id === c.case_id &&
+              p.discovery_job_id === page.discovery_job_id &&
+              observationKey(p) === observationKey(page),
+          )
+        )
+          s.snapshots.push(page);
+      });
+      for (const fact of newFacts) knownFacts.add(fact);
+      addedFacts += newFacts.length;
+    };
     try {
+      if (timeoutMs <= 0) fail('PREPARATION_PLAN_TIMEOUT');
       if (!explorer) {
         explorer = controller.discoveryFactory(controller.browser, state, {
           signal: job.abort.signal,
-          maxSteps: 6,
-          timeoutMs: 45000,
+          maxSteps,
+          timeoutMs,
         });
+        explorer.beginCase?.(c);
         observation = await explorer.open();
-      } else observation = await explorer.observe();
-      explorer.beginCase?.(c);
-      const deadline = Date.now() + 45000;
-      for (let step = 0; step < 6; step++) {
+      } else {
+        explorer.beginCase?.(c);
+        observation = await explorer.observe();
+      }
+      for (let step = 0; step < maxSteps; step++) {
         controller.assertCurrent(job);
         if (Date.now() >= deadline) fail('DISCOVERY_TIMEOUT');
         observation = await repairObservedAdapter(controller, job, explorer, observation);
-        const newFacts = recoveryEvidence([observation.snapshot], reason).filter(
-          (f) => !knownFacts.has(f),
-        );
-        if (newFacts.length)
-          await controller.store.update(job.id, (s) => {
-            controller.assertInput(job, s, baseline, c.case_id, caseHash(c));
-            const page = {
-              ...observation.snapshot,
-              captured_at: now(),
-              discovery_case_id: c.case_id,
-              discovery_job_id:
-                s.cases.find((r) => r.case_id === c.case_id).discovery?.job_id ?? job.run_id,
-            };
-            if (page.login_page) fail('AUTH_REQUIRED');
-            if (
-              !s.snapshots.some(
-                (p) =>
-                  (!p.discovery_case_id ||
-                    (p.discovery_case_id === c.case_id &&
-                      p.discovery_job_id === page.discovery_job_id)) &&
-                  semanticHash({ url: p.url, controls: p.controls, text: p.text }) ===
-                    semanticHash({ url: page.url, controls: page.controls, text: page.text }),
-              )
-            )
-              s.snapshots.push(page);
-            s.snapshots = s.snapshots.slice(-128);
-          });
-        for (const fact of newFacts) knownFacts.add(fact);
-        addedFacts += newFacts.length;
+        await capture();
         const candidates = observation.candidates.filter(
-          (v) => !visited.has(semanticHash({ url: observation.snapshot.url, locator: v.locator })),
+          (v) => !visited.has(discoveryActionKey(observation.snapshot, v)),
         );
         const raw = await controller.ask(
           job,
@@ -210,7 +229,7 @@ export async function prepareAutonomously(controller, job, baseline, c, supplied
             missing_fact: row.mapping_reason,
             prior_probes: [...previousProbes, ...probes],
             visited: [...visited],
-            remaining: { steps: 6 - step, model_calls: 6 - step },
+            remaining: { steps: maxSteps - step, model_calls: maxSteps - step },
           },
           {
             phase: 'evidence_recovery',
@@ -226,13 +245,16 @@ export async function prepareAutonomously(controller, job, baseline, c, supplied
           validateLocator(raw.probe.target);
           if (
             [...previousProbes, ...probes].some(
-              (p) => semanticHash(p.locator) === semanticHash(raw.probe.target),
+              (p) =>
+                p.state_key === observationKey(observation.snapshot) &&
+                semanticHash(p.locator) === semanticHash(raw.probe.target),
             )
           )
             break;
           const probe = {
             ...(await explorer.probe(raw.probe.target)),
             url: observation.snapshot.url,
+            state_key: observationKey(observation.snapshot),
           };
           probes.push(probe);
           if (usefulProbe(probe, reason)) usefulProbes.push(probe);
@@ -245,8 +267,11 @@ export async function prepareAutonomously(controller, job, baseline, c, supplied
         });
         if (response.done || response.blocked) break;
         const selected = candidates.find((v) => v.candidate_id === response.action.candidate_id);
-        visited.add(semanticHash({ url: observation.snapshot.url, locator: selected.locator }));
+        visited.add(discoveryActionKey(observation.snapshot, selected));
         observation = await explorer.act(response.action);
+        // The final permitted action can reveal the only missing binding. Save
+        // it now, not only on entry to a next iteration which may never happen.
+        await capture();
       }
       if (addedFacts || usefulProbes.length) outcome = 'NEW_EVIDENCE';
     } catch (error) {

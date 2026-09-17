@@ -2,6 +2,8 @@
 
 适用 REQ-20260916-internal-beta；不覆盖暂停的评测/训练模块。
 
+2026-09-17查询/计划增量：`query-capability.mjs`为原操作与当前普通查询区域提供固定值候选，`discovery-browser`重验Case/区域/节点并沿用网络与提交护栏；其他表单继续需要原声明。`dynamic-row-evidence`将已观察表格列/行内目标模式投影给规划与审查，原业务条件仍在执行时唯一绑定。`autonomous-recovery`按剩余规划窗口做6至12步补证，每动作保存相关事实并按状态/操作/值去重；不会重置累计候选、替代审批或输出业务结论。
+
 ## 职责与入口
 
 | 代码 | 责任 | 输出与副作用 |
@@ -44,3 +46,15 @@
 `tests/release-boundaries.test.mjs` 验证身份、同站点阻断和事实；`tests/installation.test.mjs` 验证实际独立进程崩溃、活锁/损坏锁反例、备份及包白名单；`tests/launcher.integration.mjs` 实际调用PowerShell启动/停止。`tests/runtime-regression.mjs` 明确排除暂停的两个评测测试。
 
 本机新目录安装只证明该机及共享依赖条件；干净Windows、真实DeepSeek两轮20条和非开发人员独立操作仍为独立验收条件。测试统计不与产品覆盖混加。
+
+## 2026-09-17 按 Case 分批预算
+
+2026-09-17准备调度增量：`preparation.mjs`以单Case为worker并投影兼容discovery状态，`job-budget.mjs`按步骤/预期分项分配取证和规划两个阶段，`controller`冻结选择集并共用有限模型permit。job请求可带options={concurrency:1|2,independent_readonly:boolean,time_multiplier:1|2}；默认串行，两路要求明确独立只读且任务未授权写入。完整取证检查点只在当前登录/版本/配置一致且15分钟内复用。使用prepare统一由服务判断复用，原高级plan仍可用。
+
+`case-advice.mjs`只对已核验引用的输入问题生成草案；case_advice与历史独立保存。确认接口新增advice_id/expected_case_hash，拒绝入口为POST /api/tasks/:id/reject-case-advice。确认新版本保留原基线、旧确认/计划并使旧审批失效；预算/能力/产品失败不触发改预期。config新增preparation_controls/case_advice。进度和草案UI已作桌面/窄屏验证；原业务执行不并发、不自动触发。
+
+控制台后续顺序修复：`public/app.js`使用Case已核对、计划及审批状态、执行收据计算当前步骤和主操作；`public/styles.css`展示五步条及窄屏纵向布局。确认弹窗固定任务/选择集，成功后自动调用既有plan/prepare；取消和失败阻断后续调用，已有计划/执行项不重新准备。输出面板明确探索数、计划数和待核对数。没有新增服务契约，服务端版本失效与批准/执行门禁继续生效。
+
+`src/job-budget.mjs`是纯计算模块：将准备任务的选择集拆为最多7个Case一批，并返回本批、项目和探索子额度。`src/controller.mjs`只消费该契约：每批重置批级计数、累计项目计数；单Case模型/步骤额度耗尽时写`BLOCKED_BUDGET`并继续同批后续Case；自动准备优先恢复此状态。批级耗尽不会回写为成功，也不会删除原捕获、审批、执行或传输诊断。
+
+`src/discovery-browser.mjs`接受由预算模块给出的步骤/时长上限（最长3小时），仍拒绝任意超出边界的调用。`public/app.js`展示本批、项目累计、探索及当前Case的逻辑调用额度；`src/report.mjs`把`BLOCKED_BUDGET`明确呈现为待续跑。逻辑模型决策与HTTP重试分开：后者只写传输诊断，不能增加预算计数。审批、未知写入阻断、认证内存边界及业务用例预期均不在本模块变更范围内。

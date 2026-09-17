@@ -23,6 +23,11 @@ const page = await browser.newPage({
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
 const now = () => new Date().toISOString();
+const budget = {
+  model_calls: { limit: 100 },
+  discovery: { model_call_limit: 26, model_calls_per_case: 13 },
+};
+const projectBudget = { model_call_limit: 100 };
 const caseA = {
   case_id: 'SYNTHETIC-001',
   status: 'NEEDS_MAPPING',
@@ -48,7 +53,19 @@ const first = {
   snapshots: [],
   site_cleanup_blockers: [],
   authenticated: true,
-  active: { kind: 'prepare', calls: 1, current_case: caseA.case_id, stage: 'MODEL' },
+  active: {
+    kind: 'prepare',
+    calls: 1,
+    total_calls: 1,
+    budget,
+    project_budget: projectBudget,
+    batch_index: 1,
+    batch_count: 1,
+    discovery_calls: 1,
+    current_case_calls: 1,
+    current_case: caseA.case_id,
+    stage: 'MODEL',
+  },
 };
 const second = {
   ...structuredClone(first),
@@ -107,9 +124,12 @@ try {
   await page.goto(app.url + '/#task=' + first.id);
   await waitForText('#output-state', '正在等待模型回复');
   const panelBox = await page.locator('#agent-output').boundingBox();
+  const workflowBox = await page.locator('#guided-workflow').boundingBox();
+  const outputStatusBox = await page.locator('.output-status').boundingBox();
+  assert.ok(workflowBox.y < panelBox.y, 'ordered workflow precedes live output');
   assert.ok(
-    panelBox.y < 260 && panelBox.y + panelBox.height < 1000,
-    'output is first-screen visible',
+    outputStatusBox.y + outputStatusBox.height < 1000,
+    'live status remains visible in the first viewport',
   );
   await page.screenshot({ path: path.join(directory, '01-running-desktop.png'), fullPage: true });
 
@@ -118,7 +138,11 @@ try {
   await waitForText('#output-state', '等待你在浏览器登录');
   first.active.stage = 'MODEL';
   first.active.calls = 2;
+  first.active.total_calls = 2;
   await waitForText('#output-calls', '2 / 100');
+  await waitForText('#output-total-calls', '2 / 100');
+  await waitForText('#output-discovery-calls', '1 / 26');
+  await waitForText('#output-case-calls', '1 / 13');
   for (const event of first.events) event.at = new Date(Date.now() - 45000).toISOString();
   first.revision++;
   await waitForText('#output-silence', '服务状态仍在同步');
@@ -200,6 +224,46 @@ try {
     'live-follow survives a full render without new rows',
   );
 
+  // Background polling must not drag the document while the user reads cases
+  // below the live feed. Exercise both a growing feed and a countdown-only poll.
+  const originalCases = first.cases;
+  const viewportStability = [];
+  first.cases = Array.from({ length: 16 }, (_, index) => ({
+    ...structuredClone(caseA),
+    case_id: 'SCROLL-' + index,
+  }));
+  first.revision++;
+  await page.waitForFunction(() => document.querySelectorAll('[data-select]').length === 16);
+  for (const width of [1440, 820, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    const reader = page.locator('[data-select="SCROLL-4"]');
+    await reader.scrollIntoViewIfNeeded();
+    await reader.focus();
+    const position = await page.evaluate(() => ({
+      y: scrollY,
+      top: document.querySelector('[data-select="SCROLL-4"]').getBoundingClientRect().top,
+    }));
+    assert.ok(position.y > 0);
+    assert.ok(position.top >= 0 && position.top < 800, 'reader anchor is actually in view');
+    addEvent('DISCOVERY_PAGE_CAPTURED', { message: 'viewport-stability-' + width });
+    await waitForText('#output-list', 'viewport-stability-' + width);
+    const after = await page.evaluate(() => ({
+      y: scrollY,
+      top: document.querySelector('[data-select="SCROLL-4"]').getBoundingClientRect().top,
+      focus: document.activeElement?.getAttribute('data-select'),
+    }));
+    assert.ok(
+      Math.abs(after.y - position.y) < 2,
+      `page moved during live output at ${width}px: ${position.y} -> ${after.y}`,
+    );
+    assert.ok(Math.abs(after.top - position.top) < 2, `reading anchor moved at ${width}px`);
+    assert.equal(after.focus, 'SCROLL-4', 'background update must retain keyboard focus');
+    viewportStability.push({ width, before: position, after });
+  }
+  first.cases = originalCases;
+  first.revision++;
+  await page.setViewportSize({ width: 1440, height: 1000 });
+
   // A failed final batch is never presented as merely idle or still running.
   addEvent('JOB_FAILED', { code: 'DEEPSEEK_CONNECTION_FAILED' });
   first.active = null;
@@ -256,7 +320,19 @@ try {
     await page.screenshot({ path: path.join(directory, `03-${label}.png`), fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  first.active = { kind: 'prepare', calls: 3, current_case: caseA.case_id, stage: 'MODEL' };
+  first.active = {
+    kind: 'prepare',
+    calls: 3,
+    total_calls: 3,
+    budget,
+    project_budget: projectBudget,
+    batch_index: 1,
+    batch_count: 1,
+    discovery_calls: 2,
+    current_case_calls: 2,
+    current_case: caseA.case_id,
+    stage: 'MODEL',
+  };
   first.status = 'ANALYZING';
   first.events = [];
   first.revision++;
@@ -289,6 +365,7 @@ try {
           'safe text and credential redaction',
           'issue filtering',
           'reading position and live-follow after full render',
+          'live output preserves document scroll, reading anchor and case checkbox focus at 1440/820/390px',
           'failed and blocked completion',
           'disconnect/reconnect',
           'log failure independent of state',
@@ -298,6 +375,7 @@ try {
           'reduced motion and keyboard focus',
         ],
         page_errors: errors,
+        viewport_stability: viewportStability,
       },
       null,
       2,

@@ -46,6 +46,19 @@ export function requirePlanSemantics(plan, c, context = {}) {
   );
   for (const [i, step] of (plan.steps ?? []).entries()) {
     const original = c.steps[i];
+    for (const obligation of original.obligations ?? []) {
+      if (
+        !/(?:页面|当前|浏览器)\s*URL|地址栏|(?:current|browser|page)\s+URL/iu.test(obligation.text)
+      )
+        continue;
+      const proofs = stepAssertions(step).filter((a) => a.obligation_ids?.includes(obligation.id));
+      if (!proofs.some((a) => ['url_equals', 'url_contains', 'url_not_contains'].includes(a.check)))
+        reject(
+          'PLAN_URL_UNPROVEN',
+          `plan.steps[${i}].assertions`,
+          '原预期要求验证当前地址栏。标题或页面可见不能证明URL；使用url_equals/url_contains/url_not_contains并保留原分项。',
+        );
+    }
     const optionalSource =
       /(?:若|如果|if).*?(?:出现|显示|present|visible)/iu.test(original.action) &&
       /(?:知道了|关闭|取消|got it|close|cancel)/iu.test(original.action) &&

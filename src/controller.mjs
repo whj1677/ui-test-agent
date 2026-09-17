@@ -54,6 +54,23 @@ import {
 import { requireCurrentAudit } from './plan-repair.mjs';
 import { validateInputOverrides } from './input-review.mjs';
 import { prepareAutonomously, repairObservedAdapter } from './autonomous-recovery.mjs';
+import {
+  caseBudgetBatches,
+  caseScaledJobBudget,
+  projectBudgetForBatches,
+  preparationOptions,
+  preparationTimeBudget,
+} from './job-budget.mjs';
+import {
+  prepareBatch,
+  preparationRoot,
+  discoveryState,
+  setDiscoveryState,
+  preparationProjection,
+  preparationContext,
+  modelPool,
+} from './preparation.mjs';
+import { updateCaseAdvice } from './case-advice.mjs';
 
 // Hint overrides are included in the effective Case used throughout planning,
 // approval and execution; the immutable baseline/business steps stay intact.
@@ -69,6 +86,7 @@ export class Controller {
     provider,
     browser,
     planningMode = 'single',
+    preparationBudget = preparationTimeBudget,
     discoveryFactory = (session, task, options) => new DiscoveryBrowser(session, task, options),
   }) {
     this.store = store;
@@ -80,6 +98,8 @@ export class Controller {
     if (!['single', 'staged'].includes(planningMode)) fail('PLANNING_MODE_INVALID');
     this.planningMode = planningMode;
     this.discoveryFactory = discoveryFactory;
+    this.discoverySessionKey = uid();
+    this.preparationBudget = preparationBudget;
     for (const name of [
       'configure',
       'discoveryContract',
@@ -92,6 +112,7 @@ export class Controller {
       'recovered',
       'requestPlanRevision',
       'revalidatePlan',
+      'rejectCaseAdvice',
     ]) {
       const operation = this[name].bind(this);
       this[name] = async (...args) => {
@@ -129,7 +150,13 @@ export class Controller {
     if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED', 500);
     try {
       return await this.diagnosticLog(job.id).append(
-        this.sanitizeDiagnostic({ at: now(), task_id: job.id, job_id: job.run_id, ...record }),
+        this.sanitizeDiagnostic({
+          at: now(),
+          task_id: job.id,
+          job_id: job.run_id,
+          ...(job.worker_id ? { worker_id: job.worker_id } : {}),
+          ...record,
+        }),
       );
     } catch {
       job.diagnostic_failed = true;
@@ -249,6 +276,7 @@ export class Controller {
     const projection = await this.store.executionProjection(id, state, { allScopes: true });
     return {
       ...state,
+      discovery: preparationProjection(state),
       site_cleanup_blockers: await this.store.cleanupBlockers(state.target),
       execution_projection: projection,
       browser_open: this.browser.active(id),
@@ -258,8 +286,27 @@ export class Controller {
           ? {
               kind: this.active.kind,
               calls: this.active.calls,
+              total_calls: this.active.total_calls,
+              budget: this.active.budget,
+              project_budget: this.active.project_budget,
+              batch_index: this.active.batch_index + 1,
+              batch_count: this.active.batch_count,
+              discovery_calls: this.active.discovery_calls ?? 0,
+              current_case_calls: this.active.current_case_calls ?? 0,
               current_case: this.active.current_case,
               stage: this.active.stage,
+              time_budget: this.active.time_budget,
+              options: this.active.options,
+              workers: [...(this.active.workers?.values() ?? [])].map((worker) => ({
+                case_id: worker.current_case,
+                phase: worker.phase ?? 'discovery',
+                stage: worker.stage,
+                calls: worker.worker_calls ?? 0,
+                remaining_ms: Math.max(
+                  0,
+                  (worker.phase_deadline ?? worker.discovery_deadline ?? Date.now()) - Date.now(),
+                ),
+              })),
             }
           : null,
       cases: state.cases.map((r) => {
@@ -326,7 +373,11 @@ export class Controller {
   }
   async confirmCase(id, caseId, input) {
     this.noJob();
-    keys(input, ['steps', 'note', 'data_overrides', 'page_entry_url'], ['steps']);
+    keys(
+      input,
+      ['steps', 'note', 'data_overrides', 'page_entry_url', 'advice_id', 'expected_case_hash'],
+      ['steps'],
+    );
     const b = await this.store.baseline(id);
     const c = b.cases.find((c) => c.case_id === caseId);
     if (!c) fail('CASE_NOT_FOUND', 404);
@@ -352,6 +403,29 @@ export class Controller {
     validateObligations(input.steps);
     await this.store.update(id, (s) => {
       const r = s.cases.find((x) => x.case_id === caseId);
+      if (
+        input.advice_id &&
+        (r.case_advice?.id !== input.advice_id ||
+          r.case_advice.status !== 'PENDING' ||
+          input.expected_case_hash !== caseHash(effectiveCase(c, r)) ||
+          r.case_advice.case_hash !== input.expected_case_hash)
+      )
+        fail('CASE_ADVICE_STALE', 409);
+      if (
+        input.advice_id &&
+        (!r.case_advice.suggestions.length || r.case_advice.category !== 'INPUT_CLARIFICATION')
+      )
+        fail('CASE_ADVICE_INVALID');
+      if (
+        input.advice_id &&
+        r.case_advice.suggestions.some(
+          (change) =>
+            change.requires_input &&
+            input.steps.find((step) => step.step_id === change.step_id)?.[change.field] ===
+              change.after,
+        )
+      )
+        fail('CASE_ADVICE_INPUT_REQUIRED');
       if (r.attempts.length) fail('CASE_ALREADY_EXECUTED', 409);
       if (r.issues.length && !nonempty(input.note)) fail('REVIEW_RESOLUTION_REQUIRED');
       r.confirmation_history ??= [];
@@ -380,7 +454,9 @@ export class Controller {
       delete r.approved_hash;
       const nextCase = effectiveCase(c, r),
         nextHash = caseHash(nextCase);
+      if (input.advice_id && priorEffective === nextHash) fail('CASE_ADVICE_NO_CHANGE');
       if (priorEffective !== nextHash) {
+        r.case_version = (r.case_version ?? 1) + 1;
         // A technical hint revision is not a new business Case allowance.
         if (
           r.preparation_budget &&
@@ -393,6 +469,16 @@ export class Controller {
         delete r.discovery_memory;
         delete r.entry_hint;
         delete r.revalidated_plan;
+        delete r.navigation_start;
+        delete r.preparation_checkpoint;
+        delete r.shared_control_evidence;
+        if (r.case_advice)
+          r.case_advice = {
+            ...r.case_advice,
+            status: input.advice_id ? 'APPLIED' : 'SUPERSEDED',
+            resolved_at: now(),
+            confirmed_by: 'LOCAL_OPERATOR',
+          };
         s.snapshots = (s.snapshots ?? []).filter((p) => p.discovery_case_id !== caseId);
       }
       this.store.event(s, 'CASE_CONFIRMED', {
@@ -400,6 +486,28 @@ export class Controller {
         note: input.note ?? '原用例已核对',
       });
     });
+  }
+  async rejectCaseAdvice(id, caseId, adviceId) {
+    await this.store.update(id, (s) => {
+      const r = s.cases.find((r) => r.case_id === caseId);
+      if (!r || r.case_advice?.id !== adviceId || r.case_advice.status !== 'PENDING')
+        fail('CASE_ADVICE_STALE', 409);
+      r.case_advice.status = 'REJECTED';
+      r.case_advice.resolved_at = now();
+      this.store.event(s, 'CASE_ADVICE_REJECTED', { case_id: caseId, advice_id: adviceId });
+    });
+  }
+  async updateCaseAdvice(job, caseId) {
+    const state = await this.store.read(job.id),
+      baseline = await this.store.baseline(job.id);
+    return updateCaseAdvice(
+      this,
+      job,
+      effectiveCase(
+        baseline.cases.find((c) => c.case_id === caseId),
+        state.cases.find((r) => r.case_id === caseId),
+      ),
+    );
   }
   async discoveryContract(id, input) {
     this.noJob();
@@ -494,6 +602,7 @@ export class Controller {
     if (!task.authorization.nonproduction) fail('NONPRODUCTION_CONFIRMATION_REQUIRED');
     await this.requireCleanSite(task, { allowOwnRecovery: true });
     await this.browser.open(task);
+    this.discoverySessionKey = uid();
     await this.store.update(id, (s) =>
       this.store.event(s, 'BROWSER_OPENED', { message: '浏览器保持到显式关闭；登录过程不录像。' }),
     );
@@ -516,6 +625,7 @@ export class Controller {
     validateLocator(marker);
     const s = await this.store.read(id);
     await this.browser.authenticate(s, marker);
+    this.discoverySessionKey = uid();
     await this.store.update(id, (s) => {
       s.auth_marker = marker;
       this.store.event(s, 'AUTHENTICATED', { message: '已验证当前页面的唯一可见标志。' });
@@ -523,7 +633,11 @@ export class Controller {
   }
   async discoverAfterAuthentication(id, selection) {
     const state = await this.store.read(id),
-      ids = selection ?? state.cases.filter((c) => !c.attempts.length).map((c) => c.case_id);
+      eligible = state.cases.filter((c) => !c.attempts.length),
+      unfinished = eligible.filter(
+        (c) => c.status === 'BLOCKED_BUDGET' || c.discovery?.status === 'BLOCKED' || !c.discovery,
+      ),
+      ids = selection ?? (unfinished.length ? unfinished : eligible).map((c) => c.case_id);
     const reason = state.fixture
       ? 'FIXTURE_PRESET'
       : !this.provider.configured()
@@ -584,7 +698,7 @@ export class Controller {
           r,
         ),
         s.target,
-        s.navigation_start?.url,
+        r.navigation_start?.url ?? s.navigation_start?.url,
       );
       if (r.attempts.length) fail('CASE_ALREADY_EXECUTED');
       r.plan_approved = true;
@@ -625,7 +739,7 @@ export class Controller {
     if (blockers.some((item) => item.task_id !== state.id)) fail('SITE_CLEANUP_REQUIRED', 409);
     if (blockers.length && !allowOwnRecovery) fail('CLEANUP_REQUIRED', 409);
   }
-  async launch(id, kind, caseIds) {
+  async launch(id, kind, caseIds, options = {}) {
     this.idle();
     const job = {
       id,
@@ -633,6 +747,13 @@ export class Controller {
       run_id: uid(),
       abort: new AbortController(),
       calls: 0,
+      budget: null,
+      batches: [],
+      batch_index: 0,
+      batch_count: 0,
+      completed_batches: 0,
+      total_calls: 0,
+      total_discovery_calls: 0,
       stage: 'VALIDATING',
     };
     job.finished = new Promise((resolve) => {
@@ -652,6 +773,24 @@ export class Controller {
         fail('CASE_SELECTION_INVALID');
       if (!['review', 'plan', 'run', 'discover', 'prepare'].includes(kind))
         fail('JOB_KIND_INVALID');
+      if (['prepare', 'discover', 'plan'].includes(kind)) {
+        job.options = preparationOptions(options, state);
+        job.cases = caseIds.map((cid) =>
+          effectiveCase(
+            baseline.cases.find((c) => c.case_id === cid),
+            state.cases.find((r) => r.case_id === cid),
+          ),
+        );
+        job.time_budget = this.preparationBudget(job.cases, job.options);
+        job.workers = new Map();
+        job.moduleEvidence = new Map();
+        job.modelPermit = modelPool(2);
+        job.context_key = preparationContext(this, state);
+      } else if (Object.keys(options).length) fail('PREPARATION_OPTIONS_INVALID');
+      job.batches = kind === 'run' ? [caseIds] : caseBudgetBatches(caseIds);
+      job.batch_count = job.batches.length;
+      job.project_budget = projectBudgetForBatches(job.batches);
+      job.budget = caseScaledJobBudget(job.batches[0].length);
       if (['run', 'discover', 'prepare'].includes(kind)) await this.requireCleanSite(state);
       if (kind !== 'run' && !this.provider.configured()) fail('DEEPSEEK_KEY_REQUIRED', 409);
       if (['discover', 'prepare'].includes(kind)) {
@@ -677,7 +816,7 @@ export class Controller {
               r,
             ),
             state.target,
-            state.navigation_start?.url,
+            r.navigation_start?.url ?? state.navigation_start?.url,
           );
           validatePlan(
             r.plan,
@@ -739,17 +878,41 @@ export class Controller {
         });
       await this.store.update(id, (s) => {
         this.assertCurrent(job);
+        if (job.time_budget) {
+          if (s.preparation) (s.preparation_history ??= []).push(s.preparation);
+          s.preparation_history = (s.preparation_history ?? []).slice(-20);
+          s.preparation = {
+            job_id: job.run_id,
+            case_ids: caseIds,
+            status: 'RUNNING',
+            options: job.options,
+            time_budget: job.time_budget,
+            started_at: now(),
+            workers: {},
+          };
+        }
         s.status = kind === 'run' ? 'RUNNING' : 'ANALYZING';
         this.store.event(s, 'JOB_STARTED', {
           kind,
           count: caseIds.length,
           run_scope_id: job.run_id,
+          budget: job.budget,
+          project_budget: job.project_budget,
         });
       });
-      job.promise = (kind === 'prepare' ? this.prepare(job, caseIds) : this.work(job, caseIds))
+      job.promise = this.runBatches(job)
         .catch(async (e) => {
           await this.store.update(id, (s) => {
-            s.status = job.abort.signal.aborted ? 'STOPPED' : 'NEEDS_ATTENTION';
+            s.status =
+              job.abort.signal.aborted && !job.failure_code ? 'STOPPED' : 'NEEDS_ATTENTION';
+            if (job.time_budget) {
+              Object.assign(s.preparation, {
+                status: s.status,
+                reason: publicError(e),
+                finished_at: now(),
+              });
+              s.discovery = preparationProjection(s);
+            }
             for (const r of s.cases)
               if (r.status === 'RUNNING') {
                 r.status = 'INTERRUPTED';
@@ -759,6 +922,7 @@ export class Controller {
           });
         })
         .finally(() => {
+          clearTimeout(job.wallTimer);
           if (this.active === job) this.active = null;
           job.resolveFinished();
         });
@@ -769,8 +933,80 @@ export class Controller {
       throw error;
     }
   }
+  async runBatches(job) {
+    for (let index = 0; index < job.batches.length; index++) {
+      this.assertCurrent(job);
+      const caseIds = job.batches[index];
+      job.batch_index = index;
+      job.budget = caseScaledJobBudget(caseIds.length);
+      job.calls = 0;
+      job.current_case = null;
+      job.current_case_calls = 0;
+      job.discovery_calls = 0;
+      job.stage = 'BATCH_STARTING';
+      await this.store.update(job.id, (s) => {
+        if (s.preparation?.job_id === job.run_id)
+          Object.assign(s.preparation, {
+            budget: job.budget,
+            batch_index: index + 1,
+            batch_count: job.batch_count,
+          });
+        this.store.event(s, 'JOB_BATCH_STARTED', {
+          kind: job.kind,
+          batch_index: index + 1,
+          batch_count: job.batch_count,
+          case_ids: caseIds,
+          budget: job.budget,
+        });
+      });
+      if (job.kind === 'prepare') await this.prepare(job, caseIds);
+      else if (['discover', 'plan'].includes(job.kind)) {
+        this.startPreparationClock(job);
+        await prepareBatch(this, job, caseIds);
+      } else await this.work(job, caseIds, { finish: false });
+      job.completed_batches++;
+      await this.store.update(job.id, (s) =>
+        this.store.event(s, 'JOB_BATCH_FINISHED', {
+          kind: job.kind,
+          batch_index: index + 1,
+          batch_count: job.batch_count,
+          case_ids: caseIds,
+          calls: job.calls,
+          total_calls: job.total_calls,
+        }),
+      );
+    }
+    await this.store.update(job.id, (s) => {
+      s.status = job.abort.signal.aborted ? 'STOPPED' : 'IDLE';
+      if (job.time_budget) {
+        const rows = s.cases.filter((c) => s.preparation.case_ids.includes(c.case_id));
+        const partial = rows.some(
+          (c) => c.status === 'BLOCKED_BUDGET' || c.status === 'BLOCKED_MAPPING',
+        );
+        if (partial) s.status = 'NEEDS_ATTENTION';
+        Object.assign(s.preparation, {
+          status: partial ? 'PARTIAL' : 'FINISHED',
+          finished_at: now(),
+          total_calls: job.total_calls,
+        });
+        s.discovery = preparationProjection(s);
+      }
+      this.store.event(s, 'JOB_FINISHED', { kind: job.kind, batches: job.batch_count });
+    });
+  }
   assertCurrent(job) {
-    if (this.active !== job || job.abort.signal.aborted) fail('STOPPED');
+    const root = preparationRoot(job);
+    if (this.active !== root || job.abort.signal.aborted) fail(root.failure_code ?? 'STOPPED');
+  }
+  startPreparationClock(job) {
+    if (job.wallTimer) return;
+    job.wallTimer = setTimeout(() => {
+      job.failure_code = 'PREPARATION_JOB_TIMEOUT';
+      job.abort.abort(
+        Object.assign(new Error('PREPARATION_JOB_TIMEOUT'), { code: 'PREPARATION_JOB_TIMEOUT' }),
+      );
+    }, job.time_budget.wall_ms);
+    job.wallTimer.unref?.();
   }
   async prepare(job, ids) {
     const task = await this.store.read(job.id);
@@ -794,8 +1030,11 @@ export class Controller {
             '已核验同源、无可见登录挑战及登录后标志，自动继续所选用例；这不授予额外业务权限。',
         });
       });
+      this.discoverySessionKey = uid();
     }
-    await this.work(job, ids, { kind: 'discover' });
+    job.context_key = preparationContext(this, await this.store.read(job.id));
+    this.startPreparationClock(job);
+    await prepareBatch(this, job, ids);
   }
   assertInput(job, s, baseline, caseId, inputHash) {
     this.assertCurrent(job);
@@ -811,17 +1050,29 @@ export class Controller {
       fail('MODEL_INPUT_CHANGED');
   }
   async ask(job, prompt, data, { phase = job.kind, runId = null, signal = job.abort.signal } = {}) {
+    const release = preparationRoot(job).modelPermit
+      ? await preparationRoot(job).modelPermit(signal)
+      : null;
+    try {
+      return await this.askWithPermit(job, prompt, data, { phase, runId, signal });
+    } finally {
+      release?.();
+    }
+  }
+  async askWithPermit(job, prompt, data, { phase, runId, signal }) {
     this.assertCurrent(job);
     if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED', 500);
-    if (job.calls >= 100) fail('MODEL_CALL_BUDGET_EXHAUSTED');
+    const deadline = job.phase_deadline ?? job.discovery_deadline;
+    const timeoutCode = job.phase_deadline ? 'PREPARATION_PLAN_TIMEOUT' : 'DISCOVERY_TIMEOUT';
+    if (deadline && Date.now() >= deadline) fail(timeoutCode);
+    if (job.calls >= job.budget.model_calls.limit) fail('MODEL_CALL_BUDGET_EXHAUSTED');
     job.calls++;
+    job.total_calls++;
+    job.worker_calls = (job.worker_calls ?? 0) + 1;
     job.stage = 'MODEL';
-    if (job.discovery_deadline) {
-      if (Date.now() >= job.discovery_deadline) fail('DISCOVERY_TIMEOUT');
-      signal = AbortSignal.any([
-        signal,
-        AbortSignal.timeout(Math.max(1, job.discovery_deadline - Date.now())),
-      ]);
+    if (deadline) {
+      if (Date.now() >= deadline) fail(timeoutCode);
+      signal = AbortSignal.any([signal, AbortSignal.timeout(Math.max(1, deadline - Date.now()))]);
     }
     // Redact string leaves, not serialized JSON: a credential-like value must
     // never consume closing quotes/braces or turn a repair request into invalid JSON.
@@ -883,7 +1134,7 @@ export class Controller {
         parsed_value: value,
       });
       this.assertCurrent(job);
-      if (job.discovery_deadline && Date.now() >= job.discovery_deadline) fail('DISCOVERY_TIMEOUT');
+      if (deadline && Date.now() >= deadline) fail(timeoutCode);
       await this.store.update(job.id, (s) => {
         this.assertCurrent(job);
         this.store.event(
@@ -900,29 +1151,39 @@ export class Controller {
       this.assertCurrent(job);
       return value;
     } catch (e) {
+      if (deadline && Date.now() >= deadline && !job.abort.signal.aborted) {
+        await this.modelDecision(job, 'CANCELLED', {
+          code: timeoutCode,
+          reason: '当前阶段时间预算已到，已保留进度。',
+        });
+        fail(timeoutCode);
+      }
       if (e.code === 'DIAGNOSTIC_WRITE_FAILED' || job.diagnostic_failed) {
         job.diagnostic_failed = true;
         fail('DIAGNOSTIC_WRITE_FAILED', 500);
       }
       await this.modelDecision(
         job,
-        job.abort.signal.aborted || this.active !== job ? 'CANCELLED' : 'REJECTED',
+        job.abort.signal.aborted || this.active !== preparationRoot(job) ? 'CANCELLED' : 'REJECTED',
         { code: publicError(e), reason: '模型请求未产生可继续校验的当前有效响应。' },
       );
       throw e;
     }
   }
-  async explore(job, ids) {
+  async explore(job, ids, { finish = true, plan = true } = {}) {
     const task = await this.store.read(job.id),
       baseline = await this.store.baseline(job.id),
-      deadline = Date.now() + 180000;
+      budget = job.budget.discovery,
+      deadline = Date.now() + budget.timeout_ms;
     job.discovery_deadline = deadline;
     let explorer,
       observation,
       discoveryCalls = 0,
       completed = 0,
       blocked = 0,
+      batchBudgetExhausted = null,
       hintNavigation = false;
+    job.discovery_calls = 0;
     const checkBudget = () => {
       this.assertCurrent(job);
       if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED');
@@ -949,8 +1210,8 @@ export class Controller {
             'DISCOVERY_REDIRECT_ALLOWED',
           ].includes(type)
         )
-          s.discovery.steps++;
-        s.discovery.current_case = job.current_case ?? null;
+          discoveryState(s, job).steps++;
+        discoveryState(s, job).current_case = job.current_case ?? null;
         this.store.event(s, type, event);
       });
     };
@@ -976,8 +1237,11 @@ export class Controller {
         );
         if (!duplicate) {
           s.snapshots.push(page);
-          s.snapshots = s.snapshots.slice(-128);
-          s.discovery.pages++;
+          // Keep other Cases' evidence when a long task collects many pages.
+          const own = s.snapshots.filter((p) => p.discovery_case_id === caseId);
+          const expired = new Set(own.slice(0, Math.max(0, own.length - 24)));
+          s.snapshots = s.snapshots.filter((p) => !expired.has(p));
+          discoveryState(s, job).pages++;
         }
       });
       await emit('DISCOVERY_PAGE_CAPTURED', {
@@ -987,18 +1251,43 @@ export class Controller {
         controls: page.controls.length,
         page_id: observed.page_id,
       });
+      const modules = preparationRoot(job).moduleEvidence;
+      const route = observedEntryPath(page, task.target);
+      if (modules && route && !page.network_issues?.length) {
+        const prior = modules.get(route)?.controls ?? [];
+        const controls = new Map(
+          [
+            ...prior,
+            ...(page.controls ?? [])
+              .filter((c) => c.locator)
+              .map((c) => ({ locator: c.locator, role: c.role, name: c.name })),
+          ].map((c) => [semanticHash(c.locator), c]),
+        );
+        modules.set(route, {
+          route,
+          controls: [...controls.values()].slice(-60),
+          captured_at: page.captured_at,
+          source: 'same_session_observed_controls_only_not_business_results',
+        });
+        if (modules.size > 64) modules.delete(modules.keys().next().value);
+      }
     };
     await this.store.update(job.id, (s) => {
       this.assertCurrent(job);
-      s.discovery = {
+      setDiscoveryState(s, job, {
         status: 'RUNNING',
         job_id: job.run_id,
         current_case: null,
         pages: 0,
         steps: 0,
+        model_calls: 0,
+        project_model_calls: job.total_discovery_calls,
+        budget: job.budget,
+        batch_index: job.batch_index + 1,
+        batch_count: job.batch_count,
         started_at: now(),
         reason: null,
-      };
+      });
       for (const id of ids) s.cases.find((c) => c.case_id === id).plan_approved = false;
     });
     try {
@@ -1007,9 +1296,10 @@ export class Controller {
         message: '复用登录，自动寻找用例相关页面与弹窗。',
       });
       explorer = this.discoveryFactory(this.browser, task, {
+        case_id: job.current_case,
         signal: job.abort.signal,
-        maxSteps: 48,
-        timeoutMs: 180000,
+        maxSteps: budget.step_limit,
+        timeoutMs: budget.timeout_ms,
         onEvent: async (event) => emit(event.type, event),
       });
       observation = await explorer.open();
@@ -1018,11 +1308,14 @@ export class Controller {
       if (observedEntryPath(observation.snapshot, task.target))
         await this.store.update(job.id, (s) => {
           this.assertCurrent(job);
-          s.navigation_start = {
+          const start = {
             ...observation.snapshot,
             captured_at: now(),
             navigation_job_id: job.run_id,
           };
+          if (job.worker_id)
+            s.cases.find((r) => r.case_id === job.current_case).navigation_start = start;
+          else s.navigation_start = start;
         });
       for (const caseId of ids) {
         checkBudget();
@@ -1039,10 +1332,12 @@ export class Controller {
           seen = new Set();
         let done = false,
           reason = null,
-          caseSteps = 0;
+          caseSteps = 0,
+          caseCalls = 0;
+        job.current_case_calls = 0;
         const navigate = async (route) => {
           checkBudget();
-          if (caseSteps >= 12) fail('DISCOVERY_STEP_LIMIT');
+          if (caseSteps >= budget.steps_per_case) fail('DISCOVERY_CASE_STEP_LIMIT');
           caseSteps++;
           return explorer.navigate(route);
         };
@@ -1051,8 +1346,12 @@ export class Controller {
           s.cases.find((c) => c.case_id === caseId).discovery = {
             status: 'RUNNING',
             job_id: job.run_id,
+            model_calls: 0,
+            model_call_limit: budget.model_calls_per_case,
+            steps: 0,
+            step_limit: budget.steps_per_case,
           };
-          s.discovery.current_case = caseId;
+          discoveryState(s, job).current_case = caseId;
         });
         try {
           explorer.beginCase?.(c);
@@ -1149,8 +1448,27 @@ export class Controller {
               title: observation.snapshot.title,
               controls: observation.snapshot.controls,
             });
-            if (discoveryCalls >= 24) fail('DISCOVERY_MODEL_BUDGET_EXHAUSTED');
+            if (caseCalls >= budget.model_calls_per_case) {
+              reason = 'DISCOVERY_CASE_MODEL_BUDGET_EXHAUSTED';
+              break;
+            }
+            if (discoveryCalls >= budget.model_call_limit) fail('DISCOVERY_MODEL_BUDGET_EXHAUSTED');
+            caseCalls++;
             discoveryCalls++;
+            job.total_discovery_calls++;
+            job.discovery_calls = discoveryCalls;
+            job.current_case_calls = caseCalls;
+            await this.store.update(job.id, (s) => {
+              const item = s.cases.find((c) => c.case_id === caseId);
+              Object.assign(item.discovery, {
+                model_calls: caseCalls,
+                model_call_limit: budget.model_calls_per_case,
+                steps: caseSteps,
+                step_limit: budget.steps_per_case,
+              });
+              discoveryState(s, job).model_calls = discoveryCalls;
+              discoveryState(s, job).project_model_calls = job.total_discovery_calls;
+            });
             const signal = AbortSignal.any([
               job.abort.signal,
               AbortSignal.timeout(Math.max(1, deadline - Date.now())),
@@ -1170,7 +1488,10 @@ export class Controller {
                 discovery_memory: memory,
                 excluded_repeated_candidates: observation.candidates.length - candidates.length,
                 handoff: scopedHandoff(state.handoff, caseId),
-                remaining: { steps: 12 - caseSteps, model_calls: 24 - discoveryCalls },
+                remaining: {
+                  steps: budget.steps_per_case - caseSteps,
+                  model_calls: budget.model_calls_per_case - caseCalls,
+                },
               },
               { phase: 'discovery', signal },
             );
@@ -1214,7 +1535,7 @@ export class Controller {
               reason = response.reason;
               break;
             }
-            if (caseSteps >= 12) fail('DISCOVERY_STEP_LIMIT');
+            if (caseSteps >= budget.steps_per_case) fail('DISCOVERY_CASE_STEP_LIMIT');
             const candidate = observation.candidates.find(
               (x) => x.candidate_id === response.action.candidate_id,
             );
@@ -1260,8 +1581,14 @@ export class Controller {
                 status: 'BLOCKED',
                 job_id: job.run_id,
                 reason: this.sanitizeDiagnostic(explanation),
+                model_calls: caseCalls,
+                model_call_limit: budget.model_calls_per_case,
+                steps: caseSteps,
+                step_limit: budget.steps_per_case,
               };
-              item.status = 'BLOCKED_MAPPING';
+              item.status = explanation.startsWith('DISCOVERY_CASE_')
+                ? 'BLOCKED_BUDGET'
+                : 'BLOCKED_MAPPING';
               item.mapping_reason = this.sanitizeDiagnostic(explanation);
             });
             await emit('DISCOVERY_BLOCKED', { reason: explanation });
@@ -1274,11 +1601,15 @@ export class Controller {
               status: 'CAPTURED',
               job_id: job.run_id,
               reason: this.sanitizeDiagnostic(reason),
+              model_calls: caseCalls,
+              model_call_limit: budget.model_calls_per_case,
+              steps: caseSteps,
+              step_limit: budget.steps_per_case,
             };
             if (!item.reviewed) item.status = 'NEEDS_REVIEW';
           });
           await emit('DISCOVERY_CASE_FINISHED', { reason, planning: row.reviewed });
-          if (row.reviewed) {
+          if (row.reviewed && plan) {
             checkBudget();
             await this.work(job, [caseId], { kind: 'plan', finish: false, explorer });
           }
@@ -1296,17 +1627,30 @@ export class Controller {
               'AUTH_REQUIRED',
               'DISCOVERY_TIMEOUT',
               'DISCOVERY_STEP_LIMIT',
-              'DISCOVERY_MODEL_BUDGET_EXHAUSTED',
-              'MODEL_CALL_BUDGET_EXHAUSTED',
               'DISCOVERY_EVIDENCE_FAILED',
             ].includes(error.code)
           )
             throw error;
+          if (
+            ['DISCOVERY_MODEL_BUDGET_EXHAUSTED', 'MODEL_CALL_BUDGET_EXHAUSTED'].includes(error.code)
+          ) {
+            batchBudgetExhausted = publicError(error);
+            break;
+          }
           blocked++;
           await this.store.update(job.id, (s) => {
             const item = s.cases.find((c) => c.case_id === caseId);
-            item.discovery = { status: 'BLOCKED', job_id: job.run_id, reason: publicError(error) };
-            item.status = 'BLOCKED_MAPPING';
+            item.discovery = {
+              status: 'BLOCKED',
+              job_id: job.run_id,
+              reason: publicError(error),
+              model_calls: caseCalls,
+              model_call_limit: budget.model_calls_per_case,
+              steps: caseSteps,
+              step_limit: budget.steps_per_case,
+            };
+            item.status =
+              error.code === 'DISCOVERY_CASE_STEP_LIMIT' ? 'BLOCKED_BUDGET' : 'BLOCKED_MAPPING';
             item.mapping_reason = publicError(error);
           });
           await emit('DISCOVERY_BLOCKED', {
@@ -1316,29 +1660,61 @@ export class Controller {
           observation = await explorer.observe();
         }
       }
+      if (batchBudgetExhausted) {
+        let newlyBlocked = 0;
+        await this.store.update(job.id, (s) => {
+          for (const id of ids) {
+            const item = s.cases.find((c) => c.case_id === id);
+            if (item.discovery?.status === 'CAPTURED' || item.discovery?.status === 'BLOCKED')
+              continue;
+            item.discovery = {
+              status: 'BLOCKED',
+              job_id: job.run_id,
+              reason: batchBudgetExhausted,
+              model_calls: 0,
+              model_call_limit: budget.model_calls_per_case,
+              steps: 0,
+              step_limit: budget.steps_per_case,
+            };
+            item.status = 'BLOCKED_BUDGET';
+            item.mapping_reason = batchBudgetExhausted;
+            newlyBlocked++;
+          }
+        });
+        blocked += newlyBlocked;
+        await emit('DISCOVERY_BATCH_BUDGET_EXHAUSTED', {
+          code: batchBudgetExhausted,
+          message: '本批预算已耗尽；已保留完成项，未完成用例可在新批次继续探索。',
+        });
+      }
       await this.store.update(job.id, (s) => {
-        s.discovery.status = blocked ? 'PARTIAL' : 'CAPTURED';
-        s.discovery.finished_at = now();
-        s.discovery.model_calls = discoveryCalls;
-        s.discovery.completed_cases = completed;
-        s.discovery.blocked_cases = blocked;
-        s.status = 'IDLE';
+        Object.assign(discoveryState(s, job), {
+          status: blocked ? 'PARTIAL' : 'CAPTURED',
+          finished_at: now(),
+          model_calls: discoveryCalls,
+          completed_cases: completed,
+          blocked_cases: blocked,
+        });
+        s.status = finish ? 'IDLE' : 'ANALYZING';
       });
       await emit('DISCOVERY_FINISHED', {
         completed_cases: completed,
         blocked_cases: blocked,
         model_calls: discoveryCalls,
       });
-      await this.store.update(job.id, (s) =>
-        this.store.event(s, 'JOB_FINISHED', { kind: job.kind }),
-      );
+      if (finish)
+        await this.store.update(job.id, (s) =>
+          this.store.event(s, 'JOB_FINISHED', { kind: job.kind, batches: 1 }),
+        );
     } catch (error) {
       if (error.code === 'AUTH_REQUIRED') this.browser.authenticated = false;
       await this.store.update(job.id, (s) => {
-        s.discovery.status = job.abort.signal.aborted ? 'STOPPED' : 'FAILED';
-        s.discovery.reason = publicError(error);
-        s.discovery.finished_at = now();
-        s.discovery.model_calls = discoveryCalls;
+        Object.assign(discoveryState(s, job), {
+          status: job.abort.signal.aborted ? 'STOPPED' : 'FAILED',
+          reason: publicError(error),
+          finished_at: now(),
+          model_calls: discoveryCalls,
+        });
         for (const id of ids) {
           const row = s.cases.find((c) => c.case_id === id);
           if (row.discovery?.status === 'RUNNING')
@@ -1348,10 +1724,11 @@ export class Controller {
       throw error;
     } finally {
       await explorer?.close();
+      job.discovery_deadline = null;
     }
   }
   async work(job, ids, { kind = job.kind, finish = true, explorer = null } = {}) {
-    if (kind === 'discover') return this.explore(job, ids);
+    if (kind === 'discover') return this.explore(job, ids, { finish });
     const baseline = await this.store.baseline(job.id);
     for (const caseId of ids) {
       if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED', 500);
@@ -1414,7 +1791,8 @@ export class Controller {
             prepared.cases.find((row) => row.case_id === caseId).plan,
             c,
             prepared.target,
-            prepared.navigation_start?.url,
+            prepared.cases.find((row) => row.case_id === caseId).navigation_start?.url ??
+              prepared.navigation_start?.url,
           );
         } else {
           const plan = r.plan;
@@ -1534,14 +1912,21 @@ export class Controller {
         }
         await this.modelDecision(
           job,
-          job.abort.signal.aborted || this.active !== job ? 'CANCELLED' : 'REJECTED',
+          job.abort.signal.aborted || this.active !== preparationRoot(job)
+            ? 'CANCELLED'
+            : 'REJECTED',
           { code: publicError(e), reason: '模型响应未通过当前输入有效性或程序结构校验。' },
         );
         if (
           kind === 'run' ||
           job.abort.signal.aborted ||
           String(e.code).startsWith('DEEPSEEK_') ||
-          ['MODEL_CALL_BUDGET_EXHAUSTED', 'DISCOVERY_TIMEOUT'].includes(e.code)
+          [
+            'MODEL_CALL_BUDGET_EXHAUSTED',
+            'DISCOVERY_TIMEOUT',
+            'PREPARATION_PLAN_TIMEOUT',
+            'PREPARATION_JOB_TIMEOUT',
+          ].includes(e.code)
         )
           throw e;
         await this.store.update(job.id, (s) => {

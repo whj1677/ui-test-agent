@@ -38,14 +38,23 @@ async function setup({
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'ui-discovery-controller-'));
   const store = new Store(directory);
   await store.init();
-  const authored = demoCases(),
-    baseline = {
-      ...authored.baseline,
-      cases: authored.baseline.cases.slice(0, count),
-      case_count: count,
-    };
-  const plans = authored.plans.slice(0, count),
-    id = await store.create({ name: 'Discovery controller fixture', target: base, baseline });
+  const authored = demoCases();
+  const cases = Array.from({ length: count }, (_, index) => {
+    const source = structuredClone(authored.baseline.cases[index % authored.baseline.cases.length]);
+    if (index >= authored.baseline.cases.length) source.case_id += '-BATCH-' + (index + 1);
+    return source;
+  });
+  const plans = Array.from({ length: count }, (_, index) => {
+    const source = structuredClone(authored.plans[index % authored.plans.length]);
+    source.case_id = cases[index].case_id;
+    return source;
+  });
+  const baseline = {
+    ...authored.baseline,
+    cases,
+    case_count: count,
+  };
+  const id = await store.create({ name: 'Discovery controller fixture', target: base, baseline });
   await store.update(id, (s) => {
     s.fixture = fixture;
     s.authorization = { nonproduction: true, writes: false, readOnlyEndpoints: [] };
@@ -312,24 +321,91 @@ test('the same observed state and action is removed so the model can finish inst
   assert.equal(row.discovery_memory.observed_controls[0].evidence, 'DOM_OBSERVED');
 });
 
-test('discovery model budget is capped at 24 across Cases and releases the explorer', async () => {
+test('discovery budget scales by selected Case count instead of stopping at a shared 24 calls', async () => {
+  const perCaseCalls = new Map();
   const h = await setup({
     count: 2,
     reviewed: false,
-    respond: (input, { calls, baseline }) =>
-      input.case.case_id === baseline.cases[0].case_id && calls.length === 12 ? done : pick(input),
+    respond: (input) => {
+      const calls = (perCaseCalls.get(input.case.case_id) ?? 0) + 1;
+      perCaseCalls.set(input.case.case_id, calls);
+      return calls === 13 ? done : pick(input);
+    },
   });
   const { job } = await h.authenticateAndStart();
   await job.promise;
   const state = await h.state();
-  assert.equal(h.calls.length, 24);
-  assert.equal(state.discovery.model_calls, 24);
-  assert.equal(state.discovery.reason, 'DISCOVERY_MODEL_BUDGET_EXHAUSTED');
-  assert.equal(state.discovery.status, 'FAILED');
-  assert.equal(h.runtime.actions.length, 23);
-  assert.equal(h.runtime.closes, 1);
-  assert.equal(state.cases[0].discovery.status, 'CAPTURED');
-  assert.ok(state.cases.every((c) => c.plan === null));
+  assert.equal(h.calls.length, 26);
+  assert.equal(state.discovery.model_calls, 26);
+  assert.equal(state.discovery.budget.case_count, 2);
+  assert.equal(state.discovery.budget.model_calls.limit, 100);
+  assert.equal(state.discovery.budget.discovery.model_call_limit, 26);
+  assert.equal(state.discovery.budget.discovery.model_calls_per_case, 13);
+  assert.equal(state.discovery.status, 'CAPTURED');
+  assert.equal(state.discovery.completed_cases, 2);
+  assert.equal(h.runtime.actions.length, 24);
+  assert.equal(h.runtime.options.maxSteps, 13);
+  assert.equal(h.runtime.closes, 2);
+  assert.ok(state.cases.every((c) => c.discovery.status === 'CAPTURED'));
+  assert.ok(state.cases.every((c) => c.discovery.model_calls === 13));
+});
+
+test('a Case step budget blocks only that Case and continues to later Cases', async () => {
+  const h = await setup({
+    count: 2,
+    reviewed: false,
+    respond: (input, { baseline }) =>
+      input.case.case_id === baseline.cases[0].case_id ? pick(input) : done,
+  });
+  const { job } = await h.authenticateAndStart();
+  await job.promise;
+  const state = await h.state();
+  assert.equal(state.discovery.status, 'PARTIAL');
+  assert.equal(state.cases[0].status, 'BLOCKED_BUDGET');
+  assert.equal(state.cases[0].discovery.reason, 'DISCOVERY_CASE_STEP_LIMIT');
+  assert.equal(state.cases[0].discovery.model_calls, 13);
+  assert.equal(state.cases[1].discovery.status, 'CAPTURED');
+  assert.equal(state.cases[1].discovery.model_calls, 1);
+  assert.equal(h.runtime.caseStarts, 2);
+  assert.equal(h.runtime.closes, 2);
+});
+
+test('selected Cases beyond one bounded batch continue automatically in later batches', async () => {
+  const h = await setup({ count: 8, reviewed: false, respond: () => done }),
+    { job } = await h.authenticateAndStart();
+  await job.promise;
+  const state = await h.state();
+  assert.equal(h.runtime.factories, 8);
+  assert.equal(h.runtime.opens, 8);
+  assert.equal(h.runtime.closes, 8);
+  assert.equal(h.calls.length, 8);
+  assert.ok(state.cases.every((c) => c.discovery.status === 'CAPTURED'));
+  assert.equal(state.discovery.batch_index, 2);
+  assert.equal(state.discovery.batch_count, 2);
+  assert.equal(state.discovery.project_model_calls, 8);
+  assert.equal(state.events.filter((e) => e.type === 'JOB_BATCH_STARTED').length, 2);
+  assert.equal(state.events.filter((e) => e.type === 'JOB_BATCH_FINISHED').length, 2);
+  assert.equal(state.events.filter((e) => e.type === 'JOB_FINISHED').length, 1);
+});
+
+test('automatic discovery resumes budget-blocked Cases before recapturing completed Cases', async () => {
+  const h = await setup({ count: 2, reviewed: false, respond: () => done });
+  await h.store.update(h.id, (s) => {
+    s.cases[0].discovery = { status: 'CAPTURED', job_id: 'earlier' };
+    s.cases[1].status = 'BLOCKED_BUDGET';
+    s.cases[1].discovery = {
+      status: 'BLOCKED',
+      job_id: 'earlier',
+      reason: 'DISCOVERY_CASE_STEP_LIMIT',
+    };
+  });
+  const { job } = await h.authenticateAndStart();
+  await job.promise;
+  assert.equal(h.calls.length, 1);
+  assert.equal(h.calls[0].input.case.case_id, h.baseline.cases[1].case_id);
+  const state = await h.state();
+  assert.equal(state.cases[0].discovery.job_id, 'earlier');
+  assert.equal(state.cases[1].discovery.status, 'CAPTURED');
 });
 
 test('diagnostic I/O failure before an approved discovery dispatch stops the job and closes the explorer', async () => {
@@ -372,7 +448,7 @@ test('a blocked Case does not prevent later Cases from being discovered and prep
   assert.equal(state.cases[0].plan, null);
   assert.equal(state.cases[1].status, 'PLAN_REVIEW');
   assert.equal(state.cases[1].plan_approved, false);
-  assert.equal(h.runtime.closes, 1);
+  assert.equal(h.runtime.closes, 2);
   await h.assertOriginal();
 });
 
@@ -461,7 +537,7 @@ test('a replaced target refreshes observation and asks again without replaying a
   await h.assertOriginal();
 });
 
-test('the discovery deadline also rejects a late generated plan before publication', async (t) => {
+test('a late plan pauses planning while preserving completed discovery', async (t) => {
   const actualNow = Date.now;
   let elapsed = 0;
   t.mock.method(Date, 'now', () => actualNow() + elapsed);
@@ -475,8 +551,9 @@ test('the discovery deadline also rejects a late generated plan before publicati
   const { job } = await h.authenticateAndStart();
   await job.promise;
   const state = await h.state();
-  assert.equal(state.discovery.status, 'FAILED');
-  assert.equal(state.discovery.reason, 'DISCOVERY_TIMEOUT');
+  assert.equal(state.discovery.status, 'CAPTURED');
+  assert.equal(state.cases[0].status, 'BLOCKED_BUDGET');
+  assert.equal(state.cases[0].mapping_reason, 'PREPARATION_PLAN_TIMEOUT');
   assert.equal(state.cases[0].plan, null);
   assert.equal(h.runtime.closes, 1);
   assert.ok(!state.events.some((e) => e.type === 'PLAN_GENERATED'));

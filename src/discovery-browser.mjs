@@ -3,6 +3,7 @@ import { runtimeLocator as handoffLocator } from './row-locator.mjs';
 import { fail, hash, redact, relativeURL, uid } from './common.mjs';
 import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
+import { queryScopeFacts, queryValues } from './query-capability.mjs';
 import {
   dismissButtonFacts,
   conditionalDismissSource,
@@ -381,10 +382,10 @@ export class DiscoveryBrowser {
     if (
       !Number.isInteger(maxSteps) ||
       maxSteps < 1 ||
-      maxSteps > 100 ||
+      maxSteps > 1200 ||
       !Number.isFinite(timeoutMs) ||
       timeoutMs < 1 ||
-      timeoutMs > 1800000
+      timeoutMs > 3 * 60 * 60 * 1000
     )
       fail('DISCOVERY_INVALID_BUDGET');
     this.session = session;
@@ -710,9 +711,37 @@ export class DiscoveryBrowser {
   }
   async _inputCandidates(handle, meta, control) {
     const candidates = [];
-    for (const contract of this.interactions.filter(
+    const contracts = this.interactions.filter(
       (c) => c.case_id === this.caseId && contractPageMatches(c, this.page.url()),
-    )) {
+    );
+    // Ordinary, case-grounded query inputs should not need a human-authored
+    // source contract. Other forms still require the reviewed contract path.
+    const queryBindings = queryValues(this.caseDefinition, meta, control.name);
+    if (this.task.authorization?.nonproduction === true && queryBindings.length) {
+      const scope = await handle.evaluate(queryScopeFacts);
+      if (scope) {
+        const url = new URL(this.page.url());
+        for (const binding of queryBindings) {
+          contracts.push({
+            case_id: this.caseId,
+            entry_path: url.pathname + url.search + url.hash,
+            locator: control.locator,
+            operation: meta.tag === 'SELECT' ? 'select' : 'fill',
+            values: [binding.value],
+            query_scope: scope,
+            evidence: {
+              kind: 'observed_query_scope',
+              ref: `${this.caseId}/${binding.step_id}`,
+              source_quote: binding.source_quote,
+              boundary:
+                'Fixed original query input; network and submit guards enforced. Not proof of handler purity or business success.',
+            },
+          });
+        }
+      }
+    }
+    const seen = new Set();
+    for (const contract of contracts) {
       const kind = interactionKind(meta, control.name, contract);
       if (!kind) continue;
       const locator = handoffLocator(this.page, contract.locator);
@@ -723,6 +752,8 @@ export class DiscoveryBrowser {
         continue;
       for (const value of contract.values) {
         if (value === meta.value) continue;
+        const key = JSON.stringify([contract.locator, contract.operation, value]);
+        if (seen.has(key)) continue;
         // An explicitly reviewed empty value clears local form state. It does not
         // need an empty substring fabricated from the source case text.
         if (
@@ -736,6 +767,7 @@ export class DiscoveryBrowser {
             ? (meta.options ?? []).filter((o) => !o.disabled && !o.hidden && o.value === value)
             : null;
         if (option && option.length !== 1) continue;
+        seen.add(key);
         const candidate = {
           candidate_id: uid(),
           kind,
@@ -866,6 +898,18 @@ export class DiscoveryBrowser {
     )
       fail('DISCOVERY_STALE_PAGE');
     const meta = await metadata(candidate.handle, this.runtimeKey);
+    if (candidate.contract?.query_scope) {
+      const scope = await candidate.handle.evaluate(queryScopeFacts);
+      const bindings = queryValues(this.caseDefinition, meta, candidate.name);
+      if (
+        this.task.authorization?.nonproduction !== true ||
+        JSON.stringify(scope) !== JSON.stringify(candidate.contract.query_scope) ||
+        !bindings.some(
+          (b) => b.value === candidate.value && b.source_quote === candidate.evidence.source_quote,
+        )
+      )
+        fail('DISCOVERY_STALE_PAGE');
+    }
     const dismissAction = await this._dismissAction(candidate.handle, meta);
     const kind = candidate.contract
       ? interactionKind(meta, candidate.name, candidate.contract)
@@ -891,7 +935,7 @@ export class DiscoveryBrowser {
   }
 
   beginCase(c) {
-    this._check();
+    this._check({ page: false });
     this.visits.clear();
     this.caseId = typeof c === 'string' ? c : (c?.case_id ?? null);
     this.caseInputs = typeof c === 'object' ? caseInputText(c) : [];

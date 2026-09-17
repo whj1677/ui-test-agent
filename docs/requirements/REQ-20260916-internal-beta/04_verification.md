@@ -1,5 +1,34 @@
 # REQ-20260916-internal-beta 验证
 
+## 2026-09-17 查询与规划解耦工程证据
+
+- `node tests/runtime-regression.mjs`，exit_code=0，test_count=377，failure_count=0，skipped_count=0；`validation/query-planning-runtime-final-20260917.log`。定向70项亦退出0（含原声明/网络保护/候选预算），不相加为业务覆盖。
+- `node work/acceptance-20260917/query-regression.mjs`实际运行原复杂页面及原003：6个固定候选动作，查询后2行，按园区定位006/赵岚/320及关闭保持2行；未知写到达0。fixture SHA `0f59e366d120a49e9718c59c582a712e9e117d8def4cc95acc89c1bdc1841775`，原8例SHA `3770932d3cf997faaf56f9d6a565b4012f53eeea80b033e4e46183aa22f4efbb` 保持。仅工程能力验证，不是模型生成/执行证据。
+- 新增查询范围、敏感控件、源值、自动写入/提交反例和末步补证/不同状态值去重/预算保留断言。首次并行工程回归暴露测试侧120ms URL采样及600ms阶段测试的调度脆弱性；独立复跑URL断言正确，测试增加调度余量后复验，不改变业务判定或生产预算。包裹label的既有SELECT适配缺口记录为延后项，当前自动查询使用已成功定位的控件。
+- 真实模型复测尚未执行；原8例不据此宣布通过。浏览器最终组合与正式collector结果另列于本包delivery_evidence。
+- 最终collector实际执行 `node --test --test-concurrency=2 tests/autonomous-preparation.integration.mjs tests/discovery-browser.integration.mjs tests/preparation.integration.mjs tests/model-flow.integration.mjs`，exit_code=0，test_count=9，failure_count=0，skipped_count=0；`validation/query-planning-browser-final-20260917.log`。既有探索安全文件内部18场景不与TAP数相加。sync/collector/checker依次退出0。
+- 服务切换前12任务无活动作业；`node work/query-plan-20260917/run.mjs freeze/verify`记录运行构建与旧资料摘要。切换后核验2994份历史JSON/样本均相同；新8例任务cfe926dd等待Key/登录，真实调用/执行均0。源码冻结后不再热修本轮服务。
+
+## 2026-09-17 当前准备调度增量
+
+- `node tests/runtime-regression.mjs`：exit_code=0，test_count=369，failure_count=0，skipped_count=0；日志 `validation/preparation-regression-20260917.log`。包含11项新调度/草案检查与1项URL语义反例，不把子集再相加。
+- `node tests/preparation.integration.mjs`：exit_code=0；真实Chromium观察到1个登录上下文+2个独立探索上下文同时存活，停止后两路均释放、登录保留。产生两份各自绑定的候选，未自动执行；业务写入请求0。URL正/反例为true/true/true/false，同次采样，实际证据query/hash脱敏；日志 `validation/preparation-browser-20260917.log`。
+- `node tests/preparation-ui.integration.mjs`：exit_code=0；真实UI设置/POST选项、两路阶段显示、390px布局、未确认不保存、未决占位不采纳、拒绝不修改、确认版本2/原基线不变/计划失效/不自动运行达到断言；日志 `validation/preparation-ui-20260917.log`。调度状态和草案为合成注入，不证明模型建议正确。
+- `node tests/workflow.integration.mjs`：exit_code=0；主流程统一prepare，由服务端验证复用。既有确认失败、部分计划和核对后执行路径仍满足原断言；日志 `validation/preparation-workflow-20260917.log`。
+- 全轮不向真实模型发送材料、不操作用户业务；工程证据不代替真实DeepSeek、站点独立性或产品验收。服务切换及最终组合/collector结果在本节下方追加。
+
+最终组合：`node --test --test-concurrency=2 tests/preparation.integration.mjs tests/preparation-ui.integration.mjs tests/workflow.integration.mjs tests/discovery.integration.mjs tests/discovery-browser.integration.mjs tests/autonomous-preparation.integration.mjs tests/model-flow.integration.mjs tests/console.integration.mjs tests/agent-output.integration.mjs`，exit_code=0，test_count=14，failure_count=0，skipped_count=0；日志 `validation/preparation-integration-20260917.log`。9个文件包含6个node:test自主准备场景及8个文件级条目；探索安全文件内部另报18个场景，不相加为业务覆盖。
+
+collector实际执行 `node --test --test-concurrency=2 tests/preparation.test.mjs tests/preparation.integration.mjs tests/preparation-ui.integration.mjs`：13项、失败0、跳过0、命令退出码0，日志 `validation/preparation-collector-20260917.log`。首次collector自身退出1，原因是本轮追踪段落被文档检查解析成错误的DR/VT交叉映射；已拆成真实逐项映射，checker复验退出0。范围内格式检查与git diff --check均退出0；没有修改历史验收含义来消除门禁问题。
+
+运行切换：全部11任务无活动作业时调用工程自带停止/启动脚本，均退出0；新版4179构建30ed22bc3afc，新能力位true，服务错误日志为空。27份基线/状态/事实文件切换前后摘要一致；记录见 `validation/preparation-rollout-20260917.json`。只核验代码上线与历史完整性，不发模型请求或业务操作；Key及登录按原内存策略由用户本机恢复。
+
+## 2026-09-17 有序控制台实际验证
+
+- `node tests/workflow.integration.mjs`验证真实控制台、存储及原文确认接口；工作进程结果为受控状态。覆盖8条未核对用例、取消、保存一部分后失败不启动、重试确认后只启动一个准备、有效探索直接规划、7份计划/1条阻塞的部分继续、独立批准和执行、历史探索零计划提示、单条勾选即时更新、390/844/1440宽度与无横向溢出。外部模型调用0；不把受控执行状态视为业务执行事实。
+- 既有`agent-output`、`console`、`model-flow`三项浏览器集成分别达到其断言。前者检查步骤条先于输出且运行状态仍首屏可见；后两项包括原演示真实Chromium执行及注入模型链路。最终四文件组合由collector重新执行并绑定日志，见delivery_evidence.md；不与上一轮373项累加为业务覆盖。
+- 范围内Prettier及`git diff --check`已实际执行；本地截图已抽查。当前运行服务按请求读取公共JS/CSS，本次无需重启，不触及其任务、Key或模型调用。原发布验收仍独立。
+
 ## 2026-09-17 条件提示与无遮挡当前工程及限定真实模型证据
 
 - `node tests/runtime-regression.mjs`，exit_code=0、test_count=341、failure_count=0、skipped_count=0，日志validation/optional-runtime-release-20260917.log；末版只读复核不新增真实模型请求。
@@ -90,3 +119,10 @@
 ## 结论
 
 - 工程验证不代替产品、真实模型或发布验收。当前不满足内部试用发布条件。
+
+## 2026-09-17 按用例数量预算与续跑验证
+
+- `node --test tests/job-budget.test.mjs tests/discovery-controller.test.mjs tests/case-entry-url.test.mjs`：退出码0，40项通过。覆盖小批保底、100 Case拆成15批并保留项目上限、两Case不再共享旧24次探索额度、单Case步骤耗尽不阻塞后续Case、8 Case自动进入第二批、预算阻塞项优先续跑及入口URL路径的单Case阻塞语义。
+- `node tests/agent-output.integration.mjs`：退出码0；校验输出面板渲染当前批、本批/项目逻辑调用、探索调用和当前Case调用字段。使用本地夹具与注入模型回复，外部API调用0。
+- `npm test`：退出码0，373项通过、失败0、跳过0。范围内Prettier检查退出码0。新增预算模块、Controller、浏览器参数、报告标签、控制台和对应测试均在此变更范围内。
+- 收集器将在本轮全量命令上重新执行并绑定验证日志；正式门禁仍会报告该REQ既有的历史混合状态，历史失败记录不删除、不重写为成功。本轮没有重启4179、读取用户Key、调用DeepSeek或操作真实业务页面，因此工程结果不等价真实模型规划、产品验收或发布验收。

@@ -12,7 +12,9 @@ let current = null,
   lastRevision = -1,
   taskNavigationSignature = '',
   polling = false,
+  workflowPending = false,
   toastTimer;
+const preparationPreferences = new Map();
 // The output panel survives workspace renders, so polling never collapses a
 // reply or moves the reader away from an older record.
 let outputTask = null,
@@ -29,6 +31,15 @@ let outputTask = null,
   outputWasBusy = false,
   outputActionError = '';
 const errors = {
+  PREPARATION_OPTIONS_INVALID: '准备设置无效，请选择支持的并发数和时间档位。',
+  PARALLEL_READONLY_CONFIRMATION_REQUIRED:
+    '两路探索仅适用于相互独立的只读用例；请确认隔离条件，写入授权开启时使用串行。',
+  PREPARATION_PLAN_TIMEOUT: '本条规划/审查时间已到，已保留页面证据；可增加时间后续跑。',
+  PREPARATION_JOB_TIMEOUT: '本轮总时间已到，进度与累计消耗已保留；请选择未完成用例继续。',
+  CASE_ADVICE_STALE: '用例或草案已变化，请重新打开详情核对，旧草案未应用。',
+  CASE_ADVICE_INPUT_REQUIRED: '草案仍有未决输入，请填写真实业务决定，不能直接采纳占位内容。',
+  CASE_ADVICE_NO_CHANGE: '尚未修改用例，未生成新版本。',
+  CASE_ADVICE_INVALID: '建议格式或适用范围未通过校验，未改变用例。',
   OPTIONAL_DIALOG_SCHEMA: '条件关闭格式不受支持；只允许原文指定的提示及关闭文字。',
   OPTIONAL_DIALOG_SOURCE_REQUIRED: '原步骤未明确授权该条件关闭，或计划不是只读。',
   OPTIONAL_DIALOG_NOT_UNIQUE: '发现多个同名提示，未猜测关闭对象。',
@@ -259,10 +270,337 @@ async function fileData(file) {
   });
 }
 function badge(status) {
-  return `<span class="badge ${status === 'PASS_ASSERTIONS' ? 'good' : ['FAIL_ASSERTION', 'TECHNICAL_FAILED', 'CLEANUP_REQUIRED'].includes(status) ? 'bad' : ['RUNNING', 'READY', 'PLAN_REVIEW'].includes(status) ? 'work' : ''}">${h(config.labels?.[status] ?? status)}</span>`;
+  return `<span class="badge ${status === 'PASS_ASSERTIONS' ? 'good' : ['FAIL_ASSERTION', 'TECHNICAL_FAILED', 'CLEANUP_REQUIRED', 'BLOCKED_BUDGET'].includes(status) ? 'bad' : ['RUNNING', 'READY', 'PLAN_REVIEW'].includes(status) ? 'work' : ''}">${h(config.labels?.[status] ?? status)}</span>`;
 }
 function ids() {
   return [...selected];
+}
+function pendingDiscoveryIds(s) {
+  const eligible = s.cases.filter((c) => !c.attempts.length);
+  const unfinished = eligible.filter(
+    (c) => c.status === 'BLOCKED_BUDGET' || c.discovery?.status === 'BLOCKED' || !c.discovery,
+  );
+  return (unfinished.length ? unfinished : eligible).map((c) => c.case_id);
+}
+function workflowRows() {
+  return state.cases.filter((c) => selected.has(c.case_id));
+}
+function reusableDiscovery(s, rows) {
+  return (
+    rows.length > 0 &&
+    rows.every(
+      (c) =>
+        c.discovery?.status === 'CAPTURED' &&
+        s.snapshots?.some(
+          (p) => p.discovery_case_id === c.case_id && p.discovery_job_id === c.discovery.job_id,
+        ),
+    )
+  );
+}
+function preparationSummary(rows) {
+  const pending = rows.filter((c) => !c.attempts.length);
+  return `已探索 ${rows.filter((c) => c.discovery?.status === 'CAPTURED').length} / ${rows.length} 条 · 已生成计划 ${rows.filter((c) => c.plan).length} / ${rows.length} 份 · 待核对用例 ${pending.filter((c) => !c.reviewed).length} 条 · 已有执行记录 ${rows.length - pending.length} 条`;
+}
+function workflowState() {
+  const rows = workflowRows(),
+    pending = rows.filter((c) => !c.attempts.length);
+  const unconfirmed = pending.filter((c) => !c.reviewed);
+  const missing = pending.filter((c) => !c.plan);
+  const blocked = pending.find((c) => c.reviewed && c.status === 'BLOCKED_MAPPING');
+  let step = unconfirmed.length
+    ? 0
+    : missing.length || blocked
+      ? 1
+      : pending.some((c) => !c.plan_approved)
+        ? 2
+        : pending.length
+          ? 3
+          : 4;
+  let id = ['confirm-main', 'prepare', 'approve-main', 'run-main', 'workflow-report'][step];
+  let label = ['核对用例并继续', '开始自动准备', '核对所选计划', '执行所选', '查看执行报告'][step];
+  let detail = [
+    `还有 ${unconfirmed.length} 条用例需要核对。确认操作和预期后，自动开始准备。`,
+    reusableDiscovery(state, missing)
+      ? `还有 ${missing.length} 份计划待生成，将使用当前有效的页面观察继续规划。`
+      : `还有 ${missing.length} 份计划待生成。登录后，Agent 自动探索页面、生成并检查计划。`,
+    '请核对计划中的操作、预期和清理内容。核对后进入执行步骤。',
+    '所选未执行用例的计划均已核对，可以开始执行。',
+    '所选用例均已有执行记录，请查看实际结果；执行结束不代表断言全部满足。',
+  ][step];
+  let disabled = workflowPending || outputConnectionError;
+  if (step === 1 && reusableDiscovery(state, missing)) label = '继续生成计划';
+  if (step === 1 && blocked) {
+    id = 'workflow-resolve';
+    label = '查看待处理原因';
+    detail = `${blocked.case_id} 的计划准备需要处理：${reasonText(blocked.mapping_reason) || '请核对该用例的准备记录。'}`;
+  }
+  const clarification = unconfirmed.find(
+    (c) => c.issues?.length || c.effective?.steps?.some((s) => !s.expected),
+  );
+  if (step === 0 && clarification) {
+    id = 'workflow-clarify';
+    label = '补充用例后继续';
+    detail = `${clarification.case_id} 需要先核对：${clarification.issues?.[0]?.message || '有步骤缺少预期结果。'}`;
+  }
+  if (step === 1 && !blocked && !config.configured) {
+    id = 'workflow-connect';
+    label = '连接 DeepSeek';
+    detail = '用例已核对。请先配置模型连接，再开始生成计划。';
+  } else if (step === 1 && !blocked && !config.autonomous_preparation) {
+    disabled = true;
+    detail = '当前服务不支持自动准备，请更新服务后继续。';
+  }
+  if (step === 3 && !state.authenticated) {
+    id = 'workflow-login';
+    label = state.browser_open ? '确认登录状态' : '打开登录浏览器';
+    detail = '执行前需要有效登录。在浏览器完成登录后，确认登录状态，再执行已核对的计划。';
+  }
+  if (state.site_cleanup_blockers?.length || state.cases.some((c) => c.cleanup_required)) {
+    id = 'workflow-cleanup';
+    label = '查看待清理记录';
+    detail = '先处理尚未完成的数据清理，再继续准备或执行。';
+  }
+  if (!rows.length) {
+    step = 0;
+    id = 'confirm-main';
+    label = '请先选择用例';
+    disabled = true;
+    detail = '在下方勾选本轮要测试的用例。这里会显示它们的当前步骤和下一步操作。';
+  }
+  if (state.active) {
+    step = state.active.kind === 'run' ? 3 : state.active.kind === 'review' ? 0 : 1;
+    id = 'workflow-running';
+    label = '正在处理，请等待';
+    disabled = true;
+    detail =
+      state.active.stage === 'WAITING_USER_LOGIN'
+        ? '请在 Agent 浏览器完成登录，识别成功后自动继续探索和生成计划。'
+        : 'Agent 正在处理本轮选择的用例。下方运行输出会持续显示当前动作、回复和异常。';
+    if (state.active.kind !== 'run' && state.cases.some((c) => !c.reviewed && !c.attempts.length)) {
+      step = 0;
+      detail += ' 尚有原文未核对的用例，它们本次只采集页面，核对后才能生成计划。';
+    }
+  }
+  return { rows, pending, step, id, label, detail, disabled, blocked, clarification };
+}
+// Update the console in place: disconnecting the whole workspace invalidates
+// browser scroll anchors and keyboard focus, even if its HTML looks unchanged.
+// This is only used for display regions, never for the editable modal forms.
+function patchConsole(parent, fresh, retain = () => false) {
+  const key = (node) =>
+    node.nodeType === Node.ELEMENT_NODE
+      ? node.id || node.getAttribute('data-select') || node.getAttribute('data-case') || ''
+      : '';
+  const compatible = (a, b) => a?.nodeName === b.nodeName && key(a) === key(b);
+  let cursor = parent.firstChild;
+  for (const next of [...fresh.childNodes]) {
+    let node = cursor;
+    if (!compatible(node, next)) {
+      node = key(next)
+        ? [...parent.childNodes].find((candidate) => compatible(candidate, next))
+        : null;
+      if (!node) node = next.cloneNode(true);
+      parent.insertBefore(node, cursor);
+    }
+    if (!retain(node)) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        // Disclosure state belongs to the reader, not the polling response.
+        const keepAttribute = (name) => node.tagName === 'DETAILS' && name === 'open';
+        for (const attribute of [...node.attributes])
+          if (!keepAttribute(attribute.name) && !next.hasAttribute(attribute.name))
+            node.removeAttribute(attribute.name);
+        for (const attribute of next.attributes)
+          if (
+            !keepAttribute(attribute.name) &&
+            node.getAttribute(attribute.name) !== attribute.value
+          )
+            node.setAttribute(attribute.name, attribute.value);
+        if (node instanceof HTMLInputElement && node.type === 'checkbox')
+          node.checked = next.checked;
+        patchConsole(node, next, retain);
+      } else if (node.nodeValue !== next.nodeValue) node.nodeValue = next.nodeValue;
+    }
+    cursor = node.nextSibling;
+  }
+  while (cursor) {
+    const next = cursor.nextSibling;
+    cursor.remove();
+    cursor = next;
+  }
+}
+function updateWorkflow() {
+  const panel = $('#guided-workflow');
+  if (!panel) return;
+  const f = workflowState();
+  const labels = ['核对用例', '自动准备', '核对计划', '执行测试', '查看结果'];
+  const content = `<div class="panel-heading"><h2 id="workflow-title">本轮测试流程</h2><span class="workflow-selection">已选 ${f.rows.length} / ${state.cases.length} 条</span></div>
+    <ol class="workflow-steps" aria-label="测试步骤">${labels.map((title, index) => `<li class="${index < f.step ? 'done' : index === f.step ? 'current' : 'locked'}" ${index === f.step ? 'aria-current="step"' : ''}><span class="workflow-number" aria-hidden="true">${index + 1}</span><div><strong>${title}</strong><small>${index < f.step ? '已完成' : index === f.step ? '当前步骤' : '等待前一步'}</small></div></li>`).join('')}</ol>
+    <div class="workflow-next"><div><p id="workflow-detail">${h(f.detail)}</p><p id="workflow-summary">${h(preparationSummary(f.rows.length ? f.rows : state.cases))}</p></div><button id="${f.id}" class="primary" aria-describedby="workflow-detail" ${f.disabled ? 'disabled' : ''}>${h(workflowPending ? '正在提交…' : f.label)}</button></div>
+    ${!f.rows.length && !state.active ? `<button id="workflow-select-all" class="link">选择全部 ${state.cases.length} 条用例</button>` : ''}
+    ${f.pending.some((c) => c.plan) && f.pending.some((c) => !c.plan) ? '<button id="workflow-select-plans" class="link">只选择已有计划的用例，继续核对和执行</button>' : ''}
+    ${config.preparation_controls ? `<div class="preparation-policy"><button id="preparation-settings" ${state.active ? 'disabled' : ''}>准备设置</button><span>${h(preparationPolicyText())}</span><small>取证与规划分别计时；准备不代表业务测试通过。</small></div>${preparationProgressHTML()}` : ''}`;
+  const signature = JSON.stringify([state.id, f.rows.map((c) => c.case_id), content]);
+  if (panel.workflowSignature === signature) return;
+  panel.workflowSignature = signature;
+  const template = document.createElement('template');
+  template.innerHTML = content;
+  patchConsole(panel, template.content);
+  if ($('#preparation-settings')) $('#preparation-settings').onclick = preparationSettings;
+  const button = panel.querySelector('.primary');
+  button.onclick = () => {
+    if (button.disabled) return;
+    if (f.id === 'confirm-main') return confirmSelected({ continuePreparation: true });
+    if (f.id === 'prepare') return action(() => startPreparedSelection(current, ids()));
+    if (f.id === 'approve-main') return approveSelected();
+    if (f.id === 'run-main')
+      return action(() =>
+        taskAPI('job', { kind: 'run', case_ids: f.pending.map((c) => c.case_id) }),
+      );
+    if (f.id === 'workflow-resolve') return caseDetail(f.blocked.case_id);
+    if (f.id === 'workflow-clarify') return caseDetail(f.clarification.case_id);
+    if (f.id === 'workflow-connect') return settings();
+    if (f.id === 'workflow-login')
+      return state.browser_open ? authDialog() : action(() => taskAPI('browser', {}));
+    if (f.id === 'workflow-report') return $('#workspace .download').click();
+    if (f.id === 'workflow-cleanup') {
+      const own = state.cases.find((c) => c.cleanup_required);
+      if (own) return caseDetail(own.case_id);
+      return $('#workspace .site-cleanup-notice')?.scrollIntoView({ block: 'center' });
+    }
+  };
+  const selectPlans = $('#workflow-select-plans');
+  if (selectPlans)
+    selectPlans.onclick = () => {
+      selected = new Set(f.pending.filter((c) => c.plan).map((c) => c.case_id));
+      render();
+    };
+  const selectAll = $('#workflow-select-all');
+  if (selectAll)
+    selectAll.onclick = () => {
+      selected = new Set(state.cases.map((c) => c.case_id));
+      render();
+    };
+  for (const [id, allowed] of [
+    ['review', f.pending.length > 0],
+    ['confirm', f.pending.length > 0],
+    ['plan', f.pending.length > 0 && f.pending.every((c) => c.reviewed) && state.snapshots?.length],
+    ['approve', f.pending.length > 0 && f.pending.every((c) => c.reviewed && c.plan)],
+    [
+      'run',
+      f.pending.length > 0 &&
+        f.pending.every((c) => c.plan_approved && c.plan) &&
+        state.authenticated,
+    ],
+  ]) {
+    const control = $('#' + id);
+    if (control) {
+      control.disabled = !!state.active || workflowPending || outputConnectionError || !allowed;
+      control.title = allowed ? '' : '请先完成上方流程中的前置步骤。';
+    }
+  }
+}
+async function startPreparedSelection(taskId, caseIds) {
+  if (workflowPending) return;
+  workflowPending = true;
+  updateWorkflow();
+  try {
+    const fresh = await api('/api/tasks/' + encodeURIComponent(taskId));
+    if (current !== taskId) return;
+    const rows = fresh.cases.filter(
+      (c) =>
+        caseIds.includes(c.case_id) &&
+        !c.attempts.length &&
+        (!c.plan || c.status === 'BLOCKED_BUDGET'),
+    );
+    if (!rows.length) return;
+    if (rows.some((c) => !c.reviewed)) throw new Error('请先核对所选用例的操作和预期。');
+    const kind = config.preparation_controls
+      ? 'prepare'
+      : reusableDiscovery(fresh, rows)
+        ? 'plan'
+        : 'prepare';
+    await api('/api/tasks/' + encodeURIComponent(taskId) + '/job', {
+      kind,
+      case_ids: rows.map((c) => c.case_id),
+      ...(config.preparation_controls
+        ? { options: preparationPreferences.get(taskId) ?? fresh.preparation?.options ?? {} }
+        : {}),
+    });
+    toast(
+      kind === 'plan'
+        ? '正在使用已采集的页面继续生成计划。'
+        : '已开始自动准备；完成浏览器登录后会自动继续。',
+    );
+  } finally {
+    workflowPending = false;
+    updateWorkflow();
+  }
+}
+function preparationPolicyText() {
+  const o = preparationPreferences.get(current) ?? state.preparation?.options ?? {};
+  return `${o.concurrency === 2 ? '两路只读探索' : '串行探索'} · ${o.time_multiplier === 2 ? '延长时间（2倍）' : '标准时间'} · 按步骤和预期分项分配`;
+}
+function durationLabel(ms) {
+  return Math.ceil(Math.max(0, ms ?? 0) / 60000) + '分钟';
+}
+function preparationProgressHTML() {
+  const p = state.preparation;
+  if (!p) return '';
+  const workers = Object.values(p.workers ?? {});
+  const ready = workers.filter((w) => w.status === 'PLAN_READY').length;
+  const paused = workers.filter((w) => ['PAUSED', 'NEEDS_REVIEW'].includes(w.status)).length;
+  const live = new Map((state.active?.workers ?? []).map((w) => [w.case_id, w]));
+  const running = workers.filter((w) => live.has(w.case_id));
+  return `<div class="preparation-progress"><p>本轮 ${p.case_ids.length} 条 · ${ready} 条已形成计划 · ${running.length} 条正在准备 · ${paused} 条待处理 · ${Math.max(0, p.case_ids.length - workers.length)} 条等待调度</p>
+    <p class="muted">总时间保护 ${durationLabel(p.time_budget?.wall_ms)}，累计工作预算 ${durationLabel(p.time_budget?.work_ms)}（含取证、规划/修复，非预计完成承诺）；等待人工登录不占用此预算。</p>
+    ${running.map((w) => `<div class="preparation-worker"><strong>${h(w.case_id)}</strong><span>${live.get(w.case_id).phase === 'planning' ? '计划生成 / 审查 / 修复' : '页面取证'}</span><span>本阶段剩余约 ${durationLabel(live.get(w.case_id).remaining_ms)} · 模型 ${live.get(w.case_id).calls} 次</span></div>`).join('')}
+    <details><summary>查看逐条进度与分阶段预算</summary>${p.case_ids
+      .map((id) => {
+        const w = p.workers[id],
+          b = p.time_budget?.per_case[id];
+        const label = !w
+          ? '等待调度'
+          : live.has(id)
+            ? '正在准备'
+            : w.status === 'PLAN_READY'
+              ? '计划待核对'
+              : w.status === 'NEEDS_REVIEW'
+                ? '需要核对用例'
+                : '暂停 / 待处理';
+        return `<div class="preparation-worker"><strong>${h(id)}</strong><span>${label}${w?.reused ? ' · 已复用页面证据' : ''}</span><span>取证 ${durationLabel(b?.discovery_ms)} / 规划 ${durationLabel(b?.planning_ms)}</span></div>`;
+      })
+      .join('')}</details></div>`;
+}
+function preparationSettings() {
+  const taskId = current,
+    o = preparationPreferences.get(taskId) ?? state.preparation?.options ?? {};
+  modal(`<h2>准备设置</h2><p>仅影响页面取证和计划准备；正式业务执行仍按原审批进行。</p>
+    <label class="field">探索并发<select id="prep-concurrency"><option value="1">串行（默认）</option><option value="2">两路独立只读探索</option></select></label>
+    <label><input id="prep-independent" type="checkbox">我已确认所选用例只读、相互独立，筛选/登录等服务器会话状态不会相互影响</label>
+    <p class="muted">不同浏览器窗口不代表服务器隔离。有关联、共享会话状态或涉及写入时，请保持串行。</p>
+    <label class="field">时间分配<select id="prep-time"><option value="1">标准：按步骤和预期分项分配</option><option value="2">延长：各阶段2倍时间</option></select></label>
+    <p>延长时间不会增加本轮模型调用上限或三次候选机会，不清空历史消耗、不自动重试已执行业务。单条预算到限后继续其他条。</p>
+    <p id="prep-error" role="alert"></p><button class="primary" id="save-preparation-settings">保存设置</button>`);
+  $('#prep-concurrency').value = String(o.concurrency ?? 1);
+  $('#prep-time').value = String(o.time_multiplier ?? 1);
+  $('#prep-independent').checked = o.independent_readonly === true;
+  $('#save-preparation-settings').onclick = () => {
+    const options = {
+      concurrency: Number($('#prep-concurrency').value),
+      time_multiplier: Number($('#prep-time').value),
+      independent_readonly: $('#prep-independent').checked,
+    };
+    if (
+      options.concurrency === 2 &&
+      (!options.independent_readonly || state.authorization.writes)
+    ) {
+      $('#prep-error').textContent = errors.PARALLEL_READONLY_CONFIRMATION_REQUIRED;
+      return;
+    }
+    preparationPreferences.set(taskId, options);
+    close();
+    updateWorkflow();
+  };
 }
 function obligationEditor(step, key) {
   return `<label class="field">需逐项验证的预期（每行一项，可编辑）<textarea data-obligations="${h(key)}">${h((step.obligations ?? []).map((o) => o.text).join('\n'))}</textarea></label>`;
@@ -527,12 +865,14 @@ async function refresh(force = false) {
       render();
     }
     updateAgentOutput();
+    if (!changed) updateWorkflow();
     // Detailed replies are already redacted by the existing diagnostics API.
     // Read them independently: a slow log must not freeze the live job state.
     void refreshOutputDiagnostics();
   } catch (error) {
     outputConnectionError = true;
     updateAgentOutput();
+    updateWorkflow();
     if (force) throw error;
   } finally {
     polling = false;
@@ -545,6 +885,11 @@ function renderEmpty() {
   $('#empty-demo').onclick = createDemo;
 }
 const eventNames = {
+  PREPARATION_EVIDENCE_REUSED: '复用当前有效页面证据',
+  PREPARATION_PLANNING_STARTED: '取证结束，开始独立计时的规划',
+  PREPARATION_CASE_PAUSED: '本条预算到限，保留进度并继续后续',
+  CASE_ADVICE_READY: '已生成处理建议，未修改用例',
+  CASE_ADVICE_REJECTED: '人工未采纳建议，原用例不变',
   PREPARATION_WAITING_LOGIN: '等待登录，完成后自动继续',
   ADAPTER_REPAIR_STARTED: '正在修复页面适配源码',
   ADAPTER_REPAIR_VERIFIED: '适配修复已验证并启用',
@@ -637,6 +982,9 @@ Object.assign(eventNames, {
   DISCOVERY_PAGE_CAPTURED: '已采集探索页面',
   DISCOVERY_CASE_FINISHED: '本条用例探索结束',
   DISCOVERY_BLOCKED: '自动探索受阻',
+  DISCOVERY_BATCH_BUDGET_EXHAUSTED: '本批探索预算已耗尽',
+  JOB_BATCH_STARTED: '开始处理下一批用例',
+  JOB_BATCH_FINISHED: '本批用例处理结束',
   DISCOVERY_FINISHED: '自动探索结束',
   DISCOVERY_FAILED: '自动探索未完成',
 });
@@ -646,9 +994,13 @@ Object.assign(eventNames, {
   DISCOVERY_REFRESHED: '页面已变化，正在重新观察',
 });
 Object.assign(errors, {
-  DISCOVERY_TIMEOUT: '本轮探索已达到时间上限，已保留采集到的页面。',
+  DISCOVERY_TIMEOUT: '本条页面取证已达到时间上限，已保留页面并继续后续用例。',
   DISCOVERY_STEP_LIMIT: '本轮探索已达到动作上限，已保留当前进度。',
-  DISCOVERY_MODEL_BUDGET_EXHAUSTED: '本轮探索已达到模型调用上限，未继续请求。',
+  DISCOVERY_CASE_STEP_LIMIT: '本条用例已达到探索动作上限，已继续处理后续用例。',
+  DISCOVERY_CASE_MODEL_BUDGET_EXHAUSTED:
+    '本条用例已达到探索模型调用上限，已保留进度并继续后续用例。',
+  DISCOVERY_MODEL_BUDGET_EXHAUSTED: '本批探索模型调用预算已耗尽，未完成用例可在新批次继续。',
+  MODEL_CALL_BUDGET_EXHAUSTED: '本批逻辑模型调用预算已耗尽，已保留完成和受阻用例。',
   DISCOVERY_LOOP_DETECTED: '发现重复探索同一页面和控件，已停止此用例的探索。',
   DISCOVERY_STALE_PAGE: '页面或目标控件已变化，需要重新观察。',
   DISCOVERY_CANDIDATE_UNKNOWN: '模型选择的控件不在当前页面候选中，该操作未执行。',
@@ -672,6 +1024,7 @@ const outputStages = {
   run: '正在执行测试',
 };
 const outputPhases = {
+  case_advice: '用例修订草案（待人工确认）',
   review: '用例审查',
   input_review: '输入核验',
   plan: '生成计划',
@@ -685,9 +1038,13 @@ function outputIssue(e) {
   return (
     e.passed === false ||
     ['REJECTED', 'BLOCKED', 'FAILED'].includes(e.outcome) ||
-    ['FAIL_ASSERTION', 'TECHNICAL_FAILED', 'CLEANUP_REQUIRED', 'BLOCKED_MAPPING'].includes(
-      e.status,
-    ) ||
+    [
+      'FAIL_ASSERTION',
+      'TECHNICAL_FAILED',
+      'CLEANUP_REQUIRED',
+      'BLOCKED_MAPPING',
+      'BLOCKED_BUDGET',
+    ].includes(e.status) ||
     /(?:FAILED|BLOCKED|REJECTED|EXHAUSTED|INTERRUPTED)$/.test(e.type) ||
     /REPAIR_(?:STARTED|ATTEMPT|REQUESTED)$/.test(e.type) ||
     e.will_retry === true
@@ -775,10 +1132,19 @@ function outputStatus() {
     };
   const touched = new Set(events.map((e) => e.case_id).filter(Boolean));
   const cases = state.cases.filter((c) => touched.has(c.case_id));
+  if (cases.some((c) => !c.reviewed && !c.attempts.length))
+    return {
+      tone: 'waiting',
+      title: cases.some((c) => c.discovery?.status === 'CAPTURED')
+        ? '页面已探索，等待核对用例后生成计划'
+        : '等待核对用例',
+      detail: preparationSummary(cases) + '。请使用“本轮测试流程”中的下一步操作。',
+    };
   if (
     cases.some((c) =>
       [
         'BLOCKED_MAPPING',
+        'BLOCKED_BUDGET',
         'AUTH_REQUIRED',
         'BLOCKED_DATA',
         'CLEANUP_REQUIRED',
@@ -790,19 +1156,21 @@ function outputStatus() {
     return {
       tone: 'error',
       title: '本批处理结束，有用例需要处理',
-      detail: '请查看异常输出和对应的用例状态，其他用例的记录已保留。',
+      detail: preparationSummary(cases) + '。请查看对应的原因；已有计划的用例可以单独继续。',
     };
   if (cases.some((c) => c.plan && !c.plan_approved))
     return {
       tone: 'waiting',
       title: '计划已生成，等待核对',
-      detail: '请核对所选计划的操作与预期，批准后即可执行。',
+      detail: preparationSummary(cases) + '。请核对计划的操作与预期。',
     };
   if (events.some((e) => e.type === 'JOB_FINISHED'))
     return {
       tone: 'neutral',
-      title: '当前批次已结束',
-      detail: '具体结果请查看用例状态和执行报告。可以继续阅读本轮输出。',
+      title: cases.some((c) => !c.attempts.length && !c.plan)
+        ? '页面探索已结束，计划尚未生成'
+        : '当前批次已结束',
+      detail: preparationSummary(cases) + '。请按测试流程继续，执行结果见报告。',
     };
   return {
     tone: 'neutral',
@@ -834,7 +1202,7 @@ function mountAgentOutput() {
       <div class="output-heading"><div><p class="output-eyebrow">运行过程</p><h2 id="agent-output-title">Agent 运行输出</h2></div>
         <div class="actions"><span id="output-connection" class="output-connection"></span><button id="output-refresh">刷新状态</button><button id="stop" class="danger" hidden>停止当前批次</button></div></div>
       <div class="output-status" role="status" aria-live="polite" aria-atomic="true"><span class="output-dot" aria-hidden="true"></span><div><strong id="output-state"></strong><p id="output-detail"></p></div></div>
-      <div class="output-meta"><span>当前用例 <b id="output-case">—</b></span><span>本批模型调用 <b id="output-calls">—</b></span><span>最后输出 <b id="output-last">暂无记录</b></span></div>
+      <div class="output-meta"><span>当前用例 <b id="output-case">—</b></span><span>本批模型调用 <b id="output-calls">—</b></span><span>本轮累计 <b id="output-total-calls">—</b></span><span>探索调用 <b id="output-discovery-calls">—</b></span><span>当前用例探索 <b id="output-case-calls">—</b></span><span>最后输出 <b id="output-last">暂无记录</b></span></div>
       <p id="output-silence" class="output-notice" hidden></p>
       <div id="output-problem" class="output-problem" hidden><strong>最近异常</strong><p id="output-problem-text"></p><button id="output-diagnostics">查看详细诊断</button></div>
       <div class="output-toolbar"><div class="output-filters" role="group" aria-label="输出筛选"><button data-output-filter="all" aria-pressed="true">全部输出</button><button data-output-filter="issues" aria-pressed="false">异常与重试</button></div><button id="output-follow" aria-pressed="true">跟随最新输出：开</button></div>
@@ -878,7 +1246,12 @@ function mountAgentOutput() {
       true,
     );
   }
-  $('#workspace > .heading').after(outputPanel);
+  const guided = $('#guided-workflow');
+  const heading = $('#workspace > .heading');
+  if (heading.nextElementSibling !== guided) heading.after(guided);
+  const placeholder = $('#agent-output');
+  if (placeholder && placeholder !== outputPanel) placeholder.replaceWith(outputPanel);
+  if (guided.nextElementSibling !== outputPanel) guided.after(outputPanel);
   updateAgentOutput();
 }
 function outputRows() {
@@ -947,8 +1320,32 @@ function updateAgentOutput() {
     '#output-connection',
     disconnected ? '连接异常 · 自动重连中' : '连接正常 · ' + outputAge(outputSyncAt) + '同步',
   );
-  outputText('#output-case', state.active?.current_case ?? '—');
-  outputText('#output-calls', state.active ? `${state.active.calls ?? 0} / 100` : '—');
+  const activeBudget = state.active?.budget,
+    discoveryBudget = activeBudget?.discovery ?? state.discovery?.budget?.discovery,
+    modelBudget = activeBudget?.model_calls ?? state.discovery?.budget?.model_calls;
+  outputText('#output-case', state.active?.current_case ?? state.discovery?.current_case ?? '—');
+  outputText(
+    '#output-calls',
+    state.active ? `${state.active.calls ?? 0} / ${modelBudget?.limit ?? '—'}` : '—',
+  );
+  outputText(
+    '#output-total-calls',
+    state.active
+      ? `${state.active.total_calls ?? 0} / ${state.active.project_budget?.model_call_limit ?? modelBudget?.limit ?? '—'}${state.active.batch_count > 1 ? ` · 第 ${state.active.batch_index}/${state.active.batch_count} 批` : ''}`
+      : '—',
+  );
+  outputText(
+    '#output-discovery-calls',
+    discoveryBudget
+      ? `${state.active?.discovery_calls ?? state.discovery?.model_calls ?? 0} / ${discoveryBudget.model_call_limit}`
+      : '—',
+  );
+  outputText(
+    '#output-case-calls',
+    discoveryBudget && state.active?.current_case
+      ? `${state.active.current_case_calls ?? 0} / ${discoveryBudget.model_calls_per_case}`
+      : '—',
+  );
   const stop = outputPanel.querySelector('#stop');
   stop.hidden = !state.active;
   stop.disabled = disconnected || outputCurrentEvents().some((e) => e.type === 'STOP_REQUESTED');
@@ -1075,12 +1472,16 @@ function discoveryHTML(s) {
     d.reason === 'WRITE_NOT_AUTHORIZED' && blockedRequest
       ? `<p>探索时拦截了未确认的请求：<code>${h(blockedRequest.method)} ${h(blockedRequest.path)}</code>。若已核实为只读查询，请在“环境设置 → 使用 POST 的只读查询接口”添加该完整路径后重新探索。允许计划写入不会放开探索阶段的请求。</p>`
       : '';
-  return `<div class="discovery-status ${['PARTIAL', 'BLOCKED', 'FAILED', 'INTERRUPTED'].includes(d.status) ? 'warn' : ''}" role="status"><strong>${h(discoveryStatusNames[d.status] ?? d.status ?? '探索状态待确认')}</strong><span>${d.current_case ? '当前用例 ' + h(d.current_case) + ' · ' : ''}已采集 ${count(d.pages)} 个页面 · 已探索 ${count(d.steps)} 步${reason ? ' · ' + h(reason) : ''}</span>${queryHelp}</div>`;
+  const budget = d.budget?.discovery;
+  const budgetText = budget
+    ? ` · 第 ${d.batch_index ?? 1}/${d.batch_count ?? 1} 批 · 模型 ${count(d.model_calls)} / ${budget.model_call_limit} 次（每条最多 ${budget.model_calls_per_case}） · 动作 ${count(d.steps)} / ${budget.step_limit} 步 · 时限 ${Math.round(budget.timeout_ms / 60000)} 分钟${Number.isFinite(d.project_model_calls) ? ` · 本轮探索累计 ${d.project_model_calls} 次` : ''}`
+    : '';
+  return `<div class="discovery-status ${['PARTIAL', 'BLOCKED', 'FAILED', 'INTERRUPTED'].includes(d.status) ? 'warn' : ''}" role="status"><strong>${h(discoveryStatusNames[d.status] ?? d.status ?? '探索状态待确认')}</strong><span>${d.current_case ? '当前用例 ' + h(d.current_case) + ' · ' : ''}已采集 ${count(d.pages)} 个页面 · 已探索 ${count(d.steps)} 步${budgetText}${reason ? ' · ' + h(reason) : ''}</span>${queryHelp}</div>`;
 }
 function siteCleanupNotice(task) {
   const blockers = task.site_cleanup_blockers ?? [];
   if (!blockers.length) return '';
-  return `<div class="notice warn" role="status"><strong>此站点有数据恢复事项，自动探索与执行已暂停</strong><p>先到原任务核实测试数据并记录恢复证据；新建任务不能绕过。原任务仍可打开浏览器用于人工处理。</p><ul>${blockers.map((item) => `<li>${h(item.task_name)} · ${h(item.case_id ?? '记录无法核实')} ${item.reason === 'STATE_UNVERIFIED' ? '请维护者检查保留的记录，勿删除历史' : `<button class="link" data-cleanup-task="${h(item.task_id)}">打开原任务</button>`}</li>`).join('')}</ul></div>`;
+  return `<div class="notice warn site-cleanup-notice" role="status"><strong>此站点有数据恢复事项，自动探索与执行已暂停</strong><p>先到原任务核实测试数据并记录恢复证据；新建任务不能绕过。原任务仍可打开浏览器用于人工处理。</p><ul>${blockers.map((item) => `<li>${h(item.task_name)} · ${h(item.case_id ?? '记录无法核实')} ${item.reason === 'STATE_UNVERIFIED' ? '请维护者检查保留的记录，勿删除历史' : `<button class="link" data-cleanup-task="${h(item.task_id)}">打开原任务</button>`}</li>`).join('')}</ul></div>`;
 }
 function render() {
   const auxiliaryOpen = $('#preparation-tools')?.open ?? false;
@@ -1096,14 +1497,27 @@ function render() {
         'NEEDS_REVIEW',
         'NEEDS_MAPPING',
         'BLOCKED_MAPPING',
+        'BLOCKED_BUDGET',
         'AUTH_REQUIRED',
         'BLOCKED_DATA',
         'CLEANUP_REQUIRED',
       ].includes(c.status),
     ).length;
   history.replaceState(null, '', '#task=' + encodeURIComponent(s.id));
-  $('#workspace').innerHTML =
-    `${siteCleanupNotice(s)}<div class="heading"><div><h1>${h(s.name)}</h1><p>${h(s.target)} · ${s.fixture ? '本机合成演示' : '独立测试轮次'}</p></div><div class="actions"><button id="environment">环境设置</button><button id="diagnostics">诊断日志</button><a class="download" href="/api/tasks/${s.id}/report">下载离线报告 ↗</a></div></div>${s.fixture ? '<div class="notice">演示使用本地商品查询与任务管理、预制执行计划；运行时使用真实 Chromium。该结果不代表真实 DeepSeek 规划或产品验收。</div>' : ''}<div class="metrics"><div class="metric"><b>${s.cases.length}</b><span>原始用例总数</span></div><div class="metric"><b>${count('READY')}</b><span>可执行</span></div><div class="metric"><b>${count('PASS_ASSERTIONS')}</b><span>已核对断言满足</span></div><div class="metric"><b>${count('FAIL_ASSERTION') + count('TECHNICAL_FAILED')}</b><span>需查看执行差异</span></div><div class="metric"><b>${blocked}</b><span>待准备或处理</span></div></div><section class="panel"><h2>自动准备</h2><p>选择用例后点击一次。在打开的浏览器中登录，Agent 会自动寻找相关模块、补充证据并尝试修复技术适配；无需先手工进入业务页面。业务预期和执行计划仍需核对。</p><button id="confirm-main" ${busy ? 'disabled' : ''}>核对所选用例</button><button class="primary" id="prepare" ${busy || !config.autonomous_preparation ? 'disabled' : ''}>开始准备所选用例</button><button id="approve-main" ${busy ? 'disabled' : ''}>核对所选计划</button><button id="run-main" ${busy ? 'disabled' : ''}>执行所选</button>${s.active?.stage === 'WAITING_USER_LOGIN' ? '<p role="status">等待浏览器登录；完成后会自动继续，无需点击确认。无法可靠识别时，可停止后使用下方辅助入口。</p>' : ''}</section><details class="panel" id="preparation-tools" ${auxiliaryOpen ? 'open' : ''}><summary>辅助操作与单步准备（正常流程无需逐项点击）</summary><div class="workflow"><section class="panel"><h3><i>01</i>核对用例</h3><p>原文单独保留。缺失或矛盾的预期按用例澄清，其他用例可以继续。</p><div class="actions"><button id="review" ${busy ? 'disabled' : ''}>审查所选用例</button><button id="confirm" ${busy ? 'disabled' : ''}>确认所选原文</button></div></section><section class="panel"><h3><i>02</i>登录并探索 <span class="badge ${s.authenticated ? 'good' : ''}">${s.authenticated ? '登录可复用' : s.browser_open ? '浏览器已打开' : '未连接'}</span></h3><p>${supportsDiscovery() ? '正常使用上方“开始准备”；这里用于无法自动识别登录时的辅助处理。' : '在 Chromium 登录一次并确认可见标志。当前服务尚未启用自动探索。'}</p><div class="actions"><button id="browser" ${busy ? 'disabled' : ''}>打开浏览器</button><button id="capture" ${busy ? 'disabled' : ''} title="需要补充页面信息时，读取当前浏览器页面">辅助：读取当前页面</button><button id="auth" ${busy ? 'disabled' : ''}>确认登录状态</button></div></section><section class="panel"><h3><i>03</i>核对计划并执行</h3><p>已采集 ${s.snapshots?.length ?? 0} 个页面。${supportsDiscovery() ? '自动探索为已确认用例生成候选计划；未选用例时探索全部未执行用例。' : '可根据现有页面信息重新规划。'}核对操作、断言与清理后再执行。</p><div class="actions"><button id="discover" ${busy || !supportsDiscovery() ? 'disabled' : ''}>自动探索并生成计划</button><button id="plan" ${busy ? 'disabled' : ''} title="根据已采集页面重新生成所选用例的候选计划，不重新探索">重新规划所选用例</button><button id="approve" ${busy ? 'disabled' : ''}>辅助：核对所选计划</button><button class="primary" id="run" ${busy ? 'disabled' : ''}>辅助：执行所选</button></div></section></div></details>${discoveryHTML(s)}<section class="panel"><div class="panel-heading"><h2>用例工作区 <small>点击标题查看原文、计划与证据</small></h2><div class="actions"><button id="discovery-contract" ${busy ? 'disabled' : ''} title="可选：导入已审查无业务写入的输入和选项操作说明">导入探索交互说明</button><button id="handoff" ${busy ? 'disabled' : ''}>关联前端导出物</button><a href="/api/tasks/${s.id}/baseline">下载用例基线</a></div></div><div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="select-all" aria-label="选择全部用例" ${s.cases.every((c) => selected.has(c.case_id)) ? 'checked' : ''}></th><th>CASE / 用例</th><th>当前状态</th><th>执行记录</th><th>准备情况</th></tr></thead><tbody>${s.cases.map((c) => `<tr><td><input type="checkbox" data-select="${h(c.case_id)}" aria-label="选择 ${h(c.case_id)}" ${selected.has(c.case_id) ? 'checked' : ''}></td><td><button class="link" data-case="${h(c.case_id)}">${h(c.original.title ?? c.case_id)}</button><small class="mono">${h(c.case_id)}</small></td><td>${badge(c.status)}${c.cleanup_required ? '<small>仍有清理待处理</small>' : ''}</td><td>${c.attempts.length} 次<small>定位修复 ${c.repair_count} 次</small>${c.self_repair ? '<small>计划修复 ' + h(c.self_repair.repair_count ?? 0) + ' / ' + h(c.self_repair.max_repairs ?? 2) + ' 次</small>' : ''}</td><td>${c.reviewed ? '原文已确认' : c.issues.length ? '有 ' + c.issues.length + ' 项需核对' : '原文待核对'}<small>${h(c.mapping_reason ?? (c.plan_approved ? '计划已核对' : c.plan ? '计划待核对' : '计划未生成'))}</small></td></tr>`).join('')}</tbody></table></div></section>`;
+  const template = document.createElement('template');
+  template.innerHTML = `${siteCleanupNotice(s)}<div class="heading"><div><h1>${h(s.name)}</h1><p>${h(s.target)} · ${s.fixture ? '本机合成演示' : '独立测试轮次'}</p></div><div class="actions"><button id="environment">环境设置</button><button id="diagnostics">诊断日志</button><a class="download" href="/api/tasks/${s.id}/report">下载离线报告 ↗</a></div></div>${s.fixture ? '<div class="notice">演示使用本地商品查询与任务管理、预制执行计划；运行时使用真实 Chromium。该结果不代表真实 DeepSeek 规划或产品验收。</div>' : ''}<div class="metrics"><div class="metric"><b>${s.cases.length}</b><span>原始用例总数</span></div><div class="metric"><b>${count('READY')}</b><span>可执行</span></div><div class="metric"><b>${count('PASS_ASSERTIONS')}</b><span>已核对断言满足</span></div><div class="metric"><b>${count('FAIL_ASSERTION') + count('TECHNICAL_FAILED')}</b><span>需查看执行差异</span></div><div class="metric"><b>${blocked}</b><span>待准备或处理</span></div></div><section class="panel guided-workflow" id="guided-workflow" aria-labelledby="workflow-title"></section><details class="panel" id="preparation-tools" ${auxiliaryOpen ? 'open' : ''}><summary>高级辅助操作（按需展开）</summary><div class="workflow"><section class="panel"><h3><i>01</i>核对用例</h3><p>原文单独保留。缺失或矛盾的预期按用例澄清，其他用例可以继续。</p><div class="actions"><button id="review" ${busy ? 'disabled' : ''}>审查所选用例</button><button id="confirm" ${busy ? 'disabled' : ''}>确认所选原文</button></div></section><section class="panel"><h3><i>02</i>登录并探索 <span class="badge ${s.authenticated ? 'good' : ''}">${s.authenticated ? '登录可复用' : s.browser_open ? '浏览器已打开' : '未连接'}</span></h3><p>${supportsDiscovery() ? '优先使用上方测试流程；这里用于补充页面信息或处理登录识别问题。' : '在 Chromium 登录一次并确认可见标志。当前服务尚未启用自动探索。'}</p><div class="actions"><button id="browser" ${busy ? 'disabled' : ''}>打开浏览器</button><button id="capture" ${busy ? 'disabled' : ''} title="需要补充页面信息时，读取当前浏览器页面">辅助：读取当前页面</button><button id="auth" ${busy ? 'disabled' : ''}>确认登录状态</button></div></section><section class="panel"><h3><i>03</i>核对计划并执行</h3><p>已采集 ${s.snapshots?.length ?? 0} 个页面。${supportsDiscovery() ? '辅助探索允许先采集页面；仅已核对用例会继续生成计划。' : '可根据现有页面信息重新规划。'}核对操作、断言与清理后再执行。</p><div class="actions"><button id="discover" ${busy || !supportsDiscovery() ? 'disabled' : ''}>辅助：探索页面</button><button id="plan" ${busy ? 'disabled' : ''} title="根据已采集页面重新生成所选用例的候选计划，不重新探索">重新规划所选用例</button><button id="approve" ${busy ? 'disabled' : ''}>辅助：核对所选计划</button><button id="run" ${busy ? 'disabled' : ''}>辅助：执行所选</button></div></section></div></details>${discoveryHTML(s)}<section class="panel"><div class="panel-heading"><h2>用例工作区 <small>点击标题查看原文、计划与证据</small></h2><div class="actions"><button id="discovery-contract" ${busy ? 'disabled' : ''} title="可选：导入已审查无业务写入的输入和选项操作说明">导入探索交互说明</button><button id="handoff" ${busy ? 'disabled' : ''}>关联前端导出物</button><a href="/api/tasks/${s.id}/baseline">下载用例基线</a></div></div><div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="select-all" aria-label="选择全部用例" ${s.cases.every((c) => selected.has(c.case_id)) ? 'checked' : ''}></th><th>CASE / 用例</th><th>当前状态</th><th>执行记录</th><th>准备情况</th></tr></thead><tbody>${s.cases.map((c) => `<tr><td><input type="checkbox" data-select="${h(c.case_id)}" aria-label="选择 ${h(c.case_id)}" ${selected.has(c.case_id) ? 'checked' : ''}></td><td><button class="link" data-case="${h(c.case_id)}">${h(c.original.title ?? c.case_id)}</button><small class="mono">${h(c.case_id)}</small></td><td>${badge(c.status)}${c.cleanup_required ? '<small>仍有清理待处理</small>' : ''}</td><td>${c.attempts.length} 次<small>定位修复 ${c.repair_count} 次</small>${c.self_repair ? '<small>计划修复 ' + h(c.self_repair.repair_count ?? 0) + ' / ' + h(c.self_repair.max_repairs ?? 2) + ' 次</small>' : ''}</td><td>${c.reviewed ? '原文已确认' : c.issues.length ? '有 ' + c.issues.length + ' 项需核对' : '原文待核对'}<small>${h(c.mapping_reason ?? (c.plan_approved ? '计划已核对' : c.plan ? '计划待核对' : '计划未生成'))}</small></td></tr>`).join('')}</tbody></table></div></section>`;
+  // Build the final order while detached; never temporarily shrink the live
+  // document or move its retained workflow/output panels on every poll.
+  const guided = template.content.querySelector('#guided-workflow');
+  template.content.querySelector('.heading').after(guided);
+  const placeholder = document.createElement('section');
+  placeholder.id = 'agent-output';
+  guided.after(placeholder);
+  patchConsole(
+    $('#workspace'),
+    template.content,
+    (node) => node.id === 'guided-workflow' || node.id === 'agent-output',
+  );
   mountAgentOutput();
   const outputFeed = outputPanel.querySelector('#output-records');
   // Reattaching the retained panel can reset its scroll offset even when the
@@ -1122,8 +1536,12 @@ function render() {
     render();
   };
   for (const el of document.querySelectorAll('[data-select]'))
-    el.onchange = () =>
+    el.onchange = () => {
       el.checked ? selected.add(el.dataset.select) : selected.delete(el.dataset.select);
+      $('#select-all').checked = s.cases.every((c) => selected.has(c.case_id));
+      $('#select-all').indeterminate = selected.size > 0 && !$('#select-all').checked;
+      updateWorkflow();
+    };
   for (const el of document.querySelectorAll('[data-case]'))
     el.onclick = () => caseDetail(el.dataset.case);
   for (const kind of ['review', 'plan', 'run'])
@@ -1132,17 +1550,10 @@ function render() {
         await taskAPI('job', { kind, case_ids: ids() });
         toast(kind === 'run' ? '已开始执行，请查看上方 Agent 运行输出。' : '已开始处理所选用例。');
       });
-  $('#prepare').onclick = () =>
-    action(async () => {
-      await taskAPI('job', { kind: 'prepare', case_ids: ids() });
-      toast('已开始自动准备；如需登录，请直接在打开的浏览器完成，随后自动继续。');
-    });
   $('#discover').onclick = () =>
     action(async () => {
       if (!supportsDiscovery()) throw new Error(errors.DISCOVERY_UNAVAILABLE);
-      const caseIds = selected.size
-        ? ids()
-        : s.cases.filter((c) => !c.attempts.length).map((c) => c.case_id);
+      const caseIds = selected.size ? ids() : pendingDiscoveryIds(s);
       if (!caseIds.length) throw new Error(errors.NO_UNEXECUTED_CASES);
       await taskAPI('job', { kind: 'discover', case_ids: caseIds });
       toast(
@@ -1162,19 +1573,13 @@ function render() {
     });
   $('#diagnostics').onclick = () => action(diagnosticsDialog);
   $('#auth').onclick = authDialog;
-  $('#confirm').onclick = confirmSelected;
-  $('#confirm-main').onclick = confirmSelected;
-  $('#approve-main').onclick = approveSelected;
-  $('#run-main').onclick = () =>
-    action(async () => {
-      await taskAPI('job', { kind: 'run', case_ids: ids() });
-      toast('已开始执行已核对计划，请查看上方 Agent 运行输出。');
-    });
+  $('#confirm').onclick = () => confirmSelected();
   $('#approve').onclick = approveSelected;
   $('#environment').onclick = environment;
   $('#discovery-contract').onclick = () => $('#discovery-contract-file').click();
   $('#handoff').onclick = () => $('#handoff-file').click();
   if ($('#stop')) $('#stop').onclick = () => action(() => taskAPI('stop', {}));
+  updateWorkflow();
 }
 function newTask() {
   modal(
@@ -1306,8 +1711,13 @@ async function authDialog() {
       });
   });
 }
-function confirmSelected() {
-  const rows = state.cases.filter((c) => selected.has(c.case_id) && !c.attempts.length);
+function confirmSelected({ continuePreparation = false } = {}) {
+  const taskId = current,
+    caseIds = ids();
+  const rows = state.cases.filter(
+    (c) =>
+      caseIds.includes(c.case_id) && !c.attempts.length && (!continuePreparation || !c.reviewed),
+  );
   if (!rows.length) return toast('请选择尚未执行的用例。', true);
   if (rows.some((c) => c.issues.length || c.effective.steps.some((s) => !s.expected)))
     return toast(
@@ -1319,19 +1729,46 @@ function confirmSelected() {
   );
   $('#confirm-all').onclick = () =>
     action(async () => {
-      for (const [ci, c] of rows.entries())
-        await taskAPI('confirm', {
-          case_id: c.case_id,
-          steps: c.effective.steps.map(({ step_id, action, expected }, si) => ({
-            step_id,
-            action,
-            expected,
-            obligations: readObligations(ci + '-' + si, si),
-          })),
-          note: '本地用户核对原文及可同时观测的预期分项',
-        });
-      close();
+      const button = $('#confirm-all');
+      if (button.disabled) return;
+      const confirmations = rows.map((c, ci) => ({
+        case_id: c.case_id,
+        steps: c.effective.steps.map(({ step_id, action, expected }, si) => ({
+          step_id,
+          action,
+          expected,
+          obligations: readObligations(ci + '-' + si, si),
+        })),
+        note: '本地用户核对原文及可同时观测的预期分项',
+      }));
+      button.disabled = true;
+      button.textContent = '正在保存核对结果…';
+      try {
+        for (const input of confirmations)
+          await api('/api/tasks/' + encodeURIComponent(taskId) + '/confirm', input);
+        if (current !== taskId || !$('#modal').open || $('#confirm-all') !== button) return;
+        close();
+        if (continuePreparation && config.configured && config.autonomous_preparation)
+          await startPreparedSelection(taskId, caseIds);
+      } finally {
+        if (button.isConnected) {
+          button.disabled = false;
+          button.textContent = '重新保存并继续';
+        }
+      }
     });
+  if (continuePreparation) {
+    $('#confirm-all').textContent =
+      config.configured && config.autonomous_preparation
+        ? '确认用例并开始准备'
+        : '确认用例，进入下一步';
+    $('#confirm-all').before(
+      Object.assign(document.createElement('p'), {
+        className: 'muted',
+        textContent: '确认后自动衔接准备。仍有效的页面观察可以复用；修改用例后按新内容重新准备。',
+      }),
+    );
+  }
 }
 function planHTML(plan) {
   if (!plan) return '<p>尚未生成计划。</p>';
@@ -1355,8 +1792,8 @@ function planHTML(plan) {
   return `<div class="notice ${plan.data_effect === 'mutation' ? 'warn' : ''}">打开 ${h(plan.entry_path)} · ${plan.data_effect === 'mutation' ? '会写入数据，必须验证清理' : '声明为只读操作'}</div><h4>前置条件</h4>${plan.preconditions.length ? assertions(plan.preconditions) : '<p>计划未声明自动验证项；请核对原用例前置条件。</p>'}${steps}${cleanup}<p>${h(plan.notes ?? '')}</p><details><summary>查看结构化计划</summary><pre>${h(JSON.stringify(plan, null, 2))}</pre></details>`;
 }
 function approveSelected() {
-  const rows = state.cases.filter((c) => selected.has(c.case_id));
-  if (!rows.length || rows.some((c) => !c.plan || c.attempts.length))
+  const rows = state.cases.filter((c) => selected.has(c.case_id) && !c.attempts.length);
+  if (!rows.length || rows.some((c) => !c.plan || !c.reviewed))
     return toast('请选择已生成计划且尚未执行的用例。', true);
   modal(
     `<h2>核对执行计划 · ${rows.length} 条</h2><p>核对每项原预期是否都有断言覆盖，输入是否准确，清理是否只作用于本轮测试数据。执行器只运行这里确认的计划；不能代替业务语义评审。</p>${rows.map((c) => `<div class="plan-card"><h3>${h(c.case_id)} · ${h(c.original.title)}</h3>${preparationHistoryHTML(c)}${planHTML(c.plan)}</div>`).join('')}<div class="dialog-footer"><button class="primary" id="approve-all">以上操作、断言和清理已核对</button></div>`,
@@ -1371,17 +1808,55 @@ function approveSelected() {
 }
 function caseDetail(id) {
   const c = state.cases.find((c) => c.case_id === id);
+  const taskId = current;
+  let appliedAdvice = null;
   modal(
     `<h2>${h(c.case_id)} · ${h(c.original.title)}</h2><p>${badge(c.status)}</p><p>原前置条件：${h(c.original.preconditions ?? '未填写')}</p>${c.issues.length ? '<div class="notice warn">' + c.issues.map((i) => h((i.step_id ?? '') + ' ' + i.message)).join('<br>') + '</div>' : ''}${c.effective.steps.map((s, i) => `<div class="step-editor"><h3>${h(s.step_id)}</h3><blockquote>原操作：${h(c.original.steps[i].action)}<br>原预期：${h(c.original.steps[i].expected ?? '缺失')}</blockquote><label class="field">确认操作<textarea data-action="${i}" ${c.attempts.length ? 'disabled' : ''}>${h(s.action)}</textarea></label><label class="field">确认预期<textarea data-expected="${i}" ${c.attempts.length ? 'disabled' : ''}>${h(s.expected ?? '')}</textarea></label>${!c.attempts.length ? obligationEditor(s.obligations ? s : c.obligation_draft[i], 'one-' + i) : '<p>已确认分项：' + h((s.obligations ?? []).map((o) => o.text).join('；')) + '</p>'}</div>`).join('')}${dataCorrectionHTML(c)}${!c.attempts.length ? '<label class="field">问题处理说明<textarea id="resolution" placeholder="若有缺失、矛盾或修改，记录确认依据。"></textarea></label><button id="confirm-one" class="primary">保存补充并确认用例</button>' : ''}${preparationHistoryHTML(c)}<div class="plan-card"><h3>执行计划</h3>${planHTML(c.plan)}</div>${config.plan_revision && c.reviewed && !c.attempts.length && !c.plan_feedback?.length ? '<label class="field">计划修订意见<textarea id="plan-feedback" maxlength="4000" placeholder="指出遗漏的原预期、错误定位或错误阻塞理由；不改变用例。"></textarea></label><button id="revise-plan">反馈并重新生成一次</button>' : ''}${c.plan_feedback?.length ? '<p>已提交一次修订意见：' + h(c.plan_feedback[0].text) + '</p>' : ''}${config.plan_revalidation && c.reviewed && !c.attempts.length && !c.revalidated_plan && c.status === 'BLOCKED_MAPPING' ? '<button id="revalidate-plan">重新校验已有模型回复</button>' : ''}<button id="view-facts">查看全部执行证据</button>${c.cleanup_required ? '<div class="notice warn">存在未完成清理。请人工检查并恢复本轮数据后填写情况。</div><textarea id="recovery-note" placeholder="精确记录检查对象、恢复动作与验证结果"></textarea><button id="recovered">记录已完成的人工恢复</button>' : ''}<p class="mono">原用例基线 ${h(state.baseline_sha256)}</p>`,
   );
   const entryField = document.createElement('div');
   entryField.innerHTML = `<label class="field">页面入口URL（选填）<input id="case-entry-url" maxlength="2048" placeholder="例如 /catalog 或 /#/catalog；留空则自主探索" value="${h(c.effective.page_entry_url ?? '')}" ${c.attempts.length || state.active ? 'disabled' : ''}></label><p>同站点页面地址，仅用于优先采集页面事实。普通失效时尝试恢复首页探索；安全阻断不会被自动解除。原用例的菜单导航和预期仍须执行。修改后旧计划需重新生成、核对。</p>${c.entry_hint ? `<p>上次入口核验：${h(c.entry_hint.status === 'OBSERVED' ? '已观察页面（非业务验证）' : '入口未核验，请查看原因')} · ${h(errors[c.entry_hint.code] ?? c.entry_hint.code)}</p>` : ''}`;
   $('#modal-body > h2 + p').after(entryField);
+  if (c.case_advice) {
+    const a = c.case_advice,
+      panel = document.createElement('section');
+    panel.className = 'case-advice';
+    panel.innerHTML = `<h3>Agent 处理建议 · ${a.status === 'PENDING' ? '待人工决定' : h(a.status)}</h3><p>${h(a.message)}</p>
+      ${(a.suggestions ?? []).map((v) => `<article><h4>${h(v.step_id)} · ${v.field === 'action' ? '操作' : '预期'}</h4><p>当前：${h(v.before)}</p><p class="advice-proposal">草案：${h(v.after)}</p><p>依据：${h(v.reason)}<br>引用：${h(v.source_quotes.join('；'))}<br>覆盖影响：${h(v.coverage_impact)}</p>${v.requires_input ? '<p class="warn">仍有业务信息待填写，不能直接采纳占位内容。</p>' : ''}</article>`).join('')}
+      ${a.status === 'PENDING' && a.suggestions?.length && !c.attempts.length && !state.active ? '<button id="load-case-advice">带入下方编辑器（尚不保存）</button><button id="reject-case-advice">不采纳，保留原用例</button><p><label><input id="advice-confirmed" type="checkbox">我已核对修改内容、未决输入和覆盖影响，同意保存为新版本</label></p>' : ''}
+      <p class="muted">草案不是已确认用例。原文和旧版本保留，保存修订后需要重新生成、核对计划；不自动执行。</p>`;
+    entryField.after(panel);
+    if ($('#load-case-advice'))
+      $('#load-case-advice').onclick = () => {
+        appliedAdvice = a;
+        for (const v of a.suggestions) {
+          const index = c.effective.steps.findIndex((s) => s.step_id === v.step_id);
+          $(`[data-${v.field}="${index}"]`).value = v.after;
+          if (v.field === 'expected') $(`[data-obligations="one-${index}"]`).value = v.after;
+        }
+        $('#confirm-one').textContent = '确认修订并保存新版本';
+        $('#confirm-one').scrollIntoView({ block: 'center' });
+      };
+    if ($('#reject-case-advice'))
+      $('#reject-case-advice').onclick = () =>
+        action(async () => {
+          await api('/api/tasks/' + encodeURIComponent(taskId) + '/reject-case-advice', {
+            case_id: id,
+            advice_id: a.id,
+          });
+          close();
+          toast('未采纳建议，原用例保持不变。');
+        });
+  }
   if ($('#confirm-one'))
     $('#confirm-one').onclick = () =>
       action(async () => {
-        await taskAPI('confirm', {
+        if (appliedAdvice && !$('#advice-confirmed').checked)
+          throw new Error('请先核对并勾选修订确认。');
+        await api('/api/tasks/' + encodeURIComponent(taskId) + '/confirm', {
           case_id: id,
+          ...(appliedAdvice
+            ? { advice_id: appliedAdvice.id, expected_case_hash: appliedAdvice.case_hash }
+            : {}),
           steps: c.effective.steps.map((s, i) => ({
             step_id: s.step_id,
             action: $(`[data-action="${i}"]`).value,

@@ -1171,7 +1171,23 @@ export async function checkAssertionGroup(
                     points,
                   };
                 } else if (!visible(e)) actual = 'HIDDEN';
-                else if (a.check === 'focused') {
+                else if (a.check.startsWith('url_')) {
+                  const url = location.href;
+                  passed =
+                    a.check === 'url_equals'
+                      ? url === a.expected
+                      : a.check === 'url_contains'
+                        ? url.includes(a.expected)
+                        : a.check === 'url_not_contains' && !url.includes(a.expected);
+                  // Compare the actual address but never persist query/hash
+                  // tokens. The visible target anchors this document sample.
+                  actual = {
+                    origin_path: location.origin + location.pathname,
+                    scope: 'full_current_url',
+                    matches: passed,
+                    query_fragment_redacted: true,
+                  };
+                } else if (a.check === 'focused') {
                   actual = document.activeElement === e;
                   passed = actual === a.expected;
                 } else if (a.check === 'has_class') {
