@@ -33,6 +33,10 @@
 - REQ-0009查询条件重置及事件拒绝锁定修复5fcec82481fb5b529f80073e991c69c9e29ad8e5已独立提交并核对GitHub main SHA：冻结WORK-002从首页按原条件查询、重置恢复默认，无业务写入；保留设备/业务重置禁令。捕获阶段拒绝后仍执行原点击的反例已由1次降为0次。
 - REQ-0009最终程序516项、正式专项38项（包含在516内）均0失败/跳过。3个浏览器集成文件分别有成功结果；组合首轮discovery失败，实际字段已观察而旧注入模型只认顶层testid，修正替身保留完整within后单独复验成功。日志validation/REQ-0009-runtime.log、REQ-0009-delivery.log、REQ-0009-integration.log及REQ-0009-discovery-final.log；所有初始/中间失败保留，不把首轮组合记为全成功。
 - 最终注入模型联调完成菜单/弹窗探索、两份计划、界面批准和两条只读执行；11次请求都是本机注入回复，实际DeepSeek仍0调用。原17文件24例摘要未改，4179未重启；此进展不解决REQ-0008审批选择、真实模型或独立环境门槛。
+- REQ-0010完整性修复192c3b35d8cc691e81bc29428b8d29184b28c890已独立提交并核对GitHub main SHA。修复前复制说明被改坏仍ready，修复后同副本明确拒绝；清单元数据/精确集合/路径链类型/逐项SHA验证不读取未列入交付白名单的manifest路径。
+- REQ-0010专项组合53项和完整非暂停程序564项均0失败/跳过，53包含在564内；5场景启动器复验成功。日志validation/REQ-0010-delivery.log、REQ-0010-runtime.log、REQ-0010-launcher.log；原17文件24例冻结摘要未改。
+- 构建14c2bda0aa6a35ad84495c36ae9ebc46faa8c5a931238b1528a3178b5748843e候选在validation/REQ-0010-package-20260918-01实际安装：固定npm运行依赖、独立.browsers下载和专用Python venv，退出0。包内检查/启动/复用/停止/备份5次命令的脚本联调成功，未配置模型、页面HTTP200、实例/数据身份、锁释放及备份摘要核对。日志validation/REQ-0010-install.log、REQ-0010-package-smoke.log；证据summary位于validation/package-smoke-STnVjw。
+- 此候选仍PENDING_ACCEPTANCE；已有Windows上的新目录不等于干净Windows，未做最终同版两轮真实模型或非开发人员操作。捕获到部分PowerShell文本在测试脚本UTF8解码时乱码，未据此判中文可读性已验收；不影响已验证退出码/结构化身份/备份断言，后续中文启动记录验证需区分终端编码。
 
 ## 推断与待确认
 
