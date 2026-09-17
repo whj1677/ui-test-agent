@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0008-multistep-plan-grounding](REQ-0008-multistep-plan-grounding/current_state.md)：REQ-0001子问题；多步表单未来控件缺少计划证据。仅设计，待选择一次审批未观察原文定位或新页面后再次审批；不扩大探索业务操作。
+
 - [REQ-0007-guarded-query-forms](REQ-0007-guarded-query-forms/current_state.md)：REQ-0001子问题；submit型查询使输入和点击候选缺失，增加原文绑定的受限GET查询及一次submit现场核验；不开放业务提交。
 
 - [REQ-0006-case-bound-reading-actions](REQ-0006-case-bound-reading-actions/current_state.md)：REQ-0001子问题；分页/说明/读取重试入口可见但不进探索候选，增加原文绑定与现场重验，保留表单和网络边界。
