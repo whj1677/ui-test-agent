@@ -1,0 +1,342 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0001",
+  "title": "多界面真实链路发布就绪",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-17"
+  },
+  "original_input": "用户设定持续目标：把Agent优化到可以发布，不能只口头宣布；通过大量界面测试发现并修复问题，每修复一个问题Git同步，修改前创建需求包。用户授权本机操作、官方DeepSeek测试和现有GitHub项目同步。凭据原文省略，不写入文件。",
+  "user_requirements": [
+    {
+      "id": "UN-0001-01",
+      "status": "已确认",
+      "goal": "Windows本地团队内部试用达到可复验发布标准，日常不依赖外部code agent临时导航、手写定位或候选计划。",
+      "constraints": "继承原内部试用正确性、权限/清理、敏感出口、安装与独立人员门槛；不扩展生产/任意网站，不恢复暂停训练平台。",
+      "success_criteria": "多种不同复杂界面、冻结同版两轮真实重规划执行、正确终态、安全回归、安装/独立操作证据及可追溯候选齐备。"
+    }
+  ],
+  "confirmed_facts": [
+    "继承REQ-20260916-internal-beta/REQ-20260916-checkpoints的既有架构和失败历史，本包管理新发布目标，新缺陷修改前另建关联需求包。",
+    "当前4179构建7e2e7272ead2；前一修复377项程序回归及4文件9TAP浏览器检查有实际日志，不代表模型自主成功。",
+    "原8条复杂合成用例和页面保持；旧003曾有候选但未形成经审查可执行计划。",
+    "用户本机连接已恢复并确认进入演示；新授权后原003启动仍被执行环境拒绝，只读回查新任务准备/请求/执行均0。",
+    "main和origin/main当前均a586ed6，存在此前多个阶段已验证未提交增量，先作为历史基线归档，不伪造逐问题历史。"
+  ],
+  "inferences_and_open_questions": [
+    "结合复杂UI上下文，将测试实施为后台自动化覆盖不同界面，同时补充不依赖可见窗口的协议/安全/恢复回归。",
+    "24例是覆盖最低清单而非成功率推断，完整清单/独立真值在执行前冻结，不得观察失败后缩小分母。",
+    "工具拒绝未给具体原因，不能断言是Key、网络或产品代码错误，不能换路径绕过。",
+    "首批原8例保留已授权2次准备/300逻辑请求/60分钟上限；后续模型预算结合实测明确，不静默无限加额。",
+    "尚无本版干净Windows与非开发人员操作证据，不得以本机新目录或主管操作代替。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0001-01",
+      "status": "已确认",
+      "requirement": "修改前建立缺陷需求包/复现/验收；修复验证后独立commit并同步现有GitHub。",
+      "acceptance_criteria": "需求、失败复现、限定diff、复验、commit及远端SHA逐项对应。",
+      "constraints": "已有未提交增量先明确归档为历史基线；不强推、不泄露秘密。"
+    },
+    {
+      "id": "DR-0001-02",
+      "status": "已确认",
+      "requirement": "冻结至少3种不同前端结构24条代表性例，两轮真实模型从原输入重新规划并受控执行，保留原8难例。",
+      "acceptance_criteria": "各轮正常、预置错误、明确阻塞分别有独立真值；承诺可执行例均有正确终态，技术代做为0。",
+      "constraints": "不得删失败、改预期、手写计划；固定脚本或注入模型不能替代真实模型证据。"
+    },
+    {
+      "id": "DR-0001-03",
+      "status": "已确认",
+      "requirement": "逐缺陷复现修复，保留身份/审批/预算/清理/敏感出口及有界恢复。",
+      "acceptance_criteria": "未知写入、对象不唯一、无归属清理、认证失效、协议错、停止/重启反例正确拒绝；零越权、误删、错误业务判通过。",
+      "constraints": "不通过无限重试、放宽授权或改预期隐藏引擎缺陷。"
+    },
+    {
+      "id": "DR-0001-04",
+      "status": "已确认",
+      "requirement": "中文配置/报告、干净Windows安装、旧版升级回退及非开发人员独立流程。",
+      "acceptance_criteria": "环境身份、安装日志、至少一名独立使用者记录、完整可读/可播放报告媒体齐备。",
+      "constraints": "新目录不等于干净系统；不能由主管替人签收。"
+    },
+    {
+      "id": "DR-0001-05",
+      "status": "已确认",
+      "requirement": "冻结源码/服务/包身份，披露成本/范围/限制，所有硬门槛有证据才判内部试用就绪。",
+      "acceptance_criteria": "同版两轮报告及包/服务SHA对应；Git/包无秘密和真实业务资料，请求/重试/tokens/耗时可追踪。",
+      "constraints": "普通代码GitHub同步已授权；不自动创建公开Release或向团队分发。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0001-01",
+      "dr_ids": [
+        "DR-0001-01"
+      ],
+      "status": "已确认",
+      "summary": "历史基线归档，新问题一包一提交。",
+      "rationale": "保留用户旧变化，不伪造历史。"
+    },
+    {
+      "id": "DD-0001-02",
+      "dr_ids": [
+        "DR-0001-02"
+      ],
+      "status": "已确认",
+      "summary": "交互类型×前端结构×正常/错误/阻塞矩阵，最终同版两轮。",
+      "rationale": "防止对单一DOM过拟合和样本数自证质量。"
+    },
+    {
+      "id": "DD-0001-03",
+      "dr_ids": [
+        "DR-0001-03"
+      ],
+      "status": "已确认",
+      "summary": "分层失败诊断、有界重试与安全正反例。",
+      "rationale": "能操作不等于操作正确；潜在写入不得盲目重放。"
+    },
+    {
+      "id": "DD-0001-04",
+      "dr_ids": [
+        "DR-0001-04"
+      ],
+      "status": "已确认",
+      "summary": "保留中文控制台，在真实环境验可用性。",
+      "rationale": "维护者经验不能代表普通测试人员。"
+    },
+    {
+      "id": "DD-0001-05",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "status": "已确认",
+      "summary": "最终冻结后完整回归、打包脱敏和单份报告。",
+      "rationale": "缺门槛只标待验，不降低标准收口。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "本包先冻结验收和基线，不新增产品接口；具体缺陷在子需求定义接口影响后修改。",
+    "冻结原文/独立真值→导入核对→登录→Agent自主探索和计划→语义审批→固定执行→事实/媒体→独立验收；主管不在执行路径代定位。"
+  ],
+  "module_document_impact": [
+    "后续子需求依实际影响维护release_runtime等模块文档；当前仅新增发布验证/追踪。"
+  ],
+  "risks_and_rollback": [
+    "工具拒绝是执行环境阻塞，用户业务授权不能替代环境许可；不修改工具安全配置。",
+    "每修复独立commit便于定位/回退，保留旧任务和数据，不使用reset --hard或删除失败记录。",
+    "对话出现的Key不复制到命令参数、文件、日志、知识库或Git；优先用已有内存连接，建议用户轮换已暴露Key。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0001-01",
+      "dr_ids": [
+        "DR-0001-01"
+      ],
+      "dd_ids": [
+        "DD-0001-01"
+      ],
+      "status": "进行中",
+      "task": "建立发布需求和历史基线，检查文件/秘密后提交同步。",
+      "verification_ids": [
+        "VT-0001-01"
+      ]
+    },
+    {
+      "id": "TK-0001-02",
+      "dr_ids": [
+        "DR-0001-02"
+      ],
+      "dd_ids": [
+        "DD-0001-02"
+      ],
+      "status": "待实现",
+      "task": "原003→原8诊断，扩充并冻结多界面样本，两轮真实验证。",
+      "verification_ids": [
+        "VT-0001-02"
+      ]
+    },
+    {
+      "id": "TK-0001-03",
+      "dr_ids": [
+        "DR-0001-03"
+      ],
+      "dd_ids": [
+        "DD-0001-03"
+      ],
+      "status": "待实现",
+      "task": "按子需求修复并复验受影响项，每项独立Git同步。",
+      "verification_ids": [
+        "VT-0001-03"
+      ]
+    },
+    {
+      "id": "TK-0001-04",
+      "dr_ids": [
+        "DR-0001-04"
+      ],
+      "dd_ids": [
+        "DD-0001-04"
+      ],
+      "status": "待实现",
+      "task": "检查干净环境可用性，安装升级回退和独立操作验收。",
+      "verification_ids": [
+        "VT-0001-04"
+      ]
+    },
+    {
+      "id": "TK-0001-05",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "dd_ids": [
+        "DD-0001-05"
+      ],
+      "status": "待实现",
+      "task": "最终同版复验、打包/敏感扫描/成本报告和发布结论。",
+      "verification_ids": [
+        "VT-0001-05"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0001-01",
+      "dr_ids": [
+        "DR-0001-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "逐问题需求和Git闭环",
+      "evidence_standard": "需求/Git/远端SHA和秘密排除检查",
+      "current_evidence": "本目标最终候选尚未验证，历史工程结果仅作基线。"
+    },
+    {
+      "id": "VT-0001-02",
+      "dr_ids": [
+        "DR-0001-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "多界面真实链路",
+      "evidence_standard": "冻结样本/真值/页面SHA、模型请求/计划/批准/执行事实及技术干预记录",
+      "current_evidence": "真实模型启动被工具拒绝，本轮0调用。"
+    },
+    {
+      "id": "VT-0001-03",
+      "dr_ids": [
+        "DR-0001-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "安全与恢复",
+      "evidence_standard": "真实命令/退出码/统计/日志及浏览器和进程事实",
+      "current_evidence": "本目标最终候选尚未验证，历史工程结果仅作基线。"
+    },
+    {
+      "id": "VT-0001-04",
+      "dr_ids": [
+        "DR-0001-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "独立可安装可使用",
+      "evidence_standard": "干净环境说明、安装/升级日志、独立试用记录、媒体检查",
+      "current_evidence": "本目标最终候选尚未验证，历史工程结果仅作基线。"
+    },
+    {
+      "id": "VT-0001-05",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "可追溯发布候选",
+      "evidence_standard": "SHA清单、模型用量、包内清单、秘密扫描和全部门槛证据",
+      "current_evidence": "本目标最终候选尚未验证，历史工程结果仅作基线。"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node tests/runtime-regression.mjs",
+      "按影响运行真实Chromium集成文件；真实模型必须经过产品自身链路。"
+    ],
+    "environment": [
+      "Windows / PowerShell / Node22 / Chromium",
+      "4179构建7e2e7272ead2；官方DeepSeek内存连接；仅本机合成目标"
+    ],
+    "conclusion": [
+      "真实模型启动受执行策略限制，不能宣布发布就绪。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0001-01",
+      "dr_id": "DR-0001-01",
+      "dd_id": "DD-0001-01",
+      "tk_id": "TK-0001-01",
+      "vt_id": "VT-0001-01",
+      "status": "进行中"
+    },
+    {
+      "un_id": "UN-0001-01",
+      "dr_id": "DR-0001-02",
+      "dd_id": "DD-0001-02",
+      "tk_id": "TK-0001-02",
+      "vt_id": "VT-0001-02",
+      "status": "待实现"
+    },
+    {
+      "un_id": "UN-0001-01",
+      "dr_id": "DR-0001-03",
+      "dd_id": "DD-0001-03",
+      "tk_id": "TK-0001-03",
+      "vt_id": "VT-0001-03",
+      "status": "待实现"
+    },
+    {
+      "un_id": "UN-0001-01",
+      "dr_id": "DR-0001-04",
+      "dd_id": "DD-0001-04",
+      "tk_id": "TK-0001-04",
+      "vt_id": "VT-0001-04",
+      "status": "待实现"
+    },
+    {
+      "un_id": "UN-0001-01",
+      "dr_id": "DR-0001-05",
+      "dd_id": "DD-0001-05",
+      "tk_id": "TK-0001-05",
+      "vt_id": "VT-0001-05",
+      "status": "待实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "继承REQ-20260916-internal-beta",
+      "status": "新目标实施",
+      "notes": "用户明确授权持续发布目标及逐问题Git同步，不重写历史失败。"
+    }
+  ],
+  "open_questions": [
+    "已授权启动动作如何恢复执行许可，当前工具未给具体原因。",
+    "干净Windows环境与独立试用人员条件须实际具备。"
+  ],
+  "prohibited_implementation": [
+    "禁止改原预期、删除失败样本、主管手写候选或降低安全边界刷通过。",
+    "禁止持久化凭据或绕过工具策略；禁止未经确认公开发布。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "新目标",
+      "description": "按用户要求新建发布就绪需求，冻结硬门槛和逐问题Git闭环。",
+      "impact": "发布验证及后续限定缺陷修复",
+      "confirmed_by": "用户设定目标并委托实施与就绪判断，实际状态以证据为准。"
+    }
+  ]
+}
