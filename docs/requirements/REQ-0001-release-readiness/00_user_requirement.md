@@ -48,6 +48,11 @@
 - 本机浏览器实际匹配录像播放至9.68秒，不一致录像暂停/时间轴检查成功，两段error=null；6.822565/14.877215秒结果字幕中文清晰且不被控制条遮住，1280宽桌面无横向溢出，视频高度634.40625px。缺失录像仍保留不一致并显示证据不完整；筛选与键盘重置有交互证据。报告SHA及范围见REQ-0011/browser-review.md。
 - 首次报告验证脚本的错误导入/未运行状态误判、补丁中间长中文溢出、首次交付混合父子记录检查失败均已留痕；未删除失败或改原24例。父验证登记615bc99先独立提交，再归档子修复。file://直接打开被浏览器策略拒绝，未绕过；本次只验同HTML字节的loopback播放，不计本地双击离线验收。
 - 原17文件/24例摘要再次保持，4179未重启、模型0调用、临时只读viewer及自建标签已关闭。旧14c2待验安装包不包含本次9b7f修复，尚未重打最终候选；KB仍未实现，REQ-0008审批选择、真实模型、干净Windows/独立人员等门槛仍保留。
+- 2026-09-18候选打包状态卡：阶段=待验候选交付验证；目标=当前9b7f1322代码形成可追溯ZIP，消除旧14c2包未含新修复的差异；输入=已提交bc9b14d源码与既有白名单打包器；交付=新目录、ZIP与逐项摘要/隔离HTTP身份验证；不做=重跑未变570项、改审批语义、配置模型/重启4179、安装系统组件或公开Release；停止=包/源码/独立进程身份一致且明确未验项，实际产品缺陷须另建子包。
+- 本轮只读复核4179/api/config：仍build653a95ecb090d96f8e25e1e61c5d0f9ef4fef58921b1010cb45128809c838d94、configured=false、active=null。未调用模型、未访问凭据；Get-VM/WindowsSandbox.exe/VBoxManage.exe/vmrun.exe命令均未发现，只表明本机这些入口不可用，不等于证明所有干净环境都不存在。REQ-0008的A/B选择尚未收到，再次向用户清楚呈现业务差异，不暗设默认。
+- 2026-09-18当前9b7f132246fa候选已生成到validation/REQ-0001-candidate-20260918-9b7f1322；ZIP为validation/ui-test-agent-0.4.0-beta.1-9b7f132246fa-pending.zip，345888字节，SHA256=8026bae30da2c97e78bf32e2b3674caf7eaf46655cc0717e721cebad39b2f6be。归档内83个清单项加清单本身共84文件逐项SHA一致，无未知/缺失/重复文件；全新目录解包成功，日志validation/REQ-0001-candidate-zip.log。
+- 解包后使用包内verifyCandidate、readBuildInfo和server.start核验：包/源代码/HTTP构建均9b7f132246fa，随机端口和新数据目录，首页/JS/CSS均HTTP200，JS/CSS字节摘要与包相同，未配置模型、无任务；关闭后监听器与写锁释放。已使用禁联网注入fetch且调用计数0，不是Agent业务运行；实际日志validation/REQ-0001-candidate-runtime.log。
+- 解包精确文件清单和敏感文件名排除检查未发现用户数据/依赖目录/凭据文件；指定Key/token/私钥正则扫描0命中，仅限所列模式，不证明所有敏感内容不存在。该HTTP验证共享工作区node_modules，未运行新包安装器/Chromium/Python导入，不是干净Windows；PENDING_ACCEPTANCE不变，完整证据及限制见candidate-check.md。
 
 ## 推断与待确认
 
