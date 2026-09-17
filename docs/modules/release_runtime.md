@@ -49,6 +49,8 @@
 
 ## 2026-09-17 按 Case 分批预算
 
+2026-09-17（REQ-0002）原生字段观察：嵌套标签排除控件自身的选项/当前值，保留可见文字及ARIA命名优先级。默认适配器的label定位不能唯一匹配时，可尝试同名原生角色；最终仍必须唯一且与原DOM节点相同，自定义适配器不得利用此路径纠正错误目标。普通输入/选择的映射失败进入`adapter_gaps`，敏感输入不新增修复提示。此项仅为布局兼容工程验证，不等于真实模型计划或发布验收。
+
 2026-09-17准备调度增量：`preparation.mjs`以单Case为worker并投影兼容discovery状态，`job-budget.mjs`按步骤/预期分项分配取证和规划两个阶段，`controller`冻结选择集并共用有限模型permit。job请求可带options={concurrency:1|2,independent_readonly:boolean,time_multiplier:1|2}；默认串行，两路要求明确独立只读且任务未授权写入。完整取证检查点只在当前登录/版本/配置一致且15分钟内复用。使用prepare统一由服务判断复用，原高级plan仍可用。
 
 `case-advice.mjs`只对已核验引用的输入问题生成草案；case_advice与历史独立保存。确认接口新增advice_id/expected_case_hash，拒绝入口为POST /api/tasks/:id/reject-case-advice。确认新版本保留原基线、旧确认/计划并使旧审批失效；预算/能力/产品失败不触发改预期。config新增preparation_controls/case_advice。进度和草案UI已作桌面/窄屏验证；原业务执行不并发、不自动触发。

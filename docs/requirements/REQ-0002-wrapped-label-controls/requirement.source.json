@@ -1,0 +1,211 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0002",
+  "title": "嵌套标签表单控件可见性与身份绑定",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-17"
+  },
+  "original_input": "关联REQ-0001-release-readiness。用户要求发布前大量不同界面验证，修改前建包，每个问题修复后独立提交同步。此包仅修复嵌套标签控件漏观察，不改变用例业务预期或执行授权。",
+  "user_requirements": [
+    {
+      "id": "UN-0002-01",
+      "status": "已确认",
+      "goal": "原生表单不同标签布局可被Agent可靠发现并绑定，无法唯一绑定时给出证据而非静默遗漏。",
+      "constraints": "只修复控件观察和对应查询绑定，保留原输入、唯一性/身份/敏感字段/写入边界。",
+      "success_criteria": "真实Chromium正反例稳定验证，回归通过，独立Git提交并同步。"
+    }
+  ],
+  "confirmed_facts": [
+    "基线a71b88f已与私有远端同步，4179运行旧冻结构建不重启。",
+    "snapshot使用labels[0].innerText优先生成label定位，映射不唯一时仅对按钮/链接/表格记录gap，输入/选择控件可能静默丢失。",
+    "已有查询选择用例使用for标签，不能代表包含select的嵌套label。",
+    "复现2项失败，日志validation/REQ-0002-before.log：getByLabel精确园区计数0，getByRole combobox/园区计数1；snapshot控件和gap均空。",
+    "修复后13项针对性与4文件15项受影响浏览器TAP检查通过；同一实际节点及自定义错误适配器反例均验证。",
+    "全量runtime383项中382通过1失败，validation/REQ-0002-runtime.log；失败为未改动Store的并发读取/rename EPERM，孤立复跑1项通过，不能据此宣称全量稳定。需另包修复并保留本次失败。"
+  ],
+  "inferences_and_open_questions": [
+    "先在真实Chromium比较标签/角色定位和同节点证据，再选最小修复；不把手写标签规则宣称为完整无障碍命名实现。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0002-01",
+      "status": "已确认",
+      "requirement": "覆盖显式for、嵌套、多标签与ARIA标签的原生输入/单选下拉观察；提供正确字段名称和可验证唯一定位。",
+      "acceptance_criteria": "无id嵌套select可被观察，原用例园区选择可得到固定值候选并操作；选项文本不混入字段名。",
+      "constraints": "不通过改fixture显式标签/人工契约绕过，定位必须同节点唯一。"
+    },
+    {
+      "id": "DR-0002-02",
+      "status": "已确认",
+      "requirement": "不唯一/错身份/无映射的非敏感输入选择控件产生技术缺口，不误绑定；敏感输入仍不参与自动探索。",
+      "acceptance_criteria": "重复标签拒绝、错节点拒绝、缺映射可见；原禁止写入/失效候选/密码保护仍成立。",
+      "constraints": "不开放任意值或新增不受限CSS/模型代码。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0002-01",
+      "dr_ids": [
+        "DR-0002-01"
+      ],
+      "status": "已确认",
+      "summary": "排除原生控件自身的标签文字提示；默认label无法唯一匹配时回退同名角色，仍强制同节点唯一；自定义适配器不享受回退。",
+      "rationale": "HTML布局与真实定位语义可能不同，字符串猜测不能当定位成功。"
+    },
+    {
+      "id": "DD-0002-02",
+      "dr_ids": [
+        "DR-0002-02"
+      ],
+      "status": "已确认",
+      "summary": "扩展缺口报告到非敏感表单控件，保持查询能力/敏感值/授权限制。",
+      "rationale": "无法操作要能诊断，但不能泄露敏感字段或降低安全门槛。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "页面DOM标签事实→snapshot命名/原生定位→唯一且同节点校验→原用例绑定的查询候选→执行前再验证。",
+    "新增缺口仅补充已有adapter_gaps，结构不改变。"
+  ],
+  "module_document_impact": [
+    "release_runtime：记录可观察原生控件布局范围和保持的安全限制。"
+  ],
+  "risks_and_rollback": [
+    "命名不完整应留下缺口，不选第一个同名元素；通过单独Git提交可回滚。",
+    "不重启用户4179、不触碰旧任务或原8条复杂样本。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0002-01",
+      "dr_ids": [
+        "DR-0002-01"
+      ],
+      "dd_ids": [
+        "DD-0002-01"
+      ],
+      "status": "已实现",
+      "task": "增加真实Chromium失败复现，修复字段命名/定位及查询选择。",
+      "verification_ids": [
+        "VT-0002-01"
+      ]
+    },
+    {
+      "id": "TK-0002-02",
+      "dr_ids": [
+        "DR-0002-02"
+      ],
+      "dd_ids": [
+        "DD-0002-02"
+      ],
+      "status": "已实现",
+      "task": "补齐失败缺口和安全反例，运行相关回归并提交同步。",
+      "verification_ids": [
+        "VT-0002-02"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0002-01",
+      "dr_ids": [
+        "DR-0002-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "不同标签布局真实浏览器观察与受控查询",
+      "evidence_standard": "失败复现及修复后命令/退出码/计数/日志，真实DOM同节点比较",
+      "current_evidence": {
+        "command": "node --test tests/label-observation.test.mjs tests/query-capability.test.mjs",
+        "exit_code": 0,
+        "test_count": 13,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0002-focused.log"
+      }
+    },
+    {
+      "id": "VT-0002-02",
+      "dr_ids": [
+        "DR-0002-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "身份/重复/敏感/安全与受影响回归",
+      "evidence_standard": "限定浏览器集成、运行时回归、正式检查及Git/远端SHA",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=2 tests/auth-menu-observation.integration.mjs tests/discovery-browser.integration.mjs tests/discovery-controls.test.mjs tests/row-locator.integration.mjs",
+        "exit_code": 0,
+        "test_count": 15,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0002-browser.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/label-observation.test.mjs tests/query-capability.test.mjs",
+      "node tests/runtime-regression.mjs"
+    ],
+    "environment": [
+      "Windows/Node22/真实无头Chromium；不调用模型，不触碰4179现存任务"
+    ],
+    "conclusion": [
+      "本包控件绑定修复及受影响安全/浏览器验证完成；尚未在4179旧冻结进程部署。",
+      "全量回归383/382/1/0，存储EPERM问题需后续独立需求；不宣称全量测试通过或发布就绪。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0002-01",
+      "dr_id": "DR-0002-01",
+      "dd_id": "DD-0002-01",
+      "tk_id": "TK-0002-01",
+      "vt_id": "VT-0002-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0002-01",
+      "dr_id": "DR-0002-02",
+      "dd_id": "DD-0002-02",
+      "tk_id": "TK-0002-02",
+      "vt_id": "VT-0002-02",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness",
+      "status": "进行中",
+      "notes": "发布目标下的独立缺陷复现与修复。"
+    }
+  ],
+  "open_questions": [
+    "无新增业务问题；存储并发失败留作下一独立缺陷包，不与本包混改。"
+  ],
+  "prohibited_implementation": [
+    "禁止移除唯一性/同节点校验或扩大写入能力；禁止修改原用例期待让测试通过。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "新增缺陷包",
+      "description": "在修改代码前冻结范围/失败复现/验收，关联REQ-0001发布目标。",
+      "impact": "表单观察与查询探索",
+      "confirmed_by": "用户发布目标授权"
+    },
+    {
+      "date": "2026-09-17",
+      "version": 1,
+      "type": "修复与限定验收",
+      "description": "保留修复前2失败，修复后13项针对性及15项受影响浏览器检查通过；全量383项暴露1项存储并发EPERM，未隐去。",
+      "impact": "原生字段观察/缺口，不更改业务预期或授权",
+      "confirmed_by": "实际命令和日志"
+    }
+  ]
+}

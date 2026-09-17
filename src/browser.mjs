@@ -1325,12 +1325,15 @@ export async function snapshot(
     // A bounded name hint, not an implementation of the accessibility spec.
     // Every proposed role/name is still checked by Playwright and against the
     // original DOM handle below. Hidden decoration must not become a menu name.
-    const nameText = (node) => {
+    const nameText = (node, excluded = null) => {
+      // A native control nested in its label does not contribute its options
+      // or current value to its own field-name hint.
+      if (node === excluded) return '';
       if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
       if (node.nodeType !== Node.ELEMENT_NODE || !visible(node)) return '';
       if (node.getAttribute('aria-label')) return node.getAttribute('aria-label');
       if (node.tagName === 'IMG') return node.getAttribute('alt') || '';
-      const text = [...node.childNodes].map(nameText).join('');
+      const text = [...node.childNodes].map((child) => nameText(child, excluded)).join('');
       return getComputedStyle(node).display.startsWith('inline') ? text : ` ${text} `;
     };
     const rowHint = (e) => {
@@ -1383,14 +1386,20 @@ export async function snapshot(
         .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
         .join(' ')
         .trim();
-      const label = labelledBy || e.getAttribute('aria-label') || e.labels?.[0]?.innerText?.trim();
+      const label = (
+        labelledBy ||
+        e.getAttribute('aria-label') ||
+        [...(e.labels ?? [])].map((node) => nameText(node, e)).join(' ')
+      )
+        .replace(/\s+/g, ' ')
+        .trim();
       const text = (label || nameText(e)).replace(/\s+/g, ' ').trim().slice(0, 150);
       const role =
         e.getAttribute('role') ||
         {
           BUTTON: 'button',
           A: 'link',
-          SELECT: 'combobox',
+          SELECT: e.multiple || e.size > 1 ? 'listbox' : 'combobox',
           H1: 'heading',
           H2: 'heading',
           H3: 'heading',
@@ -1495,7 +1504,12 @@ export async function snapshot(
         if (
           c.adapter_input.navigation_text ||
           c.adapter_input.tag === 'TABLE' ||
-          ['button', 'link', 'menuitem'].includes(c.adapter_input.role)
+          ['button', 'link', 'menuitem'].includes(c.adapter_input.role) ||
+          Object.hasOwn(c, 'current_value') ||
+          (c.adapter_input.tag === 'SELECT' &&
+            !/(?:password|passwd|secret|token|credential|api.?key|authorization|cookie|session|one.?time|passcode|credit.?card|email|phone|\botp\b|cc-|密码|口令|密钥|验证码|银行卡|身份证|手机号|账号|账户|邮箱)/iu.test(
+              [c.adapter_input.id, c.adapter_input.label, c.adapter_input.placeholder].join(' '),
+            ))
         )
           adapter_gaps.push({ code, input: c.adapter_input });
       };
@@ -1505,7 +1519,30 @@ export async function snapshot(
           continue;
         }
         validateLocator(locator);
-        const target = handoffLocator(page, locator);
+        let target = handoffLocator(page, locator);
+        // getByLabel and accessible role/name use different native-label
+        // semantics (e.g. labels wrapping a select). Only the fixed default
+        // adapter gets this semantic fallback; custom programs are still
+        // independently rejected if they propose the wrong destination.
+        if (
+          adapterSource === DEFAULT_ADAPTER_SOURCE &&
+          locator.kind === 'label' &&
+          ['INPUT', 'SELECT', 'TEXTAREA'].includes(c.adapter_input.tag) &&
+          (await target.count()) !== 1
+        ) {
+          const roleLocator = {
+            kind: 'role',
+            role: c.adapter_input.role,
+            name: c.adapter_input.label,
+            exact: true,
+          };
+          validateLocator(roleLocator);
+          const roleTarget = handoffLocator(page, roleLocator);
+          if ((await roleTarget.count()) === 1) {
+            locator = roleLocator;
+            target = roleTarget;
+          }
+        }
         if ((await target.count()) !== 1) {
           gap('ADAPTER_TARGET_NOT_UNIQUE');
           continue;

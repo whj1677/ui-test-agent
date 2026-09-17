@@ -60,11 +60,11 @@ test('query literals bind to the specific field and original action, never expec
   );
 });
 
-async function fixture(t, extra = '', onInput = '') {
+async function fixture(t, extra = '', onInput = '', wrappedSelect = false) {
   let writes = 0;
   const html = `<span data-testid="ready">Ready</span><div id="filters">
     <label>名称关键字<input type="text" id="query" ${onInput}></label>
-    <label for="park">园区</label><select id="park"><option value="">全部</option><option value="park-2">梧桐园</option></select>
+    ${wrappedSelect ? '<label>园区' : '<label for="park">园区</label>'}<select id="park"><option value="">全部</option><option value="park-2">梧桐园</option></select>${wrappedSelect ? '</label>' : ''}
     <button type="button">查询</button>${extra}</div>`;
   const server = http.createServer((req, res) => {
     if (req.method === 'POST') writes++;
@@ -133,6 +133,20 @@ test('query inference rejects save forms, sensitive fields, unapproved environme
   assert.ok(!(await explorer.observe()).candidates.some((c) => c.operation === 'fill'));
   explorer.task.authorization.nonproduction = false;
   assert.ok(!(await explorer.observe()).candidates.some((c) => c.operation));
+});
+
+test('wrapped native select offers and executes only the original field-bound query value', async (t) => {
+  const { explorer, observation, writes } = await fixture(t, '', '', true);
+  const choices = observation.candidates.filter((c) => c.operation === 'select');
+  assert.equal(choices.length, 1);
+  assert.equal(choices[0].name, '园区');
+  assert.equal(choices[0].value, 'park-2');
+  assert.equal(choices[0].evidence.kind, 'observed_query_scope');
+  const next = await explorer.act({ candidate_id: choices[0].candidate_id });
+  assert.equal(await explorer.page.locator('#park').inputValue(), 'park-2');
+  assert.equal(next.snapshot.controls.find((c) => c.role === 'combobox').name, '园区');
+  assert.ok(!next.candidates.some((c) => c.operation === 'select'));
+  assert.equal(writes(), 0);
 });
 
 test('query input cannot send autosave POST or trigger form submission', async (t) => {
