@@ -4,10 +4,66 @@ import { pathToFileURL } from 'node:url';
 import { APP_ROOT, readBuildInfo } from './build-info.mjs';
 import { hash } from './common.mjs';
 
+function candidateFiles(build) {
+  return [...build.sources.map((source) => source.file), '试用说明.md'].sort();
+}
+
+// Validate the complete inventory before reading any manifest-supplied path.
+// This detects damaged local packages, not a malicious publisher or concurrent filesystem swaps.
+export async function verifyCandidate(root, manifest, build) {
+  try {
+    build ??= await readBuildInfo(root);
+    const expected = new Set(candidateFiles(build));
+    if (
+      !manifest ||
+      manifest.schema_version !== 'ui-agent-release/v1' ||
+      manifest.application !== build.application ||
+      manifest.version !== build.version ||
+      manifest.build_id !== build.build_id ||
+      manifest.release_status !== 'PENDING_ACCEPTANCE' ||
+      !Array.isArray(manifest.files) ||
+      manifest.files.length !== expected.size
+    )
+      throw new Error('INVALID_MANIFEST');
+    for (const entry of manifest.files) {
+      if (
+        !entry ||
+        typeof entry.file !== 'string' ||
+        /[\\:\x00-\x1f]/.test(entry.file) ||
+        entry.file.split('/').some((part) => !part || part === '.' || part === '..') ||
+        !expected.delete(entry.file) ||
+        typeof entry.sha256 !== 'string' ||
+        !/^[a-f0-9]{64}$/.test(entry.sha256)
+      )
+        throw new Error('INVALID_INVENTORY');
+    }
+    for (const entry of manifest.files) {
+      const parts = entry.file.split('/');
+      let target = path.resolve(root);
+      for (let index = 0; index < parts.length; index++) {
+        target = path.join(target, parts[index]);
+        const stat = await fs.lstat(target);
+        if (
+          stat.isSymbolicLink() ||
+          (index === parts.length - 1 ? !stat.isFile() : !stat.isDirectory())
+        )
+          throw new Error('INVALID_FILE_TYPE');
+      }
+      if (hash(await fs.readFile(target)) !== entry.sha256) throw new Error('FILE_CHANGED');
+    }
+    return { file_count: manifest.files.length };
+  } catch {
+    // A missing listed file is a broken candidate, not a checkout without a manifest.
+    throw Object.assign(new Error('CANDIDATE_INTEGRITY_FAILED'), {
+      code: 'CANDIDATE_INTEGRITY_FAILED',
+    });
+  }
+}
+
 // Explicit allowlist: never traverse the workspace, data directories or credentials.
 export async function createCandidate(destination, root = APP_ROOT) {
   const build = await readBuildInfo(root);
-  const files = [...build.sources.map((source) => source.file), '试用说明.md'];
+  const files = candidateFiles(build);
   await fs.mkdir(destination); // A different candidate always receives a fresh directory.
   const manifest = [];
   for (const file of files.sort()) {

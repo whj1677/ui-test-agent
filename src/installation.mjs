@@ -5,6 +5,7 @@ import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { APP_ROOT, readBuildInfo } from './build-info.mjs';
 import { backupData, recoverDeadWriter } from './data-maintenance.mjs';
+import { verifyCandidate } from './distribution.mjs';
 
 const run = promisify(execFile);
 
@@ -23,13 +24,17 @@ export async function inspectEnvironment({ root = APP_ROOT, probeBrowser = true 
       detail: build.version + ' / ' + build.build_id.slice(0, 12),
     });
     const manifestPath = path.join(root, 'release-manifest.json');
+    let manifestExists = false;
     try {
+      const stat = await fs.lstat(manifestPath);
+      manifestExists = true;
+      if (stat.isSymbolicLink() || !stat.isFile()) throw new Error('INVALID_MANIFEST_FILE');
       const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
-      if (manifest.build_id !== build.build_id) throw new Error('BUILD_CHANGED');
+      await verifyCandidate(root, manifest, build);
       // The release manifest is a local integrity check, not a publisher signature.
       checks.push({ name: '候选包摘要', ready: true, detail: '与打包时一致（不代表发布验收）' });
     } catch (error) {
-      if (error.code !== 'ENOENT')
+      if (manifestExists || error.code !== 'ENOENT')
         checks.push({
           name: '候选包摘要',
           ready: false,
