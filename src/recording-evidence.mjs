@@ -64,11 +64,12 @@ function installRecordingDocument({ key, binding, restore = true }) {
   const style = document.createElement('style');
   style.textContent = `
     * { box-sizing: border-box; }
-    section { position: fixed; width: 500px; padding: 16px 18px; border-radius: 10px;
+    section { position: fixed; width: 560px; max-width: calc(100vw - 32px);
+      padding: 16px 18px; border-radius: 10px;
       color: #fff; background: #12263af5; border: 2px solid #63c7ff;
-      font: 17px/1.55 "Microsoft YaHei", sans-serif; white-space: pre-wrap;
+      font: 20px/1.55 "Microsoft YaHei", sans-serif; white-space: pre-wrap;
       overflow-wrap: anywhere; box-shadow: 0 5px 24px #0005; }
-    header { font-size: 15px; color: #91dcff; margin-bottom: 8px; }
+    header { font-size: 17px; color: #91dcff; margin-bottom: 8px; }
     p { margin: 6px 0; }
     .box { position: fixed; border: 3px solid #ffb000; border-radius: 4px; }
     .click { position: fixed; width: 22px; height: 22px; border-radius: 50%;
@@ -118,12 +119,21 @@ function installRecordingDocument({ key, binding, restore = true }) {
         left: `${cue.click.x - 11}px`,
         top: `${cue.click.y - 11}px`,
       });
-    const rect = panel.getBoundingClientRect();
+    panel.style.width = '560px';
+    let rect = panel.getBoundingClientRect();
+    if (rect.height > innerHeight * 0.8 - 16) {
+      panel.style.width = `${Math.min(840, innerWidth - 32)}px`;
+      rect = panel.getBoundingClientRect();
+    }
+    // Native playback controls cover the bottom of the recorded pixels. Prefer
+    // the top; lower alternatives reserve 20% of the source viewport. This is
+    // presentation only, not a claim about arbitrary browser control geometry.
+    const bottom = innerHeight * 0.8 - rect.height;
     const positions = [
-      [innerWidth - rect.width - 16, innerHeight - rect.height - 16],
-      [16, innerHeight - rect.height - 16],
       [innerWidth - rect.width - 16, 16],
       [16, 16],
+      [innerWidth - rect.width - 16, bottom],
+      [16, bottom],
     ];
     const avoidsTarget = ([x, y]) =>
       !box ||
@@ -131,7 +141,12 @@ function installRecordingDocument({ key, binding, restore = true }) {
       x > box.x + box.width ||
       y + rect.height < box.y ||
       y > box.y + box.height;
-    const [x, y] = positions.find(avoidsTarget) || positions[0];
+    const fitsViewport = ([x, y]) =>
+      x >= 0 && y >= 0 && x + rect.width <= innerWidth && y + rect.height <= innerHeight * 0.8;
+    const [x, y] =
+      positions.find((position) => fitsViewport(position) && avoidsTarget(position)) ||
+      positions.find(fitsViewport) ||
+      positions[0];
     panel.style.left = `${Math.max(0, x)}px`;
     panel.style.top = `${Math.max(0, y)}px`;
   };
@@ -290,7 +305,11 @@ export class RecordingEvidence {
         const rect = panel.getBoundingClientRect();
         return {
           visible: window[key].layer.style.display !== 'none',
-          fits: rect.height <= innerHeight && rect.width <= innerWidth,
+          fits:
+            rect.left >= 0 &&
+            rect.top >= 0 &&
+            rect.right <= innerWidth &&
+            rect.bottom <= innerHeight * 0.8,
         };
       },
       { key: this.key, cue },

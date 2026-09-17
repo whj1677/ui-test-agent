@@ -1,0 +1,169 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0011",
+  "title": "离线录像字幕可读性",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-18"
+  },
+  "original_input": "父目标REQ-0001要求实际可读、可播放的中文报告；用户授权发现缺陷后先建需求包、修复验证、独立Git同步。本子问题来自真实报告播放，不修改原用例或验收答案。",
+  "user_requirements": [
+    {
+      "id": "UN-0011-01",
+      "status": "已确认",
+      "goal": "测试人员可直接阅读录像中的操作、预期和实际，不被播放器遮住关键字幕。",
+      "constraints": "只修录像呈现和报告缩放；不变断言、审批、模型、业务页面元素或历史事实。",
+      "success_criteria": "支持的1360×900录制画面及桌面报告可辨认字幕，原生控制区不遮主要字幕；长文本/隔离/业务终态回归不退化。"
+    }
+  ],
+  "confirmed_facts": [
+    "状态卡：阶段=实现前；目标=修复已实见字幕遮挡/过小；输入=build14c2bda0aa6a与validation/report-media-hZPenr/report.html；交付=限定补丁/失败复现/程序与真实播放复验/Git同步；不做=真实模型/知识库/4179切换；停止=缺陷闭环，不据此宣称发布就绪。",
+    "修复前真实Codex浏览器播放不一致录像：0.224553秒推进至13.046669秒，最终17.76秒ended=true/error=null，暂停8.306688秒；可播放但右下字幕与原生底部控制条相交。截图在本任务浏览器工具证据中，未伪称已保存文件。",
+    "源录制1360×900，字幕17px、面板500px且优先右下16px；报告video/img共用max-height:500px使源字幕缩至约9.4px。1280宽桌面目视确认字幕较小，暂停时实际字段被原生控件挡住。",
+    "父包测试初稿有错误import与把已冻结范围中未运行状态误写NEEDS_REVIEW两次脚本错误，原日志保留；修正后3实际固定只读执行+2报告检查及父项6TAP均通过，不是真实模型验收。",
+    "修复前实际几何复现：validation/REQ-0011-before.log中5TAP为1通过/4失败（3具体失败+父项）：17px、面板底部884px、报告500px限制。补丁首轮长中文140码点×4字段底部913.40625px但宽高检查误报fits=true；REQ-0011-targeted.log及layout-detail.log保留失败。",
+    "修复后当前构建9b7f132246fa2cc5a17a0d286abc508c5325d57e26adb0ab0216d52d94c058f2：完整非暂停工程570TAP/0失败/0跳过，日志validation/REQ-0011-runtime.log。新增6项布局检查包含在570内，不另相加。",
+    "固定计划报告集成6TAP/0失败/0跳过（validation/REQ-0011-report-after.log）；8场景录像集成退出0及字幕隔离对照退出0（REQ-0011-recording.log、REQ-0011-isolation.log），不把文件/场景混加为业务用例。",
+    "浏览器实际播放/暂停/原生时间轴与中文字形检查完成：两段video error=null，匹配播放至9.68秒；不一致14.877215秒和匹配6.822565秒的结果字幕完整可读、与控制条分离。报告视频高度634.40625px，1280宽桌面无横向溢出；详见browser-review.md。",
+    "缺失媒体副本界面显示1条证据不完整且不一致仍保留，原视频SHA未变；范围筛选及键盘Enter重置已实际操作。原17文件24例冻结摘要保持，真实模型0调用，4179未重启。",
+    "file://直接打开被浏览器URL安全策略拒绝，未换路径绕过；同一HTML原字节在loopback服务上的播放已验，不等同双击离线文件验收。临时两份只读viewer和两张自建标签已关闭。"
+  ],
+  "inferences_and_open_questions": [
+    "只支持现有固定录制viewport及桌面报告；不宣称任意小屏、任意浏览器原生控制条高度或所有第三方DOM兼容。旧录像像素不可回写，更新报告可改善尺寸；字幕位置改进仅适用于新录制。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0011-01",
+      "status": "已确认",
+      "requirement": "新录制字幕优先上方并避开当前动作目标，备用下方位置留播放控件安全区；提高正文可读字号，报告不把录像强制压到500px高。",
+      "acceptance_criteria": "实际1360×900DOM几何验证上方/备用下方/长中文完整；新HTML视频显示高度大于原500限制，实际播放匹配和不一致结果的中文可读；截图缩放和断言结果不改。",
+      "constraints": "原140字符分页、观测窗口、1800ms持留不变，字幕仍closed shadow/inert/pointer-events:none；不能注入业务成功文本供定位。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0011-01",
+      "dr_ids": [
+        "DR-0011-01"
+      ],
+      "status": "已确认",
+      "summary": "录制面板通常560px、正文20px；长页超出安全区时扩至最多840px且不超视口；上右/上左优先，备选下方至少留20%源画面高度；fits核验完整边界而非仅宽高；报告录像解除500px高度限制。",
+      "rationale": "以有限展示改动修根因，不发明字幕与视频时间轴的精确同步，不改既有执行事实或依赖。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "RecordingEvidence.closedShadow样式/位置→新录像像素→现有报告内嵌播放器。报告对figure.recording video单独设max-height:none，截图维持原限制。无新协议、网络或数据迁移。"
+  ],
+  "module_document_impact": [
+    "更新docs/modules/release_runtime.md说明新录像呈现、旧像素不重写及已验证范围。"
+  ],
+  "risks_and_rollback": [
+    "大字号与安全区可能造成长字幕溢出，必须以真实DOM反例验证；原fits检测保持，不能把不可读结果记完整。",
+    "视频更高会增加报告纵向长度，用户主动展开才显示，保留无自动播放。",
+    "独立Git提交可回退源码，不改用户任务/原24例；历史录像只读，不声称修复其原像素。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0011-01",
+      "dr_ids": [
+        "DR-0011-01"
+      ],
+      "dd_ids": [
+        "DD-0011-01"
+      ],
+      "status": "已实现",
+      "task": "已按失败反例修复字幕布局/长中文边界和报告视频缩放，完成限定及非暂停程序回归、固定录像/隔离和实际浏览器播放；本轮待Git同步。",
+      "verification_ids": [
+        "VT-0011-01"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0011-01",
+      "dr_ids": [
+        "DR-0011-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "字幕布局、报告尺寸、固定计划录像和证据边界",
+      "evidence_standard": "修复前失败与修复后真实命令/TAP、报告SHA、浏览器DOM/实际播放和可读画面；程序检查与视觉复验分开。",
+      "current_evidence": {
+        "command": "node --test tests/recording-layout.test.mjs tests/recording-evidence.test.mjs",
+        "exit_code": 0,
+        "test_count": 10,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0011-delivery-formatted.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/recording-layout.test.mjs tests/recording-evidence.test.mjs",
+      "node --test tests/release-report.integration.mjs",
+      "node tests/recording.integration.mjs",
+      "node tests/recording-isolation.integration.mjs",
+      "node tests/runtime-regression.mjs"
+    ],
+    "environment": [
+      "Windows11/Node22/产品独立Chromium与Codex浏览器报告检查；本机合成数据/零模型调用"
+    ],
+    "conclusion": [
+      "本机限定字幕与报告缺陷修复已复验；正式10项组合由collector执行，另有570项工程、6项报告集成及8场景录像/隔离证据。",
+      "实际可见浏览器播放/中文字形有独立观察；本地file://直接打开被策略拒绝，保持未验，不绕过。",
+      "仅限定修复，不是最终产品发布；真实模型、独立人员及其他父门槛仍未满足。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0011-01",
+      "dr_id": "DR-0011-01",
+      "dd_id": "DD-0011-01",
+      "tk_id": "TK-0011-01",
+      "vt_id": "VT-0011-01",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001 / DR-0001-04",
+      "status": "进行中",
+      "notes": "实见报告字幕可读性问题，修改产品前建子包。"
+    },
+    {
+      "version": 1,
+      "link": "DR-0011-01 / DD-0011-01 / TK-0011-01 / VT-0011-01",
+      "status": "已实现",
+      "notes": "先复现后修复；长页溢出中间失败保留，补足完整几何判断；程序与真实播放分别记录。"
+    }
+  ],
+  "open_questions": [
+    "本子问题无新增业务语义待选；父目标的真实模型及独立环境条件仍未满足。"
+  ],
+  "prohibited_implementation": [
+    "不修改原用例、预期、审批或统计语义；不伪造录像画面；不把播放验收当真实模型产品验收。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "实现前建包",
+      "description": "冻结已实见字幕遮挡及缩小问题与有限修复边界。",
+      "impact": "录制面板及离线报告展示、相应测试",
+      "confirmed_by": "父发布目标与实见播放证据"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "限定修复与复验",
+      "description": "上方字幕、长页扩宽及完整矩形检查，报告不再500px压缩录像；保留中间失败和明确file://未验限制。",
+      "impact": "两个呈现模块、限定测试/实际播放记录；无业务和原样本变化。",
+      "confirmed_by": "真实测试日志、浏览器视频DOM及截图观察；Git同步待本轮执行。"
+    }
+  ]
+}

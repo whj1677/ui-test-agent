@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0011-recording-caption-readability](REQ-0011-recording-caption-readability/current_state.md)：REQ-0001实测子问题；修复新录像字幕与底部控制条相交、报告缩放过小，保留原执行与事实语义。
+
 - [REQ-0010-candidate-file-integrity](REQ-0010-candidate-file-integrity/current_state.md)：REQ-0001子问题；说明损坏仍被自检报摘要一致，限定增加清单元数据/路径集合/逐文件核验，不代替签名或发布验收。
 
 - [REQ-0009-guarded-query-reset](REQ-0009-guarded-query-reset/current_state.md)：REQ-0001子问题；原查询后“重置”可见但无候选，仅补原文绑定且核验身份的原生查询重置，保留业务重置禁令。
