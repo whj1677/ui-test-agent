@@ -1,0 +1,131 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0000",
+  "title": "<TITLE>",
+  "metadata": {
+    "requirement_status": "人工待确认",
+    "governance_level": "G2 / G3（待确认）",
+    "version": 1,
+    "last_updated": "2026-09-16"
+  },
+  "original_input": "待粘贴用户原始描述，不改写、不补造。",
+  "user_requirements": [
+    {
+      "id": "UN-0000-01",
+      "status": "人工待确认",
+      "goal": "待填写",
+      "constraints": "待填写",
+      "success_criteria": "待填写"
+    }
+  ],
+  "confirmed_facts": [
+    "待填写。"
+  ],
+  "inferences_and_open_questions": [
+    "待填写。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0000-01",
+      "status": "人工待确认",
+      "requirement": "待填写",
+      "acceptance_criteria": "待填写",
+      "constraints": "待填写"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0000-01",
+      "dr_ids": [
+        "DR-0000-01"
+      ],
+      "status": "人工待确认",
+      "summary": "待填写",
+      "rationale": "待填写"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "待填写。"
+  ],
+  "module_document_impact": [
+    "待确认受影响模块；确实无影响时写明原因。"
+  ],
+  "risks_and_rollback": [
+    "待填写。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0000-01",
+      "dr_ids": [
+        "DR-0000-01"
+      ],
+      "dd_ids": [
+        "DD-0000-01"
+      ],
+      "status": "待实现",
+      "task": "待填写",
+      "verification_ids": [
+        "VT-0000-01"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0000-01",
+      "dr_ids": [
+        "DR-0000-01"
+      ],
+      "confirmation_status": "人工待确认",
+      "execution_status": "未运行",
+      "item": "待填写",
+      "evidence_standard": "真实命令、退出码、测试统计和产物路径",
+      "current_evidence": "无"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "待填写。",
+    "commands": [
+      "待按当前工程事实选择。"
+    ],
+    "environment": [
+      "待探测。"
+    ],
+    "conclusion": [
+      "未运行。没有真实命令、退出码和非零测试统计，不得写成测试通过。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0000-01",
+      "dr_id": "DR-0000-01",
+      "dd_id": "DD-0000-01",
+      "tk_id": "TK-0000-01",
+      "vt_id": "VT-0000-01",
+      "status": "人工待确认"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "确认目标对象、期望行为、验收标准和影响范围。"
+  ],
+  "prohibited_implementation": [
+    "未确认的范围不得进入实现或正式测试 oracle。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-16",
+      "version": 1,
+      "type": "新建",
+      "description": "创建需求包，内容待确认",
+      "impact": "全链路",
+      "confirmed_by": "人工待确认"
+    }
+  ]
+}

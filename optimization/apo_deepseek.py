@@ -56,6 +56,8 @@ def append_json(path: Path, value):
 
 
 def summarize(rows):
+    if any(row.get("reward") is None for row in rows):
+        raise RuntimeError("EVALUATION_REVIEW_REQUIRED")
     positive = [x for x in rows if x["expected_outcome"] == "plan"]
     negative = [x for x in rows if x["expected_outcome"] == "blocked"]
     return {
@@ -128,6 +130,10 @@ async def evaluate(api, model: str, base_prompt: str, guidance: str, entries, ph
         results.append(grade)
         append_json(api.output / "responses.jsonl", {"phase": phase, "id": entry["id"], "response": value,
                     "unparsed_text": text[:64000] if value is None else None, "grade": grade})
+        # An unreviewed explanation is neither a positive nor a negative reward.
+        # Retain the response for review, and stop before APO sees it as feedback.
+        if grade["reward"] is None:
+            raise RuntimeError("EVALUATION_REVIEW_REQUIRED")
         rollouts.append({"status": "succeeded", "final_reward": grade["reward"], "spans": [],
                          "messages": messages + [{"role": "assistant", "content": text},
                                                   {"role": "user", "content": "Offline evaluator feedback: " + json.dumps(grade)}]})

@@ -1,0 +1,6 @@
+vendor/
+data/
+validation/
+node_modules/
+package-lock.json
+*.md

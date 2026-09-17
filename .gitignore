@@ -1,6 +1,16 @@
 node_modules/
 data/
 .env
+.env.*
+!.env.example
 *.local.json
 validation/
 __pycache__/
+.python-venv/
+
+# 本机运行状态、报告和媒体证据可能包含账号会话、接口观察或业务数据；保留在本机，
+# 不随源码仓库发布。可复现的合成夹具源文件由 Git 显式跟踪。
+work/
+test-results/
+playwright-report/
+coverage/

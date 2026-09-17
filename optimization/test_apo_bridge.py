@@ -16,6 +16,25 @@ def reply(text):
 
 
 class BridgeTests(unittest.TestCase):
+    def test_unreviewed_block_is_saved_but_never_sent_to_optimizer_as_reward(self):
+        bundle = bridge.node("dataset", "train")
+        entry = next(item for item in bundle["items"] if item["id"] == "OPT-TASK-02")
+
+        async def request(**kwargs):
+            return reply(json.dumps({"blocked": True, "reason": "壁纸是蓝色所以拒绝。无关词：弹窗"}))
+
+        async def run(output):
+            api = bridge.BoundedAPI(request, 1, output)
+            with self.assertRaisesRegex(RuntimeError, "EVALUATION_REVIEW_REQUIRED"):
+                await bridge.evaluate(api, "mock", bundle["prompt"], "", [entry], "baseline-train")
+            self.assertEqual(api.used, 1)
+            row = json.loads((output / "responses.jsonl").read_text(encoding="utf-8"))
+            self.assertIsNone(row["grade"]["reward"])
+            self.assertEqual(row["grade"]["assessment"], "REVIEW_REQUIRED")
+
+        with tempfile.TemporaryDirectory() as folder:
+            asyncio.run(run(Path(folder)))
+
     def test_budget_stops_before_extra_request(self):
         calls = []
 

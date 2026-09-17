@@ -1,0 +1,44 @@
+{
+  "schema_version": "case-import/v1",
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "LOCAL-001",
+      "title": "从工作台进入计费中心并查看费率目录",
+      "source_side": "ui",
+      "preconditions": ["已登录并停留在工作台首页。"],
+      "steps": [
+        { "step_id": "1", "action": "展开左侧资产运营菜单。", "expected": "显示计费中心二级菜单。" },
+        { "step_id": "2", "action": "点击计费中心。", "expected": "进入费率目录。" },
+        { "step_id": "3", "action": "查看费率目录的列名和方案名称。", "expected": "目录包含方案名称、时段、单价、状态、操作五列，并显示工业日间方案和工业夜间方案。" }
+      ]
+    },
+    {
+      "case_id": "LOCAL-002",
+      "title": "查看工业日间方案详情并返回目录",
+      "source_side": "ui",
+      "preconditions": ["已登录并停留在工作台首页。"],
+      "steps": [
+        { "step_id": "1", "action": "展开左侧资产运营菜单。", "expected": "显示计费中心二级菜单。" },
+        { "step_id": "2", "action": "点击计费中心。", "expected": "进入费率目录。" },
+        { "step_id": "3", "action": "若出现使用提示，点击知道了；若未出现则继续。", "expected": "没有使用提示遮挡操作，可以查看目录。" },
+        { "step_id": "4", "action": "点击工业日间方案对应的查看详情。", "expected": "打开该方案的详情。" },
+        { "step_id": "5", "action": "核对详情中的方案名称。", "expected": "方案名称为工业日间方案。" },
+        { "step_id": "6", "action": "核对详情中的时段。", "expected": "时段为08:00—22:00。" },
+        { "step_id": "7", "action": "核对详情中的单价。", "expected": "单价为0.68元/度。" },
+        { "step_id": "8", "action": "点击关闭。", "expected": "详情关闭，返回费率目录。" }
+      ]
+    },
+    {
+      "case_id": "LOCAL-003",
+      "title": "核验工业夜间方案单价",
+      "source_side": "ui",
+      "preconditions": ["已登录并停留在工作台首页。"],
+      "steps": [
+        { "step_id": "1", "action": "展开左侧资产运营菜单。", "expected": "显示计费中心二级菜单。" },
+        { "step_id": "2", "action": "点击计费中心。", "expected": "进入费率目录。" },
+        { "step_id": "3", "action": "核对工业夜间方案的单价。", "expected": "工业夜间方案单价为0.32元/度。" }
+      ]
+    }
+  ]
+}
