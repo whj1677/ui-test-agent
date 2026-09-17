@@ -1,0 +1,2 @@
+# Windows CMD requires CRLF, especially across an in-script codepage switch.
+*.cmd text eol=crlf

@@ -108,7 +108,7 @@ try {
     pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   await page.goto(app.url);
-  await page.getByRole('button', { name: '＋ 导入测试用例' }).click();
+  await page.getByRole('button', { name: '导入测试用例', exact: true }).click();
   await page.locator('#task-name').fill('诊断日志集成验证（模拟模型回复）');
   await page.locator('#target').fill(demo.url + '/catalog');
   await page.locator('#case-file').setInputFiles({

@@ -130,7 +130,7 @@ try {
   await page.getByText(/实际连接成功 · 返回模型 fixture-deepseek-json/).waitFor();
   assert.equal(await page.locator('#key').inputValue(), '');
   await page.getByRole('button', { name: '保存设置', exact: true }).click();
-  await page.getByRole('button', { name: '＋ 导入测试用例' }).click();
+  await page.getByRole('button', { name: '导入测试用例', exact: true }).click();
   await page.locator('#task-name').fill('导入与模型协议联调（模拟回复）');
   await page.locator('#target').fill(demo.url + '/catalog');
   await page.locator('#case-file').setInputFiles({
@@ -150,7 +150,7 @@ try {
   await page.locator('#preparation-tools > summary').click();
   await page.getByRole('button', { name: '审查所选用例' }).click();
   await page.waitForFunction(() =>
-    document.querySelector('.events')?.textContent.includes('用例文本审查结束'),
+    document.querySelector('#output-list')?.textContent.includes('用例文本审查结束'),
   );
   await page.getByRole('button', { name: '确认所选原文' }).click();
   await page.getByRole('button', { name: '以上用例原文已核对' }).click();

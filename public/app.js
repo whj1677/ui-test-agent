@@ -10,8 +10,24 @@ let current = null,
   config = {},
   selected = new Set(),
   lastRevision = -1,
+  taskNavigationSignature = '',
   polling = false,
   toastTimer;
+// The output panel survives workspace renders, so polling never collapses a
+// reply or moves the reader away from an older record.
+let outputTask = null,
+  outputPanel = null,
+  outputFollow = true,
+  outputFilter = 'all',
+  outputSignature = '',
+  outputSyncAt = 0,
+  outputConnectionError = false,
+  outputDiagnostics = [],
+  outputDiagnosticsAt = 0,
+  outputDiagnosticsError = '',
+  outputDiagnosticsPending = null,
+  outputWasBusy = false,
+  outputActionError = '';
 const errors = {
   OPTIONAL_DIALOG_SCHEMA: '条件关闭格式不受支持；只允许原文指定的提示及关闭文字。',
   OPTIONAL_DIALOG_SOURCE_REQUIRED: '原步骤未明确授权该条件关闭，或计划不是只读。',
@@ -37,6 +53,8 @@ const errors = {
   DEEPSEEK_CONNECTION_FAILED:
     '未能连接 DeepSeek，请在连接设置中测试连接；使用代理时检查 HTTPS_PROXY / HTTP_PROXY，诊断日志可查看具体网络错误。',
   DEEPSEEK_TIMEOUT: 'DeepSeek 请求超时，已保留当前进度；请检查网络后重试。',
+  DEEPSEEK_RATE_LIMIT: '模型服务暂时限流，请留意后续重试结果。',
+  INVALID_LOCATOR: '控件定位格式无效，需要修正后再继续。',
   DEEPSEEK_OUTPUT_TRUNCATED: '模型输出被截断，本次未采纳。',
   DEEPSEEK_EMPTY_RESPONSE: '模型返回空内容，本次未采纳。',
   JOB_ALREADY_RUNNING: '已有任务正在进行，请等待或停止该任务。',
@@ -89,7 +107,7 @@ Object.assign(errors, {
   NO_UNEXECUTED_CASES: '本轮没有尚未执行的用例。',
   FIXTURE_PRESET: '本机演示使用预制计划，未自动调用模型；需要时可点击自动探索。',
   DISCOVERY_BUDGET_EXHAUSTED: '本次探索已达到预算，请查看已发现的页面及受阻原因。',
-  DISCOVERY_BLOCKED: '当前探索受阻，请查看实时活动中的具体原因。',
+  DISCOVERY_BLOCKED: '当前探索受阻，请查看 Agent 运行输出中的具体原因。',
 });
 Object.assign(errors, {
   PLAN_AUDIT_REQUIRED: '计划或输入已变化，需要重新生成并核验计划后再核对执行。',
@@ -204,6 +222,7 @@ async function api(url, body) {
     method: body === undefined ? 'GET' : 'POST',
     headers: body === undefined ? {} : { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
     body: body === undefined ? undefined : JSON.stringify(body),
+    ...(body === undefined ? { signal: AbortSignal.timeout(8000) } : {}),
   });
   const value = await r.json();
   if (!r.ok) throw new Error(errors[value.error] ?? `操作未完成：${value.error}`);
@@ -212,8 +231,13 @@ async function api(url, body) {
 async function action(fn) {
   try {
     await fn();
+    outputActionError = '';
     await refresh(true);
   } catch (e) {
+    if (current && state?.id === current) {
+      outputActionError = diagnosticsSafe(e.message);
+      updateAgentOutput();
+    }
     toast(e.message, true);
   }
 }
@@ -457,38 +481,59 @@ async function refresh(force = false) {
       ? config.model + ' · 官方接口'
       : 'DeepSeek · 待连接';
     const tasks = await api('/api/tasks');
-    $('#task-list').innerHTML =
-      tasks
-        .map(
-          (t) =>
-            `<button class="task ${t.id === current ? 'selected' : ''}" data-task="${h(t.id)}">${h(t.name)}<small>${t.total ?? '?'} 条用例 · ${h({ IDLE: '空闲', IMPORTED: '已导入', ANALYZING: '分析中', RUNNING: '执行中', STOPPED: '已停止', NEEDS_ATTENTION: '需处理', INTERRUPTED: '已中断' }[t.status] ?? t.status)}</small></button>`,
-        )
-        .join('') || '<p class="muted">还没有测试轮次</p>';
-    for (const b of document.querySelectorAll('[data-task]'))
-      b.onclick = () =>
-        action(async () => {
-          current = b.dataset.task;
-          selected.clear();
-          lastRevision = -1;
-        });
+    if (!current) {
+      const linkedTask = new URLSearchParams(location.hash.slice(1)).get('task');
+      if (tasks.some((task) => task.id === linkedTask)) current = linkedTask;
+    }
+    const navigationSignature = JSON.stringify([tasks, current]);
+    if (navigationSignature !== taskNavigationSignature) {
+      taskNavigationSignature = navigationSignature;
+      $('#task-list').innerHTML =
+        tasks
+          .map(
+            (t) =>
+              `<button class="task ${t.id === current ? 'selected' : ''}" data-task="${h(t.id)}">${h(t.name)}<small>${t.total ?? '?'} 条用例 · ${h({ IDLE: '空闲', IMPORTED: '已导入', ANALYZING: '分析中', RUNNING: '执行中', STOPPED: '已停止', NEEDS_ATTENTION: '需处理', INTERRUPTED: '已中断' }[t.status] ?? t.status)}</small></button>`,
+          )
+          .join('') || '<p class="muted">还没有测试轮次</p>';
+      for (const b of document.querySelectorAll('[data-task]'))
+        b.onclick = () =>
+          action(async () => {
+            current = b.dataset.task;
+            history.replaceState(null, '', '#task=' + encodeURIComponent(current));
+            selected.clear();
+            lastRevision = -1;
+          });
+    }
     if (!current) {
       renderEmpty();
       return;
     }
-    const next = await api('/api/tasks/' + current);
+    const taskId = current;
+    const next = await api('/api/tasks/' + taskId);
+    if (taskId !== current) return;
     const changed =
       force ||
       next.revision !== lastRevision ||
       next.authenticated !== state?.authenticated ||
-      !!next.active !== !!state?.active ||
+      JSON.stringify(next.active) !== JSON.stringify(state?.active) ||
       previousDiscoverySupport !== supportsDiscovery() ||
       JSON.stringify(next.discovery) !== JSON.stringify(state?.discovery) ||
       JSON.stringify(next.site_cleanup_blockers) !== JSON.stringify(state?.site_cleanup_blockers);
     state = next;
+    outputSyncAt = Date.now();
+    outputConnectionError = false;
     if (changed) {
       lastRevision = state.revision;
       render();
     }
+    updateAgentOutput();
+    // Detailed replies are already redacted by the existing diagnostics API.
+    // Read them independently: a slow log must not freeze the live job state.
+    void refreshOutputDiagnostics();
+  } catch (error) {
+    outputConnectionError = true;
+    updateAgentOutput();
+    if (force) throw error;
   } finally {
     polling = false;
   }
@@ -617,6 +662,400 @@ function eventText(e) {
     url = e.url ?? e.target?.url;
   return `${e.type === 'CLEANUP_ACTION_STARTED' ? '正在清理操作' : (eventNames[e.type] ?? e.type)}${e.case_id ? ' · ' + e.case_id : ''}${e.step_id ? ' / ' + e.step_id : ''}${e.checkpoint_id ? ' / 检查点 ' + e.checkpoint_id : ''}${e.round !== undefined ? ' · ' + (e.round === 0 ? '首次计划' : '第 ' + e.round + ' 次修复') : ''}${e.operation ? ' · ' + (opName[e.operation] ?? e.operation) + ' ' + (discovery ? (targetName ?? loc(e.target)) : loc(e.target)) : ''}${discovery && targetName && !e.operation ? ' · ' + targetName : ''}${discovery && url ? ' · ' + url : ''}${e.status ? ' · ' + (config.labels?.[e.status] ?? discoveryStatusNames[e.status] ?? repairStatusNames[e.status] ?? e.status) : ''}${e.outcome ? ' · ' + (repairStatusNames[e.outcome] ?? diagnosticOutcomes[e.outcome] ?? e.outcome) : ''}${typeof e.issues === 'number' ? ' · ' + e.issues + ' 项需处理' : ''}${e.passed !== undefined ? ' · ' + (e.passed ? '满足' : '不一致') : ''}${e.check ? ' · 预期 ' + JSON.stringify(e.expected) + ' / 实际 ' + JSON.stringify(e.actual) : ''}${e.code ? ' · ' + reasonText(e.code) : ''}${e.reason ? ' · ' + reasonText(e.reason) : ''}${e.message ? ' · ' + e.message : ''}${e.action ? ' · ' + (typeof e.action === 'string' ? e.action : (e.action.name ?? opName[e.action.op] ?? e.action.op ?? '')) : ''}${e.response_model ? ' · ' + e.response_model : ''}`;
 }
+const outputStages = {
+  MODEL: '正在等待模型回复',
+  WAITING_USER_LOGIN: '等待你在浏览器登录',
+  review: '正在审查测试用例',
+  plan: '正在生成候选计划',
+  prepare: '正在准备测试',
+  discover: '正在探索业务页面',
+  run: '正在执行测试',
+};
+const outputPhases = {
+  review: '用例审查',
+  input_review: '输入核验',
+  plan: '生成计划',
+  plan_audit: '计划核验',
+  discover: '页面探索',
+  discovery: '页面探索',
+  adapter_repair: '适配修复',
+  repair: '定位修复',
+};
+function outputIssue(e) {
+  return (
+    e.passed === false ||
+    ['REJECTED', 'BLOCKED', 'FAILED'].includes(e.outcome) ||
+    ['FAIL_ASSERTION', 'TECHNICAL_FAILED', 'CLEANUP_REQUIRED', 'BLOCKED_MAPPING'].includes(
+      e.status,
+    ) ||
+    /(?:FAILED|BLOCKED|REJECTED|EXHAUSTED|INTERRUPTED)$/.test(e.type) ||
+    /REPAIR_(?:STARTED|ATTEMPT|REQUESTED)$/.test(e.type) ||
+    e.will_retry === true
+  );
+}
+function outputTime(at) {
+  return Number.isFinite(Date.parse(at))
+    ? new Date(at).toLocaleTimeString('zh-CN', { hour12: false })
+    : '时间未记录';
+}
+function outputAge(at) {
+  const stamp = typeof at === 'number' ? at : Date.parse(at);
+  if (!Number.isFinite(stamp) || !stamp) return '暂无记录';
+  const seconds = Math.max(0, Math.floor((Date.now() - stamp) / 1000));
+  return seconds < 2
+    ? '刚刚'
+    : seconds < 60
+      ? `${seconds} 秒前`
+      : `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒前`;
+}
+function outputText(selector, text) {
+  const node = outputPanel?.querySelector(selector);
+  if (node && node.textContent !== text) node.textContent = text;
+}
+function outputCurrentEvents() {
+  const events = state?.events ?? [];
+  const start = events.findLastIndex((event) => event.type === 'JOB_STARTED');
+  return start < 0 ? events : events.slice(start);
+}
+function outputStatus() {
+  const active = state.active;
+  const events = outputCurrentEvents();
+  const recent = events.at(-1);
+  if (outputConnectionError || (outputSyncAt && Date.now() - outputSyncAt > 15000))
+    return {
+      tone: 'error',
+      title: '连接中断，运行状态待确认',
+      detail: '正在自动重新连接本机服务。下方保留最后收到的输出，恢复连接后会更新状态。',
+    };
+  if (active) {
+    if (events.some((e) => e.type === 'STOP_REQUESTED'))
+      return {
+        tone: 'waiting',
+        title: '正在停止并收尾',
+        detail: '停止请求已收到，请等待当前操作和必要清理结束。',
+      };
+    if (active.stage === 'WAITING_USER_LOGIN')
+      return {
+        tone: 'waiting',
+        title: outputStages.WAITING_USER_LOGIN,
+        detail: '请在 Agent 打开的浏览器完成登录，识别成功后会自动继续。',
+      };
+    const title =
+      outputStages[active.stage] ??
+      eventNames[active.stage] ??
+      outputStages[active.kind] ??
+      'Agent 正在处理';
+    return {
+      tone: 'running',
+      title,
+      detail:
+        active.stage === 'MODEL'
+          ? '请求正在处理中，收到回复后会显示在下方；可以继续查看已有输出。'
+          : 'Agent 正在继续当前批次，页面会自动更新执行和修复记录。',
+    };
+  }
+  if (state.status === 'STOPPED')
+    return {
+      tone: 'neutral',
+      title: '当前批次已停止',
+      detail: '已保留停止前的输出，请根据用例状态决定下一步。',
+    };
+  if (state.status === 'INTERRUPTED')
+    return {
+      tone: 'error',
+      title: '执行已中断',
+      detail: '请核对最后输出及清理状态，已开始的操作不会自动重放。',
+    };
+  const failure = events.findLast((e) => e.type === 'JOB_FAILED' || e.type === 'INTERRUPTED');
+  if (failure || state.status === 'NEEDS_ATTENTION')
+    return {
+      tone: 'error',
+      title: '运行已结束，需要处理',
+      detail: failure?.code ? reasonText(failure.code) : '请查看下方异常原因与用例状态。',
+    };
+  const touched = new Set(events.map((e) => e.case_id).filter(Boolean));
+  const cases = state.cases.filter((c) => touched.has(c.case_id));
+  if (
+    cases.some((c) =>
+      [
+        'BLOCKED_MAPPING',
+        'AUTH_REQUIRED',
+        'BLOCKED_DATA',
+        'CLEANUP_REQUIRED',
+        'TECHNICAL_FAILED',
+        'FAIL_ASSERTION',
+      ].includes(c.status),
+    )
+  )
+    return {
+      tone: 'error',
+      title: '本批处理结束，有用例需要处理',
+      detail: '请查看异常输出和对应的用例状态，其他用例的记录已保留。',
+    };
+  if (cases.some((c) => c.plan && !c.plan_approved))
+    return {
+      tone: 'waiting',
+      title: '计划已生成，等待核对',
+      detail: '请核对所选计划的操作与预期，批准后即可执行。',
+    };
+  if (events.some((e) => e.type === 'JOB_FINISHED'))
+    return {
+      tone: 'neutral',
+      title: '当前批次已结束',
+      detail: '具体结果请查看用例状态和执行报告。可以继续阅读本轮输出。',
+    };
+  return {
+    tone: 'neutral',
+    title: '等待开始',
+    detail: recent
+      ? '已有操作记录。选择用例后开始准备或执行。'
+      : '选择用例并开始准备，Agent 的运行输出会显示在这里。',
+  };
+}
+function mountAgentOutput() {
+  if (outputTask !== state.id) {
+    outputTask = state.id;
+    outputPanel = null;
+    outputFollow = true;
+    outputFilter = 'all';
+    outputSignature = '';
+    outputDiagnostics = [];
+    outputDiagnosticsAt = 0;
+    outputDiagnosticsError = '';
+    outputWasBusy = false;
+    outputActionError = '';
+  }
+  if (!outputPanel) {
+    outputPanel = document.createElement('section');
+    outputPanel.id = 'agent-output';
+    outputPanel.className = 'panel agent-output';
+    outputPanel.setAttribute('aria-labelledby', 'agent-output-title');
+    outputPanel.innerHTML = `
+      <div class="output-heading"><div><p class="output-eyebrow">运行过程</p><h2 id="agent-output-title">Agent 运行输出</h2></div>
+        <div class="actions"><span id="output-connection" class="output-connection"></span><button id="output-refresh">刷新状态</button><button id="stop" class="danger" hidden>停止当前批次</button></div></div>
+      <div class="output-status" role="status" aria-live="polite" aria-atomic="true"><span class="output-dot" aria-hidden="true"></span><div><strong id="output-state"></strong><p id="output-detail"></p></div></div>
+      <div class="output-meta"><span>当前用例 <b id="output-case">—</b></span><span>本批模型调用 <b id="output-calls">—</b></span><span>最后输出 <b id="output-last">暂无记录</b></span></div>
+      <p id="output-silence" class="output-notice" hidden></p>
+      <div id="output-problem" class="output-problem" hidden><strong>最近异常</strong><p id="output-problem-text"></p><button id="output-diagnostics">查看详细诊断</button></div>
+      <div class="output-toolbar"><div class="output-filters" role="group" aria-label="输出筛选"><button data-output-filter="all" aria-pressed="true">全部输出</button><button data-output-filter="issues" aria-pressed="false">异常与重试</button></div><button id="output-follow" aria-pressed="true">跟随最新输出：开</button></div>
+      <div id="output-records" class="output-records" tabindex="0" role="region" aria-label="Agent 输出记录，可滚动阅读"><ol id="output-list"></ol></div>
+      <div class="output-footer"><span id="output-count"></span><span id="output-log-status"></span></div>`;
+    outputPanel.querySelector('#output-refresh').onclick = () =>
+      action(async () => {
+        outputDiagnosticsAt = 0;
+        await refresh(true);
+      });
+    outputPanel.querySelector('#output-diagnostics').onclick = () => action(diagnosticsDialog);
+    outputPanel.querySelector('#stop').onclick = () => action(() => taskAPI('stop', {}));
+    outputPanel.querySelector('#output-follow').onclick = () => {
+      outputFollow = !outputFollow;
+      updateAgentOutput();
+      if (outputFollow) {
+        const feed = outputPanel.querySelector('#output-records');
+        feed.scrollTop = feed.scrollHeight;
+      }
+    };
+    for (const button of outputPanel.querySelectorAll('[data-output-filter]'))
+      button.onclick = () => {
+        outputFilter = button.dataset.outputFilter;
+        updateAgentOutput();
+      };
+    outputPanel.querySelector('#output-records').addEventListener('scroll', () => {
+      const feed = outputPanel.querySelector('#output-records');
+      if (outputFollow && feed.scrollHeight - feed.clientHeight - feed.scrollTop > 40) {
+        outputFollow = false;
+        updateAgentOutput();
+      }
+    });
+    outputPanel.querySelector('#output-records').addEventListener(
+      'toggle',
+      (event) => {
+        if (event.target instanceof HTMLDetailsElement && event.target.open && outputFollow) {
+          outputFollow = false;
+          updateAgentOutput();
+        }
+      },
+      true,
+    );
+  }
+  $('#workspace > .heading').after(outputPanel);
+  updateAgentOutput();
+}
+function outputRows() {
+  const rows = (state.events ?? []).map((event, index) => ({
+    key: `event-${index}-${event.at}`,
+    at: event.at,
+    issue: outputIssue(event),
+    text: diagnosticsSafe(eventText(event)),
+    source: '运行',
+  }));
+  const parsed = new Set(
+    outputDiagnostics.filter((r) => r.type === 'MODEL_RESPONSE_PARSED').map((r) => r.request_id),
+  );
+  for (const record of outputDiagnostics) {
+    if (record.type === 'MODEL_PROVIDER_RESULT' && parsed.has(record.request_id)) continue;
+    const response = [
+      'MODEL_RESPONSE_PARSED',
+      'MODEL_PROVIDER_RESULT',
+      'MODEL_RESPONSE_REJECTED',
+    ].includes(record.type);
+    if (
+      !response &&
+      !['MODEL_REQUEST', 'MODEL_DECISION', 'MODEL_TRANSPORT_FINISHED'].includes(record.type)
+    )
+      continue;
+    if (record.type === 'MODEL_TRANSPORT_FINISHED' && !record.will_retry && !record.error_code)
+      continue;
+    const phase = outputPhases[record.phase] ?? record.phase ?? '模型处理';
+    const label = response
+      ? '模型回复'
+      : record.type === 'MODEL_REQUEST'
+        ? '已发送模型请求'
+        : record.will_retry
+          ? '模型请求重试'
+          : record.type === 'MODEL_DECISION'
+            ? '回复处理结果'
+            : '模型请求异常';
+    const code = record.code ?? record.error_code;
+    const detail = record.reason ?? record.parsed_value?.reason ?? record.parsed_value?.plan?.notes;
+    const body = record.parsed_value ?? record.response_text;
+    rows.push({
+      key: `model-${record.id ?? `${record.request_id}-${record.type}-${record.at}`}`,
+      at: record.at,
+      source: '模型',
+      issue: outputIssue(record) || !!record.error_code,
+      text: `${label} · ${phase}${record.case_id ? ' · ' + record.case_id : ''}${record.outcome ? ' · ' + (diagnosticOutcomes[record.outcome] ?? record.outcome) : ''}${code ? ' · ' + reasonText(code) : ''}${detail ? ' · ' + String(detail).slice(0, 800) : ''}`,
+      body:
+        response && body !== undefined
+          ? typeof body === 'string'
+            ? body
+            : JSON.stringify(body, null, 2)
+          : null,
+    });
+  }
+  return rows.sort((a, b) => (Date.parse(a.at) || 0) - (Date.parse(b.at) || 0));
+}
+function updateAgentOutput() {
+  if (!outputPanel?.isConnected || state?.id !== current || outputTask !== current) return;
+  const status = outputStatus();
+  outputPanel.dataset.tone = status.tone;
+  outputText('#output-state', status.title);
+  outputText('#output-detail', status.detail);
+  const disconnected = status.title.startsWith('连接中断');
+  outputPanel.dataset.connection = disconnected ? 'lost' : 'connected';
+  outputText(
+    '#output-connection',
+    disconnected ? '连接异常 · 自动重连中' : '连接正常 · ' + outputAge(outputSyncAt) + '同步',
+  );
+  outputText('#output-case', state.active?.current_case ?? '—');
+  outputText('#output-calls', state.active ? `${state.active.calls ?? 0} / 100` : '—');
+  const stop = outputPanel.querySelector('#stop');
+  stop.hidden = !state.active;
+  stop.disabled = disconnected || outputCurrentEvents().some((e) => e.type === 'STOP_REQUESTED');
+  const rows = outputRows();
+  const last = rows.at(-1);
+  outputText('#output-last', last ? outputAge(last.at) : '暂无记录');
+  const silent = !disconnected && state.active && last && Date.now() - Date.parse(last.at) >= 30000;
+  outputPanel.querySelector('#output-silence').hidden = !silent;
+  if (silent)
+    outputText(
+      '#output-silence',
+      `最近输出在 ${outputAge(last.at)}，服务状态仍在同步。${state.active.stage === 'WAITING_USER_LOGIN' ? '正在等候浏览器登录。' : '可能正在等待模型或页面响应，可以查看下方已有输出。'}`,
+    );
+  const currentEvents = outputCurrentEvents();
+  const issue = currentEvents.findLast(outputIssue);
+  outputPanel.querySelector('#output-problem').hidden = !issue && !outputActionError;
+  outputText(
+    '#output-problem-text',
+    outputActionError ||
+      (issue
+        ? `${outputTime(issue.at)} · ${diagnosticsSafe(eventText(issue))}${state.active ? '（批次仍在处理，请看上方当前状态。）' : ''}`
+        : ''),
+  );
+  outputText('#output-follow', outputFollow ? '跟随最新输出：开' : '跟随最新输出：关');
+  outputPanel.querySelector('#output-follow').setAttribute('aria-pressed', String(outputFollow));
+  for (const button of outputPanel.querySelectorAll('[data-output-filter]'))
+    button.setAttribute('aria-pressed', String(button.dataset.outputFilter === outputFilter));
+  const filtered = rows.filter((row) => outputFilter !== 'issues' || row.issue);
+  const visible = filtered.slice(-80);
+  const signature = JSON.stringify(visible);
+  if (signature !== outputSignature) {
+    const list = outputPanel.querySelector('#output-list');
+    const feed = outputPanel.querySelector('#output-records');
+    const scrollTop = feed.scrollTop;
+    const existing = new Map([...list.children].map((node) => [node.dataset.key, node]));
+    const keep = new Set(visible.map((row) => row.key));
+    for (const [key, node] of existing) if (!keep.has(key)) node.remove();
+    for (const row of visible) {
+      let node = existing.get(row.key);
+      if (!node) {
+        node = document.createElement('li');
+        node.dataset.key = row.key;
+        node.className = row.issue ? 'output-row issue' : 'output-row';
+        node.innerHTML = `<time>${h(outputTime(row.at))}</time><span class="output-source">${h(row.source)}</span><div class="output-content"><p>${h(diagnosticsSafe(row.text))}</p>${row.body ? `<details><summary>展开模型输出</summary><pre>${h(diagnosticsSafe(row.body))}</pre></details>` : ''}</div>`;
+      }
+      // Insert only when order changes; do not detach an expanded/focused reply.
+      const index = visible.indexOf(row);
+      if (list.children[index] !== node) list.insertBefore(node, list.children[index] ?? null);
+    }
+    let empty = outputPanel.querySelector('.output-empty');
+    if (!visible.length && !empty) {
+      empty = document.createElement('p');
+      empty.className = 'output-empty';
+      feed.append(empty);
+    }
+    if (empty) {
+      empty.hidden = visible.length > 0;
+      empty.textContent =
+        outputFilter === 'issues'
+          ? '当前没有异常或重试记录。'
+          : '暂无运行输出。开始准备后，这里会持续显示进展。';
+    }
+    feed.scrollTop = outputFollow ? feed.scrollHeight : scrollTop;
+    outputSignature = signature;
+  }
+  outputText(
+    '#output-count',
+    `显示最近 ${visible.length} / ${filtered.length} 条${outputFilter === 'issues' ? '异常与重试' : '输出'} · 完整记录见诊断日志`,
+  );
+  outputText(
+    '#output-log-status',
+    outputDiagnosticsError || '每 1.5 秒同步状态 · 模型回复自动补充',
+  );
+}
+async function refreshOutputDiagnostics() {
+  const taskId = current;
+  const panel = outputPanel;
+  const completed = outputWasBusy && !state?.active;
+  outputWasBusy = !!state?.active;
+  if (
+    outputDiagnosticsPending === taskId ||
+    !taskId ||
+    state?.id !== taskId ||
+    (!completed && Date.now() - outputDiagnosticsAt < (state.active ? 6000 : 30000))
+  )
+    return;
+  outputDiagnosticsPending = taskId;
+  outputDiagnosticsAt = Date.now();
+  try {
+    const response = await fetch(`/api/tasks/${taskId}/diagnostics`, {
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) throw new Error('诊断记录暂不可用，运行状态仍单独更新。');
+    const payload = await response.json();
+    if (payload.task_id !== taskId || !Array.isArray(payload.records))
+      throw new Error('诊断记录格式不匹配，运行状态仍单独更新。');
+    if (current !== taskId || outputTask !== taskId || outputPanel !== panel) return;
+    outputDiagnostics = diagnosticsSafe(payload.records);
+    outputDiagnosticsError = '';
+  } catch {
+    if (current === taskId && outputPanel === panel)
+      outputDiagnosticsError = '模型输出暂未同步；可刷新重试，运行状态单独更新。';
+  } finally {
+    if (outputDiagnosticsPending === taskId) outputDiagnosticsPending = null;
+    if (current === taskId && outputPanel === panel) updateAgentOutput();
+  }
+}
 function discoveryHTML(s) {
   if (!supportsDiscovery())
     return `<div class="notice warn discovery-status" role="status"><strong>当前服务尚未启用自动探索</strong><span>服务版本 ${h(config.version)}。自动探索按钮不可用；现有页面读取、计划和执行入口仍可使用。</span></div>`;
@@ -645,6 +1084,10 @@ function siteCleanupNotice(task) {
 }
 function render() {
   const auxiliaryOpen = $('#preparation-tools')?.open ?? false;
+  const outputScroll = outputPanel?.querySelector('#output-records')?.scrollTop ?? 0;
+  const outputFocused = outputPanel?.contains(document.activeElement)
+    ? document.activeElement
+    : null;
   const s = state,
     busy = !!s.active,
     count = (status) => s.cases.filter((c) => c.status === status).length,
@@ -658,16 +1101,15 @@ function render() {
         'CLEANUP_REQUIRED',
       ].includes(c.status),
     ).length;
-  const recent = s.events.at(-1);
+  history.replaceState(null, '', '#task=' + encodeURIComponent(s.id));
   $('#workspace').innerHTML =
-    `${siteCleanupNotice(s)}<div class="heading"><div><h1>${h(s.name)}</h1><p>${h(s.target)} · ${s.fixture ? '本机合成演示' : '独立测试轮次'}</p></div><div class="actions"><button id="environment">环境设置</button><button id="diagnostics">诊断日志</button><a class="download" href="/api/tasks/${s.id}/report">下载离线报告 ↗</a></div></div>${s.fixture ? '<div class="notice">演示使用本地商品查询与任务管理、预制执行计划；运行时使用真实 Chromium。该结果不代表真实 DeepSeek 规划或产品验收。</div>' : ''}<div class="metrics"><div class="metric"><b>${s.cases.length}</b><span>原始用例总数</span></div><div class="metric"><b>${count('READY')}</b><span>可执行</span></div><div class="metric"><b>${count('PASS_ASSERTIONS')}</b><span>已核对断言满足</span></div><div class="metric"><b>${count('FAIL_ASSERTION') + count('TECHNICAL_FAILED')}</b><span>需查看执行差异</span></div><div class="metric"><b>${blocked}</b><span>待准备或处理</span></div></div><section class="panel"><h2>自动准备</h2><p>选择用例后点击一次。在打开的浏览器中登录，Agent 会自动寻找相关模块、补充证据并尝试修复技术适配；无需先手工进入业务页面。业务预期和执行计划仍需核对。</p><button id="confirm-main" ${busy ? 'disabled' : ''}>核对所选用例</button><button class="primary" id="prepare" ${busy || !config.autonomous_preparation ? 'disabled' : ''}>开始准备所选用例</button><button id="approve-main" ${busy ? 'disabled' : ''}>核对所选计划</button><button id="run-main" ${busy ? 'disabled' : ''}>执行所选</button>${s.active?.stage === 'WAITING_USER_LOGIN' ? '<p role="status">等待浏览器登录；完成后会自动继续，无需点击确认。无法可靠识别时，可停止后使用下方辅助入口。</p>' : ''}</section><details class="panel" id="preparation-tools" ${auxiliaryOpen ? 'open' : ''}><summary>辅助操作与单步准备（正常流程无需逐项点击）</summary><div class="workflow"><section class="panel"><h3><i>01</i>核对用例</h3><p>原文单独保留。缺失或矛盾的预期按用例澄清，其他用例可以继续。</p><div class="actions"><button id="review" ${busy ? 'disabled' : ''}>审查所选用例</button><button id="confirm" ${busy ? 'disabled' : ''}>确认所选原文</button></div></section><section class="panel"><h3><i>02</i>登录并探索 <span class="badge ${s.authenticated ? 'good' : ''}">${s.authenticated ? '登录可复用' : s.browser_open ? '浏览器已打开' : '未连接'}</span></h3><p>${supportsDiscovery() ? '正常使用上方“开始准备”；这里用于无法自动识别登录时的辅助处理。' : '在 Chromium 登录一次并确认可见标志。当前服务尚未启用自动探索。'}</p><div class="actions"><button id="browser" ${busy ? 'disabled' : ''}>打开浏览器</button><button id="capture" ${busy ? 'disabled' : ''} title="需要补充页面信息时，读取当前浏览器页面">辅助：读取当前页面</button><button id="auth" ${busy ? 'disabled' : ''}>确认登录状态</button></div></section><section class="panel"><h3><i>03</i>核对计划并执行</h3><p>已采集 ${s.snapshots?.length ?? 0} 个页面。${supportsDiscovery() ? '自动探索为已确认用例生成候选计划；未选用例时探索全部未执行用例。' : '可根据现有页面信息重新规划。'}核对操作、断言与清理后再执行。</p><div class="actions"><button id="discover" ${busy || !supportsDiscovery() ? 'disabled' : ''}>自动探索并生成计划</button><button id="plan" ${busy ? 'disabled' : ''} title="根据已采集页面重新生成所选用例的候选计划，不重新探索">重新规划所选用例</button><button id="approve" ${busy ? 'disabled' : ''}>辅助：核对所选计划</button><button class="primary" id="run" ${busy ? 'disabled' : ''}>辅助：执行所选</button></div></section></div></details>${discoveryHTML(s)}<section class="panel"><div class="panel-heading"><h2>用例工作区 <small>点击标题查看原文、计划与证据</small></h2><div class="actions"><button id="discovery-contract" ${busy ? 'disabled' : ''} title="可选：导入已审查无业务写入的输入和选项操作说明">导入探索交互说明</button><button id="handoff" ${busy ? 'disabled' : ''}>关联前端导出物</button><a href="/api/tasks/${s.id}/baseline">下载用例基线</a></div></div><div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="select-all" aria-label="选择全部用例" ${s.cases.every((c) => selected.has(c.case_id)) ? 'checked' : ''}></th><th>CASE / 用例</th><th>当前状态</th><th>执行记录</th><th>准备情况</th></tr></thead><tbody>${s.cases.map((c) => `<tr><td><input type="checkbox" data-select="${h(c.case_id)}" aria-label="选择 ${h(c.case_id)}" ${selected.has(c.case_id) ? 'checked' : ''}></td><td><button class="link" data-case="${h(c.case_id)}">${h(c.original.title ?? c.case_id)}</button><small class="mono">${h(c.case_id)}</small></td><td>${badge(c.status)}${c.cleanup_required ? '<small>仍有清理待处理</small>' : ''}</td><td>${c.attempts.length} 次<small>定位修复 ${c.repair_count} 次</small>${c.self_repair ? '<small>计划修复 ' + h(c.self_repair.repair_count ?? 0) + ' / ' + h(c.self_repair.max_repairs ?? 2) + ' 次</small>' : ''}</td><td>${c.reviewed ? '原文已确认' : c.issues.length ? '有 ' + c.issues.length + ' 项需核对' : '原文待核对'}<small>${h(c.mapping_reason ?? (c.plan_approved ? '计划已核对' : c.plan ? '计划待核对' : '计划未生成'))}</small></td></tr>`).join('')}</tbody></table></div></section><section class="panel"><div class="panel-heading"><h2>实时活动 <small>展示页面探索、模型处理及实际执行记录</small></h2>${busy ? '<button id="stop" class="danger">停止当前批次</button>' : '<span class="badge">当前空闲</span>'}</div><div class="progress-line"><span>${busy ? '● 正在处理' : '○ 最近活动'} · ${h(recent ? eventText(recent) : '等待操作')}</span><span>${s.active ? (s.active.current_case ?? '准备批次') + ' · 本批模型调用 ' + s.active.calls + ' / 100' : ''}</span></div><ul class="events">${s.events
-      .slice(-45)
-      .reverse()
-      .map(
-        (e) =>
-          `<li><time>${h(new Date(e.at).toLocaleTimeString('zh-CN', { hour12: false }))}</time><span>${h(eventText(e))}</span></li>`,
-      )
-      .join('')}</ul></section>`;
+    `${siteCleanupNotice(s)}<div class="heading"><div><h1>${h(s.name)}</h1><p>${h(s.target)} · ${s.fixture ? '本机合成演示' : '独立测试轮次'}</p></div><div class="actions"><button id="environment">环境设置</button><button id="diagnostics">诊断日志</button><a class="download" href="/api/tasks/${s.id}/report">下载离线报告 ↗</a></div></div>${s.fixture ? '<div class="notice">演示使用本地商品查询与任务管理、预制执行计划；运行时使用真实 Chromium。该结果不代表真实 DeepSeek 规划或产品验收。</div>' : ''}<div class="metrics"><div class="metric"><b>${s.cases.length}</b><span>原始用例总数</span></div><div class="metric"><b>${count('READY')}</b><span>可执行</span></div><div class="metric"><b>${count('PASS_ASSERTIONS')}</b><span>已核对断言满足</span></div><div class="metric"><b>${count('FAIL_ASSERTION') + count('TECHNICAL_FAILED')}</b><span>需查看执行差异</span></div><div class="metric"><b>${blocked}</b><span>待准备或处理</span></div></div><section class="panel"><h2>自动准备</h2><p>选择用例后点击一次。在打开的浏览器中登录，Agent 会自动寻找相关模块、补充证据并尝试修复技术适配；无需先手工进入业务页面。业务预期和执行计划仍需核对。</p><button id="confirm-main" ${busy ? 'disabled' : ''}>核对所选用例</button><button class="primary" id="prepare" ${busy || !config.autonomous_preparation ? 'disabled' : ''}>开始准备所选用例</button><button id="approve-main" ${busy ? 'disabled' : ''}>核对所选计划</button><button id="run-main" ${busy ? 'disabled' : ''}>执行所选</button>${s.active?.stage === 'WAITING_USER_LOGIN' ? '<p role="status">等待浏览器登录；完成后会自动继续，无需点击确认。无法可靠识别时，可停止后使用下方辅助入口。</p>' : ''}</section><details class="panel" id="preparation-tools" ${auxiliaryOpen ? 'open' : ''}><summary>辅助操作与单步准备（正常流程无需逐项点击）</summary><div class="workflow"><section class="panel"><h3><i>01</i>核对用例</h3><p>原文单独保留。缺失或矛盾的预期按用例澄清，其他用例可以继续。</p><div class="actions"><button id="review" ${busy ? 'disabled' : ''}>审查所选用例</button><button id="confirm" ${busy ? 'disabled' : ''}>确认所选原文</button></div></section><section class="panel"><h3><i>02</i>登录并探索 <span class="badge ${s.authenticated ? 'good' : ''}">${s.authenticated ? '登录可复用' : s.browser_open ? '浏览器已打开' : '未连接'}</span></h3><p>${supportsDiscovery() ? '正常使用上方“开始准备”；这里用于无法自动识别登录时的辅助处理。' : '在 Chromium 登录一次并确认可见标志。当前服务尚未启用自动探索。'}</p><div class="actions"><button id="browser" ${busy ? 'disabled' : ''}>打开浏览器</button><button id="capture" ${busy ? 'disabled' : ''} title="需要补充页面信息时，读取当前浏览器页面">辅助：读取当前页面</button><button id="auth" ${busy ? 'disabled' : ''}>确认登录状态</button></div></section><section class="panel"><h3><i>03</i>核对计划并执行</h3><p>已采集 ${s.snapshots?.length ?? 0} 个页面。${supportsDiscovery() ? '自动探索为已确认用例生成候选计划；未选用例时探索全部未执行用例。' : '可根据现有页面信息重新规划。'}核对操作、断言与清理后再执行。</p><div class="actions"><button id="discover" ${busy || !supportsDiscovery() ? 'disabled' : ''}>自动探索并生成计划</button><button id="plan" ${busy ? 'disabled' : ''} title="根据已采集页面重新生成所选用例的候选计划，不重新探索">重新规划所选用例</button><button id="approve" ${busy ? 'disabled' : ''}>辅助：核对所选计划</button><button class="primary" id="run" ${busy ? 'disabled' : ''}>辅助：执行所选</button></div></section></div></details>${discoveryHTML(s)}<section class="panel"><div class="panel-heading"><h2>用例工作区 <small>点击标题查看原文、计划与证据</small></h2><div class="actions"><button id="discovery-contract" ${busy ? 'disabled' : ''} title="可选：导入已审查无业务写入的输入和选项操作说明">导入探索交互说明</button><button id="handoff" ${busy ? 'disabled' : ''}>关联前端导出物</button><a href="/api/tasks/${s.id}/baseline">下载用例基线</a></div></div><div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="select-all" aria-label="选择全部用例" ${s.cases.every((c) => selected.has(c.case_id)) ? 'checked' : ''}></th><th>CASE / 用例</th><th>当前状态</th><th>执行记录</th><th>准备情况</th></tr></thead><tbody>${s.cases.map((c) => `<tr><td><input type="checkbox" data-select="${h(c.case_id)}" aria-label="选择 ${h(c.case_id)}" ${selected.has(c.case_id) ? 'checked' : ''}></td><td><button class="link" data-case="${h(c.case_id)}">${h(c.original.title ?? c.case_id)}</button><small class="mono">${h(c.case_id)}</small></td><td>${badge(c.status)}${c.cleanup_required ? '<small>仍有清理待处理</small>' : ''}</td><td>${c.attempts.length} 次<small>定位修复 ${c.repair_count} 次</small>${c.self_repair ? '<small>计划修复 ' + h(c.self_repair.repair_count ?? 0) + ' / ' + h(c.self_repair.max_repairs ?? 2) + ' 次</small>' : ''}</td><td>${c.reviewed ? '原文已确认' : c.issues.length ? '有 ' + c.issues.length + ' 项需核对' : '原文待核对'}<small>${h(c.mapping_reason ?? (c.plan_approved ? '计划已核对' : c.plan ? '计划待核对' : '计划未生成'))}</small></td></tr>`).join('')}</tbody></table></div></section>`;
+  mountAgentOutput();
+  const outputFeed = outputPanel.querySelector('#output-records');
+  // Reattaching the retained panel can reset its scroll offset even when the
+  // rows have not changed. Restore both live-follow and manual reading modes.
+  outputFeed.scrollTop = outputFollow ? outputFeed.scrollHeight : outputScroll;
+  if (outputFocused?.isConnected) outputFocused.focus({ preventScroll: true });
   for (const button of document.querySelectorAll('[data-cleanup-task]'))
     button.onclick = () =>
       action(async () => {
@@ -688,7 +1130,7 @@ function render() {
     $('#' + kind).onclick = () =>
       action(async () => {
         await taskAPI('job', { kind, case_ids: ids() });
-        toast(kind === 'run' ? '已开始执行；可在下方查看实时活动。' : '已开始处理所选用例。');
+        toast(kind === 'run' ? '已开始执行，请查看上方 Agent 运行输出。' : '已开始处理所选用例。');
       });
   $('#prepare').onclick = () =>
     action(async () => {
@@ -726,7 +1168,7 @@ function render() {
   $('#run-main').onclick = () =>
     action(async () => {
       await taskAPI('job', { kind: 'run', case_ids: ids() });
-      toast('已开始执行已核对计划；可查看下方实时活动。');
+      toast('已开始执行已核对计划，请查看上方 Agent 运行输出。');
     });
   $('#approve').onclick = approveSelected;
   $('#environment').onclick = environment;
@@ -853,7 +1295,9 @@ async function authDialog() {
           return toast('登录状态已保存，本轮用例复用此会话。当前服务尚未启用自动探索。');
         if (result.authenticated !== true) throw new Error('服务未确认登录状态，请刷新后核对。');
         if (result.discovery_started === true)
-          toast('登录状态已保存，自动探索已启动；已确认用例将生成候选计划，请查看实时活动。');
+          toast(
+            '登录状态已保存，自动探索已启动；已确认用例将生成候选计划，请查看 Agent 运行输出。',
+          );
         else
           toast(
             '登录状态已保存，自动探索尚未启动。' +
@@ -1002,3 +1446,4 @@ $('#discovery-contract-file').onchange = () =>
   });
 await action(() => refresh(true));
 setInterval(() => refresh().catch((e) => toast(e.message, true)), 1500);
+setInterval(updateAgentOutput, 1000);

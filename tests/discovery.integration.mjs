@@ -338,7 +338,7 @@ try {
   assert.equal(discoveryJob?.kind, 'discover');
   await page.locator('.discovery-status').filter({ hasText: '探索中' }).waitFor();
   await page
-    .locator('.events')
+    .locator('#output-list')
     .getByText(/自动探索已启动/)
     .waitFor();
   await page.screenshot({
