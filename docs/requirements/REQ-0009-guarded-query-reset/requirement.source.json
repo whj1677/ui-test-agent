@@ -1,0 +1,347 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0009",
+  "title": "原用例绑定的查询条件重置",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-18"
+  },
+  "original_input": "承接REQ-0001用户确认的发布目标、问题修复和逐项Git同步。冻结原WORK-002第2步为“点击「重置」”，期望查询字段恢复默认并返回列表；本包只修该类查询重置候选缺失，不扩大为业务数据重置。",
+  "user_requirements": [
+    {
+      "id": "UN-0009-01",
+      "status": "已确认",
+      "goal": "原查询后重置筛选不再要求维护者手工介入，且设备重置/业务清空仍拒绝。",
+      "constraints": "沿用原Case/目标/权限与预算，仅已核验原生查询表单；固定原文，不改预期。",
+      "success_criteria": "冻结查询重置链路及身份/事件/网络反例有实际证据，修复独立Git同步。"
+    }
+  ],
+  "confirmed_facts": [
+    "状态卡：阶段=正式实现；目标=限定查询重置候选；输入=冻结WORK-002与当前DOM/源码；交付=限定修复、回归证据、独立提交；不做=业务重置/多步审批/知识库；停止=本包修复验证同步或真实阻塞。",
+    "修复前Chromium从首页经产品候选选择区域东区、优先级高并查询，实际显示WO-105；页面存在可见BUTTON/type=reset/FORM，但候选中重置数量0，预期1。进程退出1，业务mutations为空；日志validation/release-query-reset-before.log。",
+    "DANGEROUS_NAME包含重置/reset；candidateKind无限定例外，queryFormFacts只接受查询submit按钮作为按钮目标。现有GET查询能力不等于重置已支持。",
+    "事件序列反例实际失败：原重置按钮onmousedown触发另一表单reset，另一表单被阻止但原表单随后仍重置1次；期望0。validation/REQ-0009-latch-before.log，1测试1失败0跳过。需首个拒绝立即清空许可并锁住同操作后续事件；不只在动作结束后报错。",
+    "首轮新增测试日志REQ-0009-reset-first.log保留6个TAP失败（含父项）：两处测试夹具问题是直接getByLabel不适配嵌套select，以及测试按钮id=reset遮蔽form.reset，使重复/填入中reset反例没有实际触发。改用产品快照读字段值和非遮蔽测试ID，不修改冻结页面或业务预期。",
+    "最终产品源码下程序回归已执行516项、0失败/跳过。首次3文件浏览器集成2成功1失败，失败是tests/discovery.integration.mjs的注入模型只认顶层testid；实际记录已含新增任务dialog内within→testid的任务名称/负责人，替身因误判继续点新增直至候选去重后抛错。证据validation/REQ-0009-integration.log及validation/discovery-qU3L7y/mock-model-calls.json/summary.json；不是实际DeepSeek连接故障。",
+    "最终产品源码冻结后的非暂停程序回归516项、0失败/跳过（含新增38项TAP检查），日志validation/REQ-0009-runtime.log。固定原WORK-002从首页查询并重置恢复默认，未修改冻结17文件/24例摘要。",
+    "浏览器集成首轮browser与reliability两文件成功，discovery失败记录保留。兼容within后的第一次测试替身修订遗漏scope-only定位没有target，失败保留validation/REQ-0009-discovery-after.log；加可选目标检查与正反例后，discovery单独复验退出0，日志validation/REQ-0009-discovery-final.log。3个文件分别有成功执行证据，不能把首轮组合结果改写为全成功。",
+    "最终discovery合成联调在validation/discovery-WYgASn保存11次注入模型请求、菜单/弹窗自主候选探索、2份计划、UI批准和2条只读执行事实；仅手动登录1次、业务写请求0、语义验收仍待评审。实际DeepSeek请求0，不能计为真实模型或发布验收。",
+    "REQ-0009-related.log保留89通过1失败：该失败是测试误读SELECT.current_value，实际观察协议使用selected_label；已按原“全部”预期核验，不改变产品或原用例。"
+  ],
+  "inferences_and_open_questions": [
+    "按钮名称和GET不能证明黑盒处理器无副作用；本包限定DOM、原文、一次事件与网络边界，不宣称任意站点纯读安全。",
+    "不需改变原业务预期或完整计划审批；REQ-0008的互斥产品选择仍独立等待。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0009-01",
+      "status": "已确认",
+      "requirement": "只为当前原Case明确正向点击精确“重置/reset”、且同表单已有原查询字段绑定的动作提供能力；不从预期推导。",
+      "acceptance_criteria": "缺失/否定/条件/同义名称及其他Case不能产生重置候选。",
+      "constraints": "使用queryFormBinding确认原查询与当前字段值，再提取独立重置原句；保留两份步骤与引用。"
+    },
+    {
+      "id": "DR-0009-02",
+      "status": "已确认",
+      "requirement": "限定既有安全GET查询表单内唯一原生type=reset按钮；保留字段、同源action、覆盖属性、敏感/隐藏/外置与业务按钮排除。",
+      "acceptance_criteria": "原WORK-002查询后出现一项query_reset候选并恢复默认筛选；设备重置、按钮脚本模拟、POST/业务表单等无候选。",
+      "constraints": "复用queryFormFacts而不删除全局危险词重置；仅精确原生查询重置分支越过名称规则。"
+    },
+    {
+      "id": "DR-0009-03",
+      "status": "已确认",
+      "requirement": "观察至派发重验Case/form/button/field身份和值；一次真实点击只开启同一表单的一次reset，不产生submit许可。 首次安全拒绝立即锁住后续事件并清空所有本次许可，不能先拒绝后仍派发原点击。",
+      "acceptance_criteria": "同值替换、字段改值、按钮/表单变化、跨表单/重复reset、submit、检查异常均拒绝；许可在finally清空。",
+      "constraints": "reset没有submitter，不宣称能识别所有事件因果；凭原点击、同form、完整实时签名与一次窗口限定，保留独立网络护栏。"
+    },
+    {
+      "id": "DR-0009-04",
+      "status": "已确认",
+      "requirement": "保留修复前证据，运行受影响正反例和完整工程回归，独立Git同步；不修改冻结原例或真实模型限制。",
+      "acceptance_criteria": "原17文件/24例摘要不变；日志、退出码与统计可追溯，工程测试不计真实Agent成功。",
+      "constraints": "本包不包含多步表单/知识库，不重启4179，不触碰旧任务，不换路径调用被拒绝的模型。 本轮受阻的旧集成替身需兼容现有within观察格式，但输出计划必须保留完整scope，不能扁平化或删原断言。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0009-01",
+      "dr_ids": [
+        "DR-0009-01"
+      ],
+      "status": "已确认",
+      "summary": "查询原文绑定",
+      "rationale": "使用queryFormBinding确认原查询与当前字段值，再提取独立重置原句；保留两份步骤与引用。"
+    },
+    {
+      "id": "DD-0009-02",
+      "dr_ids": [
+        "DR-0009-02"
+      ],
+      "status": "已确认",
+      "summary": "查询表单资格",
+      "rationale": "复用queryFormFacts而不删除全局危险词重置；仅精确原生查询重置分支越过名称规则。"
+    },
+    {
+      "id": "DD-0009-03",
+      "dr_ids": [
+        "DR-0009-03"
+      ],
+      "status": "已确认",
+      "summary": "事件时重新核验",
+      "rationale": "reset没有submitter，不宣称能识别所有事件因果；凭原点击、同form、完整实时签名与一次窗口限定，保留独立网络护栏。 捕获阶段拒绝采用统一block路径，清空permit/querySubmit/queryReset/dialogSubmit；已有blocked状态拒绝所有后续事件。"
+    },
+    {
+      "id": "DD-0009-04",
+      "dr_ids": [
+        "DR-0009-04"
+      ],
+      "status": "已确认",
+      "summary": "限定验证及同步",
+      "rationale": "本包不包含多步表单/知识库，不重启4179，不触碰旧任务，不换路径调用被拒绝的模型。 集成替身识别已观察locator的基础目标时核对dialog身份，返回计划仍克隆完整范围定位；增加范围保留断言。仅修阻塞本轮验证的测试，不改变产品或冻结验收资产。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "原Case查询字段绑定+精确重置原句→已核验表单与唯一native reset→opaque query_reset候选→现场身份/字段签名→一次reset事件→新页面观察。",
+    "模型仍只能返回当前candidate_id；新kind描述窄能力，不新增任意op/selector/value/脚本入口。query与query_reset分开事件许可，不互相授权。"
+  ],
+  "module_document_impact": [
+    "更新docs/modules/release_runtime.md的探索查询边界，src/query-forms.mjs、src/discovery-browser.mjs及DISCOVERY_PROMPT受影响；无前端UI或数据迁移。"
+  ],
+  "risks_and_rollback": [
+    "仅精确原生reset；同名普通button和业务表单继续不支持，不能将候选缺失写成用例错误。",
+    "浏览器捕获检查异常必须显式拦截，不能只抛错；保留当前全局危险名称/路径与网络控制。",
+    "独立提交可定位回退；不删除历史失败、不重置数据/预算、不自动部署到4179。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0009-01",
+      "dr_ids": [
+        "DR-0009-01"
+      ],
+      "dd_ids": [
+        "DD-0009-01"
+      ],
+      "status": "已实现",
+      "task": "查询原文绑定：实现与限定复验已完成。",
+      "verification_ids": [
+        "VT-0009-01"
+      ]
+    },
+    {
+      "id": "TK-0009-02",
+      "dr_ids": [
+        "DR-0009-02"
+      ],
+      "dd_ids": [
+        "DD-0009-02"
+      ],
+      "status": "已实现",
+      "task": "查询表单资格：实现与限定复验已完成。",
+      "verification_ids": [
+        "VT-0009-02"
+      ]
+    },
+    {
+      "id": "TK-0009-03",
+      "dr_ids": [
+        "DR-0009-03"
+      ],
+      "dd_ids": [
+        "DD-0009-03"
+      ],
+      "status": "已实现",
+      "task": "事件时重新核验：实现与限定复验已完成。",
+      "verification_ids": [
+        "VT-0009-03"
+      ]
+    },
+    {
+      "id": "TK-0009-04",
+      "dr_ids": [
+        "DR-0009-04"
+      ],
+      "dd_ids": [
+        "DD-0009-04"
+      ],
+      "status": "已实现",
+      "task": "限定验证及同步：实现与限定复验已完成。 Git提交和远端SHA由本次交付末尾实际确认，不预填提交号。",
+      "verification_ids": [
+        "VT-0009-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0009-01",
+      "dr_ids": [
+        "DR-0009-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "缺失/否定/条件/同义名称及其他Case不能产生重置候选。",
+      "evidence_standard": "实际命令、退出码、非零断言统计、浏览器副作用计数及日志；不是模型业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 516,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0009-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0009-02",
+      "dr_ids": [
+        "DR-0009-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "原WORK-002查询后出现一项query_reset候选并恢复默认筛选；设备重置、按钮脚本模拟、POST/业务表单等无候选。",
+      "evidence_standard": "实际命令、退出码、非零断言统计、浏览器副作用计数及日志；不是模型业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 516,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0009-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0009-03",
+      "dr_ids": [
+        "DR-0009-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "同值替换、字段改值、按钮/表单变化、跨表单/重复reset、submit、检查异常均拒绝；许可在finally清空。",
+      "evidence_standard": "实际命令、退出码、非零断言统计、浏览器副作用计数及日志；不是模型业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 516,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0009-runtime.log"
+      }
+    },
+    {
+      "id": "VT-0009-04",
+      "dr_ids": [
+        "DR-0009-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "原17文件/24例摘要不变；日志、退出码与统计可追溯，工程测试不计真实Agent成功。",
+      "evidence_standard": "实际命令、退出码、非零断言统计、浏览器副作用计数及日志；不是模型业务验收。",
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 516,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0009-runtime.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/query-reset.test.mjs tests/query-forms.test.mjs tests/release-discovery-chains.test.mjs",
+      "node tests/runtime-regression.mjs",
+      "node acceptance/check.mjs"
+    ],
+    "environment": [
+      "本机Windows/Node22/Chromium，隔离合成随机端口。"
+    ],
+    "conclusion": [
+      "限定查询重置与首次拒绝后事件锁定已有真实Chromium正反例；516项程序回归无失败/跳过。",
+      "3个浏览器集成文件分别有最终成功证据，首轮组合1失败及测试替身中间错误保留。注入模型不计真实DeepSeek，不声称最终可发布。",
+      "原24例17文件摘要未改；REQ-0008仍待选择，知识库未实现；4179服务和历史任务未改。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0009-01",
+      "dr_id": "DR-0009-01",
+      "dd_id": "DD-0009-01",
+      "tk_id": "TK-0009-01",
+      "vt_id": "VT-0009-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0009-01",
+      "dr_id": "DR-0009-02",
+      "dd_id": "DD-0009-02",
+      "tk_id": "TK-0009-02",
+      "vt_id": "VT-0009-02",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0009-01",
+      "dr_id": "DR-0009-03",
+      "dd_id": "DD-0009-03",
+      "tk_id": "TK-0009-03",
+      "vt_id": "VT-0009-03",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0009-01",
+      "dr_id": "DR-0009-04",
+      "dd_id": "DD-0009-04",
+      "tk_id": "TK-0009-04",
+      "vt_id": "VT-0009-04",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0001-release-readiness / REQ-0007-guarded-query-forms",
+      "status": "新问题修复",
+      "notes": "原查询表单后续重置在限定链路探测中复现，不改变原例与审批。"
+    }
+  ],
+  "open_questions": [
+    "真实模型操作仍被工具策略限制；本包只做本机工程验证，不绕过限制。"
+  ],
+  "prohibited_implementation": [
+    "禁止删掉全局重置危险词、支持业务清空/设备重置、开放任意reset/submit、改原用例或将固定脚本算真实Agent成功。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "修复前需求",
+      "description": "记录冻结WORK-002实际缺候选、限定原文与查询表单重置边界；产品修改前建包。",
+      "impact": "探索候选与事件保护、提示和回归",
+      "confirmed_by": "用户原发布修复授权及冻结原用例；技术证据来自本机只读复现。"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "反例驱动补充",
+      "description": "新增鼠标按下跨表单reset反例，实际原表单仍执行1次；修改前将首拒绝清许可/锁定后续事件纳入DR-0009-03。",
+      "impact": "同操作捕获事件保护；保留失败证据",
+      "confirmed_by": "实际Chromium反例，不修改原用例判定"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "验证阻塞修正前登记",
+      "description": "浏览器集成实际失败归因为旧测试替身不识别within，而非控件缺失。限定调整hasControl/计划定位查找并保留范围与原断言，不以删除该集成绕开失败。",
+      "impact": "tests/discovery.integration.mjs，仅注入模型测试兼容",
+      "confirmed_by": "实际观察中task-name/task-owner均在新增任务dialog范围，原mock失败日志保留"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "实现与工程验证",
+      "description": "受限查询reset、一次事件许可和首次拒绝锁定已实现；516程序回归无失败/跳过，原冻结WORK-002和安全反例复验，集成旧替身兼容within后保留完整范围并复验成功。",
+      "impact": "3个产品模块、2个验证脚本、模块说明与本包；不部署4179、不调用真实模型",
+      "confirmed_by": "实际日志/退出码/浏览器副作用计数与冻结摘要；Git在交付末尾核对"
+    }
+  ]
+}

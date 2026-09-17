@@ -149,10 +149,54 @@ async function bounded(promise, milliseconds, label) {
     clearTimeout(timer);
   }
 }
-const hasControl = (page, testid) =>
-  page.controls.some(
-    (control) => control.locator?.kind === 'testid' && control.locator.value === testid,
+function controlHasTestId(control, testid) {
+  const locator = control.locator;
+  if (locator?.kind !== 'within') return locator?.kind === 'testid' && locator.value === testid;
+  // The fixture's fields belong to this exact dialog. Recognize the current
+  // observation protocol without flattening the locator in the generated plan.
+  return (
+    locator.scope.role === 'dialog' &&
+    locator.scope.name === '新增任务' &&
+    locator.scope.exact === true &&
+    locator.target?.kind === 'testid' &&
+    locator.target.value === testid
   );
+}
+const hasControl = (page, testid) =>
+  page.controls.some((control) => controlHasTestId(control, testid));
+assert.equal(
+  controlHasTestId(
+    { locator: { kind: 'within', scope: { role: 'dialog', name: '新增任务', exact: true } } },
+    'task-name',
+  ),
+  false,
+);
+assert.equal(
+  controlHasTestId(
+    {
+      locator: {
+        kind: 'within',
+        scope: { role: 'dialog', name: '其他任务', exact: true },
+        target: { kind: 'testid', value: 'task-name' },
+      },
+    },
+    'task-name',
+  ),
+  false,
+);
+assert.equal(
+  controlHasTestId(
+    {
+      locator: {
+        kind: 'within',
+        scope: { role: 'dialog', name: '新增任务', exact: true },
+        target: { kind: 'testid', value: 'task-name' },
+      },
+    },
+    'task-name',
+  ),
+  true,
+);
 function chooseDiscovery(input) {
   assert.ok(
     input.candidates.every((candidate) => !/[保存删除提交]/u.test(candidate.name)),
@@ -181,8 +225,12 @@ function makePlan(input) {
   const locator = (testid) => {
     const found = input.pages
       .flatMap((page) => page.controls)
-      .find((control) => control.locator?.kind === 'testid' && control.locator.value === testid);
+      .find((control) => controlHasTestId(control, testid));
     assert.ok(found, `planning requires observed ${testid}`);
+    if (['task-name', 'task-owner'].includes(testid)) {
+      assert.equal(found.locator.kind, 'within');
+      assert.deepEqual(found.locator.scope, { role: 'dialog', name: '新增任务', exact: true });
+    }
     return structuredClone(found.locator);
   };
   const targets =

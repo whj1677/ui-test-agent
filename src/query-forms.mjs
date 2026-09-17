@@ -58,11 +58,17 @@ export function queryFormFacts(element, arm = null) {
   );
   if (queries.length !== 1) return null;
   const button = queries[0];
+  const resets = buttons.filter(
+    (e) =>
+      e.type === 'reset' &&
+      /^(?:重置|reset)$/iu.test((e.getAttribute('aria-label') || e.innerText).trim()),
+  );
+  const reset = element === resets[0] && resets.length === 1 && buttons.length === 2;
   // A named submitter adds an extra successful form value not bound to a field.
-  if (button.getAttribute('name')) return null;
+  if (button.getAttribute('name') || (reset && element.getAttribute('name'))) return null;
   if (
     !['INPUT', 'SELECT', 'BUTTON'].includes(element.tagName) ||
-    (element.tagName === 'BUTTON' && element !== button)
+    (element.tagName === 'BUTTON' && element !== button && !reset)
   )
     return null;
   if (
@@ -147,6 +153,9 @@ export function queryFormFacts(element, arm = null) {
   const result = {
     kind: 'native_get_query',
     query_label: (button.getAttribute('aria-label') || button.innerText).trim(),
+    ...(reset
+      ? { reset_label: (element.getAttribute('aria-label') || element.innerText).trim() }
+      : {}),
     action: action.href,
     fields: facts,
   };
@@ -156,21 +165,22 @@ export function queryFormFacts(element, arm = null) {
   if (
     !permit ||
     permit.element !== element ||
-    element !== button ||
+    (!reset && element !== button) ||
     (runtime.flush(), runtime.reading_revision !== arm.revision) ||
     JSON.stringify(result) !== JSON.stringify(arm.expected)
   )
     return false;
   const signature = JSON.stringify(result);
+  const trigger = reset ? element : button;
   permit.queryForm = form;
   permit.queryCheck = () => {
     try {
-      if (!button.isConnected || button.form !== form || !form.isConnected) return false;
+      if (!trigger.isConnected || trigger.form !== form || !form.isConnected) return false;
       const live = [
         ...Object.getOwnPropertyDescriptor(HTMLFormElement.prototype, 'elements').get.call(form),
       ];
       if (live.length !== controls.length || live.some((e, i) => e !== controls[i])) return false;
-      return JSON.stringify(queryFormFacts(button)) === signature;
+      return JSON.stringify(queryFormFacts(trigger)) === signature;
     } catch {
       // A capture-listener exception alone does NOT prevent a browser submit.
       // Named controls can shadow form methods between click and submit.
@@ -254,6 +264,38 @@ export function queryFormBinding(c, facts) {
         value: b.value,
         source_quote: b.source_quote,
       })),
+    };
+  }
+  return null;
+}
+
+export function queryResetBinding(c, facts) {
+  if (!/^(?:重置|reset)$/iu.test(facts?.reset_label ?? '')) return null;
+  const query = queryFormBinding(c, facts);
+  if (!query) return null;
+  const steps = c.steps ?? [];
+  const queryIndex = steps.findIndex(
+    (s) => s.step_id === query.step_id && String(s.action ?? '').includes(query.source_quote),
+  );
+  if (queryIndex < 0) return null;
+  // Deliberately a positive standalone instruction after a source-bound query,
+  // not any mention of "reset" in prose, expectations, conditions or a prompt.
+  const pattern = new RegExp(
+    `^(?:点击|click)\\s*(?:查询(?:区|条件|表单)(?:内|中)?(?:的)?\\s*)?[「“"']${facts.reset_label}[」”"'](?:按钮)?[。.]?$`,
+    'iu',
+  );
+  for (const step of steps.slice(queryIndex + 1)) {
+    const quote = String(step.action ?? '').trim();
+    if (!pattern.test(quote) || redact(quote) !== quote) continue;
+    return {
+      kind: 'case_query_reset',
+      case_id: c.case_id,
+      case_hash: semanticHash(c),
+      step_id: step.step_id,
+      source_quote: quote,
+      query_step_id: query.step_id,
+      query_source_quote: query.source_quote,
+      fields: query.fields,
     };
   }
   return null;

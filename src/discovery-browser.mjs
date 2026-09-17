@@ -6,7 +6,12 @@ import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
 import { queryScopeFacts, queryValues } from './query-capability.mjs';
 import { readingBinding, readingDOMFacts } from './reading-actions.mjs';
-import { queryFormFacts, queryFormBinding, queryFormValues } from './query-forms.mjs';
+import {
+  queryFormFacts,
+  queryFormBinding,
+  queryFormValues,
+  queryResetBinding,
+} from './query-forms.mjs';
 import {
   dismissButtonFacts,
   conditionalDismissSource,
@@ -267,10 +272,38 @@ function installRuntime(key) {
     'auxclick',
     'dblclick',
     'submit',
+    'reset',
   ]) {
     document.addEventListener(
       type,
       (event) => {
+        const block = () => {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          state.blocked ||= 'DISCOVERY_DISPATCH_BLOCKED';
+          state.permit = null;
+          state.querySubmit = null;
+          state.queryReset = null;
+          state.dialogSubmit = null;
+        };
+        // A refusal during pointer/mouse events must also stop the later click
+        // and its default action, not merely report failure after dispatch.
+        if (state.blocked) {
+          block();
+          return;
+        }
+        if (type === 'reset' && state.queryReset) {
+          const p = state.queryReset;
+          state.queryReset = null;
+          if (
+            event.isTrusted &&
+            event.target === p.queryForm &&
+            p.url === location.href &&
+            p.metadata === JSON.stringify(state.metadata(p.element)) &&
+            p.queryCheck()
+          )
+            return;
+        }
         if (type === 'submit' && state.querySubmit) {
           const p = state.querySubmit;
           state.querySubmit = null;
@@ -301,6 +334,7 @@ function installRuntime(key) {
         const permit = state.permit;
         const allowed =
           type !== 'submit' &&
+          type !== 'reset' &&
           permit &&
           permit.element.isConnected &&
           permit.element.contains(event.target) &&
@@ -310,14 +344,15 @@ function installRuntime(key) {
           (permit.readingRevision === undefined ||
             (state.flush(), permit.readingRevision === state.reading_revision));
         if (!allowed) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          state.blocked = 'DISCOVERY_DISPATCH_BLOCKED';
+          block();
           return;
         }
         if (type === 'click') {
           if (permit.optionalDismiss) state.dialogSubmit = permit;
-          if (permit.queryRequired) state.querySubmit = permit;
+          if (permit.queryRequired) {
+            if (permit.queryResetRequired) state.queryReset = permit;
+            else state.querySubmit = permit;
+          }
           state.permit = null;
         }
       },
@@ -330,7 +365,15 @@ async function metadata(handle, key) {
   return handle.evaluate((element, key) => window[key]?.metadata(element), key);
 }
 
-function candidateKind(meta, name, base, optionalDismiss = false, reading = false, query = false) {
+function candidateKind(
+  meta,
+  name,
+  base,
+  optionalDismiss = false,
+  reading = false,
+  query = false,
+  queryReset = false,
+) {
   if (
     !meta.connected ||
     !meta.visible ||
@@ -340,7 +383,15 @@ function candidateKind(meta, name, base, optionalDismiss = false, reading = fals
     meta.editable ||
     meta.checked ||
     meta.pressed ||
-    DANGEROUS_NAME.test(name + ' ' + meta.name + ' ' + meta.navigation_owner_name)
+    (DANGEROUS_NAME.test(name + ' ' + meta.name + ' ' + meta.navigation_owner_name) &&
+      !(
+        queryReset &&
+        meta.tag === 'BUTTON' &&
+        meta.type === 'reset' &&
+        meta.form &&
+        /^(?:重置|reset)$/iu.test(name) &&
+        meta.name === name
+      ))
   )
     return null;
   if (
@@ -361,7 +412,7 @@ function candidateKind(meta, name, base, optionalDismiss = false, reading = fals
     meta.tag === 'BUTTON' &&
     ((meta.type !== 'button' && meta.form) || meta.declaredType === 'submit')
   )
-    return optionalDismiss ? 'dismiss' : query ? 'query' : null;
+    return optionalDismiss ? 'dismiss' : queryReset ? 'query_reset' : query ? 'query' : null;
   if (meta.tag === 'BUTTON' && meta.type === 'reset') return null;
   if (meta.href !== null) {
     if (meta.target && meta.target !== '_self') return null;
@@ -845,7 +896,7 @@ export class DiscoveryBrowser {
     if (
       this.task.authorization?.nonproduction !== true ||
       meta.tag !== 'BUTTON' ||
-      meta.type !== 'submit' ||
+      !['submit', 'reset'].includes(meta.type) ||
       !meta.form
     )
       return null;
@@ -856,7 +907,10 @@ export class DiscoveryBrowser {
     } catch {
       return null;
     }
-    const binding = queryFormBinding(this.caseDefinition, facts);
+    const binding =
+      meta.type === 'reset'
+        ? queryResetBinding(this.caseDefinition, facts)
+        : queryFormBinding(this.caseDefinition, facts);
     return binding ? { binding, facts } : null;
   }
   async _readingEvidence(handle, name) {
@@ -921,6 +975,7 @@ export class DiscoveryBrowser {
               !!dismissAction,
               !!reading,
               !!queryForm,
+              queryForm?.binding.kind === 'case_query_reset',
             );
           if (!kind) {
             const inputs = await this._inputCandidates(handle, meta, control);
@@ -934,7 +989,7 @@ export class DiscoveryBrowser {
             candidate_id: uid(),
             kind,
             ...(kind === 'reading' ? { evidence: reading.binding } : {}),
-            ...(kind === 'query' ? { evidence: queryForm.binding } : {}),
+            ...(['query', 'query_reset'].includes(kind) ? { evidence: queryForm.binding } : {}),
             ...(kind === 'dismiss' ? { dismissAction } : {}),
             name: redact(control.name).slice(0, 200),
             locator: structuredClone(control.locator),
@@ -948,7 +1003,9 @@ export class DiscoveryBrowser {
             handle,
             meta,
             ...(kind === 'reading' ? { reading, readingRevision: before.reading_revision } : {}),
-            ...(kind === 'query' ? { queryForm, queryRevision: before.reading_revision } : {}),
+            ...(['query', 'query_reset'].includes(kind)
+              ? { queryForm, queryRevision: before.reading_revision }
+              : {}),
           });
           candidates.push(candidate);
           handle = null;
@@ -1039,10 +1096,12 @@ export class DiscoveryBrowser {
           !!dismissAction,
           !!candidate.reading,
           !!candidate.queryForm,
+          candidate.queryForm?.binding.kind === 'case_query_reset',
         );
     if (
       JSON.stringify(meta) !== JSON.stringify(candidate.meta) ||
       !kind ||
+      kind !== candidate.kind ||
       (candidate.kind === 'dismiss' &&
         JSON.stringify(dismissAction) !== JSON.stringify(candidate.dismissAction)) ||
       (candidate.contract &&
@@ -1114,7 +1173,18 @@ export class DiscoveryBrowser {
         this._check();
         await this._unchanged(candidate);
         const armed = await candidate.handle.evaluate(
-          (element, { key, expected, meta, optionalDismiss, readingRevision, queryRequired }) => {
+          (
+            element,
+            {
+              key,
+              expected,
+              meta,
+              optionalDismiss,
+              readingRevision,
+              queryRequired,
+              queryResetRequired,
+            },
+          ) => {
             const state = window[key];
             if (
               !state ||
@@ -1133,6 +1203,7 @@ export class DiscoveryBrowser {
               optionalDismiss,
               readingRevision,
               queryRequired,
+              queryResetRequired,
             };
             return true;
           },
@@ -1143,6 +1214,7 @@ export class DiscoveryBrowser {
             optionalDismiss: candidate.kind === 'dismiss',
             readingRevision: candidate.readingRevision,
             queryRequired: !!candidate.queryForm,
+            queryResetRequired: candidate.kind === 'query_reset',
           },
         );
         if (!armed) fail('DISCOVERY_STALE_PAGE');
@@ -1199,6 +1271,7 @@ export class DiscoveryBrowser {
                 window[key].permit = null;
                 window[key].dialogSubmit = null;
                 window[key].querySubmit = null;
+                window[key].queryReset = null;
               }
             }, this.runtimeKey)
             .catch(() => {});
