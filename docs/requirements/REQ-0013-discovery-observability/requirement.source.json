@@ -1,0 +1,243 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0013",
+  "title": "探索规划衔接与有界采集诊断",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-18"
+  },
+  "original_input": "用户审阅建议后确认：好，开始修改吧。已确认三项：打通A方案探索到规划衔接、让目标丢失可解释、优化有界采集覆盖。",
+  "user_requirements": [
+    {
+      "id": "UN-0013-01",
+      "status": "已确认",
+      "goal": "复杂页面探索向规划交付诚实可追踪的技术观察，避免截断或规则衔接静默丢目标。",
+      "constraints": "原用例/预期、探索业务写入限制、审批、网络、预算不变。",
+      "success_criteria": "三项工程正反例及受影响回归有日志，逐问题Git同步；不当作真实模型改善。"
+    }
+  ],
+  "confirmed_facts": [
+    "状态卡：阶段=实现前冻结；唯一目标=三项探索改进；输入=06fd190与已确认建议；交付=包/代码/测试日志/Git同步；验收=正反例、原24例17文件不变；不做=全站重构、硬性新门禁、视觉坐标点击、外部模型调用、重启4179/改旧任务；停止=三项工程验收完成或真实阻塞。",
+    "当前snapshot先按DOM取300项，正文16000字符；adapter_gaps仅保留12条。候选生成有无原因continue与空catch。",
+    "A已进入规划/审查/执行，但探索规则未明确该例外。已有过期页面重观察、计划补证与修复，不重建这些系统。",
+    "第一项探索共享A完整限定规则；真实Chromium观察→本机注入done→输入审查/完整计划/计划审查→PLAN_REVIEW已跑通，未批准/未执行；无当前步骤标识的注入blocked保持阻塞，不自动放行。58项受影响检查0失败/跳过。初轮3失败保留；其后2通过1失败是新测试误把输入审查识别为规划而访问不存在的pages，改用既有fixture-model分流后复验，未改产品错误处理。"
+  ],
+  "inferences_and_open_questions": [
+    "探索模型可能提前放弃是代码规则衔接风险，不是已经测出的真实模型失败频率。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0013-01",
+      "status": "已确认",
+      "requirement": "共享A规则；满足已观察向导条件的原文字段不要求探索先填写，模型仍只选已有候选，不自动将blocked改done。",
+      "acceptance_criteria": "实际探索→注入规划/审查链路；缺上下文、危险操作、未批准反例；原用例不改。",
+      "constraints": "不修改原语义、权限、审批或资源预算。"
+    },
+    {
+      "id": "DR-0013-02",
+      "status": "已确认",
+      "requirement": "记录定位/候选排除原因、提供与未选择候选计数和事件关联；诊断有界、脱敏、不是授权。",
+      "acceptance_criteria": "映射缺失、歧义、禁用、安全过滤和未支持可解释；不记录字段值/异常原文；UI转义、按需展开。",
+      "constraints": "不修改原语义、权限、审批或资源预算。"
+    },
+    {
+      "id": "DR-0013-03",
+      "status": "已确认",
+      "requirement": "保持300元素总预算；大页面分区分配，优先弹窗/步骤/导航/原操作相关控件，保留概览与截断/未覆盖说明。",
+      "acceptance_criteria": "后置重要控件和弹窗被采集；超额区域有遗漏计数；小页面兼容，旧安全/身份守卫不变。",
+      "constraints": "不修改原语义、权限、审批或资源预算。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0013-01",
+      "dr_ids": [
+        "DR-0013-01"
+      ],
+      "status": "已确认",
+      "summary": "探索共享限定case_named规则和当前只读向导线索；结束不等于已证明业务结果，继续原计划审查。",
+      "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
+    },
+    {
+      "id": "DD-0013-02",
+      "dr_ids": [
+        "DR-0013-02"
+      ],
+      "status": "已确认",
+      "summary": "已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例，page_id/candidate_id关联选择和派发；复用输出面板不自动展开、抢焦点。",
+      "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
+    },
+    {
+      "id": "DD-0013-03",
+      "dr_ids": [
+        "DR-0013-03"
+      ],
+      "status": "已确认",
+      "summary": "小页原顺序，大页分区配额轮转；采样与定位/可操作性独立，记录总量/遗漏及iframe和Shadow覆盖限制。",
+      "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "原Case操作文字+DOM→有界采样与覆盖摘要→同DOM定位核验→候选及排除记录→模型选择/结束→原规划审查与批准。"
+  ],
+  "module_document_impact": [
+    "更新release_runtime探索/观察接口与输出诊断；不新增HTTP端点、依赖或启用暂停训练。"
+  ],
+  "risks_and_rollback": [
+    "不能保证任意超大页面采齐；缺口报告先不新增硬阻断，不冒充自然语言完备证明。",
+    "按问题独立提交可回退；旧4179、任务及安装包不切换，模型策略不绕过。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0013-01",
+      "dr_ids": [
+        "DR-0013-01"
+      ],
+      "dd_ids": [
+        "DD-0013-01"
+      ],
+      "status": "已实现",
+      "task": "探索规划衔接：实现、复验并独立Git同步。",
+      "verification_ids": [
+        "VT-0013-01"
+      ]
+    },
+    {
+      "id": "TK-0013-02",
+      "dr_ids": [
+        "DR-0013-02"
+      ],
+      "dd_ids": [
+        "DD-0013-02"
+      ],
+      "status": "待实现",
+      "task": "候选诊断：实现、复验并独立Git同步。",
+      "verification_ids": [
+        "VT-0013-02"
+      ]
+    },
+    {
+      "id": "TK-0013-03",
+      "dr_ids": [
+        "DR-0013-03"
+      ],
+      "dd_ids": [
+        "DD-0013-03"
+      ],
+      "status": "待实现",
+      "task": "采集覆盖：实现、复验并独立Git同步。",
+      "verification_ids": [
+        "VT-0013-03"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0013-01",
+      "dr_ids": [
+        "DR-0013-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "探索规划衔接",
+      "evidence_standard": "实际探索→注入规划/审查链路；缺上下文、危险操作、未批准反例；原用例不改。",
+      "current_evidence": {
+        "command": "node --test tests/discovery-observability.test.mjs tests/discovery.test.mjs tests/discovery-controller.test.mjs",
+        "exit_code": 0,
+        "test_count": 58,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0013-handoff-verified.log"
+      }
+    },
+    {
+      "id": "VT-0013-02",
+      "dr_ids": [
+        "DR-0013-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "候选诊断",
+      "evidence_standard": "映射缺失、歧义、禁用、安全过滤和未支持可解释；不记录字段值/异常原文；UI转义、按需展开。",
+      "current_evidence": "尚未执行，以实际日志回填。"
+    },
+    {
+      "id": "VT-0013-03",
+      "dr_ids": [
+        "DR-0013-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "采集覆盖",
+      "evidence_standard": "后置重要控件和弹窗被采集；超额区域有遗漏计数；小页面兼容，旧安全/身份守卫不变。",
+      "current_evidence": "尚未执行，以实际日志回填。"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test tests/discovery-observability.test.mjs",
+      "node tests/runtime-regression.mjs",
+      "node acceptance/check.mjs"
+    ],
+    "environment": [
+      "Windows / Node22 / Chromium隔离合成页面；仅本机注入模型。"
+    ],
+    "conclusion": [
+      "第一项58项工程检查无失败/跳过；后两项尚未实现，真实模型0调用。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0013-01",
+      "dr_id": "DR-0013-01",
+      "dd_id": "DD-0013-01",
+      "tk_id": "TK-0013-01",
+      "vt_id": "VT-0013-01",
+      "status": "已实现，验证已记录"
+    },
+    {
+      "un_id": "UN-0013-01",
+      "dr_id": "DR-0013-02",
+      "dd_id": "DD-0013-02",
+      "tk_id": "TK-0013-02",
+      "vt_id": "VT-0013-02",
+      "status": "已确认待实现"
+    },
+    {
+      "un_id": "UN-0013-01",
+      "dr_id": "DR-0013-03",
+      "dd_id": "DD-0013-03",
+      "tk_id": "TK-0013-03",
+      "vt_id": "VT-0013-03",
+      "status": "已确认待实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0008-multistep-plan-grounding / REQ-0001-release-readiness",
+      "status": "关联",
+      "notes": "继承A语义与发布门槛，新增探索覆盖与诊断范围。"
+    }
+  ],
+  "open_questions": [
+    "三项范围已确认；真实模型、干净环境与独立人员仍由发布父需求单列。"
+  ],
+  "prohibited_implementation": [
+    "不自动将blocked转换done、不自动批准、不提前操作业务表单。",
+    "不改冻结用例或原预期、不传凭据、不用工程检查替代真实模型验收。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "范围确认",
+      "description": "用户确认三项探索优化；实施前冻结范围、设计、验收。",
+      "impact": "探索提示、快照、候选诊断和已有输出面板。",
+      "confirmed_by": "用户好，开始修改吧。"
+    }
+  ]
+}
