@@ -95,7 +95,10 @@ const errors = {
   JOB_ALREADY_RUNNING: '已有任务正在进行，请等待或停止该任务。',
   REVIEW_AND_PAGE_REQUIRED: '先确认所选用例，并读取相关页面，再生成计划。',
   AUTH_REQUIRED: '请打开浏览器，登录后确认页面标志。',
-  LOGIN_NOT_FINISHED: '当前页面显示登录表单，请先完成登录。',
+  LOGIN_NOT_FINISHED: '当前页面仍有密码、验证码或登录表单，请先在 Agent 浏览器完成登录。',
+  BROWSER_REQUIRED:
+    'Agent 登录页面已关闭或连接失效。请重新打开浏览器；已保存的用例和进度不会删除。',
+  LOGIN_CONFIRMATION_STALE: '页面或确认信息已变化，请点击“重新读取页面”后再确认。',
   SESSION_UNVERIFIED: '未找到已确认的会话标志，请检查页面加载和标志选择；尚不能判定登录失效。',
   OBLIGATIONS_CONFIRMATION_REQUIRED: '请核对并填写每一步的预期分项。',
   OBLIGATION_SOURCE_COVERAGE_INCOMPLETE: '确认分项漏掉了部分原预期，请补全后再确认。',
@@ -155,7 +158,7 @@ Object.assign(errors, {
 const supportsDiscovery = () => config.auto_discovery === true;
 Object.assign(errors, {
   LOGIN_EVIDENCE_REQUIRED:
-    '尚不能可靠识别登录后的界面。浏览器和登录仍保留；请使用辅助操作中的确认登录状态，然后继续准备。',
+    '缺少可核验的登录后标志，请在主流程确认当前页面；没有合适标志时先回到登录后的首页。',
   ADAPTER_PROGRAM_REJECTED: '生成的适配修复超出受限语法，已拒绝并保留原版本。',
   ADAPTER_REGRESSION_FAILED: '适配修复未通过回归验证，未启用该版本。',
 });
@@ -408,6 +411,26 @@ function workflowState() {
       step = 0;
       detail += ' 尚有原文未核对的用例，它们本次只采集页面，核对后才能生成计划。';
     }
+    if (
+      state.active.kind === 'prepare' &&
+      state.active.stage === 'WAITING_USER_LOGIN' &&
+      config.login_recovery
+    ) {
+      if (!state.browser_open) {
+        detail =
+          '登录页面已关闭，正在尝试恢复；若本轮停止，点击开始自动准备即可重新打开，不会删除原用例。';
+      } else if (!state.authenticated) {
+        id = 'workflow-confirm-login';
+        label = '已进入首页，确认并继续';
+        disabled = workflowPending || outputConnectionError;
+        detail =
+          state.login_status === 'OUTSIDE_TARGET_ORIGIN'
+            ? '当前不在测试站点，请完成登录跳转并回到测试站点。确认入口不能放行跨站页面。'
+            : state.login_status === 'LOGIN_CHALLENGE'
+              ? '请先在 Agent 浏览器完成密码或验证码验证。完成后会自动识别，也可以在这里确认。'
+              : '正在检查登录状态。若已进入首页但没有自动继续，请确认一个页面标志；随后续接本轮准备，不必停止任务。';
+      }
+    }
   }
   return { rows, pending, step, id, label, detail, disabled, blocked, clarification };
 }
@@ -489,6 +512,7 @@ function updateWorkflow() {
     if (f.id === 'workflow-connect') return settings();
     if (f.id === 'workflow-login')
       return state.browser_open ? authDialog() : action(() => taskAPI('browser', {}));
+    if (f.id === 'workflow-confirm-login') return authDialog();
     if (f.id === 'workflow-report') return $('#workspace .download').click();
     if (f.id === 'workflow-cleanup') {
       const own = state.cases.find((c) => c.cleanup_required);
@@ -881,6 +905,8 @@ async function refresh(force = false) {
       force ||
       next.revision !== lastRevision ||
       next.authenticated !== state?.authenticated ||
+      next.browser_open !== state?.browser_open ||
+      next.login_status !== state?.login_status ||
       JSON.stringify(next.active) !== JSON.stringify(state?.active) ||
       previousDiscoverySupport !== supportsDiscovery() ||
       JSON.stringify(next.discovery) !== JSON.stringify(state?.discovery) ||
@@ -1815,6 +1841,7 @@ function environment() {
     });
 }
 async function authDialog() {
+  if (config.login_recovery) return loginConfirmationDialog();
   await action(async () => {
     const page = await taskAPI('capture', {});
     modal(
@@ -1843,6 +1870,75 @@ async function authDialog() {
           );
       });
   });
+}
+async function loginConfirmationDialog() {
+  const taskId = current;
+  modal(
+    `<h2>确认当前页面并继续</h2><p>没有自动登录标志的站点只需确认一次。请选择登录后首页的唯一业务标志；无需登录的站点请选择稳定主页标志。标题或菜单本身不会被自动当作登录成功。</p><div id="login-marker-fields"></div><p id="login-confirmation-error" class="notice warn" role="alert" hidden></p><div class="dialog-footer"><button id="reload-login-evidence">重新读取页面</button><button id="confirm-login-evidence" class="primary" disabled>确认并继续</button></div>`,
+  );
+  const fields = $('#login-marker-fields'),
+    error = $('#login-confirmation-error'),
+    reload = $('#reload-login-evidence'),
+    submit = $('#confirm-login-evidence');
+  let evidence = null;
+  const valid = () =>
+    current === taskId && $('#modal').open && $('#login-marker-fields') === fields;
+  const request = (route, body) =>
+    api('/api/tasks/' + encodeURIComponent(taskId) + '/' + route, body);
+  const read = async () => {
+    evidence = null;
+    reload.disabled = true;
+    submit.disabled = true;
+    error.hidden = true;
+    fields.textContent = '正在核验当前页面…';
+    try {
+      const result = await request('login-evidence', {});
+      if (!valid()) return;
+      evidence = result;
+      fields.innerHTML = `<label class="field" for="login-marker">页面标志<select id="login-marker">${result.markers.map((m, i) => `<option value="${i}">${h(m.name)} · ${h(m.role)}</option>`).join('')}</select></label><p>仅确认当前页面和本轮内存会话；不会自动批准计划或执行业务用例。</p>`;
+      submit.disabled = !result.markers.length;
+    } catch (e) {
+      if (!valid()) return;
+      fields.textContent = '';
+      error.textContent = reasonText(e.message);
+      error.hidden = false;
+    } finally {
+      if (valid()) reload.disabled = false;
+    }
+  };
+  reload.onclick = read;
+  submit.onclick = async () => {
+    if (!evidence || submit.disabled) return;
+    submit.disabled = true;
+    reload.disabled = true;
+    error.hidden = true;
+    try {
+      const result = await request('login-confirmation', {
+        token: evidence.token,
+        marker_index: Number($('#login-marker').value),
+        ...(selected.size ? { case_ids: ids() } : {}),
+      });
+      if (!valid()) return;
+      if (result.authenticated !== true) throw new Error('服务未确认登录状态，请重新核对。');
+      close();
+      toast(
+        result.preparation_resumed
+          ? '已确认，正在继续原来的准备任务。'
+          : result.discovery_started
+            ? '已确认，正在探索所选用例的页面。'
+            : '已确认页面状态。' + reasonText(result.discovery_reason),
+      );
+      await refresh(true);
+    } catch (e) {
+      if (!valid()) return;
+      evidence = null;
+      error.textContent = reasonText(e.message);
+      error.hidden = false;
+    } finally {
+      if (valid()) reload.disabled = false;
+    }
+  };
+  await read();
 }
 function confirmSelected({ continuePreparation = false } = {}) {
   const taskId = current,

@@ -258,9 +258,9 @@ test('planning consumes only the current Case latest discovery job and matching 
 });
 
 async function realFixture(html, contracts, work) {
-  const server = http.createServer((_req, res) => {
+  const server = http.createServer((req, res) => {
     res.setHeader('content-type', 'text/html;charset=utf-8');
-    res.end('<span data-testid="ready">Ready</span>' + html);
+    res.end('<span data-testid="ready">Ready</span>' + (req.url === '/login-owner' ? '' : html));
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const task = {
@@ -272,8 +272,10 @@ async function realFixture(html, contracts, work) {
   const session = new BrowserSession({ headless: true });
   let discovery;
   try {
-    await session.open(task);
+    // The privacy assertion still sees every original private field after landing-page login.
+    await session.open({ ...task, target: new URL('/login-owner', task.target).href });
     await session.authenticate(task, locator('ready'));
+    await session.loginPage.goto(task.target);
     discovery = new DiscoveryBrowser(session, task, { maxSteps: 12 });
     await discovery.open();
     discovery.beginCase(c);

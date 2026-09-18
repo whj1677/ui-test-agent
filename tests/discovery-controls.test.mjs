@@ -29,7 +29,7 @@ async function fixture(html, { contracts = [], readOnlyEndpoints = [] } = {}, wo
       return;
     }
     res.setHeader('content-type', 'text/html');
-    res.end('<span data-testid="ready">Ready</span>' + html);
+    res.end('<span data-testid="ready">Ready</span>' + (req.url === '/login-owner' ? '' : html));
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const task = {
@@ -41,8 +41,10 @@ async function fixture(html, { contracts = [], readOnlyEndpoints = [] } = {}, wo
   const session = new BrowserSession({ headless: true });
   let discovery;
   try {
-    await session.open(task);
+    // Confirm the landing page first; sensitive controls belong to the later business page.
+    await session.open({ ...task, target: new URL('/login-owner', task.target).href });
     await session.authenticate(task, locator('ready'));
+    await session.loginPage.goto(task.target);
     discovery = new DiscoveryBrowser(session, task, { maxSteps: 16 });
     await discovery.open();
     discovery.beginCase(original);

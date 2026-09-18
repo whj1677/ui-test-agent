@@ -69,7 +69,9 @@ try {
     const response = await route.fetch(),
       s = await response.json();
     s.active = active;
-    s.authenticated = true;
+    s.authenticated = active?.stage !== 'WAITING_USER_LOGIN';
+    s.browser_open = true;
+    s.login_status = s.authenticated ? 'VERIFIED' : 'LOGIN_CHALLENGE';
     if (executed)
       for (const c of s.cases)
         if (c.case_id !== 'UI-1') {
@@ -92,7 +94,12 @@ try {
     jobs.push(body);
     active = {
       kind: body.kind,
-      stage: body.kind === 'prepare' ? 'WAITING_USER_LOGIN' : body.kind,
+      stage:
+        body.kind === 'prepare'
+          ? jobs.length === 1
+            ? 'WAITING_USER_LOGIN'
+            : 'PLANNING'
+          : body.kind,
       calls: 0,
     };
     await app.store.update(id, (state) =>
@@ -132,7 +139,7 @@ try {
   assert.equal(jobs.length, 0, 'partial confirmation failure must not start a job');
   assert.equal((await app.store.read(id)).cases.filter((c) => c.reviewed).length, 1);
   await page.locator('#confirm-all').click();
-  await waitText('#workflow-detail', '完成登录');
+  await waitText('#workflow-detail', '密码或验证码验证');
   assert.equal(jobs.length, 1);
   assert.equal(jobs[0].kind, 'prepare');
   assert.deepEqual(
@@ -140,7 +147,7 @@ try {
     baseline.cases.map((c) => c.case_id),
   );
   assert.ok((await app.store.read(id)).cases.every((c) => c.reviewed));
-  assert.equal(await page.locator('#workflow-running').isDisabled(), true);
+  assert.equal(await page.locator('#workflow-confirm-login').isDisabled(), false);
   await capture('02-waiting-login');
 
   active = null;

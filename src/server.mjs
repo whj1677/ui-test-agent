@@ -99,6 +99,7 @@ export async function start({
           diagnostic_logging: true,
           auto_discovery: true,
           autonomous_preparation: true,
+          login_recovery: true,
           plan_revision: true,
           preparation_controls: true,
           case_advice: true,
@@ -243,7 +244,7 @@ export async function start({
               break;
             case 'close-browser':
               controller.idle();
-              if (browser.active(id)) await browser.close();
+              if (browser.taskId === id) await browser.close();
               break;
             case 'capture':
               result = await controller.capture(id);
@@ -252,6 +253,16 @@ export async function start({
               keys(body, ['marker', 'case_ids'], ['marker']);
               await controller.authenticate(id, body.marker);
               result = await controller.discoverAfterAuthentication(id, body.case_ids);
+              break;
+            case 'login-evidence':
+              keys(body, [], []);
+              result = await controller.loginEvidence(id);
+              break;
+            case 'login-confirmation':
+              keys(body, ['token', 'marker_index', 'case_ids'], ['token', 'marker_index']);
+              result = await controller.confirmLogin(id, body.token, body.marker_index);
+              if (!result.preparation_resumed)
+                result = await controller.discoverAfterAuthentication(id, body.case_ids);
               break;
             case 'handoff':
               result = await controller.handoff(id, body);
@@ -376,6 +387,7 @@ export async function start({
         await job.finished;
       }
       if (controller.preparing) await controller.preparing.finished;
+      if (controller.loginOperation) await controller.loginOperation.finished;
       const results = await Promise.allSettled([
         browser.close(),
         demo?.close(),

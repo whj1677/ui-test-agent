@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
+
 - [REQ-0015-manual-complex-lab](REQ-0015-manual-complex-lab/current_state.md)：独立复杂合成网站与18有效/4待澄清/2已知缺陷用例；Kimi编写、Codex核验，用户手动测试Agent，不修改旧验收集。
 
 - [REQ-0013-discovery-observability](REQ-0013-discovery-observability/current_state.md)：探索规划衔接、可展开的候选排除诊断与300项内分区采集已实现；627项非暂停工程回归及本机注入联调完成。权限/审批不变，真实模型收益另验，4179及旧包未切换。

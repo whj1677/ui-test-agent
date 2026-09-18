@@ -65,9 +65,9 @@ try {
   await page.getByText('浏览器已打开', { exact: true }).waitFor();
   await app.browser.loginPage.getByRole('button', { name: '进入演示', exact: true }).click();
   await page.getByRole('button', { name: '确认登录状态', exact: true }).click();
-  await page.getByRole('heading', { name: '确认登录状态', exact: true }).waitFor();
-  await page.locator('#marker').selectOption({ label: '演示用户 · strong' });
-  await page.locator('#save-marker').click();
+  await page.getByRole('heading', { name: '确认当前页面并继续', exact: true }).waitFor();
+  await page.locator('#login-marker').selectOption({ label: '演示用户 · strong' });
+  await page.locator('#confirm-login-evidence').click();
   await page.getByText('登录可复用', { exact: true }).waitFor();
   await page.getByRole('checkbox', { name: '选择全部用例' }).check();
   await page.locator('#approve-main').click();

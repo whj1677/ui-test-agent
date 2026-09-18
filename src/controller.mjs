@@ -99,6 +99,7 @@ export class Controller {
     this.browser = browser;
     this.active = null;
     this.preparing = null;
+    this.loginOperation = null;
     this.diagnosticLogs = new Map();
     if (!['single', 'staged'].includes(planningMode)) fail('PLANNING_MODE_INVALID');
     this.planningMode = planningMode;
@@ -108,6 +109,24 @@ export class Controller {
     this.discoverySessionKey = uid();
     this.preparationBudget = preparationBudget;
     this.experience = new UiExperienceStore(store.root, { mode: experienceMode });
+    for (const name of ['loginEvidence', 'confirmLogin']) {
+      const operation = this[name].bind(this);
+      this[name] = async (...args) => {
+        if (this.loginOperation) fail('JOB_ALREADY_RUNNING', 409);
+        this.loginInteraction(args[0]);
+        const token = {};
+        token.finished = new Promise((resolve) => {
+          token.resolve = resolve;
+        });
+        this.loginOperation = token;
+        try {
+          return await operation(...args);
+        } finally {
+          this.loginOperation = null;
+          token.resolve();
+        }
+      };
+    }
     for (const name of [
       'configure',
       'discoveryContract',
@@ -144,7 +163,7 @@ export class Controller {
   }
   idle() {
     this.noJob();
-    if (this.preparing) fail('JOB_ALREADY_RUNNING', 409);
+    if (this.preparing || this.loginOperation) fail('JOB_ALREADY_RUNNING', 409);
   }
   sanitizeDiagnostic(value) {
     return scrubForLog(this.provider.sanitizeForLog ? this.provider.sanitizeForLog(value) : value);
@@ -288,6 +307,7 @@ export class Controller {
       site_cleanup_blockers: await this.store.cleanupBlockers(state.target),
       execution_projection: projection,
       browser_open: this.browser.active(id),
+      login_status: this.browser.loginStatus?.(id) ?? null,
       authenticated: this.browser.active(id) && this.browser.authenticated,
       active:
         this.active?.id === id
@@ -627,6 +647,51 @@ export class Controller {
       this.store.event(s, 'PAGE_CAPTURED', { url: shot.url, controls: shot.controls.length });
     });
     return shot;
+  }
+  loginInteraction(id) {
+    const job = this.active;
+    if (
+      job &&
+      (job.id !== id ||
+        job.kind !== 'prepare' ||
+        job.stage !== 'WAITING_USER_LOGIN' ||
+        job.abort.signal.aborted)
+    )
+      fail('JOB_ALREADY_RUNNING', 409);
+    if (this.preparing) fail('JOB_ALREADY_RUNNING', 409);
+    return job;
+  }
+  async loginEvidence(id) {
+    const job = this.loginInteraction(id);
+    const task = await this.store.read(id);
+    const result = await this.browser.loginEvidence(task);
+    if (this.loginInteraction(id) !== job) fail('LOGIN_CONFIRMATION_STALE', 409);
+    return result;
+  }
+  async confirmLogin(id, token, markerIndex) {
+    const job = this.loginInteraction(id);
+    if (this.browser.loginConfirmationPending) fail('JOB_ALREADY_RUNNING', 409);
+    this.browser.loginConfirmationPending = true;
+    try {
+      const task = await this.store.read(id);
+      if (this.loginInteraction(id) !== job) fail('LOGIN_CONFIRMATION_STALE', 409);
+      const marker = await this.browser.confirmLoginEvidence(task, token, markerIndex);
+      if (this.loginInteraction(id) !== job) fail('LOGIN_CONFIRMATION_STALE', 409);
+      await this.store.update(id, (s) => {
+        if (this.loginInteraction(id) !== job) fail('LOGIN_CONFIRMATION_STALE', 409);
+        s.auth_marker = marker;
+        this.store.event(s, 'LOGIN_MARKER_CONFIRMED', {
+          message: '操作员确认当前唯一标志；继续原准备作业，不改变原用例或执行授权。',
+        });
+      });
+      this.discoverySessionKey = uid();
+    } catch (error) {
+      this.browser.invalidateAuthentication();
+      throw error;
+    } finally {
+      this.browser.loginConfirmationPending = false;
+    }
+    return { authenticated: true, preparation_resumed: !!job, discovery_started: false };
   }
   async authenticate(id, marker) {
     this.noJob();

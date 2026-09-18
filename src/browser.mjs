@@ -45,7 +45,17 @@ export class BrowserSession {
   }
   async open(task) {
     if (this.browser && this.taskId === task.id && this.browser.isConnected()) {
-      await this.loginPage.bringToFront();
+      if (this.active(task.id)) {
+        await this.loginPage.bringToFront();
+        return;
+      }
+      this.invalidateAuthentication();
+      if (!this.browser.contexts().includes(this.loginContext))
+        this.loginContext = await this.browser.newContext({
+          viewport: { width: 1360, height: 900 },
+          serviceWorkers: 'block',
+        });
+      await this.openLoginPage(task);
       return;
     }
     await this.close();
@@ -58,26 +68,94 @@ export class BrowserSession {
     this.target = task.target;
     this.browser = await chromium.launch({ headless: this.headless });
     this.browser.on('disconnected', () => {
-      this.authenticated = false;
+      this.invalidateAuthentication();
     });
     this.loginContext = await this.browser.newContext({
       viewport: { width: 1360, height: 900 },
       serviceWorkers: 'block',
     });
-    this.loginPage = await this.loginContext.newPage();
-    await this.loginPage.goto(task.target, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await this.openLoginPage(task);
+  }
+  invalidateAuthentication() {
+    this.authenticated = false;
+    this.storage = null;
+    this.sessionStorage = null;
+    this.marker = null;
+    this.authEvidence = null;
+    this.loginTicket = null;
+    this.loginWaitReason = null;
+  }
+  async openLoginPage(task) {
+    const page = await this.loginContext.newPage();
+    this.loginPage = page;
+    page.on('close', () => {
+      if (this.loginPage === page) this.invalidateAuthentication();
+    });
+    await page.goto(task.target, { waitUntil: 'domcontentloaded', timeout: 30000 });
   }
   async close() {
     if (this.browser) await this.browser.close().catch(() => {});
     this.browser = null;
     this.taskId = null;
-    this.authenticated = false;
-    this.storage = null;
-    this.sessionStorage = null;
-    this.marker = null;
+    this.loginPage = null;
+    this.loginContext = null;
+    this.invalidateAuthentication();
   }
   active(id) {
-    return !!(this.browser?.isConnected() && this.taskId === id);
+    return !!(
+      this.browser?.isConnected() &&
+      this.taskId === id &&
+      this.loginPage &&
+      !this.loginPage.isClosed()
+    );
+  }
+  loginStatus(id) {
+    if (this.taskId !== id || !this.browser?.isConnected()) return 'BROWSER_CLOSED';
+    if (!this.active(id)) return 'PAGE_CLOSED';
+    if (this.authenticated) return 'VERIFIED';
+    return this.loginWaitReason || 'CHECKING';
+  }
+  async requireLoginSurface(task) {
+    if (!this.active(task.id)) fail('BROWSER_REQUIRED', 409);
+    if (new URL(this.loginPage.url()).origin !== new URL(task.target).origin)
+      fail('OUTSIDE_TARGET_ORIGIN');
+    if (await hasLoginChallenge(this.loginPage)) fail('LOGIN_NOT_FINISHED', 409);
+  }
+  async loginEvidence(task) {
+    await this.requireLoginSurface(task);
+    const page = this.loginPage,
+      url = page.url();
+    const shot = await snapshot(page, { adapterSource: this.adapterSource });
+    const markers = [];
+    for (const control of shot.controls) {
+      if (markers.length >= 40) break;
+      if (await eligibleLoginMarker(page, control.locator))
+        markers.push({ name: control.name, role: control.role, locator: control.locator });
+    }
+    await this.requireLoginSurface(task);
+    if (this.loginPage !== page || page.url() !== url) fail('LOGIN_CONFIRMATION_STALE', 409);
+    if (!markers.length) fail('LOGIN_EVIDENCE_REQUIRED', 409);
+    const token = uid();
+    this.loginTicket = { token, page, url, taskId: task.id, expires: Date.now() + 120000, markers };
+    return { token, markers: markers.map(({ name, role }) => ({ name, role })) };
+  }
+  async confirmLoginEvidence(task, token, index) {
+    const ticket = this.loginTicket;
+    this.loginTicket = null;
+    if (
+      !ticket ||
+      ticket.token !== token ||
+      ticket.taskId !== task.id ||
+      ticket.page !== this.loginPage ||
+      ticket.url !== this.loginPage?.url() ||
+      ticket.expires < Date.now() ||
+      !Number.isInteger(index) ||
+      !ticket.markers[index]
+    )
+      fail('LOGIN_CONFIRMATION_STALE', 409);
+    const marker = ticket.markers[index].locator;
+    await this.authenticate(task, marker);
+    return marker;
   }
   async snapshot() {
     if (!this.loginPage || this.loginPage.isClosed()) fail('BROWSER_REQUIRED', 409);
@@ -87,38 +165,69 @@ export class BrowserSession {
     if (!this.active(task.id)) fail('BROWSER_REQUIRED', 409);
     validateLocator(marker);
     if (marker.kind === 'case_named') fail('CASE_NAMED_ACTION_FORBIDDEN');
-    if (new URL(this.loginPage.url()).origin !== new URL(task.target).origin)
-      fail('OUTSIDE_TARGET_ORIGIN');
-    await assertUnique(this.loginPage, marker);
-    this.marker = marker;
-    this.storage = await this.loginContext.storageState();
-    this.sessionStorage = await this.loginPage.evaluate(() =>
+    const page = this.loginPage,
+      context = this.loginContext,
+      url = page.url();
+    await this.requireLoginSurface(task);
+    await assertUnique(page, marker);
+    if (!(await eligibleLoginMarker(page, marker))) fail('LOGIN_EVIDENCE_REQUIRED', 409);
+    const storage = await context.storageState();
+    const sessionStorageValues = await page.evaluate(() =>
       Object.fromEntries(Object.entries(sessionStorage)),
     );
+    // Do not publish a verified session if the page changed during asynchronous capture.
+    await this.requireLoginSurface(task);
+    if (!(await eligibleLoginMarker(page, marker))) fail('LOGIN_CONFIRMATION_STALE', 409);
+    if (this.loginPage !== page || this.loginContext !== context || page.url() !== url)
+      fail('LOGIN_CONFIRMATION_STALE', 409);
+    this.marker = marker;
+    this.storage = storage;
+    this.sessionStorage = sessionStorageValues;
     this.authenticated = true;
+    this.authEvidence = {
+      source: 'OPERATOR_CONFIRMED_MARKER',
+      same_origin: true,
+      login_challenge_absent: true,
+    };
   }
   async waitForAuthentication(task, { signal, timeoutMs = 600000 } = {}) {
     const deadline = Date.now() + timeoutMs;
     let stable = null,
-      repeats = 0;
+      repeats = 0,
+      recoveries = 0;
     while (Date.now() < deadline) {
       if (signal?.aborted) fail('STOPPED');
-      if (!this.active(task.id) || this.loginPage.isClosed()) fail('BROWSER_REQUIRED');
+      if (!this.active(task.id)) {
+        if (this.taskId !== task.id || !this.browser?.isConnected() || recoveries >= 1)
+          fail('BROWSER_REQUIRED');
+        recoveries++;
+        await this.open(task);
+        if (signal?.aborted) fail('STOPPED');
+        stable = null;
+        repeats = 0;
+      }
+      if (this.loginConfirmationPending) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        continue;
+      }
       if (new URL(this.loginPage.url()).origin !== new URL(task.target).origin) {
+        this.loginWaitReason = 'OUTSIDE_TARGET_ORIGIN';
         stable = null;
         repeats = 0;
         await new Promise((resolve) => setTimeout(resolve, 500));
         continue;
       }
       try {
-        const login =
-          (await isLoginPage(this.loginPage)) ||
-          (await this.loginPage
-            .locator(
-              'input[autocomplete="one-time-code"]:visible,input[name*="otp" i]:visible,input[name*="captcha" i]:visible',
-            )
-            .count()) > 0;
+        const login = await hasLoginChallenge(this.loginPage);
+        this.loginWaitReason = login ? 'LOGIN_CHALLENGE' : 'EVIDENCE_REQUIRED';
         if (!login) {
+          // An explicit operator confirmation continues this preparation, never a second job.
+          if (
+            this.authenticated &&
+            this.marker &&
+            (await eligibleLoginMarker(this.loginPage, this.marker))
+          )
+            return this.marker;
           // Inspect visible labels only, never credentials or storage.
           const candidates = await this.loginPage.evaluate(() => {
             const visible = (e) =>
@@ -198,7 +307,7 @@ export class BrowserSession {
           stable = next;
           if (marker && repeats >= 2) {
             if (signal?.aborted) fail('STOPPED');
-            if (await isLoginPage(this.loginPage)) {
+            if (await hasLoginChallenge(this.loginPage)) {
               stable = null;
               repeats = 0;
               continue;
@@ -1026,6 +1135,32 @@ async function recoverCleanupObservation({ page, plan, task, guard, result, emit
 
 async function hasPassword(page) {
   return (await page.locator('input[type=password]:visible').count()) > 0;
+}
+async function hasLoginChallenge(page) {
+  return (
+    (await isLoginPage(page)) ||
+    (await page
+      .locator(
+        'input[autocomplete="one-time-code"]:visible,input[name*="otp" i]:visible,input[name*="captcha" i]:visible',
+      )
+      .count()) > 0
+  );
+}
+async function eligibleLoginMarker(page, marker) {
+  if (!marker || marker.kind === 'case_named' || !(await visibleUnique(page, marker))) return false;
+  return handoffLocator(page, marker)
+    .evaluate(
+      (e) =>
+        !['HTML', 'BODY', 'INPUT', 'TEXTAREA', 'SELECT', 'FORM', 'MAIN', 'NAV', 'ASIDE'].includes(
+          e.tagName,
+        ) &&
+        !e.matches('#root,#app,#htmlRoot,[role="main"],[role="navigation"],[role="textbox"]') &&
+        !e.closest('[aria-hidden="true"],[inert]') &&
+        !!(e.innerText || '').trim() &&
+        (e.innerText || '').length < 150 &&
+        e.children.length < 10,
+    )
+    .catch(() => false);
 }
 async function isLoginPage(page, marker) {
   if (marker && (await visibleUnique(page, marker))) return false;

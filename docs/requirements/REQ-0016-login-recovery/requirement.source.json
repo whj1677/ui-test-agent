@@ -1,0 +1,274 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0016",
+  "title": "登录证据确认与失效页面恢复",
+  "metadata": {
+    "requirement_status": "集成测试通过",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-18"
+  },
+  "original_input": "这轮测试后好像登录了都有问题了，你看看。修改吧。沿用修改前需求包、逐问题验证后Git同步的要求。",
+  "user_requirements": [
+    {
+      "id": "UN-0016-01",
+      "status": "已确认",
+      "goal": "修复登录页面失效和无自动登录证据时卡住的交接，给出就近可操作反馈。",
+      "constraints": "保留旧任务和用例预期；不因页面标题、公开菜单或登录框消失而自动认定已登录；不调用真实模型。",
+      "success_criteria": "真实Chromium复现闭页及新复杂lab无登出入口；修复后可恢复或一次确认继续同一准备作业；登录安全反例保持拒绝。"
+    }
+  ],
+  "confirmed_facts": [
+    "REQ-0015合成lab有进入演示但无退出登录，现自动识别缺正向标志；不是DeepSeek或计划阶段错误。",
+    "同任务浏览器进程存活而loginPage已关闭时，active仍真，open调用bringToFront失败。",
+    "4179在运行旧构建；源码修改不代表运行实例已切换。",
+    "新增两项确定性竞态反例：存储采集期间路由改变或OTP重现，认证必须拒绝，不能发布已验证会话。"
+  ],
+  "inferences_and_open_questions": [
+    "实际任务页面关闭原因未知；不能认定由用户关闭。",
+    "本轮采用既有操作员标志确认语义，不新增无需登录的自动放行规则。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0016-01",
+      "status": "已确认",
+      "requirement": "可恢复页面生命周期",
+      "acceptance_criteria": "区分连接与页面存活；同任务闭页可在原context恢复，context丢失重新打开；认证重新核验，准备中恢复有上限，不重放执行。",
+      "constraints": "不接管其他标签页或其他任务，关闭清空内存证据。"
+    },
+    {
+      "id": "DR-0016-02",
+      "status": "已确认",
+      "requirement": "无自动证据的原位确认",
+      "acceptance_criteria": "等待登录时提供受同作业阶段限制的确认入口；过滤唯一可见小范围标志、拒绝登录挑战和跨源；确认续原prepare而不另起discover。",
+      "constraints": "仅内存短时确认票据绑定页面及URL；不保存会话凭据、不因公开菜单自动成功。"
+    },
+    {
+      "id": "DR-0016-03",
+      "status": "已确认",
+      "requirement": "准确反馈和交接验证",
+      "acceptance_criteria": "主流程展示等待挑战、需确认、页面关闭/恢复等状态；确认错误保留表单并可重试；真实lab和反例完成自动化回归。",
+      "constraints": "沿用现有样式，无新依赖；原24例/17文件和lab原预期不改。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0016-01",
+      "dr_ids": [
+        "DR-0016-01"
+      ],
+      "status": "已确认",
+      "summary": "区分连接与页面存活；同任务闭页可在原context恢复，context丢失重新打开；认证重新核验，准备中恢复有上限，不重放执行。",
+      "rationale": "不接管其他标签页或其他任务，关闭清空内存证据。"
+    },
+    {
+      "id": "DD-0016-02",
+      "dr_ids": [
+        "DR-0016-02"
+      ],
+      "status": "已确认",
+      "summary": "等待登录时提供受同作业阶段限制的确认入口；过滤唯一可见小范围标志、拒绝登录挑战和跨源；确认续原prepare而不另起discover。",
+      "rationale": "仅内存短时确认票据绑定页面及URL；不保存会话凭据、不因公开菜单自动成功。"
+    },
+    {
+      "id": "DD-0016-03",
+      "dr_ids": [
+        "DR-0016-03"
+      ],
+      "status": "已确认",
+      "summary": "主流程展示等待挑战、需确认、页面关闭/恢复等状态；确认错误保留表单并可重试；真实lab和反例完成自动化回归。",
+      "rationale": "沿用现有样式，无新依赖；原24例/17文件和lab原预期不改。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "BrowserSession页面状态 -> Controller.view -> 主流程反馈。新增受CSRF和作业阶段限制的登录确认端点，短时票据只存内存。",
+    "原logout+navigation自动登录证据保留；无证据时等待一次人工选择标志，同prepare继续，不启动第二作业。"
+  ],
+  "module_document_impact": [
+    "更新 docs/modules/release_runtime.md 的页面生存期与登录确认接口边界。"
+  ],
+  "risks_and_rollback": [
+    "正式执行途中页面丢失仍停止，不自动重复业务动作。",
+    "恢复只访问原任务入口，不能保证丢失context后的sessionStorage仍存在；要求重新登录。",
+    "回滚本轮源码提交，不回滚/覆盖旧任务数据。运行版本切换只在无活动作业且可安全重启时进行，否则明确需人工重启。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0016-01",
+      "dr_ids": [
+        "DR-0016-01"
+      ],
+      "dd_ids": [
+        "DD-0016-01"
+      ],
+      "status": "已实现",
+      "task": "可恢复页面生命周期",
+      "verification_ids": [
+        "VT-0016-01"
+      ]
+    },
+    {
+      "id": "TK-0016-02",
+      "dr_ids": [
+        "DR-0016-02"
+      ],
+      "dd_ids": [
+        "DD-0016-02"
+      ],
+      "status": "已实现",
+      "task": "无自动证据的原位确认",
+      "verification_ids": [
+        "VT-0016-02"
+      ]
+    },
+    {
+      "id": "TK-0016-03",
+      "dr_ids": [
+        "DR-0016-03"
+      ],
+      "dd_ids": [
+        "DD-0016-03"
+      ],
+      "status": "已实现",
+      "task": "准确反馈和交接验证",
+      "verification_ids": [
+        "VT-0016-03"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0016-01",
+      "dr_ids": [
+        "DR-0016-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "区分连接与页面存活；同任务闭页可在原context恢复，context丢失重新打开；认证重新核验，准备中恢复有上限，不重放执行。",
+      "evidence_standard": "本机隔离Chromium/Controller与UI测试；真实命令、退出码、非零统计、日志。",
+      "current_evidence": {
+        "command": "node --test --test-reporter=tap tests/login-recovery.integration.mjs tests/auth-menu-observation.integration.mjs tests/autonomous-preparation.integration.mjs manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 47,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0016-integration-final.log"
+      }
+    },
+    {
+      "id": "VT-0016-02",
+      "dr_ids": [
+        "DR-0016-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "等待登录时提供受同作业阶段限制的确认入口；过滤唯一可见小范围标志、拒绝登录挑战和跨源；确认续原prepare而不另起discover。",
+      "evidence_standard": "本机隔离Chromium/Controller与UI测试；真实命令、退出码、非零统计、日志。",
+      "current_evidence": {
+        "command": "node --test --test-reporter=tap tests/login-recovery.integration.mjs tests/auth-menu-observation.integration.mjs tests/autonomous-preparation.integration.mjs manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 47,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0016-integration-final.log"
+      }
+    },
+    {
+      "id": "VT-0016-03",
+      "dr_ids": [
+        "DR-0016-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "主流程展示等待挑战、需确认、页面关闭/恢复等状态；确认错误保留表单并可重试；真实lab和反例完成自动化回归。",
+      "evidence_standard": "本机隔离Chromium/Controller与UI测试；真实命令、退出码、非零统计、日志。",
+      "current_evidence": {
+        "command": "node --test --test-reporter=tap tests/login-recovery.integration.mjs tests/auth-menu-observation.integration.mjs tests/autonomous-preparation.integration.mjs manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 47,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0016-integration-final.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "node --test --test-reporter=tap tests/login-recovery.integration.mjs",
+      "node tests/runtime-regression.mjs",
+      "node tests/console.integration.mjs",
+      "node tests/workflow.integration.mjs"
+    ],
+    "environment": [
+      "Windows Node22+ Playwright；隔离合成网站、临时数据；不调用真实模型。"
+    ],
+    "conclusion": [
+      "47项合成集成检查完成（11项新登录、10项既有登录/自主准备、26项lab自检），0失败/0跳过；不混加为业务用例数。",
+      "原控制台合成演示执行/报告测试完成；更新后的流程UI验证完成，模型请求0。桌面1440与375窄屏确认弹窗截图已查看，键盘确认可用。",
+      "最终源码构建0ce696aba972的非暂停回归647项完成，0失败/0跳过；日志 validation/REQ-0016-runtime-frozen.log。原冻结24例/17文件的清单与基线检查仍满足。",
+      "曾复现确认期间路由/验证码变化仍认证的2项失败，已增加发布认证前重验并由上述47项复验。初次扩展回归发现1处错误码顺序与2处旧夹具直接在私密输入页确认的setup冲突；修正顺序，夹具改为先首页确认再进入原业务页面，原隐私断言不变。",
+      "测试使用临时隔离数据与本机合成站点，未调用真实DeepSeek；产品控制器在验证交接后由注入provider主动报SYNTHETIC_LOGIN_HANDOFF_END，不能算模型规划成功。",
+      "4179仍运行653a95ecb090旧构建，未关闭或重启，旧任务未操作；本轮源码构建0ce696aba972待用户正常停止/启动后生效。模型Key只在内存，重启后需本机重连。",
+      "最终流程UI日志 validation/REQ-0016-workflow-v4.log：prepare、prepare、run三次显式作业，真实模型请求0；首次等待允许原位确认，二次准备模拟已认证规划。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0016-01",
+      "dr_id": "DR-0016-01",
+      "dd_id": "DD-0016-01",
+      "tk_id": "TK-0016-01",
+      "vt_id": "VT-0016-01",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0016-01",
+      "dr_id": "DR-0016-02",
+      "dd_id": "DD-0016-02",
+      "tk_id": "TK-0016-02",
+      "vt_id": "VT-0016-02",
+      "status": "已实现"
+    },
+    {
+      "un_id": "UN-0016-01",
+      "dr_id": "DR-0016-03",
+      "dd_id": "DD-0016-03",
+      "tk_id": "TK-0016-03",
+      "vt_id": "VT-0016-03",
+      "status": "已实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "REQ-0015-manual-complex-lab/current_state.md",
+      "status": "已确认",
+      "notes": "独立修复Agent登录交接，原lab规则和测试预期保留。"
+    }
+  ],
+  "open_questions": [
+    "无阻塞本轮源码交付的业务待确认项；运行4179切换需正常停止/启动，真实模型和发布验收不在本轮证据内。"
+  ],
+  "prohibited_implementation": [
+    "禁止公开菜单/标题自动作为登录证据；禁止自动重放业务动作、跨任务接管、持久化凭据、修改旧任务和原验收用例。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "新建",
+      "description": "冻结登录修复目标、3项任务与验证边界；用户明确授权修改。",
+      "impact": "BrowserSession、Controller登录交接、控制台主流程；不扩展业务执行。",
+      "confirmed_by": "用户：修改吧"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 1,
+      "type": "实现与验证",
+      "description": "实现页面可用性、一次有界恢复、原位标志确认与末端状态重验；47项集成检查及流程UI完成。原用例/断言不改，旧任务与服务未切换。",
+      "impact": "登录交接、控制台与相关回归fixture初始化；无业务执行授权扩展",
+      "confirmed_by": "用户授权范围内的本机验证，不代用户人工实测"
+    }
+  ]
+}
