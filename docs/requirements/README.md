@@ -20,6 +20,8 @@
 
 - [REQ-0004-multi-ui-fixtures](REQ-0004-multi-ui-fixtures/current_state.md)：REQ-0001子包；原8保留，三种结构24例复杂UI与独立真值，夹具自检不代替Agent验收。
 
+- [REQ-0014-runtime-binding](REQ-0014-runtime-binding/current_state.md)：默认关闭的只读运行时绑定试点已实现并完成本机工程验证；先输入审查，再批准意图，运行时查验当前目标；真实模型与发布验收未完成。
+
 - [REQ-0003-state-file-coordination](REQ-0003-state-file-coordination/current_state.md)：REQ-0001子问题；实际并发回归暴露Windows状态替换EPERM，协调本进程读写并验证有界失败。
 
 - [REQ-0002-wrapped-label-controls](REQ-0002-wrapped-label-controls/current_state.md)：REQ-0001子问题；嵌套标签控件观察/查询绑定与缺口报告，先复现再修复。

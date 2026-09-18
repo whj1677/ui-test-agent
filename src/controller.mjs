@@ -72,6 +72,8 @@ import {
 } from './preparation.mjs';
 import { updateCaseAdvice } from './case-advice.mjs';
 import { UiExperienceStore } from './ui-experience.mjs';
+import { isIntentPlan } from './intent-plan.mjs';
+import { prepareIntent } from './intent-preparation.mjs';
 
 // Hint overrides are included in the effective Case used throughout planning,
 // approval and execution; the immutable baseline/business steps stay intact.
@@ -87,6 +89,7 @@ export class Controller {
     provider,
     browser,
     planningMode = 'single',
+    runtimeBinding = false,
     experienceMode = 'observe',
     preparationBudget = preparationTimeBudget,
     discoveryFactory = (session, task, options) => new DiscoveryBrowser(session, task, options),
@@ -99,6 +102,8 @@ export class Controller {
     this.diagnosticLogs = new Map();
     if (!['single', 'staged'].includes(planningMode)) fail('PLANNING_MODE_INVALID');
     this.planningMode = planningMode;
+    if (typeof runtimeBinding !== 'boolean') fail('RUNTIME_BINDING_CONFIG_INVALID');
+    this.runtimeBinding = runtimeBinding;
     this.discoveryFactory = discoveryFactory;
     this.discoverySessionKey = uid();
     this.preparationBudget = preparationBudget;
@@ -684,6 +689,7 @@ export class Controller {
           r,
         ),
         s.target,
+        { runtimeBinding: this.runtimeBinding },
       );
       requireCurrentAudit(
         s,
@@ -774,8 +780,25 @@ export class Controller {
         caseIds.some((cid) => !state.cases.some((c) => c.case_id === cid))
       )
         fail('CASE_SELECTION_INVALID');
-      if (!['review', 'plan', 'run', 'discover', 'prepare'].includes(kind))
+      if (!['review', 'plan', 'run', 'discover', 'prepare', 'intent-plan'].includes(kind))
         fail('JOB_KIND_INVALID');
+      if (kind === 'intent-plan') {
+        if (!this.runtimeBinding) fail('RUNTIME_BINDING_DISABLED');
+        if (
+          !state.authorization.nonproduction ||
+          !this.browser.active(id) ||
+          !this.browser.authenticated
+        )
+          fail('AUTH_REQUIRED');
+        await this.requireCleanSite(state);
+        if (
+          caseIds.some((cid) => {
+            const r = state.cases.find((r) => r.case_id === cid);
+            return !r.reviewed || r.attempts.length;
+          })
+        )
+          fail('REVIEW_AND_PAGE_REQUIRED');
+      }
       if (['prepare', 'discover', 'plan'].includes(kind)) {
         job.options = preparationOptions(options, state);
         job.cases = caseIds.map((cid) =>
@@ -828,6 +851,7 @@ export class Controller {
               r,
             ),
             state.target,
+            { runtimeBinding: this.runtimeBinding },
           );
           requireCurrentAudit(
             state,
@@ -1848,6 +1872,13 @@ export class Controller {
             issues: response.issues.length,
             output_hash: semanticHash(response),
           });
+        } else if (kind === 'intent-plan') {
+          job.phase_deadline = Date.now() + 120000;
+          try {
+            await prepareIntent(this, job, baseline, c);
+          } finally {
+            job.phase_deadline = null;
+          }
         } else if (kind === 'plan') {
           if (r.attempts.length) continue;
           validateObligations(c.steps);
@@ -1862,7 +1893,7 @@ export class Controller {
           );
         } else {
           const plan = r.plan;
-          validatePlan(plan, c, state.target);
+          validatePlan(plan, c, state.target, { runtimeBinding: this.runtimeBinding });
           this.assertCurrent(job);
           const runId = uid();
           await this.store.update(job.id, (s) => {
@@ -1879,6 +1910,7 @@ export class Controller {
               signal: job.abort.signal,
               run_scope_id: job.run_id,
               approved_plan_hash: r.approved_hash,
+              runtimeBinding: this.runtimeBinding,
               onEvent: async (e) => {
                 job.stage = e.type;
                 await this.store.recordExecutionEvent(job.id, runId, {

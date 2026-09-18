@@ -19,9 +19,11 @@ export async function start({
   dataDir = path.join(ROOT, 'data', 'v02'),
   headless = false,
   experienceMode = process.env.UI_AGENT_EXPERIENCE ?? 'observe',
+  runtimeBinding = process.env.UI_AGENT_RUNTIME_BINDING ?? 'off',
   provider = new DeepSeek(),
 } = {}) {
   if (!['off', 'observe', 'assist'].includes(experienceMode)) fail('EXPERIENCE_MODE_INVALID');
+  if (!['off', 'readonly'].includes(runtimeBinding)) fail('RUNTIME_BINDING_CONFIG_INVALID');
   if ((await readBuildInfo(ROOT)).build_id !== RUNTIME_BUILD.build_id)
     fail('BUILD_SOURCE_CHANGED', 409);
   const store = new Store(dataDir);
@@ -41,6 +43,7 @@ export async function start({
       browser,
       planningMode: process.env.UI_AGENT_PLANNING ?? 'single',
       experienceMode,
+      runtimeBinding: runtimeBinding === 'readonly',
     });
   const csrf = uid();
   const instance = {
@@ -87,7 +90,12 @@ export async function start({
           instance,
           console_protocol: 'ui-agent-console/v1',
           plan_protocol: 'ui-agent-plan/v2',
-          supported_plan_protocols: ['ui-agent-plan/v2', 'ui-agent-plan/v3'],
+          supported_plan_protocols: [
+            'ui-agent-plan/v2',
+            'ui-agent-plan/v3',
+            ...(controller.runtimeBinding ? ['ui-agent-intent-plan/v1'] : []),
+          ],
+          runtime_binding: controller.runtimeBinding,
           diagnostic_logging: true,
           auto_discovery: true,
           autonomous_preparation: true,

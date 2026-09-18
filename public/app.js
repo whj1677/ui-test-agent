@@ -31,6 +31,21 @@ let outputTask = null,
   outputWasBusy = false,
   outputActionError = '';
 const errors = {
+  RUNTIME_BINDING_DISABLED: '实验运行时绑定未开启；旧固定计划不受影响。',
+  INTENT_AUDIT_REQUIRED: '输入、环境或候选已变化，需要重新审查意图计划。',
+  INTENT_ENTRY_UNOBSERVED: '当前入口缺少唯一页面标题或完整观察；未推测未来页面。',
+  INTENT_SOURCE_REQUIRED: '目标名称或业务身份缺少用例原文依据，需要核对候选，不会自动改用例。',
+  INTENT_OBJECT_IDENTITY_REQUIRED: '对象身份必须完整匹配已确认测试数据，不能只取名称前缀。',
+  INTENT_EXPECTED_SOURCE_REQUIRED: '本试点的字段值必须来自原预期，不能复制页面结果作为预期。',
+  INTENT_ACTION_UNSUPPORTED: '本试点只支持明确的只读详情按钮和标签切换；这不是用例本身错误。',
+  INTENT_ASSERTION_UNSUPPORTED: '本试点尚不支持这种断言，未修改原预期。',
+  BINDING_PAGE_MISMATCH: '当前页面与已批准入口不一致，未操作目标。',
+  BINDING_OBJECT_MISMATCH: '当前容器的业务对象身份不符或不唯一，未选择其他对象。',
+  BINDING_SCOPE_AMBIGUOUS: '找到多个同名容器，需要补充唯一范围依据。',
+  BINDING_TARGET_AMBIGUOUS: '当前容器存在多个同名目标，未任意选取。',
+  BINDING_TYPE_MISMATCH: '控件类型不符合只读试点支持范围，未派发。',
+  BINDING_STALE: '目标或所属对象在操作前后发生变化，未盲目重试。',
+  BINDING_DEADLINE_EXCEEDED: '当前步骤剩余时间内未完成绑定；没有重置验收时间窗口。',
   CASE_NAMED_SOURCE_REQUIRED: '未观察字段必须逐字来自对应步骤的操作原文，不能来自预期或经验猜测。',
   CASE_NAMED_GUARD_UNOBSERVED: '缺少可核验的向导页面和步骤信息，尚不能安全绑定后续字段。',
   CASE_NAMED_CONTEXT_MISMATCH: '当前页面或向导步骤与批准计划不符，未操作该字段。',
@@ -175,6 +190,10 @@ const repairStatusNames = {
   INTERRUPTED: '已中断',
 };
 function preparationHistoryHTML(c) {
+  if (c.plan?.schema_version === 'ui-agent-intent-plan/v1') {
+    const record = c.intent_preparation;
+    return `<details class="plan-card preparation-history" data-intent-review><summary>意图审查记录 · ${record?.audit?.outcome === 'ACCEPT' ? '候选待人工核对' : '需检查审查记录'}</summary><p>输入审查：${record?.input_review ? (record.input_review.issues?.length ? '发现待确认问题' : '本次未发现有依据的输入问题') : '无有效记录'}。候选语义审查：${h(record?.audit?.outcome === 'ACCEPT' ? '未发现缺口' : (record?.audit?.outcome ?? '无有效记录'))}。</p><p>以上不是输入绝对正确或测试已通过的证明；仍需核对原文、对象和预期。技术绑定将在执行时产生独立记录。</p><details><summary>查看本次审查依据</summary><pre>${h(JSON.stringify(record ?? {}, null, 2))}</pre></details></details>`;
+  }
   const repair = c.self_repair,
     input = c.input_review,
     audit = c.plan_audit,
@@ -942,6 +961,10 @@ const eventNames = {
   ATTEMPT_STARTED: '开始执行',
   STEP_STARTED: '开始步骤',
   ACTION_RESOLVING: '正在定位控件',
+  RUNTIME_BINDING_STARTED: '正在绑定当前已批准目标',
+  RUNTIME_BINDING_VERIFIED: '当前目标身份与定位已核验',
+  RUNTIME_BINDING_REJECTED: '当前目标绑定失败，请查看原因',
+  INTENT_PLAN_PREPARED: '实验意图计划审查结束，等待核对',
   LOCATOR_REPAIR_REQUESTED: '正在修复当前动作定位',
   CLEANUP_OWNERSHIP_OBSERVED: '已检查清理目标身份',
   CLEANUP_ACTION_EXECUTED: '清理动作已执行',
@@ -975,11 +998,13 @@ const opName = {
   wait: '等待',
 };
 const loc = (l) =>
-  l?.kind === 'case_named'
-    ? `尚未观察 · 原步骤 ${l.source_step_id} 命名：${loc(l.target)} · 类型 ${l.control_type} · ${l.guard?.path} / ${l.guard?.page_heading} / ${l.guard?.step}（执行时核验唯一表单与控件）`
-    : ['row', 'cell'].includes(l?.kind)
-      ? `${loc(l.table)} · ${l.key?.column}=${l.key?.value} · ${l.kind === 'cell' ? l.column : l.target ? loc(l.target) : '整行'}`
-      : (l?.name ?? l?.value ?? '');
+  l?.kind === 'runtime_intent'
+    ? `运行时待绑定 · ${l.page?.path} / ${l.page?.heading} · ${l.scope?.name} / 对象 ${l.scope?.identity} · ${l.role}「${l.name}」 · 原步骤 ${l.source_step_id}`
+    : l?.kind === 'case_named'
+      ? `尚未观察 · 原步骤 ${l.source_step_id} 命名：${loc(l.target)} · 类型 ${l.control_type} · ${l.guard?.path} / ${l.guard?.page_heading} / ${l.guard?.step}（执行时核验唯一表单与控件）`
+      : ['row', 'cell'].includes(l?.kind)
+        ? `${loc(l.table)} · ${l.key?.column}=${l.key?.value} · ${l.kind === 'cell' ? l.column : l.target ? loc(l.target) : '整行'}`
+        : (l?.name ?? l?.value ?? '');
 Object.assign(eventNames, {
   OPTIONAL_DIALOG_OBSERVED: '条件提示已检查',
   ACTION_SKIPPED: '提示未出现，未派发点击',
@@ -1638,6 +1663,20 @@ function render() {
     };
   for (const el of document.querySelectorAll('[data-case]'))
     el.onclick = () => caseDetail(el.dataset.case);
+  if (config.runtime_binding) {
+    const button = document.createElement('button');
+    button.id = 'intent-plan';
+    button.textContent = '实验：生成逐步绑定计划';
+    button.disabled = busy || !s.authenticated;
+    button.title =
+      '先检查已确认用例，只观察当前入口；详情和标签页的目标在执行时绑定。仅支持只读试点，不代表已验证未来页面。';
+    $('#plan').after(button);
+    button.onclick = () =>
+      action(async () => {
+        await taskAPI('job', { kind: 'intent-plan', case_ids: ids() });
+        toast('已开始输入审查和入口观察，生成后仍需核对意图计划。');
+      });
+  }
   for (const kind of ['review', 'plan', 'run'])
     $('#' + kind).onclick = () =>
       action(async () => {
@@ -1866,6 +1905,10 @@ function confirmSelected({ continuePreparation = false } = {}) {
 }
 function planHTML(plan) {
   if (!plan) return '<p>尚未生成计划。</p>';
+  const runtimeNotice =
+    plan.schema_version === 'ui-agent-intent-plan/v1'
+      ? '<div class="notice warn" data-runtime-plan><strong>实验：批准业务意图，运行时绑定技术目标</strong><p>用户原稿和模型候选都可能有误，请核对对象、每项操作及原预期。未来控件尚未验证；只读执行时检查当前页面、对象身份、容器、类型和唯一性。绑定失败不改预期、不替换对象、不重放已派发的未知操作。绑定收据单独保存，尚不是可重放回归计划。</p></div>'
+      : '';
   const unobserved = plan.steps
     .flatMap((s) => s.checkpoints ?? [s])
     .flatMap((s) => [...s.actions, ...s.assertions])
@@ -1887,7 +1930,7 @@ function planHTML(plan) {
   const cleanup = plan.cleanup
     ? `<h4>执行后清理 · ${h(plan.cleanup.identity)}</h4>${plan.cleanup.observation_path ? `<p>先以只读方式返回已批准页面：${h(plan.cleanup.observation_path)}，再核实是否已清理及资源归属。</p>` : ''}<p>删除或恢复前先确认目标身份：</p>${assertions(plan.cleanup.ownership ?? [])}${actions(plan.cleanup.actions)}${assertions(plan.cleanup.assertions)}`
     : '<p>该计划无需数据清理。</p>';
-  return `${unobserved.length ? `<div class="notice warn" data-unobserved-plan><strong>含 ${unobserved.length} 项尚未观察的定位</strong><p>以下标记项来自用例操作原文，不代表页面已经验证。此次核对固定完整操作、输入值、顺序、预期和定位；执行到对应步骤时核验页面、表单、类型和唯一性。不匹配将停止，不自动换目标或生成后续计划。</p></div>` : ''}<div class="notice ${plan.data_effect === 'mutation' ? 'warn' : ''}">打开 ${h(plan.entry_path)} · ${plan.data_effect === 'mutation' ? '会写入数据，必须验证清理' : '声明为只读操作'}</div><h4>前置条件</h4>${plan.preconditions.length ? assertions(plan.preconditions) : '<p>计划未声明自动验证项；请核对原用例前置条件。</p>'}${steps}${cleanup}<p>${h(plan.notes ?? '')}</p><details><summary>查看结构化计划</summary><pre>${h(JSON.stringify(plan, null, 2))}</pre></details>`;
+  return `${runtimeNotice}${unobserved.length ? `<div class="notice warn" data-unobserved-plan><strong>含 ${unobserved.length} 项尚未观察的定位</strong><p>以下标记项来自用例操作原文，不代表页面已经验证。此次核对固定完整操作、输入值、顺序、预期和定位；执行到对应步骤时核验页面、表单、类型和唯一性。不匹配将停止，不自动换目标或生成后续计划。</p></div>` : ''}<div class="notice ${plan.data_effect === 'mutation' ? 'warn' : ''}">打开 ${h(plan.entry_path)} · ${plan.data_effect === 'mutation' ? '会写入数据，必须验证清理' : '声明为只读操作'}</div><h4>前置条件</h4>${plan.preconditions.length ? assertions(plan.preconditions) : '<p>计划未声明自动验证项；请核对原用例前置条件。</p>'}${steps}${cleanup}<p>${h(plan.notes ?? '')}</p><details><summary>查看结构化计划</summary><pre>${h(JSON.stringify(plan, null, 2))}</pre></details>`;
 }
 function approveSelected() {
   const rows = state.cases.filter((c) => selected.has(c.case_id) && !c.attempts.length);

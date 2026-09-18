@@ -4,6 +4,12 @@ import { DISMISS_LABEL, conditionalDismissSource, CONDITIONAL_PROMPT } from './o
 import { DYNAMIC_ROW_GUIDANCE } from './dynamic-row-evidence.mjs';
 import { WITHIN_GUIDANCE } from './scope-guidance.mjs';
 import { validateCaseNamed, validateCaseNamedPlan, CASE_NAMED_GUIDANCE } from './case-named.mjs';
+import {
+  INTENT_PLAN_VERSION,
+  isIntentPlan,
+  validateIntent,
+  validateIntentPlanScope,
+} from './intent-plan.mjs';
 export const PLAN_VERSION = 'ui-agent-plan/v2';
 export const CHECKPOINT_PLAN_VERSION = 'ui-agent-plan/v3';
 export function normalizePlanResponse(response) {
@@ -25,7 +31,11 @@ export const caseHash = (c) => semanticHash(c);
 export const planHash = (plan) =>
   plan.schema_version === 'ui-agent-plan/v1' ? hash(plan) : semanticHash(plan);
 const stableId = (x) => typeof x === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,99}$/.test(x);
-export function validateLocator(l) {
+export function validateLocator(l, { runtimeBinding = false } = {}) {
+  if (l?.kind === 'runtime_intent') {
+    if (!runtimeBinding) fail('RUNTIME_BINDING_DISABLED');
+    return validateIntent(l);
+  }
   if (l?.kind === 'case_named') return validateCaseNamed(l);
   if (l?.kind === 'within') {
     keys(l, ['kind', 'scope', 'target'], ['kind', 'scope']);
@@ -173,7 +183,7 @@ const OPS = [
   'wait',
   'dismiss_optional',
 ];
-export function validateAction(a, base, ids) {
+export function validateAction(a, base, ids, options) {
   if (!a || !OPS.includes(a.op)) fail('ACTION_NOT_ALLOWED');
   keys(a, ['action_id', 'op', 'target', 'value', 'state', 'repair_anchor'], ['action_id', 'op']);
   if (!stableId(a.action_id) || ids.has(a.action_id)) fail('ACTION_ID_INVALID');
@@ -190,7 +200,7 @@ export function validateAction(a, base, ids) {
       a.value !== undefined
     )
       fail('INVALID_ACTION');
-  } else validateLocator(a.target);
+  } else validateLocator(a.target, options);
   if (
     a.op === 'dismiss_optional' &&
     (a.target.kind !== 'role' ||
@@ -221,9 +231,9 @@ export function validateAction(a, base, ids) {
     if (l && /password|密码|api.?key|token|authorization|cookie/i.test(JSON.stringify(l)))
       fail('SENSITIVE_CONTROL_FORBIDDEN');
 }
-export function validateAssertion(a, original) {
+export function validateAssertion(a, original, options) {
   keys(a, ['target', 'check', 'expected', 'oracle_quote', 'obligation_ids'], ['target', 'check']);
-  validateLocator(a.target);
+  validateLocator(a.target, options);
   if (
     ![
       'visible',
@@ -298,17 +308,17 @@ export function validateAssertion(a, original) {
     }
   } else if (a.obligation_ids !== undefined) fail('NON_BUSINESS_OBLIGATIONS_FORBIDDEN');
 }
-function actions(values, base, ids, min = 0) {
+function actions(values, base, ids, min = 0, options) {
   if (!Array.isArray(values) || values.length < min || values.length > 30)
     fail('ACTION_COUNT_INVALID');
-  values.forEach((a) => validateAction(a, base, ids));
+  values.forEach((a) => validateAction(a, base, ids, options));
 }
-function assertions(values, original, min = 1) {
+function assertions(values, original, min = 1, options) {
   if (!Array.isArray(values) || values.length < min || values.length > 20)
     fail('ASSERTION_COUNT_INVALID');
-  values.forEach((a) => validateAssertion(a, original));
+  values.forEach((a) => validateAssertion(a, original, options));
 }
-function validateCheckpointStep(step, original, base, actionIds, checkpointIds) {
+function validateCheckpointStep(step, original, base, actionIds, checkpointIds, options) {
   keys(
     step,
     ['step_id', 'source_action', 'source_expected', 'assertion_mode', 'timeout_ms', 'checkpoints'],
@@ -330,13 +340,15 @@ function validateCheckpointStep(step, original, base, actionIds, checkpointIds) 
     checkpointIds.add(point.checkpoint_id);
     if (!Number.isInteger(point.within_ms) || point.within_ms < 100 || point.within_ms > 30000)
       fail('ASSERTION_DEADLINE_INVALID');
-    actions(point.actions, base, actionIds);
-    assertions(point.assertions, original);
+    actions(point.actions, base, actionIds, 0, options);
+    assertions(point.assertions, original, 1, options);
   }
   if (stepActions(step).length > 30) fail('ACTION_COUNT_INVALID');
   if (stepAssertions(step).length > 20) fail('ASSERTION_COUNT_INVALID');
 }
-export function validatePlan(plan, c, base) {
+export function validatePlan(plan, c, base, { runtimeBinding = false } = {}) {
+  if (isIntentPlan(plan) && !runtimeBinding) fail('RUNTIME_BINDING_DISABLED');
+  const options = { runtimeBinding: runtimeBinding && isIntentPlan(plan) };
   if (plan?.schema_version === 'ui-agent-plan/v1') fail('PLAN_VERSION_REAPPROVAL_REQUIRED');
   keys(
     plan,
@@ -363,7 +375,7 @@ export function validatePlan(plan, c, base) {
     ],
   );
   if (
-    ![PLAN_VERSION, CHECKPOINT_PLAN_VERSION].includes(plan.schema_version) ||
+    ![PLAN_VERSION, CHECKPOINT_PLAN_VERSION, INTENT_PLAN_VERSION].includes(plan.schema_version) ||
     plan.case_id !== c.case_id ||
     plan.case_hash !== caseHash(c)
   )
@@ -378,8 +390,8 @@ export function validatePlan(plan, c, base) {
     checkpointIds = new Set();
   plan.steps.forEach((s, i) => {
     const original = c.steps[i];
-    if (plan.schema_version === CHECKPOINT_PLAN_VERSION) {
-      validateCheckpointStep(s, original, base, actionIds, checkpointIds);
+    if (plan.schema_version === CHECKPOINT_PLAN_VERSION || isIntentPlan(plan)) {
+      validateCheckpointStep(s, original, base, actionIds, checkpointIds, options);
     } else {
       keys(
         s,
@@ -461,6 +473,7 @@ export function validatePlan(plan, c, base) {
   } else if (plan.cleanup !== null) fail('UNEXPECTED_CLEANUP');
   if (plan.notes !== undefined && typeof plan.notes !== 'string') fail('INVALID_PLAN_NOTES');
   validateCaseNamedPlan(plan, c);
+  if (isIntentPlan(plan)) validateIntentPlanScope(plan, c, base);
   return plan;
 }
 // Kept for plan fingerprints. No action target or other field is stripped.

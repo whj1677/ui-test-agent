@@ -3,6 +3,7 @@ import { validateLocator } from './plans.mjs';
 import { fail } from './common.mjs';
 import { withinHandles } from './within-locator.mjs';
 import { caseNamedHandles } from './wizard-binding.mjs';
+import { runtimeIntentHandles, assertRuntimeTarget } from './runtime-binding.mjs';
 
 export const isRowLocator = (l) => ['row', 'cell'].includes(l?.kind);
 
@@ -135,15 +136,17 @@ async function scopedHandles(page, spec) {
 
 // Compatibility surface used by observation, discovery, actions and atomic assertions.
 export function runtimeLocator(page, spec) {
-  if (!isRowLocator(spec) && !['within', 'case_named'].includes(spec?.kind))
+  if (!isRowLocator(spec) && !['within', 'case_named', 'runtime_intent'].includes(spec?.kind))
     return handoffLocator(page, spec);
-  validateLocator(spec);
+  validateLocator(spec, { runtimeBinding: spec?.kind === 'runtime_intent' });
   const handlesFor = () =>
-    spec.kind === 'case_named'
-      ? caseNamedHandles(page, spec)
-      : spec.kind === 'within'
-        ? withinHandles(page, spec)
-        : scopedHandles(page, spec);
+    spec.kind === 'runtime_intent'
+      ? runtimeIntentHandles(page, spec)
+      : spec.kind === 'case_named'
+        ? caseNamedHandles(page, spec)
+        : spec.kind === 'within'
+          ? withinHandles(page, spec)
+          : scopedHandles(page, spec);
   const use = async (fn) => {
     const handles = await handlesFor();
     try {
@@ -185,6 +188,7 @@ export function runtimeLocator(page, spec) {
 }
 
 export async function assertRowIdentity(page, spec, original) {
+  if (spec?.kind === 'runtime_intent') return assertRuntimeTarget(page, spec, original);
   if (!isRowLocator(spec) && !['within', 'case_named'].includes(spec?.kind)) return;
   const current = runtimeLocator(page, spec);
   if (

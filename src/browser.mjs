@@ -3,6 +3,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { runtimeLocator as handoffLocator, assertRowIdentity } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
+import { isIntentPlan, INTENT_PLAN_VERSION } from './intent-plan.mjs';
+import { captureRuntimeGuard, bindingReceipt } from './runtime-binding.mjs';
 import { observeWizard, captureCaseNamedGuard } from './wizard-binding.mjs';
 import { rejectionLog, recordRejection } from './observation-diagnostics.mjs';
 import {
@@ -277,7 +279,14 @@ export class BrowserSession {
     c,
     plan,
     runDirectory,
-    { signal, onEvent = () => {}, onRepair, run_scope_id, approved_plan_hash } = {},
+    {
+      signal,
+      onEvent = () => {},
+      onRepair,
+      run_scope_id,
+      approved_plan_hash,
+      runtimeBinding = false,
+    } = {},
   ) {
     const result = {
       schema_version: 'ui-agent-facts/v2',
@@ -299,7 +308,8 @@ export class BrowserSession {
       actions: [],
       assertions: [],
       repairs: [],
-      ...(plan.schema_version === CHECKPOINT_PLAN_VERSION
+      ...(isIntentPlan(plan) ? { bindings: [], regression_ready: false } : {}),
+      ...(plan.schema_version === CHECKPOINT_PLAN_VERSION || isIntentPlan(plan)
         ? {
             checkpoints: plan.steps.flatMap((step) =>
               step.checkpoints.map((point) => ({
@@ -331,16 +341,26 @@ export class BrowserSession {
       }
     };
     try {
+      if (isIntentPlan(plan)) {
+        validatePlan(plan, c, task.target, { runtimeBinding });
+        if (approved_plan_hash !== planHash(plan)) fail('PLAN_APPROVAL_REQUIRED');
+      }
       if (
         plan.schema_version === CHECKPOINT_PLAN_VERSION ||
         plan.steps?.some((s) =>
           [...stepActions(s), ...stepAssertions(s)].some(
-            (a) => a?.op === 'dismiss_optional' || a?.target?.kind === 'case_named',
+            (a) =>
+              a?.op === 'dismiss_optional' ||
+              ['case_named', 'runtime_intent'].includes(a?.target?.kind),
           ),
         )
       )
-        validatePlan(plan, c, task.target);
-      if (!['ui-agent-plan/v2', CHECKPOINT_PLAN_VERSION].includes(plan.schema_version))
+        validatePlan(plan, c, task.target, { runtimeBinding });
+      if (
+        !['ui-agent-plan/v2', CHECKPOINT_PLAN_VERSION, INTENT_PLAN_VERSION].includes(
+          plan.schema_version,
+        )
+      )
         fail('PLAN_BASELINE_MISMATCH');
       if (!this.active(task.id) || !this.authenticated) fail('AUTH_REQUIRED', 409);
       const check = await this.context(task, { guard });
@@ -605,9 +625,18 @@ export class BrowserSession {
         setPhase('ASSERTION');
         if (signal?.aborted) fail('STOPPED');
         budget.remaining();
+        const deadline = budget.observationDeadline(lastActionAt, point.within_ms);
+        if (isIntentPlan(run.plan))
+          for (const [index, assertion] of point.assertions.entries())
+            await this.recordBinding(
+              run,
+              assertion.target,
+              { ...detail, assertion_index: index },
+              deadline,
+            );
         const observations = await checkAssertionGroup(page, point.assertions, {
           timeout: point.within_ms,
-          deadline: budget.observationDeadline(lastActionAt, point.within_ms),
+          deadline,
           signal,
         });
         const observedURL = page.url();
@@ -659,6 +688,28 @@ export class BrowserSession {
     await emit('STEP_FINISHED', { step_id: step.step_id });
   }
 
+  async recordBinding(run, intent, detail, deadline) {
+    const { result, page, emit, signal } = run;
+    await emit('RUNTIME_BINDING_STARTED', detail);
+    const receipt = await bindingReceipt(
+      page,
+      intent,
+      {
+        ...detail,
+        run_id: result.id,
+        approved_plan_hash: result.approved_plan_hash,
+        case_hash: result.case_hash,
+      },
+      { deadline, signal },
+    );
+    result.bindings.push(receipt);
+    await emit(
+      receipt.status === 'VERIFIED' ? 'RUNTIME_BINDING_VERIFIED' : 'RUNTIME_BINDING_REJECTED',
+      receipt,
+    );
+    if (receipt.status !== 'VERIFIED') fail(receipt.code);
+  }
+
   async executeActions(run) {
     const {
       task,
@@ -699,7 +750,16 @@ export class BrowserSession {
           target: a.target ?? null,
         });
         try {
-          target = await resolveAction(page, a, budget.remaining());
+          if (isIntentPlan(plan))
+            await this.recordBinding(
+              run,
+              a.target,
+              { step_id: step.step_id, checkpoint_id: point.checkpoint_id, action_id: a.action_id },
+              Math.min(budget.deadline, Date.now() + 8000),
+            );
+          target = await resolveAction(page, a, budget.remaining(), {
+            runtimeBinding: isIntentPlan(plan),
+          });
           break;
         } catch (error) {
           const failure = {
@@ -795,6 +855,28 @@ export class BrowserSession {
         if (signal?.aborted) fail('STOPPED');
         budget.remaining();
         await recording.beforeAction(a, target);
+        // One pre-dispatch refresh only. Once intent is persisted, a changed target
+        // fails closed and is not replayed, including an unknown dispatch result.
+        if (isIntentPlan(plan)) {
+          try {
+            await assertRowIdentity(page, a.target, target);
+          } catch (error) {
+            if (error.code !== 'BINDING_STALE') throw error;
+            await disposeActionTarget(target);
+            await this.recordBinding(
+              run,
+              a.target,
+              {
+                step_id: step.step_id,
+                checkpoint_id: point.checkpoint_id,
+                action_id: a.action_id,
+                refresh: 1,
+              },
+              Math.min(budget.deadline, Date.now() + 8000),
+            );
+            target = await resolveAction(page, a, budget.remaining(), { runtimeBinding: true });
+          }
+        }
         if (signal?.aborted) fail('STOPPED');
         budget.remaining();
         setPhase('INTENT');
@@ -809,6 +891,20 @@ export class BrowserSession {
         };
         // Persist the intent before dispatch. Failure here never authorizes a browser retry.
         await emit('ACTION_STARTED', event);
+        if (isIntentPlan(plan)) {
+          try {
+            await assertRowIdentity(page, a.target, target);
+          } catch (error) {
+            result.actions.push({
+              ...event,
+              status: 'FAILED',
+              phase: 'RESOLVE',
+              dispatched: false,
+              error: error.code,
+            });
+            throw error;
+          }
+        }
         const receipt = { ...event, status: 'UNKNOWN', phase: 'DISPATCH', dispatched: true };
         result.actions.push(receipt);
         if (plan.data_effect === 'mutation' && !['wait', 'hover', 'navigate'].includes(a.op))
@@ -946,8 +1042,8 @@ async function visibleUnique(page, l) {
     return false;
   }
 }
-export async function assertUnique(page, l, timeout = 8000) {
-  validateLocator(l);
+export async function assertUnique(page, l, timeout = 8000, options) {
+  validateLocator(l, options);
   const x = handoffLocator(page, l);
   if ((await x.count()) > 1) fail('LOCATOR_NOT_UNIQUE');
   try {
@@ -966,9 +1062,9 @@ async function sameElement(first, second) {
     await handle?.dispose();
   }
 }
-async function resolveAction(page, a, timeout = 8000) {
+async function resolveAction(page, a, timeout = 8000, options) {
   if (['navigate', 'reload', 'wait'].includes(a.op)) return null;
-  const target = await assertUnique(page, a.target, timeout);
+  const target = await assertUnique(page, a.target, timeout, options);
   // Dispatch this exact node. A live Locator could silently resolve to a replacement
   // object while the intent is being persisted.
   const handle = await target.elementHandle();
@@ -982,9 +1078,11 @@ async function resolveAction(page, a, timeout = 8000) {
     if (['fill', 'press'].includes(a.op) && (await handle.getAttribute('type')) === 'password')
       fail('SENSITIVE_CONTROL_FORBIDDEN');
     const guard =
-      a.target?.kind === 'case_named'
-        ? await captureCaseNamedGuard(page, a.target, handle)
-        : await captureWithinGuard(page, a.target, handle);
+      a.target?.kind === 'runtime_intent'
+        ? await captureRuntimeGuard(page, a.target, handle)
+        : a.target?.kind === 'case_named'
+          ? await captureCaseNamedGuard(page, a.target, handle)
+          : await captureWithinGuard(page, a.target, handle);
     if (guard) actionScopeGuards.set(handle, guard);
     return handle;
   } catch (error) {
@@ -1003,7 +1101,11 @@ export async function perform(page, a, base) {
 async function dispatchAction(page, a, base, target, timeout = 20000) {
   const guard = target && actionScopeGuards.get(target);
   const changed =
-    a.target?.kind === 'case_named' ? 'CASE_NAMED_CONTEXT_CHANGED' : 'WITHIN_SCOPE_CHANGED';
+    a.target?.kind === 'runtime_intent'
+      ? 'BINDING_STALE'
+      : a.target?.kind === 'case_named'
+        ? 'CASE_NAMED_CONTEXT_CHANGED'
+        : 'WITHIN_SCOPE_CHANGED';
   try {
     if (guard && !(await guard.evaluate((state) => state.arm()))) fail(changed);
     await dispatchVerifiedAction(page, a, base, target, timeout);

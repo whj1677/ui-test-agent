@@ -13,6 +13,8 @@ import { generateStagedPlan, StagedValidationError } from './plan-staged.mjs';
 import { BLOCK_AUDIT_PROMPT, blockAuditInput, validateBlockAudit } from './block-audit.mjs';
 import { describePlanError } from './plan-feedback.mjs';
 import { requirePlanSemantics } from './plan-semantics.mjs';
+import { isIntentPlan } from './intent-plan.mjs';
+import { requireIntentAudit } from './intent-preparation.mjs';
 
 const MAX_REPAIRS = 2;
 const incidental = new Set([
@@ -54,6 +56,7 @@ export function repairInputHash(state, c, row) {
   return semanticHash(context);
 }
 export function requireCurrentAudit(state, c, row, plan = row.plan) {
+  if (isIntentPlan(plan)) return requireIntentAudit(state, c, row, plan);
   requireEntryNavigation(
     plan,
     c,
