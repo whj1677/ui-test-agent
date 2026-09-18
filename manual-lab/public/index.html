@@ -1,0 +1,1608 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>巡维演练台</title>
+    <style>
+      :root {
+        --blue: #1e40af;
+        --blue-d: #1e3a8a;
+        --bg: #f1f5f9;
+        --ink: #1f2937;
+        --muted: #4b5563;
+        --line: #d7dee9;
+        --danger: #b91c1c;
+        --thbg: #eef2fb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          'PingFang SC',
+          'Microsoft YaHei',
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      :focus-visible {
+        outline: 3px solid #f59e0b;
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+      #gate {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(160deg, #1e40af, #1e3a8a);
+        padding: 20px;
+      }
+      .gate-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 44px 52px;
+        text-align: center;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.35);
+        max-width: 420px;
+      }
+      .gate-card h1 {
+        margin: 0 0 6px;
+        font-size: 26px;
+        color: var(--blue);
+      }
+      .gate-card p {
+        margin: 0 0 22px;
+        color: var(--muted);
+      }
+      .shell {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 224px;
+        flex: none;
+        background: var(--blue);
+        color: #fff;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .brand {
+        font-size: 18px;
+        font-weight: 700;
+        padding: 6px 10px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        margin-bottom: 10px;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .sidebar a,
+      .sidebar .exp {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 9px 12px;
+        border-radius: 8px;
+        color: #fff;
+        text-decoration: none;
+        background: none;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+      }
+      .sidebar a:hover,
+      .sidebar .exp:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .sidebar a[aria-current='page'] {
+        background: #fff;
+        color: var(--blue);
+        font-weight: 700;
+      }
+      .exp::after {
+        content: '▾';
+        float: right;
+      }
+      .exp[aria-expanded='false']::after {
+        content: '▸';
+      }
+      #ops-sub {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-left: 14px;
+      }
+      .main-wrap {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      #topbar {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+      #topbar .crumb {
+        font-weight: 600;
+      }
+      #topbar .env {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      main {
+        padding: 18px 20px 40px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 2px 0 14px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .stat .num {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--blue);
+      }
+      .stat .lbl {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+      .card h2 {
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+      .card-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 12px;
+      }
+      .query {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+        margin-bottom: 14px;
+      }
+      .query label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      input,
+      select {
+        font: inherit;
+        color: var(--ink);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 7px 9px;
+      }
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 7px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font: inherit;
+      }
+      .btn:hover {
+        background: #f3f6fc;
+      }
+      .btn-primary {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--blue-d);
+      }
+      .btn-danger {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
+      .btn-danger:hover {
+        background: #991b1b;
+      }
+      .btn-sm {
+        padding: 4px 10px;
+        font-size: 13px;
+      }
+      .btn[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .table-scroll {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 640px;
+      }
+      th,
+      td {
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        white-space: nowrap;
+      }
+      th {
+        background: var(--thbg);
+        font-weight: 700;
+      }
+      .empty {
+        color: var(--muted);
+        text-align: center;
+      }
+      .pager {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 12px;
+      }
+      .badge {
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .b-run {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .b-idle {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .b-alarm {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      dialog.modal {
+        border: none;
+        border-radius: 10px;
+        padding: 20px 22px;
+        width: min(580px, 94vw);
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.35);
+        color: var(--ink);
+      }
+      dialog.modal::backdrop {
+        background: rgba(15, 23, 42, 0.45);
+      }
+      dialog.modal h2 {
+        margin: 0 0 4px;
+        font-size: 18px;
+      }
+      .dlg-head .muted {
+        font-size: 13px;
+      }
+      .dlg-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin: 14px 0 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      .tabs [role='tab'] {
+        border: none;
+        background: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        color: var(--muted);
+        font: inherit;
+        border-bottom: 2px solid transparent;
+      }
+      .tabs [aria-selected='true'] {
+        color: var(--blue);
+        border-bottom-color: var(--blue);
+        font-weight: 700;
+      }
+      .kv {
+        display: grid;
+        gap: 8px;
+        margin: 12px 0;
+      }
+      .kv > div {
+        display: flex;
+        gap: 8px;
+      }
+      .kv dt {
+        width: 150px;
+        flex: none;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .kv dd {
+        margin: 0;
+      }
+      .field {
+        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .field > label,
+      .field > span {
+        font-weight: 600;
+      }
+      .err {
+        color: var(--danger);
+        font-weight: 700;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .tele {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 6px;
+        flex-wrap: wrap;
+      }
+      .mnt-filter {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .mnt-filter label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .step-hint {
+        color: var(--muted);
+        margin: 0 0 8px;
+        font-size: 13px;
+      }
+      .summary {
+        margin: 10px 0;
+      }
+      .prio-wrap {
+        position: relative;
+        display: inline-block;
+      }
+      .prio-btn {
+        min-width: 120px;
+        display: inline-flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .prio-list {
+        position: absolute;
+        z-index: 5;
+        top: calc(100% + 4px);
+        left: 0;
+        margin: 0;
+        padding: 4px;
+        list-style: none;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+        min-width: 120px;
+      }
+      .prio-list [role='option'] {
+        padding: 7px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .prio-list [role='option']:hover,
+      .prio-list [role='option']:focus {
+        background: var(--thbg);
+      }
+      .prio-list [aria-selected='true'] {
+        font-weight: 700;
+        color: var(--blue);
+      }
+      @media (max-width: 720px) {
+        .shell {
+          flex-direction: column;
+        }
+        .sidebar {
+          width: auto;
+        }
+        .sidebar nav {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        #ops-sub {
+          flex-direction: row;
+          flex-wrap: wrap;
+          padding-left: 0;
+        }
+        main {
+          padding: 14px 12px 32px;
+        }
+        .kv dt {
+          width: 110px;
+        }
+      }
+      .field > label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      dialog.drawer {
+        height: 100dvh;
+        max-height: 100dvh;
+        margin: 0 0 0 auto;
+        border-radius: 0;
+        overflow: auto;
+        width: min(680px, 94vw);
+      }
+      dialog.modal {
+        max-height: 94dvh;
+        overflow: auto;
+      }
+      dialog.drawer {
+        max-height: 100dvh;
+      }
+      [data-plist] {
+        position: absolute;
+        z-index: 8;
+        top: 42px;
+        left: 0;
+        min-width: 160px;
+        background: white;
+        border: 1px solid var(--line);
+        padding: 5px;
+        border-radius: 8px;
+        box-shadow: 0 12px 28px #17255426;
+      }
+      .field:has([data-pbtn]) {
+        position: relative;
+        max-width: 240px;
+      }
+      [data-plist] [role='option'] {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      [data-plist] [data-active='true'],
+      [data-plist] [role='option']:hover {
+        background: #dbeafe;
+        color: #1e3a8a;
+      }
+      [data-plist] [aria-selected='true'] {
+        font-weight: 700;
+      }
+      @media (max-width: 720px) {
+        .gate-card {
+          padding: 30px 20px;
+          width: 100%;
+        }
+        .pager {
+          flex-wrap: wrap;
+          gap: 8px;
+          justify-content: flex-start;
+        }
+        #topbar {
+          flex-wrap: wrap;
+          padding: 10px 12px;
+        }
+        .env {
+          overflow-wrap: anywhere;
+        }
+        .query label,
+        .query input,
+        .query select {
+          max-width: 100%;
+        }
+        dialog.modal {
+          padding: 18px 14px;
+        }
+        .kv dt {
+          width: 100px;
+        }
+        .kv dd {
+          min-width: 0;
+          overflow-wrap: anywhere;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gate" hidden>
+      <div class="gate-card">
+        <h1>巡维演练台</h1>
+        <p>离线运营演练环境 · 本机演示</p>
+        <button id="enter" class="btn btn-primary" type="button">进入演示</button>
+      </div>
+    </div>
+    <div id="shell" class="shell" hidden>
+      <aside class="sidebar">
+        <div class="brand">巡维演练台</div>
+        <nav aria-label="主导航">
+          <a href="/overview" data-nav>运营总览</a>
+          <button
+            class="exp"
+            type="button"
+            aria-label="运营中心"
+            aria-expanded="false"
+            aria-controls="ops-sub"
+            data-exp
+          >
+            运营中心
+          </button>
+          <div id="ops-sub" hidden>
+            <a href="/assets" data-nav>资产设备</a>
+            <a href="/tariffs" data-nav>电价管理</a>
+            <a href="/work-orders" data-nav>工单中心</a>
+            <a href="/audit" data-nav>审计日志</a>
+          </div>
+        </nav>
+      </aside>
+      <div class="main-wrap">
+        <header id="topbar">
+          <span class="crumb" data-crumb>运营总览</span>
+          <span class="env">离线演示 · http://127.0.0.1:4196</span>
+        </header>
+        <main id="main"></main>
+      </div>
+    </div>
+    <script>
+      'use strict';
+      /* ---------- 数据 ---------- */
+      const AUTH_KEY = 'complex-lab-v1-auth',
+        ORDERS_KEY = 'complex-lab-v1-orders';
+      const ASSETS = [
+        { id: 'D001', name: '储能柜', park: '北园', status: '运行', power: 100 },
+        { id: 'D002', name: '冷却泵', park: '北园', status: '待机', power: 80 },
+        { id: 'D003', name: '充电桩', park: '南园', status: '运行', power: 60 },
+        { id: 'D004', name: '逆变器', park: '北园', status: '告警', power: 150 },
+        { id: 'D005', name: '空调机', park: '南园', status: '待机', power: 40 },
+        { id: 'D006', name: '循环泵', park: '北园', status: '运行', power: 90 },
+        { id: 'D007', name: '配电柜', park: '南园', status: '告警', power: 300 },
+        { id: 'D008', name: '风机', park: '北园', status: '待机', power: 120 },
+        { id: 'D009', name: '储能柜', park: '南园', status: '运行', power: 200 },
+        { id: 'D010', name: '水泵', park: '南园', status: '运行', power: 70 },
+        { id: 'D011', name: '除湿机', park: '北园', status: '待机', power: 30 },
+        { id: 'D012', name: '汇流柜', park: '南园', status: '运行', power: 600 },
+      ];
+      const RECORDS = {
+        D009: [
+          { id: 'MR091', date: '2026-09-10', type: '日常巡检', result: '完成' },
+          { id: 'MR092', date: '2026-09-12', type: '传感器校准', result: '完成' },
+          { id: 'MR093', date: '2026-09-15', type: '固件复核', result: '完成' },
+        ],
+      };
+      const AUDITS = [
+        { id: 'AU001', time: '2026-09-01 08:12', op: '读取设备 D001', ok: true },
+        { id: 'AU002', time: '2026-09-02 09:05', op: '读取设备 D002', ok: true },
+        { id: 'AU003', time: '2026-09-03 10:41', op: '读取设备 D003', ok: false },
+        { id: 'AU004', time: '2026-09-04 11:20', op: '导出运营报表', ok: true },
+        { id: 'AU005', time: '2026-09-05 13:02', op: '读取设备 D006', ok: true },
+        { id: 'AU006', time: '2026-09-06 14:37', op: '更新电价 T001', ok: true },
+        { id: 'AU007', time: '2026-09-07 15:18', op: '读取设备 D009', ok: true },
+        { id: 'AU008', time: '2026-09-08 16:44', op: '重启巡检任务', ok: false },
+        { id: 'AU009', time: '2026-09-09 17:26', op: '读取设备 D012', ok: true },
+      ];
+      const SEED_ORDER = {
+        id: 'WO-SEED',
+        name: '既有巡检',
+        device: 'D001',
+        priority: '中',
+        cycle: 7,
+        date: '2026-10-01',
+        status: '待执行',
+        seed: true,
+      };
+      /* ---------- 工具 ---------- */
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+        );
+      const main = document.getElementById('main');
+      let teleToken = 0,
+        woSeq = 0,
+        lastPath = null;
+      let orders = loadOrders();
+      function loadOrders() {
+        try {
+          const raw = localStorage.getItem(ORDERS_KEY);
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (Array.isArray(p) && p.length) return p;
+          }
+        } catch (e) {}
+        const seed = [Object.assign({}, SEED_ORDER)];
+        try {
+          localStorage.setItem(ORDERS_KEY, JSON.stringify(seed));
+        } catch (e) {}
+        return seed;
+      }
+      function saveOrders() {
+        try {
+          localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+        } catch (e) {}
+      }
+      function badge(st) {
+        const m = {
+          运行: 'b-run',
+          待机: 'b-idle',
+          告警: 'b-alarm',
+          成功: 'b-run',
+          失败: 'b-alarm',
+        };
+        return '<span class="badge ' + (m[st] || 'b-idle') + '">' + esc(st) + '</span>';
+      }
+      function openModal(label, html) {
+        const d = document.createElement('dialog');
+        d.className = 'modal';
+        d.setAttribute('aria-label', label);
+        const invoker = document.activeElement;
+        d.innerHTML = html;
+        document.body.appendChild(d);
+        d.addEventListener('close', () => {
+          d.remove();
+          if (invoker && invoker.isConnected) invoker.focus();
+        });
+        d.showModal();
+        return d;
+      }
+      function setChrome(crumb, title) {
+        document.querySelector('[data-crumb]').textContent = crumb;
+        document.title = title + ' · 巡维演练台';
+      }
+      /* ---------- 路由 ---------- */
+      const assetState = { kw: '', park: '全部', status: '全部', sort: 'id-asc', page: 1 };
+      const auditState = { result: '全部', page: 1 };
+      const ROUTES = {
+        '/overview': renderOverview,
+        '/assets': renderAssets,
+        '/tariffs': renderTariffs,
+        '/work-orders': renderWorkOrders,
+        '/audit': renderAudit,
+      };
+      function navigate(path) {
+        history.pushState({}, '', path);
+        renderRoute();
+      }
+      function renderRoute() {
+        const authed = !!localStorage.getItem(AUTH_KEY);
+        document.getElementById('gate').hidden = authed;
+        document.getElementById('shell').hidden = !authed;
+        if (!authed) return;
+        let path = location.pathname;
+        if (!ROUTES[path]) {
+          path = '/overview';
+          history.replaceState({}, '', path);
+        }
+        if (path !== lastPath) {
+          assetState.kw = '';
+          assetState.park = '全部';
+          assetState.status = '全部';
+          assetState.sort = 'id-asc';
+          assetState.page = 1;
+          auditState.result = '全部';
+          auditState.page = 1;
+          lastPath = path;
+        }
+        document.querySelectorAll('[data-nav]').forEach((a) => {
+          if (a.getAttribute('href') === path) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
+        });
+        if (path !== '/overview') {
+          document.querySelector('[data-exp]').setAttribute('aria-expanded', 'true');
+          document.getElementById('ops-sub').hidden = false;
+        }
+        ROUTES[path]();
+      }
+      /* ---------- 总览 ---------- */
+      function renderOverview() {
+        setChrome('运营总览', '运营总览');
+        const run = ASSETS.filter((a) => a.status === '运行').length,
+          alarm = ASSETS.filter((a) => a.status === '告警').length;
+        main.innerHTML =
+          '<h1>运营总览</h1>' +
+          '<section class="stats" aria-label="关键指标">' +
+          stat(ASSETS.length, '设备总数') +
+          stat(run, '运行中设备') +
+          stat(alarm, '告警设备') +
+          stat(orders.length, '工单总数') +
+          '</section>' +
+          '<section class="card"><h2>演练说明</h2>' +
+          '<p>本站点为离线合成演练环境，所有数据仅保存在本浏览器练习命名空间内。通过左侧「运营中心」进入资产设备、电价管理、工单中心与审计日志。</p>' +
+          '<p class="muted">当前工单数：' +
+          orders.length +
+          '（含种子工单「既有巡检」）</p>' +
+          '<button class="btn btn-danger" type="button" data-resetall>重置演练数据</button></section>';
+        main.querySelector('[data-resetall]').addEventListener('click', () => {
+          const d = openModal(
+            '重置确认',
+            '<h2>重置确认</h2><p>将清空本练习域内的新建工单并恢复种子数据，其他浏览器数据不受影响。是否继续？</p><div class="dlg-actions"><button type="button" class="btn" data-x>取消</button><button type="button" class="btn btn-danger" data-ok>确认重置</button></div>',
+          );
+          d.querySelector('[data-x]').addEventListener('click', () => d.close());
+          d.querySelector('[data-ok]').addEventListener('click', () => {
+            try {
+              localStorage.removeItem(ORDERS_KEY);
+            } catch (e) {}
+            orders = loadOrders();
+            d.close();
+            renderOverview();
+          });
+        });
+      }
+      function stat(n, l) {
+        return (
+          '<div class="stat"><div class="num">' + n + '</div><div class="lbl">' + l + '</div></div>'
+        );
+      }
+      /* ---------- 资产设备 ---------- */
+      function filteredAssets() {
+        const kw = assetState.kw.trim();
+        let list = ASSETS.filter(
+          (a) =>
+            (kw === '' || a.id.includes(kw) || a.name.includes(kw)) &&
+            (assetState.park === '全部' || a.park === assetState.park) &&
+            (assetState.status === '全部' || a.status === assetState.status),
+        );
+        if (assetState.sort === 'power-desc')
+          list = list.slice().sort((x, y) => y.power - x.power || x.id.localeCompare(y.id));
+        else list = list.slice().sort((x, y) => x.id.localeCompare(y.id));
+        return list;
+      }
+      function selOpts(cur, vals) {
+        return vals
+          .map(
+            (v) =>
+              '<option value="' + v + '"' + (v === cur ? ' selected' : '') + '>' + v + '</option>',
+          )
+          .join('');
+      }
+      function renderAssets() {
+        setChrome('运营中心 / 资产设备', '资产设备');
+        const list = filteredAssets();
+        const pages = Math.max(1, Math.ceil(list.length / 5));
+        if (assetState.page > pages) assetState.page = pages;
+        const rows = list.slice((assetState.page - 1) * 5, assetState.page * 5);
+        const run = ASSETS.filter((a) => a.status === '运行').length,
+          idle = ASSETS.filter((a) => a.status === '待机').length,
+          alarm = ASSETS.filter((a) => a.status === '告警').length;
+        main.innerHTML =
+          '<h1>资产设备</h1>' +
+          '<section class="stats">' +
+          stat(ASSETS.length, '设备总数') +
+          stat(run, '运行') +
+          stat(idle, '待机') +
+          stat(alarm, '告警') +
+          '</section>' +
+          '<section class="card">' +
+          '<form class="query" data-qform>' +
+          '<label>关键词 <input type="text" data-kw value="' +
+          esc(assetState.kw) +
+          '" placeholder="编号或名称"></label>' +
+          '<label>园区 <select aria-label="园区" data-park>' +
+          selOpts(assetState.park, ['全部', '北园', '南园']) +
+          '</select></label>' +
+          '<label>状态 <select aria-label="状态" data-status>' +
+          selOpts(assetState.status, ['全部', '运行', '待机', '告警']) +
+          '</select></label>' +
+          '<label>排序 <select aria-label="排序" data-sort><option value="id-asc"' +
+          (assetState.sort === 'id-asc' ? ' selected' : '') +
+          '>编号升序</option><option value="power-desc"' +
+          (assetState.sort === 'power-desc' ? ' selected' : '') +
+          '>功率降序</option></select></label>' +
+          '<button type="submit" class="btn btn-primary">查询</button>' +
+          '<button type="button" class="btn" data-reset>重置</button>' +
+          '</form>' +
+          '<div class="table-scroll"><table>' +
+          '<thead><tr><th>编号</th><th>名称</th><th>园区</th><th>状态</th><th>额定功率</th><th>操作</th></tr></thead><tbody>' +
+          (rows
+            .map(
+              (a) =>
+                '<tr><td>' +
+                a.id +
+                '</td><td>' +
+                a.name +
+                '</td><td>' +
+                a.park +
+                '</td><td>' +
+                badge(a.status) +
+                '</td><td>' +
+                a.power +
+                ' kW</td><td><button type="button" class="btn btn-sm" data-detail="' +
+                a.id +
+                '">详情</button></td></tr>',
+            )
+            .join('') || '<tr><td colspan="6" class="empty">无匹配设备</td></tr>') +
+          '</tbody></table></div>' +
+          '<div class="pager">' +
+          '<button type="button" class="btn" data-prev' +
+          (assetState.page <= 1 ? ' disabled' : '') +
+          '>上一页</button>' +
+          '<span>共' +
+          list.length +
+          '条 · 第' +
+          assetState.page +
+          '/' +
+          pages +
+          '页</span>' +
+          '<button type="button" class="btn" data-next' +
+          (assetState.page >= pages ? ' disabled' : '') +
+          '>下一页</button>' +
+          '</div></section>';
+        const q = main.querySelector('[data-qform]');
+        q.addEventListener('submit', (e) => {
+          e.preventDefault();
+          assetState.kw = q.querySelector('[data-kw]').value;
+          assetState.park = q.querySelector('[data-park]').value;
+          assetState.status = q.querySelector('[data-status]').value;
+          assetState.sort = q.querySelector('[data-sort]').value;
+          assetState.page = 1;
+          renderAssets();
+        });
+        main.querySelector('[data-reset]').addEventListener('click', () => {
+          assetState.kw = '';
+          assetState.park = '全部';
+          assetState.status = '全部';
+          assetState.sort = 'id-asc';
+          assetState.page = 1;
+          renderAssets();
+        });
+        const prev = main.querySelector('[data-prev]'),
+          next = main.querySelector('[data-next]');
+        if (prev)
+          prev.addEventListener('click', () => {
+            assetState.page--;
+            renderAssets();
+          });
+        if (next)
+          next.addEventListener('click', () => {
+            assetState.page++;
+            renderAssets();
+          });
+        main
+          .querySelectorAll('[data-detail]')
+          .forEach((b) =>
+            b.addEventListener('click', () =>
+              openAssetDetail(ASSETS.find((a) => a.id === b.dataset.detail)),
+            ),
+          );
+      }
+      function openAssetDetail(a, loaded = false) {
+        if (!loaded) {
+          const waiting = openModal(
+            '设备详情',
+            '<h2>设备详情</h2><p role="status">正在加载设备详情…</p><button type="button" class="btn" data-abort>取消加载</button>',
+          );
+          waiting.classList.add('drawer');
+          waiting.querySelector('[data-abort]').addEventListener('click', () => waiting.close());
+          setTimeout(() => {
+            if (!waiting.isConnected || !waiting.open || location.pathname !== '/assets') return;
+            waiting.close();
+            openAssetDetail(a, true);
+          }, 600);
+          return;
+        }
+        teleToken++;
+        const myToken = teleToken;
+        const freq = a.id === 'D004' ? 52 : 50;
+        const recs = RECORDS[a.id] || [];
+        const mntPanel = recs.length
+          ? '<div class="mnt-filter"><label>开始日期 <input type="date" data-ms></label><label>结束日期 <input type="date" data-me></label><button type="button" class="btn" data-mf>筛选记录</button></div>' +
+            '<div class="table-scroll"><table><thead><tr><th>记录编号</th><th>日期</th><th>类型</th><th>结果</th></tr></thead><tbody data-mrows></tbody></table></div>'
+          : '<p class="muted">暂无维护记录</p>';
+        const d = openModal(
+          '设备详情',
+          '<div class="dlg-head"><h2>' +
+            a.id +
+            '</h2><span class="muted">' +
+            a.name +
+            ' · ' +
+            a.park +
+            ' · 额定功率 ' +
+            a.power +
+            ' kW</span></div>' +
+            '<div class="tabs" role="tablist" aria-label="设备详情标签页">' +
+            '<button type="button" role="tab" id="tab-base" aria-selected="true" aria-controls="panel-base" data-tab="base">基本信息</button>' +
+            '<button type="button" role="tab" id="tab-run" aria-selected="false" aria-controls="panel-run" data-tab="run">运行参数</button>' +
+            '<button type="button" role="tab" id="tab-mnt" aria-selected="false" aria-controls="panel-mnt" data-tab="mnt">维护记录</button>' +
+            '</div>' +
+            '<section id="panel-base" role="tabpanel" aria-labelledby="tab-base" data-panel="base">' +
+            '<dl class="kv"><div><dt>名称</dt><dd>' +
+            a.name +
+            '</dd></div><div><dt>园区</dt><dd>' +
+            a.park +
+            '</dd></div><div><dt>状态</dt><dd>' +
+            a.status +
+            '</dd></div><div><dt>额定功率</dt><dd>' +
+            a.power +
+            ' kW</dd></div></dl>' +
+            '<button type="button" class="btn" data-readme>读取说明</button>' +
+            '</section>' +
+            '<section id="panel-run" role="tabpanel" aria-labelledby="tab-run" data-panel="run" hidden>' +
+            '<dl class="kv"><div><dt>巡检周期</dt><dd>7天</dd></div><div><dt>额定频率</dt><dd>' +
+            freq +
+            ' Hz</dd></div></dl>' +
+            '<div class="tele"><button type="button" class="btn btn-primary" data-tele>加载遥测</button><span data-tele-status aria-live="polite"></span></div>' +
+            '</section>' +
+            '<section id="panel-mnt" role="tabpanel" aria-labelledby="tab-mnt" data-panel="mnt" hidden>' +
+            mntPanel +
+            '</section>' +
+            '<div class="dlg-actions"><button type="button" class="btn" data-close>关闭详情</button></div>',
+        );
+        d.classList.add('drawer');
+        const tabs = [].slice.call(d.querySelectorAll('[role=tab]'));
+        tabs.forEach((t) =>
+          t.addEventListener('click', () => {
+            tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+            d.querySelectorAll('[role=tabpanel]').forEach((p) => {
+              p.hidden = p.dataset.panel !== t.dataset.tab;
+            });
+          }),
+        );
+        d.querySelector('[data-close]').addEventListener('click', () => d.close());
+        d.querySelector('[data-readme]').addEventListener('click', () => {
+          const c = openModal(
+            '读取说明',
+            '<h2>读取说明</h2><p>读数每60秒更新</p><div class="dlg-actions"><button type="button" class="btn" data-x>关闭说明</button></div>',
+          );
+          c.querySelector('[data-x]').addEventListener('click', () => c.close());
+        });
+        let attempts = 0;
+        const tBtn = d.querySelector('[data-tele]'),
+          tStatus = d.querySelector('[data-tele-status]');
+        tBtn.addEventListener('click', () => {
+          attempts++;
+          const attempt = attempts;
+          tBtn.disabled = true;
+          tStatus.textContent = '遥测加载中…';
+          setTimeout(() => {
+            if (myToken !== teleToken || !d.isConnected) return; /* 防止旧回调污染 */
+            if (attempt === 1) {
+              tStatus.innerHTML = '<span class="err">遥测读取失败，请重试</span>';
+              tBtn.disabled = false;
+              tBtn.textContent = '重试';
+            } else {
+              const v = Math.round(a.power * 0.9 * 10) / 10;
+              tStatus.innerHTML = '实时功率：<strong>' + v + ' kW</strong>';
+              tBtn.hidden = true;
+            }
+          }, 600);
+        });
+        if (recs.length) {
+          const tbody = d.querySelector('[data-mrows]');
+          const draw = (s, e) => {
+            const f = recs.filter((r) => (!s || r.date >= s) && (!e || r.date <= e));
+            tbody.innerHTML =
+              f
+                .map(
+                  (r) =>
+                    '<tr><td>' +
+                    r.id +
+                    '</td><td>' +
+                    r.date +
+                    '</td><td>' +
+                    r.type +
+                    '</td><td>' +
+                    r.result +
+                    '</td></tr>',
+                )
+                .join('') || '<tr><td colspan="4" class="empty">无匹配记录</td></tr>';
+          };
+          draw('', '');
+          d.querySelector('[data-mf]').addEventListener('click', () =>
+            draw(d.querySelector('[data-ms]').value, d.querySelector('[data-me]').value),
+          );
+        }
+      }
+      /* ---------- 电价管理 ---------- */
+      function renderTariffs() {
+        setChrome('运营中心 / 电价管理', '电价管理');
+        main.innerHTML =
+          '<h1>电价管理</h1>' +
+          '<section class="stats">' +
+          stat(2, '方案总数') +
+          stat(1, '分时方案') +
+          stat(1, '全天方案') +
+          '</section>' +
+          '<section class="card"><div class="table-scroll"><table>' +
+          '<thead><tr><th>编号</th><th>名称</th><th>生效范围</th><th>操作</th></tr></thead><tbody>' +
+          '<tr><td>T001</td><td>园区标准</td><td>2026-01-01 至 2026-12-31</td><td><button type="button" class="btn btn-sm" data-t="T001">详情</button></td></tr>' +
+          '<tr><td>T002</td><td>节假日</td><td>2026-10-01 至 2026-10-07</td><td><button type="button" class="btn btn-sm" data-t="T002">详情</button></td></tr>' +
+          '</tbody></table></div></section>';
+        main
+          .querySelectorAll('[data-t]')
+          .forEach((b) => b.addEventListener('click', () => openTariffDetail(b.dataset.t)));
+      }
+      function openTariffDetail(id) {
+        let body;
+        if (id === 'T001') {
+          body =
+            '<h2>T001</h2><dl class="kv">' +
+            '<div><dt>名称</dt><dd>园区标准</dd></div>' +
+            '<div><dt>生效范围</dt><dd>2026-01-01 至 2026-12-31</dd></div>' +
+            '<div><dt>日间 06:00-18:00</dt><dd>0.68 元/kWh</dd></div>' +
+            '<div><dt>尖峰 18:00-22:00</dt><dd>1.20 元/kWh</dd></div>' +
+            '<div><dt>夜间 22:00-06:00</dt><dd>0.83 元/kWh</dd></div></dl>' +
+            '<div class="dlg-actions"><button type="button" class="btn" data-close>关闭详情</button></div>';
+        } else {
+          body =
+            '<h2>T002</h2><dl class="kv">' +
+            '<div><dt>名称</dt><dd>节假日</dd></div>' +
+            '<div><dt>生效范围</dt><dd>2026-10-01 至 2026-10-07</dd></div>' +
+            '<div><dt>全天 00:00-24:00</dt><dd>0.50 元/kWh</dd></div></dl>' +
+            '<button type="button" class="btn" data-scope>适用范围说明</button>' +
+            '<div class="dlg-actions"><button type="button" class="btn" data-close>关闭详情</button></div>';
+        }
+        const d = openModal('电价详情', body);
+        d.querySelector('[data-close]').addEventListener('click', () => d.close());
+        const sc = d.querySelector('[data-scope]');
+        if (sc)
+          sc.addEventListener('click', () => {
+            const c = openModal(
+              '适用范围说明',
+              '<h2>适用范围说明</h2><p>仅在2026-10-01至2026-10-07生效</p><div class="dlg-actions"><button type="button" class="btn" data-x>关闭说明</button></div>',
+            );
+            c.querySelector('[data-x]').addEventListener('click', () => c.close());
+          });
+      }
+      /* ---------- 审计日志 ---------- */
+      function renderAudit() {
+        setChrome('运营中心 / 审计日志', '审计日志');
+        const list = AUDITS.filter(
+          (x) => auditState.result === '全部' || (auditState.result === '成功' ? x.ok : !x.ok),
+        );
+        const pages = Math.max(1, Math.ceil(list.length / 3));
+        if (auditState.page > pages) auditState.page = pages;
+        const rows = list.slice((auditState.page - 1) * 3, auditState.page * 3);
+        const okN = AUDITS.filter((x) => x.ok).length;
+        main.innerHTML =
+          '<h1>审计日志</h1>' +
+          '<section class="stats">' +
+          stat(AUDITS.length, '日志总数') +
+          stat(okN, '成功') +
+          stat(AUDITS.length - okN, '失败') +
+          '</section>' +
+          '<section class="card">' +
+          '<form class="query" data-qform>' +
+          '<label>结果 <select aria-label="结果" data-result>' +
+          selOpts(auditState.result, ['全部', '成功', '失败']) +
+          '</select></label>' +
+          '<button type="submit" class="btn btn-primary">查询</button>' +
+          '</form>' +
+          '<div class="table-scroll"><table>' +
+          '<thead><tr><th>编号</th><th>时间</th><th>操作</th><th>结果</th></tr></thead><tbody>' +
+          (rows
+            .map(
+              (x) =>
+                '<tr><td>' +
+                x.id +
+                '</td><td>' +
+                x.time +
+                '</td><td>' +
+                x.op +
+                '</td><td>' +
+                badge(x.ok ? '成功' : '失败') +
+                '</td></tr>',
+            )
+            .join('') || '<tr><td colspan="4" class="empty">无匹配日志</td></tr>') +
+          '</tbody></table></div>' +
+          '<div class="pager">' +
+          '<button type="button" class="btn" data-prev' +
+          (auditState.page <= 1 ? ' disabled' : '') +
+          '>上一页</button>' +
+          '<span>共' +
+          list.length +
+          '条 · 第' +
+          auditState.page +
+          '/' +
+          pages +
+          '页</span>' +
+          '<button type="button" class="btn" data-next' +
+          (auditState.page >= pages ? ' disabled' : '') +
+          '>下一页</button>' +
+          '</div></section>';
+        const q = main.querySelector('[data-qform]');
+        q.addEventListener('submit', (e) => {
+          e.preventDefault();
+          auditState.result = q.querySelector('[data-result]').value;
+          auditState.page = 1;
+          renderAudit();
+        });
+        const prev = main.querySelector('[data-prev]'),
+          next = main.querySelector('[data-next]');
+        if (prev)
+          prev.addEventListener('click', () => {
+            auditState.page--;
+            renderAudit();
+          });
+        if (next)
+          next.addEventListener('click', () => {
+            auditState.page++;
+            renderAudit();
+          });
+      }
+      /* ---------- 工单中心 ---------- */
+      function deviceLabel(id) {
+        const a = ASSETS.find((x) => x.id === id);
+        return a ? a.id + ' ' + a.name : id;
+      }
+      function renderWorkOrders() {
+        setChrome('运营中心 / 工单中心', '工单中心');
+        const created = orders.filter((o) => !o.seed).length;
+        main.innerHTML =
+          '<h1>工单中心</h1>' +
+          '<section class="stats">' +
+          stat(orders.length, '工单总数') +
+          stat(orders.filter((o) => o.status === '待执行').length, '待执行') +
+          stat(created, '本轮新建') +
+          '</section>' +
+          '<section class="card">' +
+          '<div class="card-bar"><button type="button" class="btn btn-primary" data-new>新建工单</button></div>' +
+          '<div class="table-scroll"><table>' +
+          '<thead><tr><th>编号</th><th>名称</th><th>设备</th><th>优先级</th><th>周期</th><th>日期</th><th>状态</th><th>操作</th></tr></thead><tbody>' +
+          orders
+            .map(
+              (o) =>
+                '<tr><td>' +
+                esc(o.id) +
+                '</td><td>' +
+                esc(o.name) +
+                '</td><td>' +
+                esc(o.device) +
+                '</td><td>' +
+                esc(o.priority) +
+                '</td><td>' +
+                o.cycle +
+                '天</td><td>' +
+                esc(o.date) +
+                '</td><td>' +
+                esc(o.status) +
+                '</td><td>' +
+                (o.seed
+                  ? '<span class="muted">—</span>'
+                  : '<button type="button" class="btn btn-sm" data-edit="' +
+                    esc(o.id) +
+                    '">编辑周期</button> ' +
+                    '<button type="button" class="btn btn-sm btn-danger" data-del="' +
+                    esc(o.id) +
+                    '">删除本轮工单</button>') +
+                '</td></tr>',
+            )
+            .join('') +
+          '</tbody></table></div></section>';
+        main.querySelector('[data-new]').addEventListener('click', openWizard);
+        main
+          .querySelectorAll('[data-edit]')
+          .forEach((b) =>
+            b.addEventListener('click', () =>
+              openEditCycle(orders.find((o) => o.id === b.dataset.edit)),
+            ),
+          );
+        main
+          .querySelectorAll('[data-del]')
+          .forEach((b) =>
+            b.addEventListener('click', () =>
+              openDeleteConfirm(orders.find((o) => o.id === b.dataset.del)),
+            ),
+          );
+      }
+      function openEditCycle(o) {
+        if (!o || o.seed) return;
+        const d = openModal(
+          '编辑工单',
+          '<h2>' +
+            esc(o.id) +
+            '</h2><p>工单名称：<strong>' +
+            esc(o.name) +
+            '</strong></p>' +
+            '<form data-eform><div class="field"><label for="e-cycle">巡检周期</label><input id="e-cycle" type="number" min="1" max="30" step="1" required value="' +
+            o.cycle +
+            '" data-ecycle></div>' +
+            '<div class="dlg-actions"><button type="submit" class="btn btn-primary">保存周期</button><button type="button" class="btn" data-x>取消</button></div></form>',
+        );
+        const inp = d.querySelector('[data-ecycle]');
+        inp.addEventListener('invalid', () => {
+          inp.setCustomValidity(
+            inp.validity.valueMissing ? '请填写巡检周期' : '巡检周期需在1到30天之间',
+          );
+        });
+        inp.addEventListener('input', () => inp.setCustomValidity(''));
+        d.querySelector('[data-x]').addEventListener('click', () => d.close());
+        d.querySelector('[data-eform]').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const v = Number(inp.value);
+          if (!(v >= 1 && v <= 30)) {
+            inp.setCustomValidity('巡检周期需在1到30天之间');
+            inp.reportValidity();
+            return;
+          }
+          o.cycle = v;
+          saveOrders();
+          d.close();
+          renderWorkOrders();
+        });
+      }
+      function openDeleteConfirm(o) {
+        if (!o || o.seed) return;
+        const d = openModal(
+          '删除工单确认',
+          '<h2>删除工单确认</h2><p>确认删除工单 <strong>' +
+            esc(o.id) +
+            '</strong>（' +
+            esc(o.name) +
+            '）吗？此操作仅影响本轮新建记录。</p>' +
+            '<div class="dlg-actions"><button type="button" class="btn" data-x>取消</button><button type="button" class="btn btn-danger" data-ok>确认删除</button></div>',
+        );
+        d.querySelector('[data-x]').addEventListener('click', () => d.close());
+        d.querySelector('[data-ok]').addEventListener('click', () => {
+          orders = orders.filter((x) => x.id !== o.id);
+          saveOrders();
+          d.close();
+          renderWorkOrders();
+        });
+      }
+      /* ---------- 新建工单向导 ---------- */
+      function openWizard() {
+        const wz = { step: 1, name: '', device: 'D001', priority: '中', cycle: '', date: '' };
+        const d = openModal('新建工单', '<div data-wz-body></div>');
+        const body = d.querySelector('[data-wz-body]');
+        const dirty = () =>
+          wz.name !== '' ||
+          wz.device !== 'D001' ||
+          wz.priority !== '中' ||
+          wz.cycle !== '' ||
+          wz.date !== '';
+        const requestCancel = () => {
+          if (!dirty()) {
+            d.close();
+            return;
+          }
+          const c = openModal(
+            '放弃编辑确认',
+            '<h2>放弃编辑确认</h2><p>当前工单内容尚未提交，确定放弃修改吗？</p><div class="dlg-actions"><button type="button" class="btn" data-cont>继续编辑</button><button type="button" class="btn btn-danger" data-drop>放弃修改</button></div>',
+          );
+          c.querySelector('[data-cont]').addEventListener('click', () => c.close());
+          c.querySelector('[data-drop]').addEventListener('click', () => {
+            c.close();
+            d.close();
+          });
+        };
+        d.addEventListener('cancel', (e) => {
+          e.preventDefault();
+          sync();
+          requestCancel();
+        });
+        const sync = () => {
+          const n = body.querySelector('[data-name]');
+          if (n) wz.name = n.value.trim();
+          const dv = body.querySelector('[data-dev]');
+          if (dv) wz.device = dv.value;
+          const cy = body.querySelector('[data-cycle]');
+          if (cy) wz.cycle = cy.value;
+          const dt = body.querySelector('[data-date]');
+          if (dt) wz.date = dt.value;
+        };
+        const showErr = (msg) => {
+          const err = body.querySelector('[data-werr]');
+          if (err) {
+            err.textContent = msg;
+            err.hidden = false;
+          }
+        };
+        const render = () => {
+          if (wz.step === 1) {
+            const devs = Array.from({ length: 12 }, (_, i) => 'D' + String(i + 1).padStart(3, '0'));
+            body.innerHTML =
+              '<h2>基本信息</h2>' +
+              '<form data-wform>' +
+              '<p class="err" data-werr role="alert" hidden></p>' +
+              '<div class="field"><label>工单名称<input type="text" maxlength="30" value="' +
+              esc(wz.name) +
+              '" data-name autocomplete="off"></label></div>' +
+              '<div class="field"><label>设备<select aria-label="设备" data-dev>' +
+              devs
+                .map(
+                  (id) =>
+                    '<option value="' +
+                    id +
+                    '"' +
+                    (wz.device === id ? ' selected' : '') +
+                    '>' +
+                    esc(deviceLabel(id)) +
+                    '</option>',
+                )
+                .join('') +
+              '</select></label></div>' +
+              '<div class="dlg-actions"><button type="button" class="btn" data-cancel>取消</button><button type="submit" class="btn btn-primary">下一步</button></div>' +
+              '</form>';
+            const nm = body.querySelector('[data-name]');
+            nm.addEventListener('input', () => {
+              wz.name = nm.value.trim();
+              if (wz.name) {
+                const err = body.querySelector('[data-werr]');
+                err.hidden = true;
+                err.textContent = '';
+              }
+            });
+          } else if (wz.step === 2) {
+            const prs = ['低', '中', '高'];
+            body.innerHTML =
+              '<h2>执行配置</h2>' +
+              '<form data-wform>' +
+              '<div class="field"><button type="button" class="btn" aria-label="优先级" aria-haspopup="listbox" aria-expanded="false" data-pbtn>优先级</button> <span class="muted" data-pview>' +
+              esc(wz.priority) +
+              '</span>' +
+              '<div role="listbox" aria-label="优先级" tabindex="0" data-plist hidden>' +
+              prs
+                .map(
+                  (p) =>
+                    '<div role="option" id="wo-p-' +
+                    p +
+                    '" aria-selected="' +
+                    (wz.priority === p) +
+                    '" data-p="' +
+                    p +
+                    '">' +
+                    p +
+                    '</div>',
+                )
+                .join('') +
+              '</div></div>' +
+              '<div class="field"><label>巡检周期<input type="number" min="1" max="30" step="1" required value="' +
+              esc(wz.cycle) +
+              '" data-cycle></label></div>' +
+              '<div class="field"><label>执行日期<input type="date" required value="' +
+              esc(wz.date) +
+              '" data-date></label></div>' +
+              '<div class="dlg-actions"><button type="button" class="btn" data-back>上一步</button><button type="button" class="btn" data-cancel>取消</button><button type="submit" class="btn btn-primary">下一步</button></div>' +
+              '</form>';
+            const btn = body.querySelector('[data-pbtn]'),
+              list = body.querySelector('[data-plist]'),
+              opts = [...list.querySelectorAll('[role="option"]')];
+            let active = Math.max(0, prs.indexOf(wz.priority));
+            const paint = () => {
+              opts.forEach((o, i) => {
+                o.setAttribute('aria-selected', String(o.dataset.p === wz.priority));
+                o.dataset.active = String(i === active);
+              });
+              list.setAttribute('aria-activedescendant', opts[active].id);
+              body.querySelector('[data-pview]').textContent = wz.priority;
+            };
+            const closeP = (focus) => {
+              list.hidden = true;
+              btn.setAttribute('aria-expanded', 'false');
+              if (focus) btn.focus();
+            };
+            const openP = () => {
+              list.hidden = false;
+              btn.setAttribute('aria-expanded', 'true');
+              active = Math.max(0, prs.indexOf(wz.priority));
+              paint();
+              list.focus();
+            };
+            const choose = (p) => {
+              wz.priority = p;
+              active = prs.indexOf(p);
+              paint();
+            };
+            btn.addEventListener('click', () => (list.hidden ? openP() : closeP(true)));
+            btn.addEventListener('keydown', (e) => {
+              if (
+                e.key === 'ArrowDown' ||
+                e.key === 'ArrowUp' ||
+                e.key === 'Enter' ||
+                e.key === ' '
+              ) {
+                e.preventDefault();
+                openP();
+              }
+            });
+            list.addEventListener('keydown', (e) => {
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                active = (active + 1) % prs.length;
+                paint();
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                active = (active - 1 + prs.length) % prs.length;
+                paint();
+              } else if (e.key === 'Enter') {
+                e.preventDefault();
+                choose(opts[active].dataset.p);
+                closeP(true);
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closeP(true);
+              }
+            });
+            opts.forEach((o, i) =>
+              o.addEventListener('click', () => {
+                active = i;
+                choose(o.dataset.p);
+                closeP(true);
+              }),
+            );
+            body.querySelector('[data-back]').addEventListener('click', () => {
+              sync();
+              wz.step = 1;
+              render();
+            });
+          } else {
+            body.innerHTML =
+              '<h2>确认提交</h2>' +
+              '<form data-wform>' +
+              '<p class="err" data-werr role="alert" hidden></p>' +
+              '<div class="field"><label>工单名称<input type="text" value="' +
+              esc(wz.name) +
+              '" data-name readonly></label></div>' +
+              '<div class="field"><label>设备<input type="text" value="' +
+              esc(wz.device) +
+              '" data-dev readonly></label></div>' +
+              '<div class="field"><label>优先级<input type="text" value="' +
+              esc(wz.priority) +
+              '" readonly></label></div>' +
+              '<div class="field"><label>巡检周期<input type="number" value="' +
+              esc(wz.cycle) +
+              '" data-cycle readonly></label></div>' +
+              '<div class="field"><label>执行日期<input type="date" value="' +
+              esc(wz.date) +
+              '" data-date readonly></label></div>' +
+              '<div class="dlg-actions"><button type="button" class="btn" data-back>上一步</button><button type="button" class="btn" data-cancel>取消</button><button type="submit" class="btn btn-primary">提交工单</button></div>' +
+              '</form>';
+            body.querySelector('[data-back]').addEventListener('click', () => {
+              sync();
+              wz.step = 2;
+              render();
+            });
+          }
+          body.querySelector('[data-cancel]').addEventListener('click', () => {
+            sync();
+            requestCancel();
+          });
+          body.querySelector('[data-wform]').addEventListener('submit', (e) => {
+            e.preventDefault();
+            sync();
+            if (wz.step === 1) {
+              if (!wz.name) {
+                showErr('请填写工单名称');
+                return;
+              }
+              wz.step = 2;
+              render();
+              return;
+            }
+            if (wz.step === 2) {
+              const form = e.currentTarget,
+                cy = body.querySelector('[data-cycle]');
+              if (!form.reportValidity()) return;
+              if (!Number.isInteger(Number(wz.cycle))) {
+                cy.setCustomValidity('巡检周期需为1到30天的整数');
+                cy.reportValidity();
+                cy.setCustomValidity('');
+                return;
+              }
+              wz.step = 3;
+              render();
+              return;
+            }
+            if (orders.some((o) => (o.name || '').trim() === wz.name)) {
+              showErr('工单名称已存在');
+              return;
+            }
+            orders.push({
+              id: 'WO-' + Date.now() + '-' + ++woSeq,
+              name: wz.name,
+              device: wz.device,
+              priority: wz.priority,
+              cycle: Number(wz.cycle),
+              date: wz.date,
+              status: '待执行',
+              seed: false,
+            });
+            saveOrders();
+            d.close();
+            renderWorkOrders();
+          });
+        };
+        render();
+      }
+      /* ---------- 启动 ---------- */
+      const closeOpenDialogs = () => {
+        document.querySelectorAll('dialog[open]').forEach((d) => {
+          try {
+            d.close();
+          } catch (_) {}
+        });
+      };
+      const go = (path) => {
+        closeOpenDialogs();
+        if (location.pathname !== path) history.pushState(null, '', path);
+        renderRoute();
+      };
+      const enter = document.getElementById('enter');
+      if (enter)
+        enter.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.setItem(AUTH_KEY, '1');
+          go('/overview');
+        });
+      document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const exp = e.target.closest('[data-exp]');
+        if (exp) {
+          e.preventDefault();
+          const expanded = exp.getAttribute('aria-expanded') !== 'true';
+          exp.setAttribute('aria-expanded', String(expanded));
+          document.getElementById('ops-sub').hidden = !expanded;
+          return;
+        }
+        const nav = e.target.closest('[data-nav]');
+        if (nav) {
+          e.preventDefault();
+          const href = nav.getAttribute('href') || nav.getAttribute('data-nav');
+          if (!href) return;
+          const url = new URL(href, location.href);
+          if (url.origin === location.origin) go(url.pathname);
+        }
+      });
+      window.addEventListener('popstate', () => {
+        closeOpenDialogs();
+        renderRoute();
+      });
+      renderRoute();
+    </script>
+  </body>
+</html>

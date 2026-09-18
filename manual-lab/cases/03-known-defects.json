@@ -1,0 +1,84 @@
+{
+  "schema_version": "case-import/v1",
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "LAB-B01",
+      "title": "T001夜间单价与业务预期核对",
+      "source_side": "ui",
+      "preconditions": [
+        "仅限本机合成站点 http://127.0.0.1:4196/；由测试人员在运行前建立独立全新上下文，或在总览「重置演练数据」并确认。不要在Agent运行中重置。",
+        "已在Agent自己的浏览器点击「进入演示」，停留在「运营总览」；所有数据处于初始种子状态。",
+        "本例只读取页面，可填写查询条件、打开详情或切换标签，不提交业务数据。"
+      ],
+      "data": {
+        "tariff_id": "T001",
+        "night_period": "22:00-06:00",
+        "business_expected_night_price": 0.38,
+        "unit": "元/kWh"
+      },
+      "steps": [
+        {
+          "step_id": "1",
+          "action": "打开 /tariffs，确认 h1 为「电价管理」。",
+          "expected": "列表显示 T001 与 T002，各行有「详情」。"
+        },
+        {
+          "step_id": "2",
+          "action": "点击 T001 行「详情」。",
+          "expected": "打开「电价详情」，h2 精确为 T001。"
+        },
+        {
+          "step_id": "3",
+          "action": "查看夜间22:00-06:00单价并与业务规定核对。",
+          "expected": "夜间22:00-06:00单价为0.38元/kWh。"
+        },
+        {
+          "step_id": "4",
+          "action": "点击关闭详情。",
+          "expected": "返回电价管理列表，T001和T002仍可见。"
+        }
+      ],
+      "page_entry_url": "http://127.0.0.1:4196/tariffs"
+    },
+    {
+      "case_id": "LAB-B02",
+      "title": "D004额定频率与业务预期核对",
+      "source_side": "ui",
+      "preconditions": [
+        "仅限本机合成站点 http://127.0.0.1:4196/；由测试人员在运行前建立独立全新上下文，或在总览「重置演练数据」并确认。不要在Agent运行中重置。",
+        "已在Agent自己的浏览器点击「进入演示」，停留在「运营总览」；所有数据处于初始种子状态。",
+        "本例只读取页面，可填写查询条件、打开详情或切换标签，不提交业务数据。"
+      ],
+      "data": {
+        "keyword": "D004",
+        "target_asset_id": "D004",
+        "business_expected_rated_frequency_hz": 50,
+        "inspection_period_days": 7
+      },
+      "steps": [
+        {
+          "step_id": "1",
+          "action": "打开 /assets，关键词输入 D004，点击「查询」。",
+          "expected": "结果回到第1页且仅显示 D004 逆变器 北园 告警 额定功率150。"
+        },
+        {
+          "step_id": "2",
+          "action": "点击 D004 行「详情」。",
+          "expected": "打开「设备详情」，内容 h2 为 D004。"
+        },
+        {
+          "step_id": "3",
+          "action": "切换到「运行参数」tab。",
+          "expected": "显示运行参数，巡检周期为7天。"
+        },
+        {
+          "step_id": "4",
+          "action": "核对额定频率显示值与业务预期是否一致。",
+          "expected": "D004额定频率为50 Hz。"
+        }
+      ],
+      "page_entry_url": "http://127.0.0.1:4196/assets"
+    }
+  ]
+}
