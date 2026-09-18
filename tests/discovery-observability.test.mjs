@@ -187,6 +187,7 @@ test('real candidate exclusions explain mapping, ambiguity, disabled, safety and
     `<h1>诊断页面</h1><button>重复详情</button><button>重复详情</button>
     <input><div role="status">状态无匹配</div><button disabled>查看禁用项</button>
     <button>删除项目</button><button>神秘操作</button><button>查看详情</button>
+    <button aria-pressed="false">未选开关</button><button aria-pressed="true">已选开关</button>
     <label>业务字段<input value="unlogged-local-value"></label>`,
   );
   const task = {
@@ -207,6 +208,12 @@ test('real candidate exclusions explain mapping, ambiguity, disabled, safety and
   assert.equal(mapping.rejected.counts.ADAPTER_TARGET_MISSING, 1);
   assert.ok(mapping.rejected.counts.ADAPTER_MAPPING_MISSING >= 1);
   const candidates = observed.snapshot.candidate_diagnostics;
+  assert.equal(candidates.excluded.counts.STATEFUL_CONTROL_UNSUPPORTED, 2);
+  assert.equal(
+    candidates.excluded.counts.ALREADY_SELECTED,
+    undefined,
+    'state attributes do not prove selected=true',
+  );
   for (const code of [
     'TARGET_DISABLED',
     'ACTION_SAFETY_FILTERED',
@@ -223,4 +230,43 @@ test('real candidate exclusions explain mapping, ambiguity, disabled, safety and
     ['查看详情'],
   );
   assert.ok(!JSON.stringify({ mapping, candidates }).includes('unlogged-local-value'));
+});
+
+test('large-page original hints reach real candidates without granting business actions', async (t) => {
+  const buttons = Array.from({ length: 320 }, (_, i) => `<button>查看数据${i}</button>`).join('');
+  const target = await site(
+    t,
+    `<h1>大页面</h1>${buttons}<button onclick="document.querySelector('h1').textContent='目录详情'">查看尾部目录</button>
+    <button>删除项目</button><form><button>下一步</button></form>`,
+  );
+  const task = {
+    id: 'coverage-discovery',
+    target,
+    authorization: { nonproduction: true, writes: false, readOnlyEndpoints: [] },
+  };
+  const session = new BrowserSession({ headless: true });
+  t.after(() => session.close());
+  await session.open(task);
+  await session.authenticate(task, role('heading', '大页面'));
+  const events = [];
+  const explorer = new DiscoveryBrowser(session, task, { onEvent: (e) => events.push(e) });
+  t.after(() => explorer.close());
+  explorer.beginCase({
+    case_id: 'TAIL',
+    steps: [{ action: '点击「查看尾部目录」，观察「删除项目」和「下一步」', expected: '目录详情' }],
+  });
+  const observed = await explorer.open();
+  const candidate = observed.candidates.find((c) => c.name === '查看尾部目录');
+  assert.ok(candidate);
+  for (const name of ['删除项目', '下一步']) {
+    assert.ok(observed.snapshot.controls.some((c) => c.name === name));
+    assert.ok(!observed.candidates.some((c) => c.name === name), 'ranking cannot grant ' + name);
+  }
+  const event = events.find((e) => e.type === 'DISCOVERY_OBSERVED');
+  assert.equal(event.coverage.sampled_count, 300);
+  assert.ok(event.coverage.omitted_count > 0);
+  await explorer.act({ candidate_id: candidate.candidate_id });
+  assert.equal(await explorer.page.locator('h1').innerText(), '目录详情');
+  assert.equal(explorer.step, 1);
+  assert.equal(events.filter((e) => e.type === 'DISCOVERY_ACTION_AFTER').length, 1);
 });

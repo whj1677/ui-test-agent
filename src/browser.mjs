@@ -1334,7 +1334,7 @@ export async function checkAssertionGroup(
 }
 export async function snapshot(
   page,
-  { marker, adapterSource = DEFAULT_ADAPTER_SOURCE, signal } = {},
+  { marker, adapterSource = DEFAULT_ADAPTER_SOURCE, signal, focusText = [] } = {},
 ) {
   if (await isLoginPage(page, marker))
     return {
@@ -1345,203 +1345,374 @@ export async function snapshot(
     };
   const selector =
     'button,a,input,textarea,select,[role],h1,h2,h3,article,li,dialog,table,tr,td,th,[data-testid],[data-test],[id],nav span,aside span,[role="menu"] span';
-  const captured = await page.evaluateHandle((selector) => {
-    const visible = (e) =>
-      !!e.getClientRects().length &&
-      getComputedStyle(e).visibility !== 'hidden' &&
-      !e.closest('[aria-hidden="true"],[inert]');
-    // A bounded name hint, not an implementation of the accessibility spec.
-    // Every proposed role/name is still checked by Playwright and against the
-    // original DOM handle below. Hidden decoration must not become a menu name.
-    const nameText = (node, excluded = null) => {
-      // A native control nested in its label does not contribute its options
-      // or current value to its own field-name hint.
-      if (node === excluded) return '';
-      if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
-      if (node.nodeType !== Node.ELEMENT_NODE || !visible(node)) return '';
-      if (node.getAttribute('aria-label')) return node.getAttribute('aria-label');
-      if (node.tagName === 'IMG') return node.getAttribute('alt') || '';
-      const text = [...node.childNodes].map((child) => nameText(child, excluded)).join('');
-      return getComputedStyle(node).display.startsWith('inline') ? text : ` ${text} `;
-    };
-    const rowHint = (e) => {
-      const row = e.closest('tbody > tr'),
-        table = row?.closest('table');
-      if (!row || !table || e.tagName === 'TABLE') return null;
-      const header =
-        table.tHead?.rows[0] ??
-        [...table.rows].find((r) => [...r.cells].every((c) => c.tagName === 'TH'));
-      if (!header || !header.cells.length) return null;
-      const names = [...header.cells].map((c) => c.innerText.trim());
-      const preferred = names.findIndex((n) => /名称|编号|name|code|^id$/iu.test(n));
-      const keyIndex = preferred < 0 ? 0 : preferred;
-      const value = row.cells[keyIndex]?.innerText.trim();
-      if (!value || !names[keyIndex]) return null;
-      const labelled = (table.getAttribute('aria-labelledby') ?? '')
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
-        .join(' ')
-        .trim();
-      const tableLocator =
-        table.id && /^[A-Za-z][\w-]*$/.test(table.id)
-          ? { kind: 'css', value: '#' + table.id }
-          : {
-              kind: 'role',
-              role: 'table',
-              name:
-                table.getAttribute('aria-label') ||
-                labelled ||
-                table.caption?.innerText.trim() ||
-                '',
-              exact: true,
-            };
-      const cell = e.closest('td,th');
-      return {
-        table: tableLocator,
-        key: { column: names[keyIndex], value },
-        ...(cell && cell.parentElement === row ? { column: names[cell.cellIndex] } : {}),
+  const captured = await page.evaluateHandle(
+    ({ selector, focusText }) => {
+      const visible = (e) =>
+        !!e.getClientRects().length &&
+        getComputedStyle(e).visibility !== 'hidden' &&
+        !e.closest('[aria-hidden="true"],[inert]');
+      // A bounded name hint, not an implementation of the accessibility spec.
+      // Every proposed role/name is still checked by Playwright and against the
+      // original DOM handle below. Hidden decoration must not become a menu name.
+      const nameText = (node, excluded = null) => {
+        // A native control nested in its label does not contribute its options
+        // or current value to its own field-name hint.
+        if (node === excluded) return '';
+        if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
+        if (node.nodeType !== Node.ELEMENT_NODE || !visible(node)) return '';
+        if (node.getAttribute('aria-label')) return node.getAttribute('aria-label');
+        if (node.tagName === 'IMG') return node.getAttribute('alt') || '';
+        const text = [...node.childNodes].map((child) => nameText(child, excluded)).join('');
+        return getComputedStyle(node).display.startsWith('inline') ? text : ` ${text} `;
       };
-    };
-    const controls = [];
-    const scopeRole = (e) =>
-      e.getAttribute('role') || { ARTICLE: 'article', LI: 'listitem', DIALOG: 'dialog' }[e.tagName];
-    const scopeOwner = (e) => {
-      for (let n = e; n; n = n.parentElement)
-        if (['article', 'listitem', 'dialog'].includes(scopeRole(n))) return n;
-      return null;
-    };
-    const scopeHint = (e) => {
-      const root = scopeOwner(e);
-      if (!root) return null;
-      const referenced = (root.getAttribute('aria-labelledby') || '')
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((id) => document.getElementById(id)?.textContent || '')
-        .join(' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-      const name = referenced || root.getAttribute('aria-label')?.trim();
-      const headings = [...root.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]')].filter(
-        (h) => visible(h) && scopeOwner(h) === root,
-      );
-      const heading =
-        headings.length === 1 ? nameText(headings[0]).replace(/\s+/g, ' ').trim() : '';
-      if (!name && !heading) return null;
-      const identity = name || heading;
-      if (identity.length > 150) return null;
-      return {
-        scope: { role: scopeRole(root), ...(name ? { name } : { heading }), exact: true },
-        self: root === e,
+      const rowHint = (e) => {
+        const row = e.closest('tbody > tr'),
+          table = row?.closest('table');
+        if (!row || !table || e.tagName === 'TABLE') return null;
+        const header =
+          table.tHead?.rows[0] ??
+          [...table.rows].find((r) => [...r.cells].every((c) => c.tagName === 'TH'));
+        if (!header || !header.cells.length) return null;
+        const names = [...header.cells].map((c) => c.innerText.trim());
+        const preferred = names.findIndex((n) => /名称|编号|name|code|^id$/iu.test(n));
+        const keyIndex = preferred < 0 ? 0 : preferred;
+        const value = row.cells[keyIndex]?.innerText.trim();
+        if (!value || !names[keyIndex]) return null;
+        const labelled = (table.getAttribute('aria-labelledby') ?? '')
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+          .join(' ')
+          .trim();
+        const tableLocator =
+          table.id && /^[A-Za-z][\w-]*$/.test(table.id)
+            ? { kind: 'css', value: '#' + table.id }
+            : {
+                kind: 'role',
+                role: 'table',
+                name:
+                  table.getAttribute('aria-label') ||
+                  labelled ||
+                  table.caption?.innerText.trim() ||
+                  '',
+                exact: true,
+              };
+        const cell = e.closest('td,th');
+        return {
+          table: tableLocator,
+          key: { column: names[keyIndex], value },
+          ...(cell && cell.parentElement === row ? { column: names[cell.cellIndex] } : {}),
+        };
       };
-    };
-    const elements = [...document.querySelectorAll(selector)];
-    for (const [dom_index, e] of elements.entries()) {
-      if (!visible(e) || e.type === 'password' || controls.length >= 300) continue;
-      const labelledBy = (e.getAttribute('aria-labelledby') ?? '')
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
-        .join(' ')
-        .trim();
-      const label = (
-        labelledBy ||
-        e.getAttribute('aria-label') ||
-        [...(e.labels ?? [])].map((node) => nameText(node, e)).join(' ')
-      )
-        .replace(/\s+/g, ' ')
-        .trim();
-      const text = (label || nameText(e)).replace(/\s+/g, ' ').trim().slice(0, 150);
-      const role =
+      const controls = [];
+      const scopeRole = (e) =>
         e.getAttribute('role') ||
-        {
-          BUTTON: 'button',
-          A: 'link',
-          SELECT: e.multiple || e.size > 1 ? 'listbox' : 'combobox',
-          H1: 'heading',
-          H2: 'heading',
-          H3: 'heading',
-          TR: 'row',
-          TD: 'cell',
-          TH: 'columnheader',
-          TEXTAREA: 'textbox',
-          ARTICLE: 'article',
-          LI: 'listitem',
-          DIALOG: 'dialog',
-          INPUT:
-            e.type === 'checkbox'
-              ? 'checkbox'
-              : e.type === 'radio'
-                ? 'radio'
-                : ['button', 'submit', 'reset'].includes(e.type)
-                  ? 'button'
-                  : 'textbox',
-        }[e.tagName];
-      const adapter_input = {
-        testid: (e.dataset.testid ?? '').slice(0, 500),
-        label: (label ?? '').slice(0, 500),
-        placeholder: (e.getAttribute('placeholder') ?? '').slice(0, 500),
-        role: role ?? '',
-        text,
-        id: e.id && /^[A-Za-z][\w-]*$/.test(e.id) ? e.id.slice(0, 500) : '',
-        tag: e.tagName,
-        table_name: (
-          e.getAttribute('aria-label') ||
-          labelledBy ||
-          e.caption?.innerText?.trim() ||
-          ''
-        ).slice(0, 500),
-        navigation_text:
-          e.tagName === 'SPAN' && !!e.closest('nav,aside,[role="menu"]') && !e.children.length,
+        { ARTICLE: 'article', LI: 'listitem', DIALOG: 'dialog' }[e.tagName];
+      const scopeOwner = (e) => {
+        for (let n = e; n; n = n.parentElement)
+          if (['article', 'listitem', 'dialog'].includes(scopeRole(n))) return n;
+        return null;
       };
-      controls.push({
-        role: role ?? e.tagName.toLowerCase(),
-        name: label || text || e.getAttribute('placeholder') || e.id,
-        adapter_input,
-        dom_index,
-        node: e,
-        row_hint: rowHint(e),
-        scope_hint: scopeHint(e),
-        in_navigation: !!e.closest('nav,aside,[role="menu"],[role="navigation"],[role="tree"]'),
-        ...(['INPUT', 'TEXTAREA'].includes(e.tagName) &&
-        !['password', 'file', 'hidden', 'email', 'tel'].includes(e.type) &&
-        !/(?:password|passwd|secret|token|credential|api.?key|authorization|cookie|session|one.?time|passcode|credit.?card|email|phone|\botp\b|cc-|密码|口令|密钥|验证码|银行卡|身份证|手机号|账号|账户|邮箱)/iu.test(
-          [e.name, e.id, label, e.getAttribute('autocomplete')].join(' '),
-        )
-          ? { current_value: String(e.value ?? '').slice(0, 500) }
-          : {}),
-        ...(e.closest('[role="dialog"],[aria-modal="true"],dialog')
-          ? {
-              dialog_context: (
-                e
-                  .closest('[role="dialog"],[aria-modal="true"],dialog')
-                  .getAttribute('aria-label') ||
-                e.closest('[role="dialog"],[aria-modal="true"],dialog').id ||
-                'dialog'
-              ).slice(0, 150),
+      const scopeHint = (e) => {
+        const root = scopeOwner(e);
+        if (!root) return null;
+        const referenced = (root.getAttribute('aria-labelledby') || '')
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((id) => document.getElementById(id)?.textContent || '')
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        const name = referenced || root.getAttribute('aria-label')?.trim();
+        const headings = [...root.querySelectorAll('h1,h2,h3,h4,h5,h6,[role="heading"]')].filter(
+          (h) => visible(h) && scopeOwner(h) === root,
+        );
+        const heading =
+          headings.length === 1 ? nameText(headings[0]).replace(/\s+/g, ' ').trim() : '';
+        if (!name && !heading) return null;
+        const identity = name || heading;
+        if (identity.length > 150) return null;
+        return {
+          scope: { role: scopeRole(root), ...(name ? { name } : { heading }), exact: true },
+          self: root === e,
+        };
+      };
+      const elements = [...document.querySelectorAll(selector)];
+      const eligible = elements
+        .map((e, dom_index) => ({ e, dom_index }))
+        .filter(({ e }) => visible(e) && e.type !== 'password');
+      const limit = 300;
+      const large = eligible.length > limit;
+      const cleanText = (s) =>
+        String(s ?? '')
+          .replace(/\s+/g, ' ')
+          .trim();
+      // These are sampling hints, NOT wizard identity or permission evidence.
+      const currentSteps = [...document.querySelectorAll('[aria-current="step"]')].filter(visible);
+      const stepNames = new Set(currentSteps.map((e) => cleanText(e.textContent)));
+      const stepRoots = new Set(
+        currentSteps.map((e) => e.closest('section,[role="tabpanel"]')).filter(Boolean),
+      );
+      for (const heading of document.querySelectorAll('h1,h2,h3,[role="heading"]')) {
+        if (visible(heading) && stepNames.has(cleanText(heading.textContent))) {
+          const region = heading.closest('section,[role="tabpanel"]');
+          if (region) stepRoots.add(region);
+        }
+      }
+      const regions = new Map();
+      const interactive = (e) =>
+        e.matches(
+          'button,a,input,select,textarea,summary,[role="button"],[role="link"],[role="tab"],[role="menuitem"],[role="treeitem"],[role="checkbox"],[role="radio"],[role="combobox"],[role="textbox"]',
+        );
+      for (const entry of eligible) {
+        const e = entry.e;
+        let root = e.closest('dialog,[role="dialog"],[aria-modal="true"]'),
+          kind = 'dialog';
+        if (!root) {
+          root = [...stepRoots].find((r) => r.contains(e));
+          kind = 'step';
+        }
+        if (!root) {
+          root = e.closest('nav,aside,[role="navigation"],[role="menu"],[role="tree"]');
+          kind = 'navigation';
+        }
+        if (!root) {
+          root = e.closest('form,table,section,article,main,[role="region"],[role="tabpanel"]');
+          kind = root?.matches('table') ? 'table' : root?.matches('form') ? 'form' : 'region';
+        }
+        if (!root) {
+          root = document.body;
+          kind = 'page';
+        }
+        if (!regions.has(root))
+          regions.set(root, { id: 'region-' + regions.size, kind, root, entries: [] });
+        entry.region = regions.get(root);
+        entry.interactive = interactive(e);
+        // Only original action literals are hints. No expected result, runtime value,
+        // page instruction, new route or generated locator becomes authority here.
+        const hint = cleanText(
+          e.getAttribute('aria-label') ||
+            [...(e.labels ?? [])].map((l) => l.textContent).join(' ') ||
+            (entry.interactive ? e.textContent : ''),
+        );
+        entry.relevant =
+          large &&
+          hint.length >= 2 &&
+          hint.length <= 100 &&
+          focusText.some((text) => text.includes(hint));
+        entry.region.entries.push(entry);
+      }
+      let selected = eligible;
+      if (large) {
+        selected = [];
+        const seen = new Set();
+        const append = (entry) => {
+          if (seen.has(entry) || selected.length >= limit) return;
+          selected.push(entry);
+          seen.add(entry);
+        };
+        // Reserve a small overview before allocating detail, so dialog/table floods
+        // cannot erase every background region. Unlisted regions remain counted.
+        for (const region of [...regions.values()].slice(0, 24)) {
+          append(
+            region.entries.find(
+              ({ e }) => e === region.root || e.matches('h1,h2,h3,[role="heading"]'),
+            ) || region.entries[0],
+          );
+        }
+        const allocate = (filter, quota) => {
+          const buckets = [...regions.values()]
+            .map((r) =>
+              r.entries
+                .filter((e) => !seen.has(e) && filter(e))
+                .sort(
+                  (a, b) =>
+                    Number(b.relevant) - Number(a.relevant) ||
+                    Number(b.interactive) - Number(a.interactive) ||
+                    a.dom_index - b.dom_index,
+                ),
+            )
+            .filter((entries) => entries.length);
+          let taken = 0;
+          for (let index = 0; taken < quota && selected.length < limit; index++) {
+            let found = false;
+            for (const bucket of buckets) {
+              if (!bucket[index]) continue;
+              append(bucket[index]);
+              taken++;
+              found = true;
+              if (taken >= quota || selected.length >= limit) break;
             }
-          : {}),
-        ...(e.closest('tr') ? { row_context: e.closest('tr').innerText.trim().slice(0, 400) } : {}),
-        ...(e.tagName === 'SELECT'
-          ? {
-              options: Array.from(e.options).map((o) => ({ label: o.label, value: o.value })),
-              selected_label: e.selectedOptions[0]?.label,
-            }
-          : {}),
-        ...(e.tagName === 'TABLE'
-          ? {
-              row_count: Array.from(e.tBodies).reduce((n, b) => n + b.rows.length, 0),
-              headers: Array.from(e.querySelectorAll('th')).map((h) => h.innerText.trim()),
-            }
-          : {}),
-        ...(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(e.tagName)
-          ? { enabled: !e.matches(':disabled') && e.getAttribute('aria-disabled') !== 'true' }
-          : {}),
+            if (!found) break;
+          }
+        };
+        allocate((e) => e.region.kind === 'dialog', 96);
+        allocate((e) => e.region.kind === 'step', 48);
+        allocate((e) => e.region.kind === 'navigation', 32);
+        allocate((e) => e.relevant, 64);
+        allocate(() => true, limit);
+      }
+      const selectedSet = new Set(selected);
+      const regionFacts = [...regions.values()].map((r) => {
+        const sampled = r.entries.filter((e) => selectedSet.has(e)).length;
+        return {
+          id: r.id,
+          kind: r.kind,
+          eligible_count: r.entries.length,
+          sampled_count: sampled,
+          omitted_count: r.entries.length - sampled,
+        };
       });
-    }
-    return { title: document.title, text: document.body.innerText.slice(0, 16000), controls };
-  }, selector);
+      // List priority regions first but retain all-region totals. No DOM text/values
+      // in this diagnostic overview; sampled controls retain the existing facts.
+      regionFacts.sort(
+        (a, b) =>
+          ['dialog', 'step', 'navigation'].includes(b.kind) -
+          ['dialog', 'step', 'navigation'].includes(a.kind),
+      );
+      const bodyText = document.body.innerText;
+      const coverage = {
+        scope: 'visible-light-dom',
+        limit,
+        mode: large ? 'region-balanced' : 'dom-order',
+        eligible_count: eligible.length,
+        sampled_count: selected.length,
+        omitted_count: eligible.length - selected.length,
+        truncated: large,
+        text_limit: 16000,
+        text_truncated: bodyText.length > 16000,
+        regions: regionFacts.slice(0, 24),
+        region_count: regionFacts.length,
+        omitted_region_count: Math.max(0, regionFacts.length - 24),
+        unlisted_eligible_count: regionFacts.slice(24).reduce((n, r) => n + r.eligible_count, 0),
+        unlisted_sampled_count: regionFacts.slice(24).reduce((n, r) => n + r.sampled_count, 0),
+        iframes: {
+          count: document.querySelectorAll('iframe,frame').length,
+          contents_captured: false,
+        },
+        shadow_dom: {
+          open_hosts: [...document.querySelectorAll('*')].filter((e) => e.shadowRoot).length,
+          contents_captured: false,
+          closed_roots: 'unknown',
+        },
+      };
+      for (const { dom_index, e } of selected) {
+        const labelledBy = (e.getAttribute('aria-labelledby') ?? '')
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+          .join(' ')
+          .trim();
+        const label = (
+          labelledBy ||
+          e.getAttribute('aria-label') ||
+          [...(e.labels ?? [])].map((node) => nameText(node, e)).join(' ')
+        )
+          .replace(/\s+/g, ' ')
+          .trim();
+        const text = (label || nameText(e)).replace(/\s+/g, ' ').trim().slice(0, 150);
+        const role =
+          e.getAttribute('role') ||
+          {
+            BUTTON: 'button',
+            A: 'link',
+            SELECT: e.multiple || e.size > 1 ? 'listbox' : 'combobox',
+            H1: 'heading',
+            H2: 'heading',
+            H3: 'heading',
+            TR: 'row',
+            TD: 'cell',
+            TH: 'columnheader',
+            TEXTAREA: 'textbox',
+            ARTICLE: 'article',
+            LI: 'listitem',
+            DIALOG: 'dialog',
+            INPUT:
+              e.type === 'checkbox'
+                ? 'checkbox'
+                : e.type === 'radio'
+                  ? 'radio'
+                  : ['button', 'submit', 'reset'].includes(e.type)
+                    ? 'button'
+                    : 'textbox',
+          }[e.tagName];
+        const adapter_input = {
+          testid: (e.dataset.testid ?? '').slice(0, 500),
+          label: (label ?? '').slice(0, 500),
+          placeholder: (e.getAttribute('placeholder') ?? '').slice(0, 500),
+          role: role ?? '',
+          text,
+          id: e.id && /^[A-Za-z][\w-]*$/.test(e.id) ? e.id.slice(0, 500) : '',
+          tag: e.tagName,
+          table_name: (
+            e.getAttribute('aria-label') ||
+            labelledBy ||
+            e.caption?.innerText?.trim() ||
+            ''
+          ).slice(0, 500),
+          navigation_text:
+            e.tagName === 'SPAN' && !!e.closest('nav,aside,[role="menu"]') && !e.children.length,
+        };
+        controls.push({
+          role: role ?? e.tagName.toLowerCase(),
+          name: label || text || e.getAttribute('placeholder') || e.id,
+          adapter_input,
+          dom_index,
+          node: e,
+          row_hint: rowHint(e),
+          scope_hint: scopeHint(e),
+          in_navigation: !!e.closest('nav,aside,[role="menu"],[role="navigation"],[role="tree"]'),
+          ...(['INPUT', 'TEXTAREA'].includes(e.tagName) &&
+          !['password', 'file', 'hidden', 'email', 'tel'].includes(e.type) &&
+          !/(?:password|passwd|secret|token|credential|api.?key|authorization|cookie|session|one.?time|passcode|credit.?card|email|phone|\botp\b|cc-|密码|口令|密钥|验证码|银行卡|身份证|手机号|账号|账户|邮箱)/iu.test(
+            [e.name, e.id, label, e.getAttribute('autocomplete')].join(' '),
+          )
+            ? { current_value: String(e.value ?? '').slice(0, 500) }
+            : {}),
+          ...(e.closest('[role="dialog"],[aria-modal="true"],dialog')
+            ? {
+                dialog_context: (
+                  e
+                    .closest('[role="dialog"],[aria-modal="true"],dialog')
+                    .getAttribute('aria-label') ||
+                  e.closest('[role="dialog"],[aria-modal="true"],dialog').id ||
+                  'dialog'
+                ).slice(0, 150),
+              }
+            : {}),
+          ...(e.closest('tr')
+            ? { row_context: e.closest('tr').innerText.trim().slice(0, 400) }
+            : {}),
+          ...(e.tagName === 'SELECT'
+            ? {
+                options: Array.from(e.options).map((o) => ({ label: o.label, value: o.value })),
+                selected_label: e.selectedOptions[0]?.label,
+              }
+            : {}),
+          ...(e.tagName === 'TABLE'
+            ? {
+                row_count: Array.from(e.tBodies).reduce((n, b) => n + b.rows.length, 0),
+                headers: Array.from(e.querySelectorAll('th')).map((h) => h.innerText.trim()),
+              }
+            : {}),
+          ...(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(e.tagName)
+            ? { enabled: !e.matches(':disabled') && e.getAttribute('aria-disabled') !== 'true' }
+            : {}),
+        });
+      }
+      return { title: document.title, text: bodyText.slice(0, 16000), controls, coverage };
+    },
+    {
+      selector,
+      focusText: Array.isArray(focusText)
+        ? focusText
+            .filter((v) => typeof v === 'string')
+            .slice(0, 100)
+            .map((v) => v.slice(0, 2000))
+        : [],
+    },
+  );
   try {
     const raw = await captured.evaluate((data) => ({
       ...data,
@@ -1596,6 +1767,7 @@ export async function snapshot(
         // adapter gets this semantic fallback; custom programs are still
         // independently rejected if they propose the wrong destination.
         const baseLocator = locator.kind === 'within' ? locator.target : locator;
+        let ambiguousRoleFallback = false;
         if (
           adapterSource === DEFAULT_ADAPTER_SOURCE &&
           baseLocator?.kind === 'label' &&
@@ -1612,14 +1784,20 @@ export async function snapshot(
             locator.kind === 'within' ? { ...locator, target: roleBase } : roleBase;
           validateLocator(roleLocator);
           const roleTarget = handoffLocator(page, roleLocator);
-          if ((await roleTarget.count()) === 1) {
+          const roleCount = await roleTarget.count();
+          ambiguousRoleFallback = roleCount > 1;
+          if (roleCount === 1) {
             locator = roleLocator;
             target = roleTarget;
           }
         }
         const targetCount = await target.count();
         if (targetCount !== 1) {
-          gap(targetCount === 0 ? 'ADAPTER_TARGET_MISSING' : 'ADAPTER_TARGET_NOT_UNIQUE');
+          gap(
+            targetCount === 0 && !ambiguousRoleFallback
+              ? 'ADAPTER_TARGET_MISSING'
+              : 'ADAPTER_TARGET_NOT_UNIQUE',
+          );
           continue;
         }
         // Source-produced locators are not authority: independently prove they
@@ -1666,6 +1844,7 @@ export async function snapshot(
         mapped_count: controls.length,
         rejected,
       },
+      coverage: raw.coverage,
       login_page: false,
     };
   } finally {

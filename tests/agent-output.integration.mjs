@@ -351,7 +351,28 @@ try {
   );
   addEvent('DISCOVERY_OBSERVED', {
     page_id: 'observation-local',
-    message: '定位通过 3 项，1 项控件提供 1 个候选；2 项未提供探索动作，原因可展开查看。',
+    coverage: {
+      sampled_count: 300,
+      eligible_count: 800,
+      omitted_count: 500,
+      limit: 300,
+      text_truncated: true,
+      regions: [
+        {
+          id: 'region-0',
+          kind: 'dialog',
+          sampled_count: 96,
+          eligible_count: 100,
+          omitted_count: 4,
+        },
+      ],
+      omitted_region_count: 1,
+      unlisted_sampled_count: 204,
+      unlisted_eligible_count: 700,
+      iframes: { count: 1, contents_captured: false },
+      shadow_dom: { open_hosts: 2, closed_roots: 'unknown' },
+    },
+    message: '定位通过 4 项，1 项控件提供 1 个候选；3 项未提供探索动作，原因可展开查看。',
     observation_diagnostics: {
       rejected: {
         total: 1,
@@ -362,8 +383,8 @@ try {
     },
     candidate_diagnostics: {
       excluded: {
-        total: 2,
-        counts: { TARGET_DISABLED: 1, ACTION_SAFETY_FILTERED: 1 },
+        total: 3,
+        counts: { TARGET_DISABLED: 1, ACTION_SAFETY_FILTERED: 1, STATEFUL_CONTROL_UNSUPPORTED: 1 },
         samples: [{ control_index: 2, name: markup, code: 'TARGET_DISABLED' }],
         omitted_samples: 0,
       },
@@ -390,6 +411,10 @@ try {
     assert.equal(await detail.locator('img').count(), 0);
     assert.equal(await page.evaluate(() => window.outputInjected), undefined);
     assert.match(await detail.textContent(), /不是业务测试结果/);
+    assert.match(await detail.textContent(), /300 \/ 800/);
+    assert.match(await detail.textContent(), /未采集框架内部/);
+    assert.match(await detail.textContent(), /正文已截断/);
+    assert.match(await detail.textContent(), /状态型控件没有受支持的探索动作/);
     await page.screenshot({
       path: path.join(directory, `diagnostics-${width}.png`),
       fullPage: true,

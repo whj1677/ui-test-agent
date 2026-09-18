@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0013-discovery-observability](REQ-0013-discovery-observability/current_state.md)：已确认探索规划衔接、候选诊断与复杂页面有界采集；不扩大权限或审批，真实模型收益另验。
+- [REQ-0013-discovery-observability](REQ-0013-discovery-observability/current_state.md)：探索规划衔接、可展开的候选排除诊断与300项内分区采集已实现；627项非暂停工程回归及本机注入联调完成。权限/审批不变，真实模型收益另验，4179及旧包未切换。
 
 - [REQ-0012-ui-experience-memory](REQ-0012-ui-experience-memory/current_state.md)：有限经验库已接入并完成本机工程验证；默认只记录，同名范围定位可积累可信经验，真实模型收益对照未运行，不绕过多步表单审批。
 

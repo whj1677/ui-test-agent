@@ -19,10 +19,13 @@
     }
   ],
   "confirmed_facts": [
-    "状态卡：阶段=实现前冻结；唯一目标=三项探索改进；输入=06fd190与已确认建议；交付=包/代码/测试日志/Git同步；验收=正反例、原24例17文件不变；不做=全站重构、硬性新门禁、视觉坐标点击、外部模型调用、重启4179/改旧任务；停止=三项工程验收完成或真实阻塞。",
-    "当前snapshot先按DOM取300项，正文16000字符；adapter_gaps仅保留12条。候选生成有无原因continue与空catch。",
+    "状态卡：范围于实现前冻结，目前三项工程验证完成，收口归档；唯一目标=三项探索改进；输入=06fd190与已确认建议；交付=包/代码/测试日志/Git同步；验收=正反例、原24例17文件不变；不做=全站重构、硬性新门禁、视觉坐标点击、外部模型调用、重启4179/改旧任务；停止=三项工程验收完成或真实阻塞。",
+    "修改前snapshot先按DOM取300项，正文16000字符；adapter_gaps仅保留12条。候选生成有无原因continue与空catch。",
     "A已进入规划/审查/执行，但探索规则未明确该例外。已有过期页面重观察、计划补证与修复，不重建这些系统。",
-    "第一项探索共享A完整限定规则；真实Chromium观察→本机注入done→输入审查/完整计划/计划审查→PLAN_REVIEW已跑通，未批准/未执行；无当前步骤标识的注入blocked保持阻塞，不自动放行。58项受影响检查0失败/跳过。初轮3失败保留；其后2通过1失败是新测试误把输入审查识别为规划而访问不存在的pages，改用既有fixture-model分流后复验，未改产品错误处理。"
+    "第一项探索共享A完整限定规则；真实Chromium观察→本机注入done→输入审查/完整计划/计划审查→PLAN_REVIEW已跑通，未批准/未执行；无当前步骤标识的注入blocked保持阻塞，不自动放行。58项受影响检查0失败/跳过。初轮3失败保留；其后2通过1失败是新测试误把输入审查识别为规划而访问不存在的pages，改用既有fixture-model分流后复验，未改产品错误处理。",
+    "第二项首轮69项1失败是新测试将status零匹配错当未生成定位；改为无名称输入并另设零匹配反例。第三项首轮17项1失败发现旧标签回退多匹配被诊断为零匹配，修正原因分类，原测试不改。正式检查的中途证据/设计视图未同步问题已修正，首轮日志保留，不降级门禁。",
+    "第三项18项专项0失败/跳过：后置弹窗/当前步骤/导航、长表格、原操作提示、超额区域、未覆盖框架/Shadow、正文截断、小页顺序、候选实际派发与危险目标仍不可执行；固定24例17文件摘要保持。",
+    "收口复核修正状态型控件诊断：既有守卫检测aria-checked/pressed属性存在，不代表值为true；改为STATEFUL_CONTROL_UNSUPPORTED并补true/false反例，拒绝条件不变。validation/REQ-0013-coverage-final.log仍18项0失败/跳过。"
   ],
   "inferences_and_open_questions": [
     "探索模型可能提前放弃是代码规则衔接风险，不是已经测出的真实模型失败频率。"
@@ -66,7 +69,7 @@
         "DR-0013-02"
       ],
       "status": "已确认",
-      "summary": "已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例：每阶段24条、每原因3条，敏感名称省略；区分未生成定位、零匹配及重复匹配。page_id/candidate_id关联观察/选择/派发，模型返回后才记输入候选确已提供；复用输出面板不自动展开、抢焦点。",
+      "summary": "已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例：每阶段24条、每原因3条，敏感名称省略；区分未生成定位、零匹配及重复匹配，状态属性存在仅说明交互能力限制，不推定已选中。page_id/candidate_id关联观察/选择/派发，模型返回后才记输入候选确已提供；复用输出面板不自动展开、抢焦点。",
       "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
     },
     {
@@ -75,7 +78,7 @@
         "DR-0013-03"
       ],
       "status": "已确认",
-      "summary": "小页原顺序，大页分区配额轮转；采样与定位/可操作性独立，记录总量/遗漏及iframe和Shadow覆盖限制。",
+      "summary": "小页原顺序，大页先给最多24区留概览，再以弹窗96/当前步骤48/导航32/原操作相关64配额及区域轮转填满至多300；不跨预算。记录总量、24区与未列区的遗漏合计、16000正文截断、iframe/Shadow未覆盖；不增加二次按需采集或完备门禁。",
       "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
     }
   ],
@@ -126,7 +129,7 @@
       "dd_ids": [
         "DD-0013-03"
       ],
-      "status": "待实现",
+      "status": "已实现",
       "task": "采集覆盖：实现、复验并独立Git同步。",
       "verification_ids": [
         "VT-0013-03"
@@ -176,10 +179,17 @@
         "DR-0013-03"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "采集覆盖",
       "evidence_standard": "后置重要控件和弹窗被采集；超额区域有遗漏计数；小页面兼容，旧安全/身份守卫不变。",
-      "current_evidence": "尚未执行，以实际日志回填。"
+      "current_evidence": {
+        "command": "node --test tests/observation-coverage.test.mjs tests/discovery-observability.test.mjs tests/label-observation.test.mjs",
+        "exit_code": 0,
+        "test_count": 18,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0013-coverage-final.log"
+      }
     }
   ],
   "verification_environment": {
@@ -193,7 +203,10 @@
       "Windows / Node22 / Chromium隔离合成页面；仅本机注入模型。"
     ],
     "conclusion": [
-      "前两项已实现：69项工程检查0失败/跳过。真实控制台合成状态集成检查退出0，validation/REQ-0013-diagnostics-ui.log及agent-output-1789694154796/summary.json；375/1280px折叠详情键盘可达、文本转义、轮询保留焦点与滚动位置，截图已查看。第三项尚未实现，真实模型0调用。"
+      "最终构建4f1e07c50a4f7bd903d12fc1811b093d6be5821bdb72e547afe7ba0320281a18：node tests/runtime-regression.mjs实际627项0失败/跳过，validation/REQ-0013-runtime-final.log；18项专项包含其中，不重复相加。初轮e23c4d791400同为627项成功，validation/REQ-0013-runtime-regression.log；之后仅修正状态型控件诊断名称，现已全量复验。",
+      "最终真实控制台合成状态集成检查退出0，validation/REQ-0013-ui-final.log及agent-output-1789695253459/summary.json；375/1280px折叠详情键盘可达、文本转义、轮询保留焦点与滚动位置。采样、未覆盖、正文截断和状态型控件提示均已检查；前一轮coverage-ui.log两宽度截图已查看，未改布局样式。",
+      "node tests/discovery.integration.mjs退出0，validation/REQ-0013-discovery-flow.log：真实Chromium从登录触发菜单/弹窗探索、两条候选计划、UI批准和只读执行；11次本机注入协议调用，业务写请求0。真实模型0调用，独立业务语义验收仍PENDING_REVIEW；不代表真实模型规划能力或发布就绪。",
+      "node acceptance/check.mjs核验原24条合成用例17文件摘要一致；代码格式检查与git diff --check无异常。4179旧实例及数据未切换，旧ZIP未覆盖，无新发布。"
     ]
   },
   "trace_current": [
@@ -219,7 +232,7 @@
       "dd_id": "DD-0013-03",
       "tk_id": "TK-0013-03",
       "vt_id": "VT-0013-03",
-      "status": "已确认待实现"
+      "status": "已实现，验证已记录"
     }
   ],
   "trace_history": [

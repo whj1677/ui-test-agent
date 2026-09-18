@@ -29,8 +29,8 @@
 | DD | DR | 状态 | 内容 |
 |---|---|---|---|
 | DD-0013-01 | DR-0013-01 | 已确认 | 探索共享限定case_named规则和当前只读向导线索；结束不等于已证明业务结果，继续原计划审查。 |
-| DD-0013-02 | DR-0013-02 | 已确认 | 已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例：每阶段24条、每原因3条，敏感名称省略；区分未生成定位、零匹配及重复匹配。page_id/candidate_id关联观察/选择/派发，模型返回后才记输入候选确已提供；复用输出面板不自动展开、抢焦点。 |
-| DD-0013-03 | DR-0013-03 | 已确认 | 小页原顺序，大页分区配额轮转；采样与定位/可操作性独立，记录总量/遗漏及iframe和Shadow覆盖限制。 |
+| DD-0013-02 | DR-0013-02 | 已确认 | 已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例：每阶段24条、每原因3条，敏感名称省略；区分未生成定位、零匹配及重复匹配，状态属性存在仅说明交互能力限制，不推定已选中。page_id/candidate_id关联观察/选择/派发，模型返回后才记输入候选确已提供；复用输出面板不自动展开、抢焦点。 |
+| DD-0013-03 | DR-0013-03 | 已确认 | 小页原顺序，大页先给最多24区留概览，再以弹窗96/当前步骤48/导航32/原操作相关64配额及区域轮转填满至多300；不跨预算。记录总量、24区与未列区的遗漏合计、16000正文截断、iframe/Shadow未覆盖；不增加二次按需采集或完备门禁。 |
 
 ## 当前有效任务
 
@@ -38,7 +38,7 @@
 |---|---|---|---|
 | TK-0013-01 | DR-0013-01 / DD-0013-01 | 已实现 | 探索规划衔接：实现、复验并独立Git同步。 |
 | TK-0013-02 | DR-0013-02 / DD-0013-02 | 已实现 | 候选诊断：实现、复验并独立Git同步。 |
-| TK-0013-03 | DR-0013-03 / DD-0013-03 | 待实现 | 采集覆盖：实现、复验并独立Git同步。 |
+| TK-0013-03 | DR-0013-03 / DD-0013-03 | 已实现 | 采集覆盖：实现、复验并独立Git同步。 |
 
 ## 当前有效验证项
 
@@ -46,7 +46,7 @@
 |---|---|---|---|---|
 | VT-0013-01 | DR-0013-01 | 集成测试通过 | 探索规划衔接 | 命令：node --test tests/discovery-observability.test.mjs tests/discovery.test.mjs tests/discovery-controller.test.mjs；退出码：0；测试数量：58；失败数量：0；跳过数量：0；证据：validation/REQ-0013-handoff-verified.log |
 | VT-0013-02 | DR-0013-02 | 集成测试通过 | 候选诊断 | 命令：node --test tests/discovery-observability.test.mjs tests/discovery.test.mjs tests/discovery-controller.test.mjs tests/discovery-controls.test.mjs；退出码：0；测试数量：69；失败数量：0；跳过数量：0；证据：validation/REQ-0013-diagnostics-final.log |
-| VT-0013-03 | DR-0013-03 | 未运行 | 采集覆盖 | 尚未执行，以实际日志回填。 |
+| VT-0013-03 | DR-0013-03 | 集成测试通过 | 采集覆盖 | 命令：node --test tests/observation-coverage.test.mjs tests/discovery-observability.test.mjs tests/label-observation.test.mjs；退出码：0；测试数量：18；失败数量：0；跳过数量：0；证据：validation/REQ-0013-coverage-final.log |
 
 ## 人工待确认项
 

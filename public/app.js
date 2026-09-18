@@ -1282,7 +1282,7 @@ function discoveryDiagnosticsText(event) {
     TARGET_DISABLED: '目标已禁用',
     DOWNLOAD_FORBIDDEN: '探索不允许下载',
     EDITABLE_UNSUPPORTED: '不支持此编辑区域',
-    ALREADY_SELECTED: '目标已选中',
+    STATEFUL_CONTROL_UNSUPPORTED: '状态型控件没有受支持的探索动作',
     ACTION_SAFETY_FILTERED: '动作未获探索安全规则许可',
     FORM_SUBMIT_UNAUTHORIZED: '表单提交没有获准的探索能力',
     ROUTE_SAFETY_FILTERED: '路由未通过安全检查',
@@ -1314,7 +1314,36 @@ function discoveryDiagnosticsText(event) {
     if (log.omitted_samples)
       lines.push(`  另 ${log.omitted_samples} 项仅保留原因计数（样例有上限）。`);
   }
-  if (event.coverage) lines.push('采集覆盖：' + JSON.stringify(event.coverage, null, 2));
+  if (event.coverage) {
+    const c = event.coverage;
+    const names = {
+      dialog: '弹窗',
+      step: '当前步骤',
+      navigation: '导航',
+      table: '表格',
+      form: '表单',
+      region: '内容区域',
+      page: '页面概览',
+    };
+    lines.push(
+      `采集覆盖：${c.sampled_count} / ${c.eligible_count} 项，${c.omitted_count} 项未采集（上限 ${c.limit}）。`,
+    );
+    for (const r of c.regions ?? [])
+      lines.push(
+        `  ${names[r.kind] ?? r.kind} ${r.id}：${r.sampled_count} / ${r.eligible_count} 项，未采集 ${r.omitted_count} 项`,
+      );
+    if (c.omitted_region_count)
+      lines.push(
+        `  另 ${c.omitted_region_count} 个区域未逐项列出：采集 ${c.unlisted_sampled_count} / ${c.unlisted_eligible_count} 项。`,
+      );
+    if (c.text_truncated) lines.push('页面正文已截断，后部文字可能未提供；不代表后部功能不存在。');
+    if (c.iframes?.count) lines.push(`页面含 ${c.iframes.count} 个框架；本次未采集框架内部。`);
+    if (c.shadow_dom?.open_hosts)
+      lines.push(`页面含 ${c.shadow_dom.open_hosts} 个开放 Shadow DOM 宿主；本次未采集其内部。`);
+    lines.push(
+      '覆盖范围仅为当前可见的普通 DOM；未渲染、折叠、虚拟滚动内容及关闭的 Shadow DOM 覆盖未知。',
+    );
+  }
   return lines.join('\n');
 }
 function outputRows() {

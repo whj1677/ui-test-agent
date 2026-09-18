@@ -388,7 +388,7 @@ function candidateKind(
   if (meta.disabled) return no('TARGET_DISABLED');
   if (meta.download) return no('DOWNLOAD_FORBIDDEN');
   if (meta.editable) return no('EDITABLE_UNSUPPORTED');
-  if (meta.checked || meta.pressed) return no('ALREADY_SELECTED');
+  if (meta.checked || meta.pressed) return no('STATEFUL_CONTROL_UNSUPPORTED');
   if (
     DANGEROUS_NAME.test(name + ' ' + meta.name + ' ' + meta.navigation_owner_name) &&
     !(
@@ -980,6 +980,7 @@ export class DiscoveryBrowser {
         marker: this.session.marker,
         adapterSource: this.session.adapterSource,
         signal: this.signal,
+        focusText: this.caseDefinition?.steps?.map((s) => s.action),
       });
       if (observed.login_page) fail('AUTH_REQUIRED');
       observed.url = safeURL(this.page.url());
@@ -1095,7 +1096,8 @@ export class DiscoveryBrowser {
         candidate_count: candidates.length,
         observation_diagnostics: observed.observation_diagnostics,
         candidate_diagnostics,
-        message: `定位通过 ${observed.controls.length} 项，${eligibleControls} 项控件提供 ${candidates.length} 个候选；${excluded.total} 项未提供探索动作，原因可展开查看。`,
+        coverage: observed.coverage,
+        message: `采集 ${observed.coverage?.sampled_count ?? observed.controls.length} / ${observed.coverage?.eligible_count ?? observed.controls.length} 项，定位通过 ${observed.controls.length} 项；${eligibleControls} 项控件提供 ${candidates.length} 个候选，${excluded.total} 项未提供探索动作。覆盖与原因可展开查看。`,
       });
       return result;
     }
