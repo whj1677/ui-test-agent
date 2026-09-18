@@ -156,6 +156,39 @@ function coversPage(assertion, page) {
   );
 }
 
+// Adaptive-only binding guard: a pagination command is not a page counter.
+// This does not inspect current values to change the expected value or choose
+// another target. Unsupported accessible naming requires a corrected binding.
+export function requireAdaptivePageTarget(assertion, original) {
+  if (!['text', 'contains'].includes(assertion.check)) return;
+  const expectedPages = pages(assertion.expected);
+  if (
+    !expectedPages.some((p) =>
+      pages(original.expected).some((o) => o.current === p.current && o.total === p.total),
+    )
+  )
+    return;
+  let target = assertion.target;
+  while (target?.target) target = target.target;
+  if (target?.kind !== 'role' || !['button', 'link', 'menuitem'].includes(target.role)) return;
+  const namedPages = pages(target.name);
+  if (
+    expectedPages.every((p) =>
+      namedPages.some((n) => n.current === p.current && n.total === p.total),
+    )
+  )
+    return;
+  throw Object.assign(new Error('ADAPTIVE_TARGET_PAGE_MISMATCH'), {
+    code: 'ADAPTIVE_TARGET_PAGE_MISMATCH',
+    status: 400,
+    plan_feedback: {
+      field_path: 'assertion.target',
+      reason:
+        '分页文字预期被绑定到没有相应页码名称的导航控件。保留原预期，重新观察并选择分页文字/状态区域；不能读取翻页按钮标签作为页码，也不能凭当前值修改预期。',
+    },
+  });
+}
+
 /** Returns gaps only. An empty result says nothing about unsupported grammar,
  * other clauses/fields, ordering, population, or cross-checkpoint timing.
  * Only assertions cited by this step's audit AND mapped to this obligation count.

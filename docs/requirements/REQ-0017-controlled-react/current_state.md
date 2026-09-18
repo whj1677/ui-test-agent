@@ -7,7 +7,7 @@
 
 - 需求状态：已确认
 - 治理分级：G3
-- 当前版本：4
+- 当前版本：5
 - 最后更新：2026-09-18
 
 ## 当前有效用户需求
@@ -50,15 +50,15 @@
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
-| VT-0017-01 | DR-0017-01 | 集成测试通过 | 业务合同与完整检查 | 命令：node tests/runtime-regression.mjs；退出码：0；测试数量：1165；失败数量：0；跳过数量：0；证据：validation/req0017/final-governance-v4-r2.log |
-| VT-0017-02 | DR-0017-02 | 集成测试通过 | 结构化缺口与有界ReAct恢复 | 命令：node tests/runtime-regression.mjs；退出码：0；测试数量：1165；失败数量：0；跳过数量：0；证据：validation/req0017/final-governance-v4-r2.log |
-| VT-0017-03 | DR-0017-03 | 集成测试通过 | 执行时观察与受控技术绑定 | 命令：node tests/runtime-regression.mjs；退出码：0；测试数量：1165；失败数量：0；跳过数量：0；证据：validation/req0017/final-governance-v4-r2.log |
-| VT-0017-04 | DR-0017-04 | 集成测试通过 | 主流程状态与证据 | 命令：node tests/runtime-regression.mjs；退出码：0；测试数量：1165；失败数量：0；跳过数量：0；证据：validation/req0017/final-governance-v4-r2.log |
-| VT-0017-05 | DR-0017-05 | 未运行 | 冻结正反例与独立验证 | 版本3用户真实模型轮次bc122ba6-d48c-48b0-8364-e881067caded原三例均TECHNICAL_FAILED（17调用，登录VERIFIED）。版本4全量工程1165项通过，包含表格关系33项及实际失败回复回放；真实模型尚未重跑，不能据此宣称自主能力通过。 |
+| VT-0017-01 | DR-0017-01 | 集成测试通过 | 业务合同与完整检查 | 命令：node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs；退出码：0；测试数量：262；失败数量：0；跳过数量：0；证据：validation/req0017/v5-targeted.log |
+| VT-0017-02 | DR-0017-02 | 集成测试通过 | 结构化缺口与有界ReAct恢复 | 命令：node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs；退出码：0；测试数量：262；失败数量：0；跳过数量：0；证据：validation/req0017/v5-targeted.log |
+| VT-0017-03 | DR-0017-03 | 集成测试通过 | 执行时观察与受控技术绑定 | 命令：node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs；退出码：0；测试数量：262；失败数量：0；跳过数量：0；证据：validation/req0017/v5-targeted.log |
+| VT-0017-04 | DR-0017-04 | 集成测试通过 | 主流程状态与证据 | 命令：node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs；退出码：0；测试数量：262；失败数量：0；跳过数量：0；证据：validation/req0017/v5-targeted.log |
+| VT-0017-05 | DR-0017-05 | 未运行 | 冻结正反例与独立验证 | 版本4真实复验51调用，原三例0/3完整通过。V01/V02技术失败，V03错误目标上的断言差异不能认定业务缺陷；原事实保留。版本5修复后尚未真实复验；已获额外一轮100调用/15分钟授权。工程结果与模型结果分列。 |
 
 ## 人工待确认项
 
-- [ ] 版本3真实三例均技术失败；版本4已冻结并完成1165项工程回归，仍需安全配置模型连接及进入演示后实际复验，不能代替真实模型验收。
+- [ ] 版本5追加真实模型结果待记录；尚无发布或陌生页面自主验收结论。
 
 ## 本轮禁止实现内容
 

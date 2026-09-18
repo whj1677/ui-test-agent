@@ -218,7 +218,13 @@ export async function executeAdaptiveStep(session, run) {
         actions: fragment.actions.map(({ action_id, ...action }) => action),
         assertions: fragment.assertions,
       });
-      if (executedKeys.has(record.transition_hash)) fail('ADAPTIVE_NO_PROGRESS');
+      // A read-only completion declaration is a new state transition, not a
+      // replayed action. It still needs full audit and fresh assertion execution.
+      if (
+        executedKeys.has(record.transition_hash) &&
+        !(fragment.complete && !fragment.actions.length)
+      )
+        fail('ADAPTIVE_NO_PROGRESS');
       if (rejected.has(observationHash + ':' + record.proposal_hash)) fail('ADAPTIVE_NO_PROGRESS');
       const usedIds = new Set(result.actions.map((a) => a.action_id));
       if (fragment.actions.some((a) => usedIds.has(a.action_id)))

@@ -182,6 +182,38 @@ async function run(e) {
   return { state, row, fact: await e.store.facts(e.id, row.attempts.at(-1)) };
 }
 
+for (const finish of [true, false]) {
+  test(`measured assertion repeated with complete=${finish} ${finish ? 'may finalize' : 'still stops as no progress'}`, async (t) => {
+    let measured = 0;
+    let saved;
+    const e = await setup(t, {
+      transform(value, { prompt, input }) {
+        if (prompt.startsWith(INPUT_REVIEW_PROMPT) || prompt.startsWith(PLAN_AUDIT_PROMPT))
+          return value;
+        if (input.step.step_id === 'S1' && !value.actions.length) {
+          saved ??= structuredClone(value);
+          return { ...structuredClone(saved), complete: measured++ > 0 && finish };
+        }
+        return value;
+      },
+    });
+    const { row, fact } = await run(e);
+    if (finish) {
+      assert.equal(
+        row.status,
+        'PASS_ASSERTIONS',
+        JSON.stringify({ status: row.status, error: fact.error }),
+      );
+      assert.equal(fact.actions.length, 4, 'completion never repeats menu/detail/tab actions');
+      assert.equal(fact.adaptive_steps.length, 2);
+    } else {
+      assert.equal(row.status, 'TECHNICAL_FAILED');
+      assert.equal(fact.error, 'ADAPTIVE_NO_PROGRESS');
+      assert.equal(fact.actions.length, 3);
+    }
+  });
+}
+
 test('real-response format error then mistaken blocked recovers without replaying menu clicks', async (t) => {
   let next = 0;
   const e = await setup(t, {

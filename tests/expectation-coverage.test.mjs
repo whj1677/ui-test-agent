@@ -1,10 +1,45 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { extractExpectationRanges, expectationCoverageGaps } from '../src/expectation-coverage.mjs';
+import {
+  extractExpectationRanges,
+  expectationCoverageGaps,
+  requireAdaptivePageTarget,
+} from '../src/expectation-coverage.mjs';
 import { caseHash } from '../src/plans.mjs';
 import { validatePlanAudit } from '../src/plan-quality.mjs';
 
 const table = { kind: 'role', role: 'table', name: '记录', exact: true };
+
+test('page text cannot be checked on an unrelated navigation control', () => {
+  const original = { expected: '分页显示第2/3页。' };
+  const bad = {
+    target: { kind: 'role', role: 'button', name: '下一页', exact: true },
+    check: 'text',
+    expected: '共12条 · 第2/3页',
+  };
+  assert.throws(() => requireAdaptivePageTarget(bad, original), {
+    code: 'ADAPTIVE_TARGET_PAGE_MISMATCH',
+  });
+  assert.throws(() =>
+    requireAdaptivePageTarget(
+      {
+        ...bad,
+        target: { kind: 'within', scope: { role: 'article', name: '资产' }, target: bad.target },
+      },
+      original,
+    ),
+  );
+  for (const target of [
+    { kind: 'role', role: 'status', name: '分页', exact: true },
+    { kind: 'role', role: 'button', name: '第2/3页', exact: true },
+    { kind: 'text', value: '共12条 · 第2/3页', exact: true },
+  ])
+    assert.doesNotThrow(() => requireAdaptivePageTarget({ ...bad, target }, original));
+  assert.doesNotThrow(() =>
+    requireAdaptivePageTarget({ ...bad, check: 'enabled', expected: true }, original),
+  );
+  assert.doesNotThrow(() => requireAdaptivePageTarget({ ...bad, expected: '下一页' }, original));
+});
 const ids = ['D001', 'D002', 'D003', 'D004', 'D005'];
 const expected = '显示D001至D005';
 const row = (id, check = 'visible', value) => ({

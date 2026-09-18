@@ -9,7 +9,7 @@ import {
 } from './plans.mjs';
 import { conditionalDismissSource } from './optional-dialog.mjs';
 import { TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
-import { extractExpectationRanges } from './expectation-coverage.mjs';
+import { extractExpectationRanges, requireAdaptivePageTarget } from './expectation-coverage.mjs';
 
 export const ADAPTIVE_PLAN_VERSION = 'ui-agent-adaptive-plan/v1';
 export const ADAPTIVE_EXECUTION_POLICY = Object.freeze({
@@ -297,6 +297,7 @@ function validateSegments(c, original, previous, fragment, base) {
     for (const assertion of part.assertions) {
       safeTarget(assertion?.target);
       validateAssertion(assertion, original, { data: c.data, test_data: c.test_data });
+      requireAdaptivePageTarget(assertion, original);
       sourceIdentity(assertion.target, c);
     }
     actionCount += part.actions.length;

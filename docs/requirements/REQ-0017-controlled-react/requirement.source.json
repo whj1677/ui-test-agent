@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 4,
+    "version": 5,
     "last_updated": "2026-09-18"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,7 +19,7 @@
     }
   ],
   "confirmed_facts": [
-    "阶段：版本4修复及工程验证完成，真实模型复验待连接。唯一目标：修复实际响应暴露的协议负担、错误路由与过早阻塞。交付：稳定引用编译/定点纠错/阻塞复核、真实响应回归、限定真实模型复验及Git归档。验收：原三例不改预期，正例及故障对照分列；不开放任意代码/写入、不覆盖旧失败。停止：受影响验证和最多两轮真实复验，300逻辑调用或60分钟先到，环境缺口如实记录。",
+    "阶段：版本5三类反例修复及受影响工程回归262项通过；追加真实模型复验待服务切换。旧失败保留，不宣称发布。追加授权仅原三例、100调用或15分钟先到；原用例/预期/非生产只读权限不变。",
     "REQ-0014为已实现的默认关闭、同入口详情/标签原型；本包为主流程新契约，不修改历史验收。",
     "原3例探索完成、1候选待批准、2条规划/审查阻塞，均未批准/0执行；23/128调用，非预算耗尽。",
     "每原步骤合计20断言，v3拆点不能绕过；已有收据/期限/派发标记，复用内核。",
@@ -32,7 +32,10 @@
     "版本3四文件并发工程全量回归1072项、0失败、0取消、0跳过；原24例/17文件冻结检查通过。真实Chromium及注入模型回复仅构成工程证据。",
     "版本3用户实测任务bc122ba6-d48c-48b0-8364-e881067caded登录VERIFIED，17/128调用，原LAB-V01/V02/V03均TECHNICAL_FAILED。V01定位格式错误后过早blocked，V02引用操作文字被预期来源校验拒绝后错误放弃导航，V03成功导航后因覆盖缺失、格式和审查引用错误结束。保留该失败轮次，不计业务缺陷。",
     "版本4用户已确认修改：程序编译当前目标与原预期引用，格式定点纠错与审查恢复分离；blocked需一次有证据的复核，仍禁止无界重试或放宽权限。",
-    "版本4冻结构建cdd326252f4a全量工程回归1165项，0失败/取消/跳过，376388.8644毫秒；原24例/17文件未改变。真实模型未复验，不据工程结果宣称产品验收。15个旧任务与失败记录保留，另建原三例复验任务。"
+    "版本4冻结构建cdd326252f4a全量工程回归1165项，0失败/取消/跳过，376388.8644毫秒；原24例/17文件未改变。原15个旧任务与失败记录保留。",
+    "版本4实际复验任务54abc1b7-35e4-4059-82cf-e9277e8638a4已结束，51次模型调用：V01完成导航后误判完成声明为无进展；V02实际完成筛选输入及整表不变检查后，审查引用跨义务而耗尽格式恢复；V03把分页文字绑到下一页按钮，运行记录FAIL_ASSERTION，不能据此确认业务缺陷。实际0/3整例通过。",
+    "版本5修改前范围：仅修三类已复现缺陷。无动作完成声明允许再次审查/测量但不允许重派发动作；已知断言引用与来源不匹配保守降为候选待修，不增补或忽略来源；明确分页预期不得绑定不含页码的导航按钮/链接。保留所有失败事实，原预算不增加，真实模型两轮已用完，后续仅工程回放。",
+    "2026-09-18用户另行明确授权版本5追加一轮官方DeepSeek API验证：仅原LAB-V01/V02/V03及localhost:4196合成页面，最多100调用或15分钟，旧记录不改。操作员看门程序提前在95调用或14.5分钟请求正常停止，预留在途请求及收尾。"
   ],
   "inferences_and_open_questions": [
     "结构化检查不证明所有自然语言语义；保留来源与反例。",
@@ -101,7 +104,7 @@
       ],
       "status": "已确认",
       "summary": "执行时观察与受控技术绑定",
-      "rationale": "在v1受控重观察底座上新增版本化adaptive-readonly业务合同。冻结原Case/hash/步骤顺序/输入/预期/同源/只读边界，不预绑定未来DOM；执行时逐段观察→生成最多1个动作及当前检查→独立语义审查→既有执行内核→追加证据。每步最多8段、2次未派发重规划、共用120秒步骤期限，沿用累计模型额度；已派发动作及业务断言差异不自动重放。版本4增加当前目标/原预期引用编译，另限2次格式修复及1次有证据的blocked复核；同候选审查格式独立修复2次，耗尽不回规划。单原生表不变关系由运行器在首次动作前冻结基线，逐动作比较且不把差异重采为通过。断言歧义只允许修改定位范围，谓词/预期/原文来源保持不变。完成需要完整预期覆盖审查和COMPLETE收据，不能由模型done自报。"
+      "rationale": "在v1受控重观察底座上新增版本化adaptive-readonly业务合同。冻结原Case/hash/步骤顺序/输入/预期/同源/只读边界，不预绑定未来DOM；执行时逐段观察→生成最多1个动作及当前检查→独立语义审查→既有执行内核→追加证据。每步最多8段、2次未派发重规划、共用120秒步骤期限，沿用累计模型额度；已派发动作及业务断言差异不自动重放。版本4增加当前目标/原预期引用编译，另限2次格式修复及1次有证据的blocked复核；同候选审查格式独立修复2次，耗尽不回规划。单原生表不变关系由运行器在首次动作前冻结基线，逐动作比较且不把差异重采为通过。断言歧义只允许修改定位范围，谓词/预期/原文来源保持不变。完成需要完整预期覆盖审查和COMPLETE收据，不能由模型done自报。 版本5区分无动作完成转换与无进展重复，前者仍须完整审查及重新测量；已知审查断言跨来源只降为候选待修，不自动添加义务；明确分页预期绑定无对应页码名称的导航控件时在部分/完整短段执行前拒绝。"
     },
     {
       "id": "DD-0017-04",
@@ -221,12 +224,12 @@
       "item": "业务合同与完整检查",
       "evidence_standard": "原步骤/输入/对象/预期/顺序/时机保持；表格字段矩阵和明确编号区间全覆盖，25字段同一DOM观察，遗漏中段不得通过。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 1165,
+        "test_count": 262,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/final-governance-v4-r2.log"
+        "log_path": "validation/req0017/v5-targeted.log"
       }
     },
     {
@@ -239,12 +242,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 1165,
+        "test_count": 262,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/final-governance-v4-r2.log"
+        "log_path": "validation/req0017/v5-targeted.log"
       }
     },
     {
@@ -257,12 +260,12 @@
       "item": "执行时观察与受控技术绑定",
       "evidence_standard": "同一批准只读动作派发前观察/探测/等价绑定；身份/字段/作用域/顺序/期限不变；未知派发和断言差异不重放、不改预期。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 1165,
+        "test_count": 262,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/final-governance-v4-r2.log"
+        "log_path": "validation/req0017/v5-targeted.log"
       }
     },
     {
@@ -275,12 +278,12 @@
       "item": "主流程状态与证据",
       "evidence_standard": "显示当前目标/观察/恢复/停止原因，不新增逐定位审批；旧批准不静默扩权，旧任务不改。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 1165,
+        "test_count": 262,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/final-governance-v4-r2.log"
+        "log_path": "validation/req0017/v5-targeted.log"
       }
     },
     {
@@ -292,7 +295,7 @@
       "execution_status": "未运行",
       "item": "冻结正反例与独立验证",
       "evidence_standard": "保留原3例和24例/17文件，增加异构留出及故障对照；至少两轮真实模型验证另列，技术救场/漏报/误停/调用耗时分列。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
-      "current_evidence": "版本3用户真实模型轮次bc122ba6-d48c-48b0-8364-e881067caded原三例均TECHNICAL_FAILED（17调用，登录VERIFIED）。版本4全量工程1165项通过，包含表格关系33项及实际失败回复回放；真实模型尚未重跑，不能据此宣称自主能力通过。"
+      "current_evidence": "版本4真实复验51调用，原三例0/3完整通过。V01/V02技术失败，V03错误目标上的断言差异不能认定业务缺陷；原事实保留。版本5修复后尚未真实复验；已获额外一轮100调用/15分钟授权。工程结果与模型结果分列。"
     }
   ],
   "verification_environment": {
@@ -304,11 +307,12 @@
       "node --test tests/manual-lab-readonly.test.mjs"
     ],
     "environment": [
-      "Windows/Node/独立测试数据及端口/Chromium；工程回归文件并发4，保留产品内部并发测试；4179已切换到冻结构建cdd326252f4a，真实复验前不修改服务源码"
+      "Windows/Node/隔离真实Chromium，工程回归文件并发4；当前4179仍为版本4 cdd326252f4a，待版本5定向工程回归后切换，不改运行中的测试源码。"
     ],
     "conclusion": [
-      "1165为版本4同一全量工程回归的去重总数；各验证项引用同一份证据，定向回归为其子集，不相加。保留此前失败及取消日志，不计通过；工程回放/注入回复不是真实模型自主能力证据。",
-      "版本3实际模型三例技术失败，版本4模型复验待完成；不具备发布结论。"
+      "版本5受影响工程回归262项全部通过，443409.2257毫秒；各VT引用同一份证据，不累加。版本4全量1165是历史基线，未重跑新版全量。",
+      "版本4真实51调用，0/3整例通过；版本5新增回放不等于自主模型验收。",
+      "首次版本5collector已实际运行262项且退出码0；其附带文档检查因设计/追踪视图未同步失败，修复事实源视图后单独复检，保留首次检查失败记录。"
     ]
   },
   "trace_current": [
@@ -359,10 +363,16 @@
       "link": "无",
       "status": "无",
       "notes": "新建；关联REQ-0001及REQ-0014"
+    },
+    {
+      "version": 4,
+      "link": "版本4真实任务54abc1b7-35e4-4059-82cf-e9277e8638a4",
+      "status": "真实模型0/3整例通过",
+      "notes": "V01误停、V02来源映射、V03错绑目标已纳入版本5反例；链路仍为原UN/DR/DD/TK/VT，不新增业务需求。"
     }
   ],
   "open_questions": [
-    "版本3真实三例均技术失败；版本4已冻结并完成1165项工程回归，仍需安全配置模型连接及进入演示后实际复验，不能代替真实模型验收。"
+    "版本5追加真实模型结果待记录；尚无发布或陌生页面自主验收结论。"
   ],
   "prohibited_implementation": [
     "不得修改冻结用例/预期/选集换取通过。",
@@ -370,6 +380,14 @@
     "不得把模型审查/预置计划/注入回复/回放/工程测试计为自主产品验收。"
   ],
   "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 5,
+      "type": "真实复验失败后局部修复",
+      "description": "修改前记录：V01无动作完成转换误停、V02已知引用跨义务误路由、V03分页断言目标错绑；补实际反例和不放行反例，仅工程回放，真实模型额度已用完。",
+      "impact": "短段终结、审查反馈与分页技术绑定；不改业务预期、旧事实或执行权限",
+      "confirmed_by": "沿用用户改吧的限定修复授权"
+    },
     {
       "date": "2026-09-18",
       "version": 4,

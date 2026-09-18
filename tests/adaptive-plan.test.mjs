@@ -85,6 +85,30 @@ function validate(fragment, { c = fixture(), previous = [], step, plan } = {}) {
   });
 }
 
+test('real pagination-button misbinding is rejected before partial or complete execution', () => {
+  const c = fixture();
+  c.steps[0].expected = '分页显示第2/3页';
+  c.steps[0].obligations = [{ id: 'O1', text: c.steps[0].expected }];
+  const assertion = {
+    target: role('button', '下一页'),
+    check: 'text',
+    expected: '共12条 · 第2/3页',
+    oracle_quote: c.steps[0].expected,
+    obligation_ids: ['O1'],
+  };
+  for (const complete of [false, true]) {
+    assert.throws(
+      () => validate(segment([], [assertion], complete), { c }),
+      code('ADAPTIVE_TARGET_PAGE_MISMATCH'),
+    );
+    const legitimate = {
+      ...assertion,
+      target: { kind: 'text', value: '共12条 · 第2/3页', exact: true },
+    };
+    assert.doesNotThrow(() => validate(segment([], [legitimate], complete), { c }));
+  }
+});
+
 test('contract copies exact original strings, hashes full Case and contains no precompiled checkpoints', () => {
   const c = fixture(),
     before = clone(c),

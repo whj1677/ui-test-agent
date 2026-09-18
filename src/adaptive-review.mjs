@@ -52,21 +52,54 @@ export function compileAdaptiveAudit(reply, input) {
   };
 }
 
+function sourceMismatchReview(reply, context) {
+  if (!Array.isArray(reply?.checks) || !Array.isArray(reply.issues)) return null;
+  const corrected = structuredClone(reply);
+  let changed = false;
+  for (const check of corrected.checks) {
+    const entries = context.assertion_catalog.filter((a) => a.step_id === check?.step_id);
+    const indices = check?.assertion_indices;
+    if (
+      !Array.isArray(indices) ||
+      new Set(indices).size !== indices.length ||
+      indices.some((i) => !Number.isInteger(i) || i < 0 || i >= entries.length)
+    )
+      return null;
+    const wrong = indices.filter((i) => !entries[i].obligation_ids?.includes(check.obligation_id));
+    if (!wrong.length) continue;
+    changed = true;
+    check.status = 'MISSING';
+    check.assertion_indices = indices.filter((i) => !wrong.includes(i));
+    const reason = `审查引用${wrong.map((i) => entries[i].ref).join('、')}未在候选中绑定义务${check.obligation_id}。须返回规划核对原文和断言语义后修正候选来源并重新审查；不允许审查器自行增补来源或宣布覆盖。`;
+    corrected.issues.push({ code: 'ASSERTION_GAP', step_id: check.step_id, reason });
+    corrected.issues.push({ code: 'ACTION_MISMATCH', step_id: check.step_id, reason });
+  }
+  if (!changed) return null;
+  // Full validation still checks all other fields. This can only reject the
+  // candidate; raw model replies and the original candidate remain unchanged.
+  return validatePlanAudit(corrected, context.original, context.candidate_plan);
+}
+
 // Only malformed audit responses are retried, never adverse semantic findings.
 // Same frozen candidate, shared deadline, every request charged by the caller.
 export async function reviewAdaptiveCandidate(input, ask, onRepair = async () => {}) {
   const context = adaptiveAuditInput(input);
   let correction;
   for (let attempt = 0; attempt <= 2; attempt++) {
-    let reply;
+    let reply, compiled;
     try {
       reply = await ask({ ...context, ...(correction ? { review_correction: correction } : {}) });
-      return validatePlanAudit(
-        compileAdaptiveAudit(reply, context),
-        input.original,
-        input.candidate_plan,
-      );
+      compiled = compileAdaptiveAudit(reply, context);
+      return validatePlanAudit(compiled, input.original, input.candidate_plan);
     } catch (error) {
+      if (error.code === 'PLAN_AUDIT_ASSERTION_REFERENCE_INVALID' && compiled) {
+        try {
+          const repair = sourceMismatchReview(compiled, context);
+          if (repair) return repair;
+        } catch {
+          /* Other malformed fields still use bounded audit repair below. */
+        }
+      }
       if (
         error.code !== 'DEEPSEEK_JSON_INVALID' &&
         !/^PLAN_AUDIT_(?:SCHEMA|COUNT|REFERENCE|DUPLICATE|CHECK|ASSERTION_REFERENCE|ISSUE|INCONSISTENT)/u.test(

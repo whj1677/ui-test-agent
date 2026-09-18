@@ -47,6 +47,29 @@ const valid = () => ({
   ],
   issues: [],
 });
+
+test('known assertion with another obligation becomes candidate repair, not acceptance or schema exhaustion', async () => {
+  const { input } = fixture();
+  input.original.steps[0].obligations.push({ id: '1-O2', text: input.original.steps[0].expected });
+  // Keep the candidate bound to this updated original baseline.
+  const { caseHash } = await import('../src/plans.mjs');
+  input.candidate_plan.case_hash = caseHash(input.original);
+  const before = structuredClone(input.candidate_plan);
+  let calls = 0;
+  const result = await reviewAdaptiveCandidate(input, async () => {
+    calls++;
+    const reply = valid();
+    reply.checks.push({ ...reply.checks[0], obligation_id: '1-O2' });
+    return reply;
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.outcome, 'REPAIR');
+  assert.equal(result.checks[1].status, 'MISSING');
+  assert.deepEqual(result.checks[1].assertion_indices, []);
+  assert.ok(result.issues.some((i) => i.code === 'ACTION_MISMATCH'));
+  assert.match(result.issues.map((i) => i.reason).join(' '), /1-O2/);
+  assert.deepEqual(input.candidate_plan, before, 'never add obligation IDs to the candidate');
+});
 test('stable audit assertion refs compile to strict same-step measured references', async () => {
   const { input } = fixture();
   const output = await reviewAdaptiveCandidate(input, async () => valid());
