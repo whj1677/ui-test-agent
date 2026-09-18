@@ -26,6 +26,8 @@ const checks = {
   focused: '焦点状态',
   has_class: '样式类包含',
   row_sequence: '数据行顺序',
+  table_cells: '表格逐字段核对（同一次采样）',
+  table_unchanged: '表格与本步骤操作前完整快照一致',
   enabled: '可操作状态',
   selected_label: '选中选项',
   url: '页面地址',
@@ -120,17 +122,38 @@ function preparationHistory(record) {
   return `${legacy}<details class="preparation-history"><summary>输入审查与计划自修复 · 已修复 ${h(repair?.repair_count ?? 0)} / ${h(repair?.max_repairs ?? 2)} 次</summary><p>以下是计划准备记录，不计入已执行数量或断言满足数量。候选计划仍需核对后执行；执行结果以本用例的实际观测为准。</p>${input ? `<h4>输入审查</h4><p>${input.issues?.length ? input.issues.map((i) => h(issueText(i))).join('<br>') : '本次未发现输入问题。'}</p>` : ''}${repair ? `<p><strong>本次结果：</strong>${h(repairLabels[repair.outcome] ?? repair.outcome ?? '处理中')}</p><ol>${rounds.map((r, i) => `<li><strong>${r.round === 0 ? '首次计划' : '第 ' + h(r.round ?? i) + ' 次修复'} · ${h(repairLabels[r.status] ?? r.status)}</strong><p>${h(r.reason ?? r.code ?? '未记录补充原因')}</p><small>${h(time(r.at))}</small><details><summary>查看计划版本变化</summary><p>前一计划：${h(rounds[i - 1]?.plan_hash ?? '无')}<br>本次计划：${h(r.plan_hash ?? '未生成有效计划')}</p>${r.code ? `<p>原因代码：${h(r.code)}</p>` : ''}</details></li>`).join('') || '<li>尚无计划尝试记录。</li>'}</ol>` : ''}${audit ? `<h4>最近一次计划语义核验</h4><p>${h(repairLabels[audit.outcome] ?? audit.outcome)}${audit.issues?.length ? ' · ' + audit.issues.map((i) => h(issueText(i))).join('；') : ''}</p><details><summary>查看核验依据</summary><pre>${h(JSON.stringify({ plan_hash: audit.plan_hash, input_hash: audit.input_hash, checks: audit.checks, at: audit.at }, null, 2))}</pre></details>` : ''}</details>`;
 }
 
+function adaptiveStepIncomplete(fact, stepId) {
+  return (
+    !!fact &&
+    (Object.hasOwn(fact, 'adaptive_segments') || Object.hasOwn(fact, 'adaptive_steps')) &&
+    !(fact.adaptive_steps ?? []).some(
+      (step) => step.step_id === stepId && step.status === 'COMPLETE',
+    )
+  );
+}
+
 function checkpointFacts(fact, stepId) {
   const points = (fact?.checkpoints ?? []).filter((point) => point.step_id === stepId);
   const conditions = (fact?.actions ?? []).filter(
     (a) => a.step_id === stepId && a.operation === 'dismiss_optional',
   );
-  const conditionText = conditions
-    .map(
-      (a) =>
-        `<p class="muted">条件提示：${h(a.status === 'SKIPPED_NOT_PRESENT' ? '本次未出现，未派发点击；仍继续验证原预期' : a.status === 'EXECUTED' ? '本次出现，已点击关闭' : '条件关闭未完成')} · ${h(target(a.target))}</p>`,
-    )
-    .join('');
+  const missingCompletion = adaptiveStepIncomplete(fact, stepId);
+  const stopCode = missingCompletion
+    ? ((fact.adaptive_segments ?? []).findLast(
+        (segment) => segment.step_id === stepId && segment.error,
+      )?.error ?? fact.error)
+    : null;
+  const completionText = missingCompletion
+    ? `<p class="warn">步骤未完成：${h(reasonLabels[stopCode] ?? stopCode ?? '尚无本步骤的 COMPLETE 完成记录。')} 已匹配字段仅保留为局部观测，不代表原步骤全部预期满足。</p>`
+    : '';
+  const conditionText =
+    completionText +
+    conditions
+      .map(
+        (a) =>
+          `<p class="muted">条件提示：${h(a.status === 'SKIPPED_NOT_PRESENT' ? '本次未出现，未派发点击；仍继续验证原预期' : a.status === 'EXECUTED' ? '本次出现，已点击关闭' : '条件关闭未完成')} · ${h(target(a.target))}</p>`,
+      )
+      .join('');
   if (!points.length) return conditionText;
   const labels = {
     NOT_EXECUTED: '未执行',
@@ -142,23 +165,37 @@ function checkpointFacts(fact, stepId) {
   return `${conditionText}<p class="muted">分段观察，各点发生于不同时间。</p><ol>${points.map((point) => `<li><strong>检查点 ${h(point.checkpoint_id)} · ${h(labels[point.status] ?? point.status)}</strong>${point.observed_at ? `<small> · 观察于 ${h(time(point.observed_at))}</small>` : ''}${point.url ? `<p>${h(point.url)}</p>` : ''}${point.error ? `<p>${h(point.error)}</p>` : ''}</li>`).join('')}</ol>`;
 }
 
+function tableDifferences(observation) {
+  const comparison = observation.table_comparison;
+  if (!['table_cells', 'table_unchanged'].includes(observation.check) || !comparison) return '';
+  return `<p>本次采样已比对 ${h(comparison.checked_cells)} 个字段；${h(comparison.differences.length)} 项差异。</p>${comparison.differences.length ? `<details><summary>查看具体记录与字段差异</summary><ul>${comparison.differences.map((d) => `<li>${h(d.key ?? '表格')} / ${h(d.column ?? '结构')}：期望 ${h(value(d.expected))}，实际 ${h(value(d.actual))}（${h(d.reason)}）</li>`).join('')}</ul></details>` : ''}`;
+}
+
 function stepRows(effective, fact) {
   return effective.steps
     .map((s) => {
-      const observed = (fact?.assertions ?? []).filter((a) => a.step_id === s.step_id),
+      const observed = [
+          ...(fact?.assertions ?? []),
+          ...(fact?.relational_observations ?? []).map((a) => ({
+            ...a,
+            oracle_quote: '动作后关系检查：' + (a.oracle_quote ?? '表格与操作前保持一致'),
+          })),
+        ].filter((a) => a.step_id === s.step_id),
         actions = (fact?.actions ?? []).filter((a) => a.step_id === s.step_id);
       const checkpoints = (fact?.checkpoints ?? []).filter((point) => point.step_id === s.step_id);
-      const incomplete = checkpoints.some((point) => point.status !== 'ASSERTIONS_PASSED');
+      const missingCompletion = adaptiveStepIncomplete(fact, s.step_id);
+      const incomplete =
+        missingCompletion || checkpoints.some((point) => point.status !== 'ASSERTIONS_PASSED');
       const status = observed.length
         ? observed.every((a) => a.passed && a.group_passed !== false)
           ? incomplete
             ? '未完成断言'
             : '断言满足'
           : '断言不一致'
-        : actions.length
+        : actions.length || missingCompletion
           ? '未完成断言'
           : '未执行';
-      return `<tr><td class="step-id">${h(s.step_id)}</td><td class="prose">${h(s.action)}</td><td class="prose">${h(s.expected ?? '未填写')}</td><td>${checkpointFacts(fact, s.step_id)}${observed.length ? observed.map((a) => `<div class="observation ${a.passed ? 'good' : 'bad'}"><span>${a.passed ? '✓' : '×'} ${h(a.oracle_quote ?? checks[a.check] ?? a.check)}</span><strong>实际：${h(value(a.actual))}</strong><small>${a.checkpoint_id ? '检查点 ' + h(a.checkpoint_id) + ' · ' : ''}${h(checks[a.check] ?? a.check)}${a.expected !== null && a.expected !== undefined ? ' · 期望 ' + h(value(a.expected)) : ''} · ${h(target(a.target))}</small></div>`).join('') : `<span class="muted">${fact ? '未收录该步骤的断言观测' : '尚未执行，无实际结果'}</span>`}</td><td><span class="pill ${status === '断言满足' ? 'good' : status === '断言不一致' ? 'bad' : 'warn'}">${status}</span></td></tr>`;
+      return `<tr><td class="step-id">${h(s.step_id)}</td><td class="prose">${h(s.action)}</td><td class="prose">${h(s.expected ?? '未填写')}</td><td>${checkpointFacts(fact, s.step_id)}${observed.length ? observed.map((a) => `<div class="observation ${a.passed ? 'good' : 'bad'}"><span>${a.passed ? '✓' : '×'} ${h(a.oracle_quote ?? checks[a.check] ?? a.check)}</span>${tableDifferences(a)}<strong>实际：${h(value(a.actual))}</strong><small>${a.checkpoint_id ? '检查点 ' + h(a.checkpoint_id) + ' · ' : ''}${h(checks[a.check] ?? a.check)}${a.expected !== null && a.expected !== undefined ? ' · 期望 ' + h(value(a.expected)) : ''} · ${h(target(a.target))}</small></div>`).join('') : `<span class="muted">${fact ? '未收录该步骤的断言观测' : '尚未执行，无实际结果'}</span>`}</td><td><span class="pill ${status === '断言满足' ? 'good' : status === '断言不一致' ? 'bad' : 'warn'}">${status}</span></td></tr>`;
     })
     .join('');
 }

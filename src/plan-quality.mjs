@@ -5,6 +5,7 @@ import { CONDITIONAL_PROMPT } from './optional-dialog.mjs';
 import { DYNAMIC_ROW_GUIDANCE } from './dynamic-row-evidence.mjs';
 import { WITHIN_GUIDANCE } from './scope-guidance.mjs';
 import { CASE_NAMED_GUIDANCE } from './case-named.mjs';
+import { expectationCoverageGaps } from './expectation-coverage.mjs';
 
 const STATUSES = new Set(['COVERED', 'MISSING', 'UNCLEAR']);
 const ISSUE_CODES = new Set([
@@ -22,6 +23,19 @@ function strictKeys(value, allowed, required = allowed) {
   } catch {
     fail('PLAN_AUDIT_SCHEMA_INVALID');
   }
+}
+
+// Range extraction is lexical, not a proof that the IDs must be present.
+// Conservatively leave negative/exclusion clauses (including double negation)
+// to semantic review. This suppresses only our derived positive-presence gap;
+// it never removes model findings or declares hidden assertions complete.
+function negativeRangeContext(original, gap) {
+  if (gap.kind !== 'range') return false;
+  const negative =
+    /不|未|无|非|没有|禁止|隐藏|排除|剔除|移除|删除|除外|以外|之外|\b(?:not|no|never|without|hidden|absent|exclude\w*|except|remove\w*)\b/iu;
+  return original.expected
+    .split(/[，,；;。！？!?\r\n]/u)
+    .some((clause) => clause.includes(gap.quote) && negative.test(clause));
 }
 
 // An audit refers to this exact confirmed case and candidate, never a revised oracle.
@@ -60,6 +74,9 @@ For mutation, check precise authorized identity, ownership evidence, cleanup act
 Perform REVERSE review too: every action, business assertion and precondition must have a justified purpose in the original case or confirmed setup. Every business assertion index must be examined and referenced by an applicable check. A matching oracle_quote or copied obligation_ids is necessary but never sufficient. Reject additional row counts, exact populations, fixed values or unnecessary navigation even if true in the observed page. Use ACTION_MISMATCH for unjustified extras; do not turn a clear original into ORACLE_UNCLEAR merely because the model added something. Technical waits are actions, not extra business outcomes. Row/cell locators bind an exact original business key in a uniquely specified observed native table; row numbers and observed values do not define the business identity or oracle. Independent whole-table assertions that the record name occurs and a price occurs can be satisfied by different rows; require the value in that record's correct column (or a uniquely identified detail context). Retain all original navigation actions with or without an optional URL hint and verify the captured start matches the original precondition.
 ${CASE_NAMED_GUIDANCE}
 The case_named protocol above is the ONLY bounded exception to observed/source control grounding. Audit its literal action source and observed wizard context; absence of the future field itself is not a missing fact under this protocol. Never treat the wrapper as observed evidence or extend it to arbitrary future targets.
+Plan audit is technical review of a CONFIRMED case. UNCLEAR and ORACLE_UNCLEAR remain unresolved findings requiring REPAIR, never direct NEEDS_CLARIFICATION or case NEEDS_REVIEW. Repair technical gaps using original requirements and supported evidence. If a business decision truly cannot be determined, identify exact current source quotes and the unresolved choice for the independent input-review process; only that source-grounded input review may request user clarification. Never ignore a finding based on keywords, silently accept it, or change the confirmed oracle.
+For an explicit same-prefix letter+number inclusive range (e.g. D001至D005), every ID needs a strong measured identity assertion under that same step and obligation: the row itself or its identity cell with visibility/text, row_sequence, or table_cells. Endpoints alone, hidden rows, empty contains, labels, oracle_quote and obligation_ids are not coverage. table_cells targets a TABLE with expected {key_column,rows:[{key,cells:[{column,check:"text"|"number",expected}]}],ordered,exact_rows}; each row must actually check cells. Explicit page text such as 第2/3页 requires compatible current/total page text (including within 共12条 · 第2/3页), not enabled pagination buttons. Deterministic checks cover only a bounded literal grammar and ranges up to 50; independently review unsupported expressions, all remaining fields and semantics, and checkpoint timing. Passing these necessary checks never proves complete coverage.
+Range extraction alone does not establish positive presence. Negative or exclusion wording such as 不应出现D001至D005 or D001至D005均不可见 must NOT be expanded into required visible IDs. Independently review absence/hidden assertions against every original clause; skipping a positive-presence guard never accepts a negative expectation or discards a model finding.
 All checks COVERED with zero issues means only that THIS model audit found no defect. It does not prove semantic completeness, runtime success or authorize execution.`;
 
 export function auditInput(c, plan, planningContext = {}) {
@@ -149,6 +166,30 @@ export function validatePlanAudit(reply, c, plan) {
     reply.checks.some((check) => check.status === 'UNCLEAR') ||
     reply.issues.some((issue) => issue.code === 'ORACLE_UNCLEAR');
   const issues = structuredClone(reply.issues);
+  const checks = structuredClone(reply.checks);
+  // Preserve original issues verbatim. Uncertainty is not acceptance and this
+  // technical reviewer cannot reopen an operator-confirmed case on its own.
+  const unresolvedSteps = new Set([
+    ...checks.filter((c) => c.status === 'UNCLEAR').map((c) => c.step_id),
+    ...issues.filter((i) => i.code === 'ORACLE_UNCLEAR').map((i) => i.step_id),
+  ]);
+  for (const stepId of unresolvedSteps)
+    issues.push({
+      code: 'PLAN_REVIEW_UNRESOLVED',
+      step_id: stepId,
+      reason:
+        '已确认用例的技术计划审查尚未解决，须修复计划并重新审查。若确有影响业务判定的输入歧义，须提供当前原文依据及具体未决选择，交独立 input-review 复核后才能请求用户澄清；不得直接改为 NEEDS_REVIEW、忽略原问题或判 ACCEPT。',
+    });
+  for (const [stepId, step] of steps) {
+    for (const gap of expectationCoverageGaps(step.original, step.assertions, checks)) {
+      if (negativeRangeContext(step.original, gap)) continue;
+      const check = checks.find(
+        (c) => c.step_id === stepId && c.obligation_id === gap.obligation_id,
+      );
+      if (check.status === 'COVERED') check.status = 'MISSING';
+      issues.push({ code: 'ASSERTION_GAP', step_id: stepId, reason: gap.reason });
+    }
+  }
   // Reverse coverage: every assertion needs an actual audit reference, not just
   // an obligation ID copied onto an unchecked extra condition.
   for (const [stepId, step] of steps) {
@@ -163,12 +204,11 @@ export function validatePlanAudit(reply, c, plan) {
           '存在未被逐项语义核验引用的断言。请反向核验每条断言对应的原预期，删除无依据的额外条件，不能仅复制义务ID。',
       });
   }
-  const outcome = unclear
-    ? 'NEEDS_CLARIFICATION'
-    : issues.length || reply.checks.some((check) => check.status === 'MISSING')
+  const outcome =
+    unclear || issues.length || checks.some((check) => check.status === 'MISSING')
       ? 'REPAIR'
       : 'ACCEPT';
-  return { issues, checks: structuredClone(reply.checks), outcome };
+  return { issues, checks, outcome };
 }
 
 // Candidate-generation errors only. Never apply this predicate to an execution
@@ -217,6 +257,25 @@ const REPAIRABLE_PLAN_ERRORS = new Set([
   'ASSERTION_COUNT_INVALID',
   'ASSERTION_NUMBER_INVALID',
   'ASSERTION_BOOL_INVALID',
+  // Explicit planning-input errors from validateTableExpectation, not TABLE_*
+  // prefix matching. Some schema codes are shared with sample validation:
+  // this predicate must still only be called before execution.
+  'TABLE_SCHEMA_INVALID',
+  'TABLE_ARRAY_INVALID',
+  'TABLE_IDENTITY_INVALID',
+  'TABLE_FLAGS_INVALID',
+  'TABLE_EMPTY_EXPECTATION',
+  'TABLE_KEY_DUPLICATE',
+  'TABLE_EMPTY_CELLS',
+  'TABLE_CELL_LIMIT',
+  'TABLE_COLUMN_DUPLICATE',
+  'TABLE_TEXT_INVALID',
+  'TABLE_NUMBER_INVALID',
+  'TABLE_CHECK_INVALID',
+  'TABLE_SOURCE_UNGROUNDED',
+  'TABLE_SOURCE_LIMIT',
+  'TABLE_SOURCE_INVALID',
+  'REACT_POLICY_INVALID',
   'ASSERTION_ORACLE_QUOTE_REQUIRED',
   'ASSERTION_OBLIGATIONS_REQUIRED',
   'ASSERTION_OBLIGATION_UNKNOWN',

@@ -118,7 +118,13 @@ const provider = new DeepSeek({
     );
   },
 });
-const app = await start({ port: 0, dataDir: path.join(dir, 'data'), headless: true, provider }),
+const app = await start({
+    port: 0,
+    dataDir: path.join(dir, 'data'),
+    headless: true,
+    provider,
+    planningMode,
+  }),
   demo = await startDemo();
 const b = await chromium.launch({ headless: true }),
   page = await b.newPage({ viewport: { width: 1536, height: 1050 } });
@@ -159,8 +165,9 @@ try {
   await page.getByText('浏览器已打开', { exact: true }).waitFor();
   await app.browser.loginPage.getByRole('button', { name: '进入演示' }).click();
   await page.getByRole('button', { name: '确认登录状态', exact: true }).click();
-  await page.locator('#marker').selectOption({ label: '演示用户 · strong' });
-  await page.locator('#save-marker').click();
+  await page.getByRole('heading', { name: '确认当前页面并继续', exact: true }).waitFor();
+  await page.locator('#login-marker').selectOption({ label: '演示用户 · strong' });
+  await page.locator('#confirm-login-evidence').click();
   await page.getByText('登录可复用', { exact: true }).waitFor();
   await page.getByText('待确认计划', { exact: true }).waitFor();
   await page.locator('#approve-main').click();

@@ -173,15 +173,36 @@ export function runtimeLocator(page, spec) {
       }),
     async waitFor({ state = 'visible', timeout = 8000 } = {}) {
       const deadline = Date.now() + timeout;
+      let lastTransient;
       do {
-        const matched = await use(async (h) =>
-          state === 'hidden'
-            ? !h.length || !(await h[0].isVisible())
-            : h.length === 1 && (await h[0].isVisible()),
-        );
-        if (matched) return;
+        try {
+          const matched = await use(async (h) =>
+            state === 'hidden'
+              ? !h.length || !(await h[0].isVisible())
+              : h.length === 1 && (await h[0].isVisible()),
+          );
+          lastTransient = null;
+          if (matched) return;
+        } catch (error) {
+          // Observation only: loading/content dialogs may briefly overlap.
+          // Never reuse a stale node or treat ambiguity as visibility/absence.
+          if (
+            ![
+              'WITHIN_SCOPE_NOT_UNIQUE',
+              'WITHIN_TARGET_NOT_UNIQUE',
+              'WITHIN_SCOPE_CHANGED',
+              'ROW_TABLE_NOT_UNIQUE',
+              'ROW_KEY_NOT_UNIQUE',
+              'ROW_TARGET_NOT_UNIQUE',
+              'ROW_SCOPE_CHANGED',
+            ].includes(error.code)
+          )
+            throw error;
+          lastTransient = error;
+        }
         await new Promise((r) => setTimeout(r, Math.min(50, Math.max(0, deadline - Date.now()))));
       } while (Date.now() < deadline);
+      if (lastTransient) throw lastTransient;
       fail('LOCATOR_NOT_VISIBLE');
     },
   };

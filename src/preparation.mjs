@@ -1,5 +1,6 @@
 import { caseHash } from './plans.mjs';
 import { semanticHash, now, fail, publicError } from './common.mjs';
+import { prepareAdaptive } from './adaptive-preparation.mjs';
 
 export const preparationRoot = (job) => job.parent ?? job;
 export const discoveryState = (state, job) =>
@@ -162,6 +163,16 @@ export async function prepareBatch(controller, root, ids) {
         const state = await controller.store.read(root.id);
         const row = state.cases.find((r) => r.case_id === caseId);
         const c = root.cases.find((c) => c.case_id === caseId);
+        if (
+          controller.planningMode === 'adaptive' &&
+          !state.authorization.writes &&
+          root.kind !== 'discover'
+        ) {
+          job.phase = 'planning';
+          job.phase_deadline = Date.now() + root.time_budget.per_case[caseId].planning_ms;
+          await prepareAdaptive(controller, job, await controller.store.baseline(root.id), c);
+          continue;
+        }
         if (root.kind !== 'plan' && !reusableCaseEvidence(state, row, c, root.context_key))
           await controller.explore(job, [caseId], { finish: false, plan: false });
         else

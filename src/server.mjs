@@ -20,6 +20,7 @@ export async function start({
   headless = false,
   experienceMode = process.env.UI_AGENT_EXPERIENCE ?? 'observe',
   runtimeBinding = process.env.UI_AGENT_RUNTIME_BINDING ?? 'off',
+  planningMode = process.env.UI_AGENT_PLANNING ?? 'adaptive',
   provider = new DeepSeek(),
 } = {}) {
   if (!['off', 'observe', 'assist'].includes(experienceMode)) fail('EXPERIENCE_MODE_INVALID');
@@ -41,7 +42,7 @@ export async function start({
       store,
       provider,
       browser,
-      planningMode: process.env.UI_AGENT_PLANNING ?? 'single',
+      planningMode,
       experienceMode,
       runtimeBinding: runtimeBinding === 'readonly',
     });
@@ -93,9 +94,11 @@ export async function start({
           supported_plan_protocols: [
             'ui-agent-plan/v2',
             'ui-agent-plan/v3',
+            'ui-agent-adaptive-plan/v1',
             ...(controller.runtimeBinding ? ['ui-agent-intent-plan/v1'] : []),
           ],
           runtime_binding: controller.runtimeBinding,
+          direct_testing: controller.planningMode === 'adaptive',
           diagnostic_logging: true,
           auto_discovery: true,
           autonomous_preparation: true,

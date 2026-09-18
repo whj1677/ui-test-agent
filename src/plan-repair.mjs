@@ -11,10 +11,14 @@ import {
 } from './plan-quality.mjs';
 import { generateStagedPlan, StagedValidationError } from './plan-staged.mjs';
 import { BLOCK_AUDIT_PROMPT, blockAuditInput, validateBlockAudit } from './block-audit.mjs';
-import { describePlanError } from './plan-feedback.mjs';
+import { describePlanError, planLocatorEntries } from './plan-feedback.mjs';
 import { requirePlanSemantics } from './plan-semantics.mjs';
 import { isIntentPlan } from './intent-plan.mjs';
 import { requireIntentAudit } from './intent-preparation.mjs';
+import { preparationGap } from './recovery-gap.mjs';
+import { prepareControlledReactPlan } from './controlled-react.mjs';
+import { isAdaptivePlan } from './adaptive-plan.mjs';
+import { requireAdaptiveAudit } from './adaptive-preparation.mjs';
 
 const MAX_REPAIRS = 2;
 const incidental = new Set([
@@ -56,6 +60,7 @@ export function repairInputHash(state, c, row) {
   return semanticHash(context);
 }
 export function requireCurrentAudit(state, c, row, plan = row.plan) {
+  if (isAdaptivePlan(plan)) return requireAdaptiveAudit(state, c, row, plan);
   if (isIntentPlan(plan)) return requireIntentAudit(state, c, row, plan);
   requireEntryNavigation(
     plan,
@@ -285,6 +290,8 @@ export async function prepareWithRepair(controller, job, baseline, c) {
       status,
       canRepair = false,
       raw,
+      blockAudit,
+      planAudit,
       stagedError = null,
       errorDetail = null;
     if (controller.planningMode === 'staged') {
@@ -315,6 +322,7 @@ export async function prepareWithRepair(controller, job, baseline, c) {
       } else {
         keys(response, ['plan'], ['plan']);
         candidate = response.plan;
+        candidate = prepareControlledReactPlan(candidate);
         validatePlan(candidate, c, state.target);
         requireEntryNavigation(
           candidate,
@@ -332,6 +340,16 @@ export async function prepareWithRepair(controller, job, baseline, c) {
         code === 'CASE_ENTRY_NAVIGATION_REQUIRED'
           ? '入口URL只用于采证。原用例要求从首页点击菜单或导航；计划entry_path必须是本轮首页，并保留原步骤的点击，不能以navigate直达替代。'
           : errorDetail.reason;
+      if (code === 'PLAN_SCOPE_EVIDENCE_MISSING') {
+        const locator = planLocatorEntries(candidate).find(
+          (entry) => entry.path === errorDetail.field_path,
+        )?.locator;
+        const names = [
+          locator?.scope?.name ?? locator?.scope?.heading,
+          locator?.target?.name ?? locator?.target?.value,
+        ].filter(Boolean);
+        if (names.length) reason += ` 待补证目标：${names.join(' / ')}。`;
+      }
       status = 'INVALID';
       canRepair = code === 'CASE_ENTRY_NAVIGATION_REQUIRED' || repairablePlanError(code);
     }
@@ -400,13 +418,17 @@ export async function prepareWithRepair(controller, job, baseline, c) {
       await update((r) => {
         r.self_repair.rounds[round].block_audit = controller.sanitizeDiagnostic(audited);
       });
+      blockAudit = audited;
       await controller.modelDecision(job, audited.validation_error ? 'REJECTED' : 'BLOCKED', {
         code: audited.validation_error ?? 'BLOCK_REASON_REVIEWED',
         reason: audited.reason,
       });
-      code = 'MODEL_MAPPING_BLOCKED';
+      code =
+        audited.outcome === 'NEEDS_CLARIFICATION'
+          ? 'INPUT_REVIEW_REQUIRED'
+          : 'MODEL_MAPPING_BLOCKED';
       reason = response.reason;
-      status = audited.outcome === 'NEEDS_CLARIFICATION' ? 'NEEDS_CLARIFICATION' : 'BLOCKED';
+      status = 'BLOCKED';
       canRepair = audited.outcome === 'REPAIR';
       feedback = { ...audited, review_reason: audited.reason };
       await event('PLAN_AUDIT_FINISHED', { round, outcome: audited.outcome, reason });
@@ -419,6 +441,7 @@ export async function prepareWithRepair(controller, job, baseline, c) {
         c,
         candidate,
       );
+      planAudit = audit;
       await controller.modelDecision(job, audit.outcome === 'ACCEPT' ? 'ACCEPTED' : 'BLOCKED', {
         code: 'PLAN_SEMANTIC_AUDIT',
         reason: audit.outcome,
@@ -433,27 +456,19 @@ export async function prepareWithRepair(controller, job, baseline, c) {
           issues: audit.issues.length,
         });
       });
-      code =
-        audit.outcome === 'ACCEPT'
-          ? 'PLAN_AUDIT_ACCEPTED'
-          : audit.outcome === 'NEEDS_CLARIFICATION'
-            ? 'ORACLE_UNCLEAR'
-            : 'PLAN_SEMANTIC_GAP';
+      code = audit.outcome === 'ACCEPT' ? 'PLAN_AUDIT_ACCEPTED' : 'PLAN_SEMANTIC_GAP';
       reason = audit.issues.map((i) => i.reason).join('；') || '自动核验未发现缺口，等待批准执行。';
-      status =
-        audit.outcome === 'ACCEPT'
-          ? 'ACCEPTED'
-          : audit.outcome === 'NEEDS_CLARIFICATION'
-            ? 'NEEDS_CLARIFICATION'
-            : 'AUDIT_REJECTED';
+      status = audit.outcome === 'ACCEPT' ? 'ACCEPTED' : 'AUDIT_REJECTED';
       canRepair = audit.outcome === 'REPAIR';
       feedback = audit;
     }
+    const gap = preparationGap({ code, reason, blockAudit, planAudit });
     await update((r, s) => {
       Object.assign(r.self_repair.rounds[round], {
         plan_hash: candidateHash,
         status,
         code,
+        recovery_gap: gap,
         ...(errorDetail ? { feedback: errorDetail } : {}),
         reason: controller.sanitizeDiagnostic(reason),
         ...(stagedError
@@ -488,18 +503,21 @@ export async function prepareWithRepair(controller, job, baseline, c) {
       });
       return;
     }
-    if (status === 'NEEDS_CLARIFICATION') {
-      await update((r) => {
-        r.status = 'NEEDS_REVIEW';
-        r.reviewed = false;
-        r.self_repair.outcome = 'NEEDS_CLARIFICATION';
-        r.mapping_reason = controller.sanitizeDiagnostic(reason);
-        r.issues = (r.plan_audit?.issues ?? []).map((i) => ({
-          code: i.code,
-          step_id: i.step_id,
-          message: i.reason,
-        }));
-      });
+    if (code === 'INPUT_REVIEW_REQUIRED') {
+      // The isolated source-grounded review above is the only reviewer allowed
+      // to reopen a case. A technical audit's suggestion is not an input defect.
+      await finish(
+        'BLOCKED',
+        code,
+        `技术阻塞审查提出澄清建议，尚未经独立输入审查证实；保留用例确认，禁止准入。${reason}`,
+      );
+      return;
+    }
+    if (gap.kind === 'TARGETED_EVIDENCE' || gap.kind === 'BOUNDARY_REQUIRES_INPUT') {
+      // Yield before burning another candidate on missing facts. The caller
+      // owns safe evidence collection and the cumulative 3-candidate/2-recovery
+      // budget; this path never admits or auto-approves a blocked plan.
+      await finish('BLOCKED', code, reason);
       return;
     }
     if (repeated || !canRepair || round === MAX_REPAIRS) {

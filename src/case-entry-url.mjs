@@ -121,6 +121,9 @@ export function requireEntryNavigation(plan, c, target, observedHome) {
   if (!navigation.length) return;
   const home = caseEntryURL(observedHome ?? target, target)?.url;
   if (caseEntryURL(plan.entry_path, target)?.url !== home) fail('CASE_ENTRY_NAVIGATION_REQUIRED');
+  // The original navigation remains in the adaptive contract. Its actual clicks
+  // are checked by each runtime segment and by the complete-step audit.
+  if (plan.schema_version === 'ui-agent-adaptive-plan/v1') return;
   for (const step of navigation) {
     const mapped = plan.steps?.find((s) => s.step_id === step.step_id);
     const actions = [

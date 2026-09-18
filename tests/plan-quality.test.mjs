@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { caseHash, planHash } from '../src/plans.mjs';
+import { INPUT_REVIEW_PROMPT, validateInputReview } from '../src/input-review.mjs';
 import {
   PLAN_AUDIT_PROMPT,
   auditInput,
@@ -135,7 +136,7 @@ test('missing semantic coverage becomes a bounded repair finding', () => {
   assert.equal(validatePlanAudit(reply, c, plan).outcome, 'REPAIR');
 });
 
-test('Oracle ambiguity wins over repairable findings without rewriting original', () => {
+test('technical audit uncertainty requires repair and preserves original findings and case', () => {
   const { c, plan, reply } = fixture(),
     before = structuredClone(c);
   reply.checks[0] = {
@@ -152,11 +153,17 @@ test('Oracle ambiguity wins over repairable findings without rewriting original'
       reason: 'Closing control lacks technical evidence.',
     },
   ];
-  assert.equal(validatePlanAudit(reply, c, plan).outcome, 'NEEDS_CLARIFICATION');
+  const result = validatePlanAudit(reply, c, plan);
+  assert.equal(result.outcome, 'REPAIR');
+  assert.deepEqual(result.issues.slice(0, reply.issues.length), reply.issues);
+  assert.equal(result.checks[0].status, 'UNCLEAR');
+  assert.ok(
+    result.issues.some((i) => i.code === 'PLAN_REVIEW_UNRESOLVED' && /input-review/.test(i.reason)),
+  );
   assert.deepEqual(c, before);
 });
 
-test('action-level ambiguity also needs clarification when assertion checks are covered', () => {
+test('action-level audit ambiguity also routes to repair when assertion checks are covered', () => {
   const { c, plan, reply } = fixture();
   reply.issues = [
     {
@@ -165,7 +172,42 @@ test('action-level ambiguity also needs clarification when assertion checks are 
       reason: 'Original action identifies two different target records.',
     },
   ];
-  assert.equal(validatePlanAudit(reply, c, plan).outcome, 'NEEDS_CLARIFICATION');
+  assert.equal(validatePlanAudit(reply, c, plan).outcome, 'REPAIR');
+});
+
+test('unclear findings are never dropped by technical/business keyword heuristics', () => {
+  for (const reason of ['缺少定位器', '范围尚未决定', '所有数据', '未知问题。']) {
+    const { c, plan, reply } = fixture();
+    reply.issues.push({ code: 'ORACLE_UNCLEAR', step_id: 'S1', reason });
+    const result = validatePlanAudit(reply, c, plan);
+    assert.equal(result.outcome, 'REPAIR');
+    assert.deepEqual(result.issues[0], reply.issues[0]);
+    assert.equal(result.issues[1].code, 'PLAN_REVIEW_UNRESOLVED');
+  }
+});
+
+test('independent source-grounded input review still retains genuine clarification issues', () => {
+  // Plan audit cannot decide the case state. The controller's separate input
+  // review path remains responsible for asking the operator about business input.
+  const { c } = fixture();
+  const issue = {
+    code: 'AMBIGUOUS',
+    step_id: 'S1',
+    message: '请确认 Alpha 的身份范围。',
+    source_quotes: ['Name is Alpha'],
+  };
+  const review = validateInputReview({ issues: [issue] }, c);
+  assert.equal(review.issues[0].message, issue.message);
+  assert.deepEqual(review.issues[0].quote_locations[0].paths, ['/effective/steps/0/expected']);
+  assert.throws(
+    () => validateInputReview({ issues: [{ ...issue, source_quotes: ['不存在的原文'] }] }, c),
+    code('INPUT_REVIEW_QUOTE_UNGROUNDED'),
+  );
+  assert.match(INPUT_REVIEW_PROMPT, /before any plan repair/);
+  assert.match(
+    PLAN_AUDIT_PROMPT,
+    /only that source-grounded input review may request user clarification/,
+  );
 });
 
 for (const [label, mutate, error] of [
@@ -326,6 +368,40 @@ test('candidate error whitelist repairs structure/types/mapping but never runtim
     assert.equal(repairablePlanError(error), false, String(error));
 });
 
+test('table planning errors and explicit React policy error are repairable, never runtime prefixes', () => {
+  for (const error of [
+    'TABLE_SCHEMA_INVALID',
+    'TABLE_ARRAY_INVALID',
+    'TABLE_IDENTITY_INVALID',
+    'TABLE_FLAGS_INVALID',
+    'TABLE_EMPTY_EXPECTATION',
+    'TABLE_KEY_DUPLICATE',
+    'TABLE_EMPTY_CELLS',
+    'TABLE_CELL_LIMIT',
+    'TABLE_COLUMN_DUPLICATE',
+    'TABLE_TEXT_INVALID',
+    'TABLE_NUMBER_INVALID',
+    'TABLE_CHECK_INVALID',
+    'TABLE_SOURCE_UNGROUNDED',
+    'TABLE_SOURCE_LIMIT',
+    'TABLE_SOURCE_INVALID',
+    'REACT_POLICY_INVALID',
+  ])
+    assert.equal(repairablePlanError(error), true, error);
+  for (const error of [
+    'TABLE_STRUCTURE_INVALID',
+    'TABLE_SAMPLE_LIMIT',
+    'TABLE_KEY_COLUMN_MISSING',
+    'TABLE_COLUMN_MISSING',
+    'TABLE_ASSERTION_FAILED',
+    'TABLE_FUTURE_ERROR',
+    'TABLE_',
+    'REACT_FUTURE_ERROR',
+    'REACT_POLICY_INVALID_EXTRA',
+  ])
+    assert.equal(repairablePlanError(error), false, error);
+});
+
 test('structural validator does not pretend to prove truth of a covered audit', () => {
   const { c, plan, reply } = fixture();
   // A lying reviewer can cite an existing mapped assertion. This module checks
@@ -333,4 +409,84 @@ test('structural validator does not pretend to prove truth of a covered audit', 
   plan.steps[0].assertions[0].expected = 'Name label only';
   assert.equal(validatePlanAudit(reply, c, plan).outcome, 'ACCEPT');
   assert.match(PLAN_AUDIT_PROMPT, /Identify counterexamples/);
+});
+
+function rangeFixture(expected, check = 'hidden') {
+  const f = fixture();
+  const s = f.c.steps[0];
+  s.expected = expected;
+  s.obligations = [{ id: 'O1', text: expected }];
+  f.plan.case_hash = caseHash(f.c);
+  f.plan.steps[0].source_expected = expected;
+  f.plan.steps[0].assertions = ['D001', 'D002', 'D003', 'D004', 'D005'].map((id) => ({
+    target: {
+      kind: 'row',
+      table: { kind: 'role', role: 'table', name: '记录', exact: true },
+      key: { column: '编号', value: id },
+    },
+    check,
+    oracle_quote: expected,
+    obligation_ids: ['O1'],
+  }));
+  f.reply.checks = f.reply.checks.filter((c) => c.obligation_id !== 'O2');
+  f.reply.checks[0].assertion_indices = [0, 1, 2, 3, 4];
+  return f;
+}
+
+for (const expected of [
+  '不应出现D001至D005',
+  '列表不得显示D001至D005',
+  'D001至D005均不可见',
+  'D001至D005应隐藏',
+  '列表中没有D001至D005',
+  '排除D001至D005',
+  'D001至D005之外的记录可见',
+  'D001至D005 must not appear',
+  'D001至D005 should be hidden',
+])
+  test(`negative range must not demand positive presence: ${expected}`, () => {
+    const f = rangeFixture(expected),
+      before = structuredClone(f);
+    const result = validatePlanAudit(f.reply, f.c, f.plan);
+    // ACCEPT is still just the supplied model finding, not proof of absence.
+    assert.equal(result.outcome, 'ACCEPT');
+    assert.deepEqual(result.issues, []);
+    assert.deepEqual(f, before);
+  });
+
+test('skipping positive range expansion retains missing/unclear absence findings', () => {
+  for (const [status, code] of [
+    ['MISSING', 'ASSERTION_GAP'],
+    ['UNCLEAR', 'ORACLE_UNCLEAR'],
+  ]) {
+    const f = rangeFixture('不应出现D001至D005');
+    f.reply.checks[0].status = status;
+    f.reply.issues = [{ code, step_id: 'S1', reason: '原预期的缺席检查仍有问题。' }];
+    const result = validatePlanAudit(f.reply, f.c, f.plan);
+    assert.equal(result.outcome, 'REPAIR');
+    assert.deepEqual(result.issues[0], f.reply.issues[0]);
+    assert.equal(result.checks[0].status, status);
+  }
+});
+
+test('negative clause does not disable another positive range or pagination guard', () => {
+  const f = rangeFixture('不应出现D001至D005；应显示X001至X005；显示第2/3页');
+  const result = validatePlanAudit(f.reply, f.c, f.plan);
+  assert.equal(result.outcome, 'REPAIR');
+  assert.equal(result.issues.length, 2);
+  assert.ok(result.issues.some((i) => i.reason.includes('X001至X005')));
+  assert.ok(result.issues.some((i) => i.reason.includes('第2/3页')));
+  assert.ok(result.issues.every((i) => !i.reason.includes('D001至D005')));
+});
+
+test('hidden checks and negative reviewer prose cannot suppress a positive source range', () => {
+  const f = rangeFixture('应显示D001至D005');
+  f.reply.checks[0].reason = '不应拒绝此计划。';
+  f.plan.steps[0].assertions.forEach((a) => {
+    a.oracle_quote = '不应出现D001至D005';
+  });
+  const result = validatePlanAudit(f.reply, f.c, f.plan);
+  assert.equal(result.outcome, 'REPAIR');
+  assert.equal(result.checks[0].status, 'MISSING');
+  assert.ok(result.issues.some((i) => i.reason.includes('D003')));
 });

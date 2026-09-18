@@ -1,5 +1,9 @@
 import { keys, fail, nonempty, relativeURL, hash, semanticHash } from './common.mjs';
 import { stepActions, stepAssertions } from './plan-steps.mjs';
+import { validateTableExpectation, TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
+import { needsTableBaseline } from './table-invariant.mjs';
+import { validateExecutionPolicy } from './controlled-react.mjs';
+import { isAdaptivePlan, validateAdaptivePlan } from './adaptive-plan.mjs';
 import { DISMISS_LABEL, conditionalDismissSource, CONDITIONAL_PROMPT } from './optional-dialog.mjs';
 import { DYNAMIC_ROW_GUIDANCE } from './dynamic-row-evidence.mjs';
 import { WITHIN_GUIDANCE } from './scope-guidance.mjs';
@@ -251,12 +255,27 @@ export function validateAssertion(a, original, options) {
       'focused',
       'has_class',
       'row_sequence',
+      'table_cells',
+      'table_unchanged',
       'url_equals',
       'url_contains',
       'url_not_contains',
     ].includes(a.check)
   )
     fail('ASSERTION_NOT_ALLOWED');
+  if (a.check === 'table_cells') {
+    if (!original) fail('TABLE_BUSINESS_SOURCE_REQUIRED');
+    validateTableExpectation(a.expected, {
+      expected: original.expected,
+      ...(options?.data !== undefined ? { data: options.data } : {}),
+      ...(options?.test_data !== undefined ? { test_data: options.test_data } : {}),
+    });
+  }
+  if (a.check === 'table_unchanged') {
+    if (!needsTableBaseline(original?.expected) || !needsTableBaseline(a.oracle_quote))
+      fail('TABLE_INVARIANT_SOURCE_REQUIRED');
+    if (a.expected !== undefined && a.expected !== true) fail('ASSERTION_BOOL_INVALID');
+  }
   if (a.check.startsWith('url_') && (!nonempty(a.expected) || a.expected.length > 2000))
     fail('ASSERTION_EXPECTED_REQUIRED');
   if (
@@ -347,8 +366,13 @@ function validateCheckpointStep(step, original, base, actionIds, checkpointIds, 
   if (stepAssertions(step).length > 20) fail('ASSERTION_COUNT_INVALID');
 }
 export function validatePlan(plan, c, base, { runtimeBinding = false } = {}) {
+  if (isAdaptivePlan(plan)) return validateAdaptivePlan(plan, c, base);
   if (isIntentPlan(plan) && !runtimeBinding) fail('RUNTIME_BINDING_DISABLED');
-  const options = { runtimeBinding: runtimeBinding && isIntentPlan(plan) };
+  const options = {
+    runtimeBinding: runtimeBinding && isIntentPlan(plan),
+    data: c.data,
+    test_data: c.test_data,
+  };
   if (plan?.schema_version === 'ui-agent-plan/v1') fail('PLAN_VERSION_REAPPROVAL_REQUIRED');
   keys(
     plan,
@@ -362,6 +386,7 @@ export function validatePlan(plan, c, base, { runtimeBinding = false } = {}) {
       'steps',
       'cleanup',
       'notes',
+      'execution_policy',
     ],
     [
       'schema_version',
@@ -381,6 +406,7 @@ export function validatePlan(plan, c, base, { runtimeBinding = false } = {}) {
   )
     fail('PLAN_BASELINE_MISMATCH');
   validateObligations(c.steps);
+  validateExecutionPolicy(plan);
   relativeURL(plan.entry_path, base);
   if (!['read_only', 'mutation'].includes(plan.data_effect)) fail('DATA_EFFECT_REQUIRED');
   assertions(plan.preconditions, undefined, 0);
@@ -418,7 +444,7 @@ export function validatePlan(plan, c, base, { runtimeBinding = false } = {}) {
       if (!Number.isInteger(s.within_ms) || s.within_ms < 100 || s.within_ms > 30000)
         fail('ASSERTION_DEADLINE_INVALID');
       actions(s.actions, base, actionIds);
-      assertions(s.assertions, original);
+      assertions(s.assertions, original, 1, options);
     }
     if (
       s.step_id !== original.step_id ||
@@ -519,7 +545,8 @@ export function validateRepair(patch, approved, c, base, failure) {
   validateAction(repaired, base, new Set());
   return repaired;
 }
-export const PLAN_PROMPT = `${CONDITIONAL_PROMPT}\nYou map confirmed manual UI cases into a declarative Playwright plan. You cannot execute code or tools. Return JSON with either {"blocked":true,"reason":"specific missing information"} or {"plan":{...}}.
+export const PLAN_PROMPT = `${CONDITIONAL_PROMPT}\n${TABLE_ASSERTION_GUIDANCE}\nYou map confirmed manual UI cases into a declarative Playwright plan. You cannot execute code or tools. Return JSON with either {"blocked":true,"reason":"specific missing information"} or {"plan":{...}}.
+table_cells is an additional business assertion check and its bounded expected object is allowed. A complete matrix counts as one assertion, but every cell is measured and reported in the SAME sample. Use it for more than 20 table fields instead of omitting fields or splitting a simultaneous check. Plain visible pagination text can use {kind:"text",value:"exact observed text",exact:true}; lack of an id or interactive control does not by itself mean it is unlocatable. Never infer a business expectation from this observation.
 ${DYNAMIC_ROW_GUIDANCE}
 ${WITHIN_GUIDANCE}
 ${CASE_NAMED_GUIDANCE}

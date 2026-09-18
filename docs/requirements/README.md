@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本4修复工程回归1165项通过，真实模型复验待连接；稳定引用编译、分层纠错、单表前后关系检查，原三例失败保留，不视为发布验收。
+
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
 
 - [REQ-0015-manual-complex-lab](REQ-0015-manual-complex-lab/current_state.md)：独立复杂合成网站与18有效/4待澄清/2已知缺陷用例；Kimi编写、Codex核验，用户手动测试Agent，不修改旧验收集。

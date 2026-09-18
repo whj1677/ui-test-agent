@@ -148,7 +148,13 @@ for (const interruptedPhase of ['plan', 'plan_audit'])
           };
         },
       };
-      const app = await start({ port: 0, dataDir, headless: true, provider });
+      const app = await start({
+        port: 0,
+        dataDir,
+        headless: true,
+        provider,
+        planningMode: 'single',
+      });
       t.after(async () => {
         gate.resolve();
         await app.close();

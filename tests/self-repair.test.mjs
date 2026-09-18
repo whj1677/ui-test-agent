@@ -347,7 +347,7 @@ test('grounded unresolved input conflict stops before planning and requests oper
   assert.equal((await f.store.baseline(f.id)).cases[0].data.query, '香蕉');
 });
 
-test('unclear business scope reported by plan audit is not sent to technical self-repair', async () => {
+test('plan-audit uncertainty preserves confirmed input and stops repeated unchanged candidate', async () => {
   const f = await fixture(({ phase, input }) =>
     phase === 'plan_audit'
       ? auditProblem(input.original, input.candidate_plan, 'UNCLEAR', 'ORACLE_UNCLEAR')
@@ -357,11 +357,12 @@ test('unclear business scope reported by plan audit is not sent to technical sel
   const result = await row(f);
   assert.deepEqual(
     f.calls.map((c) => c.phase),
-    ['input_review', 'plan', 'plan_audit'],
+    ['input_review', 'plan', 'plan_audit', 'plan'],
   );
-  assert.equal(result.status, 'NEEDS_REVIEW');
-  assert.equal(result.self_repair.outcome, 'NEEDS_CLARIFICATION');
-  assert.equal(result.self_repair.repair_count, 0);
+  assert.equal(result.status, 'BLOCKED_MAPPING');
+  assert.equal(result.reviewed, true);
+  assert.equal(result.self_repair.outcome, 'EXHAUSTED');
+  assert.equal(result.self_repair.repair_count, 1);
   assert.equal(result.plan_approved, false);
 });
 

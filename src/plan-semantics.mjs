@@ -2,6 +2,8 @@ import { stepActions, stepAssertions } from './plan-steps.mjs';
 import { semanticHash } from './common.mjs';
 import { planLocatorEntries } from './plan-feedback.mjs';
 import { requireCaseNamedEvidence, validateCaseNamedPlan } from './case-named.mjs';
+import { extractExpectationRanges } from './expectation-coverage.mjs';
+import { needsTableBaseline } from './table-invariant.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -32,9 +34,18 @@ export function requirePlanSemantics(plan, c, context = {}) {
     preconditions: c.preconditions,
     steps: (c.steps ?? []).map((s) => ({ action: s.action, expected: s.expected })),
   }).join('\n');
+  const explicitRangeIds = new Set(
+    (c.steps ?? []).flatMap((step) =>
+      extractExpectationRanges(step.expected).flatMap((range) => range.ids),
+    ),
+  );
   for (const { locator, path } of planLocatorEntries(plan)) {
     requireCaseNamedEvidence(locator, context);
-    if (['row', 'cell'].includes(locator?.kind) && !source.includes(locator.key.value))
+    if (
+      ['row', 'cell'].includes(locator?.kind) &&
+      !source.includes(locator.key.value) &&
+      !explicitRangeIds.has(locator.key.value)
+    )
       reject(
         'PLAN_ROW_IDENTITY_UNSUPPORTED',
         path + '.key.value',
@@ -100,6 +111,20 @@ export function requirePlanSemantics(plan, c, context = {}) {
   );
   for (const [i, step] of (plan.steps ?? []).entries()) {
     const original = c.steps[i];
+    for (const obligation of original.obligations ?? []) {
+      if (
+        context.adaptive_readonly &&
+        needsTableBaseline(obligation.text) &&
+        !stepAssertions(step).some(
+          (a) => a.check === 'table_unchanged' && a.obligation_ids?.includes(obligation.id),
+        )
+      )
+        reject(
+          'PLAN_RELATION_UNPROVEN',
+          `plan.steps[${i}].assertions`,
+          '原预期要求表格在操作前后保持不变，须用table_unchanged比较本步骤操作前完整快照；当前行数、固定当前值或模型观察不构成该关系证据。',
+        );
+    }
     for (const obligation of original.obligations ?? []) {
       if (
         !/(?:页面|当前|浏览器)\s*URL|地址栏|(?:current|browser|page)\s+URL/iu.test(obligation.text)

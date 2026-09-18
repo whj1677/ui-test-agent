@@ -8,6 +8,7 @@ import { auditInput, validatePlanAudit } from '../src/plan-quality.mjs';
 import { stepAssertions } from '../src/plan-steps.mjs';
 import { StepBudget } from '../src/step-budget.mjs';
 import { semanticHash, escapeHTML } from '../src/common.mjs';
+import { isAdaptivePlan } from '../src/adaptive-plan.mjs';
 
 const base = 'http://127.0.0.1:4000';
 const code = (value) => (error) => error.code === value;
@@ -153,6 +154,7 @@ test('console shows original expectation, each checkpoint, time meaning and clea
   const end = source.indexOf('\nfunction approveSelected', start);
   const context = {
     h: escapeHTML,
+    isAdaptivePlan,
     loc: (target) => target?.value ?? '',
     opName: { click: '点击' },
   };
@@ -169,7 +171,7 @@ test('console shows original expectation, each checkpoint, time meaning and clea
 
 test('report retains matching earlier observations without claiming the unfinished step passed', async () => {
   const source = await fs.readFile(new URL('../src/report-view.mjs', import.meta.url), 'utf8');
-  const start = source.indexOf('function checkpointFacts(');
+  const start = source.indexOf('function adaptiveStepIncomplete(');
   const end = source.indexOf('\nfunction renderCase(', start);
   const context = {
     h: escapeHTML,

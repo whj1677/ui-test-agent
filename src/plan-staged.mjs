@@ -3,6 +3,7 @@ import { PLAN_VERSION, caseHash, validateAction, validateAssertion } from './pla
 import { CONDITIONAL_PROMPT } from './optional-dialog.mjs';
 import { WITHIN_GUIDANCE } from './scope-guidance.mjs';
 import { CASE_NAMED_GUIDANCE } from './case-named.mjs';
+import { TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
 
 // Experimental staged planner (UI_AGENT_PLANNING=staged): split one-shot plan
 // generation into scaffold → per-step actions → per-step assertions. The
@@ -23,7 +24,7 @@ export const STAGED_STEP_ACTIONS_PROMPT = `You map exactly ONE original step of 
 Preserve the original intent; use exact case inputs, not invented records. used_action_ids are already taken; every new action_id must be globally unique and not in that list. reload is built-in and never requires a page refresh button. A unique exact-role button after an exact query is valid without knowing a generated backend id. Do not claim a feature absent because it is not in this snapshot; if a required control has no supported technical evidence, return blocked with the specific missing fact.
 ${LOCATOR_SPEC} ${ACTION_SPEC} ${SAFETY}`;
 
-export const STAGED_STEP_ASSERTIONS_PROMPT = `You write the business assertions for exactly ONE original step, given its confirmed obligations and the actions already planned for it. Return only JSON {"blocked":true,"reason":"specific missing information"} or {"mapped":{...}}.
+export const STAGED_STEP_ASSERTIONS_PROMPT = `${TABLE_ASSERTION_GUIDANCE}\ntable_cells is an additional business check with a bounded expected object; one matrix samples every specified cell at once and counts as one assertion. Never use it outside business steps.\nYou write the business assertions for exactly ONE original step, given its confirmed obligations and the actions already planned for it. Return only JSON {"blocked":true,"reason":"specific missing information"} or {"mapped":{...}}.
 mapped: {assertions:[assertion],within_ms:8000}. within_ms is the total polling budget after this step's last action, integer 100..30000; use a confirmed time limit if the expectation gives one.
 business assertion: {target:locator,check:"visible"|"hidden"|"unobstructed"|"text"|"contains"|"value"|"selected_label"|"count"|"row_count"|"checked"|"enabled"|"number"|"focused"|"has_class"|"row_sequence",expected?:string|number|boolean|string[],oracle_quote:"EXACT substring from this original step expected",obligation_ids:["confirmed obligation id"]}. Every confirmed obligation of THIS step must be meaningfully asserted; each oracle_quote must be an exact substring of the original expected text and refer to the mapped obligation text. Never create or alter obligations; do not attach irrelevant ids. All assertions of this step must hold in the SAME DOM observation; this protocol cannot express THROUGHOUT, event history or intermediate states — return blocked if an obligation requires those. row_count measures only the current table page. text is exact trimmed innerText, contains is substring, number compares numeric DOM text.
 ${LOCATOR_SPEC} ${SAFETY}`;
@@ -114,7 +115,7 @@ function validateScaffold(scaffold, base, actionIds) {
   } else if (scaffold.cleanup !== null) fail('UNEXPECTED_CLEANUP');
 }
 
-function validateMappedAssertions(mapped, original) {
+function validateMappedAssertions(mapped, original, c) {
   keys(mapped, ['assertions', 'within_ms'], ['assertions', 'within_ms']);
   if (!Number.isInteger(mapped.within_ms) || mapped.within_ms < 100 || mapped.within_ms > 30000)
     fail('ASSERTION_DEADLINE_INVALID');
@@ -124,7 +125,8 @@ function validateMappedAssertions(mapped, original) {
     mapped.assertions.length > 20
   )
     fail('ASSERTION_COUNT_INVALID');
-  for (const assertion of mapped.assertions) validateAssertion(assertion, original);
+  for (const assertion of mapped.assertions)
+    validateAssertion(assertion, original, { data: c.data, test_data: c.test_data });
 }
 
 export async function generateStagedPlan(controller, job, request, c, state) {
@@ -179,7 +181,7 @@ export async function generateStagedPlan(controller, job, request, c, state) {
       },
       'plan_assertions',
       'mapped',
-      (value) => validateMappedAssertions(value, original),
+      (value) => validateMappedAssertions(value, original, c),
     );
     if (mapped.blocked === true) return mapped;
     // Original wording is transcribed by the program, never by the model.

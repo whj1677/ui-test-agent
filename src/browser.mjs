@@ -4,6 +4,8 @@ import path from 'node:path';
 import { runtimeLocator as handoffLocator, assertRowIdentity } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
 import { isIntentPlan, INTENT_PLAN_VERSION } from './intent-plan.mjs';
+import { isAdaptivePlan, ADAPTIVE_PLAN_VERSION } from './adaptive-plan.mjs';
+import { executeAdaptiveStep, assertAdaptiveActionTarget } from './adaptive-execution.mjs';
 import { captureRuntimeGuard, bindingReceipt } from './runtime-binding.mjs';
 import { observeWizard, captureCaseNamedGuard } from './wizard-binding.mjs';
 import { rejectionLog, recordRejection } from './observation-diagnostics.mjs';
@@ -14,10 +16,19 @@ import {
   caseHash,
   CHECKPOINT_PLAN_VERSION,
 } from './plans.mjs';
-import { fail, relativeURL, redact, poll, now, uid, hash } from './common.mjs';
+import { fail, relativeURL, redact, poll, now, uid, hash, semanticHash } from './common.mjs';
 import { RecordingEvidence } from './recording-evidence.mjs';
 import { stepActions, stepAssertions, stepCheckpoints } from './plan-steps.mjs';
 import { StepBudget } from './step-budget.mjs';
+import { compareTableCells } from './table-assertion.mjs';
+import {
+  needsTableBaseline,
+  assertTableBaselineScope,
+  requireTableBaseline,
+  compareTableBaseline,
+  installTableInvariantSampler,
+} from './table-invariant.mjs';
+import { canObserveAgain, validateObserveDecision } from './controlled-react.mjs';
 import { DEFAULT_ADAPTER_SOURCE } from './adapter-program.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
 import {
@@ -27,6 +38,28 @@ import {
 } from './optional-dialog.mjs';
 
 const actionScopeGuards = new WeakMap();
+function frozenTableAssertions(run) {
+  assertTableBaselineScope(run.tableBaselines, run.page, {
+    run_id: run.result.id,
+    step_id: run.step.step_id,
+  });
+  const original = (run.c ?? run.result.executed_case)?.steps.find(
+    (step) => step.step_id === run.step.step_id,
+  );
+  const obligations = original?.obligations.filter((o) => needsTableBaseline(o.text)) ?? [];
+  if (!needsTableBaseline(original?.expected) || !obligations.length)
+    fail('TABLE_INVARIANT_SOURCE_REQUIRED');
+  return run.tableBaselines.tables.flatMap(({ target }) =>
+    obligations.map((o) => ({
+      target,
+      check: 'table_unchanged',
+      expected: true,
+      oracle_quote: o.text,
+      obligation_ids: [o.id],
+    })),
+  );
+}
+
 async function disposeActionTarget(target) {
   if (!target) return;
   await releaseWithinGuard(actionScopeGuards.get(target));
@@ -392,6 +425,7 @@ export class BrowserSession {
       signal,
       onEvent = () => {},
       onRepair,
+      onAdaptive,
       run_scope_id,
       approved_plan_hash,
       runtimeBinding = false,
@@ -417,6 +451,15 @@ export class BrowserSession {
       actions: [],
       assertions: [],
       repairs: [],
+      ...(isAdaptivePlan(plan)
+        ? {
+            adaptive_segments: [],
+            adaptive_steps: [],
+            regression_ready: false,
+            approved_contract: structuredClone(plan),
+            checkpoints: [],
+          }
+        : {}),
       ...(isIntentPlan(plan) ? { bindings: [], regression_ready: false } : {}),
       ...(plan.schema_version === CHECKPOINT_PLAN_VERSION || isIntentPlan(plan)
         ? {
@@ -450,7 +493,7 @@ export class BrowserSession {
       }
     };
     try {
-      if (isIntentPlan(plan)) {
+      if (isIntentPlan(plan) || isAdaptivePlan(plan)) {
         validatePlan(plan, c, task.target, { runtimeBinding });
         if (approved_plan_hash !== planHash(plan)) fail('PLAN_APPROVAL_REQUIRED');
       }
@@ -466,9 +509,12 @@ export class BrowserSession {
       )
         validatePlan(plan, c, task.target, { runtimeBinding });
       if (
-        !['ui-agent-plan/v2', CHECKPOINT_PLAN_VERSION, INTENT_PLAN_VERSION].includes(
-          plan.schema_version,
-        )
+        ![
+          'ui-agent-plan/v2',
+          CHECKPOINT_PLAN_VERSION,
+          INTENT_PLAN_VERSION,
+          ADAPTIVE_PLAN_VERSION,
+        ].includes(plan.schema_version)
       )
         fail('PLAN_BASELINE_MISMATCH');
       if (!this.active(task.id) || !this.authenticated) fail('AUTH_REQUIRED', 409);
@@ -534,8 +580,12 @@ export class BrowserSession {
         }
       }
       for (const [stepIndex, step] of plan.steps.entries()) {
-        await this.executeStep({
+        const execute = isAdaptivePlan(plan)
+          ? (run) => executeAdaptiveStep(this, run)
+          : (run) => this.executeStep(run);
+        await execute({
           task,
+          c,
           plan,
           step,
           stepIndex,
@@ -546,12 +596,15 @@ export class BrowserSession {
           signal,
           emit,
           onRepair,
+          onAdaptive,
           runDirectory,
           setPhase: (value) => {
             phase = value;
           },
         });
       }
+      if (isAdaptivePlan(plan) && result.adaptive_steps.length !== c.steps.length)
+        fail('ADAPTIVE_COVERAGE_INCOMPLETE');
       result.status = 'PASS_ASSERTIONS';
       result.business_status = 'ASSERTIONS_PASSED';
     } catch (error) {
@@ -711,9 +764,17 @@ export class BrowserSession {
   }
   async executeStep(run) {
     const { step, stepIndex, result, recording, page, emit, setPhase, signal, runDirectory } = run;
-    await recording.beginStep(step, stepIndex);
-    const budget = new StepBudget(step.timeout_ms);
-    await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
+    if (!run.segment) await recording.beginStep(step, stepIndex);
+    const budget = run.budget ?? new StepBudget(step.timeout_ms);
+    if (
+      run.tableBaselines ||
+      stepCheckpoints(step).some((point) =>
+        point.assertions?.some((a) => a.check === 'table_unchanged'),
+      )
+    )
+      frozenTableAssertions(run);
+    if (!run.segment)
+      await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
     for (const [pointIndex, point] of stepCheckpoints(step).entries()) {
       const detail = {
         step_id: step.step_id,
@@ -747,6 +808,8 @@ export class BrowserSession {
           timeout: point.within_ms,
           deadline,
           signal,
+          tableBaselines: run.tableBaselines,
+          tableContext: { run_id: result.id, step_id: step.step_id },
         });
         const observedURL = page.url();
         if (receipt)
@@ -794,7 +857,7 @@ export class BrowserSession {
         throw error;
       }
     }
-    await emit('STEP_FINISHED', { step_id: step.step_id });
+    if (!run.segment) await emit('STEP_FINISHED', { step_id: step.step_id });
   }
 
   async recordBinding(run, intent, detail, deadline) {
@@ -836,16 +899,22 @@ export class BrowserSession {
       setPhase,
     } = run;
     let lastActionCompletedAt = Date.now();
+    if (run.tableBaselines || point.assertions?.some((a) => a.check === 'table_unchanged'))
+      frozenTableAssertions(run);
     let repairCalls = result.repair_requests ?? 0;
     for (const approvedAction of point.actions) {
       if (approvedAction.op === 'dismiss_optional') {
         lastActionCompletedAt = await this.executeOptionalDialog(run, approvedAction);
+        if (run.tableBaselines && result.actions.at(-1)?.dispatched)
+          await this.checkFrozenTables(run, approvedAction.action_id);
         continue;
       }
       let a = structuredClone(approvedAction),
         target;
+      let lastObservationHash;
       while (true) {
         if (signal?.aborted) fail('STOPPED');
+        if (guard.blocked) fail(guard.blocked);
         if (await isLoginPage(page, this.marker)) {
           this.authenticated = false;
           fail('AUTH_REQUIRED');
@@ -866,9 +935,14 @@ export class BrowserSession {
               { step_id: step.step_id, checkpoint_id: point.checkpoint_id, action_id: a.action_id },
               Math.min(budget.deadline, Date.now() + 8000),
             );
-          target = await resolveAction(page, a, budget.remaining(), {
-            runtimeBinding: isIntentPlan(plan),
-          });
+          target = await resolveAction(
+            page,
+            a,
+            plan.execution_policy ? Math.min(8000, budget.remaining()) : budget.remaining(),
+            {
+              runtimeBinding: isIntentPlan(plan),
+            },
+          );
           break;
         } catch (error) {
           const failure = {
@@ -878,9 +952,10 @@ export class BrowserSession {
             dispatched: false,
             current_target: a.target,
           };
+          const mayObserve = canObserveAgain(plan, failure, repairCalls, guard.dirty);
           const eligible =
             ['LOCATOR_NOT_VISIBLE', 'LOCATOR_NOT_UNIQUE'].includes(error.code) &&
-            a.repair_anchor &&
+            (a.repair_anchor || mayObserve) &&
             plan.data_effect === 'read_only' &&
             !guard.dirty &&
             repairCalls < 2 &&
@@ -911,12 +986,60 @@ export class BrowserSession {
             repair_number: repairCalls,
           });
           setPhase('REPAIR');
+          budget.remaining();
+          const observation = await snapshot(page, { marker: this.marker });
+          const observationHash = semanticHash({
+            url: observation.url,
+            controls: observation.controls,
+            text: observation.text,
+          });
+          if (plan.execution_policy && observationHash === lastObservationHash) {
+            await emit('REACT_STOPPED', {
+              action_id: a.action_id,
+              code: 'REACT_NO_PROGRESS',
+              message: '同一目标再次定位失败且观察没有变化，停止重复请求。',
+            });
+            fail('REACT_NO_PROGRESS');
+          }
+          lastObservationHash = observationHash;
+          if (plan.execution_policy)
+            await emit('REACT_OBSERVED', {
+              action_id: a.action_id,
+              step_id: step.step_id,
+              observation_hash: observationHash,
+              message: '已重新观察当前页面；只处理当前已批准动作，尚未派发。',
+            });
           const proposal = await onRepair({
             ...failure,
-            page: await snapshot(page, { marker: this.marker }),
+            page: observation,
             repair_number: repairCalls,
+            ...(plan.execution_policy
+              ? {
+                  allowed_tools: [
+                    ...(mayObserve ? ['observe'] : []),
+                    ...(a.repair_anchor ? ['patch'] : []),
+                    'stop',
+                  ],
+                }
+              : {}),
           });
           if (signal?.aborted) fail('STOPPED');
+          if (guard.blocked) fail(guard.blocked);
+          budget.remaining();
+          if (proposal?.observe !== undefined) {
+            validateObserveDecision(proposal, { allowed_tools: mayObserve ? ['observe'] : [] });
+            (result.react_observations ??= []).push({
+              action_id: a.action_id,
+              observation_hash: observationHash,
+              at: now(),
+              decision: 'observe',
+            });
+            await emit('REACT_REOBSERVING', {
+              action_id: a.action_id,
+              message: '重新核验原目标；不点击其他控件，不修改原计划或预期。',
+            });
+            continue;
+          }
           if (!proposal) {
             result.actions.push({
               at: now(),
@@ -1014,6 +1137,22 @@ export class BrowserSession {
             throw error;
           }
         }
+        if (isAdaptivePlan(plan)) {
+          try {
+            // Audit/persistence can yield while DOM changes. Validate the exact handle
+            // that is about to be dispatched, not the earlier locator observation.
+            await assertAdaptiveActionTarget(target, a, step.source_action);
+          } catch (error) {
+            result.actions.push({
+              ...event,
+              status: 'FAILED',
+              phase: 'RESOLVE',
+              dispatched: false,
+              error: error.code,
+            });
+            throw error;
+          }
+        }
         const receipt = { ...event, status: 'UNKNOWN', phase: 'DISPATCH', dispatched: true };
         result.actions.push(receipt);
         if (plan.data_effect === 'mutation' && !['wait', 'hover', 'navigate'].includes(a.op))
@@ -1031,6 +1170,7 @@ export class BrowserSession {
         if (guard.blocked) fail(guard.blocked);
         if (new URL(page.url()).origin !== new URL(task.target).origin)
           fail('OUTSIDE_TARGET_ORIGIN');
+        if (run.tableBaselines) await this.checkFrozenTables(run, a.action_id);
         await emit('ACTION_EXECUTED', event);
       } finally {
         await disposeActionTarget(target);
@@ -1038,6 +1178,36 @@ export class BrowserSession {
     }
 
     return lastActionCompletedAt;
+  }
+
+  async checkFrozenTables(run, action_id) {
+    const { page, result, step, point, budget, signal, emit, recording } = run;
+    const assertions = frozenTableAssertions(run);
+    const timeout = budget.remaining();
+    const observations = await checkAssertionGroup(page, assertions, {
+      timeout,
+      deadline: Math.min(budget.deadline, Date.now() + timeout),
+      signal,
+      tableBaselines: run.tableBaselines,
+      tableContext: { run_id: result.id, step_id: step.step_id },
+    });
+    for (const observation of observations) {
+      const evidence = {
+        ...observation,
+        step_id: step.step_id,
+        checkpoint_id: point.checkpoint_id,
+        action_id,
+        scope: 'sampled_after_each_action',
+        message: observation.passed
+          ? '表格与本步骤操作前一致。'
+          : '表格与本步骤操作前不一致；已停止后续动作。',
+      };
+      (result.relational_observations ??= []).push(evidence);
+      await emit('TABLE_INVARIANT_OBSERVED', evidence);
+    }
+    await recording.observed(observations);
+    if (observations.some((item) => !item.window_observed)) fail('ASSERTION_OBSERVATION_LATE');
+    if (observations.some((item) => !item.passed)) fail('BUSINESS_ASSERTION_FAILED');
   }
 
   async executeOptionalDialog(run, action) {
@@ -1267,7 +1437,13 @@ async function dispatchVerifiedAction(page, a, base, target, timeout = 20000) {
   }
   if (a.op === 'wait') {
     const x = handoffLocator(page, a.target);
-    if ((await x.count()) > 1) fail('LOCATOR_NOT_UNIQUE');
+    // Scoped visible/hidden waits resolve repeatedly inside their one deadline;
+    // an eager count could reject a brief loading-dialog replacement before waiting.
+    if (
+      (a.state === 'enabled' || !['within', 'row', 'cell'].includes(a.target?.kind)) &&
+      (await x.count()) > 1
+    )
+      fail('LOCATOR_NOT_UNIQUE');
     if (a.state === 'enabled') {
       if (
         !(await poll(
@@ -1313,11 +1489,24 @@ async function dispatchVerifiedAction(page, a, base, target, timeout = 20000) {
 export async function checkAssertion(page, a, options) {
   return (await checkAssertionGroup(page, [a], options))[0];
 }
+function redactMatrixEvidence(value) {
+  if (typeof value === 'string') return redact(value);
+  if (Array.isArray(value)) return value.map(redactMatrixEvidence);
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, redactMatrixEvidence(item)]),
+    );
+  return value;
+}
 export async function checkAssertionGroup(
   page,
   assertions,
-  { timeout = 8000, deadline = Date.now() + timeout, signal } = {},
+  { timeout = 8000, deadline = Date.now() + timeout, signal, tableBaselines, tableContext } = {},
 ) {
+  const hasInvariant = assertions.some((a) => a.check === 'table_unchanged');
+  for (const a of assertions)
+    if (a.check === 'table_unchanged')
+      requireTableBaseline(tableBaselines, page, tableContext, a.target);
   const observerKey = '__ui_agent_observer_' + uid().replaceAll('-', '');
   const sample_id = uid();
   let sampled = null,
@@ -1338,6 +1527,7 @@ export async function checkAssertionGroup(
     window[key] = state;
   }, observerKey);
   try {
+    if (hasInvariant) await installTableInvariantSampler(page, observerKey);
     do {
       if (signal?.aborted) fail('STOPPED');
       const revision = await page.evaluate((key) => window[key].revision, observerKey);
@@ -1365,6 +1555,7 @@ export async function checkAssertionGroup(
             };
             return {
               at: new Date().toISOString(),
+              fullURL: location.href,
               observations: assertions.map((a, i) => {
                 const rows = handles[i],
                   count = rows.length,
@@ -1373,7 +1564,14 @@ export async function checkAssertionGroup(
                   passed = false,
                   error,
                   obstruction;
-                if (a.check === 'count') {
+                if (a.check === 'table_unchanged') {
+                  if (count !== 1) error = 'TABLE_BASELINE_TABLE_NOT_UNIQUE';
+                  else {
+                    const matrix = window[key].sampleTable(e);
+                    if (matrix.error) error = matrix.error;
+                    else actual = matrix;
+                  }
+                } else if (a.check === 'count') {
                   actual = count;
                   passed = count === a.expected;
                 } else if (count > 1) error = 'LOCATOR_NOT_UNIQUE';
@@ -1458,6 +1656,48 @@ export async function checkAssertionGroup(
                 } else if (a.check === 'has_class') {
                   actual = e.classList.contains(a.expected);
                   passed = actual;
+                } else if (a.check === 'table_cells') {
+                  if (e.tagName !== 'TABLE') error = 'ASSERTION_TARGET_TYPE';
+                  else {
+                    const measurable = (node) =>
+                      visible(node) && !node.closest('[hidden],[inert],[aria-hidden="true"]');
+                    const headerRows = e.tHead
+                      ? [...e.tHead.rows]
+                      : [...e.rows].filter(
+                          (r) => r.cells.length && [...r.cells].every((c) => c.tagName === 'TH'),
+                        );
+                    const bodyRows = [...e.tBodies]
+                      .flatMap((b) => [...b.rows])
+                      .filter((r) => !headerRows.includes(r) && visible(r));
+                    if (
+                      headerRows.length !== 1 ||
+                      e.querySelector('table,[aria-rowindex],[aria-colindex]') ||
+                      e.hasAttribute('aria-rowcount') ||
+                      e.hasAttribute('aria-colcount') ||
+                      [...e.rows].some((r) =>
+                        [...r.cells].some((c) => c.colSpan !== 1 || c.rowSpan !== 1),
+                      )
+                    )
+                      error = 'TABLE_STRUCTURE_UNSUPPORTED';
+                    else if (
+                      bodyRows.length > 1000 ||
+                      headerRows[0].cells.length > 128 ||
+                      bodyRows.length * headerRows[0].cells.length > 20000
+                    )
+                      error = 'TABLE_SAMPLE_LIMIT';
+                    else if (
+                      !measurable(e) ||
+                      !measurable(headerRows[0]) ||
+                      [...headerRows[0].cells].some((c) => !measurable(c)) ||
+                      bodyRows.some((r) => [...r.cells].some((c) => !measurable(c)))
+                    )
+                      error = 'TABLE_STRUCTURE_UNSUPPORTED';
+                    else
+                      actual = {
+                        headers: [...headerRows[0].cells].map((c) => c.innerText.trim()),
+                        rows: bodyRows.map((r) => [...r.cells].map((c) => c.innerText.trim())),
+                      };
+                  }
                 } else if (a.check === 'row_sequence') {
                   if (e.tagName !== 'TABLE') error = 'ASSERTION_TARGET_TYPE';
                   else {
@@ -1512,6 +1752,34 @@ export async function checkAssertionGroup(
           },
           { key: observerKey, revision, assertions, handles },
         );
+        if (sampled)
+          sampled.observations.forEach((o, i) => {
+            if (assertions[i].check === 'table_unchanged' && !o.error) {
+              const comparison = compareTableBaseline(
+                tableBaselines,
+                page,
+                tableContext,
+                assertions[i].target,
+                o.actual,
+                sampled.fullURL,
+              );
+              o.passed = comparison.passed;
+              o.table_comparison = comparison;
+              return;
+            }
+            if (
+              assertions[i].check !== 'table_cells' ||
+              o.error ||
+              !o.actual ||
+              typeof o.actual !== 'object'
+            )
+              return;
+            // Compare captured values, never reread individual cells across revisions.
+            const comparison = compareTableCells(o.actual, assertions[i].expected);
+            o.passed = comparison.passed;
+            o.table_comparison = comparison;
+            if (comparison.invalid) o.error = comparison.error;
+          });
         if (sampled && Date.now() > deadline) {
           timedOut = true;
           if (last) sampled = null;
@@ -1529,8 +1797,10 @@ export async function checkAssertionGroup(
         last = sampled;
         const error = sampled.observations.find((o) => o.error)?.error;
         if (error) fail(error);
-        if (sampled.observations.every((o) => o.passed)) break;
+        // Invariance is a one-shot comparison, never an eventual-match poll.
+        if (hasInvariant || sampled.observations.every((o) => o.passed)) break;
       }
+      if (hasInvariant) fail('ASSERTION_SNAPSHOT_UNSTABLE');
       const remaining = deadline - Date.now();
       if (remaining > 0)
         await new Promise((resolve) => setTimeout(resolve, Math.min(100, remaining)));
@@ -1556,9 +1826,14 @@ export async function checkAssertionGroup(
         ? redact(last.observations[i].actual).slice(0, 3000)
         : Array.isArray(last.observations[i].actual)
           ? last.observations[i].actual.map((v) => redact(v).slice(0, 3000))
-          : last.observations[i].actual,
+          : ['table_cells', 'table_unchanged'].includes(a.check)
+            ? redactMatrixEvidence(last.observations[i].actual)
+            : last.observations[i].actual,
     passed: last.observations[i].passed,
     ...(last.observations[i].obstruction ? { obstruction: last.observations[i].obstruction } : {}),
+    ...(last.observations[i].table_comparison
+      ? { table_comparison: redactMatrixEvidence(last.observations[i].table_comparison) }
+      : {}),
     group_passed: groupPassed,
     window_observed: windowObserved,
     timed_out: timedOut || (!groupPassed && Date.now() >= deadline),

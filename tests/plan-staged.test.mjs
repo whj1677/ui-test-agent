@@ -94,8 +94,8 @@ test('staged scaffold, per-step actions and per-step assertions assemble into a 
   assert.equal(result.self_repair.repair_count, 0);
   assert.deepEqual(
     result.plan,
-    f.plans[0],
-    'assembled plan is identical to the fixture reference, wording transcribed by the program',
+    { ...f.plans[0], execution_policy: { mode: 'guarded-react', max_observations: 2 } },
+    'business plan stays identical; the explicit recovery capability is included in new approval',
   );
   await f.controller.approvePlan(f.id, result.case_id, planHash(result.plan));
   assert.equal(
@@ -145,7 +145,10 @@ test('a stage-level validation failure consumes one repair round and the next at
   assert.equal(result.self_repair.repair_count, 1);
   assert.equal(result.self_repair.outcome, 'ACCEPTED');
   assert.equal(result.status, 'PLAN_REVIEW');
-  assert.deepEqual(result.plan, f.plans[0]);
+  assert.deepEqual(result.plan, {
+    ...f.plans[0],
+    execution_policy: { mode: 'guarded-react', max_observations: 2 },
+  });
 });
 
 test('a stage returning blocked goes through the existing block audit and never publishes a plan', async () => {

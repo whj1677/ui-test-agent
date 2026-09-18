@@ -10,7 +10,9 @@ const files = (await fs.readdir(path.join(root, 'tests')))
   .filter((name) => name.endsWith('.test.mjs') && !paused.has(name))
   .sort()
   .map((name) => path.join('tests', name));
-const child = spawn(process.execPath, ['--test', ...files], {
+// Bound file-level Chromium/process contention. Individual tests still exercise
+// product concurrency; do not inflate their deadlines or omit failed assertions.
+const child = spawn(process.execPath, ['--test', '--test-concurrency=4', ...files], {
   cwd: root,
   stdio: 'inherit',
   windowsHide: true,
