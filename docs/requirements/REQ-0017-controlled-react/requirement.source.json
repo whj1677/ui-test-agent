@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 5,
+    "version": 6,
     "last_updated": "2026-09-18"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,7 +19,7 @@
     }
   ],
   "confirmed_facts": [
-    "阶段：版本5代码及262项受影响工程回归已完成，但追加真实模型0/3整例通过，产品目标未达成。实际共42调用（旧登录确认自动触发探索4次，已停止；直接测试38次），在100调用/15分钟限制内结束。保留全部原始失败，不再追加API轮次或宣称发布。",
+    "阶段：版本6限定反馈闭环代码及270项受影响工程回归已完成，0失败/取消/跳过，554779.033毫秒；原24例/17文件未改。本轮仅本机隔离Chromium和注入回复，无新增外部API调用、无4179重启。版本5真实0/3整例通过的事实不变，源码修复不等于自主能力或发布验收。",
     "REQ-0014为已实现的默认关闭、同入口详情/标签原型；本包为主流程新契约，不修改历史验收。",
     "原3例探索完成、1候选待批准、2条规划/审查阻塞，均未批准/0执行；23/128调用，非预算耗尽。",
     "每原步骤合计20断言，v3拆点不能绕过；已有收据/期限/派发标记，复用内核。",
@@ -36,7 +36,9 @@
     "版本4实际复验任务54abc1b7-35e4-4059-82cf-e9277e8638a4已结束，51次模型调用：V01完成导航后误判完成声明为无进展；V02实际完成筛选输入及整表不变检查后，审查引用跨义务而耗尽格式恢复；V03把分页文字绑到下一页按钮，运行记录FAIL_ASSERTION，不能据此确认业务缺陷。实际0/3整例通过。",
     "版本5修改前范围：仅修三类已复现缺陷。无动作完成声明允许再次审查/测量但不允许重派发动作；已知断言引用与来源不匹配保守降为候选待修，不增补或忽略来源；明确分页预期不得绑定不含页码的导航按钮/链接。保留所有失败事实，原预算不增加，真实模型两轮已用完，后续仅工程回放。",
     "2026-09-18用户另行明确授权版本5追加一轮官方DeepSeek API验证：仅原LAB-V01/V02/V03及localhost:4196合成页面，最多100调用或15分钟，旧记录不改。操作员看门程序提前在95调用或14.5分钟请求正常停止，预留在途请求及收尾。",
-    "版本5实际任务ab79abfc-fdc8-4bc1-a311-1528ce7a6106：LAB-V01和LAB-V03均ADAPTIVE_NO_PROGRESS，LAB-V02为PLAN_AUDIT_INCONSISTENT，三例TECHNICAL_FAILED。不是业务缺陷结论。直接测试2026-09-18T08:46:31.996Z至08:49:47.134Z，总授权时段从08:45:40.826Z开始；模型deepseek-flash，未由本轮改换供应商/模型。"
+    "版本5实际任务ab79abfc-fdc8-4bc1-a311-1528ce7a6106：LAB-V01和LAB-V03均ADAPTIVE_NO_PROGRESS，LAB-V02为PLAN_AUDIT_INCONSISTENT，三例TECHNICAL_FAILED。不是业务缺陷结论。直接测试2026-09-18T08:46:31.996Z至08:49:47.134Z，总授权时段从08:45:40.826Z开始；模型deepseek-flash，未由本轮改换供应商/模型。",
+    "版本6修改前确认：用户“好”授权继续局部反馈闭环修复。上一轮追加真实42调用、0/3完整通过保留；本轮不续用已耗尽的真实模型授权。",
+    "版本6新增回放覆盖：部分测量后缺口跨轮保留、同一义务的行数不替代分页检查、首次重复可纠错、持续重复（含仅改理由）仍停止、缺口全齐后无动作完成、矛盾审查保守退回、拒绝候选不计已测量及非法引用仍严格阻断。"
   ],
   "inferences_and_open_questions": [
     "结构化检查不证明所有自然语言语义；保留来源与反例。",
@@ -105,7 +107,7 @@
       ],
       "status": "已确认",
       "summary": "执行时观察与受控技术绑定",
-      "rationale": "在v1受控重观察底座上新增版本化adaptive-readonly业务合同。冻结原Case/hash/步骤顺序/输入/预期/同源/只读边界，不预绑定未来DOM；执行时逐段观察→生成最多1个动作及当前检查→独立语义审查→既有执行内核→追加证据。每步最多8段、2次未派发重规划、共用120秒步骤期限，沿用累计模型额度；已派发动作及业务断言差异不自动重放。版本4增加当前目标/原预期引用编译，另限2次格式修复及1次有证据的blocked复核；同候选审查格式独立修复2次，耗尽不回规划。单原生表不变关系由运行器在首次动作前冻结基线，逐动作比较且不把差异重采为通过。断言歧义只允许修改定位范围，谓词/预期/原文来源保持不变。完成需要完整预期覆盖审查和COMPLETE收据，不能由模型done自报。 版本5区分无动作完成转换与无进展重复，前者仍须完整审查及重新测量；已知审查断言跨来源只降为候选待修，不自动添加义务；明确分页预期绑定无对应页码名称的导航控件时在部分/完整短段执行前拒绝。"
+      "rationale": "在v1受控重观察底座上新增版本化adaptive-readonly业务合同。冻结原Case/hash/步骤顺序/输入/预期/同源/只读边界，不预绑定未来DOM；执行时逐段观察→生成最多1个动作及当前检查→独立语义审查→既有执行内核→追加证据。每步最多8段、2次未派发重规划、共用120秒步骤期限，沿用累计模型额度；已派发动作及业务断言差异不自动重放。版本4增加当前目标/原预期引用编译，另限2次格式修复及1次有证据的blocked复核；同候选审查格式独立修复2次，耗尽不回规划。单原生表不变关系由运行器在首次动作前冻结基线，逐动作比较且不把差异重采为通过。断言歧义只允许修改定位范围，谓词/预期/原文来源保持不变。完成需要完整预期覆盖审查和COMPLETE收据，不能由模型done自报。 版本5区分无动作完成转换与无进展重复，前者仍须完整审查及重新测量；已知审查断言跨来源只降为候选待修，不自动添加义务；明确分页预期绑定无对应页码名称的导航控件时在部分/完整短段执行前拒绝。 版本6：每次规划显式携带原义务、已成功测量片段的累计审查及剩余缺口；仅已实际成功执行的断言可标记已测量覆盖，提示不是最终验收。首次无动作重复片段可用原2次语义重规划中的1次反馈纠错；同一步再次重复仍停，已派发动作不重放、期限不刷新。审查COVERED与同一步ASSERTION_GAP矛盾仅保守下调为MISSING并附候选修复问题，不删除负面发现、不自动接受；其他格式错误保持原有界修复。"
     },
     {
       "id": "DD-0017-04",
@@ -225,12 +227,12 @@
       "item": "业务合同与完整检查",
       "evidence_standard": "原步骤/输入/对象/预期/顺序/时机保持；表格字段矩阵和明确编号区间全覆盖，25字段同一DOM观察，遗漏中段不得通过。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 262,
+        "test_count": 270,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v5-targeted.log"
+        "log_path": "validation/req0017/v6-targeted.log"
       }
     },
     {
@@ -243,12 +245,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 262,
+        "test_count": 270,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v5-targeted.log"
+        "log_path": "validation/req0017/v6-targeted.log"
       }
     },
     {
@@ -261,12 +263,12 @@
       "item": "执行时观察与受控技术绑定",
       "evidence_standard": "同一批准只读动作派发前观察/探测/等价绑定；身份/字段/作用域/顺序/期限不变；未知派发和断言差异不重放、不改预期。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 262,
+        "test_count": 270,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v5-targeted.log"
+        "log_path": "validation/req0017/v6-targeted.log"
       }
     },
     {
@@ -279,12 +281,12 @@
       "item": "主流程状态与证据",
       "evidence_standard": "显示当前目标/观察/恢复/停止原因，不新增逐定位审批；旧批准不静默扩权，旧任务不改。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
+        "command": "node --test --test-concurrency=4 tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-protocol.test.mjs tests/expectation-coverage.test.mjs tests/plan-quality.test.mjs tests/adaptive-report.test.mjs tests/adaptive-dispatch.test.mjs",
         "exit_code": 0,
-        "test_count": 262,
+        "test_count": 270,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v5-targeted.log"
+        "log_path": "validation/req0017/v6-targeted.log"
       }
     },
     {
@@ -311,6 +313,7 @@
       "Windows/Node/隔离真实Chromium，工程回归文件并发4；4179运行版本5冻结构建3922cccd60ed，追加真实测试已结束，active=null，无运行中测试。"
     ],
     "conclusion": [
+      "版本6同一组受影响工程回归270项通过（0失败/取消/跳过，554779.033毫秒），原24例/17文件冻结检查保持。最终collector及文档检查退出码0；不与历史版本或各VT重复累计。本轮未调用真实模型，4179仍运行版本5，未重启或清除内存Key。",
       "版本5受影响工程回归262项全部通过，443409.2257毫秒；各VT引用同一份证据，不累加。版本4全量1165是历史基线，未重跑新版全量。",
       "版本4真实51调用、0/3整例通过；版本5追加真实42调用、0/3整例通过。修复的局部反例工程通过，但自主执行目标未达成，不具备发布或人工验收交接条件。",
       "首次版本5collector已实际运行262项且退出码0；其附带文档检查因设计/追踪视图未同步失败，修复事实源视图后单独复检，保留首次检查失败记录。"
@@ -323,7 +326,7 @@
       "dd_id": "DD-0017-01",
       "tk_id": "TK-0017-01",
       "vt_id": "VT-0017-01",
-      "status": "已实现，工程验证通过，真实模型另验"
+      "status": "已实现，版本6受影响工程验证通过，真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",
@@ -331,7 +334,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "已实现，工程验证通过，真实模型另验"
+      "status": "已实现，版本6受影响工程验证通过，真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",
@@ -339,7 +342,7 @@
       "dd_id": "DD-0017-03",
       "tk_id": "TK-0017-03",
       "vt_id": "VT-0017-03",
-      "status": "已实现，工程验证通过，真实模型另验"
+      "status": "已实现，版本6受影响工程验证通过，真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",
@@ -347,7 +350,7 @@
       "dd_id": "DD-0017-04",
       "tk_id": "TK-0017-04",
       "vt_id": "VT-0017-04",
-      "status": "已实现，工程验证通过，真实模型另验"
+      "status": "已实现，版本6受影响工程验证通过，真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",
@@ -373,8 +376,8 @@
     }
   ],
   "open_questions": [
-    "BLOCK_NOW：部分片段审查的缺失义务没有持续提供给下一次规划；completed只保存fragment，成功片段后清除correction。需设计并验证显式未完成义务反馈、首次重复片段有界纠错及矛盾审查的保守回退，不能仅继续增加格式重试。",
-    "后续实现/真实模型验证尚未执行。本轮授权的追加一轮已使用，不再新建API复测。",
+    "VALIDATE：版本6反馈闭环已完成本机工程验证；真实模型能否利用缺口反馈自主收敛尚未复验，不宣称原三例已经通过。",
+    "本轮仅本机工程验证；追加真实一轮已使用，真实模型复验尚未另行授权。",
     "VALIDATE：无活动测试时login-confirmation会自动走旧探索入口。本轮已停止该分支并计入4次调用；未在冻结版本中顺便修改登录流程。"
   ],
   "prohibited_implementation": [
@@ -383,6 +386,22 @@
     "不得把模型审查/预置计划/注入回复/回放/工程测试计为自主产品验收。"
   ],
   "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 6,
+      "type": "实现及受影响工程验证",
+      "description": "显式保留成功测量与剩余义务；首次无动作重复消耗原重规划额度纠错，持续重复仍停止；内部矛盾审查保守退回候选。270项工程回归通过，无新增真实模型调用。",
+      "impact": "源码与合成测试/需求证据；不重启4179，不改原用例和历史真实失败结论",
+      "confirmed_by": "用户本轮限定修改授权"
+    },
+    {
+      "date": "2026-09-18",
+      "version": 6,
+      "type": "修改前限定需求",
+      "description": "保持原合同和所有限制，修复成功片段后的未完成义务反馈、无动作重复的首次有界纠错、矛盾审查的保守候选修复。先本机真实浏览器与注入回复回放，不新增API调用或重启已登录服务。",
+      "impact": "运行时规划输入/恢复路由/审查反馈；不改变原业务预期或固定计划通道",
+      "confirmed_by": "用户：好"
+    },
     {
       "date": "2026-09-18",
       "version": 5,

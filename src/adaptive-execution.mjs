@@ -4,7 +4,12 @@ import { StepBudget } from './step-budget.mjs';
 import { planHash } from './plans.mjs';
 import { validateAdaptiveFragment, fragmentAuditPlan } from './adaptive-plan.mjs';
 import { runtimeLocator } from './row-locator.mjs';
-import { adaptiveCorrection, canReconsiderBlock, isProtocolError } from './adaptive-recovery.mjs';
+import {
+  adaptiveCorrection,
+  adaptiveProgress,
+  canReconsiderBlock,
+  isProtocolError,
+} from './adaptive-recovery.mjs';
 import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs';
 
 export async function assertAdaptiveActionTarget(locator, action, originalAction = '') {
@@ -98,6 +103,8 @@ export async function executeAdaptiveStep(session, run) {
     blockReviews = 0,
     correction;
   let assertionRepair = null;
+  let executedAudit,
+    noProgressReviews = 0;
   let tableBaselines;
   await recording.beginStep(step, stepIndex);
   await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
@@ -159,6 +166,11 @@ export async function executeAdaptiveStep(session, run) {
           step,
           current,
           previous: completed,
+          progress: adaptiveProgress(
+            run.c.steps.find((item) => item.step_id === step.step_id),
+            completed,
+            executedAudit,
+          ),
           repair_assertions: assertionRepair,
           ...(correction ? { correction } : {}),
           ...(tableBaselines
@@ -291,6 +303,7 @@ export async function executeAdaptiveStep(session, run) {
       record.status = 'EXECUTED';
       executedKeys.add(record.transition_hash);
       completed.push(fragment);
+      executedAudit = audit;
       correction = undefined;
       assertionRepair = null;
       segment++;
@@ -319,7 +332,15 @@ export async function executeAdaptiveStep(session, run) {
         !point ||
         (attempts.length > 0 &&
           attempts.every((a) => a.phase === 'RESOLVE' && a.dispatched === false));
+      const noProgressRetry =
+        error.code === 'ADAPTIVE_NO_PROGRESS' &&
+        !point &&
+        fragment?.actions.length === 0 &&
+        noProgressReviews < 1 &&
+        executedKeys.has(record.transition_hash) &&
+        !rejected.has(observationHash + ':' + record.proposal_hash);
       const localError =
+        noProgressRetry ||
         /^(?:ADAPTIVE_(?:SEGMENT_REJECTED|INPUT|VALUE|FRAGMENT|ACTION|TARGET)|INVALID_|ASSERTION_|ORACLE_|PLAN_|LOCATOR_NOT_|ROW_)/.test(
           error.code ?? '',
         );
@@ -357,6 +378,7 @@ export async function executeAdaptiveStep(session, run) {
         continue;
       }
       rejected.add(observationHash + ':' + (record.proposal_hash ?? 'invalid'));
+      if (noProgressRetry) noProgressReviews++;
       replans++;
       await emit('ADAPTIVE_REPLANNING', {
         step_id: step.step_id,

@@ -2,6 +2,8 @@ import { publicError } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ADAPTIVE_NO_PROGRESS:
+    'This assertion-only partial segment repeats an already executed measurement. Read progress.remaining_obligations and its reasons; propose the missing measurements instead. If none remain, declare complete:true with no repeated actions, subject to full audit. Do not change original expectations or replay any dispatched action. One reconsideration only, within the existing replan/deadline budget.',
   INVALID_LOCATOR:
     'Use a target_ref from the CURRENT target catalog. Legacy button/heading/table locators have kind:"role", role:"button"|"heading"|"table", name, exact:true; kind:"button" is invalid. Fix only the malformed target, retain operation and business goal.',
   ASSERTION_ORACLE_QUOTE_REQUIRED:
@@ -11,6 +13,39 @@ const hints = {
   ADAPTIVE_MODEL_BLOCKED:
     'Reconsider the claimed blocker using current evidence. An observed, source-named menu can be expanded before its child exists. A literal same-origin path in THIS original action may be navigated without an observed link. Return a legal partial segment if possible; if evidence is still insufficient, return blocked again. Never guess an unseen target or broaden permission.',
 };
+
+// Advisory feedback, never an acceptance receipt. Only a successfully executed
+// cumulative audit can describe measured coverage; rejected candidates cannot.
+export function adaptiveProgress(originalStep, completed, executedAudit) {
+  const assertions = completed.flatMap((fragment) => fragment.assertions);
+  const obligations = originalStep.obligations.map((obligation) => {
+    const check = executedAudit?.checks.find(
+      (item) => item.step_id === originalStep.step_id && item.obligation_id === obligation.id,
+    );
+    const measured = (check?.assertion_indices ?? []).filter((index) =>
+      assertions[index]?.obligation_ids.includes(obligation.id),
+    );
+    const covered =
+      check?.status === 'COVERED' &&
+      measured.length > 0 &&
+      measured.length === check.assertion_indices.length;
+    return {
+      ...obligation,
+      status: covered ? 'MEASURED_COVERED' : 'PENDING',
+      measured_assertion_refs: measured.map((index) => `A${index + 1}`),
+      reason: check?.reason ?? '尚无成功执行且经审查的测量。',
+    };
+  });
+  return {
+    step_id: originalStep.step_id,
+    completed_segments: completed.length,
+    obligations,
+    remaining_obligations: obligations.filter((item) => item.status === 'PENDING'),
+    issues: executedAudit?.issues ?? [],
+    instruction:
+      '历史已测量不代表当前DOM或最终验收。优先补齐剩余原义务；检查全齐后声明无动作完成，仍须完整审查。不能从页面现值反推预期，不能重复已派发动作。',
+  };
+}
 
 export function adaptiveCorrection(error, proposal, step, audit) {
   return {

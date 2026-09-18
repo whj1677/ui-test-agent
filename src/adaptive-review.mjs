@@ -80,6 +80,30 @@ function sourceMismatchReview(reply, context) {
   return validatePlanAudit(corrected, context.original, context.candidate_plan);
 }
 
+function contradictoryCoverageReview(reply, context) {
+  if (!Array.isArray(reply?.checks) || !Array.isArray(reply.issues)) return null;
+  const corrected = structuredClone(reply);
+  let changed = false;
+  for (const issue of reply.issues) {
+    if (issue.code !== 'ASSERTION_GAP') continue;
+    const checks = corrected.checks.filter((check) => check.step_id === issue.step_id);
+    if (checks.some((check) => check.status === 'MISSING')) continue;
+    const covered = checks.filter((check) => check.status === 'COVERED');
+    if (!covered.length) continue;
+    // The finding is step-scoped: we cannot guess which obligation is actually
+    // missing. Keep the original finding and conservatively revoke coverage.
+    for (const check of covered) check.status = 'MISSING';
+    corrected.issues.push({
+      code: 'ACTION_MISMATCH',
+      step_id: issue.step_id,
+      reason:
+        '审查同时声称已覆盖和存在检查缺口，不能确定覆盖。保留原负面发现，将本步骤覆盖保守降为待补；规划须核对原义务和现有测量，不得重复已执行动作或更改预期。',
+    });
+    changed = true;
+  }
+  return changed ? validatePlanAudit(corrected, context.original, context.candidate_plan) : null;
+}
+
 // Only malformed audit responses are retried, never adverse semantic findings.
 // Same frozen candidate, shared deadline, every request charged by the caller.
 export async function reviewAdaptiveCandidate(input, ask, onRepair = async () => {}) {
@@ -92,6 +116,14 @@ export async function reviewAdaptiveCandidate(input, ask, onRepair = async () =>
       compiled = compileAdaptiveAudit(reply, context);
       return validatePlanAudit(compiled, input.original, input.candidate_plan);
     } catch (error) {
+      if (error.code === 'PLAN_AUDIT_INCONSISTENT' && compiled) {
+        try {
+          const repair = contradictoryCoverageReview(compiled, context);
+          if (repair) return repair;
+        } catch {
+          /* Unrelated malformed fields remain subject to strict bounded repair. */
+        }
+      }
       if (error.code === 'PLAN_AUDIT_ASSERTION_REFERENCE_INVALID' && compiled) {
         try {
           const repair = sourceMismatchReview(compiled, context);

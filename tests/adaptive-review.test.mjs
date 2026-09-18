@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createAdaptivePlan, fragmentAuditPlan } from '../src/adaptive-plan.mjs';
 import { suggestObligations } from '../src/plans.mjs';
-import { auditInput } from '../src/plan-quality.mjs';
+import { auditInput, validatePlanAudit } from '../src/plan-quality.mjs';
 import {
   adaptiveAuditInput,
   compileAdaptiveAudit,
@@ -75,6 +75,55 @@ test('stable audit assertion refs compile to strict same-step measured reference
   const output = await reviewAdaptiveCandidate(input, async () => valid());
   assert.equal(output.outcome, 'ACCEPT');
   assert.deepEqual(output.checks[0].assertion_indices, [0]);
+});
+
+test('contradictory COVERED plus ASSERTION_GAP conservatively rejects candidate without format exhaustion', async () => {
+  const { input } = fixture();
+  const reply = valid();
+  reply.issues = [{ step_id: '1', code: 'ASSERTION_GAP', reason: '仍缺原预期的一部分检查' }];
+  const before = structuredClone({ input, reply });
+  let calls = 0;
+  const result = await reviewAdaptiveCandidate(input, async () => {
+    calls++;
+    return reply;
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.outcome, 'REPAIR');
+  assert.equal(result.checks[0].status, 'MISSING');
+  assert.deepEqual(result.issues[0], reply.issues[0]);
+  assert.ok(result.issues.some((issue) => issue.code === 'ACTION_MISMATCH'));
+  assert.deepEqual({ input, reply }, before, 'source, candidate and raw reply are immutable');
+  assert.throws(
+    () =>
+      validatePlanAudit(
+        compileAdaptiveAudit(reply, adaptiveAuditInput(input)),
+        input.original,
+        input.candidate_plan,
+      ),
+    { code: 'PLAN_AUDIT_INCONSISTENT' },
+    'fixed-plan validation stays strict',
+  );
+});
+
+test('contradictory feedback cannot hide invalid references or unrelated malformed issues', async () => {
+  for (const malformed of ['unknown-ref', 'unknown-issue', 'empty-ref', 'missing-reason']) {
+    const reply = valid();
+    reply.issues = [{ step_id: '1', code: 'ASSERTION_GAP', reason: '仍缺检查' }];
+    if (malformed === 'unknown-ref') reply.checks[0].assertion_refs = ['A99'];
+    if (malformed === 'empty-ref') reply.checks[0].assertion_refs = [];
+    if (malformed === 'unknown-issue')
+      reply.issues.push({ step_id: '1', code: 'INVENTED', reason: '无效' });
+    if (malformed === 'missing-reason') delete reply.issues[0].reason;
+    let calls = 0;
+    await assert.rejects(
+      reviewAdaptiveCandidate(fixture().input, async () => {
+        calls++;
+        return reply;
+      }),
+      (error) => error.adaptive_audit_exhausted === true,
+    );
+    assert.equal(calls, 3, malformed);
+  }
 });
 test('real V03 COVERED-with-empty-refs response is repaired without replanning candidate', async () => {
   const { input } = fixture();

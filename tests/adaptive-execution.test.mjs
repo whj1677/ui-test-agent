@@ -42,7 +42,9 @@ async function setup(t, options = {}) {
       {
         step_id: 'S1',
         action: '展开运营中心并点击资产设备，打开设备D009的详情。',
-        expected: '设备详情中D009标题可见。',
+        expected: options.compound
+          ? '设备详情中D009标题可见；运行参数标签可见。'
+          : '设备详情中D009标题可见。',
       },
       { step_id: 'S2', action: '点击运行参数并查看频率。', expected: '频率为50。' },
     ]),
@@ -192,7 +194,11 @@ for (const finish of [true, false]) {
           return value;
         if (input.step.step_id === 'S1' && !value.actions.length) {
           saved ??= structuredClone(value);
-          return { ...structuredClone(saved), complete: measured++ > 0 && finish };
+          return {
+            ...structuredClone(saved),
+            complete: measured++ > 0 && finish,
+            reason: `重复检查${measured}`,
+          };
         }
         return value;
       },
@@ -210,9 +216,128 @@ for (const finish of [true, false]) {
       assert.equal(row.status, 'TECHNICAL_FAILED');
       assert.equal(fact.error, 'ADAPTIVE_NO_PROGRESS');
       assert.equal(fact.actions.length, 3);
+      assert.equal(measured, 3, 'one bounded reconsideration, then permanent repeat stops');
     }
   });
 }
+
+test('partial audit gaps survive success and a repeated measurement recovers without replaying actions', async (t) => {
+  let duplicate;
+  let observedGap = false,
+    corrected = false;
+  const e = await setup(t, {
+    compound: true,
+    transform(value, { prompt, input }) {
+      if (prompt.startsWith(INPUT_REVIEW_PROMPT) || prompt.startsWith(PLAN_AUDIT_PROMPT))
+        return value;
+      if (input.step.step_id !== 'S1' || value.actions.length) return value;
+      duplicate ??= { ...structuredClone(value), complete: false };
+      if (input.previous.length === 3) return structuredClone(duplicate);
+      assert.equal(input.progress.completed_segments, 4);
+      assert.deepEqual(
+        input.progress.remaining_obligations.map((o) => o.id),
+        ['S1-O2'],
+      );
+      assert.equal(input.progress.obligations[0].status, 'MEASURED_COVERED');
+      assert.ok(input.progress.issues.some((issue) => issue.code === 'ASSERTION_GAP'));
+      observedGap = true;
+      if (!input.correction) return structuredClone(duplicate);
+      assert.equal(input.correction.code, 'ADAPTIVE_NO_PROGRESS');
+      assert.equal(input.remaining.replans, 1);
+      corrected = true;
+      const obligation = input.original.steps[0].obligations[1];
+      return {
+        ...value,
+        assertions: [
+          {
+            target: role('tab', '运行参数'),
+            check: 'visible',
+            oracle_quote: obligation.text,
+            obligation_ids: [obligation.id],
+          },
+        ],
+        complete: true,
+      };
+    },
+  });
+  const { fact } = await run(e);
+  assert.equal(fact.status, 'PASS_ASSERTIONS', JSON.stringify(fact.adaptive_segments));
+  assert.ok(observedGap && corrected);
+  assert.equal(fact.actions.length, 4);
+  assert.equal(fact.assertions.length, 3, 'rejected duplicate was never measured twice');
+  assert.equal(fact.adaptive_steps.length, 2);
+  assert.ok(
+    fact.adaptive_segments.some(
+      (item) => item.error === 'ADAPTIVE_NO_PROGRESS' && !item.dispatched,
+    ),
+  );
+});
+
+test('contradictory audit returns candidate feedback without executing or erasing its negative finding', async (t) => {
+  let contradicted = false,
+    corrected = false;
+  const e = await setup(t, {
+    transform(value, { prompt, input }) {
+      if (prompt.startsWith(INPUT_REVIEW_PROMPT)) return value;
+      if (prompt.startsWith(PLAN_AUDIT_PROMPT)) {
+        if (!contradicted && value.checks.every((check) => check.status === 'COVERED')) {
+          contradicted = true;
+          value.issues.push({
+            step_id: 'S1',
+            code: 'ASSERTION_GAP',
+            reason: '合成矛盾审查：声称覆盖但又报告缺口',
+          });
+        }
+        return value;
+      }
+      if (input.correction?.code === 'ADAPTIVE_SEGMENT_REJECTED') {
+        assert.equal(input.correction.audit.outcome, 'REPAIR');
+        assert.ok(input.correction.audit.issues.some((issue) => issue.code === 'ASSERTION_GAP'));
+        assert.equal(
+          input.progress.obligations[0].status,
+          'PENDING',
+          'rejected proposed assertion is not measured',
+        );
+        corrected = true;
+        value.reason = '已对照原预期重新核对当前标题测量，提交独立审查';
+      }
+      return value;
+    },
+  });
+  const { fact } = await run(e);
+  assert.equal(fact.status, 'PASS_ASSERTIONS', JSON.stringify(fact.adaptive_segments));
+  assert.ok(contradicted && corrected);
+  assert.equal(fact.actions.length, 4);
+  assert.equal(fact.assertions.length, 2);
+  assert.ok(
+    fact.adaptive_segments.some(
+      (item) =>
+        item.status === 'REJECTED' &&
+        item.audit?.issues.some((issue) => issue.code === 'ASSERTION_GAP'),
+    ),
+  );
+});
+
+test('no remaining obligations feedback permits a no-action completion but never replays navigation', async (t) => {
+  const e = await setup(t, {
+    transform(value, { prompt, input }) {
+      if (prompt.startsWith(INPUT_REVIEW_PROMPT) || prompt.startsWith(PLAN_AUDIT_PROMPT))
+        return value;
+      if (input.step.step_id === 'S1' && !value.actions.length) {
+        if (input.correction?.code === 'ADAPTIVE_NO_PROGRESS') {
+          assert.deepEqual(input.progress.remaining_obligations, []);
+          return { ...value, assertions: [], complete: true };
+        }
+        return { ...value, complete: false };
+      }
+      return value;
+    },
+  });
+  const { fact } = await run(e);
+  assert.equal(fact.status, 'PASS_ASSERTIONS', JSON.stringify(fact.adaptive_segments));
+  assert.equal(fact.actions.length, 4);
+  assert.equal(fact.assertions.length, 2);
+});
 
 test('real-response format error then mistaken blocked recovers without replaying menu clicks', async (t) => {
   let next = 0;
