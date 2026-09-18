@@ -8,7 +8,7 @@
 
 - [REQ-0009-guarded-query-reset](REQ-0009-guarded-query-reset/current_state.md)：REQ-0001子问题；原查询后“重置”可见但无候选，仅补原文绑定且核验身份的原生查询重置，保留业务重置禁令。
 
-- [REQ-0008-multistep-plan-grounding](REQ-0008-multistep-plan-grounding/current_state.md)：REQ-0001子问题；多步表单未来控件缺少计划证据。仅设计，待选择一次审批未观察原文定位或新页面后再次审批；不扩大探索业务操作。
+- [REQ-0008-multistep-plan-grounding](REQ-0008-multistep-plan-grounding/current_state.md)：用户已选A，一次批准完整固定计划；未来字段以原文意图标记、执行时核验向导步骤及所属表单，614项工程回归完成；不扩大探索业务操作，不以工程计划代替真实模型验收。
 
 - [REQ-0007-guarded-query-forms](REQ-0007-guarded-query-forms/current_state.md)：REQ-0001子问题；submit型查询使输入和点击候选缺失，增加原文绑定的受限GET查询及一次submit现场核验；不开放业务提交。
 

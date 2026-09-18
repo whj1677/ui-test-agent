@@ -1,6 +1,17 @@
 import { validateLocator, validateAssertion, validateAction } from './plans.mjs';
 
-const kinds = ['role', 'testid', 'label', 'placeholder', 'text', 'css', 'row', 'cell', 'within'];
+const kinds = [
+  'role',
+  'testid',
+  'label',
+  'placeholder',
+  'text',
+  'css',
+  'row',
+  'cell',
+  'within',
+  'case_named',
+];
 const schema = {
   role: '{kind:"role",role:"button|link|heading|table|...",name:string,exact:true}',
   simple: '{kind:"testid|label|placeholder|text|css",value:string,exact:true}',
@@ -8,6 +19,8 @@ const schema = {
   cell: '{kind:"cell",table:baseLocator,key:{column:string,value:string},column:string}',
   within:
     '{kind:"within",scope:{role:"article|listitem|dialog",name:string OR heading:string,exact:true},target?:baseLocator}',
+  case_named:
+    '{kind:"case_named",source_step_id:string,target:exactLabelOrRole,control_type:"text|number|textarea|select|checkbox|button",guard:{path,page_heading,step}}; CASE_NAMED_UNOBSERVED intent only, never observed/cleanup evidence',
 };
 
 // Visit only protocol fields. Never interpolate arbitrary model keys/values into diagnostics.

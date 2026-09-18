@@ -180,6 +180,7 @@ export function compileAdapter(source) {
         element[key] = value ?? (key === 'navigation_text' ? false : '');
       }
       const value = run(fn.body, element)?.value ?? null;
+      if (value?.kind === 'case_named') fail('ADAPTER_PROGRAM_REJECTED');
       if (value !== null) validateLocator(value);
       return value;
     },

@@ -21,6 +21,7 @@ export function validateDiscoveryInteractions(entries, baseline) {
       fail('DISCOVERY_CONTRACT_PATH_INVALID');
     relativeURL(entry.entry_path, 'http://127.0.0.1/');
     validateLocator(entry.locator);
+    if (entry.locator.kind === 'case_named') fail('DISCOVERY_CONTRACT_INVALID');
     if (
       /password|密码|token|secret|credential|api.?key|cookie|authorization/i.test(
         JSON.stringify(entry.locator),

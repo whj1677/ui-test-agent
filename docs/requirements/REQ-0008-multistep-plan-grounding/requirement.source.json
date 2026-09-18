@@ -3,33 +3,39 @@
   "req_id": "REQ-0008",
   "title": "多步表单后续控件与计划审批边界",
   "metadata": {
-    "requirement_status": "人工待确认",
+    "requirement_status": "已确认",
     "governance_level": "G2",
-    "version": 1,
+    "version": 2,
     "last_updated": "2026-09-18"
   },
   "original_input": "承接REQ-0001用户授权的发布目标与修改前建包要求。用户另提出：“外挂一个知识库……常见UI的一些问题、组合方式、窗口叠层的信息……越运行越聪明。”本包记录验证中发现的多步表单证据断层，不把该建议解释为允许探索填写业务表单或改变完整计划审批。",
   "user_requirements": [
     {
       "id": "UN-0008-01",
-      "status": "人工待确认",
+      "status": "已确认",
       "goal": "消除多步表单尚未呈现字段造成的计划死锁，同时保持原用例含义、用户可理解的审批和运行时对象校验。",
-      "constraints": "当前阶段仅设计；审批分支待用户选择。探索不提前填写/提交业务表单，知识库不能充当当前DOM证据。",
+      "constraints": "用户选择A：一次审批完整固定计划，仅延迟DOM绑定。探索不提前填写/提交业务表单，知识库不能充当当前DOM证据；不实现B再次生成审批。",
       "success_criteria": "所选方案能对后续字段给出诚实来源、明确审批与失败状态；正常与错步骤/错对象/重复字段反例可复验，最后仍需真实模型验收。"
     }
   ],
   "confirmed_facts": [
-    "状态卡：阶段=设计及产品决策等待；唯一目标=解决未来控件证据与计划审批冲突；交付=本需求包、互斥方案及有限验收；不做=知识库实现、放宽探索写入、启用隐藏规划开关或改冻结用例。决定影响审批语义，收到选择前不进入产品实现。",
+    "状态卡：阶段=A实现及工程验证；唯一目标=固定计划中未来字段的诚实来源与运行时绑定；交付=来源协议/向导观察与守卫/审批提示/正反例证据及Git同步；验收=未观察字段不因缺DOM死锁，错页面/步骤/表单/类型/重名/身份变化零误派发；不做=探索业务写入、B分次审批、改冻结原例、重启4179或绕过模型策略；停止=本包有限工程验收完成或真实阻塞，不据此宣布发布。",
+    "2026-09-18用户回复A，明确选择一次批准完整固定计划，尚未观察项显著提示，执行时绑定失败停止。原先待选历史保留，不再要求重复选择。",
     "2026-09-18实际Chromium只读探测：原REQS-003从首页经产品DiscoveryBrowser候选“查看申请记录”→“新建申请”到/#/new。页面只呈现申请名称、项目、申请人和第一步按钮，未呈现后续品类/数量；候选只有首页、采购管理、取消；没有业务填写或下一步候选，夹具mutations为空。",
     "该探测仅验证产品观察/候选能力，候选选择由维护者指定；没有模型参与，不是REQS-003成功或完整Agent链路证据。初次node --input-type=module探测触发worker启动错误，改为普通node stdin后完成；该初次失败不归因为多步表单缺陷。",
     "planning-input只投影已观察或确认源码事实；plan-quality审查提示要求每个定位来自页面证据或确认源码。运行时可以解析已批准固定label，但全页唯一不等于当前步骤/对象正确。",
     "现有v3检查点是在一次批准的完整固定计划中分段观察，不是运行后生成剩余计划。plan-staged是离线分阶段生成，不含浏览器推进，默认未启用。",
-    "Kimi以tools=[]只读会诊最小通用设计摘要，session_856fe165-03b5-44c3-ae71-28c97cdc3641；未发送源码、业务、Key或验收真值。其建议不是产品验收。"
+    "Kimi以tools=[]只读会诊最小通用设计摘要，session_856fe165-03b5-44c3-ae71-28c97cdc3641；未发送源码、业务、Key或验收真值。其建议不是产品验收。",
+    "已实现case_named固定意图协议和wizard_context只读观察；规划/审查/阻塞复核/修复反馈共用规则，用户选择A且不会启用分次审批。断言可引用同一完整原用例任意步骤的正向字面字段，以覆盖先检验选项再输入；该引用不执行后续动作，当前断言仍由当前原预期约束。",
+    "代码审查增加来源隔离：适配器、登录标志、探索声明和只读探针拒绝case_named；普通label及role均计入范围内隐藏重名。动作意图记录之后再核验同DOM；事件检查异常也拒绝，拒绝锁存至动作结束。该守卫不是对恶意页面/后端对象身份或任意CSS变化的证明。",
+    "保留失败日志：REQ-0008-first.log为15项中10失败，主要是新合成测试响应缺UTF-8和将冻结页面链接误写为button；只修测试设定。REQ-0008-scoped-final.log为19项中1失败，原因是新认证反例未建立浏览器，先触发BROWSER_REQUIRED；补正前置，不改认证门禁。REQ-0008-runtime-final.log为613项中3失败，新校验对旧仅断言部分输入读undefined；产品兼容修复后REQ-0008-compat-fix.log为6项0失败/跳过，未修改旧断言。",
+    "原REQS-003工程固定计划在Chromium完成6步骤13操作18断言、0业务写入；原文/预期不变。它是维护者编写计划的执行能力证据，不是真实模型或最终用例验收。另一注入provider流程验证3次本机模型协议调用→候选审查→人工批准接口及旧hash拒绝，真实外部模型调用为0。",
+    "最终非暂停运行回归614项，0失败/跳过（validation/REQ-0008-runtime-verified.log）；包含本包21项，不能相加。原24例/17文件由node acceptance/check.mjs复核不变。审批组件实际Chromium以1280及375px、reduced-motion、键盘焦点及HTML转义验证，截图人工检查；没有重做整站视觉验收。"
   ],
   "inferences_and_open_questions": [
     "核心问题是后续DOM尚不可见与完整计划证据门槛冲突；增加历史经验不能证明当前页面仍有相同控件。",
     "可信反例：另一步骤出现唯一、可编辑、同名字段；仅校验唯一性与可操作性仍可能操作错对象。未来字段方案必须包含步骤/容器/对象核验。",
-    "互斥A：一次审批完整固定计划，允许原用例动作明确命名但未观察的定位，显著标注CASE_NAMED/UNOBSERVED并在执行前核验。互斥B：仅接受已观察/确认源码定位，到新页面后再生成并审批剩余计划。两者不能静默互换。"
+    "已选A，B不实现。首版支持带原生表单、可见步骤列表及aria-current=step、唯一页面标题和自有步骤标题的向导；不假称任意页面都具备可靠步骤/对象证据。"
   ],
   "development_requirements": [
     {
@@ -41,15 +47,15 @@
     },
     {
       "id": "DR-0008-02",
-      "status": "人工待确认",
-      "requirement": "明确选择A完整计划中的未观察原文定位，或B新页面后的再次审批；不得混用或暗设默认。",
+      "status": "已确认",
+      "requirement": "实现A完整计划中的未观察原文定位，规划、审查、审批和执行传播相同标记与身份。",
       "acceptance_criteria": "选定分支在规划输入、审查、审批UI、固定计划身份与执行阶段一致；未选分支不实现。",
-      "constraints": "未确认前不修改产品审批语义。"
+      "constraints": "一次批准只授权固定计划，不生成未知后续动作。"
     },
     {
       "id": "DR-0008-03",
-      "status": "人工待确认",
-      "requirement": "若选A，延迟的只能是DOM绑定，动作、值、顺序、期望与定位文字仍在审批前固定；若选B，新生成部分必须再次审批后执行。",
+      "status": "已确认",
+      "requirement": "延迟的只能是DOM绑定，动作、值、顺序、期望与定位文字仍在审批前固定。",
       "acceptance_criteria": "未来字段须可追溯原动作字面来源，不取自预期/知识库猜测；执行前核验当前步骤、对象/容器、类型、唯一性和可操作性，失败不模糊替代。",
       "constraints": "A不放行未验证清理/危险写入定位；B不把初次批准当无限后续授权。"
     },
@@ -77,18 +83,18 @@
         "DR-0008-02",
         "DR-0008-03"
       ],
-      "status": "人工待确认",
-      "summary": "A与B互斥等待选择；A是固定字面定位的延迟绑定，不是延迟规划；B是显式再次审批。",
-      "rationale": "Kimi倾向有条件接受A并建议B作退路；独立判断是不自动混用，审批次数和用户承诺须先明确。"
+      "status": "已确认",
+      "summary": "用户已选A；增加case_named定位包装，固定source_step_id、原文字面基础label/role目标、控件类型与向导上下文；进入计划摘要和哈希。",
+      "rationale": "将未观察的字面意图与DOM_OBSERVED明确区分；不允许修复替换该目标，也不用于前置、清理、认证或探索。"
     },
     {
       "id": "DD-0008-03",
       "dr_ids": [
         "DR-0008-03"
       ],
-      "status": "人工待确认",
-      "summary": "若A获选，增加独立未观察来源标记和当前步骤/对象守卫；若B获选，增加剩余计划身份和审批状态。",
-      "rationale": "全页唯一且可编辑仍不足以排除同名错步骤控件；现有within只支持article/listitem/dialog，不能假称已有通用表单步骤守卫。"
+      "status": "已确认",
+      "summary": "snapshot只读采集向导路由、唯一h1、步骤列表和当前自有步骤标题。case_named.guard固定path/page_heading/step，必须匹配该观察的向导结构；执行解析唯一当前步骤容器内的唯一原生form和固定类型控件，派发时复核同DOM身份与上下文。",
+      "rationale": "全页唯一且可编辑不足以排除同名错步骤。先支持可验证的结构，不从模型猜测生成步骤证据，不扩展任意编辑对象或未观察危险点击。"
     },
     {
       "id": "DD-0008-04",
@@ -96,17 +102,17 @@
         "DR-0008-04"
       ],
       "status": "已确认",
-      "summary": "只在确认分支后冻结具体接口和测试判定；模型被拒绝时不换路径绕过。",
+      "summary": "按已选A实现有限接口并冻结工程验证，真实模型执行策略未改变。",
       "rationale": "避免先实现后补审批或用本机能力测试代替发布结果。"
     }
   ],
   "interfaces_and_data_flow": [
     "现状：原用例+已观察/源码证据→完整计划→审查/批准→固定执行→分段事实。",
-    "待选A：额外来源标记和步骤/对象约束随固定计划传播，批准时明确列出未观察项，运行前绑定失败即停；不得写成已观察。",
-    "待选B：已观察的可执行部分→批准/执行→新观察→剩余计划→再次批准；审批ID、原步骤义务及停止/恢复关系需在确认后设计。当前不新增API/schema。"
+    "已选A：case_named={kind,source_step_id,target,control_type,guard:{path,page_heading,step}}，固定标记CASE_NAMED_UNOBSERVED；只允许有限原生输入/选择及原文明示的下一步/上一步/取消按钮，断言可复用原动作命名字段。所有新增字段进入原有语义哈希，批准和执行前重新验原文与观察上下文。",
+    "后续DOM缺席不阻止候选生成；动作目标名称必须逐字出现在该动作的原步骤action内，断言引用同一完整原用例中任意步骤的正向action字面字段（含后续步骤）；当前断言目的仍受当前原预期约束；拒绝取自expected/知识库、嵌套包装、清理/修复用途或危险按钮。已有网络、写权限、登录、审批、停止与预算独立有效。"
   ],
   "module_document_impact": [
-    "若进入实现，影响规划输入、计划证据审查、执行对象守卫及审批UI/状态；届时更新release_runtime。当前仅设计，不宣称上述模块已有新能力。"
+    "影响snapshot/planning-input/plans/plan-semantics/plan-quality/固定执行解析/public审批展示，更新release_runtime；不新增HTTP端点、不修改原用例或开启plan-staged。"
   ],
   "risks_and_rollback": [
     "A风险：原动作可能未明确给出控件字面名；不得用别名/翻译/知识库补成事实。B风险：增加人工审批次数，不得隐藏这一体验成本。",
@@ -125,8 +131,8 @@
         "DD-0008-01",
         "DD-0008-02"
       ],
-      "status": "进行中",
-      "task": "只读探测与独立会诊已完成；记录互斥分支，等待用户明确审批选择。",
+      "status": "已实现",
+      "task": "只读探测与独立会诊已完成，用户A选择已记录并冻结实现范围。",
       "verification_ids": [
         "VT-0008-01"
       ]
@@ -141,8 +147,8 @@
         "DD-0008-02",
         "DD-0008-03"
       ],
-      "status": "待实现",
-      "task": "选择后收敛接口并实现唯一分支；未确认前不写产品代码。",
+      "status": "已实现",
+      "task": "实现A来源协议、向导观察/现场守卫与审批提示。",
       "verification_ids": [
         "VT-0008-02",
         "VT-0008-03"
@@ -156,7 +162,7 @@
       "dd_ids": [
         "DD-0008-04"
       ],
-      "status": "待实现",
+      "status": "已实现",
       "task": "按选定语义运行正反例及受影响回归，核对实际diff/证据后独立Git同步；真实模型单列。",
       "verification_ids": [
         "VT-0008-04"
@@ -170,11 +176,18 @@
         "DR-0008-01",
         "DR-0008-02"
       ],
-      "confirmation_status": "人工待确认",
-      "execution_status": "未运行",
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
       "item": "产品选择和范围确认",
       "evidence_standard": "用户明确选择、设计分支一致性；只读探测不是审批确认。",
-      "current_evidence": "只读观察事实已记录；异步询问已发出，尚无选择。"
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 614,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0008-runtime-verified.log"
+      }
     },
     {
       "id": "VT-0008-02",
@@ -182,22 +195,36 @@
         "DR-0008-02",
         "DR-0008-03"
       ],
-      "confirmation_status": "人工待确认",
-      "execution_status": "未运行",
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
       "item": "所选审批分支正常多步链路",
       "evidence_standard": "实际浏览器、固定计划/审批身份、各步原始动作与事实、非零断言统计。",
-      "current_evidence": "未实现；不采用预制成功计划冒充模型成功。"
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 614,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0008-runtime-verified.log"
+      }
     },
     {
       "id": "VT-0008-03",
       "dr_ids": [
         "DR-0008-03"
       ],
-      "confirmation_status": "人工待确认",
-      "execution_status": "未运行",
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
       "item": "错步骤同名可编辑字段、重复控件、错误类型、伪造来源、计划变化与停止反例",
       "evidence_standard": "实际副作用计数及明确阻止原因，批准前/后边界均覆盖。",
-      "current_evidence": "未运行。"
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 614,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0008-runtime-verified.log"
+      }
     },
     {
       "id": "VT-0008-04",
@@ -205,22 +232,35 @@
         "DR-0008-04"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "受影响工程回归与冻结原例核对；真实模型另列",
       "evidence_standard": "命令、退出码、日志、测试/失败/跳过统计及17文件摘要；完整模型证据须归入父需求真实链路。",
-      "current_evidence": "本包设计阶段不运行交付门禁；既有REQ-0007结果不作为本包新能力验证。"
+      "current_evidence": {
+        "command": "node tests/runtime-regression.mjs",
+        "exit_code": 0,
+        "test_count": 614,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0008-runtime-verified.log"
+      }
     }
   ],
   "verification_environment": {
     "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
-      "设计阶段只读Chromium探测已执行；确认实现分支后再确定自动化验证命令。"
+      "node --test tests/case-named.test.mjs",
+      "node tests/runtime-regression.mjs",
+      "node acceptance/check.mjs",
+      "python scripts/sync_requirement_status.py --req REQ-0008-multistep-plan-grounding --apply",
+      "python scripts/collect_delivery_evidence.py --req REQ-0008-multistep-plan-grounding --verify-command \"node --test tests/case-named.test.mjs\"",
+      "python scripts/check_ai_context.py"
     ],
     "environment": [
       "本机Windows / Node22.19.0 / Chromium，隔离requests夹具随机端口，原4179实例未改变。"
     ],
     "conclusion": [
-      "设计待产品选择；无新增产品实现，无真实模型调用，不判工程实现或内部试用就绪。"
+      "A限定工程实现及614项非暂停回归完成；原冻结多步用例固定计划与注入provider协议流证据已记录，真实外部模型调用0。",
+      "首版需要可观察步骤标识、固定路由、唯一页面/步骤标题和原生表单，不支持任意无标识向导或未经证实的业务对象；没有改变旧4179、原基线或发布门槛。"
     ]
   },
   "trace_current": [
@@ -230,7 +270,7 @@
       "dd_id": "DD-0008-01",
       "tk_id": "TK-0008-01",
       "vt_id": "VT-0008-01",
-      "status": "进行中"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0008-01",
@@ -238,7 +278,7 @@
       "dd_id": "DD-0008-02",
       "tk_id": "TK-0008-02",
       "vt_id": "VT-0008-02",
-      "status": "人工待确认"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0008-01",
@@ -246,7 +286,7 @@
       "dd_id": "DD-0008-03",
       "tk_id": "TK-0008-02",
       "vt_id": "VT-0008-03",
-      "status": "人工待确认"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0008-01",
@@ -254,7 +294,7 @@
       "dd_id": "DD-0008-04",
       "tk_id": "TK-0008-03",
       "vt_id": "VT-0008-04",
-      "status": "待实现"
+      "status": "已实现，验证已记录"
     }
   ],
   "trace_history": [
@@ -266,7 +306,7 @@
     }
   ],
   "open_questions": [
-    "请选择互斥A（一次完整计划审批，明确标注未观察原文定位并运行时核验）或B（仅已观察/源码定位，新页面后再次审批剩余计划）。收到选择前仅设计，不进入该语义实现。"
+    "本包审批选择已解决；真实模型、干净环境及独立人工验收仍在父需求单列，不由本包工程检查替代。"
   ],
   "prohibited_implementation": [
     "不在探索阶段填写/推进业务表单，不把预期、fixture oracle或知识库当DOM事实。",
@@ -274,6 +314,14 @@
     "不修改冻结用例、期望和17文件摘要，不复用旧失败结果伪造新能力通过。"
   ],
   "changes": [
+    {
+      "date": "2026-09-18",
+      "version": 2,
+      "type": "确认A并实现",
+      "description": "用户A明确选择一次批准完整固定计划；实现未来字面控件来源、已观察向导步骤绑定、事件守卫、审批及报告提示，验证安全反例并修复部分计划兼容。",
+      "impact": "规划、审查、固定解析与观察、适配/探索来源隔离、审批及报告、专项验证；不改变原用例、业务权限、4179或发布门槛。",
+      "confirmed_by": "用户当前回复A及既有发布目标授权。"
+    },
     {
       "date": "2026-09-18",
       "version": 1,

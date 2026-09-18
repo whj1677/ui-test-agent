@@ -103,6 +103,8 @@ export function planningInput(state, c, row, inputHash) {
     blocked_requests_notice:
       '被拦截请求不代表只读查询；相关页面可能缺少数据，不能据此断言业务数据为空或自动扩大权限。可以继续寻找不依赖该请求的页面。',
     runtime_confirmation_required: true,
+    future_control_policy:
+      'case_named: complete fixed approval, CASE_NAMED_UNOBSERVED, literal original action plus observed wizard_context; no exploration writes or future planning',
     dynamic_row_bindings: dynamicRowEvidence(pages),
     shared_control_evidence: row.shared_control_evidence ?? [],
     recovery_probes: (row.evidence_recoveries ?? []).flatMap((r) => r.useful_probes ?? []),

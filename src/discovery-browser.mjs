@@ -88,6 +88,7 @@ function interactionContracts(input = []) {
     }
     try {
       validateLocator(item.locator);
+      if (item.locator.kind === 'case_named') fail('DISCOVERY_INTERACTION_CONTRACT_INVALID');
     } catch {
       fail('DISCOVERY_INTERACTION_CONTRACT_INVALID');
     }
@@ -1325,6 +1326,7 @@ export class DiscoveryBrowser {
     return this._run(async () => {
       this._check();
       validateLocator(locator);
+      if (locator.kind === 'case_named') fail('DISCOVERY_INTERACTION_CONTRACT_INVALID');
       const target = handoffLocator(this.page, locator),
         count = await target.count();
       return { locator, count, visible: count === 1 && (await target.isVisible()) };

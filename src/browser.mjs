@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { runtimeLocator as handoffLocator, assertRowIdentity } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
+import { observeWizard, captureCaseNamedGuard } from './wizard-binding.mjs';
 import {
   validateLocator,
   validatePlan,
@@ -12,7 +13,7 @@ import {
 } from './plans.mjs';
 import { fail, relativeURL, redact, poll, now, uid, hash } from './common.mjs';
 import { RecordingEvidence } from './recording-evidence.mjs';
-import { stepActions, stepCheckpoints } from './plan-steps.mjs';
+import { stepActions, stepAssertions, stepCheckpoints } from './plan-steps.mjs';
 import { StepBudget } from './step-budget.mjs';
 import { DEFAULT_ADAPTER_SOURCE } from './adapter-program.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
@@ -82,6 +83,7 @@ export class BrowserSession {
   async authenticate(task, marker) {
     if (!this.active(task.id)) fail('BROWSER_REQUIRED', 409);
     validateLocator(marker);
+    if (marker.kind === 'case_named') fail('CASE_NAMED_ACTION_FORBIDDEN');
     if (new URL(this.loginPage.url()).origin !== new URL(task.target).origin)
       fail('OUTSIDE_TARGET_ORIGIN');
     await assertUnique(this.loginPage, marker);
@@ -330,7 +332,11 @@ export class BrowserSession {
     try {
       if (
         plan.schema_version === CHECKPOINT_PLAN_VERSION ||
-        plan.steps?.some((s) => stepActions(s).some((a) => a?.op === 'dismiss_optional'))
+        plan.steps?.some((s) =>
+          [...stepActions(s), ...stepAssertions(s)].some(
+            (a) => a?.op === 'dismiss_optional' || a?.target?.kind === 'case_named',
+          ),
+        )
       )
         validatePlan(plan, c, task.target);
       if (!['ui-agent-plan/v2', CHECKPOINT_PLAN_VERSION].includes(plan.schema_version))
@@ -974,7 +980,10 @@ async function resolveAction(page, a, timeout = 8000) {
     }
     if (['fill', 'press'].includes(a.op) && (await handle.getAttribute('type')) === 'password')
       fail('SENSITIVE_CONTROL_FORBIDDEN');
-    const guard = await captureWithinGuard(page, a.target, handle);
+    const guard =
+      a.target?.kind === 'case_named'
+        ? await captureCaseNamedGuard(page, a.target, handle)
+        : await captureWithinGuard(page, a.target, handle);
     if (guard) actionScopeGuards.set(handle, guard);
     return handle;
   } catch (error) {
@@ -992,14 +1001,16 @@ export async function perform(page, a, base) {
 }
 async function dispatchAction(page, a, base, target, timeout = 20000) {
   const guard = target && actionScopeGuards.get(target);
+  const changed =
+    a.target?.kind === 'case_named' ? 'CASE_NAMED_CONTEXT_CHANGED' : 'WITHIN_SCOPE_CHANGED';
   try {
-    if (guard && !(await guard.evaluate((state) => state.arm()))) fail('WITHIN_SCOPE_CHANGED');
+    if (guard && !(await guard.evaluate((state) => state.arm()))) fail(changed);
     await dispatchVerifiedAction(page, a, base, target, timeout);
     if (guard && (await guard.evaluate((state) => state.blocked()).catch(() => false)))
-      fail('WITHIN_SCOPE_CHANGED');
+      fail(changed);
   } catch (error) {
     if (guard && (await guard.evaluate((state) => state.blocked()).catch(() => false)))
-      fail('WITHIN_SCOPE_CHANGED');
+      fail(changed);
     throw error;
   } finally {
     if (guard) await guard.evaluate((state) => state.disarm()).catch(() => {});
@@ -1575,6 +1586,7 @@ export async function snapshot(
           continue;
         }
         validateLocator(locator);
+        if (locator.kind === 'case_named') fail('CASE_NAMED_ACTION_FORBIDDEN');
         let target = handoffLocator(page, locator);
         // getByLabel and accessible role/name use different native-label
         // semantics (e.g. labels wrapping a select). Only the fixed default
@@ -1642,6 +1654,7 @@ export async function snapshot(
       title: redact(raw.title),
       text: redact(raw.text),
       controls: JSON.parse(redact(JSON.stringify(controls))),
+      wizard_context: JSON.parse(redact(JSON.stringify(await observeWizard(page)))),
       adapter_hash: mapped.hash,
       adapter_gaps: JSON.parse(redact(JSON.stringify(adapter_gaps.slice(0, 12)))),
       login_page: false,

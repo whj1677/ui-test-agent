@@ -31,6 +31,15 @@ let outputTask = null,
   outputWasBusy = false,
   outputActionError = '';
 const errors = {
+  CASE_NAMED_SOURCE_REQUIRED: '未观察字段必须逐字来自对应步骤的操作原文，不能来自预期或经验猜测。',
+  CASE_NAMED_GUARD_UNOBSERVED: '缺少可核验的向导页面和步骤信息，尚不能安全绑定后续字段。',
+  CASE_NAMED_CONTEXT_MISMATCH: '当前页面或向导步骤与批准计划不符，未操作该字段。',
+  CASE_NAMED_CONTEXT_CHANGED: '操作前或操作过程中页面、步骤或表单身份发生变化，已停止。',
+  CASE_NAMED_FORM_MISMATCH: '无法确认当前步骤的唯一所属表单，已停止绑定。',
+  CASE_NAMED_NOT_UNIQUE: '当前步骤存在同名控件，未自动选择其中一个。',
+  CASE_NAMED_NOT_FOUND: '进入指定步骤后仍未找到批准的字段，未替换目标。',
+  CASE_NAMED_TYPE_MISMATCH: '字段实际类型与批准计划不符，已停止绑定。',
+  CASE_NAMED_ACTION_FORBIDDEN: '未观察定位不能用于危险操作、清理、前置条件或自动替换。',
   PREPARATION_OPTIONS_INVALID: '准备设置无效，请选择支持的并发数和时间档位。',
   PARALLEL_READONLY_CONFIRMATION_REQUIRED:
     '两路探索仅适用于相互独立的只读用例；请确认隔离条件，写入授权开启时使用串行。',
@@ -966,9 +975,11 @@ const opName = {
   wait: '等待',
 };
 const loc = (l) =>
-  ['row', 'cell'].includes(l?.kind)
-    ? `${loc(l.table)} · ${l.key?.column}=${l.key?.value} · ${l.kind === 'cell' ? l.column : l.target ? loc(l.target) : '整行'}`
-    : (l?.name ?? l?.value ?? '');
+  l?.kind === 'case_named'
+    ? `尚未观察 · 原步骤 ${l.source_step_id} 命名：${loc(l.target)} · 类型 ${l.control_type} · ${l.guard?.path} / ${l.guard?.page_heading} / ${l.guard?.step}（执行时核验唯一表单与控件）`
+    : ['row', 'cell'].includes(l?.kind)
+      ? `${loc(l.table)} · ${l.key?.column}=${l.key?.value} · ${l.kind === 'cell' ? l.column : l.target ? loc(l.target) : '整行'}`
+      : (l?.name ?? l?.value ?? '');
 Object.assign(eventNames, {
   OPTIONAL_DIALOG_OBSERVED: '条件提示已检查',
   ACTION_SKIPPED: '提示未出现，未派发点击',
@@ -1772,6 +1783,10 @@ function confirmSelected({ continuePreparation = false } = {}) {
 }
 function planHTML(plan) {
   if (!plan) return '<p>尚未生成计划。</p>';
+  const unobserved = plan.steps
+    .flatMap((s) => s.checkpoints ?? [s])
+    .flatMap((s) => [...s.actions, ...s.assertions])
+    .filter((item) => item.target?.kind === 'case_named');
   const assertion = (item) =>
     `${loc(item.target)} · ${item.check} ${item.expected === undefined ? '' : JSON.stringify(item.expected)}${item.oracle_quote ? '（原预期：“' + item.oracle_quote + '”）' : ''}${item.obligation_ids ? ' · 对应 ' + item.obligation_ids.join('、') : ''}`;
   const assertions = (items) =>
@@ -1789,7 +1804,7 @@ function planHTML(plan) {
   const cleanup = plan.cleanup
     ? `<h4>执行后清理 · ${h(plan.cleanup.identity)}</h4>${plan.cleanup.observation_path ? `<p>先以只读方式返回已批准页面：${h(plan.cleanup.observation_path)}，再核实是否已清理及资源归属。</p>` : ''}<p>删除或恢复前先确认目标身份：</p>${assertions(plan.cleanup.ownership ?? [])}${actions(plan.cleanup.actions)}${assertions(plan.cleanup.assertions)}`
     : '<p>该计划无需数据清理。</p>';
-  return `<div class="notice ${plan.data_effect === 'mutation' ? 'warn' : ''}">打开 ${h(plan.entry_path)} · ${plan.data_effect === 'mutation' ? '会写入数据，必须验证清理' : '声明为只读操作'}</div><h4>前置条件</h4>${plan.preconditions.length ? assertions(plan.preconditions) : '<p>计划未声明自动验证项；请核对原用例前置条件。</p>'}${steps}${cleanup}<p>${h(plan.notes ?? '')}</p><details><summary>查看结构化计划</summary><pre>${h(JSON.stringify(plan, null, 2))}</pre></details>`;
+  return `${unobserved.length ? `<div class="notice warn" data-unobserved-plan><strong>含 ${unobserved.length} 项尚未观察的定位</strong><p>以下标记项来自用例操作原文，不代表页面已经验证。此次核对固定完整操作、输入值、顺序、预期和定位；执行到对应步骤时核验页面、表单、类型和唯一性。不匹配将停止，不自动换目标或生成后续计划。</p></div>` : ''}<div class="notice ${plan.data_effect === 'mutation' ? 'warn' : ''}">打开 ${h(plan.entry_path)} · ${plan.data_effect === 'mutation' ? '会写入数据，必须验证清理' : '声明为只读操作'}</div><h4>前置条件</h4>${plan.preconditions.length ? assertions(plan.preconditions) : '<p>计划未声明自动验证项；请核对原用例前置条件。</p>'}${steps}${cleanup}<p>${h(plan.notes ?? '')}</p><details><summary>查看结构化计划</summary><pre>${h(JSON.stringify(plan, null, 2))}</pre></details>`;
 }
 function approveSelected() {
   const rows = state.cases.filter((c) => selected.has(c.case_id) && !c.attempts.length);

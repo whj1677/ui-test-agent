@@ -1,6 +1,7 @@
 import { stepActions, stepAssertions } from './plan-steps.mjs';
 import { semanticHash } from './common.mjs';
 import { planLocatorEntries } from './plan-feedback.mjs';
+import { requireCaseNamedEvidence, validateCaseNamedPlan } from './case-named.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -24,6 +25,7 @@ const cardinality = (text) =>
 // Other extra assertions/compound expectations still require the independent semantic audit.
 export function requirePlanSemantics(plan, c, context = {}) {
   if (!plan) return;
+  validateCaseNamedPlan(plan, c);
   const source = textValues({
     data: c.data,
     test_data: c.test_data,
@@ -31,6 +33,7 @@ export function requirePlanSemantics(plan, c, context = {}) {
     steps: (c.steps ?? []).map((s) => ({ action: s.action, expected: s.expected })),
   }).join('\n');
   for (const { locator, path } of planLocatorEntries(plan)) {
+    requireCaseNamedEvidence(locator, context);
     if (['row', 'cell'].includes(locator?.kind) && !source.includes(locator.key.value))
       reject(
         'PLAN_ROW_IDENTITY_UNSUPPORTED',

@@ -2,6 +2,7 @@ import { handoffLocator } from '../vendor/manual-ui/handoff_runtime.mjs';
 import { validateLocator } from './plans.mjs';
 import { fail } from './common.mjs';
 import { withinHandles } from './within-locator.mjs';
+import { caseNamedHandles } from './wizard-binding.mjs';
 
 export const isRowLocator = (l) => ['row', 'cell'].includes(l?.kind);
 
@@ -134,10 +135,15 @@ async function scopedHandles(page, spec) {
 
 // Compatibility surface used by observation, discovery, actions and atomic assertions.
 export function runtimeLocator(page, spec) {
-  if (!isRowLocator(spec) && spec?.kind !== 'within') return handoffLocator(page, spec);
+  if (!isRowLocator(spec) && !['within', 'case_named'].includes(spec?.kind))
+    return handoffLocator(page, spec);
   validateLocator(spec);
   const handlesFor = () =>
-    spec.kind === 'within' ? withinHandles(page, spec) : scopedHandles(page, spec);
+    spec.kind === 'case_named'
+      ? caseNamedHandles(page, spec)
+      : spec.kind === 'within'
+        ? withinHandles(page, spec)
+        : scopedHandles(page, spec);
   const use = async (fn) => {
     const handles = await handlesFor();
     try {
@@ -179,12 +185,18 @@ export function runtimeLocator(page, spec) {
 }
 
 export async function assertRowIdentity(page, spec, original) {
-  if (!isRowLocator(spec) && spec?.kind !== 'within') return;
+  if (!isRowLocator(spec) && !['within', 'case_named'].includes(spec?.kind)) return;
   const current = runtimeLocator(page, spec);
   if (
     !original ||
     (await current.count()) !== 1 ||
     !(await current.evaluate((element, old) => element === old && old.isConnected, original))
   )
-    fail(spec.kind === 'within' ? 'WITHIN_SCOPE_CHANGED' : 'ROW_SCOPE_CHANGED');
+    fail(
+      spec.kind === 'case_named'
+        ? 'CASE_NAMED_CONTEXT_CHANGED'
+        : spec.kind === 'within'
+          ? 'WITHIN_SCOPE_CHANGED'
+          : 'ROW_SCOPE_CHANGED',
+    );
 }
