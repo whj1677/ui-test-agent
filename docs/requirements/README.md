@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本5受影响工程262项通过，但追加真实模型42调用、原三例0/3完整通过；缺口反馈/矛盾审查仍阻塞，不能交付或发布，旧失败保留。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本6真实54调用、原三例1/3完整通过；版本7已修复来源校验纠错和缺口定向恢复，373项受影响工程验证通过，真实效果未复验、4179仍为版本6，不能发布，旧失败保留。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
 

@@ -243,6 +243,12 @@ test('partial audit gaps survive success and a repeated measurement recovers wit
       observedGap = true;
       if (!input.correction) return structuredClone(duplicate);
       assert.equal(input.correction.code, 'ADAPTIVE_NO_PROGRESS');
+      assert.equal(input.repair_focus.mode, 'missing_assertions');
+      assert.deepEqual(
+        input.repair_focus.obligations.map((o) => o.id),
+        ['S1-O2'],
+      );
+      assert.equal(input.repair_focus.already_measured.length, 1);
       assert.equal(input.remaining.replans, 1);
       corrected = true;
       const obligation = input.original.steps[0].obligations[1];
@@ -316,6 +322,39 @@ test('contradictory audit returns candidate feedback without executing or erasin
         item.audit?.issues.some((issue) => issue.code === 'ASSERTION_GAP'),
     ),
   );
+});
+
+test('focused gap repair refuses an extra navigation action before dispatch', async (t) => {
+  let saved;
+  const e = await setup(t, {
+    compound: true,
+    transform(value, { prompt, input }) {
+      if (prompt.startsWith(INPUT_REVIEW_PROMPT) || prompt.startsWith(PLAN_AUDIT_PROMPT))
+        return value;
+      if (input.step.step_id !== 'S1' || value.actions.length) return value;
+      saved ??= { ...structuredClone(value), complete: false };
+      if (!input.repair_focus) return structuredClone(saved);
+      const o = input.original.steps[0].obligations[1];
+      return {
+        ...value,
+        actions: [{ action_id: 'extra-tab', op: 'click', target: role('tab', '运行参数') }],
+        assertions: [
+          {
+            target: role('tab', '运行参数'),
+            check: 'visible',
+            oracle_quote: o.text,
+            obligation_ids: [o.id],
+          },
+        ],
+        complete: false,
+      };
+    },
+  });
+  const { fact } = await run(e);
+  assert.equal(fact.status, 'TECHNICAL_FAILED');
+  assert.equal(fact.error, 'ADAPTIVE_REPAIR_FOCUS_VIOLATION');
+  assert.equal(fact.actions.length, 3, 'the extra action was never dispatched');
+  assert.equal(fact.adaptive_steps.length, 0);
 });
 
 test('no remaining obligations feedback permits a no-action completion but never replays navigation', async (t) => {

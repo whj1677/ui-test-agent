@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { adaptiveProgress } from '../src/adaptive-recovery.mjs';
+import {
+  adaptiveProgress,
+  missingAssertionFocus,
+  requireMissingAssertionFocus,
+  adaptiveCorrection,
+} from '../src/adaptive-recovery.mjs';
 
 const original = {
   step_id: 'S3',
@@ -72,4 +77,104 @@ test('covered requires a successfully executed same-obligation assertion, never 
     });
     assert.equal(result.obligations.find((o) => o.id === id).status, expected);
   }
+});
+
+test('focused repair keeps original gaps, forbids repeating/relabeling measurements and new actions', () => {
+  const focus = missingAssertionFocus(adaptiveProgress(original, completed, audit), completed);
+  const fresh = {
+    target: { kind: 'text', value: '共12条 · 第1/3页', exact: true },
+    check: 'visible',
+    obligation_ids: ['S3-O1'],
+    oracle_quote: original.obligations[0].text,
+  };
+  assert.deepEqual(
+    focus.obligations.map((o) => o.id),
+    ['S3-O1', 'S3-O2'],
+  );
+  assert.doesNotThrow(() =>
+    requireMissingAssertionFocus({ actions: [], assertions: [fresh], complete: false }, focus),
+  );
+  for (const ids of [['S3-O1'], ['S3-O2']]) {
+    assert.throws(
+      () =>
+        requireMissingAssertionFocus(
+          {
+            actions: [],
+            assertions: [
+              {
+                ...completed[0].assertions[0],
+                obligation_ids: ids,
+                oracle_quote: '换引用不产生新测量',
+              },
+            ],
+            complete: false,
+          },
+          focus,
+        ),
+      { code: 'ADAPTIVE_NO_PROGRESS' },
+    );
+  }
+  assert.throws(
+    () =>
+      requireMissingAssertionFocus(
+        { actions: [{ op: 'click' }], assertions: [fresh], complete: false },
+        focus,
+      ),
+    { code: 'ADAPTIVE_REPAIR_FOCUS_VIOLATION' },
+  );
+  assert.throws(
+    () =>
+      requireMissingAssertionFocus(
+        { actions: [], assertions: [{ ...fresh, obligation_ids: ['OTHER'] }], complete: false },
+        focus,
+      ),
+    { code: 'ADAPTIVE_REPAIR_FOCUS_VIOLATION' },
+  );
+  assert.throws(
+    () => requireMissingAssertionFocus({ actions: [], assertions: [], complete: true }, focus),
+    { code: 'ADAPTIVE_NO_PROGRESS' },
+  );
+});
+
+test('focused no-gap completion contains no new assertions or actions and does not mutate historical evidence', () => {
+  const progress = { step_id: 'S3', remaining_obligations: [], issues: [] };
+  const focus = missingAssertionFocus(progress, completed);
+  assert.doesNotThrow(() =>
+    requireMissingAssertionFocus({ actions: [], assertions: [], complete: true }, focus),
+  );
+  assert.throws(
+    () =>
+      requireMissingAssertionFocus(
+        { actions: [], assertions: completed[0].assertions, complete: true },
+        focus,
+      ),
+    { code: 'ADAPTIVE_NO_PROGRESS' },
+  );
+  focus.already_measured[0].expected = 999;
+  assert.equal(completed[0].assertions[0].expected, 5);
+});
+
+test('source correction exposes exact failed field but never automatically normalizes observed units', () => {
+  const proposal = {
+    assertions: [
+      {
+        check: 'table_cells',
+        expected: {
+          rows: [
+            { key: 'D009', cells: [{ column: '额定功率', check: 'text', expected: '200 kW' }] },
+          ],
+        },
+      },
+    ],
+  };
+  const before = structuredClone(proposal);
+  const correction = adaptiveCorrection(
+    { code: 'TABLE_SOURCE_UNGROUNDED', path: 'expected.rows[0].cells[0].expected' },
+    proposal,
+    { source_action: '核对功率', source_expected: '额定功率200' },
+  );
+  assert.equal(correction.field_path, 'expected.rows[0].cells[0].expected');
+  assert.match(correction.instruction, /check:"number"/);
+  assert.deepEqual(proposal, before);
+  assert.deepEqual(correction.invalid_response, before);
 });

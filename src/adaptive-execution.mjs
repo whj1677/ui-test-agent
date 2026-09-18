@@ -7,6 +7,8 @@ import { runtimeLocator } from './row-locator.mjs';
 import {
   adaptiveCorrection,
   adaptiveProgress,
+  missingAssertionFocus,
+  requireMissingAssertionFocus,
   canReconsiderBlock,
   isProtocolError,
 } from './adaptive-recovery.mjs';
@@ -105,6 +107,7 @@ export async function executeAdaptiveStep(session, run) {
   let assertionRepair = null;
   let executedAudit,
     noProgressReviews = 0;
+  let focusMissing = false;
   let tableBaselines;
   await recording.beginStep(step, stepIndex);
   await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
@@ -157,20 +160,23 @@ export async function executeAdaptiveStep(session, run) {
     result.adaptive_segments.push(record);
     let fragment, point, reply;
     const beforeActions = result.actions.length;
+    const progress = adaptiveProgress(
+      run.c.steps.find((item) => item.step_id === step.step_id),
+      completed,
+      executedAudit,
+    );
+    const repairFocus = focusMissing ? missingAssertionFocus(progress, completed) : null;
     try {
       reply = await onAdaptive(
         'plan',
         {
+          ...(repairFocus ? { repair_focus: repairFocus } : {}),
           original: run.c,
           contract: plan,
           step,
           current,
           previous: completed,
-          progress: adaptiveProgress(
-            run.c.steps.find((item) => item.step_id === step.step_id),
-            completed,
-            executedAudit,
-          ),
+          progress,
           repair_assertions: assertionRepair,
           ...(correction ? { correction } : {}),
           ...(tableBaselines
@@ -217,6 +223,7 @@ export async function executeAdaptiveStep(session, run) {
         previous: completed,
         base: run.task.target,
       });
+      requireMissingAssertionFocus(fragment, repairFocus);
       const assertionContract = (items) => items.map(({ target, ...item }) => item);
       if (
         assertionRepair &&
@@ -304,6 +311,7 @@ export async function executeAdaptiveStep(session, run) {
       executedKeys.add(record.transition_hash);
       completed.push(fragment);
       executedAudit = audit;
+      focusMissing = false;
       correction = undefined;
       assertionRepair = null;
       segment++;
@@ -341,6 +349,7 @@ export async function executeAdaptiveStep(session, run) {
         !rejected.has(observationHash + ':' + record.proposal_hash);
       const localError =
         noProgressRetry ||
+        error.code === 'TABLE_SOURCE_UNGROUNDED' ||
         /^(?:ADAPTIVE_(?:SEGMENT_REJECTED|INPUT|VALUE|FRAGMENT|ACTION|TARGET)|INVALID_|ASSERTION_|ORACLE_|PLAN_|LOCATOR_NOT_|ROW_)/.test(
           error.code ?? '',
         );
@@ -378,7 +387,10 @@ export async function executeAdaptiveStep(session, run) {
         continue;
       }
       rejected.add(observationHash + ':' + (record.proposal_hash ?? 'invalid'));
-      if (noProgressRetry) noProgressReviews++;
+      if (noProgressRetry) {
+        noProgressReviews++;
+        focusMissing = true;
+      }
       replans++;
       await emit('ADAPTIVE_REPLANNING', {
         step_id: step.step_id,

@@ -1,7 +1,9 @@
-import { publicError } from './common.mjs';
+import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  TABLE_SOURCE_UNGROUNDED:
+    'The candidate assertion contains a value not grounded in the ORIGINAL current step or confirmed data. Repair the identified field, not the business expectation. If the original supplies a numeric value, table_cells supports check:"number" with that original number and a supported display suffix in actual text; do not invent an expected text unit from the page. Do not convert units, introduce tolerance, substitute observed values, drop required fields or replay executed actions. The revised candidate must pass all original grounding and semantic checks.',
   ADAPTIVE_NO_PROGRESS:
     'This assertion-only partial segment repeats an already executed measurement. Read progress.remaining_obligations and its reasons; propose the missing measurements instead. If none remain, declare complete:true with no repeated actions, subject to full audit. Do not change original expectations or replay any dispatched action. One reconsideration only, within the existing replan/deadline budget.',
   INVALID_LOCATOR:
@@ -13,6 +15,40 @@ const hints = {
   ADAPTIVE_MODEL_BLOCKED:
     'Reconsider the claimed blocker using current evidence. An observed, source-named menu can be expanded before its child exists. A literal same-origin path in THIS original action may be navigated without an observed link. Return a legal partial segment if possible; if evidence is still insufficient, return blocked again. Never guess an unseen target or broaden permission.',
 };
+
+function measurementKey({ obligation_ids, oracle_quote, ...measurement }) {
+  // Relabelling an old measurement with missing IDs does not make it new evidence.
+  return semanticHash(measurement);
+}
+
+export function missingAssertionFocus(progress, completed) {
+  return {
+    mode: 'missing_assertions',
+    step_id: progress.step_id,
+    obligations: structuredClone(progress.remaining_obligations),
+    already_measured: structuredClone(completed.flatMap((part) => part.assertions)),
+    issues: structuredClone(progress.issues),
+    instruction:
+      '只补当前缺失义务的尚未执行测量，actions必须为空。不要再输出already_measured中的测量，也不能仅更换source_refs。正文中的静态文字不一定在控件目录里，可依据当前观察使用现有精确text定位协议，仍须唯一性和独立审查。原预期不变；若缺口全齐则只提交无动作complete:true；无法找到有依据的新测量则明确blocked。',
+  };
+}
+
+export function requireMissingAssertionFocus(fragment, focus) {
+  if (!focus) return;
+  if (fragment.actions.length) fail('ADAPTIVE_REPAIR_FOCUS_VIOLATION');
+  const missing = new Set(focus.obligations.map((item) => item.id));
+  if (!missing.size) {
+    if (!fragment.complete || fragment.assertions.length) fail('ADAPTIVE_NO_PROGRESS');
+    return;
+  }
+  if (!fragment.assertions.length) fail('ADAPTIVE_NO_PROGRESS');
+  const measured = new Set(focus.already_measured.map(measurementKey));
+  for (const assertion of fragment.assertions) {
+    if (measured.has(measurementKey(assertion))) fail('ADAPTIVE_NO_PROGRESS');
+    if (!assertion.obligation_ids.some((id) => missing.has(id)))
+      fail('ADAPTIVE_REPAIR_FOCUS_VIOLATION');
+  }
+}
 
 // Advisory feedback, never an acceptance receipt. Only a successfully executed
 // cumulative audit can describe measured coverage; rejected candidates cannot.
@@ -54,6 +90,7 @@ export function adaptiveCorrection(error, proposal, step, audit) {
       hints[error.code] ??
       'Correct only the reported technical defect. Preserve original inputs, scope, expected values and already executed actions. Do not replace a format error with an unsupported business blocker.',
     ...(error.plan_feedback ? { detail: error.plan_feedback } : {}),
+    ...(typeof error.path === 'string' ? { field_path: error.path } : {}),
     ...(proposal === undefined ? {} : { invalid_response: scrubForLog(proposal) }),
     ...(audit ? { audit } : {}),
     source_action: step.source_action,
