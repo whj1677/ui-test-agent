@@ -1545,6 +1545,13 @@ export class Controller {
               },
               { phase: 'discovery', signal },
             );
+            await emit('DISCOVERY_CANDIDATES_PROVIDED', {
+              page_id: observation.page_id,
+              request_id: job.current_model?.request_id,
+              candidate_count: candidates.length,
+              excluded_repeated_candidates: observation.candidates.length - candidates.length,
+              message: `模型已返回：本轮输入包含 ${candidates.length} 个候选，排除 ${observation.candidates.length - candidates.length} 个重复选择；返回不代表已选对目标或动作已生效。`,
+            });
             const response = normalizeDiscoveryResponse(rawResponse);
             if (response !== rawResponse)
               await this.diagnostic(job, {
@@ -1571,6 +1578,9 @@ export class Controller {
             if (response.done) {
               await this.modelDecision(job, 'ACCEPTED', {
                 code: 'DISCOVERY_OBSERVATION_COMPLETE',
+                page_id: observation.page_id,
+                offered_candidates: candidates.length,
+                unselected_candidates: candidates.length,
                 reason: response.reason,
               });
               done = true;
@@ -1580,6 +1590,9 @@ export class Controller {
             if (response.blocked) {
               await this.modelDecision(job, 'BLOCKED', {
                 code: 'DISCOVERY_MODEL_BLOCKED',
+                page_id: observation.page_id,
+                offered_candidates: candidates.length,
+                unselected_candidates: candidates.length,
                 reason: response.reason,
               });
               reason = response.reason;
@@ -1595,6 +1608,9 @@ export class Controller {
               code: 'DISCOVERY_CANDIDATE_VALID',
               reason: response.reason,
               candidate_id: candidate.candidate_id,
+              page_id: observation.page_id,
+              offered_candidates: candidates.length,
+              unselected_candidates: candidates.length - 1,
             });
             checkBudget();
             try {

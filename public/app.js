@@ -985,6 +985,7 @@ Object.assign(eventNames, {
   ACTION_SKIPPED: '提示未出现，未派发点击',
   DISCOVERY_STARTED: '自动探索已启动',
   DISCOVERY_OBSERVED: '已观察探索页面',
+  DISCOVERY_CANDIDATES_PROVIDED: '本轮可选目标已提供',
   DISCOVERY_ACTION_BEFORE: '准备探索控件',
   DISCOVERY_ACTION_AFTER: '探索控件操作结束',
   DISCOVERY_NAVIGATE_BEFORE: '准备探索页面',
@@ -1265,6 +1266,57 @@ function mountAgentOutput() {
   if (guided.nextElementSibling !== outputPanel) guided.after(outputPanel);
   updateAgentOutput();
 }
+function discoveryDiagnosticsText(event) {
+  if (!event.observation_diagnostics && !event.candidate_diagnostics && !event.coverage)
+    return null;
+  const labels = {
+    ADAPTER_MAPPING_MISSING: '未生成支持的定位',
+    ADAPTER_TARGET_NOT_UNIQUE: '定位不唯一',
+    ADAPTER_TARGET_MISSING: '定位已生成，但没有匹配对象',
+    ADAPTER_TARGET_IDENTITY_MISMATCH: '定位不是原观察对象',
+    ADAPTER_LOCATOR_REJECTED: '定位协议检查未通过',
+    TARGET_NOT_UNIQUE: '当前定位不唯一',
+    TARGET_DETACHED: '原目标已失效',
+    TARGET_NOT_VISIBLE: '目标当前不可见',
+    TARGET_OBSTRUCTED: '目标不能接收点击，可能被遮挡',
+    TARGET_DISABLED: '目标已禁用',
+    DOWNLOAD_FORBIDDEN: '探索不允许下载',
+    EDITABLE_UNSUPPORTED: '不支持此编辑区域',
+    ALREADY_SELECTED: '目标已选中',
+    ACTION_SAFETY_FILTERED: '动作未获探索安全规则许可',
+    FORM_SUBMIT_UNAUTHORIZED: '表单提交没有获准的探索能力',
+    ROUTE_SAFETY_FILTERED: '路由未通过安全检查',
+    NEW_CONTEXT_UNSUPPORTED: '不支持打开新浏览上下文',
+    INPUT_CAPABILITY_UNAVAILABLE: '未取得受支持的原文输入能力',
+    INPUT_CAPABILITY_REJECTED: '输入当前条件不满足',
+    INPUT_ALREADY_MATCHES: '当前值已符合原输入，无需重复操作',
+    INPUT_IDENTITY_MISMATCH: '输入目标身份不一致',
+    INPUT_SOURCE_UNSUPPORTED: '输入不属于原用例',
+    OPTION_UNAVAILABLE: '选项不可用或不唯一',
+    INTERACTION_UNSUPPORTED: '当前交互尚无受支持的探索能力',
+    OBSERVATION_ONLY: '仅用于观察，无需生成动作',
+    DISCOVERY_BROWSER_FAILED: '浏览器检查未完成，原因未知',
+    DISCOVERY_ACTION_TIMEOUT: '浏览器检查达到等待期限',
+  };
+  const lines = ['这是技术观察诊断，不是业务测试结果；未采集或未提供动作不等于页面不存在该功能。'];
+  for (const [title, log] of [
+    ['定位阶段', event.observation_diagnostics?.rejected],
+    ['候选阶段', event.candidate_diagnostics?.excluded],
+  ]) {
+    if (!log) continue;
+    lines.push(`${title}：${log.total} 项未继续`);
+    for (const [code, count] of Object.entries(log.counts ?? {}))
+      lines.push(`  ${labels[code] ?? code}：${count} 项`);
+    for (const sample of log.samples ?? [])
+      lines.push(
+        `  样例 #${sample.control_index} ${sample.name}：${labels[sample.code] ?? sample.code}`,
+      );
+    if (log.omitted_samples)
+      lines.push(`  另 ${log.omitted_samples} 项仅保留原因计数（样例有上限）。`);
+  }
+  if (event.coverage) lines.push('采集覆盖：' + JSON.stringify(event.coverage, null, 2));
+  return lines.join('\n');
+}
 function outputRows() {
   const rows = (state.events ?? []).map((event, index) => ({
     key: `event-${index}-${event.at}`,
@@ -1272,6 +1324,8 @@ function outputRows() {
     issue: outputIssue(event),
     text: diagnosticsSafe(eventText(event)),
     source: '运行',
+    body: discoveryDiagnosticsText(event),
+    summary: '展开探索诊断',
   }));
   const parsed = new Set(
     outputDiagnostics.filter((r) => r.type === 'MODEL_RESPONSE_PARSED').map((r) => r.request_id),
@@ -1400,7 +1454,7 @@ function updateAgentOutput() {
         node = document.createElement('li');
         node.dataset.key = row.key;
         node.className = row.issue ? 'output-row issue' : 'output-row';
-        node.innerHTML = `<time>${h(outputTime(row.at))}</time><span class="output-source">${h(row.source)}</span><div class="output-content"><p>${h(diagnosticsSafe(row.text))}</p>${row.body ? `<details><summary>展开模型输出</summary><pre>${h(diagnosticsSafe(row.body))}</pre></details>` : ''}</div>`;
+        node.innerHTML = `<time>${h(outputTime(row.at))}</time><span class="output-source">${h(row.source)}</span><div class="output-content"><p>${h(diagnosticsSafe(row.text))}</p>${row.body ? `<details><summary>${h(row.summary ?? '展开模型输出')}</summary><pre>${h(diagnosticsSafe(row.body))}</pre></details>` : ''}</div>`;
       }
       // Insert only when order changes; do not detach an expanded/focused reply.
       const index = visible.indexOf(row);

@@ -349,6 +349,52 @@ try {
     await page.locator('#output-follow').evaluate((node) => getComputedStyle(node).outlineStyle),
     'none',
   );
+  addEvent('DISCOVERY_OBSERVED', {
+    page_id: 'observation-local',
+    message: '定位通过 3 项，1 项控件提供 1 个候选；2 项未提供探索动作，原因可展开查看。',
+    observation_diagnostics: {
+      rejected: {
+        total: 1,
+        counts: { ADAPTER_TARGET_NOT_UNIQUE: 1 },
+        samples: [],
+        omitted_samples: 0,
+      },
+    },
+    candidate_diagnostics: {
+      excluded: {
+        total: 2,
+        counts: { TARGET_DISABLED: 1, ACTION_SAFETY_FILTERED: 1 },
+        samples: [{ control_index: 2, name: markup, code: 'TARGET_DISABLED' }],
+        omitted_samples: 0,
+      },
+    },
+  });
+  await waitForText('#output-list', '展开探索诊断');
+  const detail = page
+    .locator('#output-list details')
+    .filter({ has: page.getByText('展开探索诊断', { exact: true }) });
+  assert.equal(await detail.getAttribute('open'), null, 'diagnostics start collapsed');
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    const summary = detail.locator('summary');
+    await summary.focus();
+    if ((await detail.getAttribute('open')) === null) await page.keyboard.press('Enter');
+    assert.equal(await detail.getAttribute('open'), '');
+    const priorY = await page.evaluate(() => scrollY);
+    addEvent('DISCOVERY_PAGE_CAPTURED', { message: 'diagnostic-stability-' + width });
+    await waitForText('#output-list', 'diagnostic-stability-' + width);
+    assert.equal(await detail.getAttribute('open'), '');
+    assert.equal(await summary.evaluate((el) => document.activeElement === el), true);
+    assert.ok(Math.abs((await page.evaluate(() => scrollY)) - priorY) < 2);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    assert.equal(await detail.locator('img').count(), 0);
+    assert.equal(await page.evaluate(() => window.outputInjected), undefined);
+    assert.match(await detail.textContent(), /不是业务测试结果/);
+    await page.screenshot({
+      path: path.join(directory, `diagnostics-${width}.png`),
+      fullPage: true,
+    });
+  }
   assert.deepEqual(errors, []);
   await fs.writeFile(
     path.join(directory, 'summary.json'),
@@ -373,6 +419,7 @@ try {
           'stopped state',
           'mobile/tablet layout',
           'reduced motion and keyboard focus',
+          'diagnostic counts and escaped collapsed details, keyboard and polling stability at 375/1280px',
         ],
         page_errors: errors,
         viewport_stability: viewportStability,

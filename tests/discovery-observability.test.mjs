@@ -11,6 +11,8 @@ import { DISCOVERY_PROMPT } from '../src/discovery.mjs';
 import { CASE_NAMED_GUIDANCE } from '../src/case-named.mjs';
 import { caseHash, suggestObligations } from '../src/plans.mjs';
 import { fixtureModelPhase, fixtureModelReply } from './fixture-model.mjs';
+import { rejectionLog, recordRejection } from '../src/observation-diagnostics.mjs';
+import { DiscoveryBrowser } from '../src/discovery-browser.mjs';
 
 const role = (role, name) => ({ kind: 'role', role, name, exact: true });
 async function site(t, body) {
@@ -144,9 +146,81 @@ for (const marked of [true, false]) {
       assert.equal(row.plan.steps[0].actions[1].target.kind, 'case_named');
     } else assert.equal(row.plan == null, true);
     assert.equal(await session.loginPage.evaluate(() => effects), 0);
+    assert.equal(
+      result.events.some((e) => e.type === 'DISCOVERY_ACTION_BEFORE'),
+      false,
+    );
+    const offered = result.events.find((e) => e.type === 'DISCOVERY_CANDIDATES_PROVIDED');
+    assert.ok(offered?.page_id);
+    assert.ok(offered?.request_id);
+    const observation = result.events.find((e) => e.type === 'DISCOVERY_OBSERVED');
+    const mapping = observation.observation_diagnostics;
+    const selection = observation.candidate_diagnostics;
+    assert.equal(mapping.raw_count, mapping.mapped_count + mapping.rejected.total);
+    assert.equal(
+      selection.considered_controls,
+      selection.eligible_controls + selection.excluded.total,
+    );
+    assert.equal(selection.excluded.counts.FORM_SUBMIT_UNAUTHORIZED, 1);
     assert.equal(JSON.stringify(c), original);
     assert.ok(calls.includes('discovery'));
     assert.equal(calls.includes('plan'), marked);
     assert.equal(calls.includes('plan_audit'), marked);
   });
 }
+
+test('rejection accounting is bounded and never exposes sensitive control names', () => {
+  const log = rejectionLog();
+  for (let i = 0; i < 100; i++) recordRejection(log, 'TARGET_DISABLED', '普通控件', i);
+  for (let i = 0; i < 30; i++) recordRejection(log, 'CODE_' + i, 'API key local-sensitive', i);
+  assert.equal(log.total, 130);
+  assert.equal(log.counts.TARGET_DISABLED, 100);
+  assert.equal(log.samples.length, 24);
+  assert.equal(log.omitted_samples, 106);
+  assert.ok(!JSON.stringify(log).includes('local-sensitive'));
+  assert.ok(log.samples.every((s) => Object.keys(s).sort().join() === 'code,control_index,name'));
+});
+
+test('real candidate exclusions explain mapping, ambiguity, disabled, safety and unsupported controls', async (t) => {
+  const target = await site(
+    t,
+    `<h1>诊断页面</h1><button>重复详情</button><button>重复详情</button>
+    <input><div role="status">状态无匹配</div><button disabled>查看禁用项</button>
+    <button>删除项目</button><button>神秘操作</button><button>查看详情</button>
+    <label>业务字段<input value="unlogged-local-value"></label>`,
+  );
+  const task = {
+    id: 'diagnostics',
+    target,
+    authorization: { nonproduction: true, writes: false, readOnlyEndpoints: [] },
+  };
+  const session = new BrowserSession({ headless: true });
+  t.after(() => session.close());
+  await session.open(task);
+  await session.authenticate(task, role('heading', '诊断页面'));
+  const explorer = new DiscoveryBrowser(session, task);
+  t.after(() => explorer.close());
+  const observed = await explorer.open();
+  const mapping = observed.snapshot.observation_diagnostics;
+  assert.equal(mapping.raw_count, mapping.mapped_count + mapping.rejected.total);
+  assert.equal(mapping.rejected.counts.ADAPTER_TARGET_NOT_UNIQUE, 2);
+  assert.equal(mapping.rejected.counts.ADAPTER_TARGET_MISSING, 1);
+  assert.ok(mapping.rejected.counts.ADAPTER_MAPPING_MISSING >= 1);
+  const candidates = observed.snapshot.candidate_diagnostics;
+  for (const code of [
+    'TARGET_DISABLED',
+    'ACTION_SAFETY_FILTERED',
+    'INTERACTION_UNSUPPORTED',
+    'INPUT_CAPABILITY_UNAVAILABLE',
+  ])
+    assert.equal(candidates.excluded.counts[code], 1, JSON.stringify(candidates));
+  assert.equal(
+    candidates.considered_controls,
+    candidates.eligible_controls + candidates.excluded.total,
+  );
+  assert.deepEqual(
+    observed.candidates.map((c) => c.name),
+    ['查看详情'],
+  );
+  assert.ok(!JSON.stringify({ mapping, candidates }).includes('unlogged-local-value'));
+});

@@ -66,7 +66,7 @@
         "DR-0013-02"
       ],
       "status": "已确认",
-      "summary": "已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例，page_id/candidate_id关联选择和派发；复用输出面板不自动展开、抢焦点。",
+      "summary": "已有snapshot与DISCOVERY_OBSERVED增加有界原因计数/样例：每阶段24条、每原因3条，敏感名称省略；区分未生成定位、零匹配及重复匹配。page_id/candidate_id关联观察/选择/派发，模型返回后才记输入候选确已提供；复用输出面板不自动展开、抢焦点。",
       "rationale": "复用现有定位与固定执行；诊断与观察优先级不授予动作权限。"
     },
     {
@@ -112,7 +112,7 @@
       "dd_ids": [
         "DD-0013-02"
       ],
-      "status": "待实现",
+      "status": "已实现",
       "task": "候选诊断：实现、复验并独立Git同步。",
       "verification_ids": [
         "VT-0013-02"
@@ -158,10 +158,17 @@
         "DR-0013-02"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "候选诊断",
       "evidence_standard": "映射缺失、歧义、禁用、安全过滤和未支持可解释；不记录字段值/异常原文；UI转义、按需展开。",
-      "current_evidence": "尚未执行，以实际日志回填。"
+      "current_evidence": {
+        "command": "node --test tests/discovery-observability.test.mjs tests/discovery.test.mjs tests/discovery-controller.test.mjs tests/discovery-controls.test.mjs",
+        "exit_code": 0,
+        "test_count": 69,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0013-diagnostics-final.log"
+      }
     },
     {
       "id": "VT-0013-03",
@@ -186,7 +193,7 @@
       "Windows / Node22 / Chromium隔离合成页面；仅本机注入模型。"
     ],
     "conclusion": [
-      "第一项58项工程检查无失败/跳过；后两项尚未实现，真实模型0调用。"
+      "前两项已实现：69项工程检查0失败/跳过。真实控制台合成状态集成检查退出0，validation/REQ-0013-diagnostics-ui.log及agent-output-1789694154796/summary.json；375/1280px折叠详情键盘可达、文本转义、轮询保留焦点与滚动位置，截图已查看。第三项尚未实现，真实模型0调用。"
     ]
   },
   "trace_current": [
@@ -204,7 +211,7 @@
       "dd_id": "DD-0013-02",
       "tk_id": "TK-0013-02",
       "vt_id": "VT-0013-02",
-      "status": "已确认待实现"
+      "status": "已实现，验证已记录"
     },
     {
       "un_id": "UN-0013-01",

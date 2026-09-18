@@ -4,6 +4,7 @@ import path from 'node:path';
 import { runtimeLocator as handoffLocator, assertRowIdentity } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
 import { observeWizard, captureCaseNamedGuard } from './wizard-binding.mjs';
+import { rejectionLog, recordRejection } from './observation-diagnostics.mjs';
 import {
   validateLocator,
   validatePlan,
@@ -1552,6 +1553,7 @@ export async function snapshot(
     );
     const controls = [],
       adapter_gaps = [];
+    const rejected = rejectionLog();
     for (const [index, c] of raw.controls.entries()) {
       let locator = mapped.locators[index];
       if (!c.row_hint && c.scope_hint && adapterSource === DEFAULT_ADAPTER_SOURCE) {
@@ -1568,6 +1570,7 @@ export async function snapshot(
           locator = { kind: 'row', table, key, target: locator };
       }
       const gap = (code) => {
+        recordRejection(rejected, code, c.name, index);
         if (
           c.adapter_input.navigation_text ||
           c.adapter_input.tag === 'TABLE' ||
@@ -1614,8 +1617,9 @@ export async function snapshot(
             target = roleTarget;
           }
         }
-        if ((await target.count()) !== 1) {
-          gap('ADAPTER_TARGET_NOT_UNIQUE');
+        const targetCount = await target.count();
+        if (targetCount !== 1) {
+          gap(targetCount === 0 ? 'ADAPTER_TARGET_MISSING' : 'ADAPTER_TARGET_NOT_UNIQUE');
           continue;
         }
         // Source-produced locators are not authority: independently prove they
@@ -1657,6 +1661,11 @@ export async function snapshot(
       wizard_context: JSON.parse(redact(JSON.stringify(await observeWizard(page)))),
       adapter_hash: mapped.hash,
       adapter_gaps: JSON.parse(redact(JSON.stringify(adapter_gaps.slice(0, 12)))),
+      observation_diagnostics: {
+        raw_count: raw.controls.length,
+        mapped_count: controls.length,
+        rejected,
+      },
       login_page: false,
     };
   } finally {

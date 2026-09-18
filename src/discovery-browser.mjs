@@ -2,6 +2,7 @@ import { snapshot } from './browser.mjs';
 import { runtimeLocator as handoffLocator } from './row-locator.mjs';
 import { captureWithinGuard, releaseWithinGuard } from './within-locator.mjs';
 import { beginScopeExperience } from './ui-experience-evidence.mjs';
+import { rejectionLog, recordRejection } from './observation-diagnostics.mjs';
 import { fail, hash, redact, relativeURL, uid } from './common.mjs';
 import { validateLocator } from './plans.mjs';
 import { runAdapter } from './adapter-runtime.mjs';
@@ -375,27 +376,31 @@ function candidateKind(
   reading = false,
   query = false,
   queryReset = false,
+  reject = () => null,
 ) {
-  if (
-    !meta.connected ||
-    !meta.visible ||
-    !meta.receives_events ||
-    meta.disabled ||
-    meta.download ||
-    meta.editable ||
-    meta.checked ||
-    meta.pressed ||
-    (DANGEROUS_NAME.test(name + ' ' + meta.name + ' ' + meta.navigation_owner_name) &&
-      !(
-        queryReset &&
-        meta.tag === 'BUTTON' &&
-        meta.type === 'reset' &&
-        meta.form &&
-        /^(?:重置|reset)$/iu.test(name) &&
-        meta.name === name
-      ))
-  )
+  const no = (code) => {
+    reject(code);
     return null;
+  };
+  if (!meta.connected) return no('TARGET_DETACHED');
+  if (!meta.visible) return no('TARGET_NOT_VISIBLE');
+  if (!meta.receives_events) return no('TARGET_OBSTRUCTED');
+  if (meta.disabled) return no('TARGET_DISABLED');
+  if (meta.download) return no('DOWNLOAD_FORBIDDEN');
+  if (meta.editable) return no('EDITABLE_UNSUPPORTED');
+  if (meta.checked || meta.pressed) return no('ALREADY_SELECTED');
+  if (
+    DANGEROUS_NAME.test(name + ' ' + meta.name + ' ' + meta.navigation_owner_name) &&
+    !(
+      queryReset &&
+      meta.tag === 'BUTTON' &&
+      meta.type === 'reset' &&
+      meta.form &&
+      /^(?:重置|reset)$/iu.test(name) &&
+      meta.name === name
+    )
+  )
+    return no('ACTION_SAFETY_FILTERED');
   if (
     ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION', 'LABEL'].includes(meta.tag) ||
     [
@@ -409,19 +414,25 @@ function candidateKind(
       'menuitemradio',
     ].includes(meta.role)
   )
-    return null;
+    return no('INPUT_CAPABILITY_UNAVAILABLE');
   if (
     meta.tag === 'BUTTON' &&
     ((meta.type !== 'button' && meta.form) || meta.declaredType === 'submit')
   )
-    return optionalDismiss ? 'dismiss' : queryReset ? 'query_reset' : query ? 'query' : null;
-  if (meta.tag === 'BUTTON' && meta.type === 'reset') return null;
+    return optionalDismiss
+      ? 'dismiss'
+      : queryReset
+        ? 'query_reset'
+        : query
+          ? 'query'
+          : no('FORM_SUBMIT_UNAUTHORIZED');
+  if (meta.tag === 'BUTTON' && meta.type === 'reset') return no('ACTION_SAFETY_FILTERED');
   if (meta.href !== null) {
-    if (meta.target && meta.target !== '_self') return null;
+    if (meta.target && meta.target !== '_self') return no('NEW_CONTEXT_UNSUPPORTED');
     try {
       checkedURL(meta.href, base);
     } catch {
-      return null;
+      return no('ROUTE_SAFETY_FILTERED');
     }
     return 'link';
   }
@@ -431,7 +442,11 @@ function candidateKind(
   if ((meta.tag === 'BUTTON' || meta.role === 'button') && OPEN_NAME.test(name + ' ' + meta.name))
     return 'open';
   if (reading && meta.tag === 'BUTTON') return 'reading';
-  return null;
+  return no(
+    ['BUTTON', 'A'].includes(meta.tag) || ['button', 'link'].includes(meta.role)
+      ? 'INTERACTION_UNSUPPORTED'
+      : 'OBSERVATION_ONLY',
+  );
 }
 
 function interactionKind(meta, name, contract) {
@@ -804,7 +819,7 @@ export class DiscoveryBrowser {
     if (!this.caseDefinition?.steps?.some((s) => conditionalDismissSource(s, action))) return null;
     return action;
   }
-  async _inputCandidates(handle, meta, control) {
+  async _inputCandidates(handle, meta, control, reject = () => {}) {
     const candidates = [];
     const contracts = this.interactions.filter(
       (c) => c.case_id === this.caseId && contractPageMatches(c, this.page.url()),
@@ -841,15 +856,23 @@ export class DiscoveryBrowser {
     const seen = new Set();
     for (const contract of contracts) {
       const kind = interactionKind(meta, control.name, contract);
-      if (!kind) continue;
+      if (!kind) {
+        reject('INPUT_CAPABILITY_REJECTED');
+        continue;
+      }
       const locator = handoffLocator(this.page, contract.locator);
       if (
         (await locator.count()) !== 1 ||
         !(await locator.evaluate((element, expected) => element === expected, handle))
-      )
+      ) {
+        reject('INPUT_IDENTITY_MISMATCH');
         continue;
+      }
       for (const value of contract.values) {
-        if (value === meta.value) continue;
+        if (value === meta.value) {
+          reject('INPUT_ALREADY_MATCHES');
+          continue;
+        }
         const key = JSON.stringify([contract.locator, contract.operation, value]);
         if (seen.has(key)) continue;
         // An explicitly reviewed empty value clears local form state. It does not
@@ -858,13 +881,18 @@ export class DiscoveryBrowser {
           contract.operation === 'fill' &&
           value !== '' &&
           !this.caseInputs.some((text) => text === value || text.includes(value))
-        )
+        ) {
+          reject('INPUT_SOURCE_UNSUPPORTED');
           continue;
+        }
         const option =
           contract.operation === 'select'
             ? (meta.options ?? []).filter((o) => !o.disabled && !o.hidden && o.value === value)
             : null;
-        if (option && option.length !== 1) continue;
+        if (option && option.length !== 1) {
+          reject('OPTION_UNAVAILABLE');
+          continue;
+        }
         seen.add(key);
         const candidate = {
           candidate_id: uid(),
@@ -959,14 +987,26 @@ export class DiscoveryBrowser {
         (v) => v.source_url === observed.url,
       );
       const candidates = [];
-      for (const control of observed.controls) {
+      const excluded = rejectionLog();
+      let eligibleControls = 0;
+      for (const [index, control] of observed.controls.entries()) {
         this._check();
         let handle;
+        let reason = 'INTERACTION_UNSUPPORTED';
+        const reject = (code) => {
+          reason = code;
+        };
         try {
           const locator = handoffLocator(this.page, control.locator);
-          if ((await locator.count()) !== 1) continue;
+          if ((await locator.count()) !== 1) {
+            reject('TARGET_NOT_UNIQUE');
+            continue;
+          }
           handle = await locator.elementHandle();
-          if (!handle) continue;
+          if (!handle) {
+            reject('TARGET_DETACHED');
+            continue;
+          }
           const meta = await metadata(handle, this.runtimeKey),
             dismissAction = await this._dismissAction(handle, meta),
             reading = await this._readingEvidence(handle, control.name),
@@ -979,11 +1019,14 @@ export class DiscoveryBrowser {
               !!reading,
               !!queryForm,
               queryForm?.binding.kind === 'case_query_reset',
+              reject,
             );
           if (!kind) {
-            const inputs = await this._inputCandidates(handle, meta, control);
+            const inputs = await this._inputCandidates(handle, meta, control, reject);
             if (inputs.length) {
               candidates.push(...inputs);
+              reason = null;
+              eligibleControls++;
               handle = null;
             }
             continue;
@@ -1011,9 +1054,13 @@ export class DiscoveryBrowser {
               : {}),
           });
           candidates.push(candidate);
+          reason = null;
+          eligibleControls++;
           handle = null;
-        } catch {
+        } catch (error) {
+          reason = safeError(error);
         } finally {
+          if (reason) recordRejection(excluded, reason, control.name, index);
           await handle?.dispose();
         }
       }
@@ -1036,8 +1083,20 @@ export class DiscoveryBrowser {
           controls: observed.controls,
         }),
       };
-      const result = { snapshot: observed, candidates, page_id };
-      await this._emit('DISCOVERY_OBSERVED', { page_id, candidate_count: candidates.length });
+      const candidate_diagnostics = {
+        considered_controls: observed.controls.length,
+        eligible_controls: eligibleControls,
+        candidate_count: candidates.length,
+        excluded,
+      };
+      const result = { snapshot: { ...observed, candidate_diagnostics }, candidates, page_id };
+      await this._emit('DISCOVERY_OBSERVED', {
+        page_id,
+        candidate_count: candidates.length,
+        observation_diagnostics: observed.observation_diagnostics,
+        candidate_diagnostics,
+        message: `定位通过 ${observed.controls.length} 项，${eligibleControls} 项控件提供 ${candidates.length} 个候选；${excluded.total} 项未提供探索动作，原因可展开查看。`,
+      });
       return result;
     }
     fail('DISCOVERY_SNAPSHOT_UNSTABLE');
