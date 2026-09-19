@@ -8,8 +8,13 @@ import {
   validatePlan,
 } from './plans.mjs';
 import { conditionalDismissSource } from './optional-dialog.mjs';
+import { sourceRouteTokens } from './adaptive-capabilities.mjs';
 import { isQueryResetStep } from './adaptive-query-reset.mjs';
-import { TABLE_ASSERTION_GUIDANCE, ADAPTIVE_NUMERIC_GUIDANCE } from './table-assertion.mjs';
+import {
+  TABLE_ASSERTION_GUIDANCE,
+  ADAPTIVE_NUMERIC_GUIDANCE,
+  displayNumber,
+} from './table-assertion.mjs';
 import { extractExpectationRanges, requireAdaptivePageTarget } from './expectation-coverage.mjs';
 import { DEFINITION_GUIDANCE, ADAPTIVE_CONSTRAINT_GUIDANCE } from './scope-guidance.mjs';
 
@@ -215,8 +220,7 @@ function navigationGrounded(value, original, base) {
   const destination = relativeURL(value, base);
   // Match whole route tokens, not prefixes (/orders must not authorize /orders/7).
   // Quotes/whitespace around paths also allow Chinese path components verbatim.
-  const paths =
-    original.action.match(/(?:https?:\/\/|\/\/|#\/|\/)[^\s"'`<>，。；！？、（）【】“”‘’]+/gu) ?? [];
+  const paths = sourceRouteTokens(original.action);
   return paths.some((path) => {
     try {
       return relativeURL(path, base) === destination;
@@ -302,6 +306,12 @@ function validateSegments(c, original, previous, fragment, base) {
       validateAssertion(assertion, original, { data: c.data, test_data: c.test_data });
       if (assertion.check === 'number' && assertion.target.kind === 'cell')
         fail('ASSERTION_NUMERIC_TABLE_REQUIRED');
+      if (
+        assertion.check === 'contains' &&
+        assertion.target.kind === 'cell' &&
+        displayNumber(assertion.expected) !== null
+      )
+        fail('ASSERTION_NUMERIC_CONTAINS_UNSUPPORTED');
       if (assertion.check === 'number' && assertion.target.target?.kind === 'definition')
         fail('ASSERTION_NUMERIC_FIELD_REQUIRED');
       requireAdaptivePageTarget(assertion, original);

@@ -17,6 +17,7 @@ import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs
 import { requireAdaptivePageTarget } from './expectation-coverage.mjs';
 import { isQueryResetStep } from './adaptive-query-reset.mjs';
 import { queryFormFacts } from './query-forms.mjs';
+import { candidateIssues } from './adaptive-candidate-feedback.mjs';
 
 export async function requireAdaptiveAssertionTargets(
   page,
@@ -420,6 +421,18 @@ export async function executeAdaptiveStep(session, run) {
           error.code ?? '',
         );
       correction = adaptiveCorrection(error, reply ?? error.adaptive_reply, step, record.audit);
+      // Only unexecuted proposals receive repair diagnostics. A business
+      // difference or unknown dispatch must never be replanned into a pass.
+      if (beforeDispatch) {
+        const issues = candidateIssues(reply, {
+          c: run.c,
+          step,
+          base: run.task.target,
+          pages,
+          previous: completed,
+        });
+        if (issues.length) correction.candidate_issues = issues;
+      }
       const protocolError = isProtocolError(error);
       const protocolRetry = protocolError && protocolRepairs < 2;
       if (

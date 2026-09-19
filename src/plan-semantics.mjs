@@ -244,8 +244,8 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
       if (context.adaptive_readonly) {
         const sourceExpected = original.expected;
         if (
-          assertion.target?.target?.kind === 'definition' &&
-          assertion.check === 'text' &&
+          (assertion.target?.target?.kind === 'definition' || assertion.target?.kind === 'cell') &&
+          ['text', 'contains'].includes(assertion.check) &&
           displayUnit(assertion.expected)
         ) {
           const unit = displayUnit(assertion.expected);
@@ -258,7 +258,7 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
             reject(
               'PLAN_DISPLAY_UNIT_UNSUPPORTED',
               field,
-              '原步骤未支持候选的单位文本。数值要求可在同一已绑定definition字段使用display_number及原数值；明确单位要求仍用原单位文本。保留对象、字段、来源、时机和独立审查，不复制观察作为预期，不重放动作。',
+              '原步骤未支持候选的单位文本。同一已绑定definition数值字段用display_number；cell数值用同表同键同列table_cells内number及原数值。明确单位仍用原文文本。不能换定位器来规避同字段来源校验，不复制观察作为预期，不重放动作。',
             );
         }
         const unsupported = [];

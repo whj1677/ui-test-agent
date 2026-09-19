@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_NUMERIC_CONTAINS_UNSUPPORTED:
+    'Numeric cell substring matching is not a supported numeric proof (1100 contains 100). For an original numeric equality use SAME table/key/column table_cells number; explicit original unit text can use grounded exact text. If the original really requires a literal substring rather than equality, do not silently strengthen it: report the unsupported capability. Keep the original value, scope, timing and audit; no replay.',
   PLAN_ROW_POSITION_UNPROVEN:
     'The original requires an absolute row position. Membership, cell values and relative ordered do not prove it. On the SAME observed table use table_cells with the ORIGINAL key and explicit row.position (1-based data row), preserve obligation/source references. Do not add exact_rows, replace identity with nth, infer a position from the page, or replay actions. Only the documented source grammar is supported.',
   TABLE_POSITION_UNGROUNDED:
@@ -11,7 +13,7 @@ const hints = {
   ASSERTION_NUMERIC_FIELD_REQUIRED:
     'This new adaptive candidate was not dispatched. On the SAME scoped definition field use display_number with the ORIGINAL finite number when the source has no explicit unit. If the original requires a unit, use its grounded text instead. Legacy scalar number does not parse display units. Keep sources, identity, timing and independent audit; never copy observed values or replay actions.',
   PLAN_DISPLAY_UNIT_UNSUPPORTED:
-    'The candidate was not dispatched: it adds a unit text not grounded in the original. For the SAME scoped definition field, use display_number with the ORIGINAL finite numeric value if the original requires only a number. Explicit unit obligations must retain grounded text; numeric projection is not unit verification or conversion. Preserve sources, identity and timing, submit for independent audit, and do not replay actions or copy actual values.',
+    'The candidate was not dispatched: it adds unit text not grounded in the original. For the SAME scoped definition field use display_number; for a cell use table_cells on the SAME table/key/column with inner number and the ORIGINAL finite numeric value. Never switch locator or predicate to evade the same-field source constraint. Explicit unit obligations must retain grounded text; numeric projection is not unit verification or conversion. Preserve sources, identity, timing and audit, address other candidate_issues together, and do not replay actions or copy actual values.',
   ASSERTION_DISPLAY_UNIT_REQUIRED:
     'display_number cannot discharge an explicit original unit requirement. Use grounded original text on the same scoped definition field, without conversion, tolerance, observed expectations, or replay.',
   PLAN_TABLE_CONSTRAINT_UNSUPPORTED:

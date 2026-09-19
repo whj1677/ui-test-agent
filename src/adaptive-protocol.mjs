@@ -1,5 +1,6 @@
 import { canonicalJSON, nonempty, object, semanticHash } from './common.mjs';
 import { validateLocator, validateObligations } from './plans.mjs';
+import { stepCapabilityFacts, STEP_CAPABILITY_GUIDANCE } from './adaptive-capabilities.mjs';
 
 const FRAGMENT_FIELDS = ['actions', 'assertions', 'complete', 'within_ms', 'reason'];
 const own = (value, key) => Object.hasOwn(value, key);
@@ -89,8 +90,14 @@ function directory(input) {
  */
 export function adaptiveProtocolInput(input) {
   try {
-    const { observation_hash, targets, sources } = directory(input);
-    return { ...structuredClone(input), observation_hash, targets, sources };
+    const { observation_hash, targets, sources, step, previous } = directory(input);
+    return {
+      ...structuredClone(input),
+      observation_hash,
+      targets,
+      sources,
+      step_capabilities: stepCapabilityFacts(step, input.current.url, previous),
+    };
   } catch (error) {
     if (error.code?.startsWith('PROTOCOL_')) throw error;
     reject('PROTOCOL_INPUT_INVALID', 'input', '原步骤/观察必须是合法 JSON 和已有定位协议。');
@@ -301,4 +308,4 @@ export const ADAPTIVE_REFERENCE_PROMPT = `CURRENT-OBSERVATION REFERENCE OVERRIDE
 Reply remains {actions:[],assertions:[],complete:false,within_ms:5000,reason:"具体理由"}. Current action example: {"op":"click","target_ref":"COPY_CURRENT_TARGET_REF"}; fill/select/press add only the original source-grounded value; wait adds state. Do NOT supply action_id: the program generates it from the original step and successful segment count. Do not repeat already-dispatched actions. At most one CURRENT action, not a plan for future DOM. Explicit same-origin /assets in the original current action permits {"op":"navigate","value":"/assets"} without a DOM link or target_ref; this does not permit invented routes. Action-only partial segments are allowed; missing future assertions do not mean blocked.
 For business assertions use {"target_ref":"COPY_CURRENT_TARGET_REF","check":"text","expected":"原预期值","source_refs":["COPY_CURRENT_SOURCE_REF"]}. sources is THIS original step's obligations as {ref,text}; choose applicable source_refs only. Never copy oracle_quote or obligation_ids: the compiler supplies a verbatim quote from original step.expected and the selected obligation IDs, never from action text or page content. Keep expected/check exactly grounded in the original business requirement/data, not actual observations. Source selection alone does not prove semantic completeness; all original obligations still require meaningful checks before complete:true.
 If targets lack a needed table/scoped locator, fixed row/cell/within or another existing strict target remains an escape: {"op":"click","target":VALID_EXISTING_LOCATOR} or {"target":VALID_EXISTING_LOCATOR,"check":"text","expected":"原预期值","source_refs":["CURRENT_SOURCE_REF"]}. No new locator kind, scripts, broader scope or permission. The old strict validator and independent audit remain mandatory. Never combine target_ref with target, or source_refs with oracle_quote/obligation_ids. Existing entirely fixed-locator replies remain compatible, not a bypass.
-For a format error, fix the specific reported field using this schema and current directories; do not switch to blocked merely because formatting failed, change the oracle, drop required checks or replay executed actions. The existing explicit {"blocked":true,"reason":"具体缺口"} stop response remains available for a genuine source/evidence/capability gap and is separately checked by the executor.`;
+For a format error, fix the specific reported field using this schema and current directories; do not switch to blocked merely because formatting failed, change the oracle, drop required checks or replay executed actions. The existing explicit {"blocked":true,"reason":"具体缺口"} stop response remains available for a genuine source/evidence/capability gap and is separately checked by the executor.\n${STEP_CAPABILITY_GUIDANCE}`;
