@@ -1,6 +1,6 @@
 # 需求索引
 
-当前：[版本28真实F1](REQ-0017-controlled-react/real-model-v28-result.md)39调用/22媒体SHA一致，七步32断言逐项核对完整，实际自主补关闭hidden且未重放动作；扩原独立8例验证，整体及重复稳定性仍未达。[版本27误报](REQ-0017-controlled-react/real-model-v27-result.md)及旧题/旧失败保持。
+当前：[版本28真实验证](REQ-0017-controlled-react/real-model-v28-result.md)：独立8例已实跑190调用/110媒体SHA一致，4正常记录完成、4指定故障实际检出；初始排序部分只测控件而非表体，完整覆盖不夸大。F1同构建两次逐义务完整；接续原前三条稳定性复验，整体目标仍未达。[版本27误报](REQ-0017-controlled-react/real-model-v27-result.md)及旧题/旧失败保持。
 
 最新：[版本24当前页排序关系](REQ-0017-controlled-react/real-model-v24-result.md)304项受影响工程无失败；首次完整句来源拒绝已修正，日志保留。冻结后复测原V07及独立8例，不将工程数量当产品通过率。
 
