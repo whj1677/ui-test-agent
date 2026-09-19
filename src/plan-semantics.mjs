@@ -218,6 +218,47 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
           field,
           '原步骤未要求记录总数，不能把当前观察到的行数增加为验收条件；删除额外数量断言，保留原要求的字段和记录身份。',
         );
+      if (context.adaptive_readonly) {
+        const sourceExpected = original.expected;
+        const unsupported = [];
+        // A literal ID range guarantees membership, not a closed population or
+        // row order. These are necessary guards for this bounded source grammar,
+        // not a general natural-language approval of every other matrix.
+        if (assertion.check === 'table_cells' && extractExpectationRanges(sourceExpected).length) {
+          if (assertion.expected.exact_rows && !cardinality(sourceExpected))
+            unsupported.push('expected.exact_rows');
+          if (
+            assertion.expected.ordered &&
+            assertion.expected.rows.length > 1 &&
+            (!/依次|升序|降序|按序|按.{0,8}顺序|in (?:this|that|the following) order|ascending|descending/iu.test(
+              sourceExpected,
+            ) ||
+              /(?:不|无需|无须|不必).{0,8}(?:依次|升序|降序|顺序|排序)|(?:no|not|without).{0,12}(?:order|ascending|descending)/iu.test(
+                sourceExpected,
+              ))
+          )
+            unsupported.push('expected.ordered');
+        }
+        if (
+          ['text', 'contains'].includes(assertion.check) &&
+          /第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)
+        ) {
+          const sourceCounts = [
+            ...sourceExpected.matchAll(/(?<![A-Za-z0-9_.])(\d+)\s*(?:条|行|records?\b|rows?\b)/giu),
+          ].map((m) => Number(m[1]));
+          const totals = [...assertion.expected.matchAll(/(?:共|总计)\s*(\d+)\s*条/gu)].map((m) =>
+            Number(m[1]),
+          );
+          if (totals.some((n) => !sourceCounts.includes(n)))
+            unsupported.push('expected.pagination_total');
+        }
+        if (unsupported.length)
+          reject(
+            'PLAN_TABLE_CONSTRAINT_UNSUPPORTED',
+            field,
+            `候选增加了当前原步骤未支持的约束：${unsupported.join('、')}。编号范围仅要求成员可见，不自动要求仅这些行或按此顺序；页码要求也不自动要求当前观察的总记录数。只修正尚未执行候选的这些额外约束（可用原页码短语contains），保留全部原身份/字段/页码/检查时机及来源，并重新审查；不能改原预期或重放动作。`,
+          );
+      }
       const wholeTable =
         assertion.target?.role === 'table' || tableLocators.has(JSON.stringify(assertion.target));
       if (

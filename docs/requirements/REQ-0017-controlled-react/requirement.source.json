@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 14,
+    "version": 15,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,9 @@
     }
   ],
   "confirmed_facts": [
+    "版本15冻结前受影响工程回归267项0失败/取消/跳过，103824.5376ms，validation/req0017/v15-regression.log；包含新增11项及原语义、规划、审查、数值、分页、实际差异和重复停止。专项123/10与此集合重叠不相加；原始失败日志保留。新运行时没有重跑1242全量，1242明确属于版本14；新官方模型待执行，未扩量、未发布。",
+    "版本14-R2真实已结束：round-3JWjRQ，64调用/342025ms、38媒体SHA一致，原三例均记录PASS_ASSERTIONS且各4步COMPLETE；V03再次多加ordered/exact_rows及总数12，故不能算计划语义合格的稳定性验收。累计8轮538调用/2764.896秒。版本15工程首轮123项无失败；新10项执行/纯函数首跑9通过1失败，仅重复候选用例错误期望3次规划，实际原NO_PROGRESS策略在第2次就终止且零派发零测量。修正测试为精确2次及ADAPTIVE_NO_PROGRESS，并保留原失败日志v15-execution.log；扩展回归正在运行。没有为让测试通过增加重试。",
+    "版本15修改前状态卡：版本14-R1 round-6fQWFb真实3例均记录PASS_ASSERTIONS、各4步COMPLETE，61调用/331328ms、36媒体SHA一致，累计474调用/2422.871秒。独立核验发现V03第2步原文仅要求可见D006至D010，候选table_cells却ordered=true/exact_rows=true，且分页text额外固定共12条。本机纯函数复现证实这些额外约束未被语义守卫拒绝；因此是断言执行通过，不是可接受计划的稳定性通过。原事实不回写。第二轮已启动，结束前运行源码冻结。下一唯一目标=修补明确编号范围/分页表达里的额外排序、精确总行数与未要求总记录数，复用当前语义守卫和原2次纠错；不另建IR，不依赖顾问或双模型自报。修改限新自适应候选的已知语法反例：编号范围本身不授予ordered/exact_rows，必须有当前原文的对应明确要求；分页断言不能复制页面上原文未要求的总记录数。返回具体未执行候选约束和纠错提示，不自动改候选、改原预期、删除义务或重放动作。测试须覆盖合法多行顺序/唯一行/数量要求、包含范围但允许额外行或不同排列的反例、额外总数、持续错误停止及真业务差异不重试。先保留当前真实轮次并验证最小反例，再实现/回归/Git；不将目前记录PASS提升为发布验收。",
     "版本14最终运行时工程回归实际结束：node tests/runtime-regression.mjs，1242项0失败/取消/跳过，591039.1124ms，validation/req0017/v14-runtime.log，退出0。含修复后的新7项、数值能力、完成收尾和旧安全边界；各专项与1242重叠不累加。脚本按既有规则排除此前暂停的optimization/evaluation-preparation两个文件，也不代表所有独立integration脚本或真实模型已验收。新构建真实模型未执行，当前真实仍上一版2/3；原32例冻结复检另记，不能宣布发布。",
     "版本14首轮专项7项无失败，40636.3972ms（v14-targets.log）；较大受影响197项中196通过1失败，76844.9975ms（v14-regression.log）。失败为旧测试仍要求5次模型规划，而版本12有证据收尾实际只需4次；事实已PASS_ASSERTIONS且原操作未重放。修正该测试为4次并明确要求EXECUTED的controller_completion_probe收据，保留2步完整/2次原点击/非法零测量/真正差异停止等安全断言，不删除失败测试。补探测的同一步剩余期限约束后重新回归；旧失败日志保留。",
     "版本14修改前状态卡：版本13真实round-AQpqbs结束，58调用/316909ms，构建ababd5739a3c，V01/V02完整，V03第2步把分页文字text绑定整张table而误报业务失败；独立模型审查错误接受。32媒体SHA一致，原步骤不变，累计413调用/2091.543秒。唯一目标=补齐静态文本观测与分页目标能力校验，减少缺目录导致的错误绑定。交付=有界可见短叶文本（span/p/output，无交互/表格/敏感内容、唯一定位及DOM同一节点证明）作为只读观察目标，沿用300预算和区域采样；分页text/contains不得错绑整张table，原导航控件守卫保留，对当前可解析DOM核验表格标签避免CSS/testid绕过。真实页码值不同仍由原断言测出，禁止用当前值修改预期或自动选期望值节点；未知/重复文本不选first，未来目标缺失不伪造支持。修改前后工程必须包括原生无ID页码采集、重复/隐藏/交互/自定义adapter不受提权、恢复后不重放翻页、真页码差异仍失败以及CSS表格错误目标。来源、范围、8段/2恢复/120秒保持，旧事实及固定计划不改。修复验证/Git后再新真实轮，不把各版本偶然成功拼成连续稳定性。",
@@ -139,7 +142,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本14：观察目录补充有界静态短叶文本，只给默认adapter增加精确文本候选，仍核验唯一性、作用域与同一DOM节点；自适应分页预期禁止错绑整张表，含当前可解析的CSS/testid别名实DOM校验，共享原步骤剩余期限。原预期及历史不变，错误候选派发前有界修复、不重放翻页，真实页码差异仍失败。版本13数值能力区分和版本12有证据空收尾保留。",
+      "summary": "版本15在新自适应候选语义校验中补明确编号范围与分页的反例守卫：可见范围不自动授权ordered/exact_rows，分页文本不自动授权原文未要求的总记录数；拒绝时给具体候选约束，规划和审查共用规则。只纠正未执行候选，不改旧事实/原预期，不重放动作，不改固定旧计划路径。属于必要条件而非任意自然语言等价证明。版本14静态文字、版本13数值及版本12收尾保持。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -210,7 +213,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本14实现无ID静态文字目录、默认映射的同节点/作用域验证及分页整表误绑派发前校验；DOM探测使用原步骤剩余期限。版本13数值和版本12收尾保持，最终审查/原义务不弱化，旧事实和固定计划不变。工程全量结果另记，未完成不能提前宣布。",
+      "task": "版本15实现明确范围/分页候选额外约束校验及定点恢复提示；新增反例覆盖合法多行/不同排列不能误报、缺原编号必须失败、额外总数与持续重复停止。旧固定路径不变、不扩大额度；真实效果另行复验。版本14静态文字目录等能力保持。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -287,12 +290,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=3 tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/plan-quality.test.mjs tests/expectation-coverage.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-page-target.test.mjs tests/adaptive-numeric-capability.test.mjs",
         "exit_code": 0,
-        "test_count": 1242,
+        "test_count": 267,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v14-runtime.log"
+        "log_path": "validation/req0017/v15-regression.log"
       }
     },
     {
@@ -388,7 +391,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "已实现；版本14运行时回归1242项无失败（按既有规则排除2个暂停评测文件），专项重叠不累加；新真实模型未复验"
+      "status": "已实现；版本15受影响267项无失败，含新增11项；不是全量，不继承版本14的1242为本版结果；新真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",

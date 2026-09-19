@@ -10,7 +10,7 @@ import {
 import { conditionalDismissSource } from './optional-dialog.mjs';
 import { TABLE_ASSERTION_GUIDANCE, ADAPTIVE_NUMERIC_GUIDANCE } from './table-assertion.mjs';
 import { extractExpectationRanges, requireAdaptivePageTarget } from './expectation-coverage.mjs';
-import { DEFINITION_GUIDANCE } from './scope-guidance.mjs';
+import { DEFINITION_GUIDANCE, ADAPTIVE_CONSTRAINT_GUIDANCE } from './scope-guidance.mjs';
 
 export const ADAPTIVE_PLAN_VERSION = 'ui-agent-adaptive-plan/v1';
 export const ADAPTIVE_EXECUTION_POLICY = Object.freeze({
@@ -411,6 +411,7 @@ When repair_focus.mode is missing_assertions, this is a constrained repair reque
 ADDITIONAL RELATIONAL CHECK: table_unchanged (omit expected) is available only for an original expectation that the table/list remains unchanged or does not apply new filter conditions before query. The executor captures a full native table baseline BEFORE this step's first action (table_baseline.captured), compares after each action, and at this assertion. Use its observed table target, preserve the relationship source_refs/obligation_ids. Never copy current values as fixed expectations, replace this with row_count, provide a baseline yourself, or capture one after filling/selecting. Unsupported/hidden/virtual table or missing baseline stops technically. This proves sampled after-action/final equality, not continuous invisibility of transient changes. Check the selected field values with value/selected_label as separate original obligations.
 ${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
+${ADAPTIVE_CONSTRAINT_GUIDANCE}
 Observed text_context entries are read-only short text nodes with independently checked unique locators, not expected values or evidence of a pass. Use the actual page-counter target for pagination checks; an entire table or a Next/Previous button is not the counter. Keep original expected page values even if the observed text disagrees. If a counter changes after navigation, observe again and bind its actual node; never assume a table target_ref also locates nearby pagination text.
 ${DEFINITION_GUIDANCE}`;
 

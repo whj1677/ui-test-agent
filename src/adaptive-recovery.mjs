@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_TABLE_CONSTRAINT_UNSUPPORTED:
+    'The unexecuted candidate adds a population/order/record-total constraint unsupported by the original CURRENT step. Read detail.reason and remove only those proposed extras: visible ID ranges alone do not require exact_rows or ordered; a page x/y requirement alone does not fix the observed total record count. Keep all required IDs, field values, page numbers, source_refs and timing. Use contains with the ORIGINAL page phrase when the counter also displays an unrequested total. Do not alter executed evidence, weaken any explicit count/order requirement, or replay actions; submit for independent audit within the existing budget.',
   ASSERTION_NUMERIC_TABLE_REQUIRED:
     'This candidate was not dispatched or measured. Scalar number does not support display units. Replace the proposed numeric cell check with table_cells on the SAME table, original key and column, inner check:"number" and unchanged original numeric expected value; preserve its source_refs and timing. If a matrix already measures this same field, remove only the redundant unexecuted scalar check after verifying the matrix covers its original obligations. Do not add exact_rows/ordered constraints unless required, copy observed units/values, change the oracle, replay actions or claim a pass. Independent source and semantic review remain required.',
   ADAPTIVE_SEGMENT_REJECTED:
