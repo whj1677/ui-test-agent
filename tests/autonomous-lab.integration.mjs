@@ -30,6 +30,9 @@ test(
       modelProvider: provider,
     });
     assert.equal(result.tasks.length, 1);
+    assert.equal(result.model_mode, 'ENGINEERING_INJECTED');
+    assert.equal(result.fixture.url, 'http://127.0.0.1:4196');
+    assert.equal(result.fixture.browser_data, 'fresh_isolated');
     assert.deepEqual(result.tasks[0].case_ids, ['LAB-V01', 'LAB-V02', 'LAB-V03']);
     assert.ok(invoked > 0 && invoked <= 2);
     assert.equal(result.budget.calls, invoked);

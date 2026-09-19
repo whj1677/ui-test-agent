@@ -122,7 +122,13 @@ export async function runLab({
     const outputRoot = path.join(root, 'validation/autonomous');
     await fs.mkdir(outputRoot, { recursive: true });
     const directory = await fs.mkdtemp(path.join(outputRoot, 'round-'));
-    const ledger = { suite, budget: budget.snapshot(), tasks: [], acceptance: 'NOT_ESTABLISHED' };
+    const ledger = {
+      suite,
+      model_mode: modelProvider ? 'ENGINEERING_INJECTED' : 'OFFICIAL_DEEPSEEK_API',
+      budget: budget.snapshot(),
+      tasks: [],
+      acceptance: 'NOT_ESTABLISHED',
+    };
     const save = async () => {
       ledger.budget = budget.snapshot();
       await fs.writeFile(path.join(directory, 'round.json'), JSON.stringify(ledger, null, 2));
@@ -135,7 +141,14 @@ export async function runLab({
       headless: true,
       provider,
     });
-    lab = await startSyntheticLoginFixture();
+    // The frozen original preconditions explicitly name 4196. Do not silently
+    // change that environment while claiming the original cases were exercised.
+    lab = await startSyntheticLoginFixture({ port: 4196, reuseVerified: true });
+    ledger.fixture = {
+      url: lab.url,
+      reused_verified_static_server: lab.reused,
+      browser_data: 'fresh_isolated',
+    };
     if (suite === 'all') contrast = await startContrastLab(0);
     stopTimer = setInterval(() => {
       if (budget.expired() && app.controller.active) app.controller.active.abort.abort();

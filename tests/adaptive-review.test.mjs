@@ -69,6 +69,21 @@ test('known assertion with another obligation becomes candidate repair, not acce
   assert.ok(result.issues.some((i) => i.code === 'ACTION_MISMATCH'));
   assert.match(result.issues.map((i) => i.reason).join(' '), /1-O2/);
   assert.deepEqual(input.candidate_plan, before, 'never add obligation IDs to the candidate');
+  assert.equal(result.source_binding_gaps.length, 1);
+  assert.equal(result.source_binding_gaps[0].assertion_ref, 'A1');
+  assert.equal(result.source_binding_gaps[0].missing_source_ref, '1-O2');
+  assert.deepEqual(result.source_binding_gaps[0].assertion.obligation_ids, ['1-O1']);
+  const feedback = adaptiveCorrection(
+    { code: 'ADAPTIVE_SEGMENT_REJECTED' },
+    before,
+    fixture().step,
+    result,
+  );
+  assert.match(feedback.instruction, /not merely reason text/);
+  assert.deepEqual(feedback.source_binding_gaps, result.source_binding_gaps);
+  feedback.source_binding_gaps[0].assertion.obligation_ids.push('1-O2');
+  assert.deepEqual(result.source_binding_gaps[0].assertion.obligation_ids, ['1-O1']);
+  assert.deepEqual(input.candidate_plan, before);
 });
 test('stable audit assertion refs compile to strict same-step measured references', async () => {
   const { input } = fixture();

@@ -57,6 +57,7 @@ export function compileAdaptiveAudit(reply, input) {
 function sourceMismatchReview(reply, context) {
   if (!Array.isArray(reply?.checks) || !Array.isArray(reply.issues)) return null;
   const corrected = structuredClone(reply);
+  const bindingGaps = [];
   let changed = false;
   for (const check of corrected.checks) {
     const entries = context.assertion_catalog.filter((a) => a.step_id === check?.step_id);
@@ -69,6 +70,16 @@ function sourceMismatchReview(reply, context) {
       return null;
     const wrong = indices.filter((i) => !entries[i].obligation_ids?.includes(check.obligation_id));
     if (!wrong.length) continue;
+    for (const i of wrong)
+      bindingGaps.push({
+        step_id: check.step_id,
+        assertion_ref: entries[i].ref,
+        assertion: structuredClone(entries[i]),
+        missing_source_ref: check.obligation_id,
+        source_text: context.original.steps
+          .find((s) => s.step_id === check.step_id)
+          ?.obligations.find((o) => o.id === check.obligation_id)?.text,
+      });
     changed = true;
     check.status = 'MISSING';
     check.assertion_indices = indices.filter((i) => !wrong.includes(i));
@@ -79,7 +90,10 @@ function sourceMismatchReview(reply, context) {
   if (!changed) return null;
   // Full validation still checks all other fields. This can only reject the
   // candidate; raw model replies and the original candidate remain unchanged.
-  return validatePlanAudit(corrected, context.original, context.candidate_plan);
+  const verdict = validatePlanAudit(corrected, context.original, context.candidate_plan);
+  // Advisory diagnostics AFTER strict rejection validation, never an edit to
+  // candidate sources or a grant of coverage. Replanning and re-audit required.
+  return { ...verdict, source_binding_gaps: bindingGaps };
 }
 
 function contradictoryCoverageReview(reply, context) {

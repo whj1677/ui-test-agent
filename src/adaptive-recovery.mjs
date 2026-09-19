@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ADAPTIVE_SEGMENT_REJECTED:
+    'This candidate was NOT executed. Correct the specific audit finding, not merely reason text. If source_binding_gaps are supplied, inspect each candidate assertion against that original obligation: a joint proof requires EVERY contributing assertion to explicitly include the applicable source_refs. Only propose that binding if the unchanged measurement genuinely supports the original obligation, or propose a different valid measurement. Do not automatically trust the reviewer, infer expectations from actual values, remove obligations, modify already executed segments, or replay actions. The revised candidate must undergo the same independent audit. Changing reason alone is not progress.',
   PLAN_ASSERTION_UNSUPPORTED:
     'The rejected candidate was not executed or measured. Its extra row_count has no explicit original count requirement; a visible ID range alone does not require that these are the only rows. Remove only this ungrounded candidate assertion, preserve every original obligation and its identity/page measurements, then submit a new segment. Do not alter executed history, replay dispatched actions, infer expected counts from the page, or replace the count with another unsupported exact-row constraint. Existing replan and deadline limits still apply.',
   TABLE_SOURCE_UNGROUNDED:
@@ -95,6 +97,9 @@ export function adaptiveCorrection(error, proposal, step, audit) {
     ...(typeof error.path === 'string' ? { field_path: error.path } : {}),
     ...(proposal === undefined ? {} : { invalid_response: scrubForLog(proposal) }),
     ...(audit ? { audit } : {}),
+    ...(audit?.source_binding_gaps?.length
+      ? { source_binding_gaps: structuredClone(audit.source_binding_gaps) }
+      : {}),
     source_action: step.source_action,
     source_expected: step.source_expected,
   };
