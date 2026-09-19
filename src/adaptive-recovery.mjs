@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_VISIBILITY_UNPROVEN:
+    'This completion candidate lacks an original visibility/closed-state witness. Read detail.reason for the exact obligation and target scope. Keep already measured field values and their source refs; add the named region visible or the SAME whole dialog hidden/count=0 as required, then independently re-audit. A matching field, click, button disappearance or background list is not that proof. Earlier dispatched actions must not be replayed; the original replan budget/deadline still apply.',
   TABLE_ORDER_SOURCE_REQUIRED:
     'No dispatch occurred. table_order requires the ORIGINAL same-step field and direction; a control-only/input-only statement does not authorize applying its selected sort to the table. For explicit 应用排序 use only this step action, never a previous/future step or observed IDs. Preserve original sources and timing; selected_label proves only the control. Missing relationship wording remains a capability gap, not permission to copy observed rows or weaken expectations.',
   ASSERTION_SELECTION_TARGET_REQUIRED:

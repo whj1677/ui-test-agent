@@ -19,6 +19,8 @@
 
 ## 数据流与约束
 
+2026-09-20（REQ-0017版本27）：expectation-visibility在自适应完成候选要求有限肯定可见/关闭条款的必要测量，未命中不构成批准。原“可见X即使…”须同对象X的visible；字面原关闭X按钮绑定dialog且期望X关闭后/已关闭，须同完整dialog hidden或count0。字段值/点击/按钮隐藏/背景列表不能替代。部分片段可待补、完成前精确PLAN_VISIBILITY_UNPROVEN返回原重规划额度，不重放动作；固定计划不变。
+
 2026-09-20（REQ-0017版本26）：自适应规划与审查共享EVIDENCE_SOURCE_GUIDANCE，区分显式字段值、备注可见性与条件性干扰值/证据来源限制；审查目录evidence_binding仅为候选语法描述，runtime_verified=false，不能自动授予覆盖。自身definition字段或行+列的真实值测量可共同绑定适用来源限制，整区域包含/标题不可替代字段；明确正向备注正文要求仍需测量。候选、原义务、负审查和执行比较不改变。
 
 2026-09-20（REQ-0017版本11）：`within.target`新增只读`definition`基定位，name为现场观察的原生dt字段名、exact=true；固定DOM算法在同一对象范围解析唯一dt/相邻单一dd，不以值选字段，不使用模型CSS/序号。重名（含隐藏）、一词多义值、嵌套对象及交互型dd均拒绝；采集与断言继续使用原节点、容器归属和同次DOM版本核验。仅visible/text/number断言允许，动作及修复锚拒绝；number保持既有纯数字比较，不偷偷推断单位。未提供属性的原生定义列表现在能进入field_context与targets，旧data-field路线保留。模型仍须核验原对象、字段、预期和排他性，工程参考运行不能当真实Agent结果。

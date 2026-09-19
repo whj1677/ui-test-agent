@@ -7,6 +7,7 @@ import { needsTableBaseline } from './table-invariant.mjs';
 import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertion.mjs';
 import { extractRowPositions } from './table-position.mjs';
 import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.mjs';
+import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -118,6 +119,13 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
       if (context.adaptive_readonly) {
+        const visibilityGaps = visibilityEvidenceGaps(original, step);
+        if (visibilityGaps.length)
+          reject(
+            'PLAN_VISIBILITY_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            visibilityGaps.map((gap) => `${gap.obligation_id}: ${gap.reason}`).join('\n'),
+          );
         for (const obligation of original.obligations ?? []) {
           for (const wanted of extractRowPositions(obligation.text)) {
             if (
