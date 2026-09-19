@@ -9,10 +9,12 @@ import {
 } from './scope-guidance.mjs';
 import { ADAPTIVE_NUMERIC_GUIDANCE, TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
 import { TABLE_ORDER_GUIDANCE } from './table-order.mjs';
+import { EVIDENCE_SOURCE_GUIDANCE, assertionEvidenceBinding } from './assertion-evidence.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
+${EVIDENCE_SOURCE_GUIDANCE}
 ${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
 ${ADAPTIVE_CONSTRAINT_GUIDANCE}
@@ -27,6 +29,7 @@ export function adaptiveAuditInput(input) {
         ref: `A${index + 1}`,
         step_id: step.step_id,
         ...assertion,
+        evidence_binding: assertionEvidenceBinding(assertion),
       })),
     ),
   };
