@@ -2108,7 +2108,9 @@ export class Controller {
                       pages: input.pages ?? [input.current],
                       target_origin: new URL(state.target).origin,
                     };
-                    if (input.complete) requirePlanSemantics(input.plan, input.c, context);
+                    requirePlanSemantics(input.plan, input.c, context, {
+                      complete: input.complete,
+                    });
                     return reviewAdaptiveCandidate(
                       {
                         ...auditInput(input.c, input.plan, context),

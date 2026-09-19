@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本7最新限定真实复测66调用/420.143秒、原三例2/3完整通过；V03分页已测但完成态拒绝历史行数断言，详情未执行。工程373项为独立历史证据；构建980e41888c3a，不能发布，旧失败保留。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本8统一片段与完成态语义校验，305项受影响工程验证通过；尚未真实复验或启动新服务。最后真实为版本7原三例2/3完整通过（66调用/420.143秒），V03旧失败保留，不能发布。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
 

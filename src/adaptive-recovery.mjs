@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_ASSERTION_UNSUPPORTED:
+    'The rejected candidate was not executed or measured. Its extra row_count has no explicit original count requirement; a visible ID range alone does not require that these are the only rows. Remove only this ungrounded candidate assertion, preserve every original obligation and its identity/page measurements, then submit a new segment. Do not alter executed history, replay dispatched actions, infer expected counts from the page, or replace the count with another unsupported exact-row constraint. Existing replan and deadline limits still apply.',
   TABLE_SOURCE_UNGROUNDED:
     'The candidate assertion contains a value not grounded in the ORIGINAL current step or confirmed data. Repair the identified field, not the business expectation. If the original supplies a numeric value, table_cells supports check:"number" with that original number and a supported display suffix in actual text; do not invent an expected text unit from the page. Do not convert units, introduce tolerance, substitute observed values, drop required fields or replay executed actions. The revised candidate must pass all original grounding and semantic checks.',
   ADAPTIVE_NO_PROGRESS:

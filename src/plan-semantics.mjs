@@ -25,7 +25,7 @@ const cardinality = (text) =>
 
 // Narrow deterministic counterexample guards, not a claim to solve natural-language equivalence.
 // Other extra assertions/compound expectations still require the independent semantic audit.
-export function requirePlanSemantics(plan, c, context = {}) {
+export function requirePlanSemantics(plan, c, context = {}, { complete = true } = {}) {
   if (!plan) return;
   validateCaseNamedPlan(plan, c);
   const source = textValues({
@@ -111,76 +111,88 @@ export function requirePlanSemantics(plan, c, context = {}) {
   );
   for (const [i, step] of (plan.steps ?? []).entries()) {
     const original = c.steps[i];
-    for (const obligation of original.obligations ?? []) {
-      if (
-        context.adaptive_readonly &&
-        needsTableBaseline(obligation.text) &&
-        !stepAssertions(step).some(
-          (a) => a.check === 'table_unchanged' && a.obligation_ids?.includes(obligation.id),
+    // Partial execution may defer missing coverage, never the validity of a
+    // supplied locator/value/assertion. The default fixed-plan path stays full.
+    if (complete !== false) {
+      for (const obligation of original.obligations ?? []) {
+        if (
+          context.adaptive_readonly &&
+          needsTableBaseline(obligation.text) &&
+          !stepAssertions(step).some(
+            (a) => a.check === 'table_unchanged' && a.obligation_ids?.includes(obligation.id),
+          )
         )
-      )
-        reject(
-          'PLAN_RELATION_UNPROVEN',
-          `plan.steps[${i}].assertions`,
-          '原预期要求表格在操作前后保持不变，须用table_unchanged比较本步骤操作前完整快照；当前行数、固定当前值或模型观察不构成该关系证据。',
-        );
-    }
-    for (const obligation of original.obligations ?? []) {
-      if (
-        !/(?:页面|当前|浏览器)\s*URL|地址栏|(?:current|browser|page)\s+URL/iu.test(obligation.text)
-      )
-        continue;
-      const proofs = stepAssertions(step).filter((a) => a.obligation_ids?.includes(obligation.id));
-      if (!proofs.some((a) => ['url_equals', 'url_contains', 'url_not_contains'].includes(a.check)))
-        reject(
-          'PLAN_URL_UNPROVEN',
-          `plan.steps[${i}].assertions`,
-          '原预期要求验证当前地址栏。标题或页面可见不能证明URL；使用url_equals/url_contains/url_not_contains并保留原分项。',
-        );
-    }
-    const optionalSource =
-      /(?:若|如果|if).*?(?:出现|显示|present|visible)/iu.test(original.action) &&
-      /(?:知道了|关闭|取消|got it|close|cancel)/iu.test(original.action) &&
-      /(?:未|不|否则|otherwise|else)/iu.test(original.action);
-    if (optionalSource && !stepActions(step).some((a) => a?.op === 'dismiss_optional'))
-      reject(
-        'PLAN_CONDITIONAL_UNSUPPORTED',
-        `plan.steps[${i}].actions`,
-        '原步骤要求提示出现则关闭、未出现则继续；不能删去条件动作或改成无条件点击/等待。使用dismiss_optional，由原文精确标题和按钮名定义条件，保留两个分支共同的原预期。',
-      );
-    const nextTarget = plan.steps
-      .slice(i + 1)
-      .flatMap(stepActions)
-      .find((a) =>
-        ['click', 'fill', 'select', 'check', 'uncheck', 'press'].includes(a?.op),
-      )?.target;
-    for (const obligation of original.obligations ?? []) {
-      if (
-        !/(?:无|没有|不|未).*?(?:遮挡|阻挡)|unobstructed|not obstruct|not block/iu.test(
-          obligation.text,
+          reject(
+            'PLAN_RELATION_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            '原预期要求表格在操作前后保持不变，须用table_unchanged比较本步骤操作前完整快照；当前行数、固定当前值或模型观察不构成该关系证据。',
+          );
+      }
+      for (const obligation of original.obligations ?? []) {
+        if (
+          !/(?:页面|当前|浏览器)\s*URL|地址栏|(?:current|browser|page)\s+URL/iu.test(
+            obligation.text,
+          )
         )
-      )
-        continue;
-      const proofs = stepAssertions(step).filter((a) => a.obligation_ids?.includes(obligation.id));
-      if (!proofs.some((a) => a.check === 'unobstructed'))
-        reject(
-          'PLAN_OBSTRUCTION_UNPROVEN',
-          `plan.steps[${i}].assertions`,
-          'visible/hidden/count不能证明操作不被遮挡。用unobstructed对后续原操作的准确已观察目标做当前命中验证，不修改原预期。',
+          continue;
+        const proofs = stepAssertions(step).filter((a) =>
+          a.obligation_ids?.includes(obligation.id),
         );
-      if (
-        optionalSource &&
-        (!nextTarget ||
-          !proofs.some(
-            (a) =>
-              a.check === 'unobstructed' && semanticHash(a.target) === semanticHash(nextTarget),
-          ))
-      )
+        if (
+          !proofs.some((a) => ['url_equals', 'url_contains', 'url_not_contains'].includes(a.check))
+        )
+          reject(
+            'PLAN_URL_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            '原预期要求验证当前地址栏。标题或页面可见不能证明URL；使用url_equals/url_contains/url_not_contains并保留原分项。',
+          );
+      }
+      const optionalSource =
+        /(?:若|如果|if).*?(?:出现|显示|present|visible)/iu.test(original.action) &&
+        /(?:知道了|关闭|取消|got it|close|cancel)/iu.test(original.action) &&
+        /(?:未|不|否则|otherwise|else)/iu.test(original.action);
+      if (optionalSource && !stepActions(step).some((a) => a?.op === 'dismiss_optional'))
         reject(
-          'PLAN_OBSTRUCTION_UNPROVEN',
-          `plan.steps[${i}].assertions`,
-          '条件提示后的无遮挡断言必须绑定后续原操作的同一个目标（含业务行身份）；表格或其他菜单命中不能代替该目标。',
+          'PLAN_CONDITIONAL_UNSUPPORTED',
+          `plan.steps[${i}].actions`,
+          '原步骤要求提示出现则关闭、未出现则继续；不能删去条件动作或改成无条件点击/等待。使用dismiss_optional，由原文精确标题和按钮名定义条件，保留两个分支共同的原预期。',
         );
+      const nextTarget = plan.steps
+        .slice(i + 1)
+        .flatMap(stepActions)
+        .find((a) =>
+          ['click', 'fill', 'select', 'check', 'uncheck', 'press'].includes(a?.op),
+        )?.target;
+      for (const obligation of original.obligations ?? []) {
+        if (
+          !/(?:无|没有|不|未).*?(?:遮挡|阻挡)|unobstructed|not obstruct|not block/iu.test(
+            obligation.text,
+          )
+        )
+          continue;
+        const proofs = stepAssertions(step).filter((a) =>
+          a.obligation_ids?.includes(obligation.id),
+        );
+        if (!proofs.some((a) => a.check === 'unobstructed'))
+          reject(
+            'PLAN_OBSTRUCTION_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            'visible/hidden/count不能证明操作不被遮挡。用unobstructed对后续原操作的准确已观察目标做当前命中验证，不修改原预期。',
+          );
+        if (
+          optionalSource &&
+          (!nextTarget ||
+            !proofs.some(
+              (a) =>
+                a.check === 'unobstructed' && semanticHash(a.target) === semanticHash(nextTarget),
+            ))
+        )
+          reject(
+            'PLAN_OBSTRUCTION_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            '条件提示后的无遮挡断言必须绑定后续原操作的同一个目标（含业务行身份）；表格或其他菜单命中不能代替该目标。',
+          );
+      }
     }
     for (const [j, assertion] of stepAssertions(step).entries()) {
       const field = `plan.steps[${i}].assertions_flat[${j}]`;
