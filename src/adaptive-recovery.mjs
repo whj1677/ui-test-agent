@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_TABLE_ORDER_UNPROVEN:
+    'The completion candidate has not proved actual table ordering. selected_label/value is control state only. Read detail.reason and add a source-grounded table_order for the same current table and obligation, or a complete original-value ordered matrix. Do not manufacture expected rows, apply a not-yet-applied input, replay query/sort, or change original timing. Existing replan/deadline limits and independent review remain in force.',
   ASSERTION_SELECTION_BEFORE_ACTION:
     'No action or assertion was dispatched for this candidate. A post-switch selected=true check was proposed before its same-target switch in this original step. Follow detail.reason: propose the authorized switch, then its original postconditions, or omit only unsupported preparatory assertions. Preserve original defaults/pre-action expectations. Reuse an already executed locator instead of replaying a switch; different object/previous step/future action is not proof. After actual dispatch, a real selection difference still stops.',
   PLAN_VISIBILITY_UNPROVEN:

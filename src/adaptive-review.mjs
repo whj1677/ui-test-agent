@@ -12,10 +12,12 @@ import { TABLE_ORDER_GUIDANCE } from './table-order.mjs';
 import { EVIDENCE_SOURCE_GUIDANCE, assertionEvidenceBinding } from './assertion-evidence.mjs';
 import { VISIBILITY_EVIDENCE_GUIDANCE } from './expectation-visibility.mjs';
 import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
+import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
+${ORDER_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
 ${VISIBILITY_EVIDENCE_GUIDANCE}
 ${SELECTION_TIMING_GUIDANCE}

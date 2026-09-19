@@ -9,6 +9,7 @@ import { extractRowPositions } from './table-position.mjs';
 import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.mjs';
 import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 import { selectionTimingGaps } from './selection-timing.mjs';
+import { orderEvidenceGaps } from './order-evidence.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -129,6 +130,13 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
       if (context.adaptive_readonly) {
+        const orderGaps = orderEvidenceGaps(original, step);
+        if (orderGaps.length)
+          reject(
+            'PLAN_TABLE_ORDER_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            orderGaps.map((g) => g.reason).join('\n'),
+          );
         const visibilityGaps = visibilityEvidenceGaps(original, step);
         if (visibilityGaps.length)
           reject(
