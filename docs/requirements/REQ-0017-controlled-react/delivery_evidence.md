@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T05:43:04+08:00`
+- Generated at: `2026-09-20T06:07:33+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `4d3675a7e6066484229bc0a223836e5d1a295b7a0c0a716fa23b106259396767`
+- Change fingerprint: `bac95415d5cdb9e0636cdf584f584c2c8260fde54013578f4f321a155d4809c6`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=3 tests/table-order.test.mjs tests/table-order.execution.test.mjs tests/aria-selected.test.mjs tests/aria-selected.execution.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/invariant-caption-window.test.mjs tests/invariant-caption-window.execution.test.mjs`
 - Exit code: `0`
-- Test count: `37`
+- Test count: `7`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v24-delivery.log`
-- Log SHA-256: `3957ab0eda0e690edeea7c95b30f10d6f0362ce81c8d148a4f25027f9d32aac5`
+- Log path: `validation/req0017/v25-delivery.log`
+- Log SHA-256: `7c7e34302b54650b02c3d3865538da483d69d4eeb16a27735d522748f03ad911`
 
 ### Git Status
 
@@ -28,17 +28,10 @@
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/adaptive-execution.mjs
- M src/adaptive-plan.mjs
- M src/adaptive-recovery.mjs
- M src/adaptive-review.mjs
  M src/browser.mjs
- M src/plan-quality.mjs
- M src/plans.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v24-result.md
-?? src/table-order.mjs
-?? tests/table-order.execution.test.mjs
-?? tests/table-order.test.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v25-result.md
+?? tests/invariant-caption-window.execution.test.mjs
+?? tests/invariant-caption-window.test.mjs
 ```
 
 ### Git Diff Stat
@@ -54,286 +47,93 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-execution.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/browser.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/plan-quality.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/plans.mjs', LF will be replaced by CRLF the next time Git touches it
- docs/modules/release_runtime.md                    |   4 +
+ docs/modules/release_runtime.md                    |   2 +
  docs/requirements/README.md                        |   2 +
- .../00_user_requirement.md                         |   2 +
+ .../00_user_requirement.md                         |   1 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 268 +++++++++++++++++----
- .../requirement.source.json                        |  16 +-
- src/adaptive-execution.mjs                         |   1 +
- src/adaptive-plan.mjs                              |   4 +-
- src/adaptive-recovery.mjs                          |   2 +
- src/adaptive-review.mjs                            |   2 +
- src/browser.mjs                                    |  14 +-
- src/plan-quality.mjs                               |   2 +
- src/plans.mjs                                      |  11 +
- 17 files changed, 271 insertions(+), 73 deletions(-)
+ .../REQ-0017-controlled-react/delivery_evidence.md | 309 ++++-----------------
+ .../requirement.source.json                        |  15 +-
+ src/browser.mjs                                    |  27 +-
+ 11 files changed, 99 insertions(+), 273 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v24-result.md
-src/table-order.mjs
-tests/table-order.execution.test.mjs
-tests/table-order.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v25-result.md
+tests/invariant-caption-window.execution.test.mjs
+tests/invariant-caption-window.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T05:42:16+08:00
-Command: node --test --test-concurrency=3 tests/table-order.test.mjs tests/table-order.execution.test.mjs tests/aria-selected.test.mjs tests/aria-selected.execution.test.mjs
+Started at: 2026-09-20T06:07:10+08:00
+Command: node --test --test-concurrency=2 tests/invariant-caption-window.test.mjs tests/invariant-caption-window.execution.test.mjs
 Exit code: 0
-Parsed test count: 37
+Parsed test count: 7
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: default tab typed recovery without replay: repair
-ok 1 - default tab typed recovery without replay: repair
+# Subtest: caption holds must follow checkpoint sampling, difference=false
+ok 1 - caption holds must follow checkpoint sampling, difference=false
   ---
-  duration_ms: 14027.9169
+  duration_ms: 11435.2879
   type: 'test'
   ...
-# Subtest: default tab typed recovery without replay: difference
-ok 2 - default tab typed recovery without replay: difference
+# Subtest: caption holds must follow checkpoint sampling, difference=true
+ok 2 - caption holds must follow checkpoint sampling, difference=true
   ---
-  duration_ms: 19517.867
+  duration_ms: 9540.2345
   type: 'test'
   ...
-# Subtest: default tab typed recovery without replay: repeat
-ok 3 - default tab typed recovery without replay: repeat
+# Subtest: checkpoint-owned invariant presentation: normal
+ok 3 - checkpoint-owned invariant presentation: normal
   ---
-  duration_ms: 12262.5131
+  duration_ms: 2871.1677
   type: 'test'
   ...
-# Subtest: explicit ARIA selection is boolean, not selected text or checkbox state
-ok 4 - explicit ARIA selection is boolean, not selected text or checkbox state
+# Subtest: checkpoint-owned invariant presentation: difference
+ok 4 - checkpoint-owned invariant presentation: difference
   ---
-  duration_ms: 1.8028
+  duration_ms: 921.339
   type: 'test'
   ...
-# Subtest: current tab selected_label misuse is rejected before dispatch with specific feedback
-ok 5 - current tab selected_label misuse is rejected before dispatch with specific feedback
+# Subtest: checkpoint-owned invariant presentation: late-measurement
+ok 5 - checkpoint-owned invariant presentation: late-measurement
   ---
-  duration_ms: 845.7059
+  duration_ms: 3048.5264
   type: 'test'
   ...
-# Subtest: actual ARIA tab selection true is measured and observed
-ok 6 - actual ARIA tab selection true is measured and observed
+# Subtest: checkpoint-owned invariant presentation: presentation-fails
+ok 6 - checkpoint-owned invariant presentation: presentation-fails
   ---
-  duration_ms: 822.7072
+  duration_ms: 203.1957
   type: 'test'
   ...
-# Subtest: actual ARIA tab selection false is measured and observed
-ok 7 - actual ARIA tab selection false is measured and observed
+# Subtest: checkpoint-owned invariant presentation: action-only
+ok 7 - checkpoint-owned invariant presentation: action-only
   ---
-  duration_ms: 1677.0839
+  duration_ms: 2391.2711
   type: 'test'
   ...
-# Subtest: unsupported selection target is technical, never false by default: <button role="tab">基本信息</button>
-ok 8 - unsupported selection target is technical, never false by default: <button role="tab">基本信息</button>
-  ---
-  duration_ms: 842.2976
-  type: 'test'
-  ...
-# Subtest: unsupported selection target is technical, never false by default: <button role="tab" aria-selected="mixed">基本信息</button>
-ok 9 - unsupported selection target is technical, never false by default: <button role="tab" aria-selected="mixed">基本信息</button>
-  ---
-  duration_ms: 881.6057
-  type: 'test'
-  ...
-# Subtest: unsupported selection target is technical, never false by default: <button aria-selected="true">基本信息</button>
-ok 10 - unsupported selection target is technical, never false by default: <button aria-selected="true">基本信息</button>
-  ---
-  duration_ms: 747.6109
-  type: 'test'
-  ...
-# Subtest: same-step original order source, actual difference=false
-ok 11 - same-step original order source, actual difference=false
-  ---
-  duration_ms: 10935.3588
-  type: 'test'
-  ...
-# Subtest: same-step original order source, actual difference=true
-ok 12 - same-step original order source, actual difference=true
-  ---
-  duration_ms: 10246.4636
-  type: 'test'
-  ...
-# Subtest: new relation requires current original source and strict schema
-ok 13 - new relation requires current original source and strict schema
-  ---
-  duration_ms: 2.7053
-  type: 'test'
-  ...
-# Subtest: reject source: different direction
-ok 14 - reject source: different direction
-  ---
-  duration_ms: 0.1905
-  type: 'test'
-  ...
-# Subtest: reject source: control only
-ok 15 - reject source: control only
-  ---
-  duration_ms: 0.0838
-  type: 'test'
-  ...
-# Subtest: reject source: cut negation
-ok 16 - reject source: cut negation
-  ---
-  duration_ms: 0.0792
-  type: 'test'
-  ...
-# Subtest: reject source: conditional
-ok 17 - reject source: conditional
-  ---
-  duration_ms: 0.1224
-  type: 'test'
-  ...
-# Subtest: reject source: alternative
-ok 18 - reject source: alternative
-  ---
-  duration_ms: 0.1516
-  type: 'test'
-  ...
-# Subtest: reject source: wrong field suffix
-ok 19 - reject source: wrong field suffix
-  ---
-  duration_ms: 0.079
-  type: 'test'
-  ...
-# Subtest: reject source: input only
-ok 20 - reject source: input only
-  ---
-  duration_ms: 0.0684
-  type: 'test'
-  ...
-# Subtest: reject source: no action source
-ok 21 - reject source: no action source
-  ---
-  duration_ms: 0.2173
-  type: 'test'
-  ...
-# Subtest: reject source: other step not source
-ok 22 - reject source: other step not source
-  ---
-  duration_ms: 0.3307
-  type: 'test'
-  ...
-# Subtest: full current column, ties accepted, middle inversion caught
-ok 23 - full current column, ties accepted, middle inversion caught
-  ---
-  duration_ms: 1.2629
-  type: 'test'
-  ...
-# Subtest: technical unsupported: mixed unit
-ok 24 - technical unsupported: mixed unit
-  ---
-  duration_ms: 0.1378
-  type: 'test'
-  ...
-# Subtest: technical unsupported: unparseable
-ok 25 - technical unsupported: unparseable
-  ---
-  duration_ms: 0.1954
-  type: 'test'
-  ...
-# Subtest: technical unsupported: unsafe precision
-ok 26 - technical unsupported: unsafe precision
-  ---
-  duration_ms: 0.0821
-  type: 'test'
-  ...
-# Subtest: technical unsupported: fraction precision
-ok 27 - technical unsupported: fraction precision
-  ---
-  duration_ms: 0.0652
-  type: 'test'
-  ...
-# Subtest: technical unsupported: underflow
-ok 28 - technical unsupported: underflow
-  ---
-  duration_ms: 0.1505
-  type: 'test'
-  ...
-# Subtest: technical unsupported: single
-ok 29 - technical unsupported: single
-  ---
-  duration_ms: 0.0591
-  type: 'test'
-  ...
-# Subtest: technical unsupported: empty
-ok 30 - technical unsupported: empty
-  ---
-  duration_ms: 0.0451
-  type: 'test'
-  ...
-# Subtest: technical unsupported: duplicate header
-ok 31 - technical unsupported: duplicate header
-  ---
-  duration_ms: 0.0461
-  type: 'test'
-  ...
-# Subtest: technical unsupported: ambiguous suffix
-ok 32 - technical unsupported: ambiguous suffix
-  ---
-  duration_ms: 0.0435
-  type: 'test'
-  ...
-# Subtest: technical unsupported: wrong header
-ok 33 - technical unsupported: wrong header
-  ---
-  duration_ms: 0.0368
-  type: 'test'
-  ...
-# Subtest: exact field header beats suffix; cannot choose another power column
-ok 34 - exact field header beats suffix; cannot choose another power column
-  ---
-  duration_ms: 0.1195
-  type: 'test'
-  ...
-# Subtest: fixed-width identifiers without numeric overflow, no guessed collation
-ok 35 - fixed-width identifiers without numeric overflow, no guessed collation
-  ---
-  duration_ms: 0.2782
-  type: 'test'
-  ...
-# Subtest: browser measures one native matrix and does not poll an inversion into a pass
-ok 36 - browser measures one native matrix and does not poll an inversion into a pass
-  ---
-  duration_ms: 804.2217
-  type: 'test'
-  ...
-# Subtest: merged/virtual table cannot produce ordering proof
-ok 37 - merged/virtual table cannot produce ordering proof
-  ---
-  duration_ms: 1287.7515
-  type: 'test'
-  ...
-1..37
-# tests 37
+1..7
+# tests 7
 # suites 0
-# pass 37
+# pass 7
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 46342.4537
+# duration_ms 21463.7389
 ```
 
 ### Sync Record Status
@@ -352,4 +152,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-v24受影响304项；交付排序27项与页签10项组合，非官方模型结果
+主工程113项无失败；交付7项为子集，官方模型未复验

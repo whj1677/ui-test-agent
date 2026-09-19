@@ -784,6 +784,19 @@ export class BrowserSession {
       const receipt = result.checkpoints?.find(
         (item) => item.checkpoint_id === point.checkpoint_id,
       );
+      // Measurements stay immediately after each action. Their human-readable
+      // captions must not consume the final action-to-assertion window.
+      const invariantPresentations = [];
+      const presentInvariants = async () => {
+        for (const observations of invariantPresentations.splice(0)) {
+          try {
+            await recording.observed(observations);
+          } catch {
+            result.evidence_status = 'PARTIAL';
+            result.media_warning = 'RECORDING_CUE_UNAVAILABLE';
+          }
+        }
+      };
       try {
         setPhase('STEP_BUDGET');
         budget.remaining();
@@ -792,7 +805,12 @@ export class BrowserSession {
           await recording.beginCheckpoint(point, pointIndex, step.checkpoints.length);
           await emit('CHECKPOINT_STARTED', detail);
         }
-        const lastActionAt = await this.executeActions({ ...run, point, budget });
+        const lastActionAt = await this.executeActions({
+          ...run,
+          point,
+          budget,
+          invariantPresentations,
+        });
         setPhase('ASSERTION');
         if (signal?.aborted) fail('STOPPED');
         budget.remaining();
@@ -830,6 +848,7 @@ export class BrowserSession {
           await emit('ASSERTION_OBSERVED', { ...detail, ...observation });
         }
         // Observe before holding a video caption. Evidence cannot extend a deadline.
+        await presentInvariants();
         await recording.observed(observations);
         if (observations.some((item) => !item.window_observed)) fail('ASSERTION_OBSERVATION_LATE');
         if (observations.some((item) => !item.passed)) fail('BUSINESS_ASSERTION_FAILED');
@@ -849,6 +868,9 @@ export class BrowserSession {
           await emit('CHECKPOINT_FINISHED', { ...detail, status: receipt.status });
         }
       } catch (error) {
+        // A failed guard stops actions immediately; its already persisted
+        // measurement is still shown, without replacing the original error.
+        await presentInvariants();
         if (receipt) {
           receipt.status =
             error.code === 'BUSINESS_ASSERTION_FAILED' ? 'FAIL_ASSERTION' : 'TECHNICAL_FAILED';
@@ -1206,7 +1228,8 @@ export class BrowserSession {
       (result.relational_observations ??= []).push(evidence);
       await emit('TABLE_INVARIANT_OBSERVED', evidence);
     }
-    await recording.observed(observations);
+    if (Array.isArray(run.invariantPresentations)) run.invariantPresentations.push(observations);
+    else await recording.observed(observations);
     if (observations.some((item) => !item.window_observed)) fail('ASSERTION_OBSERVATION_LATE');
     if (observations.some((item) => !item.passed)) fail('BUSINESS_ASSERTION_FAILED');
   }

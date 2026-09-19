@@ -1,5 +1,7 @@
 # 需求索引
 
+当前：[版本25字幕时序修复](REQ-0017-controlled-react/real-model-v25-result.md)主工程113项受影响工程无失败。最新官方[版本24独立8例](REQ-0017-controlled-react/real-model-v24-result.md)：3正常完整、3指定缺陷检出、2技术失败；字幕占观察窗已工程修复，证据范围误解待处理，原题/原失败保持。
+
 最新：[版本24当前页排序关系](REQ-0017-controlled-react/real-model-v24-result.md)304项受影响工程无失败；首次完整句来源拒绝已修正，日志保留。冻结后复测原V07及独立8例，不将工程数量当产品通过率。
 
 当前迭代：[版本23页签状态修复](REQ-0017-controlled-react/real-model-v23-result.md)主工程213项受影响工程无失败，交付10项重叠子集无失败；真实8例仍待排序能力修复后复验，不替代下列历史产品事实。
