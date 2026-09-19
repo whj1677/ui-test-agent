@@ -1,0 +1,68 @@
+{
+  "cases": [
+    {
+      "case_id": "HOLD-Q1",
+      "expected_result": "PASS_ASSERTIONS",
+      "failing_step_id": null,
+      "business_field": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "case_id": "HOLD-Q2",
+      "expected_result": "FAIL_ASSERTION",
+      "failing_step_id": "S03",
+      "business_field": "任务类型过滤后的结果集",
+      "expected": "联合西站与检修后仅3条：H102(西站/检修/120 kW)、H106(西站/检修/220 kW)、H110(西站/检修/110 kW)，计数器共3条 · 第1/1页",
+      "actual": "任务类型条件被忽略但站点条件生效，返回全部西站6条：H102、H104、H106、H108、H110、H112"
+    },
+    {
+      "case_id": "HOLD-F1",
+      "expected_result": "PASS_ASSERTIONS",
+      "failing_step_id": null,
+      "business_field": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "case_id": "HOLD-F2",
+      "expected_result": "FAIL_ASSERTION",
+      "failing_step_id": "S04",
+      "business_field": "基本信息定义列表-额定功率",
+      "expected": "H106基本信息实际额定功率字段为220 kW；对象名称循环泵、所属站点西站不变；历史备注中的220 kW只是干扰项",
+      "actual": "基本信息实际额定功率字段显示320 kW；历史备注仍显示220 kW，编号、对象名称、所属站点未变"
+    },
+    {
+      "case_id": "HOLD-M1",
+      "expected_result": "PASS_ASSERTIONS",
+      "failing_step_id": null,
+      "business_field": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "case_id": "HOLD-M2",
+      "expected_result": "FAIL_ASSERTION",
+      "failing_step_id": "S05",
+      "business_field": "关闭详情按钮可见且未被遮挡/可点击",
+      "expected": "关闭采样说明后父详情仍打开，自身h2为H106，关闭详情可见、原生启用、无覆盖层且可指向",
+      "actual": "关闭子说明动作同步在父对话框内关闭详情按钮区域生成近透明拦截层；按钮仍可见且未禁用，但整个按钮区域的指针事件被拦截"
+    },
+    {
+      "case_id": "HOLD-S1",
+      "expected_result": "PASS_ASSERTIONS",
+      "failing_step_id": null,
+      "business_field": null,
+      "expected": null,
+      "actual": null
+    },
+    {
+      "case_id": "HOLD-S2",
+      "expected_result": "FAIL_ASSERTION",
+      "failing_step_id": "S03",
+      "business_field": "功率降序第1页第2位与第3位顺序",
+      "expected": "位置1 H107 300 kW，位置2 H111 260 kW，位置3 H106 220 kW；控件仍显示功率降序",
+      "actual": "位置1仍为H107 300 kW，但位置2与位置3互换为H106 220 kW、H111 260 kW；数值本身和默认编号升序未改"
+    }
+  ]
+}

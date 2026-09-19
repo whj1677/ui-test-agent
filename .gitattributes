@@ -16,3 +16,4 @@ expanded-lab/public/style.css text eol=lf
 expanded-lab/cases.json text eol=lf
 expanded-lab/oracle.json text eol=lf
 expanded-lab/SPEC.md text eol=lf
+heldout-lab/** text eol=lf

@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>工业巡检操作台</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --panel: #fff;
+        --ink: #17233a;
+        --muted: #66768f;
+        --line: #dbe3ef;
+        --brand: #1769d1;
+        --brand2: #0b4aa2;
+        --ok: #15803d;
+        --warn: #b45309;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          14px/1.55 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          PingFang SC,
+          Microsoft YaHei,
+          sans-serif;
+      }
+      .app {
+        display: grid;
+        grid-template-columns: 248px 1fr;
+        min-height: 100vh;
+      }
+      .side {
+        background: #0f1b33;
+        color: #dbe7ff;
+        padding: 18px 14px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 18px;
+        color: #fff;
+        margin: 2px 4px 16px;
+      }
+      .brand small {
+        display: block;
+        color: #9db4d8;
+        font-weight: 500;
+        margin-top: 3px;
+      }
+      .side details {
+        margin: 8px 0;
+        border: 1px solid #24395f;
+        border-radius: 10px;
+        background: #132344;
+      }
+      .side summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 10px 12px;
+        color: #fff;
+        font-weight: 700;
+      }
+      .side summary::-webkit-details-marker {
+        display: none;
+      }
+      .side a {
+        display: block;
+        color: #c9d9f7;
+        text-decoration: none;
+        padding: 8px 12px 8px 24px;
+        border-left: 3px solid transparent;
+      }
+      .side a.active {
+        color: #fff;
+        background: #1c3a6b;
+        border-left-color: #6db1ff;
+      }
+      .main {
+        min-width: 860px;
+      }
+      .top {
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+        padding: 14px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .crumb {
+        color: var(--muted);
+      }
+      .crumb b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .user {
+        color: var(--muted);
+      }
+      .wrap {
+        padding: 22px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(170px, 1fr));
+        gap: 14px;
+        margin: 16px 0 22px;
+      }
+      .card,
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(23, 35, 58, 0.06);
+      }
+      .card {
+        padding: 16px;
+      }
+      .card b {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+      .card span {
+        color: var(--muted);
+      }
+      .card a {
+        color: var(--brand);
+        font-weight: 700;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 14px 0;
+      }
+      .stat {
+        background: linear-gradient(180deg, #fff, #f8fbff);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .stat i {
+        font-style: normal;
+        color: var(--muted);
+        display: block;
+      }
+      .stat b {
+        font-size: 22px;
+      }
+      .panel {
+        padding: 16px;
+      }
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .filters {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr auto auto;
+        gap: 10px;
+        align-items: end;
+        margin-bottom: 14px;
+      }
+      .field {
+        display: grid;
+        gap: 5px;
+      }
+      .field label {
+        font-weight: 700;
+        color: #34425c;
+      }
+      input,
+      select,
+      button {
+        font: inherit;
+      }
+      input,
+      select {
+        width: 100%;
+        border: 1px solid #c7d2e4;
+        border-radius: 9px;
+        padding: 8px 10px;
+        background: #fff;
+        color: var(--ink);
+      }
+      button {
+        border: 1px solid #b9c7dc;
+        border-radius: 9px;
+        padding: 8px 14px;
+        background: #fff;
+        color: #203252;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: #8fb2ea;
+      }
+      .btn {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+      }
+      .btn:hover {
+        background: var(--brand2);
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        white-space: nowrap;
+      }
+      th {
+        background: #eef4fc;
+        color: #34425c;
+        font-weight: 800;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      .act {
+        color: var(--brand);
+        font-weight: 700;
+      }
+      .pager {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 12px;
+      }
+      dialog {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0;
+        box-shadow: 0 24px 70px rgba(15, 27, 51, 0.28);
+        max-width: 720px;
+        width: min(720px, 92vw);
+      }
+      dialog::backdrop {
+        background: rgba(10, 18, 34, 0.45);
+      }
+      .dlg-head {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .dlg-head h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .dlg-name {
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        padding: 12px 18px 0;
+      }
+      .tab[aria-selected='true'] {
+        background: #eaf2ff;
+        border-color: #8fb2ea;
+        color: var(--brand2);
+        font-weight: 800;
+      }
+      .dlg-body {
+        padding: 16px 18px 20px;
+        min-height: 220px;
+      }
+      .loading {
+        padding: 34px;
+        text-align: center;
+        color: var(--muted);
+      }
+      dl {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      dt,
+      dd {
+        margin: 0;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      dt {
+        background: #f3f7fd;
+        font-weight: 800;
+      }
+      dd {
+        background: #fff;
+      }
+      dl :is(dt:last-of-type, dd:last-of-type) {
+        border-bottom: 0;
+      }
+      .note {
+        margin-top: 14px;
+        border-left: 4px solid var(--warn);
+        background: #fffbeb;
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .note h3 {
+        margin: 0 0 4px;
+        font-size: 14px;
+      }
+      .dlg-foot {
+        padding: 13px 18px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      .sample {
+        width: min(460px, 88vw);
+      }
+      .seam {
+        position: absolute;
+        pointer-events: auto;
+        background: rgba(2, 8, 12, 0.006);
+        z-index: 50;
+      }
+      .gridlinks {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .gridlinks a {
+        display: block;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px;
+        color: var(--brand);
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .ok {
+        color: var(--ok);
+      }
+      @media (max-width: 980px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+        .side {
+          position: relative;
+          height: auto;
+        }
+        .main {
+          min-width: 0;
+        }
+        .cards,
+        .stats,
+        .gridlinks {
+          grid-template-columns: 1fr 1fr;
+        }
+        .filters {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side">
+        <div class="brand">巡检操作台<small>localhost:4198 · 合成演示环境</small></div>
+        <nav aria-label="主导航">
+          <details open>
+            <summary>调度中心</summary>
+            <a data-nav href="/">调度总览</a><a data-nav href="/probe/q1">工作区一</a
+            ><a data-nav href="/probe/q2">工作区二</a>
+          </details>
+          <details open>
+            <summary>泵房与换热</summary>
+            <a data-nav href="/probe/f1">工作区三</a><a data-nav href="/probe/f2">工作区四</a
+            ><a data-nav href="/probe/m1">工作区五</a><a data-nav href="/probe/m2">工作区六</a>
+          </details>
+          <details>
+            <summary>能效与排序</summary>
+            <a data-nav href="/probe/s1">工作区七</a><a data-nav href="/probe/s2">工作区八</a>
+          </details>
+        </nav>
+      </aside>
+      <main class="main">
+        <header class="top">
+          <div id="crumb" class="crumb">首页 / <b>调度总览</b></div>
+          <div class="user">合成值班员 · 只读会话</div>
+        </header>
+        <section id="homeView" class="wrap">
+          <h1>调度总览</h1>
+          <div class="cards">
+            <div class="card"><b>在册对象</b><span id="stAll">12</span></div>
+            <div class="card"><b>东站对象</b><span id="stEast">6</span></div>
+            <div class="card"><b>西站对象</b><span id="stWest">6</span></div>
+            <div class="card"><b>额定功率合计</b><span>1805 kW</span></div>
+          </div>
+          <div class="panel">
+            <h2>工作区入口</h2>
+            <div class="gridlinks">
+              <a data-nav href="/probe/q1">工作区一</a><a data-nav href="/probe/q2">工作区二</a
+              ><a data-nav href="/probe/f1">工作区三</a><a data-nav href="/probe/f2">工作区四</a
+              ><a data-nav href="/probe/m1">工作区五</a><a data-nav href="/probe/m2">工作区六</a
+              ><a data-nav href="/probe/s1">工作区七</a><a data-nav href="/probe/s2">工作区八</a>
+            </div>
+          </div>
+        </section>
+        <section id="probeView" class="wrap" hidden>
+          <h1 id="listTitle">巡检任务台账</h1>
+          <div class="stats">
+            <div class="stat"><i>当前结果</i><b id="statCur">12</b></div>
+            <div class="stat"><i>巡检任务</i><b>6</b></div>
+            <div class="stat"><i>检修任务</i><b>6</b></div>
+            <div class="stat"><i>单页容量</i><b>3</b></div>
+          </div>
+          <div class="panel">
+            <form id="qform" method="get" action="/">
+              <div class="filters">
+                <div class="field">
+                  <label for="kw">关键词</label
+                  ><input id="kw" name="kw" type="search" autocomplete="off" />
+                </div>
+                <div class="field">
+                  <label for="station">所属站点</label
+                  ><select id="station" name="station">
+                    <option value="" selected>全部</option>
+                    <option value="东站">东站</option>
+                    <option value="西站">西站</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="type">任务类型</label
+                  ><select id="type" name="type">
+                    <option value="" selected>全部</option>
+                    <option value="巡检">巡检</option>
+                    <option value="检修">检修</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sort">排序</label
+                  ><select id="sort" name="sort">
+                    <option value="id-asc" selected>编号升序</option>
+                    <option value="power-desc">功率降序</option>
+                  </select>
+                </div>
+                <button class="btn" type="submit">查询</button><button type="reset">重置</button>
+              </div>
+            </form>
+            <div class="meta">
+              <span id="counter">共12条 · 第1/4页</span
+              ><span>数据为合成台账，查询仅改变当前视图</span>
+            </div>
+            <table aria-label="巡检任务列表">
+              <thead>
+                <tr>
+                  <th>编号</th>
+                  <th>对象名称</th>
+                  <th>所属站点</th>
+                  <th>任务类型</th>
+                  <th>额定功率</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+            <div class="pager">
+              <button id="prev" type="button">上一页</button
+              ><button id="next" type="button">下一页</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <dialog id="detailDlg" aria-label="巡检详情">
+      <div class="dlg-head">
+        <div>
+          <div class="dlg-name">巡检详情</div>
+          <h2 id="detailId"></h2>
+        </div>
+        <button id="closeDetail" type="button">关闭详情</button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="详情页签">
+        <button
+          class="tab"
+          id="tabBasic"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-tab="basic"
+        >
+          基本信息</button
+        ><button
+          class="tab"
+          id="tabParam"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-tab="param"
+        >
+          作业参数
+        </button>
+      </div>
+      <div class="dlg-body">
+        <div id="loading" class="loading">正在读取台账字段…</div>
+        <div id="detailBody" hidden>
+          <section id="paneBasic" aria-label="基本信息">
+            <dl>
+              <dt>对象名称</dt>
+              <dd id="fName">循环泵</dd>
+              <dt>所属站点</dt>
+              <dd id="fStation">西站</dd>
+              <dt>额定功率</dt>
+              <dd id="fPower">220 kW</dd>
+            </dl>
+            <aside class="note" aria-label="历史备注">
+              <h3>历史备注</h3>
+              <p>历史备注：旧档曾记录 220 kW，仅用于追溯，不作为当前额定功率字段。</p>
+            </aside>
+          </section>
+          <section id="paneParam" aria-label="作业参数" hidden>
+            <dl>
+              <dt>周期</dt>
+              <dd>9天</dd>
+              <dt>阈值</dt>
+              <dd>65℃</dd>
+            </dl>
+          </section>
+        </div>
+      </div>
+      <div class="dlg-foot"><button id="readSample" type="button">读取说明</button></div>
+    </dialog>
+    <dialog id="sampleDlg" class="sample" aria-label="采样说明">
+      <div class="dlg-head">
+        <div>
+          <div class="dlg-name">采样说明</div>
+          <h2>采样说明</h2>
+        </div>
+      </div>
+      <div class="dlg-body"><p>每90秒采样</p></div>
+      <div class="dlg-foot"><button id="closeSample" type="button">关闭说明</button></div>
+    </dialog>
+    <script>
+      (function () {
+        'use strict';
+        var DATA = [
+          { id: 'H101', name: '冷却塔', station: '东站', type: '巡检', power: 80 },
+          { id: 'H102', name: '循环泵', station: '西站', type: '检修', power: 120 },
+          { id: 'H103', name: '空压机', station: '东站', type: '检修', power: 60 },
+          { id: 'H104', name: '离心风机', station: '西站', type: '巡检', power: 95 },
+          { id: 'H105', name: '补水泵', station: '东站', type: '巡检', power: 140 },
+          { id: 'H106', name: '循环泵', station: '西站', type: '检修', power: 220 },
+          { id: 'H107', name: '主换热器', station: '东站', type: '检修', power: 300 },
+          { id: 'H108', name: '排污泵', station: '西站', type: '巡检', power: 40 },
+          { id: 'H109', name: '加药装置', station: '东站', type: '巡检', power: 180 },
+          { id: 'H110', name: '疏水泵', station: '西站', type: '检修', power: 110 },
+          { id: 'H111', name: '凝结水泵', station: '东站', type: '检修', power: 260 },
+          { id: 'H112', name: '轴流风机', station: '西站', type: '巡检', power: 200 },
+        ];
+        var names = {
+          q1: '工作区一',
+          q2: '工作区二',
+          f1: '工作区三',
+          f2: '工作区四',
+          m1: '工作区五',
+          m2: '工作区六',
+          s1: '工作区七',
+          s2: '工作区八',
+        };
+        var lane =
+          location.pathname.indexOf('/probe/') === 0 ? location.pathname.split('/')[2] : '';
+        var opt = {
+          dropType: lane === 'q2',
+          rated320: lane === 'f2',
+          seam: lane === 'm2',
+          swapDesc: lane === 's2',
+        };
+        var size = 3;
+        var timer = null;
+        var keep = null;
+        function blank() {
+          return { kw: '', station: '', type: '', sort: 'id-asc', page: 1 };
+        }
+        var view = blank();
+        function $(id) {
+          return document.getElementById(id);
+        }
+        function key() {
+          return location.pathname.indexOf('/probe/') === 0 ? location.pathname.split('/')[2] : '';
+        }
+        function esc(s) {
+          return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+        function rows() {
+          var out = DATA.filter(function (r) {
+            var hit = !view.kw || r.id.indexOf(view.kw) > -1 || r.name.indexOf(view.kw) > -1;
+            var st = !view.station || r.station === view.station;
+            var ty = !view.type || opt.dropType || r.type === view.type;
+            return hit && st && ty;
+          });
+          if (view.sort === 'power-desc') {
+            out = out.slice().sort(function (a, b) {
+              return b.power - a.power || a.id.localeCompare(b.id);
+            });
+            if (opt.swapDesc) {
+              var i = out.findIndex(function (r) {
+                return r.id === 'H111';
+              });
+              var j = out.findIndex(function (r) {
+                return r.id === 'H106';
+              });
+              if (i > -1 && j > -1) {
+                var t = out[i];
+                out[i] = out[j];
+                out[j] = t;
+              }
+            }
+          } else {
+            out = out.slice().sort(function (a, b) {
+              return a.id.localeCompare(b.id);
+            });
+          }
+          return out;
+        }
+        function paint() {
+          var all = rows();
+          var pages = Math.max(1, Math.ceil(all.length / size));
+          if (view.page > pages) view.page = pages;
+          if (view.page < 1) view.page = 1;
+          var part = all.slice((view.page - 1) * size, view.page * size);
+          $('rows').innerHTML = part
+            .map(function (r) {
+              return (
+                '<tr><td>' +
+                esc(r.id) +
+                '</td><td>' +
+                esc(r.name) +
+                '</td><td>' +
+                esc(r.station) +
+                '</td><td>' +
+                esc(r.type) +
+                '</td><td>' +
+                r.power +
+                " kW</td><td><button type='button' class='act' data-id='" +
+                esc(r.id) +
+                "'>详情</button></td></tr>"
+              );
+            })
+            .join('');
+          $('counter').textContent = '共' + all.length + '条 · 第' + view.page + '/' + pages + '页';
+          $('statCur').textContent = String(all.length);
+          $('prev').disabled = view.page <= 1;
+          $('next').disabled = view.page >= pages;
+        }
+        function sync() {
+          $('kw').value = view.kw;
+          $('station').value = view.station;
+          $('type').value = view.type;
+          $('sort').value = view.sort;
+        }
+        function mark() {
+          var k = key();
+          document.querySelectorAll('a[data-nav]').forEach(function (a) {
+            a.classList.toggle('active', a.getAttribute('href') === location.pathname);
+          });
+        }
+        function render() {
+          var k = key();
+          lane = k;
+          opt = {
+            dropType: k === 'q2',
+            rated320: k === 'f2',
+            seam: k === 'm2',
+            swapDesc: k === 's2',
+          };
+          keep = null;
+          var home = !k;
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+          if ($('detailDlg').open) $('detailDlg').close();
+          if ($('sampleDlg').open) $('sampleDlg').close();
+          clearSeam();
+          if (home) {
+            $('homeView').hidden = false;
+            $('probeView').hidden = true;
+            $('crumb').innerHTML = '首页 / <b>调度总览</b>';
+            mark();
+            return;
+          }
+          $('homeView').hidden = true;
+          $('probeView').hidden = false;
+          $('crumb').innerHTML = '首页 / ' + esc(names[k] || '工作区') + ' / <b>巡检任务台账</b>';
+          view = blank();
+          sync();
+          mark();
+          paint();
+        }
+        function openDetail(id) {
+          var r = DATA.find(function (x) {
+            return x.id === id;
+          });
+          if (!r) return;
+          keep = {
+            kw: view.kw,
+            station: view.station,
+            type: view.type,
+            sort: view.sort,
+            page: view.page,
+          };
+          clearSeam();
+          setTab('basic');
+          $('loading').hidden = false;
+          $('detailBody').hidden = true;
+          $('detailId').textContent = '';
+          var d = $('detailDlg');
+          if (!d.open) d.showModal();
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () {
+            var rr = DATA.find(function (x) {
+              return x.id === id;
+            });
+            $('detailId').textContent = rr.id;
+            $('fName').textContent = rr.name;
+            $('fStation').textContent = rr.station;
+            $('fPower').textContent = (opt.rated320 && rr.id === 'H106' ? 320 : rr.power) + ' kW';
+            $('loading').hidden = true;
+            $('detailBody').hidden = false;
+          }, 500);
+        }
+        function setTab(t) {
+          $('paneBasic').hidden = t !== 'basic';
+          $('paneParam').hidden = t !== 'param';
+          $('tabBasic').setAttribute('aria-selected', t === 'basic' ? 'true' : 'false');
+          $('tabParam').setAttribute('aria-selected', t === 'param' ? 'true' : 'false');
+        }
+        function clearSeam() {
+          document.querySelectorAll('.seam').forEach(function (n) {
+            n.remove();
+          });
+        }
+        function seam() {
+          var d = $('detailDlg'),
+            b = $('closeDetail');
+          if (!d.open || document.querySelector('.seam')) return;
+          d.style.position = 'relative';
+          var a = b.getBoundingClientRect(),
+            p = d.getBoundingClientRect();
+          var n = document.createElement('div');
+          n.className = 'seam';
+          n.style.left = a.left - p.left + 'px';
+          n.style.top = a.top - p.top + 'px';
+          n.style.width = a.width + 'px';
+          n.style.height = a.height + 'px';
+          d.appendChild(n);
+        }
+        function closeSampleNow() {
+          if ($('sampleDlg').open) $('sampleDlg').close();
+          if (opt.seam) seam();
+        }
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest('a[data-nav]');
+          if (a) {
+            e.preventDefault();
+            history.pushState({}, '', a.getAttribute('href'));
+            render();
+            return;
+          }
+          var b = e.target.closest('button[data-id]');
+          if (b) {
+            openDetail(b.getAttribute('data-id'));
+            return;
+          }
+          var t = e.target.closest('.tab');
+          if (t) {
+            setTab(t.getAttribute('data-tab'));
+          }
+        });
+        window.addEventListener('popstate', render);
+        $('qform').addEventListener('submit', function (e) {
+          e.preventDefault();
+          view = {
+            kw: $('kw').value.trim(),
+            station: $('station').value,
+            type: $('type').value,
+            sort: $('sort').value,
+            page: 1,
+          };
+          paint();
+        });
+        $('qform').addEventListener('reset', function () {
+          setTimeout(function () {
+            view = blank();
+            sync();
+            paint();
+          }, 0);
+        });
+        $('prev').addEventListener('click', function () {
+          if (view.page > 1) {
+            view.page--;
+            paint();
+          }
+        });
+        $('next').addEventListener('click', function () {
+          var pages = Math.max(1, Math.ceil(rows().length / size));
+          if (view.page < pages) {
+            view.page++;
+            paint();
+          }
+        });
+        $('readSample').addEventListener('click', function () {
+          $('sampleDlg').showModal();
+        });
+        $('closeSample').addEventListener('click', closeSampleNow);
+        $('sampleDlg').addEventListener('cancel', function (e) {
+          e.preventDefault();
+          closeSampleNow();
+        });
+        $('closeDetail').addEventListener('click', function () {
+          $('detailDlg').close();
+        });
+        $('detailDlg').addEventListener('close', function () {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+          clearSeam();
+          if (keep) {
+            view = keep;
+            keep = null;
+            sync();
+            paint();
+          }
+        });
+        render();
+      })();
+    </script>
+  </body>
+</html>

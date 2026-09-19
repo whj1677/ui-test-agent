@@ -7,7 +7,7 @@
 
 - 需求状态：已确认
 - 治理分级：G3
-- 当前版本：20
+- 当前版本：21
 - 最后更新：2026-09-20
 
 ## 当前有效用户需求
@@ -34,7 +34,7 @@
 | DD-0017-02 | DR-0017-02 | 已确认 | 版本20：自适应审查MISSING/UNCLEAR缺相应ASSERTION_GAP/ORACLE_UNCLEAR时，只补拒绝性问题及ACTION_MISMATCH，保留原状态/原因/负面发现，经原完整校验后退回候选REPAIR。complete:false也不能因此派发；未知引用/枚举/缺原因仍严格拒绝。保留既有COVERED+GAP保守降级，固定计划验证器与原重规划/期限不变，原回复/候选/用例不改，不重试真实差异。版本19位置与数量来源守卫继续保持。本批不解决AND结果域、排序关系、重置覆盖。 |
 | DD-0017-03 | DR-0017-03 | 已确认 | 执行时观察与受控技术绑定；版本11新增scope内原生唯一dt/dd只读字段定位definition，禁止动作/跨域/值反选。 |
 | DD-0017-04 | DR-0017-04 | 已确认 | 主流程状态与证据 |
-| DD-0017-05 | DR-0017-05 | 已确认 | 冻结正反例与独立验证 |
+| DD-0017-05 | DR-0017-05 | 已确认 | 版本21独立留出8例：Kimi仅基于新合成真值著作HTML与用例，无产品源码/旧测试输入。冻结前核对作者错项并记录，冻结后不按Agent失败改原题。固定4198、六资产SHA和原11资产同时核验，heldout独立suite保持all原32；server不暴露答案/源码，模型只得该组原用例及现场观察。无登录站点只用首页标记建立会话，不为Agent提供业务定位器/计划；全部只读，共享调用/期限与官方供应商保持。参考18场景和工程注入不计产品，真实正常完成/指定差异/技术失败分开。 |
 
 ## 当前有效任务
 
@@ -44,7 +44,7 @@
 | TK-0017-02 | DR-0017-02 / DD-0017-02 | 已实现 | 版本20实现负面审查不一致的保守候选反馈，新增4单元反例及5真实Chromium控制器注入场景；原2次恢复/无进展终止保持，partial候选也不得派发。工程与后续真实V02复测分列，不改原预期/历史。 |
 | TK-0017-03 | DR-0017-03 / DD-0017-03 | 已实现 | 版本11实现没有HTML属性的原生dt/dd只读definition绑定，含重名/诱饵/错位及未修改manual-lab验证；真实产品效果另列。未来写入绑定仍待修复。 |
 | TK-0017-04 | DR-0017-04 / DD-0017-04 | 已实现 | 版本10同步登录后的父阶段，当前prepare/run使用对应界面流程；失败状态、原事实与未执行边界保持。 |
-| TK-0017-05 | DR-0017-05 / DD-0017-05 | 进行中 | 扩展原24例完整分类验证与成对新合成故障页；冻结输入/真值，实际运行、审查反例和记录所有未完成，不以参考脚本替代Agent结果。 |
+| TK-0017-05 | DR-0017-05 / DD-0017-05 | 进行中 | 版本21已完成独立8例资产冻结与隔离编排接入、25项参考/工程验证；真实留出和同构建稳定性继续进行。原32流程、旧失败和写入仅准备边界保留。 |
 
 ## 当前有效验证项
 
@@ -54,7 +54,7 @@
 | VT-0017-02 | DR-0017-02 | 集成测试通过 | 结构化缺口与有界ReAct恢复 | 命令：node --test --test-concurrency=2 tests/adaptive-review.test.mjs tests/adaptive-negative-review.execution.test.mjs；退出码：0；测试数量：23；失败数量：0；跳过数量：0；证据：validation/req0017/v20-final-targets.log |
 | VT-0017-03 | DR-0017-03 | 集成测试通过 | 执行时观察与受控技术绑定 | 命令：node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs；退出码：0；测试数量：199；失败数量：0；跳过数量：0；证据：validation/req0017/v11-fields-regression.log |
 | VT-0017-04 | DR-0017-04 | 集成测试通过 | 主流程状态与证据 | 命令：node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs；退出码：0；测试数量：199；失败数量：0；跳过数量：0；证据：validation/req0017/v11-fields-regression.log |
-| VT-0017-05 | DR-0017-05 | 人工待确认 | 冻结正反例与独立验证 | 命令：node --test --test-concurrency=1 expanded-lab/verify.test.mjs expanded-lab/grading.test.mjs manual-lab/verify.test.mjs；退出码：0；测试数量：60；失败数量：0；跳过数量：0；证据：validation/req0017/v9-fixture-verified.log |
+| VT-0017-05 | DR-0017-05 | 人工待确认 | 冻结正反例与独立验证 | 命令：node --test --test-concurrency=2 tests/heldout-lab.test.mjs tests/autonomous-lab.test.mjs heldout-lab/reference.test.mjs；退出码：0；测试数量：25；失败数量：0；跳过数量：0；证据：validation/req0017/v21-final-regression.log |
 
 ## 人工待确认项
 

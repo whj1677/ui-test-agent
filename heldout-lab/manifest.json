@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "origin": "http://localhost:4198",
+  "files": [
+    { "path": "index.html", "sha256": "00df6a16ed84853ea29ceb476181c7527e96c6bfc53d8076ee4753058f6cb96a" },
+    { "path": "cases.json", "sha256": "5a4d33d9211ebf145f2ae0228cab62abf7b91febddc6e9941bc53593353dcfc9" },
+    { "path": "oracle.json", "sha256": "23697f682ee3c0a83c16b2e867bec982f73966d4ae063015d16e191dd9d89e17" },
+    { "path": "serve.mjs", "sha256": "138bb8f1abf5f00150ee9e729a8232f47693df69f0114cb5f80d18b4ffd6e035" },
+    { "path": "reference.test.mjs", "sha256": "5bb41f264a862bcb0198c5bb2db66613013d9ef221e80c9c4a44034850cd1be6" },
+    { "path": "README.md", "sha256": "49fadc52ab243d24366d88a806a683c359edf6165abdbf8b8896be55447b6be4" }
+  ]
+}

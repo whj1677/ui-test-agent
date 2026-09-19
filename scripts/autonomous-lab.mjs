@@ -10,6 +10,7 @@ import { suggestObligations } from '../src/plans.mjs';
 import { publicError } from '../src/common.mjs';
 import { startSyntheticLoginFixture } from './synthetic-login.mjs';
 import { startVerifiedContrastFixture } from './contrast-fixture.mjs';
+import { readFrozenHeldout, startVerifiedHeldoutFixture } from './heldout-fixture.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsonFile = async (name) => JSON.parse(await fs.readFile(path.join(root, name), 'utf8'));
@@ -52,7 +53,7 @@ export async function runLab({
   modelProvider,
   caseIds,
 } = {}) {
-  if (!['smoke', 'all'].includes(suite)) throw Error('INVALID_SUITE');
+  if (!['smoke', 'all', 'heldout'].includes(suite)) throw Error('INVALID_SUITE');
   const budget = callBudget({ maxCalls, maxMinutes });
   const manifest = await jsonFile('expanded-lab/manifest.json');
   for (const item of manifest.files) {
@@ -65,31 +66,34 @@ export async function runLab({
     if (createHash('sha256').update(bytes).digest('hex') !== item.sha256)
       throw Error('FREEZE_MISMATCH');
   }
+  const independent = suite === 'heldout' ? await readFrozenHeldout() : null;
   const valid = (await jsonFile('manual-lab/cases/01-valid.json')).cases;
   let groups =
-    suite === 'smoke'
-      ? [{ name: 'smoke', kind: 'test', cases: valid.slice(0, 3) }]
-      : [
-          {
-            name: 'readonly',
-            kind: 'test',
-            cases: [
-              ...valid.slice(0, 12),
-              ...(await jsonFile('manual-lab/cases/03-known-defects.json')).cases,
-            ],
-          },
-          {
-            name: 'review',
-            kind: 'review',
-            cases: (await jsonFile('manual-lab/cases/02-needs-review.json')).cases,
-          },
-          {
-            name: 'contrast',
-            kind: 'test',
-            cases: (await jsonFile('expanded-lab/cases.json')).cases,
-          },
-          { name: 'writes-prepare-only', kind: 'prepare', cases: valid.slice(12) },
-        ];
+    suite === 'heldout'
+      ? [{ name: 'heldout', kind: 'test', cases: independent.cases }]
+      : suite === 'smoke'
+        ? [{ name: 'smoke', kind: 'test', cases: valid.slice(0, 3) }]
+        : [
+            {
+              name: 'readonly',
+              kind: 'test',
+              cases: [
+                ...valid.slice(0, 12),
+                ...(await jsonFile('manual-lab/cases/03-known-defects.json')).cases,
+              ],
+            },
+            {
+              name: 'review',
+              kind: 'review',
+              cases: (await jsonFile('manual-lab/cases/02-needs-review.json')).cases,
+            },
+            {
+              name: 'contrast',
+              kind: 'test',
+              cases: (await jsonFile('expanded-lab/cases.json')).cases,
+            },
+            { name: 'writes-prepare-only', kind: 'prepare', cases: valid.slice(12) },
+          ];
   if (caseIds !== undefined) {
     const available = new Set(groups.flatMap((g) => g.cases.map((c) => c.case_id)));
     if (
@@ -107,7 +111,7 @@ export async function runLab({
     return {
       state: 'PREFLIGHT_ONLY',
       cases: groups.reduce((n, g) => n + g.cases.length, 0),
-      frozen_files: manifest.files.length,
+      frozen_files: manifest.files.length + (independent?.manifest.files.length ?? 0),
       model_calls: 0,
       ...(caseIds
         ? {
@@ -119,7 +123,7 @@ export async function runLab({
   // In-process injection is for engineering tests only; CLI has no provider/URL override.
   const provider = modelProvider ?? new DeepSeek();
   if (provider.baseURL !== 'https://api.deepseek.com') throw Error('OFFICIAL_PROVIDER_REQUIRED');
-  let app, lab, contrast, stopTimer;
+  let app, lab, contrast, heldout, stopTimer;
   try {
     if (!provider.configured()) {
       const vault = new CredentialStore(
@@ -154,6 +158,9 @@ export async function runLab({
       budget: budget.snapshot(),
       tasks: [],
       acceptance: 'NOT_ESTABLISHED',
+      ...(independent
+        ? { heldout_manifest: independent.manifest, oracle_input_to_model: false }
+        : {}),
     };
     const save = async () => {
       ledger.budget = budget.snapshot();
@@ -169,12 +176,22 @@ export async function runLab({
     });
     // The frozen original preconditions explicitly name 4196. Do not silently
     // change that environment while claiming the original cases were exercised.
-    lab = await startSyntheticLoginFixture({ port: 4196, reuseVerified: true });
-    ledger.fixture = {
-      url: lab.url,
-      reused_verified_static_server: lab.reused,
-      browser_data: 'fresh_isolated',
-    };
+    if (suite === 'heldout') {
+      heldout = await startVerifiedHeldoutFixture();
+      ledger.fixture = {
+        url: heldout.url,
+        reused_verified_static_server: heldout.reused,
+        browser_data: 'fresh_isolated',
+        synthetic_login: 'none_required',
+      };
+    } else {
+      lab = await startSyntheticLoginFixture({ port: 4196, reuseVerified: true });
+      ledger.fixture = {
+        url: lab.url,
+        reused_verified_static_server: lab.reused,
+        browser_data: 'fresh_isolated',
+      };
+    }
     if (suite === 'all') {
       contrast = await startVerifiedContrastFixture();
       ledger.contrast_fixture = {
@@ -189,7 +206,12 @@ export async function runLab({
     try {
       for (const group of groups) {
         if (budget.expired() || budget.snapshot().calls >= maxCalls) break;
-        const target = (group.name === 'contrast' ? contrast.url : lab.url) + '/';
+        const target =
+          (group.name === 'heldout'
+            ? heldout.url
+            : group.name === 'contrast'
+              ? contrast.url
+              : lab.url) + '/';
         const bytes = Buffer.from(
           JSON.stringify({
             schema_version: 'case-import/v1',
@@ -219,7 +241,18 @@ export async function runLab({
         const task = await app.store.read(id);
         if (group.kind !== 'review') {
           await app.browser.open(task);
-          if (group.name === 'contrast') {
+          if (group.name === 'heldout') {
+            await heldout.verify();
+            await app.browser.loginPage
+              .getByRole('heading', { name: '调度总览', exact: true })
+              .waitFor();
+            await app.controller.authenticate(id, {
+              kind: 'role',
+              role: 'heading',
+              name: '调度总览',
+              exact: true,
+            });
+          } else if (group.name === 'contrast') {
             await contrast.verify();
             // This byte-verified synthetic fixture explicitly has no login.
             await app.browser.loginPage
@@ -279,6 +312,7 @@ export async function runLab({
     else await provider.close();
     await lab?.close();
     await contrast?.close();
+    await heldout?.close();
   }
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

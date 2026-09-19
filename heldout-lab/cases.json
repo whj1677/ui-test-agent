@@ -1,0 +1,520 @@
+{
+  "schema_version": "case-import/v1",
+  "case_count": 8,
+  "cases": [
+    {
+      "case_id": "HOLD-Q1",
+      "title": "工作区一列表查询核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/q1",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "power_assertion_style": "额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位",
+        "query_input": {
+          "station": "西站",
+          "type": "检修"
+        },
+        "expected_records": [
+          {
+            "id": "H102",
+            "name": "循环泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "120 kW"
+          },
+          {
+            "id": "H106",
+            "name": "循环泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "220 kW"
+          },
+          {
+            "id": "H110",
+            "name": "疏水泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "110 kW"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q1",
+          "expected": "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询",
+          "expected": "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击查询，并在本步骤内核对结果集",
+          "expected": "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-Q2",
+      "title": "工作区二列表查询核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/q2",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "power_assertion_style": "额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位",
+        "query_input": {
+          "station": "西站",
+          "type": "检修"
+        },
+        "expected_records": [
+          {
+            "id": "H102",
+            "name": "循环泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "120 kW"
+          },
+          {
+            "id": "H106",
+            "name": "循环泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "220 kW"
+          },
+          {
+            "id": "H110",
+            "name": "疏水泵",
+            "station": "西站",
+            "type": "检修",
+            "power_display": "110 kW"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q2",
+          "expected": "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询",
+          "expected": "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击查询，并在本步骤内核对结果集",
+          "expected": "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-F1",
+      "title": "工作区三单对象详情核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/f1",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "search_keyword": "H106",
+        "expected_record": {
+          "id": "H106",
+          "name": "循环泵",
+          "station": "西站",
+          "type": "检修",
+          "power_display": "220 kW"
+        },
+        "detail_basic": {
+          "对象名称": "循环泵",
+          "所属站点": "西站",
+          "额定功率": "220 kW"
+        },
+        "detail_param": {
+          "周期": "9天",
+          "阈值": "65℃"
+        }
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/f1",
+          "expected": "默认列表计数器“共12条 · 第1/4页”，排序为编号升序，表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "在关键词输入H106后点击查询",
+          "expected": "计数器“共1条 · 第1/1页”；表体恰好1行，为H106，对象名称循环泵，所属站点西站，任务类型检修，额定功率220 kW。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击该H106行的详情并等待延迟加载完成",
+          "expected": "加载完成后显示名为“巡检详情”的对话框，其自身h2精确等于H106；默认页签为基本信息。"
+        },
+        {
+          "step_id": "S04",
+          "action": "逐项核对基本信息定义列表，不采用历史备注",
+          "expected": "基本信息中对象名称=循环泵；所属站点=西站；额定功率字段=220 kW；可见历史备注即使也含220 kW也不作为额定功率字段。"
+        },
+        {
+          "step_id": "S05",
+          "action": "切换到作业参数页签",
+          "expected": "同一对话框且自身h2仍为H106；作业参数显示周期=9天，阈值=65℃。"
+        },
+        {
+          "step_id": "S06",
+          "action": "切回基本信息页签并复核",
+          "expected": "自身h2仍精确为H106；对象名称=循环泵、所属站点=西站、额定功率=220 kW三项保持规范值。"
+        },
+        {
+          "step_id": "S07",
+          "action": "点击关闭详情",
+          "expected": "详情关闭后恢复到打开前列表状态：仍显示关键词H106的恰好1条结果，计数器“共1条 · 第1/1页”，种子数据未被重置。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-F2",
+      "title": "工作区四单对象详情核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/f2",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "search_keyword": "H106",
+        "expected_record": {
+          "id": "H106",
+          "name": "循环泵",
+          "station": "西站",
+          "type": "检修",
+          "power_display": "220 kW"
+        },
+        "detail_basic": {
+          "对象名称": "循环泵",
+          "所属站点": "西站",
+          "额定功率": "220 kW"
+        },
+        "detail_param": {
+          "周期": "9天",
+          "阈值": "65℃"
+        }
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/f2",
+          "expected": "默认列表计数器“共12条 · 第1/4页”，排序为编号升序，表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "在关键词输入H106后点击查询",
+          "expected": "计数器“共1条 · 第1/1页”；表体恰好1行，为H106，对象名称循环泵，所属站点西站，任务类型检修，额定功率220 kW。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击该H106行的详情并等待延迟加载完成",
+          "expected": "加载完成后显示名为“巡检详情”的对话框，其自身h2精确等于H106；默认页签为基本信息。"
+        },
+        {
+          "step_id": "S04",
+          "action": "逐项核对基本信息定义列表，不采用历史备注",
+          "expected": "基本信息中对象名称=循环泵；所属站点=西站；额定功率字段=220 kW；可见历史备注即使也含220 kW也不作为额定功率字段。"
+        },
+        {
+          "step_id": "S05",
+          "action": "切换到作业参数页签",
+          "expected": "同一对话框且自身h2仍为H106；作业参数显示周期=9天，阈值=65℃。"
+        },
+        {
+          "step_id": "S06",
+          "action": "切回基本信息页签并复核",
+          "expected": "自身h2仍精确为H106；对象名称=循环泵、所属站点=西站、额定功率=220 kW三项保持规范值。"
+        },
+        {
+          "step_id": "S07",
+          "action": "点击关闭详情",
+          "expected": "详情关闭后恢复到打开前列表状态：仍显示关键词H106的恰好1条结果，计数器“共1条 · 第1/1页”，种子数据未被重置。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-M1",
+      "title": "工作区五嵌套说明核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/m1",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "search_keyword": "H106",
+        "nested_dialog": "采样说明",
+        "nested_text": "每90秒采样",
+        "nested_close": "关闭说明"
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/m1",
+          "expected": "默认列表计数器“共12条 · 第1/4页”，排序为编号升序，表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "关键词输入H106并点击查询",
+          "expected": "计数器“共1条 · 第1/1页”；唯一结果行为H106，额定功率220 kW。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击该行详情并等待自身h2出现",
+          "expected": "加载完成后父对话框“巡检详情”打开，自身h2精确为H106，默认在基本信息页签。"
+        },
+        {
+          "step_id": "S04",
+          "action": "点击读取说明",
+          "expected": "嵌套原生对话框“采样说明”与父详情共存；说明文本为每90秒采样，存在按钮关闭说明；父详情保持打开。"
+        },
+        {
+          "step_id": "S05",
+          "action": "点击关闭说明，并在点击关闭详情之前完成本步核对",
+          "expected": "子说明已关闭；父对话框仍打开且自身h2精确为H106；关闭详情按钮可见、原生启用、未被遮挡且可指向。"
+        },
+        {
+          "step_id": "S06",
+          "action": "点击关闭详情",
+          "expected": "父详情关闭，列表恢复为打开前关键词H106的恰好1条结果，计数器“共1条 · 第1/1页”。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-M2",
+      "title": "工作区六嵌套说明核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/m2",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "search_keyword": "H106",
+        "nested_dialog": "采样说明",
+        "nested_text": "每90秒采样",
+        "nested_close": "关闭说明"
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/m2",
+          "expected": "默认列表计数器“共12条 · 第1/4页”，排序为编号升序，表体恰好3条数据行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "关键词输入H106并点击查询",
+          "expected": "计数器“共1条 · 第1/1页”；唯一结果行为H106，额定功率220 kW。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击该行详情并等待自身h2出现",
+          "expected": "加载完成后父对话框“巡检详情”打开，自身h2精确为H106，默认在基本信息页签。"
+        },
+        {
+          "step_id": "S04",
+          "action": "点击读取说明",
+          "expected": "嵌套原生对话框“采样说明”与父详情共存；说明文本为每90秒采样，存在按钮关闭说明；父详情保持打开。"
+        },
+        {
+          "step_id": "S05",
+          "action": "点击关闭说明，并在点击关闭详情之前完成本步核对",
+          "expected": "子说明已关闭；父对话框仍打开且自身h2精确为H106；关闭详情按钮可见、原生启用、未被遮挡且可指向。"
+        },
+        {
+          "step_id": "S06",
+          "action": "点击关闭详情",
+          "expected": "父详情关闭，列表恢复为打开前关键词H106的恰好1条结果，计数器“共1条 · 第1/1页”。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-S1",
+      "title": "工作区七功率排序核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/s1",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "power_assertion_style": "额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位",
+        "sort_label": "功率降序",
+        "page1_expected": [
+          {
+            "position": 1,
+            "id": "H107",
+            "power_display": "300 kW"
+          },
+          {
+            "position": 2,
+            "id": "H111",
+            "power_display": "260 kW"
+          },
+          {
+            "position": 3,
+            "id": "H106",
+            "power_display": "220 kW"
+          }
+        ],
+        "page2_expected": [
+          {
+            "position": 1,
+            "id": "H112",
+            "power_display": "200 kW"
+          },
+          {
+            "position": 2,
+            "id": "H109",
+            "power_display": "180 kW"
+          },
+          {
+            "position": 3,
+            "id": "H105",
+            "power_display": "140 kW"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/s1",
+          "expected": "默认计数器“共12条 · 第1/4页”；排序为编号升序；表体恰好3条数据行而非12条当前行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "仅将排序选为功率降序，不点击查询",
+          "expected": "排序控件显示功率降序；表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103，计数器“共12条 · 第1/4页”。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击查询并核对第1页",
+          "expected": "计数器“共12条 · 第1/4页”；排序控件仍显示功率降序；表体恰好3行，位置1为H107且额定功率300 kW，位置2为H111且额定功率260 kW，位置3为H106且额定功率220 kW。"
+        },
+        {
+          "step_id": "S04",
+          "action": "点击下一页并核对第2页",
+          "expected": "计数器“共12条 · 第2/4页”；表体仍恰好3行，位置1为H112且额定功率200 kW，位置2为H109且额定功率180 kW，位置3为H105且额定功率140 kW；不显示12条当前行。"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD-S2",
+      "title": "工作区八功率排序核对",
+      "source_side": "ui",
+      "page_entry_url": "http://localhost:4198/probe/s2",
+      "preconditions": [
+        "仅允许访问 localhost:4198",
+        "使用全新且相互独立的浏览器上下文",
+        "合成环境，无需账号、凭证或登录",
+        "只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。"
+      ],
+      "read_only_scope": true,
+      "synthetic_login": "none_required",
+      "data": {
+        "power_assertion_style": "额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位",
+        "sort_label": "功率降序",
+        "page1_expected": [
+          {
+            "position": 1,
+            "id": "H107",
+            "power_display": "300 kW"
+          },
+          {
+            "position": 2,
+            "id": "H111",
+            "power_display": "260 kW"
+          },
+          {
+            "position": 3,
+            "id": "H106",
+            "power_display": "220 kW"
+          }
+        ],
+        "page2_expected": [
+          {
+            "position": 1,
+            "id": "H112",
+            "power_display": "200 kW"
+          },
+          {
+            "position": 2,
+            "id": "H109",
+            "power_display": "180 kW"
+          },
+          {
+            "position": 3,
+            "id": "H105",
+            "power_display": "140 kW"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step_id": "S01",
+          "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/s2",
+          "expected": "默认计数器“共12条 · 第1/4页”；排序为编号升序；表体恰好3条数据行而非12条当前行。"
+        },
+        {
+          "step_id": "S02",
+          "action": "仅将排序选为功率降序，不点击查询",
+          "expected": "排序控件显示功率降序；表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103，计数器“共12条 · 第1/4页”。"
+        },
+        {
+          "step_id": "S03",
+          "action": "点击查询并核对第1页",
+          "expected": "计数器“共12条 · 第1/4页”；排序控件仍显示功率降序；表体恰好3行，位置1为H107且额定功率300 kW，位置2为H111且额定功率260 kW，位置3为H106且额定功率220 kW。"
+        },
+        {
+          "step_id": "S04",
+          "action": "点击下一页并核对第2页",
+          "expected": "计数器“共12条 · 第2/4页”；表体仍恰好3行，位置1为H112且额定功率200 kW，位置2为H109且额定功率180 kW，位置3为H105且额定功率140 kW；不显示12条当前行。"
+        }
+      ]
+    }
+  ]
+}
