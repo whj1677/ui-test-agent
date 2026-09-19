@@ -1714,6 +1714,17 @@ export async function checkAssertionGroup(
                 } else if (a.check === 'enabled') {
                   actual = !e.matches(':disabled') && !e.closest('[aria-disabled="true"]');
                   passed = actual === a.expected;
+                } else if (a.check === 'aria_selected') {
+                  if (e.getAttribute('role') !== 'tab') error = 'ASSERTION_TARGET_TYPE';
+                  else {
+                    const selected = e.getAttribute('aria-selected');
+                    if (selected !== 'true' && selected !== 'false')
+                      error = 'ASSERTION_SELECTION_STATE_UNSUPPORTED';
+                    else {
+                      actual = selected === 'true';
+                      passed = actual === a.expected;
+                    }
+                  }
                 } else if (a.check === 'selected_label') {
                   if (e.tagName !== 'SELECT') error = 'ASSERTION_TARGET_TYPE';
                   else {
@@ -2259,6 +2270,10 @@ export async function snapshot(
             : {}),
           ...(e.closest('tr')
             ? { row_context: e.closest('tr').innerText.trim().slice(0, 400) }
+            : {}),
+          ...(e.getAttribute('role') === 'tab' &&
+          ['true', 'false'].includes(e.getAttribute('aria-selected'))
+            ? { aria_selected: e.getAttribute('aria-selected') === 'true' }
             : {}),
           ...(e.tagName === 'SELECT'
             ? {

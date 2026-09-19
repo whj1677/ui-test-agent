@@ -26,6 +26,28 @@ export async function requireAdaptiveAssertionTargets(
   remaining = () => 2000,
 ) {
   for (const assertion of fragment.assertions) {
+    if (assertion.check === 'selected_label' || assertion.check === 'aria_selected') {
+      const locator = runtimeLocator(page, assertion.target);
+      if ((await locator.count()) === 1) {
+        const kind = await locator.evaluate(
+          (e) => ({
+            tag: e.tagName,
+            role: e.getAttribute('role'),
+            selected: e.getAttribute('aria-selected'),
+          }),
+          undefined,
+          { timeout: remaining() },
+        );
+        if (assertion.check === 'selected_label' && kind.tag !== 'SELECT')
+          fail('ASSERTION_SELECTION_TARGET_REQUIRED');
+        if (assertion.check === 'aria_selected' && kind.role !== 'tab')
+          fail('ASSERTION_SELECTION_TARGET_REQUIRED');
+        if (assertion.check === 'aria_selected' && !['true', 'false'].includes(kind.selected))
+          fail('ASSERTION_SELECTION_STATE_UNSUPPORTED');
+      }
+      // An absent future target is not approved here; the kernel still validates it.
+      continue;
+    }
     if (
       !['text', 'contains'].includes(assertion.check) ||
       !/第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)

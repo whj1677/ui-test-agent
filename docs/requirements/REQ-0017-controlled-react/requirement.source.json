@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 22,
+    "version": 23,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,8 @@
     }
   ],
   "confirmed_facts": [
+    "版本23主工程组合验证：独立核对并合入7运行文件及2新测试文件；9文件213项0失败/取消/跳过，76106.2599ms，validation/req0017/v23-main-regression.log。含版本22新增22项，不与隔离191或子集重复相加。ARIA tab仅合法aria-selected true/false可测，SELECT语义不变；错误候选在派发前原额度纠错、已执行详情动作不重放；真实false仍业务差异。官方模型未复验，待排序关系能力另批修复后重跑原冻结题。",
+    "版本23隔离验证已结束、合入前记录：独立worktree ui-agent-aria-tab-v23从30ebd59建立，不含主工程v22改动，不读取凭据或真实模型。新7项修前全失败（validation-v23-before.log），修后7项无失败；新增3实际Chromium控制器注入场景后10项无失败，45068.7619ms；7文件191项0失败/取消/跳过，77493.5739ms（隔离validation-v23-regression.log）。错误selected_label在tab上派发前纠错为aria_selected，已执行打开详情只一次；真实未选中仍FAIL_ASSERTION，持续错误按原2次重规划停止。主工程v22已209项回归并提交d491564，后续将核验隔离diff仅包含计划/schema/状态采集/比较/类型纠错及必要测试，再应用到主工程做组合验证；隔离结果不替代主工程或产品验收。",
     "版本22工程完成：新增17原反例在修前12通过5失败（v22-before.log）；初始52项50通过2失败来自测试500ms观察窗过短及把独立关系收据误查在计划断言数组，事实分别为ASSERTION_OBSERVATION_LATE和已正确FAIL_ASSERTION。工程夹具改5000ms、显式查relational_observations，未改产品预算/比较规则，52项随后无失败；另增3个否定/记录数不等于内容关系反例。最终8文件209项0失败/取消/跳过，577647.7139ms（v22-regression.log），与各子集重叠不相加。实际Chromium控制器证明首次fill前捕获10基线，变为99立即报告差异，单次派发，无事后重捕/重放；原新17冻结文件保持。尚未官方模型复测，待页签/排序另批完成后统一复验原8题。",
     "下一批版本23修改前状态卡（先隔离实现，版本22回归期间不写其运行源码）：v21真实F1/F2/M2的默认页签被规划为selected_label且审查ACCEPT，内核发现目标为role=tab而非SELECT后ASSERTION_TARGET_TYPE，后续字段未执行。唯一目标=新增明确只读aria_selected布尔测量，用于已绑定ARIA tab及其合法true/false状态，观察提供该状态；selected_label原生SELECT语义保持。候选在当前已存在的tab误用selected_label时派发前提供定向纠错，沿用原重规划/时限，已执行详情点击不重放。缺失/非法aria-selected、错误元素类型仍技术失败，真实选错页签为业务差异，不以enabled/可见代替选中。交付=能力schema/采集与比较/规划审查共用说明、类型纠错、正反例和真实Chromium控制器回归。新8冻结输入不改、不新增点击或设置页面状态；写入/固定旧比较规则不变。隔离工作副本不读取密钥或运行真实模型；主管合入时核对diff并再次执行必要测试，单独提交，不将隔离工程自报等同产品验收。",
     "版本22修改前状态卡：独立heldout round-fSPLuC已结束，98调用/486581ms、56媒体SHA及8原输入一致，8条全TECHNICAL_FAILED，零到达指定故障检查点，非缺陷检出。累计18官方完成轮1648调用/7886602ms；不同流程40、浏览器不同用例30（原32流程中22浏览器+新8），工程注入不计。Q1/Q2/S2因‘表格内容与操作前完全一致’不被既有needsTableBaseline识别，不能捕获原步骤操作前基线；F1/F2/M2以selected_label测ARIA tab而ASSERTION_TARGET_TYPE；M1/S1因没有通用排序关系而复制现场ID导致TABLE_SOURCE_UNGROUNDED。唯一目标=补当前原步骤表格与操作前一致的明确等价表述，统一基线捕获、计划来源和完成覆盖的同一识别函数，保持运行器基线与反例守卫，不捕获事后基线或重放动作。有限交付=受限明确当前操作前关系识别、否定/条件/非表格/外部标准/历史步骤反例、真实浏览器及控制器注入回归、独立Git提交。新8原题和6文件SHA、原32及旧事实不改；排序与页签分别后批，不在本批声称解决。运行源码仅在整轮结束后修改；先工程与归档，待三类共因分批验证后再跑原冻结8例，不对同一无修复失败盲重试。",
@@ -166,7 +168,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。",
+      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。 版本23新增aria_selected布尔测量限role=tab且显式true/false；selected_label仍限SELECT。现场类型不匹配在派发前定向纠错，不点击页签制造预期，缺失状态技术失败，真实未选中为差异。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -237,7 +239,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本22实现明确同一步操作前表格一致来源识别及20单元/2控制器注入场景；209项受影响工程完成。页签/排序另批处理，原冻结留出未复验，不把工程结果当产品通过。",
+      "task": "版本22表格关系和版本23ARIA页签已实现；主工程9文件213项无失败，新增10项包含真实Chromium+Controller注入，原2次重规划及单次详情点击保持。排序另批、官方模型待复验。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -314,12 +316,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/table-invariant-source.test.mjs tests/table-invariant-source.execution.test.mjs tests/table-invariant.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/aria-selected.test.mjs tests/aria-selected.execution.test.mjs tests/table-invariant-source.test.mjs tests/table-invariant-source.execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/plan-quality.test.mjs",
         "exit_code": 0,
-        "test_count": 209,
+        "test_count": 213,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v22-regression.log"
+        "log_path": "validation/req0017/v23-main-regression.log"
       }
     },
     {
@@ -415,7 +417,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "版本22已实现，209项受影响工程无失败/取消/跳过；新8条真实上轮全技术失败、56媒体SHA一致，原题保持，待三类共因分批修复后复验。版本23隔离页签实现不计本次交付。"
+      "status": "版本23主工程213项受影响回归无失败，10项新增页签测试为子集；真实8例上轮全技术失败，待排序修复后复验，未计产品通过。"
     },
     {
       "un_id": "UN-0017-01",
@@ -439,7 +441,7 @@
       "dd_id": "DD-0017-05",
       "tk_id": "TK-0017-05",
       "vt_id": "VT-0017-05",
-      "status": "版本21新增独立8条只读留出（另计，all仍原32），6资产冻结、25工程/参考项无失败；真实尚未执行。版本20最新原三例一轮完整，第二轮稳定性及原广度缺口仍待验证，未达自主复杂测试目标。"
+      "status": "版本21独立8例实际98调用、全技术失败，56媒体SHA及原输入核验。累计18官方完成轮1648调用/7886602ms；版本23工程修复未改变旧真实结果。"
     }
   ],
   "trace_history": [

@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_SELECTION_TARGET_REQUIRED:
+    'No dispatch or measurement occurred. selected_label applies ONLY to a native SELECT. For the SAME observed ARIA tab use aria_selected with the ORIGINAL boolean selection requirement, not its visible name, checked or enabled. Keep object scope, sources, timing and previous actions; never click a default tab just to make the assertion true. Replan and re-audit within the existing budget.',
   ASSERTION_NUMERIC_CONTAINS_UNSUPPORTED:
     'Numeric cell substring matching is not a supported numeric proof (1100 contains 100). For an original numeric equality use SAME table/key/column table_cells number; explicit original unit text can use grounded exact text. If the original really requires a literal substring rather than equality, do not silently strengthen it: report the unsupported capability. Keep the original value, scope, timing and audit; no replay.',
   PLAN_ROW_POSITION_UNPROVEN:

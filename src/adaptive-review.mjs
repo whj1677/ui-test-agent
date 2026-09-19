@@ -2,10 +2,15 @@ import { fail, keys, publicError } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 import { stepAssertions } from './plan-steps.mjs';
 import { validatePlanAudit } from './plan-quality.mjs';
-import { DEFINITION_GUIDANCE, ADAPTIVE_CONSTRAINT_GUIDANCE } from './scope-guidance.mjs';
+import {
+  DEFINITION_GUIDANCE,
+  ADAPTIVE_CONSTRAINT_GUIDANCE,
+  TAB_SELECTION_GUIDANCE,
+} from './scope-guidance.mjs';
 import { ADAPTIVE_NUMERIC_GUIDANCE, TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
+${TAB_SELECTION_GUIDANCE}
 ${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
 ${ADAPTIVE_CONSTRAINT_GUIDANCE}
