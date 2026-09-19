@@ -100,7 +100,7 @@ function sourceMismatchReview(reply, context) {
   return { ...verdict, source_binding_gaps: bindingGaps };
 }
 
-function contradictoryCoverageReview(reply, context) {
+function conservativeNegativeReview(reply, context) {
   if (!Array.isArray(reply?.checks) || !Array.isArray(reply.issues)) return null;
   const corrected = structuredClone(reply);
   let changed = false;
@@ -121,6 +121,37 @@ function contradictoryCoverageReview(reply, context) {
     });
     changed = true;
   }
+  for (const check of corrected.checks) {
+    const needed =
+      check.status === 'MISSING'
+        ? 'ASSERTION_GAP'
+        : check.status === 'UNCLEAR'
+          ? 'ORACLE_UNCLEAR'
+          : null;
+    if (
+      !needed ||
+      corrected.issues.some((issue) => issue.code === needed && issue.step_id === check.step_id)
+    )
+      continue;
+    // The structured status already denies coverage. Add the missing negative
+    // carrier, NEVER erase/reclassify the original issue or infer acceptance.
+    // ACTION_MISMATCH also blocks partial dispatch: a malformed negative reply
+    // cannot become permission for an action-only fragment by adding GAP alone.
+    corrected.issues.push({
+      code: needed,
+      step_id: check.step_id,
+      reason: `审查已将${check.obligation_id}标为${check.status}，但缺少对应负面问题类型。保留原状态与发现，候选必须修复后重新审查；不将未知业务含义自动确认为规则。`,
+    });
+    corrected.issues.push({
+      code: 'ACTION_MISMATCH',
+      step_id: check.step_id,
+      reason:
+        '负面覆盖状态与问题类型不一致；仅补齐拒绝性反馈并交还候选规划，当前片段不得派发，已执行动作不得重放。',
+    });
+    changed = true;
+  }
+  // This full validation still rejects unknown sources/references/issue codes,
+  // malformed reasons, wrong counts and every unrelated schema problem.
   return changed ? validatePlanAudit(corrected, context.original, context.candidate_plan) : null;
 }
 
@@ -138,7 +169,7 @@ export async function reviewAdaptiveCandidate(input, ask, onRepair = async () =>
     } catch (error) {
       if (error.code === 'PLAN_AUDIT_INCONSISTENT' && compiled) {
         try {
-          const repair = contradictoryCoverageReview(compiled, context);
+          const repair = conservativeNegativeReview(compiled, context);
           if (repair) return repair;
         } catch {
           /* Unrelated malformed fields remain subject to strict bounded repair. */

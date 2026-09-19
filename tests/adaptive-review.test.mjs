@@ -196,6 +196,53 @@ test('valid adverse semantic verdict is returned without retry or deletion', asy
   assert.notEqual(result.outcome, 'ACCEPT');
   assert.equal(result.issues[0].code, 'ACTION_MISMATCH');
 });
+
+for (const status of ['MISSING', 'UNCLEAR'])
+  for (const hasIssue of [false, true])
+    test(`negative coverage with a missing issue type returns strict rejection: ${status}/${hasIssue}`, async () => {
+      const { input } = fixture();
+      const reply = valid();
+      reply.checks[0].status = status;
+      reply.checks[0].reason = '存在不代表原要求的不存在，当前候选不能证明原义务';
+      if (hasIssue)
+        reply.issues = [
+          {
+            step_id: '1',
+            code: status === 'MISSING' ? 'ORACLE_UNCLEAR' : 'ACTION_MISMATCH',
+            reason: '保留这条原始负面发现',
+          },
+        ];
+      const before = structuredClone({ input, reply });
+      let calls = 0;
+      const result = await reviewAdaptiveCandidate(input, async () => {
+        calls++;
+        return reply;
+      });
+      assert.equal(calls, 1, 'negative finding must not exhaust audit-format calls');
+      assert.equal(result.outcome, 'REPAIR');
+      assert.equal(result.checks[0].status, status);
+      assert.ok(
+        result.issues.some((i) => i.code === 'ACTION_MISMATCH'),
+        'even a partial action-only candidate cannot dispatch on this normalization',
+      );
+      assert.ok(
+        result.issues.some(
+          (i) => i.code === (status === 'MISSING' ? 'ASSERTION_GAP' : 'ORACLE_UNCLEAR'),
+        ),
+      );
+      for (const issue of reply.issues)
+        assert.ok(result.issues.some((i) => JSON.stringify(i) === JSON.stringify(issue)));
+      assert.deepEqual({ input, reply }, before);
+      assert.throws(
+        () =>
+          validatePlanAudit(
+            compileAdaptiveAudit(reply, adaptiveAuditInput(input)),
+            input.original,
+            input.candidate_plan,
+          ),
+        { code: 'PLAN_AUDIT_INCONSISTENT' },
+      );
+    });
 test('unknown/duplicate/mixed audit refs do not silently bind to another assertion', async () => {
   for (const refs of [['A2'], ['A1', 'A1']]) {
     const reply = valid();

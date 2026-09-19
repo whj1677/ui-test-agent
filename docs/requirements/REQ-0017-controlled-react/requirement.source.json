@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 19,
+    "version": 20,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,9 @@
     }
   ],
   "confirmed_facts": [
+    "版本20工程验证完成：初始18项14通过4失败（v20-before.log），修后18项通过；8文件194项0失败/取消/跳过，77510.1024ms（v20-regression.log）。补complete:false不能派发两个场景后，最终定向23项0失败/取消/跳过，36169.1724ms（v20-final-targets.log），与194集合重叠不相加。真实Chromium控制器验证候选修正、实际差异不重试、重复2次规划/1次审查即NO_PROGRESS和零派发；早期21项中1失败为测试错期望3次规划，改为实际原2次且保留失败日志，不增加产品重试。非全量或官方模型验收，下一步先Git后限定V02真实复测。Kimi新8例草稿已读但发现路由故障开关未刷新、总功率误写等问题，仍未冻结或产品测试。",
+    "版本20修改前状态卡：v19 round-HbFCyE真实四例结束，81调用/407757ms，43媒体SHA与原输入一致，V01/V03记录完整；V02因MISSING+ORACLE_UNCLEAR漏ASSERTION_GAP反复审查格式纠错终止，V07复制下一步固定值证明当前排序而被来源守卫拒绝。累计15完成轮1459调用/6921779ms。唯一目标=把已明确的负面覆盖状态但问题类型缺失/不一致的自适应审查，严格保守地转为候选REPAIR，而非无意义重问格式直到停止。有限交付=负面发现一致性补全（仅添加拒绝理由、必要时降低覆盖，不删除原issues、不新增覆盖）、同候选完整校验、单元反例与真实控制器有界重规划。固定计划验证器保持严格；未知引用/未知问题枚举/缺原因/缺义务等仍不能被修补掩盖；即使complete:false，修补响应必须含ACTION_MISMATCH而不能授权派发。原回复、候选、Case与历史不改，不加模型/步骤预算，真实差异和已派发动作不重试。先工程/Git，再限定V02复测；V07排序关系能力和AND结果域/重置覆盖分别留后批，不谎称本批已解决。新留出资产作者输出仅待核对，尚未进入产品，不把生成器当验收。",
+    "独立留出资产构建任务已派出（非第三次架构会诊）：Kimi只接收新合成站点/原始业务真值规格，独立临时目录、tools/subagents空、无仓库/源码/历史日志/密钥/网络工具。有限产出为单HTML、8条原用例及离线oracle，目标4198的新巡检台账，四组查询AND/字段历史诱饵/子弹窗后遮挡/分页排序正常-缺陷对照。生成器不得执行或宣称通过；原32条不改。产出尚未读取或交给产品，必须先独立核对规格、参考验证、冻结摘要，再新增隔离编排后真实执行。它是新增的合成资料作者调用，不算官方DeepSeek产品调用或已完成留出验证。当前版本19真实四例round-HbFCyE运行中，主运行源码f27e10d继续冻结。",
     "版本19最终受影响回归：13文件327项0失败/取消/跳过，104973.904ms，validation/req0017/v19-final-regression.log；其中13个新纯函数测试与3个新增Chromium控制器注入场景，旧位置恢复4场景保留。中间8文件151项与最终集合重叠不相加。原红测12项中11失败日志保留；修实现未改原32条/11份资产。非全量运行时回归或官方模型验收，最终采集器会重跑20项子集。",
     "版本18真实round-uWuTD9结束：171调用/807201ms，98媒体SHA一致、原输入未变，构建6ed217bd039d。8条原对照4正常完整、4预置差异实际检出（功率/字段互换/主标题/残留遮挡），从v16全部入口阻塞改善为完整成对验证；目标核对及代表性D1/D2截图复核完成。V07记录四步通过、位置实测正确，但默认排序/条件清空仍有覆盖缺口，不计完整语义验收。累计14完成轮1378调用/6514022ms，原32流程/22个浏览器用例不随重复累加；独立留出及稳定性未达。用户服务与旧任务未动。",
     "版本19工程红绿起点：新增12个纯函数反例在冻结v18上实际1通过11失败（v19-before.log）；结束真实轮后实现受限数量来源/位置矩阵约束，12项全部通过（v19-targets.log）。另增3个真实Chromium控制器注入场景验证候选纠错、实际错位仍失败及原预算停止，受影响回归正在执行，尚未宣称本版工程完成或官方模型验收。",
@@ -158,7 +161,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本19：新自适应row_count必须由当前原预期字面行/记录数量支持同一数值；序号/前后缀、字段个数、时间、否定/条件/上下界不作精确总数，字段为空不作空表。原编号范围或位置/前缀矩阵exact_rows需原同值总数依据，不删除合法位置/字段/明确数量。有限数字/中文数词语法，模糊语法不猜；字面匹配仍不能证明总体范围或对象正确，独立审查保持。旧固定路径不变，候选不自动修改、实际差异不重放。沿用v18可信当前步骤能力事实/联合纠错及原预算。",
+      "summary": "版本20：自适应审查MISSING/UNCLEAR缺相应ASSERTION_GAP/ORACLE_UNCLEAR时，只补拒绝性问题及ACTION_MISMATCH，保留原状态/原因/负面发现，经原完整校验后退回候选REPAIR。complete:false也不能因此派发；未知引用/枚举/缺原因仍严格拒绝。保留既有COVERED+GAP保守降级，固定计划验证器与原重规划/期限不变，原回复/候选/用例不改，不重试真实差异。版本19位置与数量来源守卫继续保持。本批不解决AND结果域、排序关系、重置覆盖。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -229,7 +232,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本19实现精确行数的当前原文字面数值来源，及编号范围/位置前缀不得额外闭合总体的校验；纯函数、真实Chromium控制器注入纠错与受影响工程回归、后续真实产品结果分别记录。沿用v18能力事实与联合反馈，不改原文/历史/旧固定路径，不增重试和期限。",
+      "task": "版本20实现负面审查不一致的保守候选反馈，新增4单元反例及5真实Chromium控制器注入场景；原2次恢复/无进展终止保持，partial候选也不得派发。工程与后续真实V02复测分列，不改原预期/历史。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -306,12 +309,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/adaptive-prefix-cardinality.test.mjs tests/adaptive-position-reset.test.mjs tests/adaptive-position-recovery.test.mjs tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-capabilities.test.mjs tests/adaptive-capabilities.execution.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-review.test.mjs tests/table-assertion.test.mjs tests/plan-quality.test.mjs",
+        "command": "node --test --test-concurrency=2 tests/adaptive-review.test.mjs tests/adaptive-negative-review.execution.test.mjs",
         "exit_code": 0,
-        "test_count": 327,
+        "test_count": 23,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v19-final-regression.log"
+        "log_path": "validation/req0017/v20-final-targets.log"
       }
     },
     {
@@ -407,7 +410,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "版本19已实现，13文件327项受影响工程无失败/取消/跳过，官方模型尚未运行。版本18真实8对照4正常完整/4指定差异检出；V07记录通过但覆盖缺口未修。不继承v18结果为v19通过。"
+      "status": "版本20已实现，194项受影响及最终23项定向工程无失败（重叠不相加），官方V02待复验。v19四例2记录通过/2技术失败；AND结果域与排序关系仍待修。v18原8对照4正常完整/4指定差异检出不继承为本版通过。"
     },
     {
       "un_id": "UN-0017-01",

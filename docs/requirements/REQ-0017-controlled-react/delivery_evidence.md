@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T04:12:54+08:00`
+- Generated at: `2026-09-20T04:37:17+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `d93ce64aa492d5c820865899d5021cc879eb9d92952660d2b8a37f75e9451419`
+- Change fingerprint: `9a5a67444997ecf21cd7ea20356637e05736cea2c9d706ffc1bdfb1e1b7f08c6`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/adaptive-prefix-cardinality.test.mjs tests/adaptive-position-recovery.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/adaptive-review.test.mjs tests/adaptive-negative-review.execution.test.mjs`
 - Exit code: `0`
-- Test count: `20`
+- Test count: `23`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v19-delivery.log`
-- Log SHA-256: `8943a2ad208b869d2ff76d66eac6309c0c888668033d7dde5cead14dfc182ec3`
+- Log path: `validation/req0017/v20-delivery.log`
+- Log SHA-256: `5cf7c900e0aa69a83ff458a7714d1b3fefae2fb4d927aa650816230e750484dd`
 
 ### Git Status
 
@@ -25,17 +25,14 @@
  M docs/requirements/REQ-0017-controlled-react/03_tasks.md
  M docs/requirements/REQ-0017-controlled-react/04_verification.md
  M docs/requirements/REQ-0017-controlled-react/05_trace.md
- M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v18-result.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v19-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/plan-semantics.mjs
- M src/scope-guidance.mjs
- M tests/adaptive-position-recovery.test.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v19-result.md
-?? src/table-cardinality.mjs
-?? tests/adaptive-prefix-cardinality.test.mjs
+ M src/adaptive-review.mjs
+ M tests/adaptive-review.test.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v20-result.md
+?? tests/adaptive-negative-review.execution.test.mjs
 ```
 
 ### Git Diff Stat
@@ -48,182 +45,195 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/02_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/04_verification.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_trace.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v18-result.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v19-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/scope-guidance.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/adaptive-position-recovery.test.mjs', LF will be replaced by CRLF the next time Git touches it
- docs/modules/release_runtime.md                    |   6 +
+warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/adaptive-review.test.mjs', LF will be replaced by CRLF the next time Git touches it
+ docs/modules/release_runtime.md                    |   4 +
  docs/requirements/README.md                        |   2 +-
- .../00_user_requirement.md                         |   4 +
+ .../00_user_requirement.md                         |   3 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
- .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 217 +++++++++++++--------
- .../real-model-v18-result.md                       |  14 +-
- .../requirement.source.json                        |  26 ++-
- src/plan-semantics.mjs                             |  21 +-
- src/scope-guidance.mjs                             |   2 +-
- tests/adaptive-position-recovery.test.mjs          |  65 +++---
- 15 files changed, 239 insertions(+), 135 deletions(-)
+ .../REQ-0017-controlled-react/delivery_evidence.md | 225 +++++++++++----------
+ .../real-model-v19-result.md                       |   9 +-
+ .../requirement.source.json                        |  17 +-
+ src/adaptive-review.mjs                            |  35 +++-
+ tests/adaptive-review.test.mjs                     |  47 +++++
+ 13 files changed, 230 insertions(+), 128 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v19-result.md
-src/table-cardinality.mjs
-tests/adaptive-prefix-cardinality.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v20-result.md
+tests/adaptive-negative-review.execution.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T04:11:57+08:00
-Command: node --test --test-concurrency=2 tests/adaptive-prefix-cardinality.test.mjs tests/adaptive-position-recovery.test.mjs
+Started at: 2026-09-20T04:36:37+08:00
+Command: node --test --test-concurrency=2 tests/adaptive-review.test.mjs tests/adaptive-negative-review.execution.test.mjs
 Exit code: 0
-Parsed test count: 20
+Parsed test count: 23
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: position proof repair without navigation or replay: membership
-ok 1 - position proof repair without navigation or replay: membership
+# Subtest: negative audit routes to bounded candidate repair: repair
+ok 1 - negative audit routes to bounded candidate repair: repair
   ---
-  duration_ms: 8288.2805
+  duration_ms: 8106.3981
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: ungrounded
-ok 2 - position proof repair without navigation or replay: ungrounded
+# Subtest: negative audit routes to bounded candidate repair: difference
+ok 2 - negative audit routes to bounded candidate repair: difference
   ---
-  duration_ms: 8108.2357
+  duration_ms: 8781.6686
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: difference
-ok 3 - position proof repair without navigation or replay: difference
+# Subtest: negative audit routes to bounded candidate repair: repeat
+ok 3 - negative audit routes to bounded candidate repair: repeat
   ---
-  duration_ms: 8836.7703
+  duration_ms: 6245.2356
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: repeat
-ok 4 - position proof repair without navigation or replay: repeat
+# Subtest: negative audit routes to bounded candidate repair: partial-repair
+ok 4 - negative audit routes to bounded candidate repair: partial-repair
   ---
-  duration_ms: 6512.1424
+  duration_ms: 8144.6092
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: prefix-extra
-ok 5 - position proof repair without navigation or replay: prefix-extra
+# Subtest: negative audit routes to bounded candidate repair: partial-repeat
+ok 5 - negative audit routes to bounded candidate repair: partial-repeat
   ---
-  duration_ms: 8211.3188
+  duration_ms: 6354.832
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: prefix-difference
-ok 6 - position proof repair without navigation or replay: prefix-difference
+# Subtest: known assertion with another obligation becomes candidate repair, not acceptance or schema exhaustion
+ok 6 - known assertion with another obligation becomes candidate repair, not acceptance or schema exhaustion
   ---
-  duration_ms: 8952.5392
+  duration_ms: 10.414
   type: 'test'
   ...
-# Subtest: position proof repair without navigation or replay: prefix-repeat
-ok 7 - position proof repair without navigation or replay: prefix-repeat
+# Subtest: stable audit assertion refs compile to strict same-step measured references
+ok 7 - stable audit assertion refs compile to strict same-step measured references
   ---
-  duration_ms: 6612.987
+  duration_ms: 1.0121
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 第一行是 R012；第二行是 R007。
-ok 8 - ordinal/prefix/incidental/conditional text is not a table count: 第一行是 R012；第二行是 R007。
+# Subtest: contradictory COVERED plus ASSERTION_GAP conservatively rejects candidate without format exhaustion
+ok 8 - contradictory COVERED plus ASSERTION_GAP conservatively rejects candidate without format exhaustion
   ---
-  duration_ms: 3.97
+  duration_ms: 1.5754
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 前两行是 R012 和 R007。
-ok 9 - ordinal/prefix/incidental/conditional text is not a table count: 前两行是 R012 和 R007。
+# Subtest: contradictory feedback cannot hide invalid references or unrelated malformed issues
+ok 9 - contradictory feedback cannot hide invalid references or unrelated malformed issues
   ---
-  duration_ms: 0.2885
+  duration_ms: 4.0737
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 第12行是R012。
-ok 10 - ordinal/prefix/incidental/conditional text is not a table count: 第12行是R012。
+# Subtest: real V03 COVERED-with-empty-refs response is repaired without replanning candidate
+ok 10 - real V03 COVERED-with-empty-refs response is repaired without replanning candidate
   ---
-  duration_ms: 0.1894
+  duration_ms: 1.3186
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 最后两行可见。
-ok 11 - ordinal/prefix/incidental/conditional text is not a table count: 最后两行可见。
+# Subtest: persistent invalid review is bounded and is never implicitly accepted
+ok 11 - persistent invalid review is bounded and is never implicitly accepted
   ---
-  duration_ms: 0.1197
+  duration_ms: 0.7566
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: first 2 rows are R012 and R007
-ok 12 - ordinal/prefix/incidental/conditional text is not a table count: first 2 rows are R012 and R007
+# Subtest: valid adverse semantic verdict is returned without retry or deletion
+ok 12 - valid adverse semantic verdict is returned without retry or deletion
   ---
-  duration_ms: 0.349
+  duration_ms: 0.6968
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 参数有2个，功率200 kW，刷新2秒。
-ok 13 - ordinal/prefix/incidental/conditional text is not a table count: 参数有2个，功率200 kW，刷新2秒。
+# Subtest: negative coverage with a missing issue type returns strict rejection: MISSING/false
+ok 13 - negative coverage with a missing issue type returns strict rejection: MISSING/false
   ---
-  duration_ms: 0.1189
+  duration_ms: 0.8329
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 不要求只有2行。
-ok 14 - ordinal/prefix/incidental/conditional text is not a table count: 不要求只有2行。
+# Subtest: negative coverage with a missing issue type returns strict rejection: MISSING/true
+ok 14 - negative coverage with a missing issue type returns strict rejection: MISSING/true
   ---
-  duration_ms: 0.1393
+  duration_ms: 0.8481
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 至少2行。
-ok 15 - ordinal/prefix/incidental/conditional text is not a table count: 至少2行。
+# Subtest: negative coverage with a missing issue type returns strict rejection: UNCLEAR/false
+ok 15 - negative coverage with a missing issue type returns strict rejection: UNCLEAR/false
   ---
-  duration_ms: 0.1
+  duration_ms: 1.1952
   type: 'test'
   ...
-# Subtest: ordinal/prefix/incidental/conditional text is not a table count: 如果有2行则显示。
-ok 16 - ordinal/prefix/incidental/conditional text is not a table count: 如果有2行则显示。
+# Subtest: negative coverage with a missing issue type returns strict rejection: UNCLEAR/true
+ok 16 - negative coverage with a missing issue type returns strict rejection: UNCLEAR/true
   ---
-  duration_ms: 0.3749
+  duration_ms: 0.5994
   type: 'test'
   ...
-# Subtest: prefix matrix cannot silently require a closed two-row population
-ok 17 - prefix matrix cannot silently require a closed two-row population
+# Subtest: unknown/duplicate/mixed audit refs do not silently bind to another assertion
+ok 17 - unknown/duplicate/mixed audit refs do not silently bind to another assertion
   ---
-  duration_ms: 1.0528
+  duration_ms: 1.144
   type: 'test'
   ...
-# Subtest: an explicitly requested row count remains enforceable with its original value
-ok 18 - an explicitly requested row count remains enforceable with its original value
+# Subtest: abort/provider-budget error is not retried as audit schema failure
+ok 18 - abort/provider-budget error is not retried as audit schema failure
   ---
-  duration_ms: 1.6706
+  duration_ms: 0.4823
   type: 'test'
   ...
-# Subtest: empty fields and ambiguous Chinese numerals do not define a row count
-ok 19 - empty fields and ambiguous Chinese numerals do not define a row count
+# Subtest: block review requires a current source-named control or explicit original route
+ok 19 - block review requires a current source-named control or explicit original route
   ---
-  duration_ms: 0.412
+  duration_ms: 0.7754
   type: 'test'
   ...
-# Subtest: legal trailing rows do not erase absolute position or explicit full-count failures
-ok 20 - legal trailing rows do not erase absolute position or explicit full-count failures
+# Subtest: format correction preserves rejected response and explicit source constraints
+ok 20 - format correction preserves rejected response and explicit source constraints
   ---
-  duration_ms: 0.8659
+  duration_ms: 0.3864
   type: 'test'
   ...
-1..20
-# tests 20
+# Subtest: null check and mixed ref fields stay inside same-candidate audit correction
+ok 21 - null check and mixed ref fields stay inside same-candidate audit correction
+  ---
+  duration_ms: 0.8073
+  type: 'test'
+  ...
+# Subtest: invalid JSON is repaired as audit format but never escapes as a planning retry
+ok 22 - invalid JSON is repaired as audit format but never escapes as a planning retry
+  ---
+  duration_ms: 1.1394
+  type: 'test'
+  ...
+# Subtest: adaptive final coverage cannot replace table unchanged with a sampled fixed row count
+ok 23 - adaptive final coverage cannot replace table unchanged with a sampled fixed row count
+  ---
+  duration_ms: 2.8565
+  type: 'test'
+  ...
+1..23
+# tests 23
 # suites 0
-# pass 20
+# pass 23
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 55997.3773
+# duration_ms 38104.0159
 ```
 
 ### Sync Record Status
@@ -242,4 +252,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-版本19数量来源与前缀总体分离；受影响327项与本次20项重叠不相加。注入模型与真实Chromium是工程验证，官方模型另列，V07覆盖缺口未修。
+v20负面审查保守候选修复，真实Chromium注入模型；官方V02待复验，非发布验收
