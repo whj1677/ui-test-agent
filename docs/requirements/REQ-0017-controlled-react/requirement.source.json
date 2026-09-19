@@ -5,8 +5,8 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 10,
-    "last_updated": "2026-09-19"
+    "version": 11,
+    "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
   "user_requirements": [
@@ -19,6 +19,10 @@
     }
   ],
   "confirmed_facts": [
+    "版本11第一批受影响工程199项0失败/取消/跳过，77156.6124ms，日志validation/req0017/v11-fields-regression.log。首次正式文档检查指出设计/验证/追踪未同步，更新对应事实源后再检查；不以旧1212项宣称新构建已做全量回归。",
+    "版本11工程开发：definition字段定位及只读协议已实现；原未修改manual-lab D009的名称/园区/状态/功率4个字段可采集。首次新增5项3通过2失败均为测试接入误用（实际数值观察保留字符串、既有number不接受kW单位），修正测试按既有语义后5项无失败；不修改数字解析或页面/预期。真实产品仍待新构建复验。",
+    "版本11修改前状态卡：用户明确设持续目标并授权真实Agent迭代、通过后扩量、必要时Kimi制作复杂界面。阶段=修复V03字段绑定；唯一目标=冻结复杂合成场景自主完成且故障不误报。逐级验收：原3例连续2轮完整完成且无需外部技术救场，再运行原32条全部对应流程并报告未执行写入，最后独立留出至少8条陌生布局/故障对照；正常例全部完整、已植入差异全部实际检出、歧义例提出正确问题，任何技术阻塞不算通过。写入仍须原审批与精确对象边界；准备成功不能冒充执行。每批默认300调用/45分钟，上限900/90，逐轮及累计记账；新用户目标授权后新轮建账，旧90调用不改。停止条件为上述标准及两轮稳定性满足，或真实权限/成本阻塞；不无限重复同构建同失败。先修改需求包、正反例/真实复验、逐批Git同步；不改预期、历史或真实网站。",
+    "版本11技术范围：原manual-lab使用没有data-field属性的原生dl/div/dt/dd，版本10因此没有字段目标。新增受限definition字段名定位，仅用于已观察对象范围内原生唯一dt及相邻单一dd的只读断言；禁止用值反选字段、跨容器、隐藏重名、多义定义及交互操作。补标签/值错位、历史诱饵、重名及结构改变反例；规划审查接收实际字段关系，不自动覆盖负面审查或业务预期。",
     "版本10追加语义提示试改已撤回：188项相关工程检查不能证明模型效果；同候选真实审查仍混淆字段与区域及对象编号。探针3次接入包装错误+1次有效审查全部计入原额，累计90调用，未重跑整例、未改原事实。最终运行源码保持1a2a95e7d15d，保留修复73e76e1/d3a6862已推送；真实结果见real-model-v10-result.md。",
     "版本10真实首轮结束：86调用/418408ms，V01及V02各4步完整、13/18断言满足；V03前三步完成，第四步ADAPTIVE_SEGMENT_REJECTED，10条已执行断言无差异但不能算整例通过。40份媒体SHA一致、原步骤不变。加密配置及自建合成登录全自动；真实业务2/3，不改原失败。",
     "版本10追加修改前状态卡：本轮V03还暴露两种语义错误：规划把整个dialog精确text等同单字段值；审查把原对象/字段的否定对照扩大为整个dialog不得出现其他编号/历史值。限定补规划与审查共享的单值字段排他性提示及反例；保留原义务、范围、值、时机和最终校验，不自动把负面审查改通过、不加未支持断言。现有14调用余量只可用于同轮有界诊断，不重置15分钟时钟；不以提示规则测试代替V03整例复验。",
@@ -126,7 +130,7 @@
         "DR-0017-03"
       ],
       "status": "已确认",
-      "summary": "执行时观察与受控技术绑定",
+      "summary": "执行时观察与受控技术绑定；版本11新增scope内原生唯一dt/dd只读字段定位definition，禁止动作/跨域/值反选。",
       "rationale": "在v1受控重观察底座上新增版本化adaptive-readonly业务合同。冻结原Case/hash/步骤顺序/输入/预期/同源/只读边界，不预绑定未来DOM；执行时逐段观察→生成最多1个动作及当前检查→独立语义审查→既有执行内核→追加证据。每步最多8段、2次未派发重规划、共用120秒步骤期限，沿用累计模型额度；已派发动作及业务断言差异不自动重放。版本4增加当前目标/原预期引用编译，另限2次格式修复及1次有证据的blocked复核；同候选审查格式独立修复2次，耗尽不回规划。单原生表不变关系由运行器在首次动作前冻结基线，逐动作比较且不把差异重采为通过。断言歧义只允许修改定位范围，谓词/预期/原文来源保持不变。完成需要完整预期覆盖审查和COMPLETE收据，不能由模型done自报。 版本5区分无动作完成转换与无进展重复，前者仍须完整审查及重新测量；已知审查断言跨来源只降为候选待修，不自动添加义务；明确分页预期绑定无对应页码名称的导航控件时在部分/完整短段执行前拒绝。 版本6：每次规划显式携带原义务、已成功测量片段的累计审查及剩余缺口；仅已实际成功执行的断言可标记已测量覆盖，提示不是最终验收。首次无动作重复片段可用原2次语义重规划中的1次反馈纠错；同一步再次重复仍停，已派发动作不重放、期限不刷新。审查COVERED与同一步ASSERTION_GAP矛盾仅保守下调为MISSING并附候选修复问题，不删除负面发现、不自动接受；其他格式错误保持原有界修复。 版本7：仅派发前TABLE_SOURCE_UNGROUNDED进入原语义重规划额度，反馈精确字段路径及数值/文本来源约束，不自动去单位、不改原预期、不重试真实差异。首次已执行无动作重复触发missing_assertions定向请求，列出原缺失义务和禁止重测的已执行断言；回复不得含动作、不得只重复已覆盖检查或通过重贴义务ID绕过。缺口审查与最终验收不放宽，共用原期限/2次语义重规划；无有效新测量或真实差异仍停止。"
     },
     {
@@ -202,7 +206,7 @@
         "DD-0017-03"
       ],
       "status": "已实现",
-      "task": "版本10增加原生dt/dd字段关系与已有data-field安全定位；保持scope/唯一性/原节点验证，不虚构无稳定属性的字段定位。未来写入绑定仍待修复。",
+      "task": "版本11实现没有HTML属性的原生dt/dd只读definition绑定，含重名/诱饵/错位及未修改manual-lab验证；真实产品效果另列。未来写入绑定仍待修复。",
       "verification_ids": [
         "VT-0017-03"
       ]
@@ -247,12 +251,12 @@
       "item": "业务合同与完整检查",
       "evidence_standard": "原步骤/输入/对象/预期/顺序/时机保持；表格字段矩阵和明确编号区间全覆盖，25字段同一DOM观察，遗漏中段不得通过。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs",
         "exit_code": 0,
-        "test_count": 1212,
+        "test_count": 199,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v10-runtime.log"
+        "log_path": "validation/req0017/v11-fields-regression.log"
       }
     },
     {
@@ -265,12 +269,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs",
         "exit_code": 0,
-        "test_count": 1212,
+        "test_count": 199,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v10-runtime.log"
+        "log_path": "validation/req0017/v11-fields-regression.log"
       }
     },
     {
@@ -283,12 +287,12 @@
       "item": "执行时观察与受控技术绑定",
       "evidence_standard": "同一批准只读动作派发前观察/探测/等价绑定；身份/字段/作用域/顺序/期限不变；未知派发和断言差异不重放、不改预期。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs",
         "exit_code": 0,
-        "test_count": 1212,
+        "test_count": 199,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v10-runtime.log"
+        "log_path": "validation/req0017/v11-fields-regression.log"
       }
     },
     {
@@ -301,12 +305,12 @@
       "item": "主流程状态与证据",
       "evidence_standard": "显示当前目标/观察/恢复/停止原因，不新增逐定位审批；旧批准不静默扩权，旧任务不改。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node tests/runtime-regression.mjs",
+        "command": "node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs",
         "exit_code": 0,
-        "test_count": 1212,
+        "test_count": 199,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v10-runtime.log"
+        "log_path": "validation/req0017/v11-fields-regression.log"
       }
     },
     {
@@ -358,7 +362,7 @@
       "dd_id": "DD-0017-01",
       "tk_id": "TK-0017-01",
       "vt_id": "VT-0017-01",
-      "status": "已实现，版本8工程305项通过；另列限定真实原三例完整通过，非发布验收"
+      "status": "已实现；版本11受影响工程199项0失败，真实新构建待复验，不继承旧版本通过"
     },
     {
       "un_id": "UN-0017-01",
@@ -366,7 +370,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "已实现，版本8工程305项通过；另列限定真实原三例完整通过，非发布验收"
+      "status": "已实现；版本11受影响工程199项0失败，真实新构建待复验，不继承旧版本通过"
     },
     {
       "un_id": "UN-0017-01",
@@ -374,7 +378,7 @@
       "dd_id": "DD-0017-03",
       "tk_id": "TK-0017-03",
       "vt_id": "VT-0017-03",
-      "status": "已实现，版本8工程305项通过；另列限定真实原三例完整通过，非发布验收"
+      "status": "已实现；版本11受影响工程199项0失败，真实新构建待复验，不继承旧版本通过"
     },
     {
       "un_id": "UN-0017-01",
@@ -382,7 +386,7 @@
       "dd_id": "DD-0017-04",
       "tk_id": "TK-0017-04",
       "vt_id": "VT-0017-04",
-      "status": "已实现，版本8工程305项通过；另列限定真实原三例完整通过，非发布验收"
+      "status": "已实现；版本11受影响工程199项0失败，真实新构建待复验，不继承旧版本通过"
     },
     {
       "un_id": "UN-0017-01",
@@ -420,6 +424,12 @@
     "不得把模型审查/预置计划/注入回复/回放/工程测试计为自主产品验收。"
   ],
   "changes": [
+    {
+      "date": "2026-09-19", "version": 11, "type": "持续目标与下一修复冻结",
+      "description": "按用户明确目标以真实产品执行迭代；先无属性定义列表字段技术绑定，再原三例、32例及陌生留出对照。工程检查仅作进入真实验证的前置，不代替结果。",
+      "impact": "受限只读字段定位、观察及规划输入、真实测试维护；不变原用例和审批边界",
+      "confirmed_by": "用户：设定目标继续测并扩量，以真实Agent运行为准"
+    },
     {
       "date": "2026-09-19", "version": 10, "type": "首批修复与工程验证",
       "description": "修改前记录首批范围后实现登录父状态、单例协议错误隔离、dt/dd字段观察与安全技术绑定；1212项工程回归0失败，原32条不改。独立加密配置/合成登录见REQ-0016版本2。",

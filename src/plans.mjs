@@ -41,6 +41,17 @@ export function validateLocator(l, { runtimeBinding = false } = {}) {
     return validateIntent(l);
   }
   if (l?.kind === 'case_named') return validateCaseNamed(l);
+  if (l?.kind === 'definition') {
+    keys(l, ['kind', 'name', 'exact'], ['kind', 'name', 'exact']);
+    if (!nonempty(l.name) || l.name.length > 150 || l.exact !== true) fail('INVALID_LOCATOR');
+    if (
+      /password|credential|api.?key|token|secret|cookie|session|密码|口令|密钥|验证码|账号|账户|邮箱|手机号/iu.test(
+        l.name,
+      )
+    )
+      fail('SENSITIVE_CONTROL_FORBIDDEN');
+    return l;
+  }
   if (l?.kind === 'within') {
     keys(l, ['kind', 'scope', 'target'], ['kind', 'scope']);
     keys(l.scope, ['role', 'name', 'heading', 'exact'], ['role', 'exact']);
@@ -66,7 +77,7 @@ export function validateLocator(l, { runtimeBinding = false } = {}) {
       l.kind === 'row' ? ['kind', 'table', 'key', 'target'] : ['kind', 'table', 'key', 'column'],
       ['kind', 'table', 'key'],
     );
-    if (!l.table || ['row', 'cell', 'within', 'case_named'].includes(l.table.kind))
+    if (!l.table || ['row', 'cell', 'within', 'case_named', 'definition'].includes(l.table.kind))
       fail('INVALID_LOCATOR');
     validateLocator(l.table);
     keys(l.key, ['column', 'value'], ['column', 'value']);
@@ -80,7 +91,10 @@ export function validateLocator(l, { runtimeBinding = false } = {}) {
     if (l.kind === 'cell' && (!nonempty(l.column) || l.column.length > 150))
       fail('INVALID_LOCATOR');
     if (l.target !== undefined) {
-      if (!l.target || ['row', 'cell', 'within', 'case_named'].includes(l.target.kind))
+      if (
+        !l.target ||
+        ['row', 'cell', 'within', 'case_named', 'definition'].includes(l.target.kind)
+      )
         fail('INVALID_LOCATOR');
       validateLocator(l.target);
     }
@@ -189,6 +203,12 @@ const OPS = [
 ];
 export function validateAction(a, base, ids, options) {
   if (!a || !OPS.includes(a.op)) fail('ACTION_NOT_ALLOWED');
+  if (
+    [a.target, a.target?.target, a.repair_anchor, a.repair_anchor?.target].some(
+      (l) => l?.kind === 'definition',
+    )
+  )
+    fail('DEFINITION_ASSERTION_ONLY');
   keys(a, ['action_id', 'op', 'target', 'value', 'state', 'repair_anchor'], ['action_id', 'op']);
   if (!stableId(a.action_id) || ids.has(a.action_id)) fail('ACTION_ID_INVALID');
   ids.add(a.action_id);
@@ -238,6 +258,9 @@ export function validateAction(a, base, ids, options) {
 export function validateAssertion(a, original, options) {
   keys(a, ['target', 'check', 'expected', 'oracle_quote', 'obligation_ids'], ['target', 'check']);
   validateLocator(a.target, options);
+  if (a.target.kind === 'definition') fail('DEFINITION_SCOPE_REQUIRED');
+  if (a.target.target?.kind === 'definition' && !['visible', 'text', 'number'].includes(a.check))
+    fail('DEFINITION_CHECK_UNSUPPORTED');
   if (
     ![
       'visible',

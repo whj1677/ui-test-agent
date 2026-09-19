@@ -19,6 +19,8 @@
 
 ## 数据流与约束
 
+2026-09-20（REQ-0017版本11）：`within.target`新增只读`definition`基定位，name为现场观察的原生dt字段名、exact=true；固定DOM算法在同一对象范围解析唯一dt/相邻单一dd，不以值选字段，不使用模型CSS/序号。重名（含隐藏）、一词多义值、嵌套对象及交互型dd均拒绝；采集与断言继续使用原节点、容器归属和同次DOM版本核验。仅visible/text/number断言允许，动作及修复锚拒绝；number保持既有纯数字比较，不偷偷推断单位。未提供属性的原生定义列表现在能进入field_context与targets，旧data-field路线保留。模型仍须核验原对象、字段、预期和排他性，工程参考运行不能当真实Agent结果。
+
 2026-09-19（REQ-0016版本2）：`credential-store.mjs`在用户显式选择后以Windows DPAPI CurrentUser加密保存官方DeepSeek Key/模型，目录内仅落`deepseek-credential.dpapi`加密信封；stdin传递给固定PowerShell脚本、无密钥命令参数/日志/HTTP导出。默认内存，不支持环境拒绝持久化，无明文回退；损坏保留并返回可见恢复错误，显式忘记才删除。`POST /api/config`可带布尔`remember`，与作业启动共享互斥，持久化成功后才更新内存；`GET /api/config`仅增加supported/saved/error。只在官方DeepSeek provider初始化恢复，不把保存的Key交给自定义endpoint/provider。旧服务没有迁移导出接口；首切换需本机输入一次。真实网站Cookie/storage不落盘，不宣称抵御同一用户恶意进程或管理员。
 
 维护脚本`autonomous-lab.mjs`默认仅冻结输入预检；显式`--real-model`才加载本机Key并发模型请求。自建隔离合成站点和BrowserSession，`synthetic-login.mjs`只对自己拥有的精确origin/任务点击进入演示并复用产品认证核验；不改产品登录守卫，不替模型导航业务步骤。共享300调用/45分钟默认预算（最高900/90），逐请求落账、独立任务留痕；32条分组包含6条仅prepare不自动批准。真实模型效果与工程辅助脚本验证分别记账。

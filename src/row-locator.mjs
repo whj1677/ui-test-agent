@@ -136,6 +136,7 @@ async function scopedHandles(page, spec) {
 
 // Compatibility surface used by observation, discovery, actions and atomic assertions.
 export function runtimeLocator(page, spec) {
+  if (spec?.kind === 'definition') fail('DEFINITION_SCOPE_REQUIRED');
   if (!isRowLocator(spec) && !['within', 'case_named', 'runtime_intent'].includes(spec?.kind))
     return handoffLocator(page, spec);
   validateLocator(spec, { runtimeBinding: spec?.kind === 'runtime_intent' });

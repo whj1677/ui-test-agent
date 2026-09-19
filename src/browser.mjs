@@ -2264,6 +2264,13 @@ export async function snapshot(
       let locator = mapped.locators[index];
       if (adapterSource === DEFAULT_ADAPTER_SOURCE && c.field_locator_hint)
         locator = c.field_locator_hint;
+      if (
+        adapterSource === DEFAULT_ADAPTER_SOURCE &&
+        c.field_context &&
+        c.scope_hint &&
+        !c.field_locator_hint
+      )
+        locator = { kind: 'definition', name: c.field_context.label, exact: true };
       if (!c.row_hint && c.scope_hint && adapterSource === DEFAULT_ADAPTER_SOURCE) {
         const { scope, self } = c.scope_hint;
         if (self || locator)

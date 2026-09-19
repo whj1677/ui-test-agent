@@ -1,5 +1,6 @@
 import { handoffLocator } from '../vendor/manual-ui/handoff_runtime.mjs';
 import { fail } from './common.mjs';
+import { definitionHandles } from './definition-locator.mjs';
 
 // Fixed semantic scopes only. No model selectors or code enter the DOM algorithm.
 function ownedBy(element, root) {
@@ -46,7 +47,10 @@ export async function withinHandles(page, spec) {
       targets = [root];
       retained = true;
     } else {
-      targets = await handoffLocator(scoped, spec.target).elementHandles();
+      targets =
+        spec.target.kind === 'definition'
+          ? await definitionHandles(scoped, spec.target)
+          : await handoffLocator(scoped, spec.target).elementHandles();
       if (targets.length > 1) fail('WITHIN_TARGET_NOT_UNIQUE');
       for (const target of targets)
         if (!(await target.evaluate(ownedBy, root))) fail('WITHIN_TARGET_UNOWNED');
