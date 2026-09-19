@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本9扩展32条均已尝试相应流程：22浏览器尝试、4输入审查、6准备失败未执行；434调用/83分3.715秒。正常完整通过2、预置差异检出1、正常误报3，其余技术/审查问题及1次外部调度分别记录。60项参考工程检查不计自主产品通过；完整业务覆盖未达成，不具备发布条件。[逐项报告](REQ-0017-controlled-react/real-model-v9-result.md)。历史版本8三例结果保留。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本10首批修复及1212项运行时回归完成；自动读取加密Key/登录后原三例2/3整例完成，V03字段绑定及审查仍失败。86执行调用+4诊断调用；提示试改无充分效果已撤回，不具备发布条件。[版本10报告](REQ-0017-controlled-react/real-model-v10-result.md)。[版本9完整32例失败基线](REQ-0017-controlled-react/real-model-v9-result.md)和历史结果保留。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：版本2增加显式Windows加密Key保存/重启恢复/忘记，以及有界合成自动登录维护入口；21项配置/登录专项无失败。4179已切换，用户首次保存完成，后续合成复测无需重复输入或点击登录。真实业务挑战仍需人工；业务结果独立验收。
 
