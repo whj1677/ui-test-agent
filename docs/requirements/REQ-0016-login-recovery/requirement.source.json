@@ -3,22 +3,25 @@
   "req_id": "REQ-0016",
   "title": "登录证据确认与失效页面恢复",
   "metadata": {
-    "requirement_status": "集成测试通过",
+    "requirement_status": "已确认",
     "governance_level": "G2",
-    "version": 1,
-    "last_updated": "2026-09-18"
+    "version": 2,
+    "last_updated": "2026-09-19"
   },
-  "original_input": "这轮测试后好像登录了都有问题了，你看看。修改吧。沿用修改前需求包、逐问题验证后Git同步的要求。",
+  "original_input": "原：这轮测试后好像登录了都有问题了，你看看。修改吧。版本2：修复啊。后面你能不能进行自主迭代，不需要我来输入密钥跟点击登录了？沿用修改前需求包、逐问题验证后Git同步的要求。",
   "user_requirements": [
     {
       "id": "UN-0016-01",
       "status": "已确认",
-      "goal": "修复登录页面失效和无自动登录证据时卡住的交接，给出就近可操作反馈。",
-      "constraints": "保留旧任务和用例预期；不因页面标题、公开菜单或登录框消失而自动认定已登录；不调用真实模型。",
+      "goal": "修复登录交接，并支持显式加密保存模型Key和自建合成站点自动登录，减少后续迭代的重复人工操作。",
+      "constraints": "保留旧任务和用例预期；不因页面标题、公开菜单或登录框消失而自动认定已登录；工程验证不调用真实模型，有界合成复验单独记账。",
       "success_criteria": "真实Chromium复现闭页及新复杂lab无登出入口；修复后可恢复或一次确认继续同一准备作业；登录安全反例保持拒绝。"
     }
   ],
   "confirmed_facts": [
+    "版本2最终工程：运行时1212项0失败/取消/跳过（validation/req0017/v10-runtime.log），专项21项0失败/取消/跳过（validation/req0016-v2/final-integration.log），两集合有重叠不可相加。4179已正常切换到1a2a95e7d15d，69份原用例/执行事实摘要一致。用户随后本机显式加密保存，API只读核验configured=true、saved=true、error=null；有界原三例复验自动读取加密Key并完成自建站点登录，无人工登录点击，结果另记。",
+    "版本2已实现配置显式保存/忘记、Windows真实DPAPI恢复、作业互斥、内联失败反馈，以及有界合成测试入口；原普通站点登录守卫未放宽。已复现并修复adaptive界面隐藏prepare登录确认入口。独立合成登录跨新浏览器连续2次核验、假Key跨服务启动恢复/忘记、375px截图已检查。注入失败provider的完整脚本接线1项执行，实际模型调用0，不是业务通过；新真实入口无已保存Key时LOCAL_SAVED_KEY_REQUIRED。最终回归与迁移结果另记。",
+    "版本2修改前状态卡：用户要求修复并自主迭代，无需重复输入Key或点击合成登录。实现显式可选Windows当前用户DPAPI密钥保存/重启加载/忘记，默认不保存；不持久化真实业务Cookie/密码。合成站点测试脚本使用自建BrowserSession自动点击本地演示入口并现场核验，不放宽产品登录守卫、不导航业务步骤。仅合成资料和官方DeepSeek；原任务不改、不从旧进程或聊天提取Key。当前旧服务无导出接口，初次迁移需本机输入一次；真实验证码/扫码失效仍需用户。交付源码、正反例、隔离重启验证及明确剩余限制，不承诺任意网站无人干预。",
     "REQ-0015合成lab有进入演示但无退出登录，现自动识别缺正向标志；不是DeepSeek或计划阶段错误。",
     "同任务浏览器进程存活而loginPage已关闭时，active仍真，open调用bringToFront失败。",
     "4179在运行旧构建；源码修改不代表运行实例已切换。",
@@ -29,6 +32,12 @@
     "本轮采用既有操作员标志确认语义，不新增无需登录的自动放行规则。"
   ],
   "development_requirements": [
+    {
+      "id": "DR-0016-04", "status": "已确认",
+      "requirement": "本机模型配置连续性与合成登录自动化",
+      "acceptance_criteria": "显式选择保存后使用Windows当前账户加密，重启恢复Key与模型；默认不保存，忘记删除加密副本；损坏/不支持时明确报错无明文回退。API/日志/仓库不得返回Key。合成登录脚本仅对自建loopback演示浏览器点击入口并通过原认证核验，不更改业务步骤或认证守卫。",
+      "constraints": "真实业务登录凭据不持久化；测试预算不因重启重置；旧服务密钥不抓取，初次安全输入由用户本机完成。"
+    },
     {
       "id": "DR-0016-01",
       "status": "已确认",
@@ -52,6 +61,11 @@
     }
   ],
   "design_decisions": [
+    {
+      "id": "DD-0016-04", "dr_ids": ["DR-0016-04"], "status": "已确认",
+      "summary": "采用Windows DPAPI CurrentUser、项目数据目录内加密文件及显式remember选择；独立测试辅助函数仅进入受信本机合成页面。",
+      "rationale": "无新依赖，不以明文环境文件保存真实Key；子进程通过stdin传递，错误不回显敏感输出；损坏不自动覆盖。首次迁移不尝试读取旧进程私密字段。"
+    },
     {
       "id": "DD-0016-01",
       "dr_ids": [
@@ -81,6 +95,7 @@
     }
   ],
   "interfaces_and_data_flow": [
+    "版本2：POST /api/config新增可选布尔remember，GET仅返回credential_storage supported/saved/error，不返回Key；DPAPI加密文件受Git忽略。scripts/autonomous-lab.mjs为维护入口，默认预检；显式真实模式才发送冻结合成资料，最多900调用/90分钟，写入仅prepare不自动批准。",
     "BrowserSession页面状态 -> Controller.view -> 主流程反馈。新增受CSRF和作业阶段限制的登录确认端点，短时票据只存内存。",
     "原logout+navigation自动登录证据保留；无证据时等待一次人工选择标志，同prepare继续，不启动第二作业。"
   ],
@@ -93,6 +108,11 @@
     "回滚本轮源码提交，不回滚/覆盖旧任务数据。运行版本切换只在无活动作业且可安全重启时进行，否则明确需人工重启。"
   ],
   "tasks": [
+    {
+      "id": "TK-0016-04", "dr_ids": ["DR-0016-04"], "dd_ids": ["DD-0016-04"],
+      "status": "已实现", "task": "实现加密模型配置保存/恢复/删除与合成登录助手，验证重启和安全反例",
+      "verification_ids": ["VT-0016-04"]
+    },
     {
       "id": "TK-0016-01",
       "dr_ids": [
@@ -137,6 +157,16 @@
     }
   ],
   "verification_items": [
+    {
+      "id": "VT-0016-04", "dr_ids": ["DR-0016-04"], "confirmation_status": "已确认", "execution_status": "集成测试通过",
+      "item": "加密保存显式授权、配置重载/忘记、损坏/非Windows拒绝、API无Key及独立合成登录",
+      "evidence_standard": "注入加密边界单测及Windows真实DPAPI/服务器重启/隔离Chromium，使用测试假Key；不等同真实模型验收。",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=2 tests/credential-store.test.mjs tests/credential-settings.integration.mjs tests/synthetic-login.test.mjs tests/autonomous-lab.test.mjs tests/autonomous-lab.integration.mjs tests/login-recovery.integration.mjs",
+        "exit_code": 0, "test_count": 21, "failure_count": 0, "skipped_count": 0,
+        "log_path": "validation/req0016-v2/final-integration.log"
+      }
+    },
     {
       "id": "VT-0016-01",
       "dr_ids": [
@@ -214,6 +244,7 @@
     ]
   },
   "trace_current": [
+    { "un_id": "UN-0016-01", "dr_id": "DR-0016-04", "dd_id": "DD-0016-04", "tk_id": "TK-0016-04", "vt_id": "VT-0016-04", "status": "已实现" },
     {
       "un_id": "UN-0016-01",
       "dr_id": "DR-0016-01",
@@ -248,12 +279,19 @@
     }
   ],
   "open_questions": [
-    "无阻塞本轮源码交付的业务待确认项；运行4179切换需正常停止/启动，真实模型和发布验收不在本轮证据内。"
+    "版本2初次迁移已由用户本机加密保存完成，后续同账户/目录自动恢复；真实密码/扫码/验证码仍需授权操作者，本轮不会持久化真实登录会话。",
+    "4179已切换，原三例有界真实复验独立记账；本批不证明32条完整业务覆盖或发布验收。"
   ],
   "prohibited_implementation": [
-    "禁止公开菜单/标题自动作为登录证据；禁止自动重放业务动作、跨任务接管、持久化凭据、修改旧任务和原验收用例。"
+    "禁止公开菜单/标题自动作为登录证据；禁止自动重放业务动作、跨任务接管、持久化真实业务登录凭据、修改旧任务和原验收用例。版本2仅允许用户显式选择后DPAPI加密保存官方DeepSeek配置，不允许明文或从旧进程提取。"
   ],
   "changes": [
+    {
+      "date": "2026-09-19", "version": 2, "type": "需求与实现",
+      "description": "先记录目标与权限边界再实现可选DPAPI配置、合成登录及有界自主复测入口；保留旧版测试事实。",
+      "impact": "模型设置、服务初始化与互斥、控制台设置、维护测试入口；不改变业务用例、写入批准或真实登录边界。",
+      "confirmed_by": "用户：修复，并减少后续Key/登录重复操作"
+    },
     {
       "date": "2026-09-18",
       "version": 1,

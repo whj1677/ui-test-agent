@@ -2,395 +2,252 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-18T11:35:21+08:00`
+- Generated at: `2026-09-19T23:38:07+08:00`
 - Record: `REQ-0016-login-recovery`
-- Change fingerprint: `0a3e9a137b1e1fe9d5b1de5fdfec5de0ff8267485bc5cf6964916dde0f2f4b8e`
+- Change fingerprint: `12ceafd20313d84b9571c64db9799b73dba5e161e3c2b79289a28efd857883e8`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-reporter=tap tests/login-recovery.integration.mjs tests/auth-menu-observation.integration.mjs tests/autonomous-preparation.integration.mjs manual-lab/verify.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/credential-store.test.mjs tests/credential-settings.integration.mjs tests/synthetic-login.test.mjs tests/autonomous-lab.test.mjs tests/autonomous-lab.integration.mjs tests/login-recovery.integration.mjs`
 - Exit code: `0`
-- Test count: `47`
+- Test count: `21`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/REQ-0016-delivery.log`
-- Log SHA-256: `c46e99f92d971b219164b487453be165156535e893d4f32dcb1affa94e0c1958`
+- Log path: `validation/req0016-v2/collector-split-final.log`
+- Log SHA-256: `cdfc65d7909e15871b638ed50d9d8a100315fab60cf07dccf596240d2f405781`
 
 ### Git Status
 
 ```text
+ M .gitignore
+ M README.md
  M docs/modules/release_runtime.md
  M docs/requirements/README.md
- M manual-lab/README.md
+ M docs/requirements/REQ-0016-login-recovery/00_user_requirement.md
+ M docs/requirements/REQ-0016-login-recovery/01_development_requirement.md
+ M docs/requirements/REQ-0016-login-recovery/02_design.md
+ M docs/requirements/REQ-0016-login-recovery/03_tasks.md
+ M docs/requirements/REQ-0016-login-recovery/04_verification.md
+ M docs/requirements/REQ-0016-login-recovery/05_trace.md
+ M docs/requirements/REQ-0016-login-recovery/change_log.md
+ M docs/requirements/REQ-0016-login-recovery/current_state.md
+ M docs/requirements/REQ-0016-login-recovery/delivery_evidence.md
+ M docs/requirements/REQ-0016-login-recovery/requirement.source.json
  M public/app.js
- M src/browser.mjs
- M src/controller.mjs
+ M src/deepseek.mjs
  M src/server.mjs
- M tests/console.integration.mjs
- M tests/discovery-controls.test.mjs
- M tests/discovery-memory.test.mjs
- M tests/workflow.integration.mjs
-?? docs/requirements/REQ-0016-login-recovery/00_user_requirement.md
-?? docs/requirements/REQ-0016-login-recovery/01_development_requirement.md
-?? docs/requirements/REQ-0016-login-recovery/02_design.md
-?? docs/requirements/REQ-0016-login-recovery/03_tasks.md
-?? docs/requirements/REQ-0016-login-recovery/04_verification.md
-?? docs/requirements/REQ-0016-login-recovery/05_trace.md
-?? docs/requirements/REQ-0016-login-recovery/change_log.md
-?? docs/requirements/REQ-0016-login-recovery/current_state.md
-?? docs/requirements/REQ-0016-login-recovery/delivery_evidence.md
-?? docs/requirements/REQ-0016-login-recovery/requirement.source.json
-?? tests/login-recovery.integration.mjs
+?? scripts/autonomous-lab.mjs
+?? scripts/synthetic-login.mjs
+?? src/credential-store.mjs
+?? tests/autonomous-lab.integration.mjs
+?? tests/autonomous-lab.test.mjs
+?? tests/credential-settings.integration.mjs
+?? tests/credential-store.test.mjs
+?? tests/synthetic-login.test.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/modules/release_runtime.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'manual-lab/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0016-login-recovery/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'public/app.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/browser.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/controller.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/deepseek.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/server.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/console.integration.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/discovery-controls.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/discovery-memory.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/workflow.integration.mjs', LF will be replaced by CRLF the next time Git touches it
- docs/modules/release_runtime.md   |   8 ++
- docs/requirements/README.md       |   2 +
- manual-lab/README.md              |   8 ++
- public/app.js                     | 100 ++++++++++++++++++++-
- src/browser.mjs                   | 185 ++++++++++++++++++++++++++++++++------
- src/controller.mjs                |  67 +++++++++++++-
- src/server.mjs                    |  14 ++-
- tests/console.integration.mjs     |   6 +-
- tests/discovery-controls.test.mjs |   6 +-
- tests/discovery-memory.test.mjs   |   8 +-
- tests/workflow.integration.mjs    |  15 +++-
- 11 files changed, 378 insertions(+), 41 deletions(-)
+ .gitignore                                         |   2 +
+ README.md                                          |  10 +-
+ docs/modules/release_runtime.md                    |   4 +
+ docs/requirements/README.md                        |   2 +-
+ .../REQ-0016-login-recovery/00_user_requirement.md |   7 +-
+ .../01_development_requirement.md                  |   1 +
+ .../REQ-0016-login-recovery/02_design.md           |   2 +
+ .../REQ-0016-login-recovery/03_tasks.md            |   1 +
+ .../REQ-0016-login-recovery/04_verification.md     |   1 +
+ .../REQ-0016-login-recovery/05_trace.md            |   1 +
+ .../REQ-0016-login-recovery/change_log.md          |   1 +
+ .../REQ-0016-login-recovery/current_state.md       |  17 +-
+ .../REQ-0016-login-recovery/delivery_evidence.md   | 407 +++++++--------------
+ .../requirement.source.json                        |  54 ++-
+ public/app.js                                      |  62 +++-
+ src/deepseek.mjs                                   |  18 +
+ src/server.mjs                                     |  33 +-
+ 17 files changed, 308 insertions(+), 315 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0016-login-recovery/00_user_requirement.md
-docs/requirements/REQ-0016-login-recovery/01_development_requirement.md
-docs/requirements/REQ-0016-login-recovery/02_design.md
-docs/requirements/REQ-0016-login-recovery/03_tasks.md
-docs/requirements/REQ-0016-login-recovery/04_verification.md
-docs/requirements/REQ-0016-login-recovery/05_trace.md
-docs/requirements/REQ-0016-login-recovery/change_log.md
-docs/requirements/REQ-0016-login-recovery/current_state.md
-docs/requirements/REQ-0016-login-recovery/delivery_evidence.md
-docs/requirements/REQ-0016-login-recovery/requirement.source.json
-tests/login-recovery.integration.mjs
+scripts/autonomous-lab.mjs
+scripts/synthetic-login.mjs
+src/credential-store.mjs
+tests/autonomous-lab.integration.mjs
+tests/autonomous-lab.test.mjs
+tests/credential-settings.integration.mjs
+tests/credential-store.test.mjs
+tests/synthetic-login.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-18T11:34:51+08:00
-Command: node --test --test-reporter=tap tests/login-recovery.integration.mjs tests/auth-menu-observation.integration.mjs tests/autonomous-preparation.integration.mjs manual-lab/verify.test.mjs
+Started at: 2026-09-19T23:37:36+08:00
+Command: node --test --test-concurrency=2 tests/credential-store.test.mjs tests/credential-settings.integration.mjs tests/synthetic-login.test.mjs tests/autonomous-lab.test.mjs tests/autonomous-lab.integration.mjs tests/login-recovery.integration.mjs
 Exit code: 0
-Parsed test count: 47
+Parsed test count: 21
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: 24 native-import cases have isolated identities, fixed groups and accurate original oracle
-ok 1 - 24 native-import cases have isolated identities, fixed groups and accurate original oracle
+# {"group":"smoke","calls":1,"results":[{"case_id":"LAB-V01","status":"NEEDS_MAPPING","reason":null,"attempts":0},{"case_id":"LAB-V02","status":"NEEDS_MAPPING","attempts":0},{"case_id":"LAB-V03","status":"NEEDS_MAPPING","attempts":0}]}
+# Subtest: autonomous runner owns login and records a bounded model-boundary failure with no external calls
+ok 1 - autonomous runner owns login and records a bounded model-boundary failure with no external calls
   ---
-  duration_ms: 327.3964
+  duration_ms: 1367.7533
   type: 'test'
   ...
-# Subtest: server exposes only local synthetic routes, never answer files, source or write APIs
-ok 2 - server exposes only local synthetic routes, never answer files, source or write APIs
+# Subtest: shared round call/time budget never resets between jobs and counts failed requests
+ok 2 - shared round call/time budget never resets between jobs and counts failed requests
   ---
-  duration_ms: 37.9091
+  duration_ms: 1.1961
   type: 'test'
   ...
-# Subtest: V01 homepage navigation exposes 12 assets and 5 first-page rows
-ok 3 - V01 homepage navigation exposes 12 assets and 5 first-page rows
+# Subtest: autonomous preflight checks the frozen 32 cases without creating sessions or calling a model
+ok 3 - autonomous preflight checks the frozen 32 cases without creating sessions or calling a model
   ---
-  duration_ms: 665.6677
+  duration_ms: 13.7998
   type: 'test'
   ...
-# Subtest: V02 compound AND filter distinguishes the same-name south device
-ok 4 - V02 compound AND filter distinguishes the same-name south device
+# Subtest: settings has opt-in retention, busy guard, inline recovery and usable narrow layout
+ok 4 - settings has opt-in retention, busy guard, inline recovery and usable narrow layout
   ---
-  duration_ms: 296.8145
+  duration_ms: 2210.6037
   type: 'test'
   ...
-# Subtest: V03 paginated same-name record binds D009, never D001
-ok 5 - V03 paginated same-name record binds D009, never D001
+# Subtest: unsupported storage fails explicitly without mutating in-memory configuration
+ok 5 - unsupported storage fails explicitly without mutating in-memory configuration
   ---
-  duration_ms: 1134.7206
+  duration_ms: 4.8912
   type: 'test'
   ...
-# Subtest: V04 tabs preserve D009 identity and specified parameter values
-ok 6 - V04 tabs preserve D009 identity and specified parameter values
+# Subtest: oversized invalid regular file can be explicitly forgotten, never silently overwritten
+ok 6 - oversized invalid regular file can be explicitly forgotten, never silently overwritten
   ---
-  duration_ms: 1159.8266
+  duration_ms: 4.1838
   type: 'test'
   ...
-# Subtest: V05 nested modal blocks background and closes only the top layer
-ok 7 - V05 nested modal blocks background and closes only the top layer
+# Subtest: corrupt encrypted configuration stays visible and unchanged until explicitly forgotten
+ok 7 - corrupt encrypted configuration stays visible and unchanged until explicitly forgotten
   ---
-  duration_ms: 1531.1565
+  duration_ms: 3.4712
   type: 'test'
   ...
-# Subtest: V06 querying from later page and resetting restore pagination
-ok 8 - V06 querying from later page and resetting restore pagination
+# Subtest: Windows DPAPI roundtrip across server restart never exposes a key through config API
+ok 8 - Windows DPAPI roundtrip across server restart never exposes a key through config API
   ---
-  duration_ms: 370.439
+  duration_ms: 1057.3604
   type: 'test'
   ...
-# Subtest: V07 descending numeric power sort and reset
-ok 9 - V07 descending numeric power sort and reset
+# Subtest: invalid model/remember never partially changes the private key
+ok 9 - invalid model/remember never partially changes the private key
   ---
-  duration_ms: 334.0744
-  type: 'test'
-  ...
-# Subtest: V08 deterministic async read error recovers once with the correct device value
-ok 10 - V08 deterministic async read error recovers once with the correct device value
-  ---
-  duration_ms: 2858.2406
-  type: 'test'
-  ...
-# Subtest: V09 inclusive date range returns exactly two matching maintenance rows
-ok 11 - V09 inclusive date range returns exactly two matching maintenance rows
-  ---
-  duration_ms: 1210.9456
-  type: 'test'
-  ...
-# Subtest: closing a loading detail prevents its delayed contents reopening on a new route
-ok 12 - closing a loading detail prevents its delayed contents reopening on a new route
-  ---
-  duration_ms: 1245.0074
-  type: 'test'
-  ...
-# Subtest: V10 standard tariff correct non-defect values
-ok 13 - V10 standard tariff correct non-defect values
-  ---
-  duration_ms: 333.9299
-  type: 'test'
-  ...
-# Subtest: V11 conditional tariff help remains nested and keeps the right template
-ok 14 - V11 conditional tariff help remains nested and keeps the right template
-  ---
-  duration_ms: 399.8234
-  type: 'test'
-  ...
-# Subtest: V12 audit pages and result filter reset page position
-ok 15 - V12 audit pages and result filter reset page position
-  ---
-  duration_ms: 417.8644
-  type: 'test'
-  ...
-# Subtest: V13 wizard only creates on submit, uses dynamic id, persists all entered fields
-ok 16 - V13 wizard only creates on submit, uses dynamic id, persists all entered fields
-  ---
-  duration_ms: 589.1574
-  type: 'test'
-  ...
-# Subtest: V14 missing name prevents advancing and leaves seed data alone
-ok 17 - V14 missing name prevents advancing and leaves seed data alone
-  ---
-  duration_ms: 297.941
-  type: 'test'
-  ...
-# Subtest: V15 step-back preserves all configured values without committing
-ok 18 - V15 step-back preserves all configured values without committing
-  ---
-  duration_ms: 522.5722
-  type: 'test'
-  ...
-# Subtest: V16 dirty confirmation keeps data or discards only the draft
-ok 19 - V16 dirty confirmation keeps data or discards only the draft
-  ---
-  duration_ms: 385.3502
-  type: 'test'
-  ...
-# Subtest: V17 duplicate name is rejected at submit with no new persisted record
-ok 20 - V17 duplicate name is rejected at submit with no new persisted record
-  ---
-  duration_ms: 451.0556
-  type: 'test'
-  ...
-# Subtest: wizard keyboard priority, invalid period and escaped business text do not silently submit
-ok 21 - wizard keyboard priority, invalid period and escaped business text do not silently submit
-  ---
-  duration_ms: 419.87
-  type: 'test'
-  ...
-# Subtest: V18 update and cleanup bind only the newly created record
-ok 22 - V18 update and cleanup bind only the newly created record
-  ---
-  duration_ms: 628.7975
-  type: 'test'
-  ...
-# Subtest: B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
-ok 23 - B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
-  ---
-  duration_ms: 252.5426
-  type: 'test'
-  ...
-# Subtest: B02 seeded frequency defect exists only on D004, not the valid D009
-ok 24 - B02 seeded frequency defect exists only on D004, not the valid D009
-  ---
-  duration_ms: 2095.6766
-  type: 'test'
-  ...
-# Subtest: reload, history navigation and reset preserve isolation from unrelated storage
-ok 25 - reload, history navigation and reset preserve isolation from unrelated storage
-  ---
-  duration_ms: 663.8781
-  type: 'test'
-  ...
-# Subtest: desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
-ok 26 - desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
-  ---
-  duration_ms: 831.5801
-  type: 'test'
-  ...
-# Subtest: duplicate home labels and decorative menu arrows allow automatic protected-page recognition and two-level discovery
-ok 27 - duplicate home labels and decorative menu arrows allow automatic protected-page recognition and two-level discovery
-  ---
-  duration_ms: 4358.9333
-  type: 'test'
-  ...
-# Subtest: observable names honor labelledby, hidden decoration, nested text, and native role uniqueness
-ok 28 - observable names honor labelledby, hidden decoration, nested text, and native role uniqueness
-  ---
-  duration_ms: 993.9623
-  type: 'test'
-  ...
-# Subtest: unmapped buttons and incorrect unique destinations are visible repair gaps, never rebound controls
-ok 29 - unmapped buttons and incorrect unique destinations are visible repair gaps, never rebound controls
-  ---
-  duration_ms: 998.6727
-  type: 'test'
-  ...
-# Subtest: public menu and hidden logout decoration cannot satisfy positive login evidence
-ok 30 - public menu and hidden logout decoration cannot satisfy positive login evidence
-  ---
-  duration_ms: 2433.0207
-  type: 'test'
-  ...
-# Subtest: one preparation: manual login -> internal source repair -> missing-evidence probe/navigation -> audited candidate, no automatic approval
-ok 31 - one preparation: manual login -> internal source repair -> missing-evidence probe/navigation -> audited candidate, no automatic approval
-  ---
-  duration_ms: 6975.5791
-  type: 'test'
-  ...
-# Subtest: unknown initialization request does not kill navigation; action-induced write remains blocked
-ok 32 - unknown initialization request does not kill navigation; action-induced write remains blocked
-  ---
-  duration_ms: 2545.9629
-  type: 'test'
-  ...
-# Subtest: public or ambiguous page cannot silently count as login; waiting is cancellable
-ok 33 - public or ambiguous page cannot silently count as login; waiting is cancellable
-  ---
-  duration_ms: 1377.5188
-  type: 'test'
-  ...
-# Subtest: adapter cannot silently rebind an observed node or expose duplicate tables
-ok 34 - adapter cannot silently rebind an observed node or expose duplicate tables
-  ---
-  duration_ms: 1212.4537
-  type: 'test'
-  ...
-# Subtest: dismissing a login modal over a public shell and a visible OTP challenge are not login evidence
-ok 35 - dismissing a login modal over a public shell and a visible OTP challenge are not login evidence
-  ---
-  duration_ms: 5095.3555
-  type: 'test'
-  ...
-# Subtest: rejected live adapter keeps the login owner; leaf labels cannot bypass dangerous menu ancestors
-ok 36 - rejected live adapter keeps the login owner; leaf labels cannot bypass dangerous menu ancestors
-  ---
-  duration_ms: 2438.6411
+  duration_ms: 1.7184
   type: 'test'
   ...
 # Subtest: authentication refuses a late route change while memory state is captured
-ok 37 - authentication refuses a late route change while memory state is captured
+ok 10 - authentication refuses a late route change while memory state is captured
   ---
-  duration_ms: 1349.2568
+  duration_ms: 1196.1379
   type: 'test'
   ...
 # Subtest: authentication refuses a late challenge change while memory state is captured
-ok 38 - authentication refuses a late challenge change while memory state is captured
+ok 11 - authentication refuses a late challenge change while memory state is captured
   ---
-  duration_ms: 1124.3886
+  duration_ms: 1133.493
   type: 'test'
   ...
 # Subtest: actual complex lab: no automatic positive signal; explicit marker resumes the same waiting loop
-ok 39 - actual complex lab: no automatic positive signal; explicit marker resumes the same waiting loop
+ok 12 - actual complex lab: no automatic positive signal; explicit marker resumes the same waiting loop
   ---
-  duration_ms: 1908.0323
+  duration_ms: 1907.8227
   type: 'test'
   ...
 # Subtest: closed owner page is not active; explicit open recovers only that task in the original context
-ok 40 - closed owner page is not active; explicit open recovers only that task in the original context
+ok 13 - closed owner page is not active; explicit open recovers only that task in the original context
   ---
-  duration_ms: 1586.3993
+  duration_ms: 1561.9762
   type: 'test'
   ...
 # Subtest: waiting preparation repairs one closed page, then refuses an unbounded reopen loop
-ok 41 - waiting preparation repairs one closed page, then refuses an unbounded reopen loop
+ok 14 - waiting preparation repairs one closed page, then refuses an unbounded reopen loop
   ---
-  duration_ms: 2616.407
+  duration_ms: 2577.6705
   type: 'test'
   ...
 # Subtest: closed context/browser can be reopened without inheriting verified authentication
-ok 42 - closed context/browser can be reopened without inheriting verified authentication
+ok 15 - closed context/browser can be reopened without inheriting verified authentication
   ---
-  duration_ms: 2250.6826
+  duration_ms: 1941.9012
   type: 'test'
   ...
 # Subtest: recovery never adopts an unrelated tab or another task session
-ok 43 - recovery never adopts an unrelated tab or another task session
+ok 16 - recovery never adopts an unrelated tab or another task session
   ---
-  duration_ms: 2199.6557
+  duration_ms: 1951.3936
   type: 'test'
   ...
 # Subtest: confirmation ticket rejects route changes, wrong tasks, expiry, invalid index and replay
-ok 44 - confirmation ticket rejects route changes, wrong tasks, expiry, invalid index and replay
+ok 17 - confirmation ticket rejects route changes, wrong tasks, expiry, invalid index and replay
   ---
-  duration_ms: 8339.9444
+  duration_ms: 8560.8775
   type: 'test'
   ...
 # Subtest: password, OTP, cross-origin and broad markers cannot be operator-confirmed
-ok 45 - password, OTP, cross-origin and broad markers cannot be operator-confirmed
+ok 18 - password, OTP, cross-origin and broad markers cannot be operator-confirmed
   ---
-  duration_ms: 963.6283
+  duration_ms: 1003.5828
   type: 'test'
   ...
 # Subtest: stopping waiting login does not recover another task or reopen a page
-ok 46 - stopping waiting login does not recover another task or reopen a page
+ok 19 - stopping waiting login does not recover another task or reopen a page
   ---
-  duration_ms: 870.0599
+  duration_ms: 876.4039
   type: 'test'
   ...
 # Subtest: real console and Controller: confirm from waiting preparation, preserve scope, no second job
-ok 47 - real console and Controller: confirm from waiting preparation, preserve scope, no second job
+ok 20 - real console and Controller: confirm from waiting preparation, preserve scope, no second job
   ---
-  duration_ms: 5178.1044
+  duration_ms: 2874.0969
   type: 'test'
   ...
-# screenshots: D:\\01_AI工程\\01_工程项目\\ui-test-agent\\validation\\login-recovery-1789702515206; provider intentionally stops at the first model boundary
-1..47
-# tests 47
+# screenshots: D:\\01_AI工程\\01_工程项目\\ui-test-agent\\validation\\login-recovery-1789832283174; provider intentionally stops at the first model boundary
+# Subtest: owned synthetic fixture enters and re-verifies a fresh browser without user actions
+ok 21 - owned synthetic fixture enters and re-verifies a fresh browser without user actions
+  ---
+  duration_ms: 2321.9388
+  type: 'test'
+  ...
+1..21
+# tests 21
 # suites 0
-# pass 47
+# pass 21
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 29100.3537
+# duration_ms 29570.5516
 ```
 
 ### Sync Record Status
@@ -409,4 +266,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-本机隔离合成登录/页面生命周期/控制台交接，真实模型未调用；4179旧实例和旧任务未修改。
+本次单REQ交付21项工程验证；1212项全量含重叠不相加。真实原三例单独记账，不是发布验收。

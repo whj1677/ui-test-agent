@@ -33,6 +33,11 @@ let outputTask = null,
   outputWasBusy = false,
   outputActionError = '';
 const errors = {
+  CREDENTIAL_STORAGE_UNSUPPORTED:
+    '当前环境不支持 Windows 当前账户加密保存，可取消勾选后仅在内存使用。',
+  CREDENTIAL_STORAGE_FAILED: '加密保存失败，未更新设置。请检查本机权限后重试。',
+  CREDENTIAL_FORGET_REQUIRED: '旧加密副本无法恢复，请先取消勾选并保存以忘记旧副本，再重新配置。',
+  CREDENTIAL_KEY_REQUIRED: '请先在本机填写 Key，才能启用加密保存。',
   ADAPTIVE_MODEL_BLOCKED: '当前技术步骤受阻，请查看运行输出中的具体缺口；原用例与权限不变。',
   ADAPTIVE_NO_PROGRESS: '当前步骤没有新进展，已停止重复尝试。',
   ADAPTIVE_SEGMENT_LIMIT: '当前步骤已达到分段执行上限，尚未完成全部检查。',
@@ -423,7 +428,11 @@ function preparationSummary(rows) {
 function workflowState() {
   const rows = workflowRows(),
     pending = rows.filter((c) => !c.attempts.length);
-  if (directTestingEligible(state, rows)) return directWorkflowState(rows, pending);
+  if (
+    directTestingEligible(state, rows) &&
+    (!state.active || ['test', 'review'].includes(state.active.kind))
+  )
+    return directWorkflowState(rows, pending);
   const unconfirmed = pending.filter((c) => !c.reviewed);
   const missing = pending.filter((c) => !c.plan);
   const blocked = pending.find((c) => c.reviewed && c.status === 'BLOCKED_MAPPING');
@@ -1968,33 +1977,48 @@ function newTask() {
 }
 function settings() {
   modal(
-    `<h2>连接 DeepSeek</h2><p>使用官方接口。密钥仅保留在本地服务内存中，也可通过 DEEPSEEK_API_KEY 环境变量配置。服务重启后需重新提供；密钥不会写入任务与报告。</p><label class="field">模型<select id="model"><option value="deepseek-flash">DeepSeek Flash</option><option value="deepseek-v4-pro">DeepSeek V4 Pro</option></select></label><label class="field">API Key<input id="key" type="password" autocomplete="off" placeholder="${config.configured ? '已配置；留空保持当前密钥' : '在本机输入，不要发到聊天'}"></label><p id="connection-result"></p><div class="dialog-footer"><button id="test-connection">测试连接</button><button class="primary" id="save-config">保存设置</button></div>`,
+    `<h2>连接 DeepSeek</h2><p>仅使用官方接口。默认只保留在服务内存；可选择用 Windows 当前账户加密保存，重启后自动恢复。密钥不会写入任务、报告或同步到 Git。</p><label class="field">模型<select id="model"><option value="deepseek-flash">DeepSeek Flash</option><option value="deepseek-v4-pro">DeepSeek V4 Pro</option></select></label><label class="field">API Key<input id="key" type="password" autocomplete="off" placeholder="${config.configured ? '已配置；留空保持当前密钥' : '在本机输入，不要发到聊天'}"></label><label class="check"><input id="remember-key" type="checkbox" ${config.credential_storage?.saved ? 'checked' : ''} ${config.credential_storage?.supported ? '' : 'disabled'}>在此 Windows 账户加密保存密钥</label><p>取消勾选并保存会删除加密副本，当前进程仍可使用；下次启动不再恢复。真实业务网站的登录不保存在此处。</p><p id="connection-result" role="status" aria-live="polite">${config.credential_storage?.error ? '加密配置恢复失败，请先取消勾选并保存以忘记旧副本，再重新配置。' : !config.credential_storage?.supported ? '当前环境不支持 Windows 加密保存。' : ''}</p><div class="dialog-footer"><button id="test-connection">测试连接</button><button class="primary" id="save-config">保存设置</button></div>`,
   );
   $('#model').value = config.model ?? 'deepseek-flash';
   const save = async () => {
     const key = $('#key').value;
-    await api('/api/config', { model: $('#model').value, ...(key ? { key } : {}) });
+    const r = await api('/api/config', {
+      model: $('#model').value,
+      ...(key ? { key } : {}),
+      ...(config.credential_storage ? { remember: $('#remember-key').checked } : {}),
+    });
     $('#key').value = '';
+    return r;
   };
-  $('#save-config').onclick = () =>
-    action(async () => {
-      await save();
-      close();
-      toast('连接设置已保存到本地进程。');
-    });
-  $('#test-connection').onclick = () =>
-    action(async () => {
-      $('#test-connection').disabled = true;
-      try {
-        await save();
+  const submit = async (testConnection) => {
+    if ($('#save-config').disabled) return;
+    $('#save-config').disabled = $('#test-connection').disabled = true;
+    $('#connection-result').textContent = '正在保存设置…';
+    try {
+      const r = await save();
+      if (testConnection) {
         $('#connection-result').textContent = '正在请求官方接口…';
-        const r = await api('/api/connection-test', {});
+        const connection = await api('/api/connection-test', {});
         $('#connection-result').textContent =
-          `实际连接成功 · 返回模型 ${r.response_model} · ${r.prompt_tokens + r.completion_tokens} tokens`;
-      } finally {
-        if ($('#test-connection')) $('#test-connection').disabled = false;
+          `实际连接成功 · 返回模型 ${connection.response_model} · ${connection.prompt_tokens + connection.completion_tokens} tokens`;
+      } else {
+        $('#connection-result').textContent = r.credential_storage?.saved
+          ? '已加密保存，下次启动自动恢复。保存设置不代表连接测试成功。'
+          : '已保存到当前进程，磁盘无加密副本。';
       }
-    });
+    } catch (e) {
+      if ($('#connection-result'))
+        $('#connection-result').textContent =
+          '设置未完成：' +
+          (e.message || '请检查后重试') +
+          '。输入保留，可重试；加密文件损坏时请先取消勾选并保存。';
+    } finally {
+      if ($('#save-config')) $('#save-config').disabled = $('#test-connection').disabled = false;
+      await refresh();
+    }
+  };
+  $('#save-config').onclick = () => submit(false);
+  $('#test-connection').onclick = () => submit(true);
 }
 async function createDemo() {
   await action(async () => {

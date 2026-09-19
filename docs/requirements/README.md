@@ -2,7 +2,7 @@
 
 - [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本9扩展32条均已尝试相应流程：22浏览器尝试、4输入审查、6准备失败未执行；434调用/83分3.715秒。正常完整通过2、预置差异检出1、正常误报3，其余技术/审查问题及1次外部调度分别记录。60项参考工程检查不计自主产品通过；完整业务覆盖未达成，不具备发布条件。[逐项报告](REQ-0017-controlled-react/real-model-v9-result.md)。历史版本8三例结果保留。
 
-- [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
+- [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：版本2增加显式Windows加密Key保存/重启恢复/忘记，以及有界合成自动登录维护入口；21项配置/登录专项无失败。4179已切换，用户首次保存完成，后续合成复测无需重复输入或点击登录。真实业务挑战仍需人工；业务结果独立验收。
 
 - [REQ-0015-manual-complex-lab](REQ-0015-manual-complex-lab/current_state.md)：独立复杂合成网站与18有效/4待澄清/2已知缺陷用例；Kimi编写、Codex核验，用户手动测试Agent，不修改旧验收集。
 

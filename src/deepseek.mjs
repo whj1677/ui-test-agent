@@ -48,6 +48,8 @@ export class DeepSeek {
     });
   }
   configure({ key, model }) {
+    if (model !== undefined && !['deepseek-flash', 'deepseek-v4-pro'].includes(model))
+      fail('UNSUPPORTED_MODEL');
     if (key !== undefined) {
       if (typeof key !== 'string' || key.length > 500) fail('INVALID_KEY');
       this.#key = key.trim();
@@ -57,6 +59,22 @@ export class DeepSeek {
       this.model = model;
     }
     return { configured: this.configured(), model: this.model, base_url: this.baseURL };
+  }
+  async configureRemembered(body, credentials) {
+    const { key, model, remember } = body;
+    if (remember !== undefined && typeof remember !== 'boolean') fail('INVALID_REMEMBER');
+    if (key !== undefined && (typeof key !== 'string' || key.length > 500)) fail('INVALID_KEY');
+    if (model !== undefined && !['deepseek-flash', 'deepseek-v4-pro'].includes(model))
+      fail('UNSUPPORTED_MODEL');
+    const next = {
+      key: key === undefined ? this.#key : key.trim(),
+      model: model ?? this.model,
+      base_url: this.baseURL,
+    };
+    if (remember === false) await credentials.forget();
+    else if (remember === true || credentials.saved) await credentials.save(next);
+    // Commit memory only after the requested durable operation succeeds.
+    return { ...this.configure(next), credential_storage: credentials.status() };
   }
   async json(system, payload, { signal, onUsage = () => {}, onTrace } = {}) {
     if (!this.#key) fail('DEEPSEEK_KEY_REQUIRED', 409);

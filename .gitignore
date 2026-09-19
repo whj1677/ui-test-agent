@@ -3,6 +3,8 @@ data/
 .env
 .env.*
 !.env.example
+*.dpapi
+*.dpapi.*.tmp
 *.local.json
 validation/
 __pycache__/

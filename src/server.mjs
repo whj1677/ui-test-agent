@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Store } from './store.mjs';
 import { DeepSeek } from './deepseek.mjs';
+import { CredentialStore } from './credential-store.mjs';
 import { BrowserSession } from './browser.mjs';
 import { Controller } from './controller.mjs';
 import { importCases } from './importer.mjs';
@@ -22,6 +23,7 @@ export async function start({
   runtimeBinding = process.env.UI_AGENT_RUNTIME_BINDING ?? 'off',
   planningMode = process.env.UI_AGENT_PLANNING ?? 'adaptive',
   provider = new DeepSeek(),
+  credentialStore,
 } = {}) {
   if (!['off', 'observe', 'assist'].includes(experienceMode)) fail('EXPERIENCE_MODE_INVALID');
   if (!['off', 'readonly'].includes(runtimeBinding)) fail('RUNTIME_BINDING_CONFIG_INVALID');
@@ -31,7 +33,12 @@ export async function start({
   store.build = RUNTIME_BUILD;
   await store.init();
   await store.acquireLock();
+  const credentials = credentialStore ?? new CredentialStore(store.root);
   try {
+    if (provider instanceof DeepSeek && provider.baseURL === 'https://api.deepseek.com') {
+      const restored = await credentials.load();
+      if (restored && !provider.configured()) provider.configure(restored);
+    }
     await store.recoverInterrupted();
   } catch (error) {
     await store.releaseLock();
@@ -112,6 +119,10 @@ export async function start({
           planning_mode: controller.planningMode,
           ui_experience_mode: controller.experience.mode,
           configured: provider.configured(),
+          credential_storage: {
+            ...credentials.status(),
+            supported: credentials.supported && !!provider.configureRemembered,
+          },
           model: provider.model,
           base_url: provider.baseURL,
           labels,
@@ -121,8 +132,26 @@ export async function start({
         });
       if (p === '/api/config' && req.method === 'POST') {
         controller.idle();
-        keys(body, ['key', 'model']);
-        return json(res, 200, provider.configure(body));
+        keys(body, ['key', 'model', 'remember']);
+        const operation = {};
+        operation.finished = new Promise((resolve) => {
+          operation.resolve = resolve;
+        });
+        controller.preparing = operation;
+        try {
+          if (body.remember === true && !provider.configureRemembered)
+            fail('CREDENTIAL_STORAGE_UNSUPPORTED');
+          return json(
+            res,
+            200,
+            provider.configureRemembered
+              ? await provider.configureRemembered(body, credentials)
+              : provider.configure({ key: body.key, model: body.model }),
+          );
+        } finally {
+          controller.preparing = null;
+          operation.resolve();
+        }
       }
       if (p === '/api/connection-test' && req.method === 'POST') {
         controller.idle();
