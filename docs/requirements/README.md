@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本9扩展验证进行中，保留原24例并增加8条成对故障页面。51项夹具参考检查与真实模型分列；真实重复已暴露V03详情整区域精确文本导致误报，尚未完成32例，不具备发布结论。历史版本8三例成功结果保留。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本9扩展32条：22浏览器尝试、4输入审查已有事实，6条待登录；累计342调用。正常完整通过2、预置差异检出1、正常误报3，其余技术/审查问题分别记录。60项参考工程检查不计自主产品通过；不具备发布结论。[逐项报告](REQ-0017-controlled-react/real-model-v9-result.md)。历史版本8三例结果保留。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
 
