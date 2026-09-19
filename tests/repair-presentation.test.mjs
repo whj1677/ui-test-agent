@@ -119,7 +119,9 @@ async function client() {
     console,
   });
   vm.runInContext(
-    source.slice(0, source.lastIndexOf('await action(() => refresh(true));')) +
+    source
+      .slice(0, source.lastIndexOf('await action(() => refresh(true));'))
+      .replace(/^import .*evidence-view\.js';\r?\n/m, '') +
       '\nconfig.auto_discovery=true;globalThis.helpers={preparationHistoryHTML,dataCorrectionHTML,readDataCorrections,eventText,discoveryHTML};',
     context,
   );

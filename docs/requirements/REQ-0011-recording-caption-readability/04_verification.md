@@ -10,6 +10,7 @@
 | VT | DR | 确认状态 | 执行状态 | 验证项 | 证据标准 | 当前证据 | 命令 | 退出码 | 测试数量 | 失败数量 | 跳过数量 | 证据路径 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | VT-0011-01 | DR-0011-01 | 已确认 | 集成测试通过 | 字幕布局、报告尺寸、固定计划录像和证据边界 | 修复前失败与修复后真实命令/TAP、报告SHA、浏览器DOM/实际播放和可读画面；程序检查与视觉复验分开。 | 命令：node --test tests/recording-layout.test.mjs tests/recording-evidence.test.mjs；退出码：0；测试数量：10；失败数量：0；跳过数量：0；证据：validation/REQ-0011-delivery-formatted.log | node --test tests/recording-layout.test.mjs tests/recording-evidence.test.mjs | 0 | 10 | 0 | 0 | validation/REQ-0011-delivery-formatted.log |
+| VT-0011-02 | DR-0011-02 | 已确认 | 集成测试通过 | 步骤事实投影、录像旁可读性、控制台/离线一致性 | 单元反例、真实DOM桌面/窄屏、原三条模型复测分开记录。 | 命令：node --test --test-concurrency=4 tests/evidence-results.test.mjs tests/adaptive-report.test.mjs tests/adaptive-console.test.mjs tests/repair-presentation.test.mjs tests/checkpoints.test.mjs tests/recording-layout.test.mjs tests/recording-evidence.test.mjs；退出码：0；测试数量：72；失败数量：0；跳过数量：0；证据：validation/req0011/v2-visual-final.log | node --test --test-concurrency=4 tests/evidence-results.test.mjs tests/adaptive-report.test.mjs tests/adaptive-console.test.mjs tests/repair-presentation.test.mjs tests/checkpoints.test.mjs tests/recording-layout.test.mjs tests/recording-evidence.test.mjs | 0 | 72 | 0 | 0 | validation/req0011/v2-visual-final.log |
 
 ## 本轮命令与环境
 

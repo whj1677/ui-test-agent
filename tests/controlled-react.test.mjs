@@ -384,8 +384,9 @@ test('approval UI discloses bounded recovery and escapes matrix expectations', a
     console,
   });
   vm.runInContext(
-    source.slice(0, source.lastIndexOf('await action(() => refresh(true));')) +
-      '\nglobalThis.renderPlan=planHTML;',
+    source
+      .slice(0, source.lastIndexOf('await action(() => refresh(true));'))
+      .replace(/^import .*evidence-view\.js';\r?\n/m, '') + '\nglobalThis.renderPlan=planHTML;',
     context,
   );
   const { plan } = fixture();

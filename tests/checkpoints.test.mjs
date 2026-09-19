@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
+import { stepOutcome } from '../public/evidence-view.js';
 import { demoCases } from '../src/demo.mjs';
 import { validatePlan, planHash, normalizePlanResponse, validateRepair } from '../src/plans.mjs';
 import { auditInput, validatePlanAudit } from '../src/plan-quality.mjs';
@@ -179,6 +180,7 @@ test('report retains matching earlier observations without claiming the unfinish
     value: String,
     checks: { text: '文本等于' },
     target: () => '详情',
+    stepOutcome,
   };
   vm.createContext(context);
   vm.runInContext(source.slice(start, end), context);

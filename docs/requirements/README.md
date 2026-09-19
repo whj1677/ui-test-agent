@@ -10,7 +10,7 @@
 
 - [REQ-0012-ui-experience-memory](REQ-0012-ui-experience-memory/current_state.md)：有限经验库已接入并完成本机工程验证；默认只记录，同名范围定位可积累可信经验，真实模型收益对照未运行，不绕过多步表单审批。
 
-- [REQ-0011-recording-caption-readability](REQ-0011-recording-caption-readability/current_state.md)：REQ-0001实测子问题；修复新录像字幕与底部控制条相交、报告缩放过小，保留原执行与事实语义。
+- [REQ-0011-recording-caption-readability](REQ-0011-recording-caption-readability/current_state.md)：录像呈现；版本2补控制台与离线报告的原步骤结果面板，区分通过、断言不一致、未完成及未执行，保留原事实和媒体；本轮工程及真实复测分别记账。
 
 - [REQ-0010-candidate-file-integrity](REQ-0010-candidate-file-integrity/current_state.md)：REQ-0001子问题；说明损坏仍被自检报摘要一致，限定增加清单元数据/路径集合/逐文件核验，不代替签名或发布验收。
 

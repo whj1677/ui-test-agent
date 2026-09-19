@@ -1,3 +1,5 @@
+import { renderEvidenceSteps } from './evidence-view.js';
+
 const $ = (s) => document.querySelector(s),
   csrf = $('meta[name=csrf-token]').content;
 const h = (v) =>
@@ -293,6 +295,7 @@ async function action(fn) {
 }
 function modal(html) {
   $('#modal-body').innerHTML = html;
+  $('#modal').scrollTop = 0;
   if (!$('#modal').open) $('#modal').showModal();
 }
 function close() {
@@ -2337,7 +2340,32 @@ function caseDetail(id) {
     action(async () => {
       const facts = (await taskAPI('facts')).filter((f) => f.case_id === id);
       modal(
-        `<h2>${h(id)} · 执行证据</h2>${facts.map((f) => `<div class="plan-card evidence">${badge(f.status)}<p>${h(f.started_at)} · 清理 ${h(f.cleanup_status)}</p>${f.media.map((m) => (m.type === 'video' ? `<video controls src="/api/tasks/${current}/media/${f.id}/${encodeURIComponent(m.file)}"></video>` : `<img alt="${h(m.step_id ?? '执行现场')}" src="/api/tasks/${current}/media/${f.id}/${encodeURIComponent(m.file)}">`)).join('')}<details><summary>动作、断言和事实摘要</summary><pre>${h(JSON.stringify(f, null, 2))}</pre></details></div>`).join('') || '<p>尚未产生执行证据。</p>'}`,
+        `<h2>${h(id)} · 执行证据</h2>${
+          facts
+            .slice()
+            .reverse()
+            .map(
+              (f) =>
+                `<div class="plan-card evidence"><h3>本次用例结果：${badge(f.status)}</h3><p>${h(f.started_at)} · 清理 ${h(f.cleanup_status)} · 记录 ${h(f.id)}</p><div class="execution-review"><div class="execution-media">${
+                  (f.media ?? [])
+                    .filter((m) => m.type === 'video')
+                    .map(
+                      (m) =>
+                        `<video controls preload="metadata" aria-label="${h(id)} 执行录像" src="/api/tasks/${current}/media/${f.id}/${encodeURIComponent(m.file)}"></video>`,
+                    )
+                    .join('') || '<p>本次没有可用录像，步骤结果仍可查看。</p>'
+                }</div>${renderEvidenceSteps(f, state.cases.find((c) => c.case_id === id)?.original)}</div><details><summary>查看执行截图</summary>${
+                  (f.media ?? [])
+                    .filter((m) => m.type !== 'video')
+                    .map(
+                      (m) =>
+                        `<figure><figcaption>步骤 ${h(m.step_id ?? '未标注')} · 截图不单独代表通过</figcaption><img loading="lazy" alt="${h(m.step_id ?? '执行现场')}" src="/api/tasks/${current}/media/${f.id}/${encodeURIComponent(m.file)}"></figure>`,
+                    )
+                    .join('') || '<p>未记录截图。</p>'
+                }</details><details><summary>动作、断言和事实摘要</summary><pre>${h(JSON.stringify(f, null, 2))}</pre></details></div>`,
+            )
+            .join('') || '<p>尚未产生执行证据。</p>'
+        }`,
       );
     });
   if ($('#recovered'))

@@ -22,7 +22,7 @@ globalThis.consoleFixture = {
   workflow: workflowState, planHTML, approveSelected,
   submit: (caseIds) => startPreparedSelection(current, caseIds),
   refresh: () => refresh(true),
-  eventNames, reasonText, eventText,
+  eventNames, reasonText, eventText, caseDetail,
 };`;
 let browser;
 before(async () => {
@@ -135,8 +135,18 @@ async function fixture(t, { rows = [row()], config = {}, task = {}, width = 1280
         body: html.replace('__CSRF__', 'synthetic'),
       });
     if (pathname === '/styles.css') return route.fulfill({ contentType: 'text/css', body: css });
+    if (pathname === '/evidence.css')
+      return route.fulfill({
+        contentType: 'text/css',
+        body: await fs.readFile(new URL('../public/evidence.css', import.meta.url), 'utf8'),
+      });
     if (pathname === '/app.js')
       return route.fulfill({ contentType: 'text/javascript', body: script });
+    if (pathname === '/evidence-view.js')
+      return route.fulfill({
+        contentType: 'text/javascript',
+        body: await fs.readFile(new URL('../public/evidence-view.js', import.meta.url), 'utf8'),
+      });
     if (req.method() === 'POST') {
       const body = req.postDataJSON();
       posts.push({ pathname, body });
@@ -166,6 +176,7 @@ async function fixture(t, { rows = [row()], config = {}, task = {}, width = 1280
       return respond([{ id: state.id, name: state.name, total: rows.length }]);
     if (pathname === '/api/tasks/synthetic') return respond(state);
     if (pathname.endsWith('/diagnostics')) return respond({ records: [] });
+    if (pathname.endsWith('/facts')) return respond(state.fixtureFacts ?? []);
     return route.abort();
   });
   await page.goto('http://adaptive-console.test/');
@@ -199,6 +210,61 @@ const waitPosts = (x, path) =>
     (path) => document.querySelector('#toast')?.textContent.includes(path),
     path,
   );
+
+test('evidence modal shows original-step outcomes without video and survives refresh on desktop and narrow screen', async (t) => {
+  const sourceSteps = [1, 2, 3].map((n) => ({
+    step_id: String(n),
+    action: `检查${n}`,
+    expected: `预期${n}`,
+  }));
+  const frozen = { case_id: 'C1', title: '结果可读性', steps: sourceSteps };
+  const fact = {
+    id: 'synthetic-run',
+    case_id: 'C1',
+    status: 'TECHNICAL_FAILED',
+    error: 'ADAPTIVE_NO_PROGRESS',
+    media: [],
+    executed_case: frozen,
+    adaptive_steps: [{ step_id: '1', status: 'COMPLETE' }],
+    adaptive_segments: [
+      { step_id: '1', status: 'EXECUTED' },
+      { step_id: '2', error: 'ADAPTIVE_NO_PROGRESS' },
+    ],
+    assertions: [
+      { step_id: '1', passed: true },
+      { step_id: '2', passed: true },
+    ],
+  };
+  const x = await fixture(t, {
+    rows: [
+      row('C1', {
+        original: frozen,
+        effective: frozen,
+        attempts: [{ id: fact.id }],
+        status: fact.status,
+      }),
+    ],
+    task: { fixtureFacts: [fact] },
+  });
+  await x.page.evaluate(() => consoleFixture.caseDetail('C1'));
+  await x.page.getByRole('button', { name: '查看全部执行证据' }).click();
+  await x.page.getByRole('heading', { name: '原步骤结果' }).waitFor();
+  assert.equal(await x.page.locator('#modal').evaluate((el) => el.scrollTop), 0);
+  assert.equal(await x.page.locator('.measurement-details[open]').count(), 0);
+  for (const width of [1440, 375]) {
+    await x.page.setViewportSize({ width, height: 900 });
+    assert.match(
+      await x.page.locator('#modal-body').innerText(),
+      /通过 1 · 失败 0 · 未完成 1 · 未执行 1/,
+    );
+    assert.match(await x.page.locator('#modal-body').innerText(), /没有可用录像/);
+    assert.ok(await x.page.locator('#modal').evaluate((el) => el.scrollWidth <= el.clientWidth));
+  }
+  await x.render();
+  assert.equal(await x.page.getByRole('heading', { name: '原步骤结果' }).isVisible(), true);
+  await x.page.keyboard.press('Escape');
+  assert.equal(await x.page.locator('#modal').evaluate((el) => el.open), false);
+});
 
 test('direct testing has three stages, one primary action and no pre-emptive login gate', async (t) => {
   const x = await fixture(t),

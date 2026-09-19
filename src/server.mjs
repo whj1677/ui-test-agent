@@ -336,7 +336,10 @@ export async function start({
           return json(res, 200, result ?? { ok: true });
         }
       }
-      if (req.method === 'GET' && ['/', '/app.js', '/styles.css'].includes(p)) {
+      if (
+        req.method === 'GET' &&
+        ['/', '/app.js', '/evidence-view.js', '/evidence.css', '/styles.css'].includes(p)
+      ) {
         const filename = p === '/' ? 'index.html' : p.slice(1);
         let contents = await fs.readFile(path.join(ROOT, 'public', filename));
         if (p === '/') contents = Buffer.from(contents.toString().replace('__CSRF__', csrf));

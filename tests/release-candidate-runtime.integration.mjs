@@ -118,6 +118,8 @@ test('unpacked candidate serves its own bytes and closes isolated empty instance
         for (const [route, file] of [
           ['/', 'public/index.html'],
           ['/app.js', 'public/app.js'],
+          ['/evidence-view.js', 'public/evidence-view.js'],
+          ['/evidence.css', 'public/evidence.css'],
           ['/styles.css', 'public/styles.css'],
         ]) {
           const response = await get(route);

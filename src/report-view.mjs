@@ -1,5 +1,7 @@
 import { escapeHTML as h } from './common.mjs';
+import { readFileSync } from 'node:fs';
 import { renderSupplement } from './report-supplement.mjs';
+import { stepOutcome, renderEvidenceSteps } from '../public/evidence-view.js';
 
 const cleanupLabels = {
   CLEAN: '已清理',
@@ -123,13 +125,7 @@ function preparationHistory(record) {
 }
 
 function adaptiveStepIncomplete(fact, stepId) {
-  return (
-    !!fact &&
-    (Object.hasOwn(fact, 'adaptive_segments') || Object.hasOwn(fact, 'adaptive_steps')) &&
-    !(fact.adaptive_steps ?? []).some(
-      (step) => step.step_id === stepId && step.status === 'COMPLETE',
-    )
-  );
+  return stepOutcome(fact, stepId).missingCompletion;
 }
 
 function checkpointFacts(fact, stepId) {
@@ -175,26 +171,18 @@ function stepRows(effective, fact) {
   return effective.steps
     .map((s) => {
       const observed = [
-          ...(fact?.assertions ?? []),
-          ...(fact?.relational_observations ?? []).map((a) => ({
-            ...a,
-            oracle_quote: '动作后关系检查：' + (a.oracle_quote ?? '表格与操作前保持一致'),
-          })),
-        ].filter((a) => a.step_id === s.step_id),
-        actions = (fact?.actions ?? []).filter((a) => a.step_id === s.step_id);
-      const checkpoints = (fact?.checkpoints ?? []).filter((point) => point.step_id === s.step_id);
-      const missingCompletion = adaptiveStepIncomplete(fact, s.step_id);
-      const incomplete =
-        missingCompletion || checkpoints.some((point) => point.status !== 'ASSERTIONS_PASSED');
-      const status = observed.length
-        ? observed.every((a) => a.passed && a.group_passed !== false)
-          ? incomplete
-            ? '未完成断言'
-            : '断言满足'
-          : '断言不一致'
-        : actions.length || missingCompletion
-          ? '未完成断言'
-          : '未执行';
+        ...(fact?.assertions ?? []),
+        ...(fact?.relational_observations ?? []).map((a) => ({
+          ...a,
+          oracle_quote: '动作后关系检查：' + (a.oracle_quote ?? '表格与操作前保持一致'),
+        })),
+      ].filter((a) => a.step_id === s.step_id);
+      const status = {
+        PASS: '断言满足',
+        FAIL: '断言不一致',
+        INCOMPLETE: '未完成断言',
+        NOT_EXECUTED: '未执行',
+      }[stepOutcome(fact, s.step_id).status];
       return `<tr><td class="step-id">${h(s.step_id)}</td><td class="prose">${h(s.action)}</td><td class="prose">${h(s.expected ?? '未填写')}</td><td>${checkpointFacts(fact, s.step_id)}${observed.length ? observed.map((a) => `<div class="observation ${a.passed ? 'good' : 'bad'}"><span>${a.passed ? '✓' : '×'} ${h(a.oracle_quote ?? checks[a.check] ?? a.check)}</span>${tableDifferences(a)}<strong>实际：${h(value(a.actual))}</strong><small>${a.checkpoint_id ? '检查点 ' + h(a.checkpoint_id) + ' · ' : ''}${h(checks[a.check] ?? a.check)}${a.expected !== null && a.expected !== undefined ? ' · 期望 ' + h(value(a.expected)) : ''} · ${h(target(a.target))}</small></div>`).join('') : `<span class="muted">${fact ? '未收录该步骤的断言观测' : '尚未执行，无实际结果'}</span>`}</td><td><span class="pill ${status === '断言满足' ? 'good' : status === '断言不一致' ? 'bad' : 'warn'}">${status}</span></td></tr>`;
     })
     .join('');
@@ -222,12 +210,14 @@ function renderCase({ c, record, original, effective, attempts, review }, labels
       ? `${ok}/${observations.length} 项值匹配${observations.some((a) => a.group_passed === false) ? ' · 整组未满足' : ''}${fact.checkpoints?.some((point) => point.status !== 'ASSERTIONS_PASSED') ? ' · 存在未完成检查点' : ''} · ${duration(fact)}`
       : `尚无业务断言观测 · ${duration(fact)}`
     : '未执行 · ' + (record?.mapping_reason ? '计划准备受阻' : '等待准备或计划核对');
-  return `<article class="case" data-video="${attempts.some((a) => a.media?.includes('<video'))}" data-status="${h(c.status)}" data-group="${group}" data-priority="${h(original.priority ?? '未标注')}"><details class="case-detail"><summary class="case-row"><span class="case-key"><span class="chevron">›</span><span>${h(c.case_id)}</span></span><h2>${h(original.title)}</h2><span class="priority">${h(original.priority ?? '—')}</span><span class="pill ${kind}">${h(labels[c.status] ?? c.status)}</span><span class="row-actual">${h(actualSummary)}</span><span class="row-evidence">${h(cleanupLabels[c.cleanup_status] ?? c.cleanup_status)}<small>${h(evidenceLabels[c.evidence_status] ?? c.evidence_status)}${attempts.some((a) => a.media?.includes('<video')) ? ' · ▶ 有录像' : ''}</small>${review ? `<small class="${review.passed ? 'good' : 'bad'}">补充复核：${review.passed ? '预期满足' : '发现不一致'}</small>` : ''}</span></summary><div class="case-body">${reason ? `<div class="reason"><strong>${fact ? '需关注' : '未执行原因'}</strong><p>${h(reason)}</p></div>` : ''}${c.issues.length ? `<p class="warning">证据检查：${h(c.issues.map((i) => i.code).join('；'))}</p>` : ''}<div class="case-meta"><div><span>前置条件</span><p>${h(effective.preconditions ?? original.preconditions ?? '未填写')}</p></div><div><span>执行时间</span><p>${fact ? h(time(fact.started_at)) : '尚未执行'}</p></div><div><span>测试数据</span><p>${h(cleanupLabels[c.cleanup_status] ?? c.cleanup_status)}</p></div></div><h3>步骤与结果对照</h3><div class="table-scroll"><table class="steps"><thead><tr><th>步骤</th><th>操作步骤</th><th>${fact?.executed_case ? '执行时已确认预期' : '当前确认预期'}</th><th>实际结果</th><th>步骤结果</th></tr></thead><tbody>${stepRows(effective, fact)}</tbody></table></div>${fact ? `<details class="evidence" open><summary>Agent 执行录像与截图 <span class="muted">${fact.media?.length ?? 0} 个文件 · ${h(evidenceLabels[c.evidence_status] ?? c.evidence_status)}</span></summary><div class="media-grid">${latestMedia || '<p>本次没有可用媒体。</p>'}</div></details>` : '<p class="muted">本用例没有 Agent 执行录像或实际结果。</p>'}${fact?.cleanup_actions?.length ? `<details><summary>查看清理过程 · ${h(cleanupLabels[fact.cleanup_status] ?? fact.cleanup_status)}</summary><ol>${fact.cleanup_actions.map((a) => `<li>${h(ops[a.operation] ?? a.operation)} ${h(target(a.target))} · ${h(a.status)}</li>`).join('')}</ol></details>` : ''}${renderSupplement(review)}${preparationHistory(record)}<details class="technical"><summary>原始用例、计划与诊断记录</summary><h4>原始用例（保留输入）</h4>${original.steps.map((s) => `<p>原步骤：${h(s.action)}</p><p>原预期：${h(s.expected ?? '缺失')}</p>`).join('')}<h4>原始测试数据</h4><pre>${h(JSON.stringify({ data: original.data, test_data: original.test_data }, null, 2))}</pre><h4>补充确认记录</h4><pre>${h(JSON.stringify(record?.confirmations ?? [], null, 2))}</pre><h4>执行计划</h4><pre>${h(JSON.stringify(fact?.executed_plan ?? record?.plan ?? null, null, 2))}</pre>${attempts.map((a) => `<details><summary>执行记录 ${h(a.receipt.id.slice(0, 8))} · ${h(a.fact ? (labels[a.fact.status] ?? a.fact.status) : '事实未验证')}</summary>${a.fact ? `<p>开始 ${h(time(a.fact.started_at))} · 结束 ${h(time(a.fact.finished_at))} · SHA-256 ${h(a.receipt.sha256)}</p>${a.fact.id !== fact?.id ? a.media : ''}<pre>${h(JSON.stringify(a.fact, null, 2))}</pre>` : `<p class="warning">${h(a.issue.code)}；该记录不参与断言满足计数。</p>`}</details>`).join('')}</details></div></details></article>`;
+  return `<article class="case" data-video="${attempts.some((a) => a.media?.includes('<video'))}" data-status="${h(c.status)}" data-group="${group}" data-priority="${h(original.priority ?? '未标注')}"><details class="case-detail"><summary class="case-row"><span class="case-key"><span class="chevron">›</span><span>${h(c.case_id)}</span></span><h2>${h(original.title)}</h2><span class="priority">${h(original.priority ?? '—')}</span><span class="pill ${kind}">${h(labels[c.status] ?? c.status)}</span><span class="row-actual">${h(actualSummary)}</span><span class="row-evidence">${h(cleanupLabels[c.cleanup_status] ?? c.cleanup_status)}<small>${h(evidenceLabels[c.evidence_status] ?? c.evidence_status)}${attempts.some((a) => a.media?.includes('<video')) ? ' · ▶ 有录像' : ''}</small>${review ? `<small class="${review.passed ? 'good' : 'bad'}">补充复核：${review.passed ? '预期满足' : '发现不一致'}</small>` : ''}</span></summary><div class="case-body">${reason ? `<div class="reason"><strong>${fact ? '需关注' : '未执行原因'}</strong><p>${h(reason)}</p></div>` : ''}${c.issues.length ? `<p class="warning">证据检查：${h(c.issues.map((i) => i.code).join('；'))}</p>` : ''}<div class="case-meta"><div><span>前置条件</span><p>${h(effective.preconditions ?? original.preconditions ?? '未填写')}</p></div><div><span>执行时间</span><p>${fact ? h(time(fact.started_at)) : '尚未执行'}</p></div><div><span>测试数据</span><p>${h(cleanupLabels[c.cleanup_status] ?? c.cleanup_status)}</p></div></div><h3>步骤与结果对照</h3><div class="table-scroll"><table class="steps"><thead><tr><th>步骤</th><th>操作步骤</th><th>${fact?.executed_case ? '执行时已确认预期' : '当前确认预期'}</th><th>实际结果</th><th>步骤结果</th></tr></thead><tbody>${stepRows(effective, fact)}</tbody></table></div>${fact ? `<details class="evidence" open><summary>Agent 执行录像与截图 <span class="muted">${fact.media?.length ?? 0} 个文件 · ${h(evidenceLabels[c.evidence_status] ?? c.evidence_status)}</span></summary><h3>本次用例结果：${h(labels[fact.status] ?? fact.status)}</h3><div class="execution-review"><div class="media-grid execution-media">${latestMedia || '<p>本次没有可用媒体，步骤结果仍可查看。</p>'}</div>${renderEvidenceSteps(fact, effective)}</div></details>` : '<p class="muted">本用例没有 Agent 执行录像或实际结果。</p>'}${fact?.cleanup_actions?.length ? `<details><summary>查看清理过程 · ${h(cleanupLabels[fact.cleanup_status] ?? fact.cleanup_status)}</summary><ol>${fact.cleanup_actions.map((a) => `<li>${h(ops[a.operation] ?? a.operation)} ${h(target(a.target))} · ${h(a.status)}</li>`).join('')}</ol></details>` : ''}${renderSupplement(review)}${preparationHistory(record)}<details class="technical"><summary>原始用例、计划与诊断记录</summary><h4>原始用例（保留输入）</h4>${original.steps.map((s) => `<p>原步骤：${h(s.action)}</p><p>原预期：${h(s.expected ?? '缺失')}</p>`).join('')}<h4>原始测试数据</h4><pre>${h(JSON.stringify({ data: original.data, test_data: original.test_data }, null, 2))}</pre><h4>补充确认记录</h4><pre>${h(JSON.stringify(record?.confirmations ?? [], null, 2))}</pre><h4>执行计划</h4><pre>${h(JSON.stringify(fact?.executed_plan ?? record?.plan ?? null, null, 2))}</pre>${attempts.map((a) => `<details><summary>执行记录 ${h(a.receipt.id.slice(0, 8))} · ${h(a.fact ? (labels[a.fact.status] ?? a.fact.status) : '事实未验证')}</summary>${a.fact ? `<p>开始 ${h(time(a.fact.started_at))} · 结束 ${h(time(a.fact.finished_at))} · SHA-256 ${h(a.receipt.sha256)}</p>${a.fact.id !== fact?.id ? a.media : ''}<pre>${h(JSON.stringify(a.fact, null, 2))}</pre>` : `<p class="warning">${h(a.issue.code)}；该记录不参与断言满足计数。</p>`}</details>`).join('')}</details></div></details></article>`;
 }
 
 // Preserve the recording aspect ratio instead of shrinking 900px source text
 // into a 500px-high player. Screenshot thumbnails retain their existing limit.
-const recordingStyles = 'figure.recording video{max-height:none}';
+const recordingStyles =
+  'figure.recording video{max-height:none}' +
+  readFileSync(new URL('../public/evidence.css', import.meta.url), 'utf8');
 
 export function renderReport({ state, baseline, projection, manifest, rows, scopeText, labels }) {
   const n = manifest.counts,
