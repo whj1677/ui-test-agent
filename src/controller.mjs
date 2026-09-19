@@ -1216,6 +1216,7 @@ export class Controller {
       });
       this.discoverySessionKey = uid();
     }
+    job.stage = 'PREPARING';
     job.context_key = preparationContext(this, await this.store.read(job.id));
     this.startPreparationClock(job);
     await prepareBatch(this, job, ids);

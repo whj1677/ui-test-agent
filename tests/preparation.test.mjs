@@ -18,6 +18,37 @@ import { fixtureModelPhase, fixtureModelReply } from './fixture-model.mjs';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const done = { done: true, reason: '已取得当前用例的定位证据，不代表业务通过' };
+test('a case-local malformed model reply is retained and does not cancel later cases', async (t) => {
+  const h = await setup(t, {
+    reply: ({ phase, input }) => {
+      if (phase === 'discovery' && input.case?.case_id === 'P-1')
+        throw Object.assign(new Error('DEEPSEEK_JSON_INVALID'), { code: 'DEEPSEEK_JSON_INVALID' });
+    },
+  });
+  const state = await h.run();
+  assert.equal(state.cases[0].status, 'BLOCKED_MAPPING');
+  assert.equal(state.cases[0].mapping_reason, 'DEEPSEEK_JSON_INVALID');
+  assert.equal(state.cases[0].attempts.length, 0);
+  assert.ok(h.runtime.opens.includes('P-2'));
+  assert.ok(state.events.some((e) => e.type === 'PREPARATION_CASE_PROTOCOL_FAILED'));
+});
+test('waiting root leaves login stage before any child discovery starts', async (t) => {
+  const h = await setup(t, {
+    count: 1,
+    open: () => {
+      assert.equal(h.controller.active.stage, 'PREPARING');
+    },
+  });
+  h.controller.browser.authenticated = false;
+  h.controller.browser.waitForAuthentication = async () => {
+    assert.equal(h.controller.active.stage, 'WAITING_USER_LOGIN');
+    h.controller.browser.authenticated = true;
+    return { kind: 'testid', value: 'signed-in' };
+  };
+  await h.controller.launch(h.id, 'prepare', ['P-1']);
+  await h.controller.active.finished;
+  assert.ok(h.runtime.opens.includes('P-1'));
+});
 async function setup(
   t,
   { count = 2, reviewed = true, open, reply, time = 1500, wall = 30000 } = {},

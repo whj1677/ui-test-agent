@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 9,
+    "version": 10,
     "last_updated": "2026-09-19"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,9 @@
     }
   ],
   "confirmed_facts": [
+    "版本10最终运行时1212项0失败/取消/跳过，612099.6906ms，日志validation/req0017/v10-runtime.log；配置/登录专项21项有重叠，不相加。构建1a2a95e7d15d已切换4179，69份旧baseline/facts摘要保持7f6291fdcccca92095cee894c002c8a2fb851c9d4387b17e18f59caa185d0cba。原32条/11文件冻结一致。用户已本机保存加密配置，原三例新轮最多100调用/15分钟，自动登录、无人工技术导航，尚在执行。",
+    "版本10首批实现：prepare登录后父阶段PREPARING；单例模型JSON/协议错误隔离为BLOCKED_MAPPING并继续未开始用例；dt/dd可见相邻字段及已有合法data-field属性进入同scope/唯一原节点核验，拒绝同域歧义，不从历史诱饵值借字段预期。另修复adaptive UI隐藏当前prepare确认入口。原32例/页面冻结不变；记录v10-repair-notes.md，工程与真实复验分列；其余通用缺口仍未解决。",
+    "版本10修改前状态卡：用户要求修复版本9并减少手工Key和登录。当前阶段实现/验证；唯一目标为修复已复现通用缺口，保留原32例/预期/历史。有限交付为父子状态同步、单例协议失败隔离、定义列表字段观察、相称正反例与结果。密钥/合成登录连续性单独归REQ-0016版本2。不降低写入审批或强行执行缺未来绑定的6例，不为某页面写特例；工程与真实结果分列。验收为新增反例及受影响回归真实运行；没有安全可用Key时仍完成本机验证，不从旧进程或聊天提取凭据。其余导航、语义及未来写入架构缺口继续明确记录，不声称本批全部修复。",
     "版本9最终收口2026-09-19T14:53:53.878Z：434累计调用、83分3.715秒（含等待），未扩900调用/90分钟上限。32条均进入流程：22浏览器尝试、4输入审查、6固定计划准备。后6条5映射阻塞、1探索JSON错误，0批准/0业务执行；V17格式错误中断整个批次，操作员仅接续尚未开始的V18，8调用计入原额，此1次外部调度不算自主恢复。全部active=null、登录VERIFIED、Key配置仍在；完整业务覆盖及发布目标未达成。",
     "版本9恢复：用户随后回复进入了，2026-09-19T14:45恢复原6条零执行的固定计划任务，产品当前唯一heading运营总览证据确认登录。沿用同一预算342已用调用与13:30:50全轮时钟，未获150分钟扩时授权；此前14:42正常停止的记录保留，尚未批准或执行业务写入。",
     "版本9阶段收口2026-09-19T14:42:00.282Z：6条新写入任务的当前页面仍仅有进入演示，未获首页证据，已正常停止等待作业；全部active=null，342累计调用、全轮71分10.119秒（包含等待），6条0模型/0业务执行。服务与Key未重启或清除，仍未达32条完整验收。尚无延长150分钟授权，原900调用/90分钟不重置。",
@@ -182,7 +185,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "已统一片段执行前与完成态语义校验，派发前精确反馈额外行数断言；305项受影响工程验证保留。冻结后另行授权的版本8真实原三例均完整通过；本轮没有触发额外行数候选拒绝分支，不能把成功归因为该分支已在真实模型中验证。",
+      "task": "版本10补准备单例JSON/协议错误隔离与后续调度；不吞认证/网络/持久化/停止错误。版本8统一片段前后语义守卫的305项工程及三例真实历史保留，不能继承为版本10真实效果。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -196,7 +199,7 @@
         "DD-0017-03"
       ],
       "status": "已实现",
-      "task": "执行时观察与受控技术绑定",
+      "task": "版本10增加原生dt/dd字段关系与已有data-field安全定位；保持scope/唯一性/原节点验证，不虚构无稳定属性的字段定位。未来写入绑定仍待修复。",
       "verification_ids": [
         "VT-0017-03"
       ]
@@ -210,7 +213,7 @@
         "DD-0017-04"
       ],
       "status": "已实现",
-      "task": "主流程状态与证据",
+      "task": "版本10同步登录后的父阶段，当前prepare/run使用对应界面流程；失败状态、原事实与未执行边界保持。",
       "verification_ids": [
         "VT-0017-04"
       ]
@@ -241,12 +244,12 @@
       "item": "业务合同与完整检查",
       "evidence_standard": "原步骤/输入/对象/预期/顺序/时机保持；表格字段矩阵和明确编号区间全覆盖，25字段同一DOM观察，遗漏中段不得通过。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs",
+        "command": "node tests/runtime-regression.mjs",
         "exit_code": 0,
-        "test_count": 305,
+        "test_count": 1212,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v8-targeted.log"
+        "log_path": "validation/req0017/v10-runtime.log"
       }
     },
     {
@@ -259,12 +262,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs",
+        "command": "node tests/runtime-regression.mjs",
         "exit_code": 0,
-        "test_count": 305,
+        "test_count": 1212,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v8-targeted.log"
+        "log_path": "validation/req0017/v10-runtime.log"
       }
     },
     {
@@ -277,12 +280,12 @@
       "item": "执行时观察与受控技术绑定",
       "evidence_standard": "同一批准只读动作派发前观察/探测/等价绑定；身份/字段/作用域/顺序/期限不变；未知派发和断言差异不重放、不改预期。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs",
+        "command": "node tests/runtime-regression.mjs",
         "exit_code": 0,
-        "test_count": 305,
+        "test_count": 1212,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v8-targeted.log"
+        "log_path": "validation/req0017/v10-runtime.log"
       }
     },
     {
@@ -295,12 +298,12 @@
       "item": "主流程状态与证据",
       "evidence_standard": "显示当前目标/观察/恢复/停止原因，不新增逐定位审批；旧批准不静默扩权，旧任务不改。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs",
+        "command": "node tests/runtime-regression.mjs",
         "exit_code": 0,
-        "test_count": 305,
+        "test_count": 1212,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v8-targeted.log"
+        "log_path": "validation/req0017/v10-runtime.log"
       }
     },
     {
@@ -402,6 +405,7 @@
     }
   ],
   "open_questions": [
+    "版本10首批状态、批次隔离和部分字段观察修复完成1212项工程回归；真实新32例尚未完整复验。导航路径否定、整区域误断言、范围声明、120秒期限、负向遮挡和未来写入绑定仍待解决，不因工程项通过声称全部修复。免重复Key与合成登录基础见REQ-0016版本2，初次迁移已完成。",
     "版本9验证已收口，但完整业务覆盖未达到：32条均尝试相应流程，6准备失败无正式执行，新故障对照未触及故障目标。434调用/83分3.715秒，未使用扩时。BLOCK_NOW：字段级采集/绑定、合法入口及同名作用域、范围声明与预期区分、一动作往返与120秒期限冲突、父/子任务状态不同步、单例JSON错误终止批次、写入未来页面预绑定限制。运行源码保持冻结，须按通用能力修复后复验，不改旧结果或原预期。",
     "VALIDATE：版本8本轮3/3不证明重复稳定性。真实模型未提出额外row_count，因此新的提前拒绝/纠错分支仅有工程注入反例证据；应另行故障对照验证详情整区域contains在错字段或诱饵值下不会误报，不能从当前正常页面推断该能力。",
     "历史版本8：用户“再进行一轮测试吧”授权的一轮100调用/15分钟已使用，实际78调用/521.384秒；当时已结束。版本9扩大验证依最新明确请求另行建账，未续用或篡改版本8记录。",
@@ -413,6 +417,12 @@
     "不得把模型审查/预置计划/注入回复/回放/工程测试计为自主产品验收。"
   ],
   "changes": [
+    {
+      "date": "2026-09-19", "version": 10, "type": "首批修复与工程验证",
+      "description": "修改前记录首批范围后实现登录父状态、单例协议错误隔离、dt/dd字段观察与安全技术绑定；1212项工程回归0失败，原32条不改。独立加密配置/合成登录见REQ-0016版本2。",
+      "impact": "页面采集、准备状态和隔离；不修改原预期、旧任务或未来写入审批",
+      "confirmed_by": "用户：修复并自主迭代；工程日志与旧事实摘要核验"
+    },
     {
       "date": "2026-09-19",
       "version": 9,

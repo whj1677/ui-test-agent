@@ -260,6 +260,21 @@ export async function prepareBatch(controller, root, ids) {
                 '该用例预算已到，证据和历史消耗已保留；继续处理其他用例，可稍后增加时间续跑。',
             });
           });
+        } else if (['DEEPSEEK_JSON_INVALID', 'DISCOVERY_RESPONSE_INVALID'].includes(code)) {
+          // Malformed content belongs to this Case, not to the entire batch.
+          // Authentication, transport, persistence and stop failures stay fatal.
+          await controller.store.update(root.id, (s) => {
+            const row = s.cases.find((r) => r.case_id === caseId);
+            row.status = 'BLOCKED_MAPPING';
+            row.mapping_reason = code;
+            row.plan_approved = false;
+            row.discovery = { ...row.discovery, status: 'BLOCKED', reason: code };
+            controller.store.event(s, 'PREPARATION_CASE_PROTOCOL_FAILED', {
+              case_id: caseId,
+              code,
+              message: '该用例模型回复格式错误，保留失败证据并继续其他未开始用例；未执行此用例。',
+            });
+          });
         } else {
           fatal = error;
           if (code !== 'STOPPED') root.failure_code = code;

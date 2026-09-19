@@ -1856,7 +1856,7 @@ export async function snapshot(
       text: '请在可见浏览器中完成登录，再读取页面。',
     };
   const selector =
-    'button,a,input,textarea,select,[role],h1,h2,h3,article,li,dialog,table,tr,td,th,[data-testid],[data-test],[id],nav span,aside span,[role="menu"] span';
+    'button,a,input,textarea,select,[role],h1,h2,h3,article,li,dialog,table,tr,td,th,dt,dd,[data-testid],[data-test],[id],nav span,aside span,[role="menu"] span';
   const captured = await page.evaluateHandle(
     ({ selector, focusText }) => {
       const visible = (e) =>
@@ -2109,6 +2109,21 @@ export async function snapshot(
         },
       };
       for (const { dom_index, e } of selected) {
+        const term =
+          e.tagName === 'DD' &&
+          e.previousElementSibling?.tagName === 'DT' &&
+          e.closest('dl') === e.previousElementSibling.closest('dl')
+            ? e.previousElementSibling
+            : null;
+        const fieldLabel = term && visible(term) ? cleanText(nameText(term)).slice(0, 150) : '';
+        if (
+          fieldLabel &&
+          /密码|口令|密钥|验证码|账号|账户|邮箱|手机号|password|credential|api.?key|token|secret|cookie|session|email|phone/iu.test(
+            fieldLabel,
+          )
+        )
+          continue;
+        const fieldAttribute = e.getAttribute('data-field');
         const labelledBy = (e.getAttribute('aria-labelledby') ?? '')
           .trim()
           .split(/\s+/)
@@ -2174,6 +2189,14 @@ export async function snapshot(
           node: e,
           row_hint: rowHint(e),
           scope_hint: scopeHint(e),
+          ...(fieldLabel
+            ? {
+                field_context: { label: fieldLabel, value: cleanText(e.innerText).slice(0, 500) },
+                field_locator_hint: /^[A-Za-z0-9_:. -]+$/.test(fieldAttribute ?? '')
+                  ? { kind: 'css', value: '[data-field="' + fieldAttribute + '"]' }
+                  : null,
+              }
+            : {}),
           in_navigation: !!e.closest('nav,aside,[role="menu"],[role="navigation"],[role="tree"]'),
           ...(['INPUT', 'TEXTAREA'].includes(e.tagName) &&
           !['password', 'file', 'hidden', 'email', 'tel'].includes(e.type) &&
@@ -2239,6 +2262,8 @@ export async function snapshot(
     const rejected = rejectionLog();
     for (const [index, c] of raw.controls.entries()) {
       let locator = mapped.locators[index];
+      if (adapterSource === DEFAULT_ADAPTER_SOURCE && c.field_locator_hint)
+        locator = c.field_locator_hint;
       if (!c.row_hint && c.scope_hint && adapterSource === DEFAULT_ADAPTER_SOURCE) {
         const { scope, self } = c.scope_hint;
         if (self || locator)
@@ -2329,7 +2354,7 @@ export async function snapshot(
         } finally {
           await handle?.dispose();
         }
-        const { adapter_input, dom_index, row_hint, scope_hint, ...fact } = c;
+        const { adapter_input, dom_index, row_hint, scope_hint, field_locator_hint, ...fact } = c;
         controls.push({
           ...fact,
           ...(scope_hint ? { scope_context: scope_hint.scope } : {}),

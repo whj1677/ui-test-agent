@@ -19,6 +19,12 @@
 
 ## 数据流与约束
 
+2026-09-19（REQ-0016版本2）：`credential-store.mjs`在用户显式选择后以Windows DPAPI CurrentUser加密保存官方DeepSeek Key/模型，目录内仅落`deepseek-credential.dpapi`加密信封；stdin传递给固定PowerShell脚本、无密钥命令参数/日志/HTTP导出。默认内存，不支持环境拒绝持久化，无明文回退；损坏保留并返回可见恢复错误，显式忘记才删除。`POST /api/config`可带布尔`remember`，与作业启动共享互斥，持久化成功后才更新内存；`GET /api/config`仅增加supported/saved/error。只在官方DeepSeek provider初始化恢复，不把保存的Key交给自定义endpoint/provider。旧服务没有迁移导出接口；首切换需本机输入一次。真实网站Cookie/storage不落盘，不宣称抵御同一用户恶意进程或管理员。
+
+维护脚本`autonomous-lab.mjs`默认仅冻结输入预检；显式`--real-model`才加载本机Key并发模型请求。自建隔离合成站点和BrowserSession，`synthetic-login.mjs`只对自己拥有的精确origin/任务点击进入演示并复用产品认证核验；不改产品登录守卫，不替模型导航业务步骤。共享300调用/45分钟默认预算（最高900/90），逐请求落账、独立任务留痕；32条分组包含6条仅prepare不自动批准。真实模型效果与工程辅助脚本验证分别记账。
+
+2026-09-19（REQ-0017版本10）：prepare完成登录后父阶段及时转PREPARING；当前旧prepare/run任务用对应工作流展示，避免adaptive主界面藏起确认入口。准备阶段单例DEEPSEEK_JSON_INVALID/DISCOVERY_RESPONSE_INVALID保存BLOCKED_MAPPING并继续其他未开始用例，认证/网络/数据持久化/取消等仍全局停止。snapshot补充原生dt/dd，当可见相邻term及已有合法data-field属性成立时，暴露字段标签/值及受既有唯一性、scope/DOM身份核验的定位；无稳定属性的dd不虚构定位。同弹窗重复字段被拒绝，scope外诱饵值不用于替代字段值。这不等于所有字段布局/写入未来页面问题已解决。
+
 2026-09-18（REQ-0016）：`BrowserSession.active` 现在要求本任务的登录页面仍存活，不再仅检查 Chromium 进程。页面关闭会撤销内存认证、确认票据和旧证据；再次打开时只在原所属 context 内新建登录页，不接管其他标签页。context/进程已丢失则重新打开且要求重新核验。准备等待中仅允许一次闭页恢复，重复关闭或断开明确失败；正式执行不自动恢复并重放业务动作。恢复不能保证新页面仍有旧 sessionStorage。
 
 自动认证仍要求同源、无可见密码/验证码/登录表单、既有确认标志重验或可见退出登录加导航及稳定样本。公开菜单、标题或登录框消失不构成自动认证。没有自动证据时，主流程提供一次操作员标志确认，不要求先停止准备。人工标志是操作员声明加当前DOM核验，不是服务器端认证证明。
