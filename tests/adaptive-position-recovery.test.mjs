@@ -12,18 +12,33 @@ import { PLAN_AUDIT_PROMPT } from '../src/plan-quality.mjs';
 import { suggestObligations } from '../src/plans.mjs';
 
 // Real kernel/browser, injected model. These validate bounded recovery, not LLM quality.
-for (const scenario of ['membership', 'ungrounded', 'difference', 'repeat'])
+for (const scenario of [
+  'membership',
+  'ungrounded',
+  'difference',
+  'repeat',
+  'prefix-extra',
+  'prefix-difference',
+  'prefix-repeat',
+])
   test(`position proof repair without navigation or replay: ${scenario}`, async (t) => {
-    const rows =
-      scenario === 'difference'
-        ? [
-            ['R003', 100],
-            ['R012', 600],
-          ]
-        : [
-            ['R012', 600],
-            ['R003', 100],
-          ];
+    const prefixCase = scenario.startsWith('prefix-');
+    const difference = scenario === 'difference' || scenario === 'prefix-difference';
+    const repeat = scenario === 'repeat' || scenario === 'prefix-repeat';
+    const expectedError = prefixCase
+      ? 'PLAN_TABLE_CONSTRAINT_UNSUPPORTED'
+      : scenario === 'ungrounded'
+        ? 'TABLE_POSITION_UNGROUNDED'
+        : 'PLAN_ROW_POSITION_UNPROVEN';
+    const rows = difference
+      ? [
+          ['R003', 100],
+          ['R012', 600],
+        ]
+      : [
+          ['R012', 600],
+          ['R003', 100],
+        ];
     const server = http.createServer((req, res) => {
       res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
       res.end(
@@ -80,15 +95,10 @@ for (const scenario of ['membership', 'ungrounded', 'difference', 'repeat'])
         else {
           plans++;
           if (plans > 1) {
-            assert.equal(
-              input.correction.code,
-              scenario === 'ungrounded'
-                ? 'TABLE_POSITION_UNGROUNDED'
-                : 'PLAN_ROW_POSITION_UNPROVEN',
-            );
+            assert.equal(input.correction.code, expectedError);
             assert.equal(input.progress.completed_segments, 0);
           }
-          const bad = plans === 1 || scenario === 'repeat';
+          const bad = plans === 1 || repeat;
           value = {
             actions: [],
             assertions: [
@@ -98,11 +108,11 @@ for (const scenario of ['membership', 'ungrounded', 'difference', 'repeat'])
                 expected: {
                   key_column: '编号',
                   ordered: false,
-                  exact_rows: false,
+                  exact_rows: prefixCase && bad,
                   rows: [
                     {
                       key: 'R012',
-                      ...(!bad
+                      ...(prefixCase || !bad
                         ? { position: 1 }
                         : scenario === 'ungrounded'
                           ? { position: 2 }
@@ -131,21 +141,14 @@ for (const scenario of ['membership', 'ungrounded', 'difference', 'repeat'])
     await controller.active?.finished;
     const row = (await store.read(id)).cases[0];
     const fact = await store.facts(id, row.attempts.at(-1));
-    assert.equal(
-      fact.adaptive_segments[0].error,
-      scenario === 'ungrounded' ? 'TABLE_POSITION_UNGROUNDED' : 'PLAN_ROW_POSITION_UNPROVEN',
-    );
+    assert.equal(fact.adaptive_segments[0].error, expectedError);
     assert.equal(fact.adaptive_segments[0].dispatched, false);
     assert.equal(fact.actions.length, 0);
     assert.ok(plans >= 2 && plans <= 3);
     assert.equal(
       fact.status,
-      scenario === 'repeat'
-        ? 'TECHNICAL_FAILED'
-        : scenario === 'difference'
-          ? 'FAIL_ASSERTION'
-          : 'PASS_ASSERTIONS',
+      repeat ? 'TECHNICAL_FAILED' : difference ? 'FAIL_ASSERTION' : 'PASS_ASSERTIONS',
     );
-    assert.equal(fact.assertions.length, scenario === 'repeat' ? 0 : 1);
-    if (scenario === 'difference') assert.match(JSON.stringify(fact.assertions), /row_position/);
+    assert.equal(fact.assertions.length, repeat ? 0 : 1);
+    if (difference) assert.match(JSON.stringify(fact.assertions), /row_position/);
   });

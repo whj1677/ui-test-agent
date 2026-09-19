@@ -6,6 +6,7 @@ import { extractExpectationRanges } from './expectation-coverage.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
 import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertion.mjs';
 import { extractRowPositions } from './table-position.mjs';
+import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -235,11 +236,16 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
             '行内数值断言与原步骤明确写出的数值不一致；必须保留原预期，不能复制页面实际值使测试通过。',
           );
       }
-      if (assertion.check === 'row_count' && !cardinality(c.steps[i].expected))
+      if (
+        assertion.check === 'row_count' &&
+        !(context.adaptive_readonly
+          ? sourceTableCounts(original.expected).includes(assertion.expected)
+          : cardinality(c.steps[i].expected))
+      )
         reject(
           'PLAN_ASSERTION_UNSUPPORTED',
           field,
-          '原步骤未要求记录总数，不能把当前观察到的行数增加为验收条件；删除额外数量断言，保留原要求的字段和记录身份。',
+          '当前原步骤没有支持此精确行数的字面数量依据；第一行、前两行、字段个数、至少/条件数量都不是全表行数。不能复制观察数量或改变原数量；修正未执行候选，保留原位置、字段和身份后重新审查。',
         );
       if (context.adaptive_readonly) {
         const sourceExpected = original.expected;
@@ -265,10 +271,17 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
         // A literal ID range guarantees membership, not a closed population or
         // row order. These are necessary guards for this bounded source grammar,
         // not a general natural-language approval of every other matrix.
-        if (assertion.check === 'table_cells' && extractExpectationRanges(sourceExpected).length) {
-          if (assertion.expected.exact_rows && !cardinality(sourceExpected))
+        if (assertion.check === 'table_cells') {
+          if (
+            assertion.expected.exact_rows &&
+            (extractExpectationRanges(sourceExpected).length ||
+              extractRowPositions(sourceExpected).length ||
+              hasTablePositionPhrase(sourceExpected)) &&
+            !sourceTableCounts(sourceExpected).includes(assertion.expected.rows.length)
+          )
             unsupported.push('expected.exact_rows');
           if (
+            extractExpectationRanges(sourceExpected).length &&
             assertion.expected.ordered &&
             assertion.expected.rows.length > 1 &&
             (!/依次|升序|降序|按序|按.{0,8}顺序|in (?:this|that|the following) order|ascending|descending/iu.test(
