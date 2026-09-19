@@ -15,4 +15,17 @@
 
 ## 官方模型验证
 
-待提交后执行：8条新留出，官方DeepSeek、本机已加密配置、每例新隔离上下文，最多400逻辑调用或45分钟。Code Agent不代导航/断言，正常完整、实际指定差异、技术失败分别登记；任何PASS仍须核验原步骤时机、字段/对象和媒体SHA。未运行前不计产品覆盖，更不声明发布。
+提交30ebd59、产品构建ab391c37ab48a8fa95fe67c587605fa452c15683c385076fbefaac22bd448dab，round-fSPLuC已结束。官方DeepSeek98调用/486581ms，低于400调用/45分钟上限。任务0e34f5a8-1e87-43fb-a96e-61e3f1628e9c，8条全为TECHNICAL_FAILED，零完整正常、零实际指定缺陷检出；56媒体SHA和全部原输入一致，原动作由产品执行。不能把前面的25工程参考项当成这8条Agent通过。
+
+|用例|完整原步骤|阻塞|
+|---|---:|---|
+|HOLD-Q1/Q2|各1|TABLE_INVARIANT_SOURCE_REQUIRED：不识别表格内容与操作前完全一致，未建立本步基线|
+|HOLD-F1/F2|各2|ASSERTION_TARGET_TYPE：对ARIA tab使用仅支持原生SELECT的selected_label|
+|HOLD-M1|0|TABLE_SOURCE_UNGROUNDED：缺编号升序关系能力，复制现场ID作为期望遭拒|
+|HOLD-M2|2|ASSERTION_TARGET_TYPE：默认页签检查同上|
+|HOLD-S1|0|TABLE_SOURCE_UNGROUNDED：默认排序检查同上|
+|HOLD-S2|1|TABLE_INVARIANT_SOURCE_REQUIRED：操作前表格一致关系同上|
+
+独立逐项核验：F1对H106的详情点击确实已执行，后续审查虽ACCEPT，内核正确拒绝了tab上的selected_label，没有将未测量字段当通过。Q组也实际测了部分输入/原行位置，但这不能替代整表与操作前不变。M1/S1的来源拒绝不能通过抄现场ID或下一步骤数据放宽。三类共因分别修产品能力，原8用例/页面/离线答案保持冻结；修后再跑，不对无改动失败盲试。
+
+累计18官方完成轮1648调用/7886602ms。新增8条使不同浏览器用例30、不同流程40，重复和工程注入不增加分母。独立留出自主能力仍未达，两轮稳定性亦未齐全；不能宣称发布。

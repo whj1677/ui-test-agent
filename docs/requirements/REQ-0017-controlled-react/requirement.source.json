@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 21,
+    "version": 22,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,9 @@
     }
   ],
   "confirmed_facts": [
+    "版本22工程完成：新增17原反例在修前12通过5失败（v22-before.log）；初始52项50通过2失败来自测试500ms观察窗过短及把独立关系收据误查在计划断言数组，事实分别为ASSERTION_OBSERVATION_LATE和已正确FAIL_ASSERTION。工程夹具改5000ms、显式查relational_observations，未改产品预算/比较规则，52项随后无失败；另增3个否定/记录数不等于内容关系反例。最终8文件209项0失败/取消/跳过，577647.7139ms（v22-regression.log），与各子集重叠不相加。实际Chromium控制器证明首次fill前捕获10基线，变为99立即报告差异，单次派发，无事后重捕/重放；原新17冻结文件保持。尚未官方模型复测，待页签/排序另批完成后统一复验原8题。",
+    "下一批版本23修改前状态卡（先隔离实现，版本22回归期间不写其运行源码）：v21真实F1/F2/M2的默认页签被规划为selected_label且审查ACCEPT，内核发现目标为role=tab而非SELECT后ASSERTION_TARGET_TYPE，后续字段未执行。唯一目标=新增明确只读aria_selected布尔测量，用于已绑定ARIA tab及其合法true/false状态，观察提供该状态；selected_label原生SELECT语义保持。候选在当前已存在的tab误用selected_label时派发前提供定向纠错，沿用原重规划/时限，已执行详情点击不重放。缺失/非法aria-selected、错误元素类型仍技术失败，真实选错页签为业务差异，不以enabled/可见代替选中。交付=能力schema/采集与比较/规划审查共用说明、类型纠错、正反例和真实Chromium控制器回归。新8冻结输入不改、不新增点击或设置页面状态；写入/固定旧比较规则不变。隔离工作副本不读取密钥或运行真实模型；主管合入时核对diff并再次执行必要测试，单独提交，不将隔离工程自报等同产品验收。",
+    "版本22修改前状态卡：独立heldout round-fSPLuC已结束，98调用/486581ms、56媒体SHA及8原输入一致，8条全TECHNICAL_FAILED，零到达指定故障检查点，非缺陷检出。累计18官方完成轮1648调用/7886602ms；不同流程40、浏览器不同用例30（原32流程中22浏览器+新8），工程注入不计。Q1/Q2/S2因‘表格内容与操作前完全一致’不被既有needsTableBaseline识别，不能捕获原步骤操作前基线；F1/F2/M2以selected_label测ARIA tab而ASSERTION_TARGET_TYPE；M1/S1因没有通用排序关系而复制现场ID导致TABLE_SOURCE_UNGROUNDED。唯一目标=补当前原步骤表格与操作前一致的明确等价表述，统一基线捕获、计划来源和完成覆盖的同一识别函数，保持运行器基线与反例守卫，不捕获事后基线或重放动作。有限交付=受限明确当前操作前关系识别、否定/条件/非表格/外部标准/历史步骤反例、真实浏览器及控制器注入回归、独立Git提交。新8原题和6文件SHA、原32及旧事实不改；排序与页签分别后批，不在本批声称解决。运行源码仅在整轮结束后修改；先工程与归档，待三类共因分批验证后再跑原冻结8例，不对同一无修复失败盲重试。",
     "版本21受影响工程25项0失败/取消/跳过，19805.809ms（v21-final-regression.log），包括冻结18参考场景、原编排预算/32条保持及新4项导入/只读服务/未知服务拒绝/真实浏览器工程注入编排。注入模型1调用在输入审查故意停止，不能计产品成功；验证无密钥读取、无oracle或其他缺陷数据送入。新6份资产SHA已冻结，原11份未变，heldout固定4198无需登录，仅只读运行8条新增用例。版本20原三例round-lCJzb1真实结束67调用/345907ms，三例各4COMPLETE，13/9/11断言，38媒体SHA与原输入一致；原步内AND结果、详情字段投影均实际测量。累计17完成轮1550调用/7400021ms，尚未有同构建原三例两轮完整证据，旧广度缺口不视为解决。",
     "版本21修改前状态卡：v20真实V02 round-BJQSzW已结束，24调用/132335ms，4COMPLETE/10断言，14媒体SHA一致，第三步实际测AND结果行和页码，第四步唯一D009矩阵排除D001；负面审查补全分支本次未触发，不宣称真实验证该分支。累计16完成轮1483调用/7054114ms。当前v20原三例稳定性批次运行，src/public/vendor/package等运行源码继续冻结。唯一目标=将Kimi新建巡检台账8条独立正常/缺陷留出接入只读隔离真实编排，避免只反复旧3例。有限交付=4198固定合成站点/8条原始用例/离线oracle及独立SHA清单、参考检查、显式heldout suite与账本，不把答案或参考定位器发给产品。新资产未用于产品前纠正作者错误（路由故障开关、1805kW总量及把权限约束当DOM断言），完整说明来源；冻结后不因Agent失败修改用例或页面。原32/11资产不改，heldout=额外8例，all仍原32；只读授权、官方DeepSeek、DPAPI和原共享预算保持，不新增Agent运行能力或业务写入。参考18项检查无失败，非Agent验收；先工程/Git，再8例真实执行并人工按事实复核四个缺陷靶点，任何技术失败不能算差异检出。",
     "版本20工程验证完成：初始18项14通过4失败（v20-before.log），修后18项通过；8文件194项0失败/取消/跳过，77510.1024ms（v20-regression.log）。补complete:false不能派发两个场景后，最终定向23项0失败/取消/跳过，36169.1724ms（v20-final-targets.log），与194集合重叠不相加。真实Chromium控制器验证候选修正、实际差异不重试、重复2次规划/1次审查即NO_PROGRESS和零派发；早期21项中1失败为测试错期望3次规划，改为实际原2次且保留失败日志，不增加产品重试。非全量或官方模型验收，下一步先Git后限定V02真实复测。Kimi新8例草稿已读但发现路由故障开关未刷新、总功率误写等问题，仍未冻结或产品测试。",
@@ -163,7 +166,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本20：自适应审查MISSING/UNCLEAR缺相应ASSERTION_GAP/ORACLE_UNCLEAR时，只补拒绝性问题及ACTION_MISMATCH，保留原状态/原因/负面发现，经原完整校验后退回候选REPAIR。complete:false也不能因此派发；未知引用/枚举/缺原因仍严格拒绝。保留既有COVERED+GAP保守降级，固定计划验证器与原重规划/期限不变，原回复/候选/用例不改，不重试真实差异。版本19位置与数量来源守卫继续保持。本批不解决AND结果域、排序关系、重置覆盖。",
+      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -234,7 +237,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本20实现负面审查不一致的保守候选反馈，新增4单元反例及5真实Chromium控制器注入场景；原2次恢复/无进展终止保持，partial候选也不得派发。工程与后续真实V02复测分列，不改原预期/历史。",
+      "task": "版本22实现明确同一步操作前表格一致来源识别及20单元/2控制器注入场景；209项受影响工程完成。页签/排序另批处理，原冻结留出未复验，不把工程结果当产品通过。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -311,12 +314,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=2 tests/adaptive-review.test.mjs tests/adaptive-negative-review.execution.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/table-invariant-source.test.mjs tests/table-invariant-source.execution.test.mjs tests/table-invariant.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs",
         "exit_code": 0,
-        "test_count": 23,
+        "test_count": 209,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v20-final-targets.log"
+        "log_path": "validation/req0017/v22-regression.log"
       }
     },
     {
@@ -412,7 +415,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "版本20已实现，194项受影响及最终23项定向工程无失败（重叠不相加），官方V02待复验。v19四例2记录通过/2技术失败；AND结果域与排序关系仍待修。v18原8对照4正常完整/4指定差异检出不继承为本版通过。"
+      "status": "版本22已实现，209项受影响工程无失败/取消/跳过；新8条真实上轮全技术失败、56媒体SHA一致，原题保持，待三类共因分批修复后复验。版本23隔离页签实现不计本次交付。"
     },
     {
       "un_id": "UN-0017-01",

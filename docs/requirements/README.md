@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：[版本21独立留出](REQ-0017-controlled-react/real-model-v21-heldout.md)8例已冻结，25项参考/编排工程无失败，官方模型待验，原32流程保持。[版本20真实记录](REQ-0017-controlled-react/real-model-v20-result.md)：限定V02及随后原三例均记录完整，逐步事实已复核，原三例两轮稳定性未达。[版本19真实记录](REQ-0017-controlled-react/real-model-v19-result.md)：2通过/2技术失败；排序关系等缺口保留。[版本18对照](REQ-0017-controlled-react/real-model-v18-result.md)：4正常完整/4指定差异检出。[原32诊断](REQ-0017-controlled-react/diagnostic-v16-matrix.md)及失败保留；完整自主能力未达，不宣称发布。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：[版本22表格关系来源修复](REQ-0017-controlled-react/real-model-v22-result.md)209项受影响工程无失败，真实待复验。[版本21独立8例](REQ-0017-controlled-react/real-model-v21-heldout.md)98次官方调用后全技术失败，已收敛表格关系表述/页签类型/排序能力三类共因，原题保持。[版本20原三例](REQ-0017-controlled-react/real-model-v20-result.md)一轮完整、稳定性未达；[版本18原对照](REQ-0017-controlled-react/real-model-v18-result.md)4正常完整/4指定差异检出。[原32诊断](REQ-0017-controlled-react/diagnostic-v16-matrix.md)及失败保留，40不同流程/30浏览器例不随重复增加；完整自主能力未达，不宣称发布。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：版本2增加显式Windows加密Key保存/重启恢复/忘记，以及有界合成自动登录维护入口；21项配置/登录专项无失败。4179已切换，用户首次保存完成，后续合成复测无需重复输入或点击登录。真实业务挑战仍需人工；业务结果独立验收。
 

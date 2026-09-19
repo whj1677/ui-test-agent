@@ -10,6 +10,19 @@ export function needsTableBaseline(originalExpected) {
   if (typeof originalExpected !== 'string') return false;
   return originalExpected.split(/[；;。.!?！？\n]/u).some((clause) => {
     if (!/(?:表格|列表|\b(?:table|list)\b)/iu.test(clause)) return false;
+    // Explicit same-step temporal equality is the same existing capability,
+    // not equality to a reference document, previous step, or observed values.
+    // A conditional/example/alternative is not an unconditional invariant.
+    if (/如果|假如|若|否则|可能|例如|比如|或|不成立/u.test(clause)) return false;
+    const preActionEquality =
+      /(?:表格|列表)(?:内容|数据)?(?:仍|应|必须)?(?:与|和)(?:本步骤|当前步骤)?操作前(?:保持)?(?:完全)?(?:一致|相同)/u.test(
+        clause,
+      );
+    if (preActionEquality) {
+      if (/不要求|无需|无须|不需要|不保证|不应|不必|不要|并非|不是|不一定/u.test(clause))
+        return false;
+      return true;
+    }
     // Negative/optional invariance is not authorization to assert equality.
     if (
       /(?:不要求|无需|不需要|不保证|不能|不应|不再|并非|不是|未能|不必|不要|不会|不一定|不保持).{0,12}(?:不变|保持|原样|原状)|(?:不变|保持原样|保持原状)(?:的)?(?:不成立|并非要求)|\b(?:not|never|need\s+not|does\s+not)\b.{0,20}\bunchanged\b/iu.test(
@@ -17,7 +30,7 @@ export function needsTableBaseline(originalExpected) {
       )
     )
       return false;
-    return /(?:不变|保持(?:原样|原状)|不(?:应)?应用新条件|未应用新条件)|\bunchanged\b/iu.test(
+    return /(?:不变|保持(?:原样|原状)|不(?:应)?应用(?:新)?条件|未应用(?:新)?条件)|\bunchanged\b/iu.test(
       clause,
     );
   });
