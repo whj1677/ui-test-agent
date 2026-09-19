@@ -9,7 +9,7 @@ import { importCases } from '../src/importer.mjs';
 import { suggestObligations } from '../src/plans.mjs';
 import { publicError } from '../src/common.mjs';
 import { startSyntheticLoginFixture } from './synthetic-login.mjs';
-import { startContrastLab } from '../expanded-lab/serve.mjs';
+import { startVerifiedContrastFixture } from './contrast-fixture.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsonFile = async (name) => JSON.parse(await fs.readFile(path.join(root, name), 'utf8'));
@@ -149,7 +149,13 @@ export async function runLab({
       reused_verified_static_server: lab.reused,
       browser_data: 'fresh_isolated',
     };
-    if (suite === 'all') contrast = await startContrastLab(0);
+    if (suite === 'all') {
+      contrast = await startVerifiedContrastFixture();
+      ledger.contrast_fixture = {
+        url: contrast.url,
+        reused_verified_static_server: contrast.reused,
+      };
+    }
     stopTimer = setInterval(() => {
       if (budget.expired() && app.controller.active) app.controller.active.abort.abort();
     }, 250);
@@ -188,7 +194,8 @@ export async function runLab({
         if (group.kind !== 'review') {
           await app.browser.open(task);
           if (group.name === 'contrast') {
-            // This fixture is owned by this process and explicitly has no login.
+            await contrast.verify();
+            // This byte-verified synthetic fixture explicitly has no login.
             await app.browser.loginPage
               .getByRole('heading', { name: '运营总览', exact: true })
               .waitFor();
