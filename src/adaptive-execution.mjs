@@ -437,6 +437,7 @@ export async function executeAdaptiveStep(session, run) {
       const localError =
         noProgressRetry ||
         error.code === 'TABLE_SOURCE_UNGROUNDED' ||
+        /^TABLE_ORDER_(?:SOURCE_REQUIRED|SCHEMA_INVALID)$/u.test(error.code ?? '') ||
         /^TABLE_POSITION_(?:UNGROUNDED|INVALID|DUPLICATE)$/u.test(error.code ?? '') ||
         error.code === 'ADAPTIVE_QUERY_RESET_CONTEXT_REQUIRED' ||
         /^(?:ADAPTIVE_(?:SEGMENT_REJECTED|INPUT|VALUE|FRAGMENT|ACTION|TARGET)|INVALID_|ASSERTION_|ORACLE_|PLAN_|LOCATOR_NOT_|ROW_)/.test(

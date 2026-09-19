@@ -7,6 +7,7 @@ import {
   sourceDisplayUnits,
 } from './table-assertion.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
+import { validateTableOrder, TABLE_ORDER_GUIDANCE } from './table-order.mjs';
 import { validateExecutionPolicy } from './controlled-react.mjs';
 import { isAdaptivePlan, validateAdaptivePlan } from './adaptive-plan.mjs';
 import { DISMISS_LABEL, conditionalDismissSource, CONDITIONAL_PROMPT } from './optional-dialog.mjs';
@@ -289,6 +290,7 @@ export function validateAssertion(a, original, options) {
       'has_class',
       'row_sequence',
       'table_cells',
+      'table_order',
       'table_unchanged',
       'url_equals',
       'url_contains',
@@ -302,6 +304,14 @@ export function validateAssertion(a, original, options) {
       expected: original.expected,
       ...(options?.data !== undefined ? { data: options.data } : {}),
       ...(options?.test_data !== undefined ? { test_data: options.test_data } : {}),
+    });
+  }
+  if (a.check === 'table_order') {
+    if (!original) fail('TABLE_BUSINESS_SOURCE_REQUIRED');
+    validateTableOrder(a.expected, {
+      expected: original.expected,
+      action: original.action,
+      quote: a.oracle_quote,
     });
   }
   if (a.check === 'table_unchanged') {
@@ -602,6 +612,7 @@ table_cells is an additional business assertion check and its bounded expected o
 ${DYNAMIC_ROW_GUIDANCE}
 ${WITHIN_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
+${TABLE_ORDER_GUIDANCE}
 ${CASE_NAMED_GUIDANCE}
 URL extension to the business-assertion enumeration below: url_equals, url_contains and url_not_contains are supported checks with a nonempty string expected. They compare the FULL current browser URL at the same observation instant as DOM assertions, using a supplied unique visible page-root/heading target to anchor readiness. No query/hash values are persisted in actual evidence. Use them for explicit address-bar/URL obligations; never replace URL checks with visible headings. Shared_control_evidence contains same-session observed locator hints only, never business expected values or proof of runtime success. A row key can use any case-supplied column/value that is UNIQUE after the original filter, not necessarily a database ID; the runtime verifies uniqueness and fails rather than selecting the first match.
 revision_feedback contains bounded supervisor review of a previous candidate or block. Evaluate the feedback against original and technical evidence, and return a corrected complete plan. Feedback never changes original actions/expected/obligations or authorizes extra operations. Return blocked only for a specific remaining technical gap. The simultaneous assertion engine supports MULTIPLE different element locators in one atomic DOM observation; it is not restricted to a single element. A sequence of actions can open, fill, press Escape on a field, query, then assert the final state; this is supported. A unique exact-role edit/delete button after an exact query plus one matching owned row does not require knowing a generated backend ID. Confirm row identity/count before destructive operations, and keep cleanup exact.

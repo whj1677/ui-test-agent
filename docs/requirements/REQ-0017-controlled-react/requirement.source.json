@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 23,
+    "version": 24,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,8 @@
     }
   ],
   "confirmed_facts": [
+    "版本24工程结果：初版8文件301项299通过2失败，Controller反例暴露带句号的完整oracle_quote在分句后错误来源拒绝，保留v24-regression.log。修正同一原句/引用分句关联，不放行截取否定或控件声明；主动反例发现高精度不同数值经Number舍入可误当相等，限定15有效数字且拒绝下溢/次正规数，编号使用等宽字符串无精度损失。最终304项0失败/取消/跳过、76418.0922ms，validation/req0017/v24-regression-corrected.log。真实Chromium+Controller注入证明错误升序候选派发前修正为原降序、查询只派发一次，真实逆序FAIL_ASSERTION，不复制页面数值或重采至通过。官方模型待冻结提交后复验。",
+    "版本24修改前状态卡：真实v19 V07排序步骤及v21 M1/S1因缺排序关系能力而复制现场ID，被TABLE_SOURCE_UNGROUNDED拒绝。目标=新增table_order只读当前页顺序关系，方向/业务字段来自同一原步骤；expected含field/column/direction/comparison，不接受观察值列表作为预期。有限能力=数字同单位不转换、共同ASCII前缀且等宽数字编号；至少2行、原生单层完整矩阵同一次采样，列绑定唯一，实际逆序为业务差异且不重采至通过。数字比较不证明单位正确，当前页不证明全数据集完整；控件显示不替代表格关系，原明确行位置/单元值仍必须测量。原文仅控件显示/不点击查询不授权新排序关系；同一步明确应用排序允许由其action提供字段方向并由expected明确应用关系，仍独立审查关联与时机。交付=来源/schema/纯比较、复用矩阵采样内核、共享能力说明/原预算候选纠错、反例与Chromium/Controller验证；不改冻结17资产、原用例/旧结果/预算，不加入业务写入。测试通过单独Git归档，再对原V07和独立8题限额官方模型复验。",
     "版本23主工程组合验证：独立核对并合入7运行文件及2新测试文件；9文件213项0失败/取消/跳过，76106.2599ms，validation/req0017/v23-main-regression.log。含版本22新增22项，不与隔离191或子集重复相加。ARIA tab仅合法aria-selected true/false可测，SELECT语义不变；错误候选在派发前原额度纠错、已执行详情动作不重放；真实false仍业务差异。官方模型未复验，待排序关系能力另批修复后重跑原冻结题。",
     "版本23隔离验证已结束、合入前记录：独立worktree ui-agent-aria-tab-v23从30ebd59建立，不含主工程v22改动，不读取凭据或真实模型。新7项修前全失败（validation-v23-before.log），修后7项无失败；新增3实际Chromium控制器注入场景后10项无失败，45068.7619ms；7文件191项0失败/取消/跳过，77493.5739ms（隔离validation-v23-regression.log）。错误selected_label在tab上派发前纠错为aria_selected，已执行打开详情只一次；真实未选中仍FAIL_ASSERTION，持续错误按原2次重规划停止。主工程v22已209项回归并提交d491564，后续将核验隔离diff仅包含计划/schema/状态采集/比较/类型纠错及必要测试，再应用到主工程做组合验证；隔离结果不替代主工程或产品验收。",
     "版本22工程完成：新增17原反例在修前12通过5失败（v22-before.log）；初始52项50通过2失败来自测试500ms观察窗过短及把独立关系收据误查在计划断言数组，事实分别为ASSERTION_OBSERVATION_LATE和已正确FAIL_ASSERTION。工程夹具改5000ms、显式查relational_observations，未改产品预算/比较规则，52项随后无失败；另增3个否定/记录数不等于内容关系反例。最终8文件209项0失败/取消/跳过，577647.7139ms（v22-regression.log），与各子集重叠不相加。实际Chromium控制器证明首次fill前捕获10基线，变为99立即报告差异，单次派发，无事后重捕/重放；原新17冻结文件保持。尚未官方模型复测，待页签/排序另批完成后统一复验原8题。",
@@ -168,7 +170,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。 版本23新增aria_selected布尔测量限role=tab且显式true/false；selected_label仍限SELECT。现场类型不匹配在派发前定向纠错，不点击页签制造预期，缺失状态技术失败，真实未选中为差异。",
+      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。 版本23新增aria_selected布尔测量限role=tab且显式true/false；selected_label仍限SELECT。现场类型不匹配在派发前定向纠错，不点击页签制造预期，缺失状态技术失败，真实未选中为差异。 版本24新增受限table_order关系，当前原步骤字段/方向与技术列绑定分离，完整原生矩阵同次采样当前页单调顺序。数字同单位/15有效位，无转换；等宽同前缀编号不猜排序规则。至少2行，真实逆序一次采样失败；不替代精确位置/字段/数量/跨页义务。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -239,7 +241,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本22表格关系和版本23ARIA页签已实现；主工程9文件213项无失败，新增10项包含真实Chromium+Controller注入，原2次重规划及单次详情点击保持。排序另批、官方模型待复验。",
+      "task": "版本24当前页排序关系与v22/v23已实现；8文件304项受影响回归无失败，首次301项中的2处完整句引用拒绝已修复并保留日志。原预算/只读/原题保持，官方模型待复验。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -316,12 +318,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/aria-selected.test.mjs tests/aria-selected.execution.test.mjs tests/table-invariant-source.test.mjs tests/table-invariant-source.execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/plan-quality.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/table-order.test.mjs tests/table-order.execution.test.mjs tests/table-assertion.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/plan-quality.test.mjs",
         "exit_code": 0,
-        "test_count": 213,
+        "test_count": 304,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v23-main-regression.log"
+        "log_path": "validation/req0017/v24-regression-corrected.log"
       }
     },
     {
@@ -417,7 +419,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "版本23主工程213项受影响回归无失败，10项新增页签测试为子集；真实8例上轮全技术失败，待排序修复后复验，未计产品通过。"
+      "status": "版本24受影响304项无失败；新增排序27项为子集，v23页签工程独立已归档。当前官方8条仍以上轮全技术失败为准，待原题真实复验。"
     },
     {
       "un_id": "UN-0017-01",

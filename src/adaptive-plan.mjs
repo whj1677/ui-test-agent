@@ -10,6 +10,7 @@ import {
 import { conditionalDismissSource } from './optional-dialog.mjs';
 import { sourceRouteTokens } from './adaptive-capabilities.mjs';
 import { isQueryResetStep } from './adaptive-query-reset.mjs';
+import { TABLE_ORDER_GUIDANCE } from './table-order.mjs';
 import {
   TABLE_ASSERTION_GUIDANCE,
   ADAPTIVE_NUMERIC_GUIDANCE,
@@ -419,7 +420,7 @@ Complete JSON action examples, illustrative ONLY (names, IDs and values are not 
 {"action_id":"S1-A4","op":"click","target":{"kind":"within","scope":{"role":"dialog","name":"工单详情","exact":true},"target":{"kind":"role","role":"button","name":"关闭","exact":true}}}
 {"action_id":"S1-A5","op":"wait","target":{"kind":"role","role":"status","name":"正在加载工单…","exact":true},"state":"hidden"}
 Every action has a globally unique action_id. fill/select values must be literal substrings of this step.action or exact scalar values from Case data/test_data (not object keys). Empty values require an explicit empty source data value. press only Enter/Tab/Escape/ArrowDown/ArrowUp/Space with that literal key value in the same sources. Never obtain input values from expected text, other steps, current page answers or invented defaults. dismiss_optional must preserve an explicit original conditional appear/absent branch and literal dialog/close names; at most once per original step.
-ASSERTION SCHEMA: exactly target, check, oracle_quote, obligation_ids, and expected when required. check is visible|unobstructed|hidden (expected omitted or true), text|contains|value|selected_label (string expected), count|row_count (nonnegative integer), checked|enabled|focused|aria_selected (boolean), number|display_number (finite number; display_number only within->definition with a source number and no explicit source unit), has_class (one class string), row_sequence (ordered string array), table_cells (matrix below), or url_equals|url_contains|url_not_contains (nonempty string; tests actual page URL, never infer URL from a heading). oracle_quote must be an exact substring of THIS step.expected; obligation_ids is a nonempty unique array from THIS step. No invented assertions or metadata-only proof. Complete illustrative assertion JSON:
+ASSERTION SCHEMA: exactly target, check, oracle_quote, obligation_ids, and expected when required. check is visible|unobstructed|hidden (expected omitted or true), text|contains|value|selected_label (string expected), count|row_count (nonnegative integer), checked|enabled|focused|aria_selected (boolean), number|display_number (finite number; display_number only within->definition with a source number and no explicit source unit), has_class (one class string), row_sequence (ordered string array), table_cells (matrix below), table_order (sourced current-page relation described below), or url_equals|url_contains|url_not_contains (nonempty string; tests actual page URL, never infer URL from a heading). oracle_quote must be an exact substring of THIS step.expected; obligation_ids is a nonempty unique array from THIS step. No invented assertions or metadata-only proof. Complete illustrative assertion JSON:
 {"target":{"kind":"cell","table":{"kind":"role","role":"table","name":"工单","exact":true},"key":{"column":"编号","value":"WO-101"},"column":"状态"},"check":"text","expected":"待处理","oracle_quote":"状态为待处理","obligation_ids":["S1-O1"]}
 {"target":{"kind":"role","role":"heading","name":"工单中心","exact":true},"check":"url_equals","expected":"http://127.0.0.1:4888/orders","oracle_quote":"当前页面URL为 http://127.0.0.1:4888/orders","obligation_ids":["S1-O2"]}
 {"target":{"kind":"role","role":"table","name":"工单","exact":true},"check":"table_cells","expected":{"key_column":"编号","rows":[{"key":"WO-101","cells":[{"column":"状态","check":"text","expected":"待处理"},{"column":"响应时限","check":"number","expected":45}]}],"ordered":false,"exact_rows":false},"oracle_quote":"表格字段符合测试数据","obligation_ids":["S1-O3"]}
@@ -431,6 +432,7 @@ ${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
 ${ADAPTIVE_CONSTRAINT_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
+${TABLE_ORDER_GUIDANCE}
 Observed text_context entries are read-only short text nodes with independently checked unique locators, not expected values or evidence of a pass. Use the actual page-counter target for pagination checks; an entire table or a Next/Previous button is not the counter. Keep original expected page values even if the observed text disagrees. If a counter changes after navigation, observe again and bind its actual node; never assume a table target_ref also locates nearby pagination text.
 ${DEFINITION_GUIDANCE}`;
 

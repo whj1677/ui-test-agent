@@ -21,6 +21,7 @@ import { RecordingEvidence } from './recording-evidence.mjs';
 import { stepActions, stepAssertions, stepCheckpoints } from './plan-steps.mjs';
 import { StepBudget } from './step-budget.mjs';
 import { compareTableCells, displayNumber } from './table-assertion.mjs';
+import { compareTableOrder } from './table-order.mjs';
 import {
   needsTableBaseline,
   assertTableBaselineScope,
@@ -1504,6 +1505,7 @@ export async function checkAssertionGroup(
   { timeout = 8000, deadline = Date.now() + timeout, signal, tableBaselines, tableContext } = {},
 ) {
   const hasInvariant = assertions.some((a) => a.check === 'table_unchanged');
+  const oneShotOrder = assertions.some((a) => a.check === 'table_order');
   for (const a of assertions)
     if (a.check === 'table_unchanged')
       requireTableBaseline(tableBaselines, page, tableContext, a.target);
@@ -1656,7 +1658,7 @@ export async function checkAssertionGroup(
                 } else if (a.check === 'has_class') {
                   actual = e.classList.contains(a.expected);
                   passed = actual;
-                } else if (a.check === 'table_cells') {
+                } else if (a.check === 'table_cells' || a.check === 'table_order') {
                   if (e.tagName !== 'TABLE') error = 'ASSERTION_TARGET_TYPE';
                   else {
                     const measurable = (node) =>
@@ -1793,14 +1795,16 @@ export async function checkAssertionGroup(
               return;
             }
             if (
-              assertions[i].check !== 'table_cells' ||
+              !['table_cells', 'table_order'].includes(assertions[i].check) ||
               o.error ||
               !o.actual ||
               typeof o.actual !== 'object'
             )
               return;
             // Compare captured values, never reread individual cells across revisions.
-            const comparison = compareTableCells(o.actual, assertions[i].expected);
+            const compare =
+              assertions[i].check === 'table_order' ? compareTableOrder : compareTableCells;
+            const comparison = compare(o.actual, assertions[i].expected);
             o.passed = comparison.passed;
             o.table_comparison = comparison;
             if (comparison.invalid) o.error = comparison.error;
@@ -1823,7 +1827,7 @@ export async function checkAssertionGroup(
         const error = sampled.observations.find((o) => o.error)?.error;
         if (error) fail(error);
         // Invariance is a one-shot comparison, never an eventual-match poll.
-        if (hasInvariant || sampled.observations.every((o) => o.passed)) break;
+        if (hasInvariant || oneShotOrder || sampled.observations.every((o) => o.passed)) break;
       }
       if (hasInvariant) fail('ASSERTION_SNAPSHOT_UNSTABLE');
       const remaining = deadline - Date.now();
@@ -1851,7 +1855,7 @@ export async function checkAssertionGroup(
         ? redact(last.observations[i].actual).slice(0, 3000)
         : Array.isArray(last.observations[i].actual)
           ? last.observations[i].actual.map((v) => redact(v).slice(0, 3000))
-          : ['table_cells', 'table_unchanged'].includes(a.check)
+          : ['table_cells', 'table_unchanged', 'table_order'].includes(a.check)
             ? redactMatrixEvidence(last.observations[i].actual)
             : last.observations[i].actual,
     passed: last.observations[i].passed,
