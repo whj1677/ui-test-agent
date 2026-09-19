@@ -1,5 +1,13 @@
 # Delivery Evidence
 
+## 2026-09-19 真实复测补充（非下方工程重跑）
+
+- 新增脱敏结论文件：`docs/requirements/REQ-0017-controlled-react/real-model-v7-result.md`。
+- 原三例真实模型实际2/3完整通过，66调用、420.143秒；V03完成态与片段态语义校验不一致，详情未执行，不是产品验收。
+- 只读命令：`node validation/req0017/verify-live-round.mjs`，退出码0；核对3例原步骤与33份媒体SHA，收据`validation/req0017/v7-real-result.json`。该命令不调用模型或修改任务。
+- 本次只更新验证事实和文档；下方373项工程collector记录保留原日期、命令、日志及结论，未将其伪称本次重跑。
+- 首次文档检查因新结论文件未登记到交付证据而失败；本节补齐登记后复检，原业务失败不改。
+
 ## Delivery Evidence (managed)
 
 - Generated at: `2026-09-18T17:44:16+08:00`
