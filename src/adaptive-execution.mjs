@@ -11,6 +11,7 @@ import {
   requireMissingAssertionFocus,
   canReconsiderBlock,
   isProtocolError,
+  canProposeCompletion,
 } from './adaptive-recovery.mjs';
 import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs';
 
@@ -108,6 +109,7 @@ export async function executeAdaptiveStep(session, run) {
   let executedAudit,
     noProgressReviews = 0;
   let focusMissing = false;
+  let completionProposed = false;
   let tableBaselines;
   await recording.beginStep(step, stepIndex);
   await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
@@ -167,33 +169,55 @@ export async function executeAdaptiveStep(session, run) {
     );
     const repairFocus = focusMissing ? missingAssertionFocus(progress, completed) : null;
     try {
-      reply = await onAdaptive(
-        'plan',
-        {
-          ...(repairFocus ? { repair_focus: repairFocus } : {}),
-          original: run.c,
-          contract: plan,
-          step,
-          current,
-          previous: completed,
-          progress,
-          repair_assertions: assertionRepair,
-          ...(correction ? { correction } : {}),
-          ...(tableBaselines
-            ? { table_baseline: { captured: true, scope: 'before_first_action_of_current_step' } }
-            : {}),
-          completed_steps: result.adaptive_steps,
-          failures: result.adaptive_segments.filter(
-            (r) => r.step_id === step.step_id && r.status === 'REJECTED',
-          ),
-          remaining: {
-            segments: plan.execution_policy.max_segments_per_step - segment,
-            replans: plan.execution_policy.max_replans_per_step - replans,
-            protocol_repairs: 2 - protocolRepairs,
+      if (
+        !completionProposed &&
+        !correction &&
+        !assertionRepair &&
+        canProposeCompletion(progress, completed, executedAudit)
+      ) {
+        completionProposed = true;
+        record.proposal_origin = 'controller_completion_probe';
+        reply = {
+          actions: [],
+          assertions: [],
+          complete: true,
+          within_ms: 100,
+          reason: '所有原义务已有成功执行测量，提请最终完整性审查；尚未批准完成。',
+        };
+        await emit('ADAPTIVE_COMPLETION_PROBE', {
+          step_id: step.step_id,
+          message:
+            '原检查已有执行证据，正在核验整个步骤是否完整；不新增操作，最终审查拒绝时不算通过。',
+        });
+      } else {
+        reply = await onAdaptive(
+          'plan',
+          {
+            ...(repairFocus ? { repair_focus: repairFocus } : {}),
+            original: run.c,
+            contract: plan,
+            step,
+            current,
+            previous: completed,
+            progress,
+            repair_assertions: assertionRepair,
+            ...(correction ? { correction } : {}),
+            ...(tableBaselines
+              ? { table_baseline: { captured: true, scope: 'before_first_action_of_current_step' } }
+              : {}),
+            completed_steps: result.adaptive_steps,
+            failures: result.adaptive_segments.filter(
+              (r) => r.step_id === step.step_id && r.status === 'REJECTED',
+            ),
+            remaining: {
+              segments: plan.execution_policy.max_segments_per_step - segment,
+              replans: plan.execution_policy.max_replans_per_step - replans,
+              protocol_repairs: 2 - protocolRepairs,
+            },
           },
-        },
-        budget.deadline,
-      );
+          budget.deadline,
+        );
+      }
       check();
       if (reply?.blocked === true) {
         keys(reply, ['blocked', 'reason'], ['blocked', 'reason']);

@@ -5,6 +5,7 @@ import {
   missingAssertionFocus,
   requireMissingAssertionFocus,
   adaptiveCorrection,
+  canProposeCompletion,
 } from '../src/adaptive-recovery.mjs';
 
 const original = {
@@ -36,6 +37,45 @@ const audit = {
   ],
   issues: [{ step_id: 'S3', code: 'ASSERTION_GAP', reason: '缺少总计12条/第1/3页与详情按钮' }],
 };
+
+test('completion eligibility requires executed coverage and a clean accepting audit, never model done alone', () => {
+  const one = { ...original, obligations: [original.obligations[0]] };
+  const clean = {
+    outcome: 'ACCEPT',
+    issues: [],
+    checks: [
+      {
+        step_id: 'S3',
+        obligation_id: 'S3-O1',
+        status: 'COVERED',
+        assertion_indices: [0],
+        reason: '实际测量引用',
+      },
+    ],
+  };
+  const progress = adaptiveProgress(one, completed, clean);
+  assert.equal(canProposeCompletion(progress, completed, clean), true);
+  assert.equal(canProposeCompletion(progress, [], clean), false);
+  assert.equal(canProposeCompletion(progress, [{ actions: [], assertions: [] }], clean), false);
+  assert.equal(canProposeCompletion(progress, completed, { ...clean, outcome: 'REPAIR' }), false);
+  assert.equal(
+    canProposeCompletion(progress, completed, { ...clean, issues: [{ code: 'ASSERTION_GAP' }] }),
+    false,
+  );
+  assert.equal(
+    canProposeCompletion(adaptiveProgress(original, completed, clean), completed, clean),
+    false,
+  );
+  const invented = { ...clean, checks: [{ ...clean.checks[0], assertion_indices: [2] }] };
+  assert.equal(
+    canProposeCompletion(adaptiveProgress(one, completed, invented), completed, invented),
+    false,
+  );
+  assert.equal(
+    canProposeCompletion({ obligations: [], remaining_obligations: [] }, completed, clean),
+    false,
+  );
+});
 
 test('initial progress contains every original obligation without guessed coverage', () => {
   const result = adaptiveProgress(original, [], undefined);

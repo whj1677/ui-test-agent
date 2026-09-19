@@ -87,6 +87,22 @@ export function adaptiveProgress(originalStep, completed, executedAudit) {
   };
 }
 
+// This only permits proposing a zero-action completion candidate. The caller
+// still must run full plan semantics and independent final audit. completed is
+// owned by the executor and contains successfully executed fragments ONLY.
+export function canProposeCompletion(progress, completed, audit) {
+  return (
+    completed.length > 0 &&
+    completed.some((fragment) => fragment.assertions.length > 0) &&
+    audit?.outcome === 'ACCEPT' &&
+    Array.isArray(audit.issues) &&
+    audit.issues.length === 0 &&
+    progress.obligations.length > 0 &&
+    progress.remaining_obligations.length === 0 &&
+    progress.obligations.every((obligation) => obligation.status === 'MEASURED_COVERED')
+  );
+}
+
 export function adaptiveCorrection(error, proposal, step, audit) {
   return {
     code: publicError(error),

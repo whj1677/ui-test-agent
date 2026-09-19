@@ -185,10 +185,11 @@ async function run(e) {
 }
 
 for (const finish of [true, false]) {
-  test(`measured assertion repeated with complete=${finish} ${finish ? 'may finalize' : 'still stops as no progress'}`, async (t) => {
+  test(`measured assertion coverage ${finish ? 'requests final audit without repeated planning' : 'with a remaining gap still stops permanent repeats'}`, async (t) => {
     let measured = 0;
     let saved;
     const e = await setup(t, {
+      compound: !finish,
       transform(value, { prompt, input }) {
         if (prompt.startsWith(INPUT_REVIEW_PROMPT) || prompt.startsWith(PLAN_AUDIT_PROMPT))
           return value;
@@ -212,6 +213,14 @@ for (const finish of [true, false]) {
       );
       assert.equal(fact.actions.length, 4, 'completion never repeats menu/detail/tab actions');
       assert.equal(fact.adaptive_steps.length, 2);
+      assert.equal(
+        measured,
+        1,
+        'controller proposes completion instead of asking for another measurement',
+      );
+      assert.ok(
+        fact.adaptive_segments.some((s) => s.proposal_origin === 'controller_completion_probe'),
+      );
     } else {
       assert.equal(row.status, 'TECHNICAL_FAILED');
       assert.equal(fact.error, 'ADAPTIVE_NO_PROGRESS');
