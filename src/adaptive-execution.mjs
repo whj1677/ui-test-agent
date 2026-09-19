@@ -15,6 +15,8 @@ import {
 } from './adaptive-recovery.mjs';
 import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs';
 import { requireAdaptivePageTarget } from './expectation-coverage.mjs';
+import { isQueryResetStep } from './adaptive-query-reset.mjs';
+import { queryFormFacts } from './query-forms.mjs';
 
 export async function requireAdaptiveAssertionTargets(
   page,
@@ -41,11 +43,17 @@ export async function requireAdaptiveAssertionTargets(
   }
 }
 
-export async function assertAdaptiveActionTarget(locator, action, originalAction = '') {
+export async function assertAdaptiveActionTarget(
+  locator,
+  action,
+  originalAction = '',
+  originalExpected = '',
+) {
   if (!locator || ['wait', 'dismiss_optional'].includes(action.op)) return;
   if (['click', 'press', 'fill', 'select', 'check', 'uncheck'].includes(action.op)) {
     const identity = await locator.evaluate((element) => ({
       connected: element.isConnected,
+      native_reset: element.matches('input[type=reset],button[type=reset]'),
       name: [
         element.getAttribute('aria-label'),
         element.innerText,
@@ -54,7 +62,9 @@ export async function assertAdaptiveActionTarget(locator, action, originalAction
           .split(/\s+/)
           .filter(Boolean)
           .map((id) => document.getElementById(id)?.textContent),
-        element.matches('input[type=button],input[type=submit]') ? element.value : '',
+        element.matches('input[type=button],input[type=submit],input[type=reset]')
+          ? element.value
+          : '',
       ]
         .filter(Boolean)
         .join(' ')
@@ -76,14 +86,12 @@ export async function assertAdaptiveActionTarget(locator, action, originalAction
       )
     )
       fail('ADAPTIVE_ACTION_WRITE_FORBIDDEN');
-    if (
-      /重置|\breset\b/iu.test(identity.name) &&
-      !(
-        /查询|搜索|筛选|过滤|\b(?:query|search|filter)\b/iu.test(originalAction) &&
-        /重置|\breset\b/iu.test(originalAction)
-      )
-    )
-      fail('ADAPTIVE_ACTION_WRITE_FORBIDDEN');
+    if (identity.native_reset || /重置|\breset\b/iu.test(identity.name)) {
+      if (action.op !== 'click' || !isQueryResetStep(originalAction, originalExpected))
+        fail('ADAPTIVE_ACTION_WRITE_FORBIDDEN');
+      const facts = await locator.evaluate(queryFormFacts, { mode: 'adaptive_reset' });
+      if (!facts?.reset_label) fail('ADAPTIVE_QUERY_RESET_CONTEXT_REQUIRED');
+    }
     const interactive = await locator.evaluate((element, op) => {
       if (element.closest('[hidden],[inert],[aria-hidden="true"]')) return false;
       const tag = element.tagName,
@@ -111,10 +119,10 @@ export async function assertAdaptiveActionTarget(locator, action, originalAction
   }
 }
 
-async function currentActionTarget(page, action, budget, originalAction) {
+async function currentActionTarget(page, action, budget, originalAction, originalExpected) {
   if (!action.target || ['wait', 'dismiss_optional'].includes(action.op)) return;
   const locator = await assertUnique(page, action.target, budget.remaining(2000));
-  await assertAdaptiveActionTarget(locator, action, originalAction);
+  await assertAdaptiveActionTarget(locator, action, originalAction, originalExpected);
 }
 
 // The model proposes one short segment; it never receives a browser/code handle.
@@ -305,7 +313,7 @@ export async function executeAdaptiveStep(session, run) {
       if (fragment.actions.some((a) => usedIds.has(a.action_id)))
         fail('ADAPTIVE_ACTION_ALREADY_ATTEMPTED');
       for (const action of fragment.actions)
-        await currentActionTarget(page, action, budget, step.source_action);
+        await currentActionTarget(page, action, budget, step.source_action, step.source_expected);
       if (!fragment.actions.length) {
         for (const assertion of fragment.assertions) {
           if (assertion.check === 'count' || assertion.check.startsWith('url_')) continue;
@@ -406,6 +414,8 @@ export async function executeAdaptiveStep(session, run) {
       const localError =
         noProgressRetry ||
         error.code === 'TABLE_SOURCE_UNGROUNDED' ||
+        /^TABLE_POSITION_(?:UNGROUNDED|INVALID|DUPLICATE)$/u.test(error.code ?? '') ||
+        error.code === 'ADAPTIVE_QUERY_RESET_CONTEXT_REQUIRED' ||
         /^(?:ADAPTIVE_(?:SEGMENT_REJECTED|INPUT|VALUE|FRAGMENT|ACTION|TARGET)|INVALID_|ASSERTION_|ORACLE_|PLAN_|LOCATOR_NOT_|ROW_)/.test(
           error.code ?? '',
         );

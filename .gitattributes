@@ -4,3 +4,15 @@
 acceptance/** -text
 tests/acceptance-fixtures.test.mjs -text
 tests/acceptance-fixtures.integration.mjs -text
+# These frozen inputs were hashed as LF; Windows checkouts must retain those bytes.
+manual-lab/public/index.html text eol=lf
+manual-lab/cases/01-valid.json text eol=lf
+manual-lab/cases/02-needs-review.json text eol=lf
+manual-lab/cases/03-known-defects.json text eol=lf
+manual-lab/SPEC.md text eol=lf
+expanded-lab/public/index.html text eol=lf
+expanded-lab/public/app.js text eol=lf
+expanded-lab/public/style.css text eol=lf
+expanded-lab/cases.json text eol=lf
+expanded-lab/oracle.json text eol=lf
+expanded-lab/SPEC.md text eol=lf

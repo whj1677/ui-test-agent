@@ -1,11 +1,12 @@
 import { extractExpectationRanges } from './expectation-coverage.mjs';
+import { sourceSupportsPosition } from './table-position.mjs';
 
 // Adaptive planning uses one explicit comparison capability for numeric cells.
 // This does not change approved fixed plans or the scalar browser comparator.
 export const ADAPTIVE_NUMERIC_GUIDANCE = `NUMERIC CAPABILITIES: a top-level check:"number" compares only pure numeric DOM text (commas removed); it does NOT parse units such as kW, labels or formulas, including on definition fields. For a scoped definition field whose ORIGINAL requirement supplies only a number, use check:"display_number" with that finite ORIGINAL number. This explicit projection accepts one decimal with a supported display suffix; it does not verify or convert units. It is allowed only on within->definition, never whole dialogs/tables, and cannot substitute for an explicit unit requirement (use the original grounded text in that case). Do not add observed units to text expectations when the original only requires a number. In adaptive plans, a cell locator with check:"number" is not supported: use check:"table_cells" on that SAME observed table with the SAME original key, column and finite expected number, even for a single cell or pure-number display. Never duplicate it with a scalar number assertion. Do not copy units/values from observations into expectations. Keep all original source obligations; ordered/exact_rows stay false unless the original requires them. Numeric projection does NOT establish unit correctness: if the original explicitly requires a unit, also measure its original text faithfully, without conversion or inferred tolerance. Missing supported measurement is a technical gap, not a business failure or permission to weaken the oracle.`;
 
 /** Pure helpers: no DOM reads, I/O, retries, formulas or inferred expectations. */
-export const TABLE_ASSERTION_GUIDANCE = `table_cells compares a bounded matrix in ONE DOM sample: expected={key_column:string,rows:[{key:string,cells:[{column:string,check:"text"|"number",expected:string|number}]}],ordered:boolean,exact_rows:boolean}. At most 50 rows, 20 cells per row and 200 asserted cells total. Supply every required field, including middle rows. Keys and column names are exact, unique identities; never use substring or row position as identity. ordered checks the relative order of requested keys; exact_rows forbids extra rows. Empty expected rows require exact_rows:true. text is exact trimmed DOM text; number is one finite decimal (optional grouped thousands/exponent) with an optional supported display-unit suffix, with no unit conversion or tolerance. Expected keys/values must come from THIS original step's expected or explicit case.data/test_data, never observations. validateTableExpectation(expected, {expected:step.expected,data:case.data,test_data:case.test_data}) checks literal grounding; omit absent data fields. Omitting the second argument only checks schema and MUST NOT authorize a business plan. Grounding checks literal presence, not row/field associations, negation, completeness or ordering semantics: retain independent original-case coverage review. compareTableCells consumes exactly {headers:string[],rows:string[][]} collected together from one supported table; it cannot establish snapshot atomicity itself. The collector must reject merged/nested/virtual/unknown structures and incomplete/truncated samples. Missing/duplicate columns or ambiguous keys yield technical invalid, never a pass. Do not resample individual fields or change expected values after a difference.`;
+export const TABLE_ASSERTION_GUIDANCE = `table_cells compares a bounded matrix in ONE DOM sample: expected={key_column:string,rows:[{key:string,position?:integer,cells:[{column:string,check:"text"|"number",expected:string|number}]}],ordered:boolean,exact_rows:boolean}. At most 50 rows, 20 cells per row and 200 asserted cells total. Supply every required field, including middle rows. Keys and column names are exact, unique identities; never use substring or row position as identity. Optional row.position is a 1-based absolute data-row position from the CURRENT original expectation, not a selector or identity. Preserve the exact key and verify position in the same matrix sample. It is NOT implied by ordered; extra trailing rows remain allowed when exact_rows=false. Supported source grammar: 首行/第N行 (N Arabic 1..999 or Chinese 一..十) followed by the exact alphanumeric record ID. Unsupported positional prose needs clarification/capability, never invent an ordinal. ordered checks the relative order of requested keys; exact_rows forbids extra rows. Empty expected rows require exact_rows:true. text is exact trimmed DOM text; number is one finite decimal (optional grouped thousands/exponent) with an optional supported display-unit suffix, with no unit conversion or tolerance. Expected keys/values must come from THIS original step's expected or explicit case.data/test_data, never observations. validateTableExpectation(expected, {expected:step.expected,data:case.data,test_data:case.test_data}) checks literal grounding; omit absent data fields. Omitting the second argument only checks schema and MUST NOT authorize a business plan. Grounding checks literal presence, not row/field associations, negation, completeness or ordering semantics: retain independent original-case coverage review. compareTableCells consumes exactly {headers:string[],rows:string[][]} collected together from one supported table; it cannot establish snapshot atomicity itself. The collector must reject merged/nested/virtual/unknown structures and incomplete/truncated samples. Missing/duplicate columns or ambiguous keys yield technical invalid, never a pass. Do not resample individual fields or change expected values after a difference.`;
 
 const MAX_ROWS = 50;
 const MAX_CELLS_PER_ROW = 20;
@@ -83,10 +84,20 @@ export function validateTableExpectation(expected, original) {
   if (!expected.rows.length && !expected.exact_rows)
     fail('TABLE_EMPTY_EXPECTATION', 'expected.rows');
   const keys = new Set();
+  const positions = new Set();
   let total = 0;
   for (const [i, row] of expected.rows.entries()) {
     const path = `expected.rows[${i}]`;
-    shape(row, ['key', 'cells'], [], path);
+    shape(row, ['key', 'cells'], ['position'], path);
+    if (
+      Object.hasOwn(row, 'position') &&
+      (!Number.isInteger(row.position) || row.position < 1 || row.position > MAX_ACTUAL_ROWS)
+    )
+      fail('TABLE_POSITION_INVALID', `${path}.position`);
+    if (Object.hasOwn(row, 'position')) {
+      if (positions.has(row.position)) fail('TABLE_POSITION_DUPLICATE', `${path}.position`);
+      positions.add(row.position);
+    }
     identity(row.key, `${path}.key`);
     if (keys.has(row.key)) fail('TABLE_KEY_DUPLICATE', `${path}.key`);
     keys.add(row.key);
@@ -119,6 +130,11 @@ export function validateTableExpectation(expected, original) {
     const sources = sourceLeaves(original);
     for (const [i, row] of expected.rows.entries()) {
       if (!grounded(row.key, sources)) fail('TABLE_SOURCE_UNGROUNDED', `expected.rows[${i}].key`);
+      if (
+        Object.hasOwn(row, 'position') &&
+        !sourceSupportsPosition(row.key, row.position, original)
+      )
+        fail('TABLE_POSITION_UNGROUNDED', `expected.rows[${i}].position`);
       for (const [j, cell] of row.cells.entries())
         if (!grounded(cell.expected, sources))
           fail('TABLE_SOURCE_UNGROUNDED', `expected.rows[${i}].cells[${j}].expected`);
@@ -280,6 +296,14 @@ export function compareTableCells(actual, expected) {
     let missingColumn = false;
     for (const row of expected.rows) {
       const found = rows.get(row.key);
+      if (Object.hasOwn(row, 'position') && found?.index + 1 !== row.position)
+        differences.push({
+          key: row.key,
+          column: expected.key_column,
+          expected: row.position,
+          actual: found ? found.index + 1 : null,
+          reason: 'row_position',
+        });
       for (const cell of row.cells) {
         const base = {
           key: row.key,

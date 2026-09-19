@@ -50,6 +50,7 @@ export async function runLab({
   maxCalls = 300,
   maxMinutes = 45,
   modelProvider,
+  caseIds,
 } = {}) {
   if (!['smoke', 'all'].includes(suite)) throw Error('INVALID_SUITE');
   const budget = callBudget({ maxCalls, maxMinutes });
@@ -65,7 +66,7 @@ export async function runLab({
       throw Error('FREEZE_MISMATCH');
   }
   const valid = (await jsonFile('manual-lab/cases/01-valid.json')).cases;
-  const groups =
+  let groups =
     suite === 'smoke'
       ? [{ name: 'smoke', kind: 'test', cases: valid.slice(0, 3) }]
       : [
@@ -89,12 +90,31 @@ export async function runLab({
           },
           { name: 'writes-prepare-only', kind: 'prepare', cases: valid.slice(12) },
         ];
+  if (caseIds !== undefined) {
+    const available = new Set(groups.flatMap((g) => g.cases.map((c) => c.case_id)));
+    if (
+      !Array.isArray(caseIds) ||
+      !caseIds.length ||
+      new Set(caseIds).size !== caseIds.length ||
+      caseIds.some((id) => typeof id !== 'string' || !available.has(id))
+    )
+      throw Error('INVALID_CASE_SELECTION');
+    groups = groups
+      .map((g) => ({ ...g, cases: g.cases.filter((c) => caseIds.includes(c.case_id)) }))
+      .filter((g) => g.cases.length);
+  }
   if (!realModel)
     return {
       state: 'PREFLIGHT_ONLY',
       cases: groups.reduce((n, g) => n + g.cases.length, 0),
       frozen_files: manifest.files.length,
       model_calls: 0,
+      ...(caseIds
+        ? {
+            selected_case_ids: groups.flatMap((g) => g.cases.map((c) => c.case_id)),
+            subset_only: true,
+          }
+        : {}),
     };
   // In-process injection is for engineering tests only; CLI has no provider/URL override.
   const provider = modelProvider ?? new DeepSeek();
@@ -124,6 +144,12 @@ export async function runLab({
     const directory = await fs.mkdtemp(path.join(outputRoot, 'round-'));
     const ledger = {
       suite,
+      ...(caseIds
+        ? {
+            selected_case_ids: groups.flatMap((g) => g.cases.map((c) => c.case_id)),
+            subset_only: true,
+          }
+        : {}),
       model_mode: modelProvider ? 'ENGINEERING_INJECTED' : 'OFFICIAL_DEEPSEEK_API',
       budget: budget.snapshot(),
       tasks: [],
@@ -258,7 +284,7 @@ export async function runLab({
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const args = process.argv.slice(2);
-    if (args.some((a) => a !== '--real-model' && !/^--(?:suite|calls|minutes)=/.test(a)))
+    if (args.some((a) => a !== '--real-model' && !/^--(?:suite|calls|minutes|cases)=/.test(a)))
       throw Error('INVALID_ARGUMENT');
     const option = (key, fallback) =>
       args.find((a) => a.startsWith('--' + key + '='))?.split('=')[1] ?? fallback;
@@ -269,6 +295,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
           suite: option('suite', 'smoke'),
           maxCalls: Number(option('calls', 300)),
           maxMinutes: Number(option('minutes', 45)),
+          ...(args.some((a) => a.startsWith('--cases='))
+            ? { caseIds: option('cases', '').split(',') }
+            : {}),
         }),
       ),
     );

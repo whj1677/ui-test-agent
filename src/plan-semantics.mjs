@@ -5,6 +5,7 @@ import { requireCaseNamedEvidence, validateCaseNamedPlan } from './case-named.mj
 import { extractExpectationRanges } from './expectation-coverage.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
 import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertion.mjs';
+import { extractRowPositions } from './table-position.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -115,6 +116,27 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     // Partial execution may defer missing coverage, never the validity of a
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
+      if (context.adaptive_readonly) {
+        for (const obligation of original.obligations ?? []) {
+          for (const wanted of extractRowPositions(obligation.text)) {
+            if (
+              !stepAssertions(step).some(
+                (a) =>
+                  a.check === 'table_cells' &&
+                  a.obligation_ids?.includes(obligation.id) &&
+                  a.expected.rows.some(
+                    (row) => row.key === wanted.key && row.position === wanted.position,
+                  ),
+              )
+            )
+              reject(
+                'PLAN_ROW_POSITION_UNPROVEN',
+                `plan.steps[${i}].assertions`,
+                `原义务要求${wanted.key}位于第${wanted.position}行。成员存在、单元格值或相对ordered不证明绝对位置；须在同一已观察表格的table_cells中为原身份提供position。不得增加全表仅这些行、修改原位置或重放动作。`,
+              );
+          }
+        }
+      }
       for (const obligation of original.obligations ?? []) {
         if (
           context.adaptive_readonly &&

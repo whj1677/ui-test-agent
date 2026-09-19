@@ -2,6 +2,12 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_ROW_POSITION_UNPROVEN:
+    'The original requires an absolute row position. Membership, cell values and relative ordered do not prove it. On the SAME observed table use table_cells with the ORIGINAL key and explicit row.position (1-based data row), preserve obligation/source references. Do not add exact_rows, replace identity with nth, infer a position from the page, or replay actions. Only the documented source grammar is supported.',
+  TABLE_POSITION_UNGROUNDED:
+    'The proposed row.position is not grounded with its exact key in the CURRENT original expected. Use only its explicit position, never incidental numbers or observed rank. Unsupported wording remains a capability gap. Preserve original requirements and executed history.',
+  ADAPTIVE_QUERY_RESET_CONTEXT_REQUIRED:
+    'No dispatch occurred. A reset is permitted only for a CURRENT original positive reset instruction with query/filter semantics, on a uniquely bound native GET query form reset/button alongside its query submitter. Business data reset, unbound/custom forms or changed DOM are not authorized. Observe the same target; do not substitute another reset or retry a dispatched action.',
   ASSERTION_NUMERIC_FIELD_REQUIRED:
     'This new adaptive candidate was not dispatched. On the SAME scoped definition field use display_number with the ORIGINAL finite number when the source has no explicit unit. If the original requires a unit, use its grounded text instead. Legacy scalar number does not parse display units. Keep sources, identity, timing and independent audit; never copy observed values or replay actions.',
   PLAN_DISPLAY_UNIT_UNSUPPORTED:

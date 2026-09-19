@@ -1141,7 +1141,7 @@ export class BrowserSession {
           try {
             // Audit/persistence can yield while DOM changes. Validate the exact handle
             // that is about to be dispatched, not the earlier locator observation.
-            await assertAdaptiveActionTarget(target, a, step.source_action);
+            await assertAdaptiveActionTarget(target, a, step.source_action, step.source_expected);
           } catch (error) {
             result.actions.push({
               ...event,

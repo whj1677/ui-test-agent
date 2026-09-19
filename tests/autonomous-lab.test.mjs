@@ -23,3 +23,18 @@ test('autonomous preflight checks the frozen 32 cases without creating sessions 
   });
   assert.equal((await runLab()).cases, 3);
 });
+
+test('bounded selection retains original suite order and rejects missing/duplicate IDs', async () => {
+  assert.deepEqual(await runLab({ suite: 'all', caseIds: ['LAB-V07', 'LAB-V06'] }), {
+    state: 'PREFLIGHT_ONLY',
+    cases: 2,
+    frozen_files: 11,
+    model_calls: 0,
+    selected_case_ids: ['LAB-V06', 'LAB-V07'],
+    subset_only: true,
+  });
+  for (const caseIds of [[], [''], ['LAB-V06', 'LAB-V06'], ['unknown'], 'LAB-V06'])
+    await assert.rejects(runLab({ suite: 'all', caseIds }), /INVALID_CASE_SELECTION/);
+  await assert.rejects(runLab({ suite: 'smoke', caseIds: ['LAB-V06'] }), /INVALID_CASE_SELECTION/);
+  assert.equal((await runLab({ suite: 'all', caseIds: ['LAB-V13'] })).subset_only, true);
+});

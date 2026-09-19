@@ -4,6 +4,9 @@ import { queryValues } from './query-capability.mjs';
 // Fixed DOM inspection and an optional one-action identity guard. Neither GET
 // nor a query label proves that a black-box handler is free of side effects.
 export function queryFormFacts(element, arm = null) {
+  // Only adaptive execution may inspect a JS button reset in an observed query
+  // form. Discovery's native reset/one-action permit contract is unchanged.
+  const adaptiveReset = arm?.mode === 'adaptive_reset';
   const form = element.closest('form');
   const visible = (e) =>
     !!e.getClientRects().length &&
@@ -60,7 +63,7 @@ export function queryFormFacts(element, arm = null) {
   const button = queries[0];
   const resets = buttons.filter(
     (e) =>
-      e.type === 'reset' &&
+      (e.type === 'reset' || (adaptiveReset && e.type === 'button')) &&
       /^(?:重置|reset)$/iu.test((e.getAttribute('aria-label') || e.innerText).trim()),
   );
   const reset = element === resets[0] && resets.length === 1 && buttons.length === 2;
@@ -159,7 +162,7 @@ export function queryFormFacts(element, arm = null) {
     action: action.href,
     fields: facts,
   };
-  if (!arm) return result;
+  if (!arm || adaptiveReset) return result;
   const runtime = window[arm.key],
     permit = runtime?.permit;
   if (

@@ -8,6 +8,7 @@ import {
   validatePlan,
 } from './plans.mjs';
 import { conditionalDismissSource } from './optional-dialog.mjs';
+import { isQueryResetStep } from './adaptive-query-reset.mjs';
 import { TABLE_ASSERTION_GUIDANCE, ADAPTIVE_NUMERIC_GUIDANCE } from './table-assertion.mjs';
 import { extractExpectationRanges, requireAdaptivePageTarget } from './expectation-coverage.mjs';
 import { DEFINITION_GUIDANCE, ADAPTIVE_CONSTRAINT_GUIDANCE } from './scope-guidance.mjs';
@@ -252,8 +253,9 @@ function guardAction(action, original, c, base, ids) {
     if (
       /重置|\breset\b/iu.test(label) &&
       !(
+        action.op === 'click' &&
         original.action.includes(label) &&
-        /查询|搜索|筛选|过滤|\b(?:query|search|filter)\b/iu.test(original.action)
+        isQueryResetStep(original.action, original.expected)
       )
     )
       fail('ADAPTIVE_ACTION_WRITE_FORBIDDEN');

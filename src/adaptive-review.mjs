@@ -3,9 +3,10 @@ import { scrubForLog } from './telemetry.mjs';
 import { stepAssertions } from './plan-steps.mjs';
 import { validatePlanAudit } from './plan-quality.mjs';
 import { DEFINITION_GUIDANCE, ADAPTIVE_CONSTRAINT_GUIDANCE } from './scope-guidance.mjs';
-import { ADAPTIVE_NUMERIC_GUIDANCE } from './table-assertion.mjs';
+import { ADAPTIVE_NUMERIC_GUIDANCE, TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
+${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
 ${ADAPTIVE_CONSTRAINT_GUIDANCE}
 CURRENT AUDIT OUTPUT OVERRIDE: Prefer {checks:[{obligation_id,status,assertion_refs:["A1"],reason}],issues:[{code,step_id,reason}]}. The program supplies assertion_catalog with stable IDs for THIS cumulative candidate. Do not manufacture indices or mark an operation as a measured assertion. COVERED requires at least one actual assertion reference that checks that obligation. When entering a page is required, a measured heading or URL assertion may cover that obligation AND a heading obligation if its source_refs bind both; executed click alone is not coverage. Missing coverage in complete:false is MISSING + ASSERTION_GAP, not a protocol exception or business ambiguity. On review_correction, fix ONLY your audit response for the SAME candidate. Never modify the original expected, candidate, or execute actions. Legacy assertion_indices output remains accepted if strictly valid.

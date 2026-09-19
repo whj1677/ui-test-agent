@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 16,
+    "version": 17,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,13 @@
     }
   ],
   "confirmed_facts": [
+    "版本17最终主工作区受影响回归：15文件488项0失败/取消/跳过，117365.8039ms，validation/req0017/v17-final-regression.log；包含18项新增纯函数/真实Chromium/注入模型控制器测试及定点筛选编排。中间主工作区483项和隔离480项与最终集合重叠不相加。初始旧复合重置语法失败、隔离CRLF冻结校验失败均保留日志并修实现/检出规则，不改原输入或manifest。本版真实DeepSeek尚待执行，未继承v16结果为本版通过，非全项目回归或发布验收。",
+    "版本17验证环境阻塞（修改前，必要范围修正）：新隔离worktree在Windows core.autocrlf=true下将全部11份冻结输入转换为CRLF，编排预检报FREEZE_MISMATCH（v17-selection.log）。逐一核验git HEAD blob及只将CRLF还原LF的SHA均等于原manifest；不是用例语义变化。为可复现验证，给这11份文件显式text eol=lf，当前隔离副本仅做已验证换行归一化，不改manifest或内容。加入此构建/检出修正，不绕过冻结检查、不重新计算期望哈希；原主工作区仍保留原字节。",
+    "版本17定点复验编排（修改前）：为直接复验失败项而不每次重复32流程，autonomous-lab增加可选原case_id子集；只能从所选冻结suite筛选，未知/重复/空ID拒绝，保留原顺序、组类型、页面与manifest校验。不得改变原用例内容、将写入准备升为执行或继承旧结果；账本显式记录selected_case_ids和subset_only，非完整套件验收。实际产品执行仍官方DeepSeek、新上下文、共享调用/时间账本。",
+    "版本17工程初步：13项新纯函数/Chromium派发与同次表格样本反例均无失败；受影响13文件480项0失败/取消/跳过，94496.4728ms（validation/req0017/v17-regression.log）。早期170项中1项暴露原复合步骤的‘重置查询’正向表述被新语法误拒，修正实现而未删除旧测试，原失败日志v17-initial.log保留。此为工程验证，不是本版真实模型验收。",
+    "版本17修改前状态卡：版本16扩量诊断round-e60fZz已结束，官方DeepSeek 440逻辑调用/1756797ms，原32流程分别为22浏览器执行、4输入审查、6仅准备。浏览器5记录PASS_ASSERTIONS、2真实已知差异、15技术失败；原步骤未变、188媒体SHA一致。累计12完成轮1172调用/5542623ms。不能算稳定性或发布验收。V06短动作‘点击重置’被只查看action的写入禁令误挡；V07同样受阻，且第一/第二行要求被成员存在断言冒充。唯一目标=当前原步骤明确查询重置语义+现场查询表单核验，及同一表格样本的按原身份测量绝对行位置。有限交付=两项通用能力、来源/执行守卫、正反例与原用例真实复验；不改原预期/页面/失败记录，不放行业务重置，不把位置当业务身份，不把前两行扩大为全表仅两行。验收=短重置动作合法查询表单可执行，业务/不明表单/更名不得派发；明确第一/第二行在额外尾行时通过，前插/错位/重复键不通过，成员断言不能证明位置。工程及真实结果分开；持续目标的两轮稳定性/独立陌生8例仍未达到。其他关系/瞬态/范围证据问题留待后批，不在本批扩展。",
+    "版本16真实两轮同构建bed58fb5fa94结束：round-XBXIL3为65调用/340882ms、12/13/10断言，round-rpMIA7为64调用/339759ms、13/11/11断言；均三例各4步COMPLETE、各37媒体SHA一致。V03两轮实际display_number测原200，不添加单位，首轮还实际有界修复了额外分页/单位候选。首轮V02第三步却把控件值当AND结果证据，第四步才测结果行；不可回填第三步，不计两轮语义稳定性。第二轮在第三步实际核验结果行，仍只有一轮，不声明稳定。累计11轮732调用/3785.826秒，仅3个不同用例。",
+    "扩量诊断状态卡：用户目标要求扩大复杂场景，持续仅重复3例会过拟合。保持原验收门槛未通过，不以扩量替代修复；在冻结版本16上运行原32条的诊断批次，以收集跨场景共因，所有结果标为诊断、未验收。14条只读含2故障+8对照进入浏览器，4条输入审查，6条写入仅准备不批准/不执行；原预期/页面/旧事实不变，真实DeepSeek与本机合成页面，最多900调用/90分钟先到即停。期间不改运行源码、不代导航、不对同一失败盲重试；完成后统一复核输入状态/结果证据域及其他共性缺口，再修复和复验。独立留出仍未开始；不更改最终2轮逐步语义合格及正常/故障/陌生场景验收条件。",
     "版本16最终受影响工程回归376项0失败/取消/跳过，104935.7147ms，validation/req0017/v16-final-regression.log；包含新增8项及定义字段、表格解析、计划语义、真实浏览器/控制器有界恢复、分页与数值原行为。初始7项6通过1失败是测试缺少范围证据，补输入后中间375项通过；增加definition旧number派发前拒绝后重跑最终376，重叠集合不相加。原32例11文件冻结不变，新真实模型待执行，没有继承版本14全量1242或任何旧真实通过。",
     "版本16修改前状态卡：版本15真实round-TVdyaT结束，65调用/340289ms，三例各4步COMPLETE，13/15/11断言满足，37媒体SHA一致；分页额外约束已消失，但V03第四步把原数值200扩成text=200 kW，不能计语义合格。累计9轮603调用/3105.185秒，仅3个不同用例。唯一目标=为已唯一绑定的定义字段提供显式display_number投影断言，复用表格已审查的严格单数值/封闭单位语法；旧number保持不变。派发前拒绝新自适应定义字段从观察增加原文无依据的单位文本，要求模型重新规划而不改原预期。明确单位义务仍需独立文本核对，数值投影不是量纲验证或换算。交付=能力/来源校验、规划审查共用说明、正反例及真实复验。验收=200/200 kW/200.0可检验原200；1200、120、多数值/不支持格式不得通过；明确单位不能由投影代替；无额外重试、旧任务不改。达到两轮语义合格三例后扩量，当前未达。",
     "版本15冻结前受影响工程回归267项0失败/取消/跳过，103824.5376ms，validation/req0017/v15-regression.log；包含新增11项及原语义、规划、审查、数值、分页、实际差异和重复停止。专项123/10与此集合重叠不相加；原始失败日志保留。新运行时没有重跑1242全量，1242明确属于版本14；新官方模型待执行，未扩量、未发布。",
@@ -144,7 +151,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本16新增显式display_number，仅作用域内唯一definition字段使用，与表格共用封闭显示数值语法，保留DOM文本/解析数值及unit_verified:false；旧number不变。必须有原数值来源且没有明确单位义务，明确单位仍用原文本；新自适应候选不得从观察添加未支持的单位文本。原对象/字段关联仍须独立语义审查。版本15范围/分页额外约束、版本14静态文字与版本12收尾保持，不增预算或自动修改候选。",
+      "summary": "版本17新增table_cells行position（原ID+原绝对位置，单样本测量，位置不充当定位身份）；明确位置义务不能由成员/相对排序代替。查询重置由当前原动作+预期授权并在实际派发前复用原生GET查询表单事实核验，业务/不明表单/原生input reset/更名拒绝。原预算内纠错，不重放动作或差异。新增冻结原case_id子集复验入口，保留组类型及字节校验，显式标subset_only。原版本16字段数值投影及既有来源/范围/收尾规则保留。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -215,7 +222,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本16实现definition显示数值投影、原数值来源/明确单位限制、观察单位额外约束拦截及共享提示；旧number不变。新增浏览器原文本证据、数值差异/多值/歧义/单位要求与有界候选恢复反例。工程与真实模型分列，不增加重试，不改原用例。",
+      "task": "版本17实现原步骤查询重置与现场GET表单核验、绝对行位置矩阵及完整覆盖守卫、有界候选纠错；补正反例和真实Chromium/注入模型控制器恢复测试。编排仅筛选冻结原ID，不改用例/预期/写入准备边界；Windows冻结输入显式LF，原manifest不改。工程与真实产品效果分别记录。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -292,12 +299,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/display-number.test.mjs tests/definition-fields.test.mjs tests/table-assertion.test.mjs tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/plan-quality.test.mjs tests/expectation-coverage.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-page-target.test.mjs tests/adaptive-numeric-capability.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/adaptive-position-reset.test.mjs tests/adaptive-position-recovery.test.mjs tests/autonomous-lab.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/adaptive-dispatch.test.mjs tests/table-assertion.test.mjs tests/table-observation.test.mjs tests/query-reset.test.mjs tests/query-forms.test.mjs tests/plan-quality.test.mjs tests/expectation-coverage.test.mjs",
         "exit_code": 0,
-        "test_count": 376,
+        "test_count": 488,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v16-final-regression.log"
+        "log_path": "validation/req0017/v17-final-regression.log"
       }
     },
     {
@@ -393,7 +400,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "已实现；版本16受影响376项无失败，含新增8项；不是全量，不继承版本14的1242或旧真实结果；新真实模型未复验"
+      "status": "版本17已实现，受影响488项工程无失败；查询重置/绝对行位置/原ID子集与检出字节核验已验证。本版官方DeepSeek定点复验待执行，不继承v16或早期全量结果。"
     },
     {
       "un_id": "UN-0017-01",
@@ -417,7 +424,7 @@
       "dd_id": "DD-0017-05",
       "tk_id": "TK-0017-05",
       "vt_id": "VT-0017-05",
-      "status": "进行中：版本9原24例加8对照完整分母，夹具参考与产品真实执行分列，尚未完成全部验收"
+      "status": "进行中：版本16已跑原32诊断流程，22浏览器执行5记录通过/2实际差异/15技术失败；4输入审查和6仅准备另计。完整自主能力、两轮语义稳定性及陌生留出尚未达成。"
     }
   ],
   "trace_history": [
@@ -448,13 +455,25 @@
   ],
   "changes": [
     {
-      "date": "2026-09-19", "version": 11, "type": "持续目标与下一修复冻结",
+      "date": "2026-09-20",
+      "version": 17,
+      "type": "真实扩量失败驱动的受控能力修复",
+      "description": "原32流程诊断结束，5断言通过/2差异/15技术失败的22次浏览器执行；另4输入审查和6仅准备。先修V06/V07查询重置误挡及绝对行位置未测，保留全部原输入/失败记录。工程与新真实复测分别记录。",
+      "impact": "查询重置派发边界、表格断言/来源/覆盖、限定复验编排和冻结输入检出一致性",
+      "confirmed_by": "用户自主迭代目标及实际产品证据"
+    },
+    {
+      "date": "2026-09-19",
+      "version": 11,
+      "type": "持续目标与下一修复冻结",
       "description": "按用户明确目标以真实产品执行迭代；先无属性定义列表字段技术绑定，再原三例、32例及陌生留出对照。工程检查仅作进入真实验证的前置，不代替结果。",
       "impact": "受限只读字段定位、观察及规划输入、真实测试维护；不变原用例和审批边界",
       "confirmed_by": "用户：设定目标继续测并扩量，以真实Agent运行为准"
     },
     {
-      "date": "2026-09-19", "version": 10, "type": "首批修复与工程验证",
+      "date": "2026-09-19",
+      "version": 10,
+      "type": "首批修复与工程验证",
       "description": "修改前记录首批范围后实现登录父状态、单例协议错误隔离、dt/dd字段观察与安全技术绑定；1212项工程回归0失败，原32条不改。独立加密配置/合成登录见REQ-0016版本2。",
       "impact": "页面采集、准备状态和隔离；不修改原预期、旧任务或未来写入审批",
       "confirmed_by": "用户：修复并自主迭代；工程日志与旧事实摘要核验"
