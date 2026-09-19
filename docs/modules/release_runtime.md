@@ -19,6 +19,8 @@
 
 ## 数据流与约束
 
+2026-09-20（REQ-0017版本28）：selection-timing对当前原步骤肯定字面页签切换后的aria_selected=true检查checkpoint动作先后与同目标绑定；部分/完整候选均在派发前校验，返回ASSERTION_SELECTION_BEFORE_ACTION供原额度修正，不补动作/改预期/重放。默认/初始/明确前态不重解释，否定/条件/示例及其他语法仍独立审查；不读当前值决定接受，真实切换后未选中仍失败。固定路径不变。
+
 2026-09-20（REQ-0017版本27）：expectation-visibility在自适应完成候选要求有限肯定可见/关闭条款的必要测量，未命中不构成批准。原“可见X即使…”须同对象X的visible；字面原关闭X按钮绑定dialog且期望X关闭后/已关闭，须同完整dialog hidden或count0。字段值/点击/按钮隐藏/背景列表不能替代。部分片段可待补、完成前精确PLAN_VISIBILITY_UNPROVEN返回原重规划额度，不重放动作；固定计划不变。
 
 2026-09-20（REQ-0017版本26）：自适应规划与审查共享EVIDENCE_SOURCE_GUIDANCE，区分显式字段值、备注可见性与条件性干扰值/证据来源限制；审查目录evidence_binding仅为候选语法描述，runtime_verified=false，不能自动授予覆盖。自身definition字段或行+列的真实值测量可共同绑定适用来源限制，整区域包含/标题不可替代字段；明确正向备注正文要求仍需测量。候选、原义务、负审查和执行比较不改变。

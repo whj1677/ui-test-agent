@@ -1,6 +1,6 @@
 # 需求索引
 
-当前：[版本27可见/关闭必要证据](REQ-0017-controlled-react/real-model-v27-result.md)250项受影响工程无失败，待官方F1复验。[版本26真实子集](REQ-0017-controlled-react/real-model-v26-result.md)69调用，两指定缺陷检出，正常详情虽记录完成但两处漏测，未计完整验收；40媒体SHA及原输入一致。原题/原失败保持。
+当前：[版本28页签时序约束](REQ-0017-controlled-react/real-model-v28-result.md)249项受影响工程无失败，待官方F1复验。[版本27真实F1](REQ-0017-controlled-react/real-model-v27-result.md)备注可见已补齐，但未切回就测选中导致正常页误报，27调用/16媒体SHA一致；原题/原失败保持，未计整例通过。
 
 最新：[版本24当前页排序关系](REQ-0017-controlled-react/real-model-v24-result.md)304项受影响工程无失败；首次完整句来源拒绝已修正，日志保留。冻结后复测原V07及独立8例，不将工程数量当产品通过率。
 

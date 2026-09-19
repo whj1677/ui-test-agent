@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T06:40:52+08:00`
+- Generated at: `2026-09-20T06:54:57+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `5893561ef57ad09abdeebfc246b7f45efd1c60883b703ddb5c5ceaa1fa5a47ac`
+- Change fingerprint: `90eb3a1478cbd77ab06e253aee2b200f085e29c564c03b37b8575c6c04b59398`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test tests/expectation-visibility.test.mjs tests/expectation-visibility.execution.test.mjs`
+- Command: `node --test tests/selection-timing.test.mjs tests/selection-timing.execution.test.mjs`
 - Exit code: `0`
-- Test count: `33`
+- Test count: `22`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v27-delivery.log`
-- Log SHA-256: `3ae3e42f8a836e65ce9b3daa0d6a5ff4268cfc75639f9ca32961c1a7f5d9ac15`
+- Log path: `validation/req0017/v28-delivery.log`
+- Log SHA-256: `38b8662a7297e647e1fe5bbe2120dc4dd911377d2f32ddccd6a2dd1441dc0ede`
 
 ### Git Status
 
@@ -28,16 +28,16 @@
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v26-result.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v27-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
  M src/adaptive-plan.mjs
  M src/adaptive-recovery.mjs
  M src/adaptive-review.mjs
  M src/plan-semantics.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v27-result.md
-?? src/expectation-visibility.mjs
-?? tests/expectation-visibility.execution.test.mjs
-?? tests/expectation-visibility.test.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v28-result.md
+?? src/selection-timing.mjs
+?? tests/selection-timing.execution.test.mjs
+?? tests/selection-timing.test.mjs
 ```
 
 ### Git Diff Stat
@@ -53,7 +53,7 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v26-result.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v27-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
@@ -68,245 +68,179 @@ warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by
  .../REQ-0017-controlled-react/05_trace.md          |   4 +-
  .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 282 ++++++++++++++++-----
- .../real-model-v26-result.md                       |   8 +-
+ .../REQ-0017-controlled-react/delivery_evidence.md | 292 ++++++++-------------
+ .../real-model-v27-result.md                       |   8 +-
  .../requirement.source.json                        |  27 +-
  src/adaptive-plan.mjs                              |   2 +
  src/adaptive-recovery.mjs                          |   2 +
  src/adaptive-review.mjs                            |   2 +
- src/plan-semantics.mjs                             |   8 +
- 16 files changed, 272 insertions(+), 85 deletions(-)
+ src/plan-semantics.mjs                             |  10 +
+ 16 files changed, 166 insertions(+), 203 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v27-result.md
-src/expectation-visibility.mjs
-tests/expectation-visibility.execution.test.mjs
-tests/expectation-visibility.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v28-result.md
+src/selection-timing.mjs
+tests/selection-timing.execution.test.mjs
+tests/selection-timing.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T06:40:08+08:00
-Command: node --test tests/expectation-visibility.test.mjs tests/expectation-visibility.execution.test.mjs
+Started at: 2026-09-20T06:54:27+08:00
+Command: node --test tests/selection-timing.test.mjs tests/selection-timing.execution.test.mjs
 Exit code: 0
-Parsed test count: 33
+Parsed test count: 22
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: closing requires same-dialog result without replay: repair
-ok 1 - closing requires same-dialog result without replay: repair
+# Subtest: tab postcondition timing without business retry: repair
+ok 1 - tab postcondition timing without business retry: repair
   ---
-  duration_ms: 13705.3945
+  duration_ms: 9978.1001
   type: 'test'
   ...
-# Subtest: closing requires same-dialog result without replay: still-open
-ok 2 - closing requires same-dialog result without replay: still-open
+# Subtest: tab postcondition timing without business retry: difference-after-click
+ok 2 - tab postcondition timing without business retry: difference-after-click
   ---
-  duration_ms: 16415.5707
+  duration_ms: 11756.4848
   type: 'test'
   ...
-# Subtest: closing requires same-dialog result without replay: persistent-missing
-ok 3 - closing requires same-dialog result without replay: persistent-missing
+# Subtest: tab postcondition timing without business retry: persistent-premature
+ok 3 - tab postcondition timing without business retry: persistent-premature
   ---
-  duration_ms: 11840.5567
+  duration_ms: 6433.1679
   type: 'test'
   ...
-# Subtest: field value with same source is not visibility; correct scoped named visibility supplies only missing witness
-ok 4 - field value with same source is not visibility; correct scoped named visibility supplies only missing witness
+# Subtest: post-switch assertion cannot precede original action even in a partial candidate
+ok 4 - post-switch assertion cannot precede original action even in a partial candidate
   ---
-  duration_ms: 4.1597
+  duration_ms: 3.49
   type: 'test'
   ...
-# Subtest: visible source witness rejects other source
-ok 5 - visible source witness rejects other source
+# Subtest: same-point and earlier-point exact original target click precedes assertion
+ok 5 - same-point and earlier-point exact original target click precedes assertion
   ---
-  duration_ms: 0.1689
+  duration_ms: 0.674
   type: 'test'
   ...
-# Subtest: visible source witness rejects other dialog
-ok 6 - visible source witness rejects other dialog
+# Subtest: future click cannot backfill earlier assertion
+ok 6 - future click cannot backfill earlier assertion
   ---
-  duration_ms: 0.2108
+  duration_ms: 0.1503
   type: 'test'
   ...
-# Subtest: visible source witness rejects field instead
-ok 7 - visible source witness rejects field instead
+# Subtest: other dialog cannot discharge pending switch
+ok 7 - other dialog cannot discharge pending switch
   ---
-  duration_ms: 0.1152
+  duration_ms: 0.19
   type: 'test'
   ...
-# Subtest: visible source witness rejects text is not visibility
-ok 8 - visible source witness rejects text is not visibility
+# Subtest: other tab cannot discharge pending switch
+ok 8 - other tab cannot discharge pending switch
   ---
-  duration_ms: 0.1406
+  duration_ms: 0.2122
   type: 'test'
   ...
-# Subtest: visible source witness rejects count is not visibility
-ok 9 - visible source witness rejects count is not visibility
+# Subtest: hover is not switch cannot discharge pending switch
+ok 9 - hover is not switch cannot discharge pending switch
   ---
-  duration_ms: 0.0863
+  duration_ms: 0.1361
   type: 'test'
   ...
-# Subtest: visible source witness rejects non-exact name
-ok 10 - visible source witness rejects non-exact name
+# Subtest: no inferred switch: 不点击基本信息页签
+ok 10 - no inferred switch: 不点击基本信息页签
   ---
-  duration_ms: 0.1256
+  duration_ms: 0.1547
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 如果可见旧记录即使含22 kW也不作为字段
-ok 11 - does not reinterpret unsupported/conditional requirement: 如果可见旧记录即使含22 kW也不作为字段
+# Subtest: no inferred switch: 如果出现则点击基本信息页签
+ok 11 - no inferred switch: 如果出现则点击基本信息页签
   ---
-  duration_ms: 0.0827
+  duration_ms: 0.0584
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 不可见旧记录
-ok 12 - does not reinterpret unsupported/conditional requirement: 不可见旧记录
+# Subtest: no inferred switch: 例如切回基本信息页签
+ok 12 - no inferred switch: 例如切回基本信息页签
   ---
-  duration_ms: 0.2414
+  duration_ms: 0.2477
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 无需可见旧记录
-ok 13 - does not reinterpret unsupported/conditional requirement: 无需可见旧记录
+# Subtest: no inferred switch: 点击详情并核对基本信息页签
+ok 13 - no inferred switch: 点击详情并核对基本信息页签
   ---
-  duration_ms: 0.2517
+  duration_ms: 0.257
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 旧记录即使含22 kW也不作为字段
-ok 14 - does not reinterpret unsupported/conditional requirement: 旧记录即使含22 kW也不作为字段
+# Subtest: no inferred switch: 查看基本信息页签
+ok 14 - no inferred switch: 查看基本信息页签
   ---
-  duration_ms: 0.102
+  duration_ms: 0.1063
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 备注正文必须显示22 kW
-ok 15 - does not reinterpret unsupported/conditional requirement: 备注正文必须显示22 kW
+# Subtest: preserve original pre-state measurement: 默认页签为基本信息
+ok 15 - preserve original pre-state measurement: 默认页签为基本信息
   ---
-  duration_ms: 0.0422
+  duration_ms: 0.0875
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 可见旧记录即使含22 kW也不作为字段仅为示例
-ok 16 - does not reinterpret unsupported/conditional requirement: 可见旧记录即使含22 kW也不作为字段仅为示例
+# Subtest: preserve original pre-state measurement: 初始基本信息页签选中
+ok 16 - preserve original pre-state measurement: 初始基本信息页签选中
   ---
-  duration_ms: 0.0287
+  duration_ms: 0.0351
   type: 'test'
   ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 不要求可见旧记录即使有相同值
-ok 17 - does not reinterpret unsupported/conditional requirement: 不要求可见旧记录即使有相同值
-  ---
-  duration_ms: 0.0278
-  type: 'test'
-  ...
-# Subtest: does not reinterpret unsupported/conditional requirement: 可见旧记录即使相同或者允许不显示
-ok 18 - does not reinterpret unsupported/conditional requirement: 可见旧记录即使相同或者允许不显示
-  ---
-  duration_ms: 0.0261
-  type: 'test'
-  ...
-# Subtest: an exact text locator can witness named visibility with unchanged object scope
-ok 19 - an exact text locator can witness named visibility with unchanged object scope
-  ---
-  duration_ms: 0.1869
-  type: 'test'
-  ...
-# Subtest: same whole dialog hidden or exact absence witnesses closure, not acceptance of other obligations
-ok 20 - same whole dialog hidden or exact absence witnesses closure, not acceptance of other obligations
-  ---
-  duration_ms: 1.4002
-  type: 'test'
-  ...
-# Subtest: closure does not accept wrong dialog
-ok 21 - closure does not accept wrong dialog
-  ---
-  duration_ms: 0.2375
-  type: 'test'
-  ...
-# Subtest: closure does not accept button only
-ok 22 - closure does not accept button only
-  ---
-  duration_ms: 0.0751
-  type: 'test'
-  ...
-# Subtest: closure does not accept wrong source
-ok 23 - closure does not accept wrong source
-  ---
-  duration_ms: 0.0603
-  type: 'test'
-  ...
-# Subtest: closure does not accept visible
-ok 24 - closure does not accept visible
-  ---
-  duration_ms: 0.0713
-  type: 'test'
-  ...
-# Subtest: closure does not accept nonzero count
-ok 25 - closure does not accept nonzero count
-  ---
-  duration_ms: 0.0687
-  type: 'test'
-  ...
-# Subtest: does not reinterpret negative/conditional/other action 不点击关闭详情
-ok 26 - does not reinterpret negative/conditional/other action 不点击关闭详情
-  ---
-  duration_ms: 0.0543
-  type: 'test'
-  ...
-# Subtest: does not reinterpret negative/conditional/other action 如果出现则点击关闭详情
-ok 27 - does not reinterpret negative/conditional/other action 如果出现则点击关闭详情
-  ---
-  duration_ms: 0.0287
-  type: 'test'
-  ...
-# Subtest: does not reinterpret negative/conditional/other action 例如点击关闭详情
-ok 28 - does not reinterpret negative/conditional/other action 例如点击关闭详情
-  ---
-  duration_ms: 0.0302
-  type: 'test'
-  ...
-# Subtest: does not reinterpret negative/conditional/other action 点击取消
-ok 29 - does not reinterpret negative/conditional/other action 点击取消
-  ---
-  duration_ms: 0.0345
-  type: 'test'
-  ...
-# Subtest: guard is adaptive complete-only; original source and candidate remain immutable
-ok 30 - guard is adaptive complete-only; original source and candidate remain immutable
-  ---
-  duration_ms: 1.7177
-  type: 'test'
-  ...
-# Subtest: closed-state guard does not choose conditional/example/alternative: 如果详情关闭后恢复列表
-ok 31 - closed-state guard does not choose conditional/example/alternative: 如果详情关闭后恢复列表
+# Subtest: preserve original pre-state measurement: 切换前基本信息已选中
+ok 17 - preserve original pre-state measurement: 切换前基本信息已选中
   ---
   duration_ms: 0.0791
   type: 'test'
   ...
-# Subtest: closed-state guard does not choose conditional/example/alternative: 例如详情已关闭
-ok 32 - closed-state guard does not choose conditional/example/alternative: 例如详情已关闭
+# Subtest: literal positive switch: 点击“基本信息”页签
+ok 18 - literal positive switch: 点击“基本信息”页签
   ---
-  duration_ms: 0.0365
+  duration_ms: 0.1023
   type: 'test'
   ...
-# Subtest: closed-state guard does not choose conditional/example/alternative: 详情已关闭或仍可见
-ok 33 - closed-state guard does not choose conditional/example/alternative: 详情已关闭或仍可见
+# Subtest: literal positive switch: 切换到基本信息标签页
+ok 19 - literal positive switch: 切换到基本信息标签页
   ---
-  duration_ms: 0.0788
+  duration_ms: 0.0482
   type: 'test'
   ...
-1..33
-# tests 33
+# Subtest: literal positive switch: 切换至基本信息页签
+ok 20 - literal positive switch: 切换至基本信息页签
+  ---
+  duration_ms: 0.038
+  type: 'test'
+  ...
+# Subtest: literal positive switch: 选择基本信息页签
+ok 21 - literal positive switch: 选择基本信息页签
+  ---
+  duration_ms: 0.037
+  type: 'test'
+  ...
+# Subtest: previous original-step click does not carry into new step; original and candidate are not edited
+ok 22 - previous original-step click does not carry into new step; original and candidate are not edited
+  ---
+  duration_ms: 0.2761
+  type: 'test'
+  ...
+1..22
+# tests 22
 # suites 0
-# pass 33
+# pass 22
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 42415.4355
+# duration_ms 28651.8419
 ```
 
 ### Sync Record Status
@@ -317,19 +251,12 @@ DRY-RUN: no derived changes for REQ-0017-controlled-react; explicit implementati
 
 ### Check AI Context
 
-- Exit code: `1`
+- Exit code: `0`
 
 ```text
-FAIL ai-engineering-context checks
-
-1. docs\requirements\REQ-0017-controlled-react\03_tasks.md
-   Problem: Potentially unstable or undefined-behavior test is recorded as implemented/passing without a guardrail.
-   Fix: Do not use released resources, closed handles, dangling pointers, races, or platform-dependent side effects as stable unit tests; mark it `人工待确认` / `仅静态检查`, or redesign with a controlled mock/fake.
-2. docs\requirements\REQ-0017-controlled-react\current_state.md
-   Problem: Potentially unstable or undefined-behavior test is recorded as implemented/passing without a guardrail.
-   Fix: Do not use released resources, closed handles, dangling pointers, races, or platform-dependent side effects as stable unit tests; mark it `人工待确认` / `仅静态检查`, or redesign with a controlled mock/fake.
+PASS ai-engineering-context checks
 ```
 
 ### Notes
 
-33项重叠工程复检，不是官方模型验收，真实F1待复测
+22项重叠工程复检，不计官方模型验收；默认及后态差异不改，真实F1待复验

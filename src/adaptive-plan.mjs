@@ -13,6 +13,7 @@ import { isQueryResetStep } from './adaptive-query-reset.mjs';
 import { TABLE_ORDER_GUIDANCE } from './table-order.mjs';
 import { EVIDENCE_SOURCE_GUIDANCE } from './assertion-evidence.mjs';
 import { VISIBILITY_EVIDENCE_GUIDANCE } from './expectation-visibility.mjs';
+import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
 import {
   TABLE_ASSERTION_GUIDANCE,
   ADAPTIVE_NUMERIC_GUIDANCE,
@@ -437,6 +438,7 @@ ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
 ${VISIBILITY_EVIDENCE_GUIDANCE}
+${SELECTION_TIMING_GUIDANCE}
 Observed text_context entries are read-only short text nodes with independently checked unique locators, not expected values or evidence of a pass. Use the actual page-counter target for pagination checks; an entire table or a Next/Previous button is not the counter. Keep original expected page values even if the observed text disagrees. If a counter changes after navigation, observe again and bind its actual node; never assume a table target_ref also locates nearby pagination text.
 ${DEFINITION_GUIDANCE}`;
 

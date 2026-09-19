@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 27,
+    "version": 28,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,9 @@
     }
   ],
   "confirmed_facts": [
+    "版本28工程完成：selection-timing对当前原步骤字面肯定页签切换后的aria_selected=true按checkpoint顺序核验同目标先有click，部分与完整候选均适用；不读当前选中值改oracle，不借前一步/别对象/未来动作，默认或显式前态仍独立原样检查。22定向反例纳入12文件249项受影响回归，0失败/取消/跳过，77982.652ms，validation/req0017/v28-regression.log。实际Chromium+Controller注入：提前断言零派发，修正单次切换正常完成；真正切换后仍false仍FAIL_ASSERTION；持续提前断言零动作零断言技术停止；v23默认页签真实false反例仍保留。模型API未调用，提交后限定原F1最多100调用/15分钟复验，满足逐义务后再扩8例。",
+    "版本27真实F1 round-6bUm6C结束：a4e1eb2/2f24c598fbaa构建，27调用/148962ms、16媒体SHA一致。S01–05完整，S04自身三字段与同dialog历史备注visible同样本9fa03269-fbd8-4d54-942a-6034cb27d2cc实际满足，本轮没有把条件数字强制为备注值。但S06零切回动作先断言基本信息aria_selected=true，实际false即停，是正常页误报，S06/07未完成；关闭守卫尚未官方触达。累计22官方完成轮1943调用/9565590ms，不计本例通过。",
+    "版本28修改前状态卡：v27真实F1 S06候选无动作，却把尚未切回的基本信息aria_selected=true挂在字段值义务下提前执行，真实false被误报业务失败；部分审查仅ASSERTION_GAP允许该断言派发。唯一目标=阻止明确原步骤切换页签的动作后选中检查跑到对应动作之前，不能按当前值改预期或重试实际差异。有限实现=当前原步骤肯定字面切换到/切换至/切回/点击/选择X页签，候选aria_selected=true且同名精确role tab时，按checkpoints顺序要求此前/同点已有同目标click；前一原步骤、别对象、后续checkpoint不能借用。原expected显式默认/初始/操作前等前态声明不由该规则重解释；否定/条件/示例和不支持语法保持独立审查。不论complete:false/true，已提供的提前断言派发前返回时序缺口，在原额度内纠正候选，允许只发合法切换然后补测，不补点击、不重放。真实点击后未选中仍业务失败。工程=顺序/同对象/来源/部分态单元、Controller错误候选零派发→单次合法切换成功/真实未选中失败/持续提前断言停止，原默认页签反例保持。官方F1另有限复验，原输入及历史失败不改。",
     "版本27工程完成：自适应完成态新增受限可见/关闭必要证据守卫与共享指导、精确恢复反馈；部分候选可缺证据，完整候选字段值/点击/背景列表不能代替明确可见或同dialog消失结果。原义务、预算和已派发动作保持。30纯函数/语义反例及3真实Chromium+Controller注入场景纳入12文件250项，0失败/取消/跳过，77048.6394ms，validation/req0017/v27-regression.log。关闭一次后正常补hidden成功、真实仍开FAIL_ASSERTION、持续不给证据技术停止；不计官方模型。首次控制器测试候选未绑定关闭义务，旧来源校验先拒绝，修正测试使背景标题虚挂关闭ID来重现原失败；v27-controller.log保留。官方F1待冻结后复验（最多100调用/15分钟），通过逐义务核验才整组扩量。",
     "版本26真实子集round-LDV6xA已结束：e7b98cf/9ecacfa0334e构建，69调用/404948ms，40媒体SHA与原输入一致。Q2 S01/S02完整后S03实际检出预期3条而6条、额外H104及缺H110；v25字幕迟到未再发生，原窗不扩。F2 S04自身definition额定功率320 kW对220 kW差异，非技术失败。F1虽7步30断言PASS标签，S04备注可见/S07关闭后弹窗消失未实际测，完整验收不成立，不能宣称3例全部满足。两指定缺陷检出，1正常记录完成但覆盖不足；累计21完成官方轮1916调用/9416628ms，40不同流程/30浏览器例保持。",
     "版本27修改前状态卡：v26真实F1记录7步COMPLETE/30断言，但S04仅自身额定功率共同绑定来源约束而漏可见历史备注；S07只点击关闭并验列表字段，没有同一弹窗hidden/不存在证据，不计完整语义验收。唯一目标=完成候选对明确复合可见声明与关闭后状态补必要证据，不改原预期，不以metadata/点击/背景列表可读替代结果。有限实现=自适应完成态必要守卫，仅识别明确肯定的“可见X即使…”来源约束和原动作字面关闭X+同一步X关闭后/已关闭；有名字/范围关联才要求对应可见测量或原关闭动作同一dialog的hidden/count0，排除否定/条件/示例，不猜别名或一般自然语言。部分片段允许尚缺证据，已提供非法断言继续拒绝；完整候选返回可操作缺口，在原重规划预算内补断言、不重放关闭。工程反例=字段值不证明备注可见、标题字段不证明内容、隐藏其他弹窗/测关闭按钮/错误义务不构成同对象关闭证据、真实未关闭必须差异、持续不补必须停、正常补证。原17冻结资产、预算、字段差异停止保持。工程与官方F1复验分列；通过后才扩整组。",
@@ -179,7 +182,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。 版本23新增aria_selected布尔测量限role=tab且显式true/false；selected_label仍限SELECT。现场类型不匹配在派发前定向纠错，不点击页签制造预期，缺失状态技术失败，真实未选中为差异。 版本24新增受限table_order关系，当前原步骤字段/方向与技术列绑定分离，完整原生矩阵同次采样当前页单调顺序。数字同单位/15有效位，无转换；等宽同前缀编号不猜排序规则。至少2行，真实逆序一次采样失败；不替代精确位置/字段/数量/跨页义务。 版本25检查点私有关系字幕队列：每个动作后原基线比较和事实持久化仍立即进行；最终业务组在原deadline采样后再播放字幕，异常也排空且字幕故障仅证据部分，不覆盖业务错误；不重放动作、不扩时。 版本26共享证据来源约束语义，候选只读语法目录区分自身字段/列/整区域/标题；即使干扰值出现不等于要求其出现，显式正向备注义务仍须测量。标签不代表DOM验证，来源、审查及执行比较保持。 版本27仅自适应完成态要求有限明确可见/关闭条款的实际必要测量：可见X即使的X单独visible，原关闭动作绑定的同dialog须hidden或count0；字段/点击/背景列表不能代替。否定/条件/示例/未支持表达不由此推定，独立审查仍负责全部语义。",
+      "summary": "版本22扩展现有table_unchanged来源识别：明确表格/列表内容与本步骤操作前完全一致/相同，以及未应用条件，同一函数用于提前捕获、计划来源和完整覆盖。排除否定/条件/例子/选择分支、上一步/历史/操作后/外部标准和仅记录数关系；不一般性解释任意同义词。运行器基线绑定、实际矩阵比较和差异不重试保持，不能事后捕获或用当前固定值代替关系。v20审查反馈/旧来源守卫继续保持。 版本23新增aria_selected布尔测量限role=tab且显式true/false；selected_label仍限SELECT。现场类型不匹配在派发前定向纠错，不点击页签制造预期，缺失状态技术失败，真实未选中为差异。 版本24新增受限table_order关系，当前原步骤字段/方向与技术列绑定分离，完整原生矩阵同次采样当前页单调顺序。数字同单位/15有效位，无转换；等宽同前缀编号不猜排序规则。至少2行，真实逆序一次采样失败；不替代精确位置/字段/数量/跨页义务。 版本25检查点私有关系字幕队列：每个动作后原基线比较和事实持久化仍立即进行；最终业务组在原deadline采样后再播放字幕，异常也排空且字幕故障仅证据部分，不覆盖业务错误；不重放动作、不扩时。 版本26共享证据来源约束语义，候选只读语法目录区分自身字段/列/整区域/标题；即使干扰值出现不等于要求其出现，显式正向备注义务仍须测量。标签不代表DOM验证，来源、审查及执行比较保持。 版本27仅自适应完成态要求有限明确可见/关闭条款的实际必要测量：可见X即使的X单独visible，原关闭动作绑定的同dialog须hidden或count0；字段/点击/背景列表不能代替。否定/条件/示例/未支持表达不由此推定，独立审查仍负责全部语义。 版本28当前步骤肯定字面切换页签时，aria_selected=true须在同目标click之后，按checkpoints顺序且部分候选同样校验；默认/初始/明确前态不重解释。仅必要时序，实际选中值不参与补造预期或重试决定。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -250,7 +253,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本27可见/关闭必要证据守卫及精确补测恢复已实现，250项受影响工程无失败。真实未关闭仍失败、已关闭补证后成功且关闭仅一次；官方F1与后续扩组待执行。 工程模型为可控替身，采样的是仍有效页面内原生dialog的显示状态，不访问已释放资源；官方模型本版尚未运行。",
+      "task": "版本28受限页签动作后断言时序守卫与反馈已实现，249项受影响工程无失败。注入模型为可控替身；提前断言先拦截，正常单次切换完成、真实后态差异仍失败，持续非法零执行。官方F1待复验，不继承前轮误报为产品通过。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -327,12 +330,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/expectation-visibility.test.mjs tests/expectation-visibility.execution.test.mjs tests/assertion-evidence.test.mjs tests/assertion-evidence.execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/selection-timing.test.mjs tests/selection-timing.execution.test.mjs tests/aria-selected.test.mjs tests/aria-selected.execution.test.mjs tests/expectation-visibility.test.mjs tests/expectation-visibility.execution.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-source-recovery.test.mjs tests/plan-quality.test.mjs",
         "exit_code": 0,
-        "test_count": 250,
+        "test_count": 249,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v27-regression.log"
+        "log_path": "validation/req0017/v28-regression.log"
       }
     },
     {
@@ -428,7 +431,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "版本27有限可见/关闭证据守卫250项受影响工程无失败，原窗口/预算/动作不重放保持；真实F1待复验，不把版本26漏测标签视为验收。"
+      "status": "版本28页签动作后断言先后约束249项工程无失败，默认状态/真实后态差异保持；官方F1待复验。"
     },
     {
       "un_id": "UN-0017-01",
@@ -452,7 +455,7 @@
       "dd_id": "DD-0017-05",
       "tk_id": "TK-0017-05",
       "vt_id": "VT-0017-05",
-      "status": "版本26三例69调用/40媒体SHA一致；Q2/F2指定缺陷检出，F1记录完成但漏可见/关闭证据，不计完整验收。累计21轮1916调用/9416628ms；版本27先补必要证据守卫。"
+      "status": "版本27F1真实27调用，备注可见补齐，但未切回先断言选中误报；16媒体SHA一致。累计22官方轮1943调用/9565590ms，整例自主及重复稳定性未达。"
     }
   ],
   "trace_history": [
@@ -482,6 +485,14 @@
     "不得把模型审查/预置计划/注入回复/回放/工程测试计为自主产品验收。"
   ],
   "changes": [
+    {
+      "date": "2026-09-20",
+      "version": 28,
+      "type": "动作后选中检查的必要先后约束",
+      "description": "版本28工程完成：selection-timing对当前原步骤字面肯定页签切换后的aria_selected=true按checkpoint顺序核验同目标先有click，部分与完整候选均适用；不读当前选中值改oracle，不借前一步/别对象/未来动作，默认或显式前态仍独立原样检查。22定向反例纳入12文件249项受影响回归，0失败/取消/跳过，77982.652ms，validation/req0017/v28-regression.log。实际Chromium+Controller注入：提前断言零派发，修正单次切换正常完成；真正切换后仍false仍FAIL_ASSERTION；持续提前断言零动作零断言技术停止；v23默认页签真实false反例仍保留。模型API未调用，提交后限定原F1最多100调用/15分钟复验，满足逐义务后再扩8例。",
+      "impact": "自适应候选语义/规划审查指导/派发前修正；原预算及实际差异不重试",
+      "confirmed_by": "用户本轮自主迭代目标"
+    },
     {
       "date": "2026-09-20",
       "version": 27,

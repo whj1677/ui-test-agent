@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_SELECTION_BEFORE_ACTION:
+    'No action or assertion was dispatched for this candidate. A post-switch selected=true check was proposed before its same-target switch in this original step. Follow detail.reason: propose the authorized switch, then its original postconditions, or omit only unsupported preparatory assertions. Preserve original defaults/pre-action expectations. Reuse an already executed locator instead of replaying a switch; different object/previous step/future action is not proof. After actual dispatch, a real selection difference still stops.',
   PLAN_VISIBILITY_UNPROVEN:
     'This completion candidate lacks an original visibility/closed-state witness. Read detail.reason for the exact obligation and target scope. Keep already measured field values and their source refs; add the named region visible or the SAME whole dialog hidden/count=0 as required, then independently re-audit. A matching field, click, button disappearance or background list is not that proof. Earlier dispatched actions must not be replayed; the original replan budget/deadline still apply.',
   TABLE_ORDER_SOURCE_REQUIRED:

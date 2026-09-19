@@ -8,6 +8,7 @@ import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertio
 import { extractRowPositions } from './table-position.mjs';
 import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.mjs';
 import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
+import { selectionTimingGaps } from './selection-timing.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -115,6 +116,15 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
   );
   for (const [i, step] of (plan.steps ?? []).entries()) {
     const original = c.steps[i];
+    if (context.adaptive_readonly) {
+      const timingGaps = selectionTimingGaps(original, step);
+      if (timingGaps.length)
+        reject(
+          'ASSERTION_SELECTION_BEFORE_ACTION',
+          `plan.steps[${i}].assertions`,
+          timingGaps.map((g) => g.reason).join('\n'),
+        );
+    }
     // Partial execution may defer missing coverage, never the validity of a
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
