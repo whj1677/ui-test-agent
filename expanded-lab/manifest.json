@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "case_count": 32,
+  "files": [
+    {
+      "path": "manual-lab/public/index.html",
+      "sha256": "59fb33f6712b4ceb7012585325054a0f7909bab743701a6c4b7e3170d9645f5e"
+    },
+    {
+      "path": "manual-lab/cases/01-valid.json",
+      "sha256": "881c3a234a8d1e9803a5952746aa71a8b9c6b5c3575b704efd0de6aa361af675"
+    },
+    {
+      "path": "manual-lab/cases/02-needs-review.json",
+      "sha256": "c8ba08bbc32e21c425edff0f061d6552468dad8b2bf74442ea6e77a8cef26184"
+    },
+    {
+      "path": "manual-lab/cases/03-known-defects.json",
+      "sha256": "d4c16a831d2dca478078043bb4429104be0c9f95587960ededac5a001034fd6f"
+    },
+    {
+      "path": "manual-lab/SPEC.md",
+      "sha256": "36b00ee513c58cedafb4ece6723423ad958e956da2a85a1e0b714aa9217c3927"
+    },
+    {
+      "path": "expanded-lab/public/index.html",
+      "sha256": "dd2aa855f03d2f889c2d284cf7c5b07df8832d3123c172fdae42fa4f2b1aae2b"
+    },
+    {
+      "path": "expanded-lab/public/app.js",
+      "sha256": "65830fb1272f58d6577e10fd97787f811b75e58441d7747914c31516f32febb7"
+    },
+    {
+      "path": "expanded-lab/public/style.css",
+      "sha256": "98010a6d77fd11c96380f1f49c20d7144a42c661c68fafcca18bf1d60afb61b6"
+    },
+    {
+      "path": "expanded-lab/cases.json",
+      "sha256": "8144cdefa2ae777ff483eeedc511919432d3001a9452517f71ba3cccb3a13b8f"
+    },
+    {
+      "path": "expanded-lab/oracle.json",
+      "sha256": "5d64b7147f34cb65ef672c16444509f8bb53152694bb1b7ff401b1c7720d66dd"
+    },
+    {
+      "path": "expanded-lab/SPEC.md",
+      "sha256": "6c9bdf0702fc11d2aac96d9f65df3ee7616645fd095d75a4d000467593c77105"
+    }
+  ]
+}

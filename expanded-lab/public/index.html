@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>巡维资产工作台</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主内容</a>
+    <aside class="nav">
+      <strong>巡维资产工作台</strong>
+      <p>本机离线 · 合成资料</p>
+      <nav aria-label="业务导航">
+        <a href="/">运营总览</a>
+        <details open>
+          <summary>资产管理</summary>
+          <div id="entries"></div>
+        </details>
+      </nav>
+    </aside>
+    <div class="workspace">
+      <header><span>运营中心 / 资产管理</span><span class="badge">只读演练</span></header>
+      <main id="main" tabindex="-1"></main>
+    </div>
+  </body>
+</html>

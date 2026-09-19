@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "CON-A1",
+      "path": "/site/a1",
+      "expected": "PASS_ASSERTIONS",
+      "field": "power",
+      "actual": "200 kW"
+    },
+    {
+      "id": "CON-A2",
+      "path": "/site/a2",
+      "expected": "FAIL_ASSERTION",
+      "field": "power",
+      "actual": "120 kW"
+    },
+    {
+      "id": "CON-B1",
+      "path": "/site/b1",
+      "expected": "PASS_ASSERTIONS",
+      "field": "park",
+      "actual": "南园"
+    },
+    {
+      "id": "CON-B2",
+      "path": "/site/b2",
+      "expected": "FAIL_ASSERTION",
+      "field": "park",
+      "actual": "储能柜"
+    },
+    {
+      "id": "CON-C1",
+      "path": "/site/c1",
+      "expected": "PASS_ASSERTIONS",
+      "field": "identity",
+      "actual": "D009"
+    },
+    {
+      "id": "CON-C2",
+      "path": "/site/c2",
+      "expected": "FAIL_ASSERTION",
+      "field": "identity",
+      "actual": "D001"
+    },
+    {
+      "id": "CON-D1",
+      "path": "/site/d1",
+      "expected": "PASS_ASSERTIONS",
+      "field": "unobstructed",
+      "actual": true
+    },
+    {
+      "id": "CON-D2",
+      "path": "/site/d2",
+      "expected": "FAIL_ASSERTION",
+      "field": "unobstructed",
+      "actual": false
+    }
+  ]
+}

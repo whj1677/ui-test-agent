@@ -2,653 +2,476 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-19T20:44:30+08:00`
+- Generated at: `2026-09-19T22:01:13+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `e2a3251aadc6f6b36bfec05719229b310aa55c1365e03f8f8f7c864610e478bd`
+- Change fingerprint: `0da816005a91ecc7d735a31b7515f19900a222ba0effd1211c05fc4f456b7784`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs`
+- Command: `node --test --test-concurrency=1 expanded-lab/verify.test.mjs expanded-lab/grading.test.mjs manual-lab/verify.test.mjs`
 - Exit code: `0`
-- Test count: `305`
+- Test count: `60`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v8-targeted.log`
-- Log SHA-256: `60deafa307c8de709ef31473ad1d1dcb7b4225c65290951e47ffba72f81dab1e`
+- Log path: `validation/req0017/v9-fixture-verified.log`
+- Log SHA-256: `fd87701b293952079a8787a70cb8fb164fff2ff9b1a2a7725f07116440c1c2ca`
 
 ### Git Status
 
 ```text
  M docs/modules/release_runtime.md
+ M docs/requirements/README.md
  M docs/requirements/REQ-0017-controlled-react/00_user_requirement.md
  M docs/requirements/REQ-0017-controlled-react/02_design.md
  M docs/requirements/REQ-0017-controlled-react/03_tasks.md
+ M docs/requirements/REQ-0017-controlled-react/04_verification.md
+ M docs/requirements/REQ-0017-controlled-react/05_trace.md
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/adaptive-recovery.mjs
- M src/controller.mjs
- M src/plan-semantics.mjs
-?? tests/adaptive-semantic-boundary.test.mjs
+?? expanded-lab/README.md
+?? expanded-lab/SPEC.md
+?? expanded-lab/cases.json
+?? expanded-lab/check-freeze.mjs
+?? expanded-lab/grade.mjs
+?? expanded-lab/grading.test.mjs
+?? expanded-lab/manifest.json
+?? expanded-lab/oracle.json
+?? expanded-lab/public/app.js
+?? expanded-lab/public/index.html
+?? expanded-lab/public/style.css
+?? expanded-lab/serve.mjs
+?? expanded-lab/verify.test.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
 warning: in the working copy of 'docs/modules/release_runtime.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/02_design.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_trace.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/controller.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
- docs/modules/release_runtime.md                    |  10 +
- .../00_user_requirement.md                         |   1 +
+ docs/modules/release_runtime.md                    |   5 +
+ docs/requirements/README.md                        |   2 +-
+ .../00_user_requirement.md                         |   3 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
+ .../REQ-0017-controlled-react/04_verification.md   |   4 +-
+ .../REQ-0017-controlled-react/05_trace.md          |   2 +-
  .../REQ-0017-controlled-react/change_log.md        |   1 +
- .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 274 ++++++++++-----------
- .../requirement.source.json                        |  19 +-
- src/adaptive-recovery.mjs                          |   2 +
- src/controller.mjs                                 |   4 +-
- src/plan-semantics.mjs                             | 142 ++++++-----
- 11 files changed, 238 insertions(+), 227 deletions(-)
+ .../REQ-0017-controlled-react/current_state.md     |   7 +-
+ .../REQ-0017-controlled-react/delivery_evidence.md | 673 ++++++++-------------
+ .../requirement.source.json                        |  26 +-
+ 11 files changed, 285 insertions(+), 442 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-tests/adaptive-semantic-boundary.test.mjs
+expanded-lab/README.md
+expanded-lab/SPEC.md
+expanded-lab/cases.json
+expanded-lab/check-freeze.mjs
+expanded-lab/grade.mjs
+expanded-lab/grading.test.mjs
+expanded-lab/manifest.json
+expanded-lab/oracle.json
+expanded-lab/public/app.js
+expanded-lab/public/index.html
+expanded-lab/public/style.css
+expanded-lab/serve.mjs
+expanded-lab/verify.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-19T20:34:32+08:00
-Command: node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs
+Started at: 2026-09-19T22:00:40+08:00
+Command: node --test --test-concurrency=1 expanded-lab/verify.test.mjs expanded-lab/grading.test.mjs manual-lab/verify.test.mjs
 Exit code: 0
-Parsed test count: 305
+Parsed test count: 60
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: final adaptive dispatch validates actual node: write
-ok 1 - final adaptive dispatch validates actual node: write
+# Subtest: missing cases remain in denominator, not successful skips
+ok 1 - missing cases remain in denominator, not successful skips
   ---
-  duration_ms: 1016.8801
+  duration_ms: 0.6745
   type: 'test'
   ...
-# Subtest: final adaptive dispatch validates actual node: replacement
-ok 2 - final adaptive dispatch validates actual node: replacement
+# Subtest: fault technical block is never defect detection
+ok 2 - fault technical block is never defect detection
   ---
-  duration_ms: 1019.5621
+  duration_ms: 0.1406
   type: 'test'
   ...
-# Subtest: final adaptive dispatch validates actual node: late-name
-ok 3 - final adaptive dispatch validates actual node: late-name
+# Subtest: fault returning pass is explicitly false pass
+ok 3 - fault returning pass is explicitly false pass
   ---
-  duration_ms: 891.0282
+  duration_ms: 0.09
   type: 'test'
   ...
-# Subtest: final adaptive dispatch validates actual node: password
-ok 4 - final adaptive dispatch validates actual node: password
+# Subtest: real failure still requires checking the measured target
+ok 4 - real failure still requires checking the measured target
   ---
-  duration_ms: 940.5847
+  duration_ms: 0.0911
   type: 'test'
   ...
-# Subtest: final adaptive dispatch validates actual node: valid
-ok 5 - final adaptive dispatch validates actual node: valid
+# Subtest: normal fixture assertion failure is not a business defect acceptance
+ok 5 - normal fixture assertion failure is not a business defect acceptance
   ---
-  duration_ms: 783.5144
+  duration_ms: 0.0761
   type: 'test'
   ...
-# Subtest: measured assertion repeated with complete=true may finalize
-ok 6 - measured assertion repeated with complete=true may finalize
+# Subtest: candidate plan is not execution
+ok 6 - candidate plan is not execution
   ---
-  duration_ms: 43710.9544
+  duration_ms: 0.0843
   type: 'test'
   ...
-# Subtest: measured assertion repeated with complete=false still stops as no progress
-ok 7 - measured assertion repeated with complete=false still stops as no progress
+# Subtest: review label without a question is not established clarification
+ok 7 - review label without a question is not established clarification
   ---
-  duration_ms: 29933.4683
+  duration_ms: 0.0637
   type: 'test'
   ...
-# Subtest: partial audit gaps survive success and a repeated measurement recovers without replaying actions
-ok 8 - partial audit gaps survive success and a repeated measurement recovers without replaying actions
+# Subtest: ambiguous cases must not execute
+ok 8 - ambiguous cases must not execute
   ---
-  duration_ms: 42709.3214
+  duration_ms: 0.0608
   type: 'test'
   ...
-# Subtest: contradictory audit returns candidate feedback without executing or erasing its negative finding
-ok 9 - contradictory audit returns candidate feedback without executing or erasing its negative finding
+# Subtest: status pass alone cannot prove original step completeness
+ok 9 - status pass alone cannot prove original step completeness
   ---
-  duration_ms: 38312.9069
+  duration_ms: 0.3631
   type: 'test'
   ...
-# Subtest: focused gap repair refuses an extra navigation action before dispatch
-ok 10 - focused gap repair refuses an extra navigation action before dispatch
+# Subtest: independent truth CON-A1
+ok 10 - independent truth CON-A1
   ---
-  duration_ms: 28538.9406
+  duration_ms: 1210.1663
   type: 'test'
   ...
-# Subtest: no remaining obligations feedback permits a no-action completion but never replays navigation
-ok 11 - no remaining obligations feedback permits a no-action completion but never replays navigation
+# Subtest: independent truth CON-A2
+ok 11 - independent truth CON-A2
   ---
-  duration_ms: 42354.5442
+  duration_ms: 507.3508
   type: 'test'
   ...
-# Subtest: real-response format error then mistaken blocked recovers without replaying menu clicks
-ok 12 - real-response format error then mistaken blocked recovers without replaying menu clicks
+# Subtest: independent truth CON-B1
+ok 12 - independent truth CON-B1
   ---
-  duration_ms: 38101.2976
+  duration_ms: 1025.0734
   type: 'test'
   ...
-# Subtest: malformed audit response repairs only the audit while preserving executed actions
-ok 13 - malformed audit response repairs only the audit while preserving executed actions
+# Subtest: independent truth CON-B2
+ok 13 - independent truth CON-B2
   ---
-  duration_ms: 37981.0433
+  duration_ms: 537.0213
   type: 'test'
   ...
-# Subtest: repeated blocked is terminal after one evidence-based reconsideration
-ok 14 - repeated blocked is terminal after one evidence-based reconsideration
+# Subtest: independent truth CON-C1
+ok 14 - independent truth CON-C1
   ---
-  duration_ms: 6387.3614
+  duration_ms: 563.212
   type: 'test'
   ...
-# Subtest: current target/source refs execute through the real controller and browser kernel
-ok 15 - current target/source refs execute through the real controller and browser kernel
+# Subtest: independent truth CON-C2
+ok 15 - independent truth CON-C2
   ---
-  duration_ms: 37938.5663
+  duration_ms: 546.6321
   type: 'test'
   ...
-# Subtest: exhausted audit format repair is terminal without spending a fresh planning round
-ok 16 - exhausted audit format repair is terminal without spending a fresh planning round
+# Subtest: independent truth CON-D1
+ok 16 - independent truth CON-D1
   ---
-  duration_ms: 6502.7908
+  duration_ms: 686.3666
   type: 'test'
   ...
-# Subtest: direct test dynamically handles button navigation without upfront technical plan
-ok 17 - direct test dynamically handles button navigation without upfront technical plan
+# Subtest: independent truth CON-D2
+ok 17 - independent truth CON-D2
   ---
-  duration_ms: 38417.0881
+  duration_ms: 623.8804
   type: 'test'
   ...
-# Subtest: direct test dynamically handles link navigation without upfront technical plan
-ok 18 - direct test dynamically handles link navigation without upfront technical plan
+# Subtest: import eight complete cases without grading outcomes or variant hints
+ok 18 - import eight complete cases without grading outcomes or variant hints
   ---
-  duration_ms: 38114.4954
+  duration_ms: 3.3191
   type: 'test'
   ...
-# Subtest: actual business mismatch stops without changing oracle or replaying actions
-ok 19 - actual business mismatch stops without changing oracle or replaying actions
+# Subtest: server does not serve grading or repository: /oracle.json
+ok 19 - server does not serve grading or repository: /oracle.json
   ---
-  duration_ms: 38544.5174
+  duration_ms: 15.0873
   type: 'test'
   ...
-# Subtest: a pre-dispatch locator failure is locally replanned and the rejected attempt is retained
-ok 20 - a pre-dispatch locator failure is locally replanned and the rejected attempt is retained
+# Subtest: server does not serve grading or repository: /SPEC.md
+ok 20 - server does not serve grading or repository: /SPEC.md
   ---
-  duration_ms: 40110.4129
+  duration_ms: 4.4983
   type: 'test'
   ...
-# Subtest: model completion cannot skip original expected obligations
-ok 21 - model completion cannot skip original expected obligations
+# Subtest: server does not serve grading or repository: /cases.json
+ok 21 - server does not serve grading or repository: /cases.json
   ---
-  duration_ms: 24481.7244
+  duration_ms: 2.6289
   type: 'test'
   ...
-# Subtest: direct entry refuses write authorization and unreviewed input
-ok 22 - direct entry refuses write authorization and unreviewed input
+# Subtest: server does not serve grading or repository: /verify.test.mjs
+ok 22 - server does not serve grading or repository: /verify.test.mjs
   ---
-  duration_ms: 1013.167
+  duration_ms: 2.5363
   type: 'test'
   ...
-# Subtest: ambiguous assertion can repair its scope without replaying completed actions
-ok 23 - ambiguous assertion can repair its scope without replaying completed actions
+# Subtest: server does not serve grading or repository: /../src/server.mjs
+ok 23 - server does not serve grading or repository: /../src/server.mjs
   ---
-  duration_ms: 38081.1607
+  duration_ms: 2.3287
   type: 'test'
   ...
-# Subtest: assertion scope repair cannot change the predicate or expected result
-ok 24 - assertion scope repair cannot change the predicate or expected result
+# Subtest: server does not serve grading or repository: /site/a1?oracle=1
+ok 24 - server does not serve grading or repository: /site/a1?oracle=1
   ---
-  duration_ms: 24081.1937
+  duration_ms: 2.5687
   type: 'test'
   ...
-# Subtest: real pagination-button misbinding is rejected before partial or complete execution
-ok 25 - real pagination-button misbinding is rejected before partial or complete execution
+# Subtest: server only accepts readonly methods
+ok 25 - server only accepts readonly methods
   ---
-  duration_ms: 14.4824
+  duration_ms: 2.7805
   type: 'test'
   ...
-# Subtest: contract copies exact original strings, hashes full Case and contains no precompiled checkpoints
-ok 26 - contract copies exact original strings, hashes full Case and contains no precompiled checkpoints
+# Subtest: query empty result and reset keep row identity
+ok 26 - query empty result and reset keep row identity
   ---
-  duration_ms: 4.4575
+  duration_ms: 272.7859
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects extra top field
-ok 27 - strict adaptive contract rejects extra top field
+# Subtest: normal nested Escape restores parent and focus
+ok 27 - normal nested Escape restores parent and focus
   ---
-  duration_ms: 0.4554
+  duration_ms: 574.9089
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects missing notes
-ok 28 - strict adaptive contract rejects missing notes
+# Subtest: closing while pending does not resurrect stale detail
+ok 28 - closing while pending does not resurrect stale detail
   ---
-  duration_ms: 0.4509
+  duration_ms: 652.5622
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects wrong version
-ok 29 - strict adaptive contract rejects wrong version
+# Subtest: usable layout 375
+ok 29 - usable layout 375
   ---
-  duration_ms: 0.7661
+  duration_ms: 611.3988
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects wrong case id
-ok 30 - strict adaptive contract rejects wrong case id
+# Subtest: usable layout 768
+ok 30 - usable layout 768
   ---
-  duration_ms: 0.6672
+  duration_ms: 587.885
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects wrong hash
-ok 31 - strict adaptive contract rejects wrong hash
+# Subtest: usable layout 1440
+ok 31 - usable layout 1440
   ---
-  duration_ms: 0.5916
+  duration_ms: 594.8931
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects external entry
-ok 32 - strict adaptive contract rejects external entry
+# Subtest: broad text witness can match a wrong field/object /site/a2
+ok 32 - broad text witness can match a wrong field/object /site/a2
   ---
-  duration_ms: 0.5293
+  duration_ms: 532.3283
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects mutation
-ok 33 - strict adaptive contract rejects mutation
+# Subtest: broad text witness can match a wrong field/object /site/b2
+ok 33 - broad text witness can match a wrong field/object /site/b2
   ---
-  duration_ms: 0.783
+  duration_ms: 546.132
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects cleanup
-ok 34 - strict adaptive contract rejects cleanup
+# Subtest: broad text witness can match a wrong field/object /site/c2
+ok 34 - broad text witness can match a wrong field/object /site/c2
   ---
-  duration_ms: 0.7223
+  duration_ms: 521.546
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects precondition
-ok 35 - strict adaptive contract rejects precondition
+# Subtest: 24 native-import cases have isolated identities, fixed groups and accurate original oracle
+ok 35 - 24 native-import cases have isolated identities, fixed groups and accurate original oracle
   ---
-  duration_ms: 0.5544
+  duration_ms: 354.9889
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects policy extra
-ok 36 - strict adaptive contract rejects policy extra
+# Subtest: server exposes only local synthetic routes, never answer files, source or write APIs
+ok 36 - server exposes only local synthetic routes, never answer files, source or write APIs
   ---
-  duration_ms: 0.3556
+  duration_ms: 52.8277
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects policy mode
-ok 37 - strict adaptive contract rejects policy mode
+# Subtest: V01 homepage navigation exposes 12 assets and 5 first-page rows
+ok 37 - V01 homepage navigation exposes 12 assets and 5 first-page rows
   ---
-  duration_ms: 0.3144
+  duration_ms: 582.3724
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects segment budget
-ok 38 - strict adaptive contract rejects segment budget
+# Subtest: V02 compound AND filter distinguishes the same-name south device
+ok 38 - V02 compound AND filter distinguishes the same-name south device
   ---
-  duration_ms: 0.2991
+  duration_ms: 302.891
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects replan budget
-ok 39 - strict adaptive contract rejects replan budget
+# Subtest: V03 paginated same-name record binds D009, never D001
+ok 39 - V03 paginated same-name record binds D009, never D001
   ---
-  duration_ms: 0.2698
+  duration_ms: 1128.6393
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects missing step
-ok 40 - strict adaptive contract rejects missing step
+# Subtest: V04 tabs preserve D009 identity and specified parameter values
+ok 40 - V04 tabs preserve D009 identity and specified parameter values
   ---
-  duration_ms: 0.3189
+  duration_ms: 1205.1405
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects reordered steps
-ok 41 - strict adaptive contract rejects reordered steps
+# Subtest: V05 nested modal blocks background and closes only the top layer
+ok 41 - V05 nested modal blocks background and closes only the top layer
   ---
-  duration_ms: 1.5201
+  duration_ms: 1596.0215
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects changed source
-ok 42 - strict adaptive contract rejects changed source
+# Subtest: V06 querying from later page and resetting restore pagination
+ok 42 - V06 querying from later page and resetting restore pagination
   ---
-  duration_ms: 0.8286
+  duration_ms: 423.6726
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects step extra
-ok 43 - strict adaptive contract rejects step extra
+# Subtest: V07 descending numeric power sort and reset
+ok 43 - V07 descending numeric power sort and reset
   ---
-  duration_ms: 0.5338
+  duration_ms: 380.5656
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects precompiled step
-ok 44 - strict adaptive contract rejects precompiled step
+# Subtest: V08 deterministic async read error recovers once with the correct device value
+ok 44 - V08 deterministic async read error recovers once with the correct device value
   ---
-  duration_ms: 0.4658
+  duration_ms: 2906.3883
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects illegal timeout
-ok 45 - strict adaptive contract rejects illegal timeout
+# Subtest: V09 inclusive date range returns exactly two matching maintenance rows
+ok 45 - V09 inclusive date range returns exactly two matching maintenance rows
   ---
-  duration_ms: 0.2794
+  duration_ms: 1256.9496
   type: 'test'
   ...
-# Subtest: strict adaptive contract rejects string timeout
-ok 46 - strict adaptive contract rejects string timeout
+# Subtest: closing a loading detail prevents its delayed contents reopening on a new route
+ok 46 - closing a loading detail prevents its delayed contents reopening on a new route
   ---
-  duration_ms: 0.6342
+  duration_ms: 1279.936
   type: 'test'
   ...
-# Subtest: Case hash includes data and changes are never silently rebased
-ok 47 - Case hash includes data and changes are never silently rebased
+# Subtest: V10 standard tariff correct non-defect values
+ok 47 - V10 standard tariff correct non-defect values
   ---
-  duration_ms: 0.8759
+  duration_ms: 300.078
   type: 'test'
   ...
-# Subtest: action-only, assertion-only and copied fragment return; no inputs are mutated
-ok 48 - action-only, assertion-only and copied fragment return; no inputs are mutated
+# Subtest: V11 conditional tariff help remains nested and keeps the right template
+ok 48 - V11 conditional tariff help remains nested and keeps the right template
   ---
-  duration_ms: 2.2195
+  duration_ms: 415.8719
   type: 'test'
   ...
-# Subtest: fragment rejects extra field
-ok 49 - fragment rejects extra field
+# Subtest: V12 audit pages and result filter reset page position
+ok 49 - V12 audit pages and result filter reset page position
   ---
-  duration_ms: 0.6397
+  duration_ms: 372.7501
   type: 'test'
   ...
-# Subtest: fragment rejects missing reason
-ok 50 - fragment rejects missing reason
+# Subtest: V13 wizard only creates on submit, uses dynamic id, persists all entered fields
+ok 50 - V13 wizard only creates on submit, uses dynamic id, persists all entered fields
   ---
-  duration_ms: 0.3748
+  duration_ms: 568.0175
   type: 'test'
   ...
-# Subtest: fragment rejects blank reason
-ok 51 - fragment rejects blank reason
+# Subtest: V14 missing name prevents advancing and leaves seed data alone
+ok 51 - V14 missing name prevents advancing and leaves seed data alone
   ---
-  duration_ms: 0.4292
+  duration_ms: 352.1455
   type: 'test'
   ...
-# Subtest: fragment rejects nonboolean complete
-ok 52 - fragment rejects nonboolean complete
+# Subtest: V15 step-back preserves all configured values without committing
+ok 52 - V15 step-back preserves all configured values without committing
   ---
-  duration_ms: 0.8231
+  duration_ms: 572.5873
   type: 'test'
   ...
-# Subtest: fragment rejects two actions
-ok 53 - fragment rejects two actions
+# Subtest: V16 dirty confirmation keeps data or discards only the draft
+ok 53 - V16 dirty confirmation keeps data or discards only the draft
   ---
-  duration_ms: 0.4326
+  duration_ms: 452.7441
   type: 'test'
   ...
-# Subtest: fragment rejects 21 assertions
-ok 54 - fragment rejects 21 assertions
+# Subtest: V17 duplicate name is rejected at submit with no new persisted record
+ok 54 - V17 duplicate name is rejected at submit with no new persisted record
   ---
-  duration_ms: 0.4345
+  duration_ms: 487.5097
   type: 'test'
   ...
-# Subtest: fragment rejects below time bound
-ok 55 - fragment rejects below time bound
+# Subtest: wizard keyboard priority, invalid period and escaped business text do not silently submit
+ok 55 - wizard keyboard priority, invalid period and escaped business text do not silently submit
   ---
-  duration_ms: 0.2881
+  duration_ms: 485.0447
   type: 'test'
   ...
-# Subtest: fragment rejects above time bound
-ok 56 - fragment rejects above time bound
+# Subtest: V18 update and cleanup bind only the newly created record
+ok 56 - V18 update and cleanup bind only the newly created record
   ---
-  duration_ms: 0.288
+  duration_ms: 711.297
   type: 'test'
   ...
-# Subtest: fragment rejects fractional time
-ok 57 - fragment rejects fractional time
+# Subtest: B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
+ok 57 - B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
   ---
-  duration_ms: 0.3425
+  duration_ms: 286.2647
   type: 'test'
   ...
-# Subtest: fragment rejects arbitrary operation
-ok 58 - fragment rejects arbitrary operation
+# Subtest: B02 seeded frequency defect exists only on D004, not the valid D009
+ok 58 - B02 seeded frequency defect exists only on D004, not the valid D009
   ---
-  duration_ms: 0.343
+  duration_ms: 2179.5683
   type: 'test'
   ...
-# Subtest: fragment rejects repair_anchor
-ok 59 - fragment rejects repair_anchor
+# Subtest: reload, history navigation and reset preserve isolation from unrelated storage
+ok 59 - reload, history navigation and reset preserve isolation from unrelated storage
   ---
-  duration_ms: 0.353
+  duration_ms: 754.121
   type: 'test'
   ...
-# Subtest: fragment rejects future case_named
-ok 60 - fragment rejects future case_named
+# Subtest: desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
+ok 60 - desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
   ---
-  duration_ms: 0.3114
+  duration_ms: 963.8914
   type: 'test'
   ...
-# Subtest: fragment rejects future runtime_intent
-ok 61 - fragment rejects future runtime_intent
-  ---
-  duration_ms: 0.3015
-  type: 'test'
-  ...
-# Subtest: empty completion requires earlier assertions and complete coverage, never just prior action
-ok 62 - empty completion requires earlier assertions and complete coverage, never just prior action
-  ---
-  duration_ms: 4.5508
-  type: 'test'
-  ...
-# Subtest: current original step is authoritative; previous fragments and IDs are revalidated
-ok 63 - current original step is authoritative; previous fragments and IDs are revalidated
-  ---
-  duration_ms: 2.2314
-  type: 'test'
-  ...
-# Subtest: only current action substrings and data scalar VALUES authorize input; expected and other steps do not
-ok 64 - only current action substrings and data scalar VALUES authorize input; expected and other steps do not
-  ---
-  duration_ms: 6.5787
-  type: 'test'
-  ...
-# Subtest: navigation needs same origin and whole explicit action path, not data or a path prefix
-ok 65 - navigation needs same origin and whole explicit action path, not data or a path prefix
-  ---
-  duration_ms: 5.7144
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 保存 even if literal in source
-ok 66 - read-only known-write guard rejects 保存 even if literal in source
-  ---
-  duration_ms: 0.4673
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 提交 even if literal in source
-ok 67 - read-only known-write guard rejects 提交 even if literal in source
-  ---
-  duration_ms: 0.3263
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 删除 even if literal in source
-ok 68 - read-only known-write guard rejects 删除 even if literal in source
-  ---
-  duration_ms: 0.3248
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 新建 even if literal in source
-ok 69 - read-only known-write guard rejects 新建 even if literal in source
-  ---
-  duration_ms: 0.5787
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 创建 even if literal in source
-ok 70 - read-only known-write guard rejects 创建 even if literal in source
-  ---
-  duration_ms: 1.4028
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 重置数据 even if literal in source
-ok 71 - read-only known-write guard rejects 重置数据 even if literal in source
-  ---
-  duration_ms: 1.0665
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 清空数据 even if literal in source
-ok 72 - read-only known-write guard rejects 清空数据 even if literal in source
-  ---
-  duration_ms: 0.6421
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 上传 even if literal in source
-ok 73 - read-only known-write guard rejects 上传 even if literal in source
-  ---
-  duration_ms: 1.0314
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects 退出登录 even if literal in source
-ok 74 - read-only known-write guard rejects 退出登录 even if literal in source
-  ---
-  duration_ms: 0.7033
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects Delete even if literal in source
-ok 75 - read-only known-write guard rejects Delete even if literal in source
-  ---
-  duration_ms: 1.0915
-  type: 'test'
-  ...
-# Subtest: read-only known-write guard rejects Save even if literal in source
-ok 76 - read-only known-write guard rejects Save even if literal in source
-  ---
-  duration_ms: 0.7242
-  type: 'test'
-  ...
-# Subtest: query reset is source-bound and sensitive controls are forbidden for both actions and assertions
-ok 77 - query reset is source-bound and sensitive controls are forbidden for both actions and assertions
-  ---
-  duration_ms: 8.1883
-  type: 'test'
-  ...
-# Subtest: read-only technical tools remain in fixed protocol and retain optional-dialog source conditions
-ok 78 - read-only technical tools remain in fixed protocol and retain optional-dialog source conditions
-  ---
-  duration_ms: 6.4218
-  type: 'test'
-  ...
-# Subtest: row/cell identity must come from Case scalars/actions/expected, never current DOM or metadata keys
-ok 79 - row/cell identity must come from Case scalars/actions/expected, never current DOM or metadata keys
-  ---
-  duration_ms: 7.7601
-  type: 'test'
-  ...
-# Subtest: business within scope is source-bound; dialog names are left to current-DOM independent audit
-ok 80 - business within scope is source-bound; dialog names are left to current-DOM independent audit
-  ---
-  duration_ms: 2.8213
-  type: 'test'
-  ...
-# Subtest: every assertion requires current-step quote and obligation IDs, including in prior fragments
-ok 81 - every assertion requires current-step quote and obligation IDs, including in prior fragments
-  ---
-  duration_ms: 2.0592
-  type: 'test'
-  ...
-# Subtest: matrix assertions are grounded in original data and count as one assertion, not cell count
-ok 82 - matrix assertions are grounded in original data and count as one assertion, not cell count
-  ---
-  duration_ms: 7.0293
-  type: 'test'
-  ...
-# Subtest: cumulative 20-assertion and 8-segment budgets cannot be reset by a new reply
-ok 83 - cumulative 20-assertion and 8-segment budgets cannot be reset by a new reply
-  ---
-  duration_ms: 3.8301
-  type: 'test'
-  ...
-# Subtest: projection groups consecutive actions only into the NEXT assertion checkpoint, preserves order and source
-ok 84 - projection groups consecutive actions only into the NEXT assertion checkpoint, preserves order and source
-  ---
-  duration_ms: 1.507
-  type: 'test'
-  ...
-# Subtest: pending tail actions remain available for partial audit but can never disappear at complete
-ok 85 - pending tail actions remain available for partial audit but can never disappear at complete
-  ---
-  duration_ms: 2.4334
-  type: 'test'
-  ...
-# Subtest: only-final-complete adds no checkpoint and v3 completion still enforces required click
-ok 86 - only-final-complete adds no checkpoint and v3 completion still enforces required click
-  ---
-  duration_ms: 3.3469
-  type: 'test'
-  ...
-# Subtest: partial audit injection retains missing obligations; other audit issues still reject and complete needs coverage
-ok 87 - partial audit injection retains missing obligations; other audit issues still reject and complete needs coverage
-  ---
-  duration_ms: 2.8019
-  type: 'test'
-  ...
-# Subtest: partial validator does not require future URL evidence; complete caller semantics still rejects false coverage
-ok 88 - partial validator does not require future URL evidence; complete caller semantics still rejects false coverage
-  ---
-  duration_ms: 2.2169
-  type: 'test'
-  ...
-# Subtest: prompts define current-only segments and an appended audit override, not a technical approval or replay
-ok 89 - prompts define current-only segments and an appended audit override, not a technical approval or replay
-  ---
-  duration_ms: 0.3317
-  type: 'test'
-  ...
-# Subtest: all complete JSON prompt examples parse and satisfy the existing action/assertion schema
-ok 90 - all complete JSON prompt examples parse and satisfy the existing action/assertion schema
-  ---
-  duration_ms: 0.5248
-  type: 'test'
-  ...
-# Subtest: initial progress contains every original obligation without guessed coverage
-ok 91 - initial progress contains every original obligation without guessed coverage
-  ---
-  duration_ms: 1.4561
-  type: 'test'
-  ...
-# Subtest: same-obligation partial row count remains pending with measured reference and missing-clause reason
-ok 92 - same-obligation partial row count remains pending with measured reference and missing-clause reason
-  ---
-  duration_ms: 1.8267
-  type: 'test'
-  ...
-# Subtest: covered requires a successfully executed same-obligation assertion, never a proposed or cross-step reference
-ok 93 - covered requires a successfully executed same-obligation assertion, never a proposed or cross-step reference
-  ---
-  duration_ms: 0.4407
-  type: 'test'
-  ...
-# Subtest: focused repair keeps original gaps, forbids repeating/relabeling measurements and new actions
-ok 94 - focused repair keeps original gaps, forbids repeating/relabeling measurements and new actions
-  ---
-  duration_ms: 2.9292
-  type: 'test'
-  ...
-# Subtest: focused no-gap completion contains no new assertions or actions and does not mutate historical evidence
-ok 95 - focused no-gap completion contains no new assertions or actions and does not mutate historical evidence
-  ---
-  duration_ms: 0.5935
-  type:
-... truncated ...
+1..60
+# tests 60
+# suites 0
+# pass 60
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 32155.1013
 ```
 
 ### Sync Record Status
@@ -659,18 +482,12 @@ DRY-RUN: no derived changes for REQ-0017-controlled-react; explicit implementati
 
 ### Check AI Context
 
-- 更新事实源视图后的独立复检：`python scripts/check_ai_context.py`，退出码`0`，输出`PASS ai-engineering-context checks`；仅文档一致性检查，不代表产品验收。
-- 首次检查未通过：04_verification.md和05_trace.md未同步本轮事实。已更新requirement.source.json并重新生成视图；首次原始记录完整保留于`validation/req0017/v8-first-delivery-evidence.md`。
-- 工程命令及305项统计来自上方原collector实跑，没有重跑或改写该执行日志。
+- Exit code: `0`
+
+```text
+PASS ai-engineering-context checks
+```
 
 ### Notes
 
-历史工程阶段：版本8仅修片段与完成态语义规则不一致；隔离浏览器和注入回复，不调用真实模型，不重启4179。版本7真实2/3失败事实保留，不作为版本8验收。
-
-### 版本8后续限定真实复测
-
-- 脱敏结果文件：`docs/requirements/REQ-0017-controlled-react/real-model-v8-result.md`。
-- 新任务058fd81f-4010-4b6d-b08c-c51a7d40ad3c，冻结构建2f3976d64a9d，原三例各4步完整，执行断言13/16/12，78逻辑调用/521.384秒；原预期和旧结果不改。
-- `node validation/req0017/verify-live-round.mjs 058fd81f-4010-4b6d-b08c-c51a7d40ad3c`实际退出0，原步骤一致、37份媒体SHA一致；本机收据`validation/req0017/v8-real-result.json`。未逐段播放录像。
-- 本轮未触发新行数纠错分支；详情整区域contains反例和重复稳定性未验证。只记录本轮合成用例执行结果，不认定产品发布。
-- 本次仅追加真实复测事实与文档，未修改运行源码、重跑305工程项或改写上述collector日志。
+版本9扩展夹具及判分器：expanded-lab页面、cases、oracle、manifest、serve、grade和参考测试。60项是参考/单元证据，不是32例产品验收。初次正式采证50/51时序竞态已记录并修复，旧页面和用例不变，真实模型仍在执行。
