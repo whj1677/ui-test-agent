@@ -14,6 +14,32 @@ import {
   canProposeCompletion,
 } from './adaptive-recovery.mjs';
 import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs';
+import { requireAdaptivePageTarget } from './expectation-coverage.mjs';
+
+export async function requireAdaptiveAssertionTargets(
+  page,
+  fragment,
+  original,
+  remaining = () => 2000,
+) {
+  for (const assertion of fragment.assertions) {
+    if (
+      !['text', 'contains'].includes(assertion.check) ||
+      !/第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)
+    )
+      continue;
+    const locator = runtimeLocator(page, assertion.target);
+    // Future targets may not exist before the authorized action. This observation
+    // is not an approval, uniqueness shortcut, or permission to ignore absence.
+    if ((await locator.count()) !== 1) continue;
+    const role = await locator.evaluate(
+      (e) => (e.tagName === 'TABLE' ? 'table' : e.getAttribute('role')),
+      undefined,
+      { timeout: remaining() },
+    );
+    requireAdaptivePageTarget(assertion, original, role);
+  }
+}
 
 export async function assertAdaptiveActionTarget(locator, action, originalAction = '') {
   if (!locator || ['wait', 'dismiss_optional'].includes(action.op)) return;
@@ -248,6 +274,12 @@ export async function executeAdaptiveStep(session, run) {
         base: run.task.target,
       });
       requireMissingAssertionFocus(fragment, repairFocus);
+      await requireAdaptiveAssertionTargets(
+        page,
+        fragment,
+        { expected: step.source_expected },
+        () => budget.remaining(2000),
+      );
       const assertionContract = (items) => items.map(({ target, ...item }) => item);
       if (
         assertionRepair &&

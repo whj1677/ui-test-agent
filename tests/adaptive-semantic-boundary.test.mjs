@@ -222,7 +222,15 @@ for (const scenario of ['recover', 'persistent-invalid', 'page-mismatch', 'inval
     const clicks = fact.actions.filter((a) => a.dispatched);
     if (scenario === 'recover') {
       assert.equal(fact.status, 'PASS_ASSERTIONS', JSON.stringify(fact));
-      assert.equal(pagePlans, 5);
+      assert.equal(pagePlans, 4, 'executed complete evidence uses the controller completion probe');
+      assert.ok(
+        fact.adaptive_segments.some(
+          (s) =>
+            s.step_id === '2' &&
+            s.proposal_origin === 'controller_completion_probe' &&
+            s.status === 'EXECUTED',
+        ),
+      );
       assert.equal(detailPlans, 1);
       assert.equal(clicks.length, 2, 'one next-page click and one detail click; no replay');
       assert.equal(fact.adaptive_steps.length, 2);

@@ -159,7 +159,7 @@ function coversPage(assertion, page) {
 // Adaptive-only binding guard: a pagination command is not a page counter.
 // This does not inspect current values to change the expected value or choose
 // another target. Unsupported accessible naming requires a corrected binding.
-export function requireAdaptivePageTarget(assertion, original) {
+export function requireAdaptivePageTarget(assertion, original, observedRole) {
   if (!['text', 'contains'].includes(assertion.check)) return;
   const expectedPages = pages(assertion.expected);
   if (
@@ -170,9 +170,16 @@ export function requireAdaptivePageTarget(assertion, original) {
     return;
   let target = assertion.target;
   while (target?.target) target = target.target;
-  if (target?.kind !== 'role' || !['button', 'link', 'menuitem'].includes(target.role)) return;
+  const wholeTable =
+    observedRole === 'table' || (target?.kind === 'role' && target.role === 'table');
+  if (
+    !wholeTable &&
+    (target?.kind !== 'role' || !['button', 'link', 'menuitem'].includes(target.role))
+  )
+    return;
   const namedPages = pages(target.name);
   if (
+    !wholeTable &&
     expectedPages.every((p) =>
       namedPages.some((n) => n.current === p.current && n.total === p.total),
     )
@@ -184,7 +191,7 @@ export function requireAdaptivePageTarget(assertion, original) {
     plan_feedback: {
       field_path: 'assertion.target',
       reason:
-        '分页文字预期被绑定到没有相应页码名称的导航控件。保留原预期，重新观察并选择分页文字/状态区域；不能读取翻页按钮标签作为页码，也不能凭当前值修改预期。',
+        '分页文字预期被绑定到整张表或没有相应页码名称的导航控件。保留原预期，从当前观察选择独立分页文字/状态目标（可用text_context），不能把整表内容或翻页按钮当页码；真实页码不符仍应失败，不得凭当前值修改预期。',
     },
   });
 }

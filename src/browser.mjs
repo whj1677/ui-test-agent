@@ -1949,7 +1949,28 @@ export async function snapshot(
           self: root === e,
         };
       };
-      const elements = [...document.querySelectorAll(selector)];
+      // Include bounded, non-interactive leaf text as observed read-only targets.
+      // No expected result is used for selection or for locator construction.
+      const staticText = (e) => {
+        if (!e.matches('span,p,output') || e.children.length || !visible(e)) return false;
+        if (
+          e.closest(
+            'button,a,input,select,textarea,label,table,nav,aside,[role="button"],[role="link"],[role="textbox"],[role="combobox"],[role="menuitem"],[contenteditable]',
+          )
+        )
+          return false;
+        const text = e.innerText?.trim() ?? '';
+        return (
+          text.length > 0 &&
+          text.length <= 150 &&
+          !/密码|口令|密钥|验证码|账号|账户|邮箱|手机号|password|credential|api.?key|token|secret|cookie|session|email|phone/iu.test(
+            text,
+          )
+        );
+      };
+      const elements = [...document.querySelectorAll(selector + ',span,p,output')].filter(
+        (e) => e.matches(selector) || staticText(e),
+      );
       const eligible = elements
         .map((e, dom_index) => ({ e, dom_index }))
         .filter(({ e }) => visible(e) && e.type !== 'password');
@@ -2189,6 +2210,9 @@ export async function snapshot(
           node: e,
           row_hint: rowHint(e),
           scope_hint: scopeHint(e),
+          ...(staticText(e)
+            ? { text_context: { kind: 'static_text', value: e.innerText.trim(), read_only: true } }
+            : {}),
           ...(fieldLabel
             ? {
                 field_context: { label: fieldLabel, value: cleanText(e.innerText).slice(0, 500) },
@@ -2262,6 +2286,8 @@ export async function snapshot(
     const rejected = rejectionLog();
     for (const [index, c] of raw.controls.entries()) {
       let locator = mapped.locators[index];
+      if (adapterSource === DEFAULT_ADAPTER_SOURCE && locator === null && c.text_context)
+        locator = { kind: 'text', value: c.text_context.value, exact: true };
       if (adapterSource === DEFAULT_ADAPTER_SOURCE && c.field_locator_hint)
         locator = c.field_locator_hint;
       if (
