@@ -665,4 +665,12 @@ DRY-RUN: no derived changes for REQ-0017-controlled-react; explicit implementati
 
 ### Notes
 
-版本8仅修片段与完成态语义规则不一致；隔离浏览器和注入回复，不调用真实模型，不重启4179。版本7真实2/3失败事实保留，不作为版本8验收。
+历史工程阶段：版本8仅修片段与完成态语义规则不一致；隔离浏览器和注入回复，不调用真实模型，不重启4179。版本7真实2/3失败事实保留，不作为版本8验收。
+
+### 版本8后续限定真实复测
+
+- 脱敏结果文件：`docs/requirements/REQ-0017-controlled-react/real-model-v8-result.md`。
+- 新任务058fd81f-4010-4b6d-b08c-c51a7d40ad3c，冻结构建2f3976d64a9d，原三例各4步完整，执行断言13/16/12，78逻辑调用/521.384秒；原预期和旧结果不改。
+- `node validation/req0017/verify-live-round.mjs 058fd81f-4010-4b6d-b08c-c51a7d40ad3c`实际退出0，原步骤一致、37份媒体SHA一致；本机收据`validation/req0017/v8-real-result.json`。未逐段播放录像。
+- 本轮未触发新行数纠错分支；详情整区域contains反例和重复稳定性未验证。只记录本轮合成用例执行结果，不认定产品发布。
+- 本次仅追加真实复测事实与文档，未修改运行源码、重跑305工程项或改写上述collector日志。

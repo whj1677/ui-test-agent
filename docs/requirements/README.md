@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本8统一片段与完成态语义校验，305项受影响工程验证通过；尚未真实复验或启动新服务。最后真实为版本7原三例2/3完整通过（66调用/420.143秒），V03旧失败保留，不能发布。
+- [REQ-0017-controlled-react](REQ-0017-controlled-react/current_state.md)：版本8工程305项证据保留；限定真实原三例均完整通过（78调用/521.384秒），原预期及旧失败不变。新行数纠错分支本轮未触发，异构故障对照及稳定性仍待验证，不能据此发布。见包内real-model-v8-result.md。
 
 - [REQ-0016-login-recovery](REQ-0016-login-recovery/current_state.md)：已实现闭页恢复、原位登录确认与状态反馈；本机合成集成检查完成，不改变原业务预期或自动放行公开页面。4179需重启后生效，真实模型另验。
 

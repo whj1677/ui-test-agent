@@ -41,7 +41,7 @@
 | TK | DR/DD | 状态 | 内容 |
 |---|---|---|---|
 | TK-0017-01 | DR-0017-01 / DD-0017-01 | 已实现 | 业务合同与完整检查 |
-| TK-0017-02 | DR-0017-02 / DD-0017-02 | 已实现 | 已统一片段执行前与完成态语义校验，派发前精确反馈额外行数断言；新增控制器/真实浏览器回归并纳入305项受影响工程验证，未追加真实模型调用。 |
+| TK-0017-02 | DR-0017-02 / DD-0017-02 | 已实现 | 已统一片段执行前与完成态语义校验，派发前精确反馈额外行数断言；305项受影响工程验证保留。冻结后另行授权的版本8真实原三例均完整通过；本轮没有触发额外行数候选拒绝分支，不能把成功归因为该分支已在真实模型中验证。 |
 | TK-0017-03 | DR-0017-03 / DD-0017-03 | 已实现 | 执行时观察与受控技术绑定 |
 | TK-0017-04 | DR-0017-04 / DD-0017-04 | 已实现 | 主流程状态与证据 |
 | TK-0017-05 | DR-0017-05 / DD-0017-05 | 部分实现 | 冻结正反例与独立验证 |
@@ -54,12 +54,12 @@
 | VT-0017-02 | DR-0017-02 | 集成测试通过 | 结构化缺口与有界ReAct恢复 | 命令：node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs；退出码：0；测试数量：305；失败数量：0；跳过数量：0；证据：validation/req0017/v8-targeted.log |
 | VT-0017-03 | DR-0017-03 | 集成测试通过 | 执行时观察与受控技术绑定 | 命令：node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs；退出码：0；测试数量：305；失败数量：0；跳过数量：0；证据：validation/req0017/v8-targeted.log |
 | VT-0017-04 | DR-0017-04 | 集成测试通过 | 主流程状态与证据 | 命令：node --test --test-concurrency=4 tests/adaptive-semantic-boundary.test.mjs tests/adaptive-execution.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-review.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-source-recovery.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-dispatch.test.mjs tests/plan-quality.test.mjs tests/repair-contracts.test.mjs tests/optional-dialog.test.mjs tests/semantic-scope.test.mjs tests/case-named.test.mjs tests/controlled-react.test.mjs tests/table-invariant.test.mjs；退出码：0；测试数量：305；失败数量：0；跳过数量：0；证据：validation/req0017/v8-targeted.log |
-| VT-0017-05 | DR-0017-05 | 无法运行 | 冻结正反例与独立验证 | 版本7限定真实运行实际2/3完整通过，任务40da64d7-b2b2-4cd0-8e17-57b7a4aaf074，66调用/420.143秒。V01四步13断言、V02四步18断言通过；V03一步完成，分页测量后被累计语义校验拒绝，详情未执行。无法运行指V03未能完整跑通，不是未执行。验证收据validation/req0017/v7-real-result.json；脱敏结论real-model-v7-result.md。更广异构及独立验收仍未齐备。 |
+| VT-0017-05 | DR-0017-05 | 人工待确认 | 冻结正反例与独立验证 | 版本8限定真实运行原三例3/3完整通过，任务058fd81f-4010-4b6d-b08c-c51a7d40ad3c，78逻辑调用/521.384秒。各4步完整、断言13/16/12；37份媒体SHA核验一致，原步骤不变。验证收据validation/req0017/v8-real-result.json；脱敏结论real-model-v8-result.md。该状态表示更广异构、故障对照、稳定复现与独立验收未齐备，不是本轮未执行；版本7的2/3旧结果保留。 |
 
 ## 人工待确认项
 
-- [ ] VALIDATE：版本8统一语义入口的工程反例已验证；真实模型是否根据提前反馈修正候选并完成原V03仍需新的限定复验，不能把注入回复当自主能力。
-- [ ] 此前版本7一轮100调用/15分钟授权已使用，实际66调用/420.143秒；本次只进行源码修复与本机工程验证，不续跑外部API。4179当前连接拒绝且本轮未启动，新代码下次启动生效。
+- [ ] VALIDATE：版本8本轮3/3不证明重复稳定性。真实模型未提出额外row_count，因此新的提前拒绝/纠错分支仅有工程注入反例证据；应另行故障对照验证详情整区域contains在错字段或诱饵值下不会误报，不能从当前正常页面推断该能力。
+- [ ] 用户“再进行一轮测试吧”授权的版本8一轮100调用/15分钟已使用，实际78调用/521.384秒。当前无活动作业，冻结源码不改，不追加第二轮或扩大测试场景。
 - [ ] VALIDATE（历史版本6发现）：无活动测试时login-confirmation会自动走旧探索入口；当时停止该分支并计入4次调用。当前版本7复测未走该分支，未在冻结版本中顺便修改登录流程。
 
 ## 本轮禁止实现内容
