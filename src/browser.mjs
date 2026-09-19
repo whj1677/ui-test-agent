@@ -20,7 +20,7 @@ import { fail, relativeURL, redact, poll, now, uid, hash, semanticHash } from '.
 import { RecordingEvidence } from './recording-evidence.mjs';
 import { stepActions, stepAssertions, stepCheckpoints } from './plan-steps.mjs';
 import { StepBudget } from './step-budget.mjs';
-import { compareTableCells } from './table-assertion.mjs';
+import { compareTableCells, displayNumber } from './table-assertion.mjs';
 import {
   needsTableBaseline,
   assertTableBaselineScope,
@@ -1754,6 +1754,20 @@ export async function checkAssertionGroup(
         );
         if (sampled)
           sampled.observations.forEach((o, i) => {
+            if (assertions[i].check === 'display_number' && !o.error) {
+              if (
+                assertions[i].target.kind !== 'within' ||
+                assertions[i].target.target?.kind !== 'definition'
+              ) {
+                o.error = 'ASSERTION_DISPLAY_NUMBER_SCOPE';
+                return;
+              }
+              const parsed = typeof o.actual === 'string' ? displayNumber(o.actual) : null;
+              o.numeric_projection = { value: parsed, unit_verified: false, conversion: false };
+              if (parsed === null) o.error = 'ASSERTION_DISPLAY_NUMBER_UNPARSEABLE';
+              o.passed = parsed !== null && parsed === assertions[i].expected;
+              return;
+            }
             if (assertions[i].check === 'table_unchanged' && !o.error) {
               const comparison = compareTableBaseline(
                 tableBaselines,
@@ -1830,6 +1844,9 @@ export async function checkAssertionGroup(
             ? redactMatrixEvidence(last.observations[i].actual)
             : last.observations[i].actual,
     passed: last.observations[i].passed,
+    ...(last.observations[i].numeric_projection
+      ? { numeric_projection: last.observations[i].numeric_projection }
+      : {}),
     ...(last.observations[i].obstruction ? { obstruction: last.observations[i].obstruction } : {}),
     ...(last.observations[i].table_comparison
       ? { table_comparison: redactMatrixEvidence(last.observations[i].table_comparison) }

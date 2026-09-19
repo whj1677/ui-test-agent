@@ -2,7 +2,7 @@ import { extractExpectationRanges } from './expectation-coverage.mjs';
 
 // Adaptive planning uses one explicit comparison capability for numeric cells.
 // This does not change approved fixed plans or the scalar browser comparator.
-export const ADAPTIVE_NUMERIC_GUIDANCE = `NUMERIC CAPABILITIES: a top-level check:"number" compares only pure numeric DOM text (commas removed); it does NOT parse units such as kW, labels or formulas, including on definition fields. In adaptive plans, a cell locator with check:"number" is not supported: use check:"table_cells" on that SAME observed table with the SAME original key, column and finite expected number, even for a single cell or pure-number display. table_cells' inner check:"number" alone supports the documented display suffixes. Never duplicate it with a scalar number assertion. Do not copy units/values from observations into expectations. Keep all original source obligations; ordered/exact_rows stay false unless the original requires them. Numeric projection does NOT establish unit correctness: if the original explicitly requires a unit, also measure its original text faithfully, without conversion or inferred tolerance. Missing supported measurement is a technical gap, not a business failure or permission to weaken the oracle.`;
+export const ADAPTIVE_NUMERIC_GUIDANCE = `NUMERIC CAPABILITIES: a top-level check:"number" compares only pure numeric DOM text (commas removed); it does NOT parse units such as kW, labels or formulas, including on definition fields. For a scoped definition field whose ORIGINAL requirement supplies only a number, use check:"display_number" with that finite ORIGINAL number. This explicit projection accepts one decimal with a supported display suffix; it does not verify or convert units. It is allowed only on within->definition, never whole dialogs/tables, and cannot substitute for an explicit unit requirement (use the original grounded text in that case). Do not add observed units to text expectations when the original only requires a number. In adaptive plans, a cell locator with check:"number" is not supported: use check:"table_cells" on that SAME observed table with the SAME original key, column and finite expected number, even for a single cell or pure-number display. Never duplicate it with a scalar number assertion. Do not copy units/values from observations into expectations. Keep all original source obligations; ordered/exact_rows stay false unless the original requires them. Numeric projection does NOT establish unit correctness: if the original explicitly requires a unit, also measure its original text faithfully, without conversion or inferred tolerance. Missing supported measurement is a technical gap, not a business failure or permission to weaken the oracle.`;
 
 /** Pure helpers: no DOM reads, I/O, retries, formulas or inferred expectations. */
 export const TABLE_ASSERTION_GUIDANCE = `table_cells compares a bounded matrix in ONE DOM sample: expected={key_column:string,rows:[{key:string,cells:[{column:string,check:"text"|"number",expected:string|number}]}],ordered:boolean,exact_rows:boolean}. At most 50 rows, 20 cells per row and 200 asserted cells total. Supply every required field, including middle rows. Keys and column names are exact, unique identities; never use substring or row position as identity. ordered checks the relative order of requested keys; exact_rows forbids extra rows. Empty expected rows require exact_rows:true. text is exact trimmed DOM text; number is one finite decimal (optional grouped thousands/exponent) with an optional supported display-unit suffix, with no unit conversion or tolerance. Expected keys/values must come from THIS original step's expected or explicit case.data/test_data, never observations. validateTableExpectation(expected, {expected:step.expected,data:case.data,test_data:case.test_data}) checks literal grounding; omit absent data fields. Omitting the second argument only checks schema and MUST NOT authorize a business plan. Grounding checks literal presence, not row/field associations, negation, completeness or ordering semantics: retain independent original-case coverage review. compareTableCells consumes exactly {headers:string[],rows:string[][]} collected together from one supported table; it cannot establish snapshot atomicity itself. The collector must reject merged/nested/virtual/unknown structures and incomplete/truncated samples. Missing/duplicate columns or ambiguous keys yield technical invalid, never a pass. Do not resample individual fields or change expected values after a difference.`;
@@ -22,7 +22,7 @@ const DECIMAL =
 // masquerading as a display unit. Extend only with reviewed display formats.
 const UNIT =
   '(?:元/kWh|kWh/日|kg/m³|元/度|m/s|mAh|mA|Ah|A|kWh|kW|MWh|MW|Wh|W|mV|kV|V|kHz|MHz|Hz|kΩ|MΩ|Ω|kPa|MPa|Pa|bar|rpm|ms|min|s|h|d|mm|cm|km|m²|m³|m2|m3|ml|mL|mg|m|L|kg|g|t|万元|亿元|元|人|个|条|件|次|台|度|%|‰|℃|℉|°C|°F|K)';
-const DISPLAY_NUMBER = new RegExp(`^(${DECIMAL})(?:[ \\t]*${UNIT})?$`, 'u');
+const DISPLAY_NUMBER = new RegExp(`^(${DECIMAL})(?:[ \\t]*(${UNIT}))?$`, 'u');
 const SOURCE_NUMBER = new RegExp(`${DECIMAL}(?:[ \\t]*${UNIT})?`, 'gu');
 
 function fail(code, path) {
@@ -156,11 +156,43 @@ function sourceLeaves(original) {
   return leaves;
 }
 
-function displayNumber(text) {
+export function displayNumber(text) {
   const match = DISPLAY_NUMBER.exec(text.trim());
   if (!match) return null;
   const value = Number(match[1].replaceAll(',', ''));
   return Number.isFinite(value) ? value : null;
+}
+
+export function displayUnit(text) {
+  return typeof text === 'string' ? (DISPLAY_NUMBER.exec(text.trim())?.[2] ?? null) : null;
+}
+
+export function sourceSupportsNumber(value, original) {
+  return Number.isFinite(value) && grounded(value, sourceLeaves(original));
+}
+
+// Source quantities are technical grounding only, not field-association proof.
+export function sourceDisplayUnits(value, original) {
+  const units = new Set();
+  for (const source of sourceLeaves(original)) {
+    if (typeof source.value !== 'string') continue;
+    const matches = source.prose
+      ? [...source.value.matchAll(SOURCE_NUMBER)]
+      : [{ 0: source.value, index: 0 }];
+    for (const match of matches) {
+      const before = source.value[match.index - 1] ?? '';
+      const after = source.value[match.index + match[0].length] ?? '';
+      const unit = displayUnit(match[0]);
+      if (
+        unit &&
+        displayNumber(match[0]) === value &&
+        !/[A-Za-z0-9_.,+\-]/u.test(before) &&
+        !/[A-Za-z0-9_.,+\-]/u.test(after)
+      )
+        units.add(unit);
+    }
+  }
+  return [...units];
 }
 
 function grounded(value, sources) {

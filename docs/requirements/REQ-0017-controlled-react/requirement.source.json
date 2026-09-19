@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G3",
-    "version": 15,
+    "version": 16,
     "last_updated": "2026-09-20"
   },
   "original_input": "用户确认Agent ReAct及显式目标：无需技术救场、检查不遗漏、故障不误报。最新：可以，我说的需求包应该是 ai-engineering-context 的需求包。你直接干活吧，别那么多jjyy的。\n2026-09-18 用户对照任务01a0b32f-9231-7473-ab56-a00cb2cadb58后确认：agent要能多态地规划、执行，学习现场观察/短段执行/局部修复并优化。\n用户进一步确认：默认开始测试直接执行，取消独立技术计划审批；遇难例可建立独立Codex任务对照实测后吸收能力。",
@@ -19,6 +19,8 @@
     }
   ],
   "confirmed_facts": [
+    "版本16最终受影响工程回归376项0失败/取消/跳过，104935.7147ms，validation/req0017/v16-final-regression.log；包含新增8项及定义字段、表格解析、计划语义、真实浏览器/控制器有界恢复、分页与数值原行为。初始7项6通过1失败是测试缺少范围证据，补输入后中间375项通过；增加definition旧number派发前拒绝后重跑最终376，重叠集合不相加。原32例11文件冻结不变，新真实模型待执行，没有继承版本14全量1242或任何旧真实通过。",
+    "版本16修改前状态卡：版本15真实round-TVdyaT结束，65调用/340289ms，三例各4步COMPLETE，13/15/11断言满足，37媒体SHA一致；分页额外约束已消失，但V03第四步把原数值200扩成text=200 kW，不能计语义合格。累计9轮603调用/3105.185秒，仅3个不同用例。唯一目标=为已唯一绑定的定义字段提供显式display_number投影断言，复用表格已审查的严格单数值/封闭单位语法；旧number保持不变。派发前拒绝新自适应定义字段从观察增加原文无依据的单位文本，要求模型重新规划而不改原预期。明确单位义务仍需独立文本核对，数值投影不是量纲验证或换算。交付=能力/来源校验、规划审查共用说明、正反例及真实复验。验收=200/200 kW/200.0可检验原200；1200、120、多数值/不支持格式不得通过；明确单位不能由投影代替；无额外重试、旧任务不改。达到两轮语义合格三例后扩量，当前未达。",
     "版本15冻结前受影响工程回归267项0失败/取消/跳过，103824.5376ms，validation/req0017/v15-regression.log；包含新增11项及原语义、规划、审查、数值、分页、实际差异和重复停止。专项123/10与此集合重叠不相加；原始失败日志保留。新运行时没有重跑1242全量，1242明确属于版本14；新官方模型待执行，未扩量、未发布。",
     "版本14-R2真实已结束：round-3JWjRQ，64调用/342025ms、38媒体SHA一致，原三例均记录PASS_ASSERTIONS且各4步COMPLETE；V03再次多加ordered/exact_rows及总数12，故不能算计划语义合格的稳定性验收。累计8轮538调用/2764.896秒。版本15工程首轮123项无失败；新10项执行/纯函数首跑9通过1失败，仅重复候选用例错误期望3次规划，实际原NO_PROGRESS策略在第2次就终止且零派发零测量。修正测试为精确2次及ADAPTIVE_NO_PROGRESS，并保留原失败日志v15-execution.log；扩展回归正在运行。没有为让测试通过增加重试。",
     "版本15修改前状态卡：版本14-R1 round-6fQWFb真实3例均记录PASS_ASSERTIONS、各4步COMPLETE，61调用/331328ms、36媒体SHA一致，累计474调用/2422.871秒。独立核验发现V03第2步原文仅要求可见D006至D010，候选table_cells却ordered=true/exact_rows=true，且分页text额外固定共12条。本机纯函数复现证实这些额外约束未被语义守卫拒绝；因此是断言执行通过，不是可接受计划的稳定性通过。原事实不回写。第二轮已启动，结束前运行源码冻结。下一唯一目标=修补明确编号范围/分页表达里的额外排序、精确总行数与未要求总记录数，复用当前语义守卫和原2次纠错；不另建IR，不依赖顾问或双模型自报。修改限新自适应候选的已知语法反例：编号范围本身不授予ordered/exact_rows，必须有当前原文的对应明确要求；分页断言不能复制页面上原文未要求的总记录数。返回具体未执行候选约束和纠错提示，不自动改候选、改原预期、删除义务或重放动作。测试须覆盖合法多行顺序/唯一行/数量要求、包含范围但允许额外行或不同排列的反例、额外总数、持续错误停止及真业务差异不重试。先保留当前真实轮次并验证最小反例，再实现/回归/Git；不将目前记录PASS提升为发布验收。",
@@ -142,7 +144,7 @@
         "DR-0017-02"
       ],
       "status": "已确认",
-      "summary": "版本15在新自适应候选语义校验中补明确编号范围与分页的反例守卫：可见范围不自动授权ordered/exact_rows，分页文本不自动授权原文未要求的总记录数；拒绝时给具体候选约束，规划和审查共用规则。只纠正未执行候选，不改旧事实/原预期，不重放动作，不改固定旧计划路径。属于必要条件而非任意自然语言等价证明。版本14静态文字、版本13数值及版本12收尾保持。",
+      "summary": "版本16新增显式display_number，仅作用域内唯一definition字段使用，与表格共用封闭显示数值语法，保留DOM文本/解析数值及unit_verified:false；旧number不变。必须有原数值来源且没有明确单位义务，明确单位仍用原文本；新自适应候选不得从观察添加未支持的单位文本。原对象/字段关联仍须独立语义审查。版本15范围/分页额外约束、版本14静态文字与版本12收尾保持，不增预算或自动修改候选。",
       "rationale": "在原prepare协调器内补结构化恢复；模型审查不确定只能提出问题或修复，不直接改变确认状态。"
     },
     {
@@ -213,7 +215,7 @@
         "DD-0017-02"
       ],
       "status": "已实现",
-      "task": "版本15实现明确范围/分页候选额外约束校验及定点恢复提示；新增反例覆盖合法多行/不同排列不能误报、缺原编号必须失败、额外总数与持续重复停止。旧固定路径不变、不扩大额度；真实效果另行复验。版本14静态文字目录等能力保持。",
+      "task": "版本16实现definition显示数值投影、原数值来源/明确单位限制、观察单位额外约束拦截及共享提示；旧number不变。新增浏览器原文本证据、数值差异/多值/歧义/单位要求与有界候选恢复反例。工程与真实模型分列，不增加重试，不改原用例。",
       "verification_ids": [
         "VT-0017-02"
       ]
@@ -290,12 +292,12 @@
       "item": "结构化缺口与有界ReAct恢复",
       "evidence_standard": "计划缺项或缺证不得直接撤销已确认用例；真正业务歧义由隔离输入审查判断；补证先于重复生成，预算/无进展终止保持。 实际命令/退出码/非零统计/日志；工程与真实模型分列。",
       "current_evidence": {
-        "command": "node --test --test-concurrency=3 tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/plan-quality.test.mjs tests/expectation-coverage.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-page-target.test.mjs tests/adaptive-numeric-capability.test.mjs",
+        "command": "node --test --test-concurrency=3 tests/display-number.test.mjs tests/definition-fields.test.mjs tests/table-assertion.test.mjs tests/adaptive-extra-constraints.test.mjs tests/adaptive-extra-constraints.execution.test.mjs tests/plan-quality.test.mjs tests/expectation-coverage.test.mjs tests/adaptive-progress.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/adaptive-review.test.mjs tests/adaptive-semantic-boundary.test.mjs tests/adaptive-page-target.test.mjs tests/adaptive-numeric-capability.test.mjs",
         "exit_code": 0,
-        "test_count": 267,
+        "test_count": 376,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "validation/req0017/v15-regression.log"
+        "log_path": "validation/req0017/v16-final-regression.log"
       }
     },
     {
@@ -391,7 +393,7 @@
       "dd_id": "DD-0017-02",
       "tk_id": "TK-0017-02",
       "vt_id": "VT-0017-02",
-      "status": "已实现；版本15受影响267项无失败，含新增11项；不是全量，不继承版本14的1242为本版结果；新真实模型未复验"
+      "status": "已实现；版本16受影响376项无失败，含新增8项；不是全量，不继承版本14的1242或旧真实结果；新真实模型未复验"
     },
     {
       "un_id": "UN-0017-01",

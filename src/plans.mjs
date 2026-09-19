@@ -1,6 +1,11 @@
 import { keys, fail, nonempty, relativeURL, hash, semanticHash } from './common.mjs';
 import { stepActions, stepAssertions } from './plan-steps.mjs';
-import { validateTableExpectation, TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
+import {
+  validateTableExpectation,
+  TABLE_ASSERTION_GUIDANCE,
+  sourceSupportsNumber,
+  sourceDisplayUnits,
+} from './table-assertion.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
 import { validateExecutionPolicy } from './controlled-react.mjs';
 import { isAdaptivePlan, validateAdaptivePlan } from './adaptive-plan.mjs';
@@ -259,7 +264,10 @@ export function validateAssertion(a, original, options) {
   keys(a, ['target', 'check', 'expected', 'oracle_quote', 'obligation_ids'], ['target', 'check']);
   validateLocator(a.target, options);
   if (a.target.kind === 'definition') fail('DEFINITION_SCOPE_REQUIRED');
-  if (a.target.target?.kind === 'definition' && !['visible', 'text', 'number'].includes(a.check))
+  if (
+    a.target.target?.kind === 'definition' &&
+    !['visible', 'text', 'number', 'display_number'].includes(a.check)
+  )
     fail('DEFINITION_CHECK_UNSUPPORTED');
   if (
     ![
@@ -275,6 +283,7 @@ export function validateAssertion(a, original, options) {
       'checked',
       'enabled',
       'number',
+      'display_number',
       'focused',
       'has_class',
       'row_sequence',
@@ -323,8 +332,24 @@ export function validateAssertion(a, original, options) {
     (!Number.isInteger(a.expected) || a.expected < 0 || a.expected > 100000)
   )
     fail('ASSERTION_COUNT_INVALID');
-  if (a.check === 'number' && (typeof a.expected !== 'number' || !Number.isFinite(a.expected)))
+  if (
+    ['number', 'display_number'].includes(a.check) &&
+    (typeof a.expected !== 'number' || !Number.isFinite(a.expected))
+  )
     fail('ASSERTION_NUMBER_INVALID');
+  if (a.check === 'display_number') {
+    if (a.target.kind !== 'within' || a.target.target?.kind !== 'definition')
+      fail('ASSERTION_DISPLAY_NUMBER_SCOPE');
+    if (!original) fail('ASSERTION_DISPLAY_NUMBER_SOURCE');
+    const source = {
+      expected: original.expected,
+      ...(options?.data !== undefined ? { data: options.data } : {}),
+      ...(options?.test_data !== undefined ? { test_data: options.test_data } : {}),
+    };
+    if (!sourceSupportsNumber(a.expected, source)) fail('ASSERTION_DISPLAY_NUMBER_SOURCE');
+    // Do not let numeric projection discharge an explicitly sourced unit.
+    if (sourceDisplayUnits(a.expected, source).length) fail('ASSERTION_DISPLAY_UNIT_REQUIRED');
+  }
   if (['checked', 'enabled', 'focused'].includes(a.check) && typeof a.expected !== 'boolean')
     fail('ASSERTION_BOOL_INVALID');
   if (

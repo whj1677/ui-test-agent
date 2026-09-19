@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T01:58:59+08:00`
+- Generated at: `2026-09-20T02:16:58+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `adc41de1c754a3ae6ace58f65c8f9663eaa73e4155fd79f461232ca551c2d1b0`
+- Change fingerprint: `09c238a941b7f62945de3626fae671380a8e1f4a98b57d42aa3cda086a78b26b`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test tests/adaptive-extra-constraints.test.mjs`
+- Command: `node --test tests/display-number.test.mjs`
 - Exit code: `0`
 - Test count: `8`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v15-final-constraints.log`
-- Log SHA-256: `801912423edddcd705b2f21c18caceea3f983e4650455c31aba0b13b544de45b`
+- Log path: `validation/req0017/v16-delivery.log`
+- Log SHA-256: `9ab378f200054a2d60e3fdbd18c3e12fb9632745ae619134e87adc4808c34ffb`
 
 ### Git Status
 
@@ -26,16 +26,17 @@
  M docs/requirements/REQ-0017-controlled-react/05_trace.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v14-result.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v15-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
  M src/adaptive-plan.mjs
  M src/adaptive-recovery.mjs
- M src/adaptive-review.mjs
+ M src/browser.mjs
  M src/plan-semantics.mjs
+ M src/plans.mjs
  M src/scope-guidance.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v15-result.md
-?? tests/adaptive-extra-constraints.execution.test.mjs
-?? tests/adaptive-extra-constraints.test.mjs
+ M src/table-assertion.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v16-result.md
+?? tests/display-number.test.mjs
 ```
 
 ### Git Diff Stat
@@ -49,45 +50,48 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/04_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_trace.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v14-result.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v15-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/browser.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/plans.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/scope-guidance.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/table-assertion.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/release_runtime.md                    |   6 +
- .../00_user_requirement.md                         |   3 +
+ .../00_user_requirement.md                         |   2 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 475 +++------------------
- .../real-model-v14-result.md                       |   8 +-
- .../requirement.source.json                        |  17 +-
- src/adaptive-plan.mjs                              |   3 +-
- src/adaptive-recovery.mjs                          |   2 +
- src/adaptive-review.mjs                            |   3 +-
- src/plan-semantics.mjs                             |  41 ++
- src/scope-guidance.mjs                             |   1 +
- 15 files changed, 152 insertions(+), 423 deletions(-)
+ .../REQ-0017-controlled-react/delivery_evidence.md | 125 +++++++++++----------
+ .../real-model-v15-result.md                       |   4 +-
+ .../requirement.source.json                        |  16 +--
+ src/adaptive-plan.mjs                              |   4 +-
+ src/adaptive-recovery.mjs                          |   6 +
+ src/browser.mjs                                    |  19 +++-
+ src/plan-semantics.mjs                             |  19 ++++
+ src/plans.mjs                                      |  31 ++++-
+ src/scope-guidance.mjs                             |   2 +-
+ src/table-assertion.mjs                            |  38 ++++++-
+ 17 files changed, 201 insertions(+), 87 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v15-result.md
-tests/adaptive-extra-constraints.execution.test.mjs
-tests/adaptive-extra-constraints.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v16-result.md
+tests/display-number.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T01:58:57+08:00
-Command: node --test tests/adaptive-extra-constraints.test.mjs
+Started at: 2026-09-20T02:16:24+08:00
+Command: node --test tests/display-number.test.mjs
 Exit code: 0
 Parsed test count: 8
 Parsed failure count: 0
@@ -95,52 +99,52 @@ Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: planner and reviewer receive the same constraint-scope contract
-ok 1 - planner and reviewer receive the same constraint-scope contract
+# Subtest: display number uses the existing strict closed numeric display grammar
+ok 1 - display number uses the existing strict closed numeric display grammar
   ---
-  duration_ms: 0.6944
+  duration_ms: 2.1507
   type: 'test'
   ...
-# Subtest: visible range does not authorize extra matrix constraints: {"ordered":true}
-ok 2 - visible range does not authorize extra matrix constraints: {"ordered":true}
+# Subtest: projection requires a sourced finite number, scoped definition and no explicit unit
+ok 2 - projection requires a sourced finite number, scoped definition and no explicit unit
   ---
-  duration_ms: 1.956
+  duration_ms: 1.7733
   type: 'test'
   ...
-# Subtest: visible range does not authorize extra matrix constraints: {"exact_rows":true}
-ok 3 - visible range does not authorize extra matrix constraints: {"exact_rows":true}
+# Subtest: new adaptive unit text cannot be copied from observation; fixed text behavior stays unchanged
+ok 3 - new adaptive unit text cannot be copied from observation; fixed text behavior stays unchanged
   ---
-  duration_ms: 0.7176
+  duration_ms: 1.7942
   type: 'test'
   ...
-# Subtest: visible range does not authorize extra matrix constraints: {"ordered":true,"exact_rows":true}
-ok 4 - visible range does not authorize extra matrix constraints: {"ordered":true,"exact_rows":true}
+# Subtest: actual browser projection preserves DOM evidence and does not convert or match a substring
+ok 4 - actual browser projection preserves DOM evidence and does not convert or match a substring
   ---
-  duration_ms: 0.5273
+  duration_ms: 1708.2748
   type: 'test'
   ...
-# Subtest: explicit count and order remain required rather than removed by repair
-ok 5 - explicit count and order remain required rather than removed by repair
+# Subtest: display-number candidate repair with no business replay: repair
+ok 5 - display-number candidate repair with no business replay: repair
   ---
-  duration_ms: 0.8613
+  duration_ms: 7910.4437
   type: 'test'
   ...
-# Subtest: a legal extra row or alternative ordering proves why the proposed extras are not neutral
-ok 6 - a legal extra row or alternative ordering proves why the proposed extras are not neutral
+# Subtest: display-number candidate repair with no business replay: difference
+ok 6 - display-number candidate repair with no business replay: difference
   ---
-  duration_ms: 0.9852
+  duration_ms: 8619.9638
   type: 'test'
   ...
-# Subtest: page text cannot smuggle a copied record total: text
-ok 7 - page text cannot smuggle a copied record total: text
+# Subtest: display-number candidate repair with no business replay: repeat
+ok 7 - display-number candidate repair with no business replay: repeat
   ---
-  duration_ms: 0.6489
+  duration_ms: 6448.1441
   type: 'test'
   ...
-# Subtest: page text cannot smuggle a copied record total: contains
-ok 8 - page text cannot smuggle a copied record total: contains
+# Subtest: display-number candidate repair with no business replay: scalar
+ok 8 - display-number candidate repair with no business replay: scalar
   ---
-  duration_ms: 0.2223
+  duration_ms: 7797.8197
   type: 'test'
   ...
 1..8
@@ -151,7 +155,7 @@ ok 8 - page text cannot smuggle a copied record total: contains
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 136.733
+# duration_ms 32958.7903
 ```
 
 ### Sync Record Status
@@ -170,4 +174,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-本版主证据是v15-regression.log的267项受影响回归；本命令8项为重叠复检，不相加，不继承旧1242全量，不代表真实模型通过。
+版本16最终受影响376项无失败；采证8项重叠不累加，真实模型尚待冻结后复验，原失败保留。

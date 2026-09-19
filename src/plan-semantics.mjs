@@ -4,6 +4,7 @@ import { planLocatorEntries } from './plan-feedback.mjs';
 import { requireCaseNamedEvidence, validateCaseNamedPlan } from './case-named.mjs';
 import { extractExpectationRanges } from './expectation-coverage.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
+import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertion.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -220,6 +221,24 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
         );
       if (context.adaptive_readonly) {
         const sourceExpected = original.expected;
+        if (
+          assertion.target?.target?.kind === 'definition' &&
+          assertion.check === 'text' &&
+          displayUnit(assertion.expected)
+        ) {
+          const unit = displayUnit(assertion.expected);
+          const source = {
+            expected: sourceExpected,
+            ...(c.data !== undefined ? { data: c.data } : {}),
+            ...(c.test_data !== undefined ? { test_data: c.test_data } : {}),
+          };
+          if (!sourceDisplayUnits(displayNumber(assertion.expected), source).includes(unit))
+            reject(
+              'PLAN_DISPLAY_UNIT_UNSUPPORTED',
+              field,
+              '原步骤未支持候选的单位文本。数值要求可在同一已绑定definition字段使用display_number及原数值；明确单位要求仍用原单位文本。保留对象、字段、来源、时机和独立审查，不复制观察作为预期，不重放动作。',
+            );
+        }
         const unsupported = [];
         // A literal ID range guarantees membership, not a closed population or
         // row order. These are necessary guards for this bounded source grammar,

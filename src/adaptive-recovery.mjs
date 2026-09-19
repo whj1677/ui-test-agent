@@ -2,6 +2,12 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_NUMERIC_FIELD_REQUIRED:
+    'This new adaptive candidate was not dispatched. On the SAME scoped definition field use display_number with the ORIGINAL finite number when the source has no explicit unit. If the original requires a unit, use its grounded text instead. Legacy scalar number does not parse display units. Keep sources, identity, timing and independent audit; never copy observed values or replay actions.',
+  PLAN_DISPLAY_UNIT_UNSUPPORTED:
+    'The candidate was not dispatched: it adds a unit text not grounded in the original. For the SAME scoped definition field, use display_number with the ORIGINAL finite numeric value if the original requires only a number. Explicit unit obligations must retain grounded text; numeric projection is not unit verification or conversion. Preserve sources, identity and timing, submit for independent audit, and do not replay actions or copy actual values.',
+  ASSERTION_DISPLAY_UNIT_REQUIRED:
+    'display_number cannot discharge an explicit original unit requirement. Use grounded original text on the same scoped definition field, without conversion, tolerance, observed expectations, or replay.',
   PLAN_TABLE_CONSTRAINT_UNSUPPORTED:
     'The unexecuted candidate adds a population/order/record-total constraint unsupported by the original CURRENT step. Read detail.reason and remove only those proposed extras: visible ID ranges alone do not require exact_rows or ordered; a page x/y requirement alone does not fix the observed total record count. Keep all required IDs, field values, page numbers, source_refs and timing. Use contains with the ORIGINAL page phrase when the counter also displays an unrequested total. Do not alter executed evidence, weaken any explicit count/order requirement, or replay actions; submit for independent audit within the existing budget.',
   ASSERTION_NUMERIC_TABLE_REQUIRED:
