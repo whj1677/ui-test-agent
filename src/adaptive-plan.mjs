@@ -8,7 +8,7 @@ import {
   validatePlan,
 } from './plans.mjs';
 import { conditionalDismissSource } from './optional-dialog.mjs';
-import { TABLE_ASSERTION_GUIDANCE } from './table-assertion.mjs';
+import { TABLE_ASSERTION_GUIDANCE, ADAPTIVE_NUMERIC_GUIDANCE } from './table-assertion.mjs';
 import { extractExpectationRanges, requireAdaptivePageTarget } from './expectation-coverage.mjs';
 import { DEFINITION_GUIDANCE } from './scope-guidance.mjs';
 
@@ -298,6 +298,8 @@ function validateSegments(c, original, previous, fragment, base) {
     for (const assertion of part.assertions) {
       safeTarget(assertion?.target);
       validateAssertion(assertion, original, { data: c.data, test_data: c.test_data });
+      if (assertion.check === 'number' && assertion.target.kind === 'cell')
+        fail('ASSERTION_NUMERIC_TABLE_REQUIRED');
       requireAdaptivePageTarget(assertion, original);
       sourceIdentity(assertion.target, c);
     }
@@ -408,6 +410,7 @@ Use progress.remaining_obligations and their audit reasons to choose the next mi
 When repair_focus.mode is missing_assertions, this is a constrained repair request: actions MUST be empty and every new assertion must measure an outstanding repair_focus.obligation, not repeat already_measured (changing source_refs does not help). Focus on the missing clause now, not a later segment. Text such as a page counter can be in current.text without an actionable target_ref; an evidence-backed legacy exact text locator is supported and will be checked for uniqueness. If there is no missing obligation, return an empty complete:true fragment for full review. If no grounded measurement is possible, return blocked; never invent a locator or expectation. The repair does not grant extra calls or time.
 ADDITIONAL RELATIONAL CHECK: table_unchanged (omit expected) is available only for an original expectation that the table/list remains unchanged or does not apply new filter conditions before query. The executor captures a full native table baseline BEFORE this step's first action (table_baseline.captured), compares after each action, and at this assertion. Use its observed table target, preserve the relationship source_refs/obligation_ids. Never copy current values as fixed expectations, replace this with row_count, provide a baseline yourself, or capture one after filling/selecting. Unsupported/hidden/virtual table or missing baseline stops technically. This proves sampled after-action/final equality, not continuous invisibility of transient changes. Check the selected field values with value/selected_label as separate original obligations.
 ${TABLE_ASSERTION_GUIDANCE}
+${ADAPTIVE_NUMERIC_GUIDANCE}
 ${DEFINITION_GUIDANCE}`;
 
 // Append to PLAN_AUDIT_PROMPT at the call site. Importing that prompt here would

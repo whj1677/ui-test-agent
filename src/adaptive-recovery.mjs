@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_NUMERIC_TABLE_REQUIRED:
+    'This candidate was not dispatched or measured. Scalar number does not support display units. Replace the proposed numeric cell check with table_cells on the SAME table, original key and column, inner check:"number" and unchanged original numeric expected value; preserve its source_refs and timing. If a matrix already measures this same field, remove only the redundant unexecuted scalar check after verifying the matrix covers its original obligations. Do not add exact_rows/ordered constraints unless required, copy observed units/values, change the oracle, replay actions or claim a pass. Independent source and semantic review remain required.',
   ADAPTIVE_SEGMENT_REJECTED:
     'This candidate was NOT executed. Correct the specific audit finding, not merely reason text. If source_binding_gaps are supplied, inspect each candidate assertion against that original obligation: a joint proof requires EVERY contributing assertion to explicitly include the applicable source_refs. Only propose that binding if the unchanged measurement genuinely supports the original obligation, or propose a different valid measurement. Do not automatically trust the reviewer, infer expectations from actual values, remove obligations, modify already executed segments, or replay actions. The revised candidate must undergo the same independent audit. Changing reason alone is not progress.',
   PLAN_ASSERTION_UNSUPPORTED:
