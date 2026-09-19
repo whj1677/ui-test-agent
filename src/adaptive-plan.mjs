@@ -15,6 +15,7 @@ import { EVIDENCE_SOURCE_GUIDANCE } from './assertion-evidence.mjs';
 import { VISIBILITY_EVIDENCE_GUIDANCE } from './expectation-visibility.mjs';
 import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
 import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
+import { requireRowEvidence, ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
 import {
   TABLE_ASSERTION_GUIDANCE,
   ADAPTIVE_NUMERIC_GUIDANCE,
@@ -313,6 +314,7 @@ function validateSegments(c, original, previous, fragment, base) {
     for (const assertion of part.assertions) {
       safeTarget(assertion?.target);
       validateAssertion(assertion, original, { data: c.data, test_data: c.test_data });
+      requireRowEvidence(assertion, original);
       if (assertion.check === 'number' && assertion.target.kind === 'cell')
         fail('ASSERTION_NUMERIC_TABLE_REQUIRED');
       if (
@@ -438,6 +440,7 @@ ${ADAPTIVE_CONSTRAINT_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
 ${ORDER_EVIDENCE_GUIDANCE}
+${ROW_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
 ${VISIBILITY_EVIDENCE_GUIDANCE}
 ${SELECTION_TIMING_GUIDANCE}

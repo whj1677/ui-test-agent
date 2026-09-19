@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  ASSERTION_ROW_FIELD_REQUIRED:
+    'This candidate was not dispatched. A whole-row scalar summary is not original field evidence. Replace it with SAME original record key + appropriate column checks (cell/table_cells), preserving every ORIGINAL value, source ref, predicate meaning and timing. For AND, verify each original condition on returned fields, not only ID/count/input controls; do not add unrelated visible fields, units or action labels. Do not normalize or copy observed row text as the oracle. An explicit original complete literal row-text requirement remains unchanged. Reuse executed query; no replay, extra calls or deadline extension.',
   PLAN_TABLE_ORDER_UNPROVEN:
     'The completion candidate has not proved actual table ordering. selected_label/value is control state only. Read detail.reason and add a source-grounded table_order for the same current table and obligation, or a complete original-value ordered matrix. Do not manufacture expected rows, apply a not-yet-applied input, replay query/sort, or change original timing. Existing replan/deadline limits and independent review remain in force.',
   ASSERTION_SELECTION_BEFORE_ACTION:

@@ -18,6 +18,7 @@ import { requireAdaptivePageTarget } from './expectation-coverage.mjs';
 import { isQueryResetStep } from './adaptive-query-reset.mjs';
 import { queryFormFacts } from './query-forms.mjs';
 import { candidateIssues } from './adaptive-candidate-feedback.mjs';
+import { requireRowEvidence } from './row-evidence.mjs';
 
 export async function requireAdaptiveAssertionTargets(
   page,
@@ -48,21 +49,23 @@ export async function requireAdaptiveAssertionTargets(
       // An absent future target is not approved here; the kernel still validates it.
       continue;
     }
-    if (
-      !['text', 'contains'].includes(assertion.check) ||
-      !/第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)
-    )
-      continue;
+    if (!['text', 'contains', 'number'].includes(assertion.check)) continue;
     const locator = runtimeLocator(page, assertion.target);
     // Future targets may not exist before the authorized action. This observation
     // is not an approval, uniqueness shortcut, or permission to ignore absence.
     if ((await locator.count()) !== 1) continue;
     const role = await locator.evaluate(
-      (e) => (e.tagName === 'TABLE' ? 'table' : e.getAttribute('role')),
+      (e) =>
+        e.tagName === 'TABLE' ? 'table' : e.tagName === 'TR' ? 'row' : e.getAttribute('role'),
       undefined,
       { timeout: remaining() },
     );
-    requireAdaptivePageTarget(assertion, original, role);
+    requireRowEvidence(assertion, original, role === 'row');
+    if (
+      ['text', 'contains'].includes(assertion.check) &&
+      /第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)
+    )
+      requireAdaptivePageTarget(assertion, original, role);
   }
 }
 
@@ -308,7 +311,7 @@ export async function executeAdaptiveStep(session, run) {
       await requireAdaptiveAssertionTargets(
         page,
         fragment,
-        { expected: step.source_expected },
+        run.c.steps.find((item) => item.step_id === step.step_id),
         () => budget.remaining(2000),
       );
       const assertionContract = (items) => items.map(({ target, ...item }) => item);

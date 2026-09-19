@@ -1,3 +1,5 @@
+import { wholeRowTarget } from './row-evidence.mjs';
+
 // Advisory syntax facts for independent semantic review, never an acceptance
 // receipt. Real uniqueness, object scope and values remain executor obligations.
 export const EVIDENCE_SOURCE_GUIDANCE =
@@ -7,6 +9,8 @@ export function assertionEvidenceBinding(assertion) {
   const target = assertion?.target;
   const predicate = assertion?.check ?? null;
   const common = { basis: 'candidate_locator_syntax_only', runtime_verified: false, predicate };
+  if (wholeRowTarget(target))
+    return { ...common, kind: 'whole_table_row', field_value_proof: false };
   const comparison =
     {
       text: 'exact_text',
