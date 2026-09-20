@@ -120,13 +120,22 @@ export function analyzeRecords(records) {
 export async function analyzeRound(directory) {
   const round = JSON.parse(await fs.readFile(path.join(directory, 'round.json'), 'utf8'));
   if (!round.tasks?.length || round.tasks.some(t => !t.finished_at)) throw Error('ROUND_NOT_FINISHED');
-  const records = [], recording = [];
+  const records = [], recording = [], no_execution_tasks = [];
   for (const task of round.tasks) {
     const diagnosticDir = path.join(directory, 'product-data', 'tasks', task.id, 'diagnostics');
     for (const name of (await fs.readdir(diagnosticDir)).filter(n => n.endsWith('.json')).sort())
       records.push(JSON.parse(await fs.readFile(path.join(diagnosticDir, name), 'utf8')).record);
     const runsDir = path.join(directory, 'product-data', 'tasks', task.id, 'runs');
-    for (const run of await fs.readdir(runsDir, { withFileTypes: true })) {
+    let runs;
+    try { runs = await fs.readdir(runsDir, { withFileTypes: true }); }
+    catch (error) {
+      if (error.code !== 'ENOENT' || !task.results?.length ||
+          !task.results.every(r => r.attempts === 0)) throw error;
+      runs = [];
+      no_execution_tasks.push({ task_id: task.id, reason: 'Ledger records zero attempts; no run directory',
+        cases: task.results.map(r => ({ case_id: r.case_id, status: r.status })) });
+    }
+    for (const run of runs) {
       if (!run.isDirectory()) continue;
       const factPath = path.join(runsDir, run.name, 'facts.json');
       let fact;
@@ -150,7 +159,7 @@ export async function analyzeRound(directory) {
     scope: 'Read-only accounting, not semantic acceptance or controlled causal comparison',
     method: 'Request-ID dedup; mutually exclusive purpose with phase as separate axis; text marker explicitly labelled; audit of proposed complete fragments with measurements remains candidate review; empty completion proposal review separate; no raw prompts or page data exported; missing telemetry is unknown; time sums are not wall-clock.',
     wall_clock_ms: round.budget.elapsed_ms,
-    recording,
+    recording, no_execution_tasks,
     ...report,
   };
 }

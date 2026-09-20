@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { analyzeRecords, classifyRequest } from '../scripts/analyze-model-round.mjs';
+import { analyzeRecords, classifyRequest, analyzeRound } from '../scripts/analyze-model-round.mjs';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 
 test('classification separates proposals from measured completion, repairs and partial review', () => {
   const classify = (phase, input) => classifyRequest({ phase, input }).category;
@@ -47,4 +50,21 @@ test('missing timings and usage remain explicitly unknown, never synthetic zero'
   assert.equal(r.rows[0].latency_ms, null);
   assert.equal(r.by_category[0].missing_transport_calls, 1);
   assert.equal(r.by_category[0].missing_usage_calls, 1);
+});
+
+test('a pre-execution failure has no recordings, but a missing attempted run is not hidden', async () => {
+  const dir=await fs.mkdtemp(path.join(os.tmpdir(),'model-diagnosis-no-run-'));
+  const diagnostics=path.join(dir,'product-data/tasks/t/diagnostics');
+  await fs.mkdir(diagnostics,{recursive:true});
+  await fs.writeFile(path.join(diagnostics,'1.json'),JSON.stringify({record:{type:'MODEL_REQUEST',request_id:'r',phase:'input_review'}}));
+  const task={id:'t',finished_at:'2026-09-20T00:01:00Z',results:[{case_id:'c',attempts:0,status:'NEEDS_MAPPING'}]};
+  const round={tasks:[task],budget:{calls:1,elapsed_ms:1000}};
+  await fs.writeFile(path.join(dir,'round.json'),JSON.stringify(round));
+  const result=await analyzeRound(dir);
+  assert.equal(result.recording.length,0);
+  assert.equal(result.no_execution_tasks.length,1);
+  assert.equal(result.by_category[0].missing_usage_calls,1);
+  task.results[0].attempts=1;
+  await fs.writeFile(path.join(dir,'round.json'),JSON.stringify(round));
+  await assert.rejects(analyzeRound(dir),{code:'ENOENT'});
 });
