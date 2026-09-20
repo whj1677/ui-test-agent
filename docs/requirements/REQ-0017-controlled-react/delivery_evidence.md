@@ -2,22 +2,23 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T08:55:01+08:00`
+- Generated at: `2026-09-20T09:25:39+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `c4f0b33040af5aa05ab5efa345e6959159b5c19af9061b0658c9bb813054753d`
+- Change fingerprint: `6860e9a14d619573a31756cc6258df8717cf7cc0201ab081ae753bbfc234a1c7`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/adaptive-completion-evidence.test.mjs tests/adaptive-completion-evidence.execution.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/partial-assertion-review.test.mjs tests/partial-assertion-review.execution.test.mjs`
 - Exit code: `0`
-- Test count: `11`
+- Test count: `21`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v33-delivery.log`
-- Log SHA-256: `efd23f567ac7e0660cbf276d37728351b1e524269977b85a90bfbeb98a132698`
+- Log path: `validation/req0017/v34-delivery.log`
+- Log SHA-256: `9cb2ca876736e6489e005068a347913be521a89a56b73b49d3187a8bb098ac0e`
 
 ### Git Status
 
 ```text
+ M docs/modules/release_runtime.md
  M docs/requirements/README.md
  M docs/requirements/REQ-0017-controlled-react/00_user_requirement.md
  M docs/requirements/REQ-0017-controlled-react/02_design.md
@@ -27,18 +28,20 @@
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v32-result.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v33-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/adaptive-execution.mjs
- M src/adaptive-recovery.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v33-result.md
-?? tests/adaptive-completion-evidence.execution.test.mjs
-?? tests/adaptive-completion-evidence.test.mjs
+ M src/adaptive-review.mjs
+?? docs/requirements/REQ-0017-controlled-react/kimi-v34-review.md
+?? docs/requirements/REQ-0017-controlled-react/real-model-v34-result.md
+?? src/partial-assertion-review.mjs
+?? tests/partial-assertion-review.execution.test.mjs
+?? tests/partial-assertion-review.test.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
+warning: in the working copy of 'docs/modules/release_runtime.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/02_design.md', LF will be replaced by CRLF the next time Git touches it
@@ -48,122 +51,183 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v32-result.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v33-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-execution.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+ docs/modules/release_runtime.md                    |   2 +
  docs/requirements/README.md                        |   2 +
- .../00_user_requirement.md                         |   3 +
+ .../00_user_requirement.md                         |   4 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   4 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   4 +-
  .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |  10 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 320 +++++----------------
- .../real-model-v32-result.md                       |   6 +
- .../requirement.source.json                        |  29 +-
- src/adaptive-execution.mjs                         |  22 +-
- src/adaptive-recovery.mjs                          |  17 ++
- 13 files changed, 145 insertions(+), 277 deletions(-)
+ .../REQ-0017-controlled-react/delivery_evidence.md | 223 +++++++++++++--------
+ .../real-model-v33-result.md                       |  12 ++
+ .../requirement.source.json                        |  33 ++-
+ src/adaptive-review.mjs                            |  11 +-
+ 13 files changed, 201 insertions(+), 109 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v33-result.md
-tests/adaptive-completion-evidence.execution.test.mjs
-tests/adaptive-completion-evidence.test.mjs
+docs/requirements/REQ-0017-controlled-react/kimi-v34-review.md
+docs/requirements/REQ-0017-controlled-react/real-model-v34-result.md
+src/partial-assertion-review.mjs
+tests/partial-assertion-review.execution.test.mjs
+tests/partial-assertion-review.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T08:54:03+08:00
-Command: node --test --test-concurrency=2 tests/adaptive-completion-evidence.test.mjs tests/adaptive-completion-evidence.execution.test.mjs
+Started at: 2026-09-20T09:24:08+08:00
+Command: node --test --test-concurrency=2 tests/partial-assertion-review.test.mjs tests/partial-assertion-review.execution.test.mjs
 Exit code: 0
-Parsed test count: 11
+Parsed test count: 21
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: a new successful measurement can request completion, not approve it: new-evidence
-ok 1 - a new successful measurement can request completion, not approve it: new-evidence
+# Subtest: partial semantic review with actual Controller and browser: inverted
+ok 1 - partial semantic review with actual Controller and browser: inverted
   ---
-  duration_ms: 16341.1744
+  duration_ms: 14500.8007
   type: 'test'
   ...
-# Subtest: a new successful measurement can request completion, not approve it: final-reject
-ok 2 - a new successful measurement can request completion, not approve it: final-reject
+# Subtest: partial semantic review with actual Controller and browser: real-defect
+ok 2 - partial semantic review with actual Controller and browser: real-defect
   ---
-  duration_ms: 14723.5376
+  duration_ms: 16718.1351
   type: 'test'
   ...
-# Subtest: a new successful measurement can request completion, not approve it: duplicate-only
-ok 3 - a new successful measurement can request completion, not approve it: duplicate-only
+# Subtest: partial semantic review with actual Controller and browser: valid-part
+ok 3 - partial semantic review with actual Controller and browser: valid-part
   ---
-  duration_ms: 11186.2722
+  duration_ms: 17784.1085
   type: 'test'
   ...
-# Subtest: a new successful measurement can request completion, not approve it: actual-difference
-ok 4 - a new successful measurement can request completion, not approve it: actual-difference
+# Subtest: partial semantic review with actual Controller and browser: unresolved
+ok 4 - partial semantic review with actual Controller and browser: unresolved
   ---
-  duration_ms: 13824.6618
+  duration_ms: 14107.3377
   type: 'test'
   ...
-# Subtest: a newly measured distinct assertion changes the completion evidence set
-ok 5 - a newly measured distinct assertion changes the completion evidence set
+# Subtest: partial semantic review with actual Controller and browser: malformed
+ok 5 - partial semantic review with actual Controller and browser: malformed
   ---
-  duration_ms: 1.4139
+  duration_ms: 13925.2915
   type: 'test'
   ...
-# Subtest: duplicates, order and fragment/action metadata do not unlock another probe
-ok 6 - duplicates, order and fragment/action metadata do not unlock another probe
+# Subtest: partial semantic review with actual Controller and browser: persistent
+ok 6 - partial semantic review with actual Controller and browser: persistent
   ---
-  duration_ms: 0.4543
+  duration_ms: 12074.4953
   type: 'test'
   ...
-# Subtest: new source IDs or quote alone do not count as new measured content
-ok 7 - new source IDs or quote alone do not count as new measured content
+# Subtest: partial assertion semantic verdict remains separate from coverage: SUPPORTED
+ok 7 - partial assertion semantic verdict remains separate from coverage: SUPPORTED
   ---
-  duration_ms: 0.1556
+  duration_ms: 3.5618
   type: 'test'
   ...
-# Subtest: default visibility is normalized to its actual default true predicate
-ok 8 - default visibility is normalized to its actual default true predicate
+# Subtest: partial assertion semantic verdict remains separate from coverage: CONTRADICTS
+ok 8 - partial assertion semantic verdict remains separate from coverage: CONTRADICTS
   ---
-  duration_ms: 0.1537
+  duration_ms: 0.6584
   type: 'test'
   ...
-# Subtest: changing a real target, predicate or expected value is a different declaration, not approval
-ok 9 - changing a real target, predicate or expected value is a different declaration, not approval
+# Subtest: partial assertion semantic verdict remains separate from coverage: UNRESOLVED
+ok 9 - partial assertion semantic verdict remains separate from coverage: UNRESOLVED
   ---
-  duration_ms: 0.3416
+  duration_ms: 0.4431
   type: 'test'
   ...
-# Subtest: input is never mutated and property serialization order is immaterial
-ok 10 - input is never mutated and property serialization order is immaterial
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {}
+ok 10 - missing or forged assertion verdict cannot authorize a partial candidate: {}
   ---
-  duration_ms: 1.2942
+  duration_ms: 0.4705
   type: 'test'
   ...
-# Subtest: a model cannot forge controller probe origin or an evidence epoch
-ok 11 - a model cannot forge controller probe origin or an evidence epoch
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[]}
+ok 11 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[]}
   ---
-  duration_ms: 4.0749
+  duration_ms: 0.4109
   type: 'test'
   ...
-1..11
-# tests 11
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"},{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}]}
+ok 12 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"},{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}]}
+  ---
+  duration_ms: 0.1901
+  type: 'test'
+  ...
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A9","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}]}
+ok 13 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A9","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}]}
+  ---
+  duration_ms: 0.3242
+  type: 'test'
+  ...
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"ACCEPT","reason":"按原断言逐项复核的测试判定"}]}
+ok 14 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"ACCEPT","reason":"按原断言逐项复核的测试判定"}]}
+  ---
+  duration_ms: 0.5597
+  type: 'test'
+  ...
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":""}]}
+ok 15 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":""}]}
+  ---
+  duration_ms: 1.4457
+  type: 'test'
+  ...
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}],"complete":true}
+ok 16 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定"}],"complete":true}
+  ---
+  duration_ms: 0.8552
+  type: 'test'
+  ...
+# Subtest: missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定","expected":"替换原预期"}]}
+ok 17 - missing or forged assertion verdict cannot authorize a partial candidate: {"assertion_checks":[{"assertion_ref":"A1","status":"SUPPORTED","reason":"按原断言逐项复核的测试判定","expected":"替换原预期"}]}
+  ---
+  duration_ms: 0.3503
+  type: 'test'
+  ...
+# Subtest: complete, already-rejected, action-only and supported current assertions add no request
+ok 18 - complete, already-rejected, action-only and supported current assertions add no request
+  ---
+  duration_ms: 0.4321
+  type: 'test'
+  ...
+# Subtest: one covered source cannot hide a second unreviewed or negative binding
+ok 19 - one covered source cannot hide a second unreviewed or negative binding
+  ---
+  duration_ms: 0.3203
+  type: 'test'
+  ...
+# Subtest: executed prefix is not reviewed again and tail mismatch is rejected without asking
+ok 20 - executed prefix is not reviewed again and tail mismatch is rejected without asking
+  ---
+  duration_ms: 0.3743
+  type: 'test'
+  ...
+# Subtest: invalid JSON denies execution once; cancellation and provider failures propagate
+ok 21 - invalid JSON denies execution once; cancellation and provider failures propagate
+  ---
+  duration_ms: 0.9437
+  type: 'test'
+  ...
+1..21
+# tests 21
 # suites 0
-# pass 11
+# pass 21
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 56608.6373
+# duration_ms 89643.6705
 ```
 
 ### Sync Record Status
@@ -174,20 +238,12 @@ DRY-RUN: no derived changes for REQ-0017-controlled-react; explicit implementati
 
 ### Check AI Context
 
-- Exit code: `1`
+- Exit code: `0`
 
 ```text
-FAIL ai-engineering-context checks
-
-1. docs\modules
-   Problem: Code/test/config changed but no concrete module document was updated, and no explicit no-module-doc-change reason was recorded in the changed requirement design.
-   Fix: Create or update the affected `docs/modules/<module>.md` file. If the change truly has no module impact, add `本次无需模块文档变更，原因：...` to the changed requirement `02_design.md`.
+PASS ai-engineering-context checks
 ```
 
 ### Notes
 
-版本33成功新证据后的完整收尾重核，11项专项；原预算和最终审查保持，不计官方模型效果。
-
-### Module documentation follow-up
-
-首次 collector 的上述失败仅为模块说明未更新，保留原始结果。补齐 `docs/modules/release_runtime.md` 后实际重新运行 `python scripts/check_ai_context.py` 返回 exit 0 / `PASS ai-engineering-context checks`；代码未变化，不重复运行已成功的11项专项。随后四个变更源码/测试文件 Prettier 检查和 `git diff --check` 均无问题。
+版本34当前部分断言语义许可与义务覆盖分离；真实Chromium注入工程，不计官方模型效果，原预算/权限不变。

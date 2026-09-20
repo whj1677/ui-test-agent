@@ -16,6 +16,10 @@ import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 import { ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
 import { CURRENT_PAGE_GUIDANCE } from './page-index-evidence.mjs';
 import { QUERY_RESULT_EVIDENCE_GUIDANCE } from './query-result-evidence.mjs';
+import {
+  PARTIAL_ASSERTION_REVIEW_GUIDANCE,
+  reviewPartialAssertions,
+} from './partial-assertion-review.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
 ${TAB_SELECTION_GUIDANCE}
@@ -31,7 +35,9 @@ ${TABLE_ASSERTION_GUIDANCE}
 ${ADAPTIVE_NUMERIC_GUIDANCE}
 ${ADAPTIVE_CONSTRAINT_GUIDANCE}
 CURRENT AUDIT OUTPUT OVERRIDE: Prefer {checks:[{obligation_id,status,assertion_refs:["A1"],reason}],issues:[{code,step_id,reason}]}. The program supplies assertion_catalog with stable IDs for THIS cumulative candidate. Do not manufacture indices or mark an operation as a measured assertion. COVERED requires at least one actual assertion reference that checks that obligation. When entering a page is required, a measured heading or URL assertion may cover that obligation AND a heading obligation if its source_refs bind both; executed click alone is not coverage. Missing coverage in complete:false is MISSING + ASSERTION_GAP, not a protocol exception or business ambiguity. On review_correction, fix ONLY your audit response for the SAME candidate. Never modify the original expected, candidate, or execute actions. Legacy assertion_indices output remains accepted if strictly valid.
-SUPPORTED RELATIONAL CHECK: table_unchanged (expected omitted or true) compares the complete single native table with a runtime-owned baseline frozen before this original step's first action, bound to run/step/locator/full URL. The executor independently compares after each action and at this assertion, rejects missing/forged/cross-scope baselines and unsupported structures, and never retries a mismatch until it becomes equal. It supports an explicit original table-unchanged/not-yet-applied-filter expectation; it is not a new literal value from the current page. It does NOT verify entered query field values (require value/selected_label separately), data beyond the current table, continuous states between samples, or a business result after clicking query. Row count alone is not proof of unchanged contents. Only mark its actual relation obligation covered, with the correct table scope.`;
+SUPPORTED RELATIONAL CHECK: table_unchanged (expected omitted or true) compares the complete single native table with a runtime-owned baseline frozen before this original step's first action, bound to run/step/locator/full URL. The executor independently compares after each action and at this assertion, rejects missing/forged/cross-scope baselines and unsupported structures, and never retries a mismatch until it becomes equal. It supports an explicit original table-unchanged/not-yet-applied-filter expectation; it is not a new literal value from the current page. It does NOT verify entered query field values (require value/selected_label separately), data beyond the current table, continuous states between samples, or a business result after clicking query. Row count alone is not proof of unchanged contents. Only mark its actual relation obligation covered, with the correct table scope.
+For partial_assertion_review requests ONLY, the following output schema overrides the normal checks/issues schema above:
+${PARTIAL_ASSERTION_REVIEW_GUIDANCE}`;
 
 export function adaptiveAuditInput(input) {
   return {
@@ -187,7 +193,8 @@ export async function reviewAdaptiveCandidate(input, ask, onRepair = async () =>
     try {
       reply = await ask({ ...context, ...(correction ? { review_correction: correction } : {}) });
       compiled = compileAdaptiveAudit(reply, context);
-      return validatePlanAudit(compiled, input.original, input.candidate_plan);
+      const verdict = validatePlanAudit(compiled, input.original, input.candidate_plan);
+      return await reviewPartialAssertions(context, verdict, ask);
     } catch (error) {
       if (error.code === 'PLAN_AUDIT_INCONSISTENT' && compiled) {
         try {
