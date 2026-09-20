@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import { DeepSeek } from '../src/deepseek.mjs';
+import { requireDiagnosticProfile } from '../src/diagnostic-profile.mjs';
 import { CredentialStore } from '../src/credential-store.mjs';
 import { start } from '../src/server.mjs';
 import { importCases } from '../src/importer.mjs';
@@ -52,7 +53,11 @@ export async function runLab({
   maxMinutes = 45,
   modelProvider,
   caseIds,
+  diagnosticProfile = 'baseline',
+  sharedBudget,
+  onRoundStarted,
 } = {}) {
+  requireDiagnosticProfile(diagnosticProfile);
   if (!['smoke', 'all', 'heldout'].includes(suite)) throw Error('INVALID_SUITE');
   const budget = callBudget({ maxCalls, maxMinutes });
   const manifest = await jsonFile('expanded-lab/manifest.json');
@@ -121,7 +126,7 @@ export async function runLab({
         : {}),
     };
   // In-process injection is for engineering tests only; CLI has no provider/URL override.
-  const provider = modelProvider ?? new DeepSeek();
+  const provider = modelProvider ?? new DeepSeek({ diagnosticProfile });
   if (provider.baseURL !== 'https://api.deepseek.com') throw Error('OFFICIAL_PROVIDER_REQUIRED');
   let app, lab, contrast, heldout, stopTimer;
   try {
@@ -136,10 +141,13 @@ export async function runLab({
       throw Object.assign(new Error('LOCAL_SAVED_KEY_REQUIRED'), {
         code: 'LOCAL_SAVED_KEY_REQUIRED',
       });
+    if (sharedBudget && provider.model !== 'deepseek-flash') throw Error('COMPARISON_MODEL_CHANGED');
     const originalJson = provider.json.bind(provider);
     let persistBudget = async () => {};
     provider.json = async (...args) => {
+      if (sharedBudget?.expired()) throw Error('COMPARISON_BUDGET_EXHAUSTED');
       budget.take();
+      await sharedBudget?.take();
       await persistBudget();
       return originalJson(...args);
     };
@@ -155,6 +163,7 @@ export async function runLab({
           }
         : {}),
       model_mode: modelProvider ? 'ENGINEERING_INJECTED' : 'OFFICIAL_DEEPSEEK_API',
+      diagnostic_profile: diagnosticProfile,
       budget: budget.snapshot(),
       tasks: [],
       acceptance: 'NOT_ESTABLISHED',
@@ -168,6 +177,7 @@ export async function runLab({
     };
     persistBudget = save;
     await save();
+    await onRoundStarted?.({ directory, diagnosticProfile });
     app = await start({
       port: 0,
       dataDir: path.join(directory, 'product-data'),
@@ -200,12 +210,13 @@ export async function runLab({
       };
     }
     stopTimer = setInterval(() => {
-      if (budget.expired() && app.controller.active) app.controller.active.abort.abort();
+      if ((budget.expired() || sharedBudget?.expired()) && app.controller.active)
+        app.controller.active.abort.abort();
     }, 250);
     stopTimer.unref();
     try {
       for (const group of groups) {
-        if (budget.expired() || budget.snapshot().calls >= maxCalls) break;
+        if (budget.expired() || sharedBudget?.expired() || budget.snapshot().calls >= maxCalls) break;
         const target =
           (group.name === 'heldout'
             ? heldout.url

@@ -52,6 +52,7 @@ function aggregate(rows, key) {
       latency_ms: 0, missing_latency_calls: 0, missing_transport_calls: 0,
       prompt_tokens: 0, completion_tokens: 0, total_tokens: 0, missing_usage_calls: 0,
       prompt_cache_hit_tokens: 0, prompt_cache_miss_tokens: 0, missing_cache_usage_calls: 0,
+      reasoning_tokens: 0, missing_reasoning_usage_calls: 0,
     });
     const group = groups.get(label);
     group.calls++;
@@ -68,6 +69,8 @@ function aggregate(rows, key) {
       group.missing_cache_usage_calls++;
     for (const k of ['prompt_cache_hit_tokens', 'prompt_cache_miss_tokens'])
       if (finite(row.usage?.[k])) group[k] += row.usage[k];
+    if (finite(row.usage?.reasoning_tokens)) group.reasoning_tokens += row.usage.reasoning_tokens;
+    else group.missing_reasoning_usage_calls++;
   }
   return [...groups.values()].sort((a, b) => b.transport_ms - a.transport_ms);
 }

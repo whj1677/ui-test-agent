@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { diagnosticPlanningRequest } from './diagnostic-profile.mjs';
 import { validateObserveDecision } from './controlled-react.mjs';
 import path from 'node:path';
 import {
@@ -1247,6 +1248,11 @@ export class Controller {
   async askWithPermit(job, prompt, data, { phase, runId, signal }) {
     this.assertCurrent(job);
     if (job.diagnostic_failed) fail('DIAGNOSTIC_WRITE_FAILED', 500);
+    if (phase === 'adaptive_plan') {
+      const request = diagnosticPlanningRequest(prompt, data, this.provider.diagnosticProfile);
+      prompt = request.prompt;
+      data = request.input;
+    }
     if (['discovery', 'plan'].includes(phase) && this.experience.mode !== 'off') {
       const root = preparationRoot(job);
       const state = await this.store.read(job.id);

@@ -1,6 +1,7 @@
 import { fail, nonempty, now, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 import { createModelFetch, networkErrorCode } from './model-transport.mjs';
+import { requireDiagnosticProfile } from './diagnostic-profile.mjs';
 
 const tokenCount = (value) =>
   typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
@@ -23,7 +24,9 @@ export class DeepSeek {
     baseURL = 'https://api.deepseek.com',
     fetchImpl,
     timeout = 60000,
+    diagnosticProfile = 'baseline',
   } = {}) {
+    Object.defineProperty(this, 'diagnosticProfile', { value: requireDiagnosticProfile(diagnosticProfile), enumerable: true });
     this.#key = key;
     this.model = model;
     this.baseURL = baseURL;
@@ -95,7 +98,8 @@ export class DeepSeek {
     ];
     const requestSettings = {
       model: requestedModel,
-      thinking: { type: 'disabled' },
+      thinking: { type: this.diagnosticProfile === 'reasoning-low' ? 'enabled' : 'disabled' },
+      ...(this.diagnosticProfile === 'reasoning-low' ? { reasoning_effort: 'low' } : {}),
       response_format: { type: 'json_object' },
       max_tokens: 6000,
       temperature: 0,
@@ -203,6 +207,7 @@ export class DeepSeek {
       total_tokens: tokenCount(raw?.usage?.total_tokens),
       prompt_cache_hit_tokens: tokenCount(raw?.usage?.prompt_cache_hit_tokens),
       prompt_cache_miss_tokens: tokenCount(raw?.usage?.prompt_cache_miss_tokens),
+      reasoning_tokens: tokenCount(raw?.usage?.completion_tokens_details?.reasoning_tokens),
     };
     const meta = {
       attempt,

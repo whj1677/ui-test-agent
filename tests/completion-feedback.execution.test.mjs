@@ -11,8 +11,9 @@ import { suggestObligations } from '../src/plans.mjs';
 import { INPUT_REVIEW_PROMPT } from '../src/input-review.mjs';
 import { PLAN_AUDIT_PROMPT } from '../src/plan-quality.mjs';
 
+for (const diagnosticProfile of ['baseline', 'preflight-hints'])
 for (const scenario of ['early-feedback', 'actual-page11', 'persistent-omission'])
-  test('parallel completion feedback through actual Controller: ' + scenario, async (t) => {
+  test('parallel completion feedback through actual Controller: ' + diagnosticProfile + '/' + scenario, async (t) => {
     const server = http.createServer((q, r) => {
       r.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
       r.end(
@@ -52,8 +53,15 @@ for (const scenario of ['early-feedback', 'actual-page11', 'persistent-omission'
     await browser.authenticate(task, marker);
     let plans = 0;
     const provider = {
+      diagnosticProfile,
       configured: () => true,
       json: async (prompt, input) => {
+        if (prompt.startsWith('Planning preflight')) {
+          assert.equal(diagnosticProfile, 'preflight-hints');
+          assert.equal(input.planning_preflight.evidence_of_pass, false);
+          assert.equal(input.planning_preflight.future_targets, 'pending_binding_not_a_dispatch_gate');
+          assert.equal(input.planning_preflight.protocol.max_actions_per_reply, 1);
+        } else assert.equal(input.planning_preflight, undefined);
         let value;
         if (prompt.startsWith(INPUT_REVIEW_PROMPT)) value = { issues: [] };
         else if (prompt.startsWith(PLAN_AUDIT_PROMPT)) {
