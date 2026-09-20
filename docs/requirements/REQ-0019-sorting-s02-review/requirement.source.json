@@ -2,7 +2,7 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0019",
   "title": "排序组S02草稿修订与人工首审交付",
-  "metadata": {"requirement_status":"待人工首审","governance_level":"G2","version":2,"last_updated":"2026-09-20"},
+  "metadata": {"requirement_status":"排序组正式回归完成","governance_level":"G2","version":4,"last_updated":"2026-09-20"},
   "original_input": "新授权、单独记账地修订排序组草稿，仅补齐HOLD-S1的S02行集合完整性，交付真人首审材料；旧试点结论、旧脚本、旧报告和运行事实保持不变。",
   "user_requirements": [{"id":"UN-0019-01","status":"已确认","goal":"由原建例器修订排序组候选，补齐S02在选择功率降序但未查询时的同一表格行集合完整性检查，并形成可供真人首审的独立交付。","constraints":"最多一次建例修订和一次基于明确验证反馈的纠正；不改产品src、冻结页面、旧脚本、旧报告、历史事实，不切模型、不启用healer、不执行正式3+3回归。","success_criteria":"正常页面原检查可完成；独立新增第四行反例由实际候选在S02拒绝且不是定位或环境失败；逐义务对应表、差异、配置、尝试、耗时和中文首审材料齐全。"}],
   "confirmed_facts": [
@@ -10,21 +10,25 @@
     "旧候选S02仅按操作前行数比较原有行，不能排除选择排序后末尾新增第四行。",
     "建例工具为Claude Code 2.1.218兼容工具环境，供应商接口为DeepSeek Anthropic兼容端点，实际模型为deepseek-v4-pro；不得称为Claude模型。",
     "旧试点已耗尽初稿一次和修正两轮且未完成，本任务独立记账，不改变该历史结论。"
+    ,"2026-09-20用户明确确认新候选人工首审通过，并授权使用同一批准脚本开展正常3次、故障3次正式回归。"
   ],
   "inferences_and_open_questions": ["无阻塞业务问题；真人是否批准只能在本轮候选技术核查完成后由真人决定。"],
   "development_requirements": [
     {"id":"DR-0019-01","status":"已确认","requirement":"通过现有建例器生成新的排序候选，S02必须在原检查时点验证选择功率降序后表格行数和原每行每列及顺序均与操作前一致，同时保留表头、指定编号位置、中文选择值和计数器检查。","acceptance_criteria":"新候选与旧草稿差异只涉及所需检查或建例器为保持原义务所作的必要调整；不得以S01/S03/S04行数、计数器文字或故障分支替代S02表体完整性。","constraints":"Codex不得直接代补业务断言后冒称建例器产出；建例输入不得包含故障实现、oracle、参考测试或旧产品成功方案。"},
     {"id":"DR-0019-02","status":"已确认","requirement":"用实际修订候选完成正常工程干跑和独立新增行反例验证。","acceptance_criteria":"正常无变化完成；保留前三行和原计数器但新增第四行时在S02拒绝，错误明确指向表格变化，且未进入S03才失败。","constraints":"反例是工程验证，不冒充原S2故障检出；不得修改冻结站点或为反例另写一套正确断言。"},
-    {"id":"DR-0019-03","status":"已确认","requirement":"提供独立、脱敏、可追溯的中文真人首审包。","acceptance_criteria":"逐义务说明原要求、实际检查、检查时点、代码位置和执行证据，并记录工具模型配置、所有尝试、耗时、差异与限制。","constraints":"不得把模型审核冒充真人批准；不得提交凭据、会话、private目录或原始媒体。"}
+    {"id":"DR-0019-03","status":"已确认","requirement":"提供独立、脱敏、可追溯的中文真人首审包。","acceptance_criteria":"逐义务说明原要求、实际检查、检查时点、代码位置和执行证据，并记录工具模型配置、所有尝试、耗时、差异与限制。","constraints":"不得把模型审核冒充真人批准；不得提交凭据、会话、private目录或原始媒体。"},
+    {"id":"DR-0019-04","status":"已确认","requirement":"人工批准后使用SHA-256为280A7875...的同一脚本，按固定顺序执行正常入口3次、故障入口3次正式回归。","acceptance_criteria":"正常三次均完整通过；故障三次均在S03指定第二行错序检查上实际失败，错误为期望H111而实际H106；技术超时、定位错误或无关失败不计检出，故障后S04保持未执行。","constraints":"每次独立浏览器上下文；retries=0；零建例模型调用；不改脚本、不启用healer、不自动重试；保留六次全部结果和实际成本。"}
   ],
   "design_decisions": [
     {"id":"DD-0019-01","dr_ids":["DR-0019-01"],"status":"已确认","summary":"在新任务目录保存反馈、建例器原样输出和差异，旧pilot/tests/sorting.spec.ts保持不变。","rationale":"隔离新授权和旧试点事实，避免追溯改写历史。"},
     {"id":"DD-0019-02","dr_ids":["DR-0019-02"],"status":"已确认","summary":"同一份新候选通过入口环境变量分别运行正常页面和独立工程夹具。","rationale":"验证正式检查逻辑本身，防止只在反例侧实现正确检查。"},
     {"id":"DD-0019-03","dr_ids":["DR-0019-03"],"status":"已确认","summary":"只提交脱敏文本、脚本、夹具和结果摘要；原始会话和媒体继续留在被忽略的private目录。","rationale":"满足可审查性且不泄露凭据和敏感运行资料。"}
+    ,{"id":"DD-0019-04","dr_ids":["DR-0019-04"],"status":"已确认","summary":"固定顺序为normal-1、normal-2、normal-3、fault-1、fault-2、fault-3；每次单独启动Playwright测试进程。","rationale":"顺序固定且每次生成独立浏览器上下文、报告和媒体；正常结果先建立稳定基线，故障结果随后逐次核验指定差异。"}
   ],
   "interfaces_and_data_flow": [
     "原HOLD-S1正常用例、确认数据、旧候选、正常页面观察和明确S02反馈 -> 受限Claude Code工具环境/deepseek-v4-pro -> 新候选脚本。",
-    "新候选脚本 -> 原正常页面工程干跑与独立新增行夹具 -> 脱敏结果摘要、差异及逐义务对应表 -> 真人首审。"
+    "新候选脚本 -> 原正常页面工程干跑与独立新增行夹具 -> 脱敏结果摘要、差异及逐义务对应表 -> 真人首审。",
+    "人工批准的同一候选 -> /probe/s1正常入口3次 -> /probe/s2故障入口3次 -> 六份独立JSON/Trace/截图/录像和正式回归摘要。"
   ],
   "module_document_impact": ["新增pilot/revision-s02独立任务目录和对应模块说明；不修改产品src及旧pilot/REPORT.md、pilot/tests/sorting.spec.ts。"],
   "risks_and_rollback": [
@@ -36,28 +40,34 @@
     {"id":"TK-0019-01","dr_ids":["DR-0019-01"],"dd_ids":["DD-0019-01"],"status":"已完成","task":"冻结输入并调用原建例器完成最多一次修订和一次明确反馈纠正。","verification_ids":["VT-0019-01"]},
     {"id":"TK-0019-02","dr_ids":["DR-0019-02"],"dd_ids":["DD-0019-02"],"status":"已完成","task":"执行静态核查、正常干跑和独立新增行反例。","verification_ids":["VT-0019-02"]},
     {"id":"TK-0019-03","dr_ids":["DR-0019-03"],"dd_ids":["DD-0019-03"],"status":"已完成","task":"生成中文真人首审包、成本记录并完成本地提交。","verification_ids":["VT-0019-03"]}
+    ,{"id":"TK-0019-04","dr_ids":["DR-0019-04"],"dd_ids":["DD-0019-04"],"status":"已完成","task":"冻结批准脚本，按固定顺序执行六次正式回归并汇总结果、成本和媒体。","verification_ids":["VT-0019-04"]}
   ],
   "verification_items": [
     {"id":"VT-0019-01","dr_ids":["DR-0019-01"],"confirmation_status":"已确认","execution_status":"仅静态检查","item":"检查建例尝试记录、候选来源、旧新差异、S02行集合完整性及其他原义务保持情况。","evidence_standard":"原样候选、工具配置、脱敏尝试记录、差异与静态检查；候选SHA 280a7875，旧脚本和报告哈希不变。","current_evidence":{"command":"node --test pilot/revision-s02/acceptance.test.mjs","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0019-sorting-s02-review/verification.log"}},
     {"id":"VT-0019-02","dr_ids":["DR-0019-02"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"运行同一候选：正常页面应完成；新增第四行反例应在S02因表体变化失败且S03未执行。","evidence_standard":"真实命令、退出码、Playwright报告及失败步骤/错误文本；原正常页1/1通过，独立新增第四行反例在S02第62行期望3实际4失败且S03未开始。","current_evidence":{"command":"node --test pilot/revision-s02/acceptance.test.mjs","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0019-sorting-s02-review/verification.log"}},
-    {"id":"VT-0019-03","dr_ids":["DR-0019-03"],"confirmation_status":"待人工首审","execution_status":"人工待确认","item":"检查真人首审材料逐义务可追溯、状态仅A或B，且提交不含敏感或被禁止内容。","evidence_standard":"首审文档、git差异、敏感文件检查与本地提交","current_evidence":"RESULT.md与HUMAN_REVIEW.md已生成；最终敏感检查及本地提交待收口步骤。"}
+    {"id":"VT-0019-03","dr_ids":["DR-0019-03"],"confirmation_status":"人工已确认","execution_status":"仅静态检查","item":"检查真人首审材料逐义务可追溯、状态仅A或B，且提交不含敏感或被禁止内容。","evidence_standard":"首审文档、git差异、敏感文件检查与本地提交","current_evidence":"2026-09-20用户明确回复人工首审已通过；批准对象为SHA-256 280A7875...的新候选。"},
+    {"id":"VT-0019-04","dr_ids":["DR-0019-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"同一批准脚本按固定顺序完成正常3次和故障3次；核验故障均为S03第二行H111/H106错序，且S04未执行。","evidence_standard":"六份独立JSON报告、退出码、步骤错误、脚本前后哈希、媒体清单、模型调用数、重试数和墙钟成本；实际正常3/3完整、故障3/3指定检出、技术失败0。","current_evidence":{"command":"node --test pilot/revision-s02/verify-formal-regression.test.mjs","exit_code":0,"test_count":6,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0019-sorting-s02-review/formal-regression-verification.log"}}
   ],
-  "verification_environment": {"working_directory":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-script-pilot","commands":["python scripts/requirement_source.py render --package REQ-0019-sorting-s02-review","node --test pilot/revision-s02/verify-candidate.test.mjs","node pilot/node_modules/playwright/cli.js test --config pilot/revision-s02/playwright.config.ts","node pilot/revision-s02/run-engineering-check.mjs --verify-existing"],"environment":["Windows PowerShell","Claude Code 2.1.218工具环境；DeepSeek Anthropic兼容端点；deepseek-v4-pro","@playwright/test 1.62.1；Chromium；retries=0；workers=1"],"conclusion":["A. 候选已通过本轮技术核查，等待人工首审；没有人工批准，未执行正式3+3。"]},
+  "verification_environment": {"working_directory":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-script-pilot","commands":["node pilot/revision-s02/run-formal-regression.mjs","node --test pilot/revision-s02/verify-formal-regression.test.mjs","python scripts/check_ai_context.py"],"environment":["Windows PowerShell","批准脚本SHA-256 280A7875...；零建例模型调用、无healer","@playwright/test 1.62.1；Chromium；retries=0；workers=1；每次独立测试进程与浏览器上下文"],"conclusion":["人工首审已通过；排序组正式回归正常3/3完整、故障3/3指定错序检出、技术失败0；未启动详情组或产品集成。"]},
   "trace_current": [
     {"un_id":"UN-0019-01","dr_id":"DR-0019-01","dd_id":"DD-0019-01","tk_id":"TK-0019-01","vt_id":"VT-0019-01","status":"技术核查通过"},
     {"un_id":"UN-0019-01","dr_id":"DR-0019-02","dd_id":"DD-0019-02","tk_id":"TK-0019-02","vt_id":"VT-0019-02","status":"技术核查通过"},
     {"un_id":"UN-0019-01","dr_id":"DR-0019-03","dd_id":"DD-0019-03","tk_id":"TK-0019-03","vt_id":"VT-0019-03","status":"待人工首审"}
+    ,{"un_id":"UN-0019-01","dr_id":"DR-0019-04","dd_id":"DD-0019-04","tk_id":"TK-0019-04","vt_id":"VT-0019-04","status":"正式回归完成"}
   ],
   "trace_history": [{"version":1,"link":"用户2026-09-20新任务授权","status":"已授权实施","notes":"新任务独立记账；旧REQ-0018结论和证据不变。"}],
-  "open_questions": ["无阻塞问题；真人首审结论待本轮技术核查后由真人给出。"],
+  "open_questions": ["无阻塞问题；排序组按本轮边界结束，详情组和产品集成未启动。"],
   "prohibited_implementation": [
     "不得由Codex直接补业务断言后冒称建例器产出。",
     "不得向建例器提供故障页面实现、oracle、参考测试、故障答案或旧成功方案。",
     "不得修改产品src、冻结页面、旧脚本、旧报告或历史事实。",
-    "不得切模型、启用healer、新建Agent、多模型调度、正式3+3、详情组或产品接入。"
+    "正式回归不得调用建例模型、启用healer、修改批准脚本、自动重试或现场修到通过。",
+    "不得启动详情组、产品接入或修改录像机制。"
   ],
   "changes": [
     {"date":"2026-09-20","version":1,"type":"新建并确认","description":"记录排序S02独立修订、工程反例和真人首审边界","impact":"仅隔离pilot/revision-s02","confirmed_by":"用户明确授权"},
-    {"date":"2026-09-20","version":2,"type":"技术核查完成","description":"建例器候选补齐S02行集合完整性；正常页和独立新增行反例完成技术核查，转真人首审","impact":"仅隔离pilot/revision-s02","confirmed_by":"Codex技术证据，非真人批准"}
+    {"date":"2026-09-20","version":2,"type":"技术核查完成","description":"建例器候选补齐S02行集合完整性；正常页和独立新增行反例完成技术核查，转真人首审","impact":"仅隔离pilot/revision-s02","confirmed_by":"Codex技术证据，非真人批准"},
+    {"date":"2026-09-20","version":3,"type":"人工首审通过并授权正式回归","description":"冻结候选SHA并启动同脚本正常3次、故障3次正式回归","impact":"仅隔离pilot/revision-s02正式运行","confirmed_by":"用户明确确认"},
+    {"date":"2026-09-20","version":4,"type":"正式回归完成","description":"正常3/3完整、故障3/3在S03第二行H111/H106指定错序检出，技术失败0","impact":"排序组正式结果与私有媒体","confirmed_by":"六次Playwright独立运行证据"}
   ]
 }

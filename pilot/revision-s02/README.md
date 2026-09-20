@@ -8,3 +8,4 @@
 - 与旧草稿差异：`candidate.diff`
 - 技术结果与成本：`RESULT.md`
 - 真人首审材料：`HUMAN_REVIEW.md`
+- 正式3+3回归结果：`FORMAL_REGRESSION.md`

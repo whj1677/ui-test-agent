@@ -6,3 +6,4 @@
 - 输出：`pilot/revision-s02/tests/sorting.spec.ts` 新候选、工程验证夹具、差异、结果和真人首审材料。
 - 边界：最多一次修订和一次反馈纠正；无 healer、无模型切换、无正式 3+3、无详情组、无产品接入。
 - 敏感数据：凭据、会话和原始媒体仅保留在 Git 忽略的 `pilot/private/`，不提交。
+- 人工首审通过后，批准脚本以固定顺序完成正常3次、故障3次正式回归；结果见 `pilot/revision-s02/FORMAL_REGRESSION.md`。详情组和产品集成仍不在本模块范围。

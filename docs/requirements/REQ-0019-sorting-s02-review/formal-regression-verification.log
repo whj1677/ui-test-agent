@@ -1,0 +1,55 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-20T16:24:43+08:00
+Command: node --test pilot/revision-s02/verify-formal-regression.test.mjs
+Exit code: 0
+Parsed test count: 6
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: normal-1 formal result is preserved and correctly classified
+ok 1 - normal-1 formal result is preserved and correctly classified
+  ---
+  duration_ms: 5.0907
+  type: 'test'
+  ...
+# Subtest: normal-2 formal result is preserved and correctly classified
+ok 2 - normal-2 formal result is preserved and correctly classified
+  ---
+  duration_ms: 0.9475
+  type: 'test'
+  ...
+# Subtest: normal-3 formal result is preserved and correctly classified
+ok 3 - normal-3 formal result is preserved and correctly classified
+  ---
+  duration_ms: 0.6198
+  type: 'test'
+  ...
+# Subtest: fault-1 formal result is preserved and correctly classified
+ok 4 - fault-1 formal result is preserved and correctly classified
+  ---
+  duration_ms: 0.6789
+  type: 'test'
+  ...
+# Subtest: fault-2 formal result is preserved and correctly classified
+ok 5 - fault-2 formal result is preserved and correctly classified
+  ---
+  duration_ms: 0.6432
+  type: 'test'
+  ...
+# Subtest: fault-3 formal result is preserved and correctly classified
+ok 6 - fault-3 formal result is preserved and correctly classified
+  ---
+  duration_ms: 0.572
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 136.4397
