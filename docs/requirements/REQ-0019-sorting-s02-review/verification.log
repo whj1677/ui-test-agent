@@ -1,0 +1,31 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-20T16:14:49+08:00
+Command: node --test pilot/revision-s02/acceptance.test.mjs
+Exit code: 0
+Parsed test count: 2
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: generator candidate source and S02 static contract
+ok 1 - generator candidate source and S02 static contract
+  ---
+  duration_ms: 116.9319
+  type: 'test'
+  ...
+# Subtest: same candidate passes normal engineering fixture and rejects extra row in S02
+ok 2 - same candidate passes normal engineering fixture and rejects extra row in S02
+  ---
+  duration_ms: 10346.6765
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10568.0062

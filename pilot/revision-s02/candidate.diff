@@ -1,0 +1,18 @@
+--- pilot/tests/sorting.spec.ts (旧草稿，保持不变)
++++ pilot/revision-s02/tests/sorting.spec.ts (新候选)
+@@ S02
+- const headerTexts = await table.getByRole('columnheader').allTextContents();
++ const headerTexts = (await table.getByRole('columnheader').allTextContents()).map((t) => t.trim());
+  const beforeRowCellTexts: string[][] = [];
+- const rowCount = await rows.count();
+- for (let i = 0; i < rowCount; i++) {
+-   beforeRowCellTexts.push(await rows.nth(i).locator('td').allTextContents());
++ const rowCountBefore = await rows.count();
++ for (let i = 0; i < rowCountBefore; i++) {
++   beforeRowCellTexts.push((await rows.nth(i).locator('td').allTextContents()).map((t) => t.trim()));
+  }
+  await sortSelect.selectOption({ label: '功率降序' });
+  await expect(sortSelect.locator('option:checked')).toHaveText('功率降序');
++ await expect(rows).toHaveCount(rowCountBefore);
+
+除上述 S02 变化外，S01、S03、S04 代码无差异。
