@@ -1,5 +1,7 @@
 # 需求索引
 
+当前：[版本33补证后重新收尾](REQ-0017-controlled-react/real-model-v33-result.md)已实现，230项受影响工程、7纯函数补验、8旧执行守卫和11交付专项分别无失败（重叠不累加）；官方V03待冻结复验。按真正新增成功测量允许再次完整核验，原重试/调用/步骤额度不增加。[版本32真实失败](REQ-0017-controlled-react/real-model-v32-result.md)与旧记录保留，不以工程结果代替产品验收。
+
 当前：[版本32当前页证据](REQ-0017-controlled-react/real-model-v32-result.md)341项受影响工程无失败，官方原V03待冻结复验。[版本31原3整轮结果](REQ-0017-controlled-react/real-model-v31-result.md)三例通过标签但V03漏初始第1页，不计整轮完整；旧结果及分母保持。
 
 最新：[版本31查询结果必要证据](REQ-0017-controlled-react/real-model-v31-result.md)337项受影响工程无失败；原V02官方24调用/14媒体核验一致，4步17断言逐义务完整，S03原三条件已在结果中同次测量。单例不等于整轮稳定，接续原3例同构建复验。[版本30遗漏](REQ-0017-controlled-react/real-model-v30-result.md)及旧失败保留。

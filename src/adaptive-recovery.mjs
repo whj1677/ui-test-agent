@@ -141,6 +141,23 @@ export function canProposeCompletion(progress, completed, audit) {
   );
 }
 
+// Caller supplies ONLY successfully executed fragments from this original step.
+// This fingerprints measured assertion declarations, not DOM alias equivalence
+// or proof of semantic completeness. It never itself authorizes completion.
+export function completionEvidenceKey(completed) {
+  const measurements = completed
+    .flatMap((fragment) => fragment.assertions ?? [])
+    .map((a) =>
+      semanticHash({
+        target: a.target ?? null,
+        check: a.check,
+        expected:
+          a.expected ?? (['visible', 'hidden', 'unobstructed'].includes(a.check) ? true : null),
+      }),
+    );
+  return semanticHash([...new Set(measurements)].sort());
+}
+
 export function adaptiveCorrection(error, proposal, step, audit) {
   return {
     code: publicError(error),

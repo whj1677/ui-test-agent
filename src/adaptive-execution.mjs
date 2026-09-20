@@ -12,6 +12,7 @@ import {
   canReconsiderBlock,
   isProtocolError,
   canProposeCompletion,
+  completionEvidenceKey,
 } from './adaptive-recovery.mjs';
 import { captureTableBaselines, needsTableBaseline } from './table-invariant.mjs';
 import { requireAdaptivePageTarget } from './expectation-coverage.mjs';
@@ -175,7 +176,7 @@ export async function executeAdaptiveStep(session, run) {
   let executedAudit,
     noProgressReviews = 0;
   let focusMissing = false;
-  let completionProposed = false;
+  const completionProposals = new Set();
   let tableBaselines;
   await recording.beginStep(step, stepIndex);
   await emit('STEP_STARTED', { step_id: step.step_id, action: step.source_action });
@@ -234,15 +235,24 @@ export async function executeAdaptiveStep(session, run) {
       executedAudit,
     );
     const repairFocus = focusMissing ? missingAssertionFocus(progress, completed) : null;
+    const completionEvidence = completionEvidenceKey(completed);
+    // Only controller-owned probes get an evidence epoch. A model cannot add
+    // origin/hash metadata to escape ordinary rejected-proposal deduplication.
+    const proposalKey = () =>
+      observationHash +
+      ':' +
+      (record.proposal_hash ?? 'invalid') +
+      (record.proposal_origin === 'controller_completion_probe' ? ':' + completionEvidence : '');
     try {
       if (
-        !completionProposed &&
+        !completionProposals.has(completionEvidence) &&
         !correction &&
         !assertionRepair &&
         canProposeCompletion(progress, completed, executedAudit)
       ) {
-        completionProposed = true;
+        completionProposals.add(completionEvidence);
         record.proposal_origin = 'controller_completion_probe';
+        record.completion_evidence_hash = completionEvidence;
         reply = {
           actions: [],
           assertions: [],
@@ -340,7 +350,7 @@ export async function executeAdaptiveStep(session, run) {
         !(fragment.complete && !fragment.actions.length)
       )
         fail('ADAPTIVE_NO_PROGRESS');
-      if (rejected.has(observationHash + ':' + record.proposal_hash)) fail('ADAPTIVE_NO_PROGRESS');
+      if (rejected.has(proposalKey())) fail('ADAPTIVE_NO_PROGRESS');
       const usedIds = new Set(result.actions.map((a) => a.action_id));
       if (fragment.actions.some((a) => usedIds.has(a.action_id)))
         fail('ADAPTIVE_ACTION_ALREADY_ATTEMPTED');
@@ -442,7 +452,7 @@ export async function executeAdaptiveStep(session, run) {
         fragment?.actions.length === 0 &&
         noProgressReviews < 1 &&
         executedKeys.has(record.transition_hash) &&
-        !rejected.has(observationHash + ':' + record.proposal_hash);
+        !rejected.has(proposalKey());
       const localError =
         noProgressRetry ||
         error.code === 'TABLE_SOURCE_UNGROUNDED' ||
@@ -497,7 +507,7 @@ export async function executeAdaptiveStep(session, run) {
         });
         continue;
       }
-      rejected.add(observationHash + ':' + (record.proposal_hash ?? 'invalid'));
+      rejected.add(proposalKey());
       if (noProgressRetry) {
         noProgressReviews++;
         focusMissing = true;

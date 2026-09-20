@@ -23,3 +23,9 @@ v31 round-Tdpbi3 的 V03 初始步骤只测h1与D001～D005，没有“默认第
 ## 官方验证
 
 工程/Git冻结后仅原V03，100调用/15分钟；逐项核对初始当前页/编号范围、真实菜单导航、第二页计数器/成员、同D009详情及自身字段，不替Agent操作，不修改17冻结资产。完整后才重启原3整轮稳定性及独立8/剩余原32验证。工程数量不计官方效果，不宣称发布。
+
+实际round-yEXcww结束：构建7f87d478b0c0/提交a15e933，任务f0d43ed1-879a-4e33-b15d-cd1e8b9f0fc3，run125eb875-dfcb-4c1f-9c28-c5ab71dfa799。14调用/61777ms，7媒体SHA/原输入一致。原菜单两次点击各一次；标题缺来源先纠正，内部完成候选再实际触发PLAN_CURRENT_PAGE_UNPROVEN，Agent随后零动作补contains“第1/”，sample31c5aab9-6aa0-4924-aa22-a38eee5d2600实际为“共12条 · 第1/3页”，未借未来页码、未添加分母预期或重放导航。
+
+但本例仍TECHNICAL_FAILED/ADAPTIVE_NO_PROGRESS：每步只允许一次内部完成候选，早先缺证拒绝已经耗掉标志；页码补齐、审查ACCEPT之后没有再次自动提请完整核验，模型继续complete:false并重复标题，最终无进展。4条实际断言均无业务差异，但无COMPLETE步骤，后续未执行。不能把页码子修复有效等同整例通过。
+
+证据validation/req0017/v32-real-audit.log、validation/autonomous/round-yEXcww/audit.json和原事实。累计30完成官方轮2414调用/12208081ms，40不同流程/30浏览器例不变。版本33先修真正新测量后的有限收尾重核，不改预算、原题或旧失败。
