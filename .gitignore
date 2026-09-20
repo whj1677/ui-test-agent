@@ -16,3 +16,9 @@ work/
 test-results/
 playwright-report/
 coverage/
+
+# 独立测试工作台的本机持久化数据、报告、媒体和浏览器运行产物。
+workbench/.local/
+workbench/node_modules/
+workbench/test-results/
+workbench/playwright-report/
