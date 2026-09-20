@@ -1,0 +1,7 @@
+{
+  "name": "isolated-ai-script-pilot",
+  "private": true,
+  "type": "module",
+  "dependencies": {"@playwright/test": "1.62.1"},
+  "scripts": {"test": "playwright test"}
+}

@@ -1,0 +1,9 @@
+private/
+node_modules/
+test-results/
+playwright-report/
+*.local.json
+.claude/
+.mcp.json
+seed.spec.ts
+specs/

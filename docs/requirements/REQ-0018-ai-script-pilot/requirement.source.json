@@ -1,0 +1,213 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0018",
+  "title": "AI辅助建例与固定脚本回归隔离试点",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G3",
+    "version": 1,
+    "last_updated": "2026-09-20"
+  },
+  "original_input": "用户新任务：从c1e9455独立分支/隔离目录建立AI辅助建例、人工首次核对、Playwright固定脚本回归。固定隔离Claude Code与官方建例能力，不比较模型/不启用故障自动修复。先HOLD-S1/S2成立后HOLD-F1/F2；只向建例提供正常原文、确认数据和现场页面。每组初稿1次、修正最多2轮；人工核对冻结后正常/故障各3次，同逻辑原预期，仅入口切换。保留全部尝试及分项成本，不计官方产品自主验收，不接产品、不扩题。暂停V40等其他路线。",
+  "user_requirements": [
+    {
+      "id": "UN-0018-01",
+      "status": "已确认",
+      "goal": "独立验证辅助建例固定脚本路线",
+      "constraints": "产品src/原题/冻结页面/历史事实/现有服务不改；禁oracle/参考测试/页面实现/旧答案给建例",
+      "success_criteria": "排序组正常完整3次、故障实际到指定差异3次，技术失败不算检出；人工批准为硬停止点，未成立不得详情组"
+    }
+  ],
+  "confirmed_facts": [
+    "到预算边界收口：初稿111377ms环境失败、修正1 353057ms、修正2 243850ms，总708284ms。两版正常工程干跑分别2576/2712ms、各1次退出0，但末版S02只比较原矩阵长度，漏选择后行总数，全表不变义务未完整。该缺口是静态反例，未改页面注入新故障。人工未批准，正式正常/故障各3均0执行，详情未启动，不再第三轮或Codex代补断言。末版SHA a189e62bca7bd09b217ca954ebbcf2436e4abae6c5ee83a1f08bef7bc126f812，报告pilot/REPORT.md；所有会话/媒体私有保留，主产品未改。",
+    "修正1耗时353057ms产出首份脚本；正常单次工程干跑2576ms/退出0，不算正式回归。只读审查仍发现显示文字仅验内部value、S02原H101/H102/H103身份缺失、全表关系不含表头和列边界、功率未按原字段列绑定等缺口。保留原脚本与媒体，使用最后修正2，仅反馈正常原义务，不暴露故障侧；人工未批准，正式仍0。",
+    "初稿1实际111377ms后由主管停止：多次seed/project参数与隔离配置不符，尚未进入业务步骤，没有产出脚本。保留全部会话，不重置次数。环境修正为固定拥有的seed映射与明确chromium项目，任何其他文件拒绝；先实际seed预检，再使用修正1额度。",
+    "基线c1e9455d6cb32fd919b604585ba440c4997448ee；codex/ai-case-script-pilot及ui-test-agent-script-pilot worktree。",
+    "Claude Code2.1.218现有路由DeepSeek兼容接口/deepseek-v4-pro，固定沿用不比模型，不冒称Claude模型或产品全自主。Playwright官方1.62.1独立依赖；只加载generator，不加载healer。"
+  ],
+  "inferences_and_open_questions": [
+    "人工首次核对尚未发生；本轮先交排序组初稿和映射。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0018-01",
+      "status": "已确认",
+      "requirement": "隔离且可审计的有限辅助建例和固定回归",
+      "acceptance_criteria": "输入hash/工具白名单；初稿1修正2；人工批准hash后正常/故障各3、retries0、零模型回归；逐义务映射、媒体和成本分列",
+      "constraints": "不修改产品、不扩业务、不向建例暴露故障或实现"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0018-01",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "status": "已确认",
+      "summary": "双目录：Codex工作树管理代码/证据；随机authoring目录只放正常输入、官方generator和空seed/config。Claude bare禁通用文件/命令工具，仅限定MCP透传官方工具子集；禁evaluate/任意代码/越界导航/文件路径，凭据仅子进程环境。不是OS沙箱。正常草稿现场建例、最多20分钟/100工具调用每轮，最多1初稿2修正；人工审核未确认停。冻结后6次无模型/无重试、逻辑不改，仅原入口参数；分项判定失败不掩盖。",
+      "rationale": "分离源预期、技术建例、人工批准和故障回归，控制泄露及无限重跑"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "正常原题和确认数据→隔离Claude Code/官方generator→脚本与映射→只读工程核对→人工首次批准→hash冻结→同脚本正常3/故障3→结果归档；排序成立后才详情"
+  ],
+  "module_document_impact": [
+    "新增docs/modules/ai_script_pilot.md记录pilot工具模块；产品模块无变动"
+  ],
+  "risks_and_rollback": [
+    "工具隔离不能声称OS隔离；明确拒绝文件/代码执行类能力并用反例验证。",
+    "不以正常页当前值创造预期，不以工程注入或AI审核代替人工签字；停止试点不影响原服务。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0018-01",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "dd_ids": [
+        "DD-0018-01"
+      ],
+      "status": "已实现",
+      "task": "隔离环境、正常输入冻结、官方工具门和待批准回归入口；仅工程验证，不表示业务验收",
+      "verification_ids": [
+        "VT-0018-01"
+      ]
+    },
+    {
+      "id": "TK-0018-02",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "dd_ids": [
+        "DD-0018-01"
+      ],
+      "status": "已实现",
+      "task": "有限初稿1/修正2全部完成或停止并记录，交两版草稿及映射；已知S02漏验，试点不成立，人工未签收",
+      "verification_ids": [
+        "VT-0018-02"
+      ]
+    },
+    {
+      "id": "TK-0018-03",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "dd_ids": [
+        "DD-0018-01"
+      ],
+      "status": "待实现",
+      "task": "人工批准冻结后的正常/故障各3次正式回归；当前因完整性缺口禁止启动，详情亦未开始",
+      "verification_ids": [
+        "VT-0018-03"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0018-01",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "工具边界四项工程单元；官方seed预检与未批准正式入口拒绝另有实际检查，不作回归能力证明",
+      "evidence_standard": "源工具/入口/seed/输出约束单元，禁止工具实调拒绝；不代表OS隔离",
+      "current_evidence": {
+        "command": "node --test pilot/gate.test.mjs",
+        "exit_code": 0,
+        "test_count": 4,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/pilot/gate-final.log"
+      }
+    },
+    {
+      "id": "VT-0018-02",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "仅静态检查",
+      "item": "原义务完整性静态判定不通过；首次人工批准未发生",
+      "evidence_standard": "逐原文/检查时机独立复核，不接受生成器自报无缺口",
+      "current_evidence": "pilot/REPORT.md及末版65–66行：S02缺少选择后行总数，初稿/两修正已耗尽；正常干跑绿不算完整；人工未批准。"
+    },
+    {
+      "id": "VT-0018-03",
+      "dr_ids": [
+        "DR-0018-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "排序同脚本正常3/故障3；成立后详情组",
+      "evidence_standard": "批准hash后固定零模型/零重试，指定差异实际到达；技术失败不算检出",
+      "current_evidence": "0次，未批准冻结且已知漏验，未访问故障侧执行"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent-script-pilot",
+    "commands": [
+      "node --test pilot/gate.test.mjs",
+      "node pilot/probe-gate.mjs <isolated-authoring> --seed",
+      "node pilot/run-regression.mjs --draft-check",
+      "node pilot/run-regression.mjs --draft-check correction-2"
+    ],
+    "environment": [
+      "Windows;Node22.19.0;ClaudeCode2.1.218;Playwright1.62.1"
+    ],
+    "conclusion": [
+      "环境和两份正常草稿可运行；完整性失败，人工与正式回归均未完成，不宣称试点成立。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0018-01",
+      "dr_id": "DR-0018-01",
+      "dd_id": "DD-0018-01",
+      "tk_id": "TK-0018-01",
+      "vt_id": "VT-0018-01",
+      "status": "工程验证"
+    },
+    {
+      "un_id": "UN-0018-01",
+      "dr_id": "DR-0018-01",
+      "dd_id": "DD-0018-01",
+      "tk_id": "TK-0018-02",
+      "vt_id": "VT-0018-02",
+      "status": "完整性失败"
+    },
+    {
+      "un_id": "UN-0018-01",
+      "dr_id": "DR-0018-01",
+      "dd_id": "DD-0018-01",
+      "tk_id": "TK-0018-03",
+      "vt_id": "VT-0018-03",
+      "status": "未运行"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "新建",
+      "notes": "从c1e9455建立独立试点，不继承产品验收"
+    }
+  ],
+  "open_questions": [
+    "不申请无限追加；本轮已到上限。人工未签收，不建议批准存在已知漏验的草稿。后续需新的明确边界。"
+  ],
+  "prohibited_implementation": [
+    "禁产品src/原题/冻结页面/历史事实/主服务改动；暂停V40、词法、模型对照、录像解耦。",
+    "禁给建例oracle/参考测试/实现/故障入口；禁healer、故障分支、skip、弱化原义务/改预期或无限重跑。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-20",
+      "version": 1,
+      "type": "新隔离试点修改前冻结",
+      "description": "有限范围及人工硬门，不接产品",
+      "impact": "pilot新增工具",
+      "confirmed_by": "用户本轮明确指令"
+    }
+  ]
+}
