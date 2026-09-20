@@ -15,7 +15,14 @@ import {
   EXPECTATION_REVIEW_PROMPT,
 } from '../src/expectation-contract.mjs';
 
-for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-unknown'])
+for (const scenario of [
+  'correct',
+  'correct-order',
+  'swapped',
+  'weak-repeat',
+  'unknown',
+  'review-unknown',
+])
   test('source contract through actual Controller with future table: ' + scenario, async (t) => {
     const order = scenario === 'swapped' ? ['R702', 'R701'] : ['R701', 'R702'];
     const server = http.createServer((q, r) => {
@@ -38,7 +45,8 @@ for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-
         {
           step_id: 'S',
           action: '点击查看并核对结果',
-          expected: 'R701必须占据表体的第一个数据位置',
+          expected:
+            scenario === 'correct-order' ? '编号升序排列' : 'R701必须占据表体的第一个数据位置',
         },
       ]),
     };
@@ -87,7 +95,15 @@ for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-
                 predicates:
                   scenario === 'unknown'
                     ? []
-                    : [{ subject: 'R701的表体位置', check: 'table_cells', expected }],
+                    : scenario === 'correct-order'
+                      ? [
+                          {
+                            subject: '编号排序',
+                            check: 'table_order',
+                            expected: { field: '编号', direction: 'ascending' },
+                          },
+                        ]
+                      : [{ subject: 'R701的表体位置', check: 'table_cells', expected }],
               },
             ],
           };
@@ -136,13 +152,21 @@ for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-
           else {
             const e = structuredClone(expected);
             if (plans === 2 || scenario === 'weak-repeat') delete e.rows[0].position;
+            const orderAssertion = scenario === 'correct-order';
             value = {
               actions: [],
               assertions: [
                 {
                   target: { kind: 'role', role: 'table', name: '结果', exact: true },
-                  check: 'table_cells',
-                  expected: e,
+                  check: orderAssertion ? 'table_order' : 'table_cells',
+                  expected: orderAssertion
+                    ? {
+                        field: '编号',
+                        column: '编号',
+                        direction: 'ascending',
+                        comparison: 'identifier',
+                      }
+                    : e,
                   source_refs: ['S-O1'],
                 },
               ],
@@ -169,25 +193,28 @@ for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-
     assert.equal(f.actions.length, 1, 'authorized click once, no replay or pre-observation gate');
     assert.equal(
       f.status,
-      scenario === 'correct'
+      scenario.startsWith('correct')
         ? 'PASS_ASSERTIONS'
         : scenario === 'swapped'
           ? 'FAIL_ASSERTION'
           : 'TECHNICAL_FAILED',
       JSON.stringify(f.error),
     );
-    assert.ok(
-      f.adaptive_segments.some(
-        (s) =>
-          s.error ===
-          (scenario.includes('unknown')
-            ? 'PLAN_OBLIGATION_UNINTERPRETED'
-            : 'PLAN_CONTRACT_EVIDENCE_INSUFFICIENT'),
-      ),
-    );
-    if (['correct', 'swapped'].includes(scenario)) {
+    if (scenario !== 'correct-order')
+      assert.ok(
+        f.adaptive_segments.some(
+          (s) =>
+            s.error ===
+            (scenario.includes('unknown')
+              ? 'PLAN_OBLIGATION_UNINTERPRETED'
+              : 'PLAN_CONTRACT_EVIDENCE_INSUFFICIENT'),
+        ),
+      );
+    if (['correct', 'correct-order', 'swapped'].includes(scenario)) {
       assert.equal(f.assertions.length, 1);
-      assert.equal(f.assertions[0].expected.rows[0].position, 1);
+      if (scenario === 'correct-order')
+        assert.equal(f.assertions[0].expected.direction, 'ascending');
+      else assert.equal(f.assertions[0].expected.rows[0].position, 1);
       if (scenario === 'swapped')
         assert.ok(
           f.assertions[0].table_comparison.differences.some((d) => d.reason === 'row_position'),
@@ -196,7 +223,7 @@ for (const scenario of ['correct', 'swapped', 'weak-repeat', 'unknown', 'review-
     assert.deepEqual(f.executed_case.steps, c.steps);
     assert.equal(
       f.expectation_states.at(-1).state,
-      scenario === 'correct'
+      scenario.startsWith('correct')
         ? 'MEASURED_COMPLETE'
         : scenario === 'swapped'
           ? 'ACTUAL_DIFFERENCE'

@@ -210,3 +210,49 @@ test('pre-action proof cannot discharge a post-action source obligation', () => 
     );
   });
 });
+
+test('source ordering freezes relation, not unseen DOM header or technical comparison', () => {
+  const o = original('编号升序'),
+    { draft, review } = setup(o, [{ key: 'R701', position: 2 }]);
+  draft.obligations[0].predicates = [
+    {
+      subject: '编号排序',
+      check: 'table_order',
+      expected: { field: '编号', direction: 'ascending' },
+    },
+  ];
+  const c = approveInterpretation(draft, review, o);
+  withExpectationContract(c, () => {
+    const a = {
+      check: 'table_order',
+      expected: {
+        field: '编号',
+        column: '记录编号',
+        direction: 'ascending',
+        comparison: 'identifier',
+      },
+      obligation_ids: [o.obligations[0].id],
+    };
+    assert.deepEqual(contractIssues(o, { assertions: [a] }), []);
+    a.expected.direction = 'descending';
+    assert.ok(contractIssues(o, { assertions: [a] }).length);
+  });
+});
+
+for (const bad of [
+  { field: '编号', direction: 'asc' },
+  { field: '编号', column: '编号', direction: 'asc', comparison: 'asc' },
+  { field: '编号', column: '编号', direction: 'ascending', comparison: 'number' },
+])
+  test(
+    'invalid or premature source ordering binding cannot become INTERPRETED: ' +
+      JSON.stringify(bad),
+    () => {
+      const o = original('编号升序'),
+        { draft, review } = setup(o, [{ key: 'R701', position: 2 }]);
+      draft.obligations[0].predicates = [
+        { subject: '编号排序', check: 'table_order', expected: bad },
+      ];
+      assert.throws(() => approveInterpretation(draft, review, o));
+    },
+  );

@@ -33,7 +33,7 @@ const checks = new Set([
   'url_not_contains',
 ]);
 
-export const EXPECTATION_INTERPRET_PROMPT = `Interpret ONLY the supplied original CURRENT step, before any candidate or page is seen. Return JSON {obligations:[{id,timing:"AFTER_ACTIONS"|"BEFORE_ACTIONS"|null,status:"INTERPRETED"|"UNINTERPRETED",reason,predicates:[{subject,check,expected}]}]}. Include every original obligation exactly once. INTERPRETED needs ALL conjuncts, identity, quantifier, relation, polarity and timing represented by predicates; otherwise UNINTERPRETED with no predicates. timing must retain the original checkpoint: AFTER_ACTIONS measures after all current-step actions, BEFORE_ACTIONS strictly before its first action. Mixed or unsupported timing is UNINTERPRETED, never guessed. subject describes the business field/region, NEVER a locator. No actual page values, invented rules or implicit defaults. This is a source interpretation, NOT evidence or permission. Future targets need not be visible. Checks use the existing UI assertion vocabulary: ${[...checks].join(',')}. expected uses the existing assertion data shape; omitted expectations for visible/hidden/unchanged/unobstructed use true. A table_cells expectation is {key_column,rows:[{key,position?,cells:[{column,check:"text"|"number",expected}]}],ordered,exact_rows}. position is one-based ABSOLUTE row index; by-key cell values or ordered membership do NOT prove absolute position. Preserve source-specified positions even if expressed differently from 第N行. Do not turn a list of positions into a closed total population, or a contains expectation into equality. table_order uses {field,column,direction,comparison}. Never infer expected values from IDs or future steps. Unrepresentable/business-ambiguous obligations stay UNINTERPRETED; do not call them covered.`;
+export const EXPECTATION_INTERPRET_PROMPT = `Interpret ONLY the supplied original CURRENT step, before any candidate or page is seen. Return JSON {obligations:[{id,timing:"AFTER_ACTIONS"|"BEFORE_ACTIONS"|null,status:"INTERPRETED"|"UNINTERPRETED",reason,predicates:[{subject,check,expected}]}]}. Include every original obligation exactly once. INTERPRETED needs ALL conjuncts, identity, quantifier, relation, polarity and timing represented by predicates; otherwise UNINTERPRETED with no predicates. timing must retain the original checkpoint: AFTER_ACTIONS measures after all current-step actions, BEFORE_ACTIONS strictly before its first action. Mixed or unsupported timing is UNINTERPRETED, never guessed. subject describes the business field/region, NEVER a locator. No actual page values, invented rules or implicit defaults. This is a source interpretation, NOT evidence or permission. Future targets need not be visible. Checks use the existing UI assertion vocabulary: ${[...checks].join(',')}. expected uses the existing assertion data shape; omitted expectations for visible/hidden/unchanged/unobstructed use true. A table_cells expectation is {key_column,rows:[{key,position?,cells:[{column,check:"text"|"number",expected}]}],ordered,exact_rows}. position is one-based ABSOLUTE row index; by-key cell values or ordered membership do NOT prove absolute position. Preserve source-specified positions even if expressed differently from 第N行. Do not turn a list of positions into a closed total population, or a contains expectation into equality. Source table_order uses ONLY {field,direction:"ascending"|"descending"}; asc/desc are INVALID. Do NOT freeze a DOM column or numeric/identifier comparison choice: these are runtime technical bindings, not original business expectations. Never infer expected values from IDs or future steps. Unrepresentable/business-ambiguous obligations stay UNINTERPRETED; do not call them covered.`;
 
 export const EXPECTATION_REVIEW_PROMPT = `Independently compare the source-only interpretation against EVERY original obligation. You have no page, candidate or success trace. Return JSON {checks:[{id,status:"SUPPORTED"|"UNINTERPRETED",reason}]}, one per obligation. SUPPORTED requires ALL original conjuncts, polarity, object/field, absolute positions vs relative ordering, quantifiers and observation timing preserved, and no invented requirements. If a relation, field, timing or numeric meaning is lost, status MUST be UNINTERPRETED. Do not repair, weaken or approve a subset. Unrecognized wording is unknown, never no obligation. This review is not execution evidence.`;
 
@@ -74,7 +74,16 @@ export function validateInterpretation(reply, original) {
       keys(p, ['subject', 'check', 'expected'], ['subject', 'check', 'expected']);
       if (!nonempty(p.subject) || !checks.has(p.check)) fail('EXPECTATION_INTERPRETATION_INVALID');
       if (p.check === 'table_cells') validateTableExpectation(p.expected);
-      else if (['visible', 'hidden', 'unobstructed', 'table_unchanged'].includes(p.check)) {
+      else if (p.check === 'table_order') {
+        // Field/direction belong to the source; actual header and value parser
+        // are technical binding choices made from the current page later.
+        keys(p.expected, ['field', 'direction'], ['field', 'direction']);
+        if (
+          !nonempty(p.expected.field) ||
+          !['ascending', 'descending'].includes(p.expected.direction)
+        )
+          fail('EXPECTATION_INTERPRETATION_INVALID');
+      } else if (['visible', 'hidden', 'unobstructed', 'table_unchanged'].includes(p.check)) {
         if (p.expected !== true) fail('EXPECTATION_INTERPRETATION_INVALID');
       } else if (['aria_selected', 'checked', 'enabled', 'focused'].includes(p.check)) {
         if (typeof p.expected !== 'boolean') fail('EXPECTATION_INTERPRETATION_INVALID');
@@ -171,6 +180,8 @@ function proves(assertion, predicate) {
   if (assertion.check !== predicate.check) return false;
   const wanted = predicate.expected,
     actual = assertion.expected ?? true;
+  if (predicate.check === 'table_order')
+    return actual.field === wanted.field && actual.direction === wanted.direction;
   if (predicate.check === 'table_cells') {
     return (
       actual.key_column === wanted.key_column &&
