@@ -1,4 +1,10 @@
 import http from 'node:http';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { resolveInside, sha256File } from './integrity.mjs';
+
+const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
 
 function sendJson(response, status, value) {
   response.writeHead(status, {
@@ -7,6 +13,66 @@ function sendJson(response, status, value) {
     'x-content-type-options': 'nosniff',
   });
   response.end(JSON.stringify(value));
+}
+
+function securityHeaders(contentType) {
+  return {
+    'content-type': contentType,
+    'cache-control': 'no-store',
+    'x-content-type-options': 'nosniff',
+    'referrer-policy': 'no-referrer',
+    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+  };
+}
+
+async function sendStatic(response, webRoot, pathname) {
+  const files = new Map([
+    ['/', ['index.html', 'text/html; charset=utf-8']],
+    ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
+    ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+  ]);
+  const selected = files.get(pathname);
+  if (!selected) return false;
+  response.writeHead(200, securityHeaders(selected[1]));
+  response.end(await fs.readFile(path.join(webRoot, selected[0])));
+  return true;
+}
+
+async function sendMedia(request, response, store, runId, mediaId) {
+  const run = await store.getRun(runId);
+  const media = run?.media?.find((item) => item.media_id === mediaId);
+  if (!media) return sendJson(response, 404, { error: 'MEDIA_NOT_FOUND' });
+  const runRoot = store.runDirectory(runId);
+  const file = resolveInside(runRoot, media.relative_path);
+  const [realRoot, realFile] = await Promise.all([fs.realpath(runRoot), fs.realpath(file)]);
+  if (realFile !== realRoot && !realFile.startsWith(`${realRoot}${path.sep}`)) {
+    return sendJson(response, 403, { error: 'MEDIA_PATH_OUTSIDE_RUN' });
+  }
+  const stat = await fs.stat(realFile);
+  if (!stat.isFile() || stat.size !== media.bytes || await sha256File(realFile) !== media.sha256) {
+    return sendJson(response, 409, { error: 'MEDIA_FILE_CHANGED' });
+  }
+  const body = await fs.readFile(realFile);
+  const range = String(request.headers.range || '').match(/^bytes=(\d+)-(\d*)$/);
+  const disposition = media.kind === 'trace' ? 'attachment' : 'inline';
+  const headers = {
+    ...securityHeaders(media.content_type),
+    'content-disposition': `${disposition}; filename*=UTF-8''${encodeURIComponent(media.file_name)}`,
+    'accept-ranges': 'bytes',
+  };
+  if (range) {
+    const start = Number(range[1]);
+    const end = range[2] ? Math.min(Number(range[2]), body.length - 1) : body.length - 1;
+    if (!Number.isInteger(start) || start < 0 || start > end) {
+      response.writeHead(416, { 'content-range': `bytes */${body.length}` });
+      return response.end();
+    }
+    response.writeHead(206, { ...headers, 'content-range': `bytes ${start}-${end}/${body.length}`, 'content-length': end - start + 1 });
+    response.end(body.subarray(start, end + 1));
+    return;
+  }
+  response.writeHead(200, { ...headers, 'content-length': body.length });
+  response.end(body);
 }
 
 async function readJsonBody(request, limit = 16 * 1024) {
@@ -43,6 +109,7 @@ function errorStatus(error) {
 export function createWorkbenchServer(options = {}) {
   const store = options.store;
   const manager = options.manager;
+  const webRoot = options.webRoot || defaultWebRoot;
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
@@ -61,6 +128,11 @@ export function createWorkbenchServer(options = {}) {
       }
       if (store && request.method === 'GET' && url.pathname === '/api/runs') {
         sendJson(response, 200, { runs: await store.listRuns() });
+        return;
+      }
+      const mediaMatch = url.pathname.match(/^\/api\/runs\/([^/]+)\/media\/([^/]+)$/);
+      if (store && request.method === 'GET' && mediaMatch) {
+        await sendMedia(request, response, store, decodeURIComponent(mediaMatch[1]), decodeURIComponent(mediaMatch[2]));
         return;
       }
       if (store && request.method === 'GET' && /^\/api\/runs\/[^/]+$/.test(url.pathname)) {
@@ -87,6 +159,7 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 202, await manager.stop(decodeURIComponent(stop[1])));
         return;
       }
+      if (request.method === 'GET' && await sendStatic(response, webRoot, url.pathname)) return;
       sendJson(response, 404, { error: 'NOT_FOUND' });
     } catch (error) {
       sendJson(response, errorStatus(error), { error: error.message.split(':')[0] });

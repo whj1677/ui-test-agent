@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { resolveInside, sha256File, stripAnsi } from './integrity.mjs';
+import { analyzeRunArtifacts } from './report.mjs';
 
 const MAX_CONSOLE_BYTES = 2 * 1024 * 1024;
 const ENV_ALLOWLIST = [
@@ -224,18 +225,26 @@ export class WorkbenchRunManager extends EventEmitter {
         } catch {
           integrityError = 'SCRIPT_HASH_CHECK_FAILED';
         }
-        const reportExists = await fs.access(context.reportFile).then(() => true, () => false);
+        const currentBeforeAnalysis = await this.store.getRun(runId);
+        const terminalStatus = integrityError ? 'INTEGRITY_FAILED' : stopped ? 'CANCELLED' : startError ? 'PROCESS_ERROR' : 'PROCESS_ENDED';
+        const analysis = await analyzeRunArtifacts({
+          runRoot: this.store.runDirectory(runId), reportFile: context.reportFile,
+          registeredSteps: currentBeforeAnalysis.steps.map(({ step_id, action, expected }) => ({ step_id, action, expected })),
+          exitCode: Number.isInteger(exitCode) ? exitCode : null, executionStatus: terminalStatus,
+        });
         const next = await this.store.updateRun(runId, (current) => ({
           ...current,
           finished_at: this.now().toISOString(),
-          execution_status: integrityError ? 'INTEGRITY_FAILED' : stopped ? 'CANCELLED' : startError ? 'PROCESS_ERROR' : 'PROCESS_ENDED',
-          report_status: reportExists ? 'PRESENT_UNPARSED' : 'MISSING',
-          test_status: 'UNPARSED', evidence_status: 'PENDING_PARSE',
+          execution_status: terminalStatus,
+          report_status: analysis.report_status,
+          test_status: analysis.test_status,
+          evidence_status: analysis.evidence_status,
           process: { pid: null, state: 'ENDED', exit_code: Number.isInteger(exitCode) ? exitCode : null, signal: signal || null },
           integrity: { ...current.integrity, source_after_sha256: sourceAfter, runtime_after_sha256: runtimeAfter },
+          steps: analysis.steps, media: analysis.media, summary: analysis.summary,
           error: integrityError
             ? { code: integrityError, message: '批准脚本来源或本次运行副本的结束哈希不一致。' }
-            : startError ? { code: 'PROCESS_START_FAILED', message: stripAnsi(startError.message) } : current.error,
+            : startError ? { code: 'PROCESS_START_FAILED', message: stripAnsi(startError.message) } : analysis.error,
         }));
         this.emit('changed', runId);
         resolve(next);

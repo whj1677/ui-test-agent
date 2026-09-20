@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>批准脚本测试工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">LOCAL · APPROVED ASSETS ONLY</p>
+      <h1>批准脚本测试工作台</h1>
+      <p class="subtle">第一阶段集成闭环 · 不调用模型 · 单任务串行</p>
+    </div>
+    <div id="service-status" class="status-chip" data-testid="service-status">连接中</div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="asset-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">ASSET</p><h2 id="asset-heading">批准资产</h2></div>
+        <span id="asset-count" class="count">0</span>
+      </div>
+      <div id="asset-empty" class="empty">尚未登记批准资产，请先运行 npm run register:approved。</div>
+      <article id="asset-card" class="asset-card hidden" data-testid="asset-card">
+        <div>
+          <h3 id="asset-title"></h3>
+          <p id="asset-version" class="mono"></p>
+        </div>
+        <dl class="facts">
+          <div><dt>用例</dt><dd id="asset-case"></dd></div>
+          <div><dt>来源提交</dt><dd id="asset-commit" class="mono"></dd></div>
+          <div><dt>脚本 SHA-256</dt><dd id="asset-sha" class="mono break"></dd></div>
+          <div><dt>批准状态</dt><dd id="asset-approval"></dd></div>
+          <div><dt>Playwright</dt><dd id="asset-playwright"></dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="panel run-panel" aria-labelledby="run-heading">
+      <div class="section-heading"><div><p class="eyebrow">RUN</p><h2 id="run-heading">启动批准脚本</h2></div></div>
+      <div class="controls">
+        <label>允许的测试入口
+          <select id="environment-select" data-testid="environment-select" disabled></select>
+        </label>
+        <button id="run-button" class="primary" data-testid="run-button" disabled>启动运行</button>
+        <button id="stop-button" class="danger" data-testid="stop-button" disabled>停止当前任务</button>
+      </div>
+      <p id="action-message" class="message" role="status" data-testid="action-message"></p>
+    </section>
+
+    <div class="workspace-grid">
+      <section class="panel" aria-labelledby="history-heading">
+        <div class="section-heading"><div><p class="eyebrow">HISTORY</p><h2 id="history-heading">运行历史</h2></div><span id="run-count" class="count">0</span></div>
+        <div id="history" class="history" data-testid="history"></div>
+      </section>
+
+      <section class="panel detail-panel" aria-labelledby="detail-heading">
+        <div class="section-heading"><div><p class="eyebrow">RESULT</p><h2 id="detail-heading">运行详情</h2></div></div>
+        <div id="detail-empty" class="empty">选择一条运行查看进程、报告、测试、步骤与证据事实。</div>
+        <div id="detail" class="hidden" data-testid="run-detail">
+          <div id="detail-statuses" class="status-grid"></div>
+          <dl id="run-facts" class="facts compact"></dl>
+          <h3>步骤</h3><div id="steps" class="steps"></div>
+          <h3>错误</h3><pre id="error" class="error-box">无</pre>
+          <h3>媒体</h3><div id="media" class="media-grid"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>数据仅保存在本机 workbench/.local；哈希用于完整性核对，不是防管理员篡改签名。</footer>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

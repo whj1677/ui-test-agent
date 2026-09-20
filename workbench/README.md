@@ -7,6 +7,7 @@
 ```powershell
 cd workbench
 npm ci
+node node_modules/@playwright/test/cli.js install chromium
 npm test
 npm run register:approved
 npm start
@@ -22,7 +23,20 @@ npm start
 
 同一时间最多一个活动运行。停止只接受当前服务持有的活动 `run_id`，Windows 上仅对该子进程 PID 调用进程树终止；已结束、旧服务遗留或其他 PID 不会被处理。子进程仅继承 Playwright 运行需要的系统路径/临时目录变量，不继承模型 Key、Cookie 或任意完整 `process.env`。
 
-结构化结果解析和中文页面在 T3 补齐。
+## 结果判定与 Web
+
+打开 `http://127.0.0.1:4210`，可查看批准资产、选择正常/故障入口、启动或停止当前任务、浏览运行历史、步骤错误及媒体。页面每秒读取一次真实后端状态；轮询只负责刷新，不制造进度或结果。
+
+- `execution_status` 只描述进程和工作台生命周期；`report_status` 描述 JSON 报告是否完整；`test_status` 保留 Playwright 的通过、失败、跳过或未运行；`evidence_status` 单独描述截图、视频和 Trace 是否齐全。
+- 只有退出码为 0、报告有效、恰好运行一个目标测试、没有跳过且登记步骤全部实际通过，`summary.complete_pass` 才为真。
+- 断言错误保留原消息、期望值、实际值和 `PENDING_ANALYSIS` 归因；即使包含等待期限，只要确认发生值比较，仍分类为 `ASSERTION_MISMATCH`。没有执行的登记步骤显示 `NOT_EXECUTED`。
+- 媒体 API 只按本运行记录中的 `media_id` 读取，并复核真实路径仍在 run 目录和文件大小未变化。截图与视频可在页面本地查看；Trace 下载后可执行：
+
+```powershell
+node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
+```
+
+T3 工程验证包含 18 项 Node 测试和一次真实 Chromium 工作台操作流；它不代替 T4 的批准脚本正常/故障真实组合。
 
 ## 架构与隔离边界
 
