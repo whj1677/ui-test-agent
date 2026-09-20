@@ -24,6 +24,7 @@ test('health endpoint reports the independent workbench', async () => {
   assert.deepEqual(await response.json(), {
     service: 'approved-test-workbench',
     status: 'ready',
+    active_run_id: null,
   });
 });
 
