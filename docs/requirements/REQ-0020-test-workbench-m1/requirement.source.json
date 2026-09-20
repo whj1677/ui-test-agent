@@ -2,7 +2,7 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0020",
   "title": "测试工作台第一阶段：批准脚本执行闭环",
-  "metadata": {"requirement_status":"已确认，实施中","governance_level":"G2","version":1,"last_updated":"2026-09-20"},
+  "metadata": {"requirement_status":"第一阶段集成验证完成","governance_level":"G2","version":2,"last_updated":"2026-09-20"},
   "original_input": "测试工作台第一阶段——批准脚本执行闭环，并推送GitHub。以744a3f7a7b775e0a89a7150babf6e5d46649de1c为基线，在codex/test-workbench-m1分支建立独立workbench子工程；从真实Web运行批准排序脚本，保存并展示可信结果，重启后可追溯，原资产和历史不受污染；完成T0-T4后停止。",
   "user_requirements": [{
     "id":"UN-0020-01","status":"已确认",
@@ -35,7 +35,7 @@
     "Web同源POST(asset_id, environment) -> 后端固定映射入口 -> 独立Playwright进程 -> JSON报告与媒体 -> 解析后的run.json -> Web历史/详情。",
     "Web停止请求 -> 当前运行所有权核验 -> 仅终止本服务启动的进程树 -> 持久化取消事实。"
   ],
-  "module_document_impact": ["新增workbench/**、REQ-0020及需求索引；仅增补.gitignore和顶层README入口，不修改原src/**、public/**、批准脚本、冻结站点或旧结果。"],
+  "module_document_impact": ["新增docs/modules/test-workbench.md说明独立工作台的职责、接口、数据、执行与安全边界；新增workbench/**、REQ-0020及需求索引，仅增补.gitignore和顶层README入口，不修改原src/**、public/**、批准脚本、冻结站点或旧结果。"],
   "risks_and_rollback": [
     "Windows换行转换可改变文件字节；登记和每次运行前后以批准SHA核对，任何不符均拒绝并停止。",
     "子进程或服务异常可能遗留活动状态；重启只标记INTERRUPTED，不自动重放；不尝试杀死非本服务当前拥有的PID。",
@@ -47,29 +47,32 @@
     {"id":"TK-0020-02","dr_ids":["DR-0020-01"],"dd_ids":["DD-0020-01"],"status":"已完成","task":"T1：实现受控批准资产登记、运行记录和重启持久化。","verification_ids":["VT-0020-02"]},
     {"id":"TK-0020-03","dr_ids":["DR-0020-02"],"dd_ids":["DD-0020-02"],"status":"已完成","task":"T2：实现受控Playwright子进程、串行互斥、停止与中断恢复。","verification_ids":["VT-0020-03"]},
     {"id":"TK-0020-04","dr_ids":["DR-0020-03"],"dd_ids":["DD-0020-03"],"status":"已完成","task":"T3：实现结构化结果解析、中文Web、历史详情和媒体边界。","verification_ids":["VT-0020-04"]},
-    {"id":"TK-0020-05","dr_ids":["DR-0020-04"],"dd_ids":["DD-0020-04"],"status":"待实现","task":"T4：执行工程测试、真实Web正常/故障组合、重启核对、脱敏报告及最终GitHub同步。","verification_ids":["VT-0020-05"]}
+    {"id":"TK-0020-05","dr_ids":["DR-0020-04"],"dd_ids":["DD-0020-04"],"status":"已完成","task":"T4：执行工程测试、真实Web正常/故障组合、重启核对、脱敏报告及最终GitHub同步。","verification_ids":["VT-0020-05"]}
   ],
   "verification_items": [
-    {"id":"VT-0020-01","dr_ids":["DR-0020-01"],"confirmation_status":"已确认","execution_status":"基础验证通过","item":"独立工程基础启动、健康接口、批准源哈希和Git隔离核查。","evidence_standard":"命令、退出码、健康响应、哈希和提交/远端SHA。","current_evidence":"npm test退出码0，2项通过；npm start后GET /api/health返回200及ready；批准脚本SHA-256为280A7875...；原src/public/pilot/heldout-lab无内容差异。提交与远端SHA待本批推送后补充。"},
-    {"id":"VT-0020-02","dr_ids":["DR-0020-01"],"confirmation_status":"已确认","execution_status":"工程验证通过","item":"登记真实性、原用例版本、非法/哈希不符拒绝、持久化和启动恢复测试。","evidence_standard":"Node测试、临时数据目录和实际catalog/run记录。","current_evidence":"npm test退出码0，7项通过；真实登记首次REGISTERED、再次ALREADY_REGISTERED；资产API返回来源提交、280A...哈希、两份批准依据、配置/锁摘要及normal/fault固定入口；运行目录持久化、路径越界拒绝和重启中断状态由自动化测试覆盖。"},
-    {"id":"VT-0020-03","dr_ids":["DR-0020-02"],"confirmation_status":"已确认","execution_status":"工程验证通过","item":"固定Playwright参数、独立进程、环境脱敏、互斥、取消、异常中断和前后哈希测试。","evidence_standard":"Node测试、子进程事实和受控模拟夹具。","current_evidence":"npm test退出码0，12项通过；受控模拟核对shell=false参数数组、workers=1/retries=0、入口固定映射、模型Key/Cookie不继承、来源与运行副本哈希、重复启动拒绝、仅自有PID停止、取消终态、未批准/错哈希/越界/非法环境拒绝；API同源与固定字段校验通过。真实Playwright组合留待T4。"},
-    {"id":"VT-0020-04","dr_ids":["DR-0020-03"],"confirmation_status":"已确认","execution_status":"工程与浏览器联调通过","item":"正常/断言失败/缺失损坏/未运行/跳过报告、路径越界/非法入口及真实浏览器Web流程。","evidence_standard":"Node测试、浏览器截图和三方记录核对。","current_evidence":"npm test退出码0，18项通过；覆盖完整报告、真实断言差异、缺失/损坏、跳过、零目标、退出码0但步骤缺失、附件索引/越界/变化拒绝。npm run test:browser退出码0，真实Chromium从页面读取登记资产、选择入口、启动模拟进程记录、显示历史/步骤/错误、停止并看到CANCELLED；不可信<img>文本未执行；截图位于被忽略的workbench/test-results/workbench-browser-smoke.png。真实批准脚本组合留待T4。"},
-    {"id":"VT-0020-05","dr_ids":["DR-0020-04"],"confirmation_status":"已确认","execution_status":"未运行","item":"真实正常/故障各一次、重启历史/附件、原资产与旧历史不变、零模型/零重试和GitHub远端一致性。","evidence_standard":"运行ID、哈希表、Playwright报告、Web截图、验收报告、提交及远端SHA。","current_evidence":"无"}
+    {"id":"VT-0020-01","dr_ids":["DR-0020-01"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"独立工程基础启动、健康接口、批准源哈希和Git隔离核查。","evidence_standard":"命令、退出码、健康响应、哈希和提交/远端SHA；健康接口200、批准哈希280A...，T0提交87699fd1c25ae627ea013899012c1c7053a7601b与远端一致。","current_evidence":{"command":"cd workbench; npm test（T0基线）","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/ACCEPTANCE_REPORT.md#工程验证"}},
+    {"id":"VT-0020-02","dr_ids":["DR-0020-01"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"登记真实性、原用例版本、非法/哈希不符拒绝、持久化和启动恢复测试。","evidence_standard":"Node测试、临时数据目录和实际catalog/run记录；真实登记REGISTERED后幂等ALREADY_REGISTERED。","current_evidence":{"command":"cd workbench; npm test（T1批次）","exit_code":0,"test_count":7,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/ACCEPTANCE_REPORT.md#工程验证"}},
+    {"id":"VT-0020-03","dr_ids":["DR-0020-02"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"固定Playwright参数、独立进程、环境脱敏、互斥、取消、异常中断和前后哈希测试。","evidence_standard":"Node测试、子进程事实和受控模拟夹具；真实组合由VT-0020-05验证。","current_evidence":{"command":"cd workbench; npm test（T2批次）","exit_code":0,"test_count":12,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/ACCEPTANCE_REPORT.md#工程验证"}},
+    {"id":"VT-0020-04","dr_ids":["DR-0020-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"正常/断言失败/缺失损坏/未运行/跳过报告、路径越界/非法入口及真实浏览器Web流程。","evidence_standard":"18项Node测试、1个真实Chromium工作台流、浏览器截图和三方记录核对；不可信HTML保持文本。","current_evidence":{"command":"cd workbench; npm test；npm run test:browser","exit_code":0,"test_count":19,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/ACCEPTANCE_REPORT.md#工程验证"}},
+    {"id":"VT-0020-05","dr_ids":["DR-0020-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实正常/故障各一次、重启历史/附件、原资产与旧历史不变、零模型/零重试和GitHub远端一致性。","evidence_standard":"运行ID、哈希表、Playwright报告、Web截图、验收报告、提交及远端SHA；验收场景通过不覆盖fault的Playwright失败事实。","current_evidence":{"command":"cd workbench; npm run test:real -- --normal-run-id=run-20260920152922-af45f654；重启后 npm run test:restart","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/ACCEPTANCE_REPORT.md"}}
   ],
   "verification_environment": {
     "working_directory":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-workbench-m1",
     "commands":["cd workbench; npm ci","npm test","npm start","npm run register:approved","npm run test:browser"],
     "environment":["Windows PowerShell","Node.js v22.19.0 / npm 10.9.3","127.0.0.1:4210；冻结heldout站点127.0.0.1:4198","@playwright/test 1.62.1；Chromium；workers=1；retries=0"],
-    "conclusion":["实施中；必须以实际执行证据更新。"]
+    "conclusion":["第一阶段集成验证完成：18项Node工程测试和工作台Chromium联调通过；真实Web normal/fault组合与重启历史/附件核对完成。业务事实和工作台验收结论分开记录；未进入Harness或发布。"]
   },
   "trace_current": [
     {"un_id":"UN-0020-01","dr_id":"DR-0020-01","dd_id":"DD-0020-01","tk_id":"TK-0020-01","vt_id":"VT-0020-01","status":"基础验证通过"},
     {"un_id":"UN-0020-01","dr_id":"DR-0020-01","dd_id":"DD-0020-01","tk_id":"TK-0020-02","vt_id":"VT-0020-02","status":"工程验证通过"},
-    {"un_id":"UN-0020-01","dr_id":"DR-0020-02","dd_id":"DD-0020-02","tk_id":"TK-0020-03","vt_id":"VT-0020-03","status":"工程验证通过，真实组合待T4"},
-    {"un_id":"UN-0020-01","dr_id":"DR-0020-03","dd_id":"DD-0020-03","tk_id":"TK-0020-04","vt_id":"VT-0020-04","status":"工程与浏览器联调通过，真实组合待T4"},
-    {"un_id":"UN-0020-01","dr_id":"DR-0020-04","dd_id":"DD-0020-04","tk_id":"TK-0020-05","vt_id":"VT-0020-05","status":"待实现"}
+    {"un_id":"UN-0020-01","dr_id":"DR-0020-02","dd_id":"DD-0020-02","tk_id":"TK-0020-03","vt_id":"VT-0020-03","status":"工程验证通过，T4真实组合完成"},
+    {"un_id":"UN-0020-01","dr_id":"DR-0020-03","dd_id":"DD-0020-03","tk_id":"TK-0020-04","vt_id":"VT-0020-04","status":"工程与浏览器联调通过，T4真实组合完成"},
+    {"un_id":"UN-0020-01","dr_id":"DR-0020-04","dd_id":"DD-0020-04","tk_id":"TK-0020-05","vt_id":"VT-0020-05","status":"第一阶段集成验证完成"}
   ],
-  "trace_history": [{"version":1,"link":"用户2026-09-20任务授权","status":"已授权实施","notes":"从指定批准基线独立建立工作台；T0-T4同一授权，完成第一阶段后停止。"}],
+  "trace_history": [
+    {"version":1,"link":"用户2026-09-20任务授权","status":"已授权实施","notes":"从指定批准基线独立建立工作台；T0-T4同一授权，完成第一阶段后停止。"},
+    {"version":2,"link":"workbench/docs/ACCEPTANCE_REPORT.md","status":"第一阶段集成验证完成","notes":"两个真实run_id、三方一致性、重启历史/附件、原资产未变和公开脱敏证据齐全。"}
+  ],
   "open_questions": ["无。若批准哈希、冻结站点身份或远端分支发生冲突，按证据转BLOCKED，不替换未知版本。"],
   "prohibited_implementation": [
     "不得修改原产品src/**、public/**、批准脚本、原用例/冻结站点/真值、旧报告/批准记录/历史结果或详情组本地工作。",
@@ -84,5 +87,6 @@
     ,{"date":"2026-09-20","version":1,"type":"T1工程验证","description":"完成真实批准资产登记、幂等冲突保护、运行JSON持久化、路径边界和重启中断恢复；7项工程测试通过。","impact":"workbench本地catalog与run存储","confirmed_by":"本机命令和实际catalog/API证据"}
     ,{"date":"2026-09-20","version":1,"type":"T2工程验证","description":"完成固定参数Playwright子进程、站点预检、环境最小化、双哈希、单任务互斥和自有进程树停止；12项工程测试通过。","impact":"workbench受控执行入口","confirmed_by":"受控模拟进程与API工程证据；真实运行待T4"}
     ,{"date":"2026-09-20","version":1,"type":"T3工程与浏览器联调","description":"完成结构化报告fail-closed解析、步骤事实、错误保真、中文Web和媒体边界；18项Node测试及真实Chromium工作台操作流通过。","impact":"workbench结果与Web","confirmed_by":"本机测试、浏览器DOM断言和被忽略截图；真实批准脚本组合待T4"}
+    ,{"date":"2026-09-20","version":2,"type":"T4集成验证完成","description":"真实Web normal/fault组合、三方一致性、服务重启历史/附件、原资产未变和脱敏报告完成；第一阶段停止。","impact":"仅workbench第一阶段集成结论","confirmed_by":"两个真实run_id、Playwright报告、运行记录、Web截图与重启验证"}
   ]
 }

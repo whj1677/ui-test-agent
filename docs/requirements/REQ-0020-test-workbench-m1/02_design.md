@@ -18,7 +18,7 @@
 
 ## 模块文档影响
 
-- 新增workbench/**、REQ-0020及需求索引；仅增补.gitignore和顶层README入口，不修改原src/**、public/**、批准脚本、冻结站点或旧结果。
+- 新增docs/modules/test-workbench.md说明独立工作台的职责、接口、数据、执行与安全边界；新增workbench/**、REQ-0020及需求索引，仅增补.gitignore和顶层README入口，不修改原src/**、public/**、批准脚本、冻结站点或旧结果。
 
 ## 风险与回滚
 

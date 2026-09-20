@@ -2,6 +2,8 @@
 
 这是独立于原产品的本地单用户子工程。它只负责登记已批准资产、从固定入口启动 Playwright、持久化运行事实并在中文 Web 中展示结果；不生成或修改业务脚本，也不调用任何模型、Harness 或 healer。
 
+第一阶段真实 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。
+
 ## 安装、登记与启动
 
 ```powershell
@@ -37,6 +39,25 @@ node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
 ```
 
 T3 工程验证包含 18 项 Node 测试和一次真实 Chromium 工作台操作流；它不代替 T4 的批准脚本正常/故障真实组合。
+
+## 验收命令
+
+先在独立终端运行冻结站点和工作台：
+
+```powershell
+npm run lab
+npm start
+```
+
+完成工程测试后，使用真实 Web 组合和重启验证：
+
+```powershell
+npm run test:real
+# 正常停止并重新 npm start 后
+npm run test:restart
+```
+
+`test:real` 会真实新增 normal/fault 运行，不能用作无改动反复碰运气。公开报告已记录本轮实际 ID；不要用旧成绩替代新的授权验收。
 
 ## 架构与隔离边界
 
