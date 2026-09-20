@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_ROW_POSITION_SOURCE_UNRESOLVED:
+    'The CURRENT original position interval has no unambiguous supported literal identity list. Do not fill it from the DOM, weaken it to relative order, add a population count or replay actions. Preserve the original and explain this source/capability gap within the existing budget. A supported 第N至M行依次为 list maps each explicit identity to row.position, independently of exact_rows.',
   PLAN_CURRENT_PAGE_UNPROVEN:
     'Completion lacks the original current-page proof. Read detail.reason and measure the current counter in this same step. Table IDs or a later page are not proof. Preserve original N with contains 第N/ or standalone 第N页; never invent the observed total or replay navigation. Existing source/target checks and budgets remain.',
   PLAN_CURRENT_PAGE_SOURCE_INVALID:

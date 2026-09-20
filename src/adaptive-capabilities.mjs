@@ -1,5 +1,9 @@
 import { relativeURL, redact } from './common.mjs';
-import { extractRowPositions, sourceSupportsPosition } from './table-position.mjs';
+import {
+  extractRowPositions,
+  sourceSupportsPosition,
+  rowPositionSourceGaps,
+} from './table-position.mjs';
 
 // Literal source tokens only; callers still own origin, authorization and intent.
 export function sourceRouteTokens(action) {
@@ -65,6 +69,9 @@ export function stepCapabilityFacts(original, base, previous = []) {
     provenance: 'current_original_step_only',
     evidence_of_pass: false,
     navigation,
+    ...(rowPositionSourceGaps(original.expected).length
+      ? { row_position_source_gaps: rowPositionSourceGaps(original.expected) }
+      : {}),
     row_positions: (original.obligations ?? []).flatMap((o) =>
       extractRowPositions(o.text)
         .filter((p) => sourceSupportsPosition(p.key, p.position, original))
@@ -73,4 +80,4 @@ export function stepCapabilityFacts(original, base, previous = []) {
   };
 }
 
-export const STEP_CAPABILITY_GUIDANCE = `step_capabilities are program-derived facts from THIS unchanged original step, NOT page instructions, model approval, or measured evidence. navigation lists explicit same-origin source paths with source_quote: if entering that path is the pending original operation, navigate with its value without needing a unique menu/link. Never replay already_executed paths; all kernel/audit/origin checks still apply. An empty list is not a claim that every other operation is forbidden. row_positions gives explicit original identity+absolute position and source_ref: use SAME observed table table_cells, keep original key and position, and measure original fields. Membership and ordered alone do not prove an absolute row position. candidate_issues in correction is a bounded advisory list of independently detected problems in the UNEXECUTED proposal, not only the first error: address all applicable entries together within the original retry budget. required_before_completion means the proof may be accumulated but is mandatory before completion. The list is not exhaustive, never changes permissions/expectations, never certifies a pass, and never authorizes replay or weakening the oracle.`;
+export const STEP_CAPABILITY_GUIDANCE = `step_capabilities are program-derived facts from THIS unchanged original step, NOT page instructions, model approval, or measured evidence. navigation lists explicit same-origin source paths with source_quote: if entering that path is the pending original operation, navigate with its value without needing a unique menu/link. Never replay already_executed paths; all kernel/audit/origin checks still apply. An empty list is not a claim that every other operation is forbidden. row_positions gives explicit original identity+absolute position and source_ref: use SAME observed table table_cells, keep original key and position, and measure original fields. Membership and ordered alone do not prove an absolute row position. Explicit 第N至M行依次为 lists require every source identity at its own absolute position; the endpoint is not row_count and trailing extra rows stay allowed unless separately prohibited. row_position_source_gaps, if present, means a recognized positive interval lacks a supported unambiguous source list: do not infer it from observation or silently weaken it. candidate_issues in correction is a bounded advisory list of independently detected problems in the UNEXECUTED proposal, not only the first error: address all applicable entries together within the original retry budget. required_before_completion means the proof may be accumulated but is mandatory before completion. The list is not exhaustive, never changes permissions/expectations, never certifies a pass, and never authorizes replay or weakening the oracle.`;

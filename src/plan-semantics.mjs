@@ -5,7 +5,7 @@ import { requireCaseNamedEvidence, validateCaseNamedPlan } from './case-named.mj
 import { extractExpectationRanges } from './expectation-coverage.mjs';
 import { needsTableBaseline } from './table-invariant.mjs';
 import { displayNumber, displayUnit, sourceDisplayUnits } from './table-assertion.mjs';
-import { extractRowPositions } from './table-position.mjs';
+import { extractRowPositions, rowPositionSourceGaps } from './table-position.mjs';
 import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.mjs';
 import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 import { selectionTimingGaps } from './selection-timing.mjs';
@@ -131,6 +131,13 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
       if (context.adaptive_readonly) {
+        const positionSourceGaps = rowPositionSourceGaps(original.expected);
+        if (positionSourceGaps.length)
+          reject(
+            'PLAN_ROW_POSITION_SOURCE_UNRESOLVED',
+            `plan.steps[${i}].assertions`,
+            positionSourceGaps.join('\n'),
+          );
         const orderGaps = orderEvidenceGaps(original, step);
         const pageGaps = currentPageEvidenceGaps(original, step);
         if (pageGaps.length)

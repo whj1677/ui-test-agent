@@ -22,6 +22,10 @@ function integer(value) {
 function withoutPositions(text) {
   return text
     .replace(
+      /第\s*(?:-?\d+(?:\.\d+)?|[零一二两三四五六七八九十百]+)\s*(?:至|到|[-~～])\s*(?:第\s*)?(?:-?\d+(?:\.\d+)?|[零一二两三四五六七八九十百]+)\s*(?:条|行)/gu,
+      '',
+    )
+    .replace(
       /(?:第|前|后|最前|最后|首|末|倒数)\s*(?:\d+|[零一二两三四五六七八九十百]+)\s*(?:条|行)/gu,
       '',
     )

@@ -1,6 +1,7 @@
 import { fragmentAuditPlan } from './adaptive-plan.mjs';
 import { requirePlanSemantics } from './plan-semantics.mjs';
 import { stepCapabilityFacts } from './adaptive-capabilities.mjs';
+import { rowPositionSourceGaps } from './table-position.mjs';
 
 // Diagnostic probes of independent candidate assertions. No dispatch, repair,
 // model call, expectation rewrite, or acceptance state can originate here.
@@ -9,6 +10,12 @@ export function candidateIssues(reply, { c, step, base, pages = [], previous = [
   const original = c.steps.find((s) => s.step_id === step.step_id);
   if (!original) return [];
   const issues = [];
+  for (const reason of rowPositionSourceGaps(original.expected))
+    issues.push({
+      code: 'PLAN_ROW_POSITION_SOURCE_UNRESOLVED',
+      required_before_completion: true,
+      reason,
+    });
   reply.assertions.forEach((assertion, index) => {
     try {
       const bundle = fragmentAuditPlan(
