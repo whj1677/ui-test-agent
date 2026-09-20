@@ -17,6 +17,10 @@ import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
 import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 import { requireRowEvidence, ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
 import {
+  requireQueryResultEvidence,
+  QUERY_RESULT_EVIDENCE_GUIDANCE,
+} from './query-result-evidence.mjs';
+import {
   TABLE_ASSERTION_GUIDANCE,
   ADAPTIVE_NUMERIC_GUIDANCE,
   displayNumber,
@@ -405,6 +409,7 @@ export function fragmentAuditPlan(c, step, previous, fragment, base) {
     if (bundle.plan.steps[0].checkpoints.some((point) => !point.assertions.length))
       fail('ADAPTIVE_ACTION_UNCHECKED');
     validatePlan(bundle.plan, bundle.c, base);
+    requireQueryResultEvidence(c, original, bundle.plan.steps[0]);
   }
   return bundle;
 }
@@ -441,6 +446,7 @@ ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
 ${ORDER_EVIDENCE_GUIDANCE}
 ${ROW_EVIDENCE_GUIDANCE}
+${QUERY_RESULT_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
 ${VISIBILITY_EVIDENCE_GUIDANCE}
 ${SELECTION_TIMING_GUIDANCE}

@@ -2,6 +2,10 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_QUERY_RESULT_UNPROVEN:
+    'Completion lacks field evidence for original AND inputs. Read detail.reason; retain previous successful measurements and add the missing original conditions on the SAME returned record fields in this step. Control state/count/ID alone is insufficient. Do not borrow a future step, copy observed expected values, or repeat an already dispatched query; this remains within the original replan budget and independent review.',
+  PLAN_QUERY_SOURCE_UNRESOLVED:
+    'The explicit AND query has unsupported or ambiguous original input clauses. Do not infer them from observed results or future steps. This is a source capability gap, not permission to rewrite the case, invent a condition or report successful coverage.',
   ASSERTION_ROW_FIELD_REQUIRED:
     'This candidate was not dispatched. A whole-row scalar summary is not original field evidence. Replace it with SAME original record key + appropriate column checks (cell/table_cells), preserving every ORIGINAL value, source ref, predicate meaning and timing. For AND, verify each original condition on returned fields, not only ID/count/input controls; do not add unrelated visible fields, units or action labels. Do not normalize or copy observed row text as the oracle. An explicit original complete literal row-text requirement remains unchanged. Reuse executed query; no replay, extra calls or deadline extension.',
   PLAN_TABLE_ORDER_UNPROVEN:
