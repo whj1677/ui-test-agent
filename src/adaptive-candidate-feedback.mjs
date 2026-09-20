@@ -1,21 +1,21 @@
 import { fragmentAuditPlan } from './adaptive-plan.mjs';
 import { requirePlanSemantics } from './plan-semantics.mjs';
-import { stepCapabilityFacts } from './adaptive-capabilities.mjs';
-import { rowPositionSourceGaps } from './table-position.mjs';
+import { completionIssues } from './completion-evidence.mjs';
+
+const unavailable = () => ({
+  code: 'COMPLETION_DIAGNOSTIC_UNAVAILABLE',
+  evidence_of_pass: false,
+  reason: '候选结构不可评估；这不是无缺口或批准。先按原错误修正格式，保留原义务、时点和预算。',
+});
 
 // Diagnostic probes of independent candidate assertions. No dispatch, repair,
 // model call, expectation rewrite, or acceptance state can originate here.
 export function candidateIssues(reply, { c, step, base, pages = [], previous = [] }) {
-  if (!reply || !Array.isArray(reply.assertions) || reply.assertions.length > 20) return [];
+  if (!reply || !Array.isArray(reply.assertions) || reply.assertions.length > 20)
+    return [unavailable()];
   const original = c.steps.find((s) => s.step_id === step.step_id);
-  if (!original) return [];
+  if (!original) return [unavailable()];
   const issues = [];
-  for (const reason of rowPositionSourceGaps(original.expected))
-    issues.push({
-      code: 'PLAN_ROW_POSITION_SOURCE_UNRESOLVED',
-      required_before_completion: true,
-      reason,
-    });
   reply.assertions.forEach((assertion, index) => {
     try {
       const bundle = fragmentAuditPlan(
@@ -47,23 +47,36 @@ export function candidateIssues(reply, { c, step, base, pages = [], previous = [
         });
     }
   });
-  const assertions = [...previous.flatMap((p) => p.assertions ?? []), ...reply.assertions];
-  for (const wanted of stepCapabilityFacts(original, base).row_positions) {
-    if (
-      !assertions.some(
-        (a) =>
-          a?.check === 'table_cells' &&
-          Array.isArray(a.obligation_ids) &&
-          a.obligation_ids.includes(wanted.source_ref) &&
-          Array.isArray(a.expected?.rows) &&
-          a.expected.rows.some((r) => r?.key === wanted.key && r.position === wanted.position),
-      )
-    )
+  try {
+    // This is only a structural proposal projection. Each fragment's assertions
+    // stay in its own sampling group; pending actions remain in original order.
+    // It does not merge candidate evidence into the controller's completed list.
+    const checkpoints = [...previous, reply].map((p) => {
+      if (!p || !Array.isArray(p.assertions) || !Array.isArray(p.actions ?? []))
+        throw Error('DIAGNOSTIC_SHAPE');
+      if (p.assertions.some((a) => !a || typeof a !== 'object')) throw Error('DIAGNOSTIC_SHAPE');
+      return { actions: p.actions ?? [], assertions: p.assertions };
+    });
+    for (const issue of completionIssues(original, { checkpoints }, { adaptiveReadonly: true }))
       issues.push({
-        code: 'PLAN_ROW_POSITION_UNPROVEN',
+        ...issue,
         required_before_completion: true,
-        ...wanted,
+        basis: 'unexecuted_proposal_plus_completed_structure',
+        evidence_of_pass: false,
       });
+  } catch {
+    // Existing schema/source/dispatch guards remain authoritative. Diagnostic
+    // failure cannot turn an unknown proposal into a complete one.
+    issues.push(unavailable());
   }
-  return issues.slice(0, 24);
+  if (issues.length <= 24) return issues;
+  return [
+    ...issues.slice(0, 23),
+    {
+      code: 'DIAGNOSTIC_LIST_TRUNCATED',
+      omitted_count: issues.length - 23,
+      evidence_of_pass: false,
+      reason: '仅展示前23项诊断；原完整守卫没有截断，未展示项仍必须满足。',
+    },
+  ];
 }

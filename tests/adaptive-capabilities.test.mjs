@@ -170,10 +170,13 @@ test('diagnostic probing of malformed candidate data cannot replace primary fail
     assert.doesNotThrow(() =>
       candidateIssues({ assertions: [assertion] }, { c, step: plan.steps[0], base }),
     );
-  assert.deepEqual(
-    candidateIssues({ assertions: Array(21).fill(null) }, { c, step: plan.steps[0], base }),
-    [],
+  const tooLarge = candidateIssues(
+    { assertions: Array(21).fill(null) },
+    { c, step: plan.steps[0], base },
   );
+  assert.equal(tooLarge.length, 1);
+  assert.equal(tooLarge[0].code, 'COMPLETION_DIAGNOSTIC_UNAVAILABLE');
+  assert.equal(tooLarge[0].evidence_of_pass, false);
 });
 
 test('cell text cannot evade original numeric-unit source by abandoning the matrix', () => {

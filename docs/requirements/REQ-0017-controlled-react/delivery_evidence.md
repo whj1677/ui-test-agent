@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T10:42:41+08:00`
+- Generated at: `2026-09-20T11:19:07+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `76d4721b9b316639986b583da7c397702b473caabadd8230ba8b54a3b4f9bf29`
+- Change fingerprint: `d9befc3be52cd10c7e8397bac8cea3fe57cdcf8f4fb766ba38178fe233f54d51`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/unique-row-evidence.test.mjs tests/unique-row-evidence.execution.test.mjs tests/negative-row-review.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/completion-feedback.test.mjs tests/completion-feedback.execution.test.mjs tests/adaptive-capabilities.test.mjs`
 - Exit code: `0`
-- Test count: `28`
+- Test count: `15`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v37-delivery.log`
-- Log SHA-256: `bae19b0fcae4858c29eebb486c2f54c1beba3ac3d9aa14eb7ed858253a26dbd2`
+- Log path: `validation/req0017/v38-delivery.log`
+- Log SHA-256: `eb8cb2a85d388e067643086f4323becef8cdb41b7ee847bd46be74986ca91448`
 
 ### Git Status
 
@@ -29,16 +29,14 @@
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/adaptive-capabilities.mjs
- M src/adaptive-plan.mjs
- M src/adaptive-recovery.mjs
- M src/adaptive-review.mjs
+ M src/adaptive-candidate-feedback.mjs
  M src/plan-semantics.mjs
- M src/table-cardinality.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v37-result.md
-?? src/unique-row-evidence.mjs
-?? tests/unique-row-evidence.execution.test.mjs
-?? tests/unique-row-evidence.test.mjs
+ M tests/adaptive-capabilities.test.mjs
+?? docs/requirements/REQ-0017-controlled-react/kimi-v38-review.md
+?? docs/requirements/REQ-0017-controlled-react/real-model-v38-result.md
+?? src/completion-evidence.mjs
+?? tests/completion-feedback.execution.test.mjs
+?? tests/completion-feedback.test.mjs
 ```
 
 ### Git Diff Stat
@@ -55,12 +53,9 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/cha
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-capabilities.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-candidate-feedback.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/table-cardinality.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/adaptive-capabilities.test.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/release_runtime.md                    |   2 +
  docs/requirements/README.md                        |   2 +-
  .../00_user_requirement.md                         |   2 +
@@ -70,216 +65,136 @@ warning: in the working copy of 'src/table-cardinality.mjs', LF will be replaced
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
  .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 257 +++++++++++----------
+ .../REQ-0017-controlled-react/delivery_evidence.md | 246 +++++++--------------
  .../requirement.source.json                        |  24 +-
- src/adaptive-capabilities.mjs                      |   4 +
- src/adaptive-plan.mjs                              |   2 +
- src/adaptive-recovery.mjs                          |   2 +
- src/adaptive-review.mjs                            |   2 +
- src/plan-semantics.mjs                             |   8 +
- src/table-cardinality.mjs                          |  31 +++
- 17 files changed, 218 insertions(+), 135 deletions(-)
+ src/adaptive-candidate-feedback.mjs                |  63 +++---
+ src/plan-semantics.mjs                             | 143 +-----------
+ tests/adaptive-capabilities.test.mjs               |   9 +-
+ 14 files changed, 162 insertions(+), 346 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v37-result.md
-src/unique-row-evidence.mjs
-tests/unique-row-evidence.execution.test.mjs
-tests/unique-row-evidence.test.mjs
+docs/requirements/REQ-0017-controlled-react/kimi-v38-review.md
+docs/requirements/REQ-0017-controlled-react/real-model-v38-result.md
+src/completion-evidence.mjs
+tests/completion-feedback.execution.test.mjs
+tests/completion-feedback.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T10:41:28+08:00
-Command: node --test --test-concurrency=2 tests/unique-row-evidence.test.mjs tests/unique-row-evidence.execution.test.mjs tests/negative-row-review.test.mjs
+Started at: 2026-09-20T11:18:10+08:00
+Command: node --test --test-concurrency=2 tests/completion-feedback.test.mjs tests/completion-feedback.execution.test.mjs tests/adaptive-capabilities.test.mjs
 Exit code: 0
-Parsed test count: 28
+Parsed test count: 15
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: program derived sampling groups distinguish joint evidence from separate times: false
-ok 1 - program derived sampling groups distinguish joint evidence from separate times: false
+# Subtest: explicit source paths are visible capabilities, not menu requirements or pass evidence
+ok 1 - explicit source paths are visible capabilities, not menu requirements or pass evidence
   ---
-  duration_ms: 2.9395
+  duration_ms: 9.1068
   type: 'test'
   ...
-# Subtest: program derived sampling groups distinguish joint evidence from separate times: true
-ok 2 - program derived sampling groups distinguish joint evidence from separate times: true
+# Subtest: negative/conditional/alternative/external routes and observed inventions never become source facts
+ok 2 - negative/conditional/alternative/external routes and observed inventions never become source facts
   ---
-  duration_ms: 0.4018
+  duration_ms: 2.1193
   type: 'test'
   ...
-# Subtest: same explicit negative capability reaches planner and reviewer without new predicate
-ok 3 - same explicit negative capability reaches planner and reviewer without new predicate
+# Subtest: one unexecuted candidate exposes numeric source, extra total and missing absolute position together
+ok 3 - one unexecuted candidate exposes numeric source, extra total and missing absolute position together
   ---
-  duration_ms: 0.2346
+  duration_ms: 11.5386
   type: 'test'
   ...
-# Subtest: sole-record proof through actual Controller: joint
-ok 4 - sole-record proof through actual Controller: joint
+# Subtest: diagnostic probing of malformed candidate data cannot replace primary failure or grant acceptance
+ok 4 - diagnostic probing of malformed candidate data cannot replace primary failure or grant acceptance
   ---
-  duration_ms: 14310.3749
+  duration_ms: 0.9757
   type: 'test'
   ...
-# Subtest: sole-record proof through actual Controller: extra
-ok 5 - sole-record proof through actual Controller: extra
+# Subtest: cell text cannot evade original numeric-unit source by abandoning the matrix
+ok 5 - cell text cannot evade original numeric-unit source by abandoning the matrix
   ---
-  duration_ms: 15576.389
+  duration_ms: 1.3809
   type: 'test'
   ...
-# Subtest: sole-record proof through actual Controller: closed
-ok 6 - sole-record proof through actual Controller: closed
+# Subtest: numeric substring is rejected before measurement instead of passing 1100 for 100
+ok 6 - numeric substring is rejected before measurement instead of passing 1100 for 100
   ---
-  duration_ms: 13993.0265
+  duration_ms: 0.898
   type: 'test'
   ...
-# Subtest: sole-record proof through actual Controller: closed-extra
-ok 7 - sole-record proof through actual Controller: closed-extra
+# Subtest: parallel completion feedback through actual Controller: early-feedback
+ok 7 - parallel completion feedback through actual Controller: early-feedback
   ---
-  duration_ms: 15243.1373
+  duration_ms: 20644.1135
   type: 'test'
   ...
-# Subtest: sole-record proof through actual Controller: persistent
-ok 8 - sole-record proof through actual Controller: persistent
+# Subtest: parallel completion feedback through actual Controller: actual-page11
+ok 8 - parallel completion feedback through actual Controller: actual-page11
   ---
-  duration_ms: 12130.6774
+  duration_ms: 17834.5808
   type: 'test'
   ...
-# Subtest: literal sole record is a source quantity of one, not an observed default
-ok 9 - literal sole record is a source quantity of one, not an observed default
+# Subtest: parallel completion feedback through actual Controller: persistent-omission
+ok 9 - parallel completion feedback through actual Controller: persistent-omission
   ---
-  duration_ms: 3.4389
+  duration_ms: 16942.1958
   type: 'test'
   ...
-# Subtest: identity plus exclusion of another key cannot prove sole record
-ok 10 - identity plus exclusion of another key cannot prove sole record
+# Subtest: first rejected extra constraint also exposes the already-known default-page gap
+ok 10 - first rejected extra constraint also exposes the already-known default-page gap
   ---
-  duration_ms: 2.3166
+  duration_ms: 11.9292
   type: 'test'
   ...
-# Subtest: sole record needs same-group same-table identity and total
-ok 11 - sole record needs same-group same-table identity and total
+# Subtest: candidate aggregation preserves same-checkpoint sole-row proof, not flattened fragments
+ok 11 - candidate aggregation preserves same-checkpoint sole-row proof, not flattened fragments
   ---
-  duration_ms: 7.2525
+  duration_ms: 2.7228
   type: 'test'
   ...
-# Subtest: one closed matrix proves sole identity, open membership does not
-ok 12 - one closed matrix proves sole identity, open membership does not
+# Subtest: future-page gap is advisory: partial navigation allowed, complete still refused
+ok 12 - future-page gap is advisory: partial navigation allowed, complete still refused
   ---
-  duration_ms: 1.0626
+  duration_ms: 1.0845
   type: 'test'
   ...
-# Subtest: unique source is shared by capabilities and count authorization
-ok 13 - unique source is shared by capabilities and count authorization
+# Subtest: wrong original page or source reference does not close the structural gap
+ok 13 - wrong original page or source reference does not close the structural gap
   ---
-  duration_ms: 1.0253
+  duration_ms: 0.6594
   type: 'test'
   ...
-# Subtest: not an affirmative sole-table record source: 不要求唯一行是R009
-ok 14 - not an affirmative sole-table record source: 不要求唯一行是R009
+# Subtest: malformed diagnostics are explicit unknowns and cannot mutate candidate or actual history
+ok 14 - malformed diagnostics are explicit unknowns and cannot mutate candidate or actual history
   ---
-  duration_ms: 0.1222
+  duration_ms: 0.6599
   type: 'test'
   ...
-# Subtest: not an affirmative sole-table record source: 如果唯一行是R009
-ok 15 - not an affirmative sole-table record source: 如果唯一行是R009
+# Subtest: bounded diagnostic list declares truncation; hard completion is not truncated
+ok 15 - bounded diagnostic list declares truncation; hard completion is not truncated
   ---
-  duration_ms: 0.1261
+  duration_ms: 1.6053
   type: 'test'
   ...
-# Subtest: not an affirmative sole-table record source: 此前唯一行是R009
-ok 16 - not an affirmative sole-table record source: 此前唯一行是R009
-  ---
-  duration_ms: 0.0818
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 例如唯一行是R009
-ok 17 - not an affirmative sole-table record source: 例如唯一行是R009
-  ---
-  duration_ms: 0.2332
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 标题说明唯一行是R009
-ok 18 - not an affirmative sole-table record source: 标题说明唯一行是R009
-  ---
-  duration_ms: 0.2691
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 唯一行是R009或R010
-ok 19 - not an affirmative sole-table record source: 唯一行是R009或R010
-  ---
-  duration_ms: 0.1059
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 唯一行是R009的说法不成立
-ok 20 - not an affirmative sole-table record source: 唯一行是R009的说法不成立
-  ---
-  duration_ms: 0.0528
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 编号唯一，记录R009可见
-ok 21 - not an affirmative sole-table record source: 编号唯一，记录R009可见
-  ---
-  duration_ms: 0.0551
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 第一行是R009
-ok 22 - not an affirmative sole-table record source: 第一行是R009
-  ---
-  duration_ms: 0.0397
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 前一行是R009
-ok 23 - not an affirmative sole-table record source: 前一行是R009
-  ---
-  duration_ms: 0.0423
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 唯一行
-ok 24 - not an affirmative sole-table record source: 唯一行
-  ---
-  duration_ms: 0.0338
-  type: 'test'
-  ...
-# Subtest: not an affirmative sole-table record source: 点击唯一行按钮
-ok 25 - not an affirmative sole-table record source: 点击唯一行按钮
-  ---
-  duration_ms: 0.0362
-  type: 'test'
-  ...
-# Subtest: a rejected sole-row phrase cannot mask a separate explicit quantity
-ok 26 - a rejected sole-row phrase cannot mask a separate explicit quantity
-  ---
-  duration_ms: 0.3468
-  type: 'test'
-  ...
-# Subtest: different source, identity, key-only count, unbound text and count alone remain gaps
-ok 27 - different source, identity, key-only count, unbound text and count alone remain gaps
-  ---
-  duration_ms: 0.2868
-  type: 'test'
-  ...
-# Subtest: no new closed-population obligation for ordinary membership and no input mutation
-ok 28 - no new closed-population obligation for ordinary membership and no input mutation
-  ---
-  duration_ms: 1.164
-  type: 'test'
-  ...
-1..28
-# tests 28
+1..15
+# tests 15
 # suites 0
-# pass 28
+# pass 15
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 71776.0873
+# duration_ms 55943.2551
 ```
 
 ### Sync Record Status
@@ -298,4 +213,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-唯一记录同次数量与身份；385受影响工程无失败，交付集合重叠不累加，真实模型另验
+共享既有完成证据汇总；581受影响工程及28组结构差分已核验，集合重叠不累加，官方效果另验
