@@ -2,6 +2,8 @@
 
 ## REQ-0017 V39有限模型对照（非发布功能）
 
+只读记账工具analyze-model-round对输入审查阶段结束且账本全部attempts=0的任务允许没有runs目录，并显式输出no_execution_tasks；不将其计为正常完成/故障检出或缺失成本零值。存在任何attempt时目录丢失继续报错。该维护修正不改变src构建、对照条件或旧事实。
+
 DeepSeek构造参数diagnosticProfile仅允许baseline、reasoning-low、preflight-hints，默认baseline与既有请求参数/提示不变；不新增UI设置或凭据持久化字段。B仅同型号thinking enabled/low，C仅Controller的adaptive_plan请求前置原协议/既有完成缺口摘要，其他阶段及所有硬守卫不变。未来目标待绑定、摘要非证据，原输入、采样分组与检查时机保持；不修V38已知排序漏验。
 
 维护入口scripts/model-profile-comparison.mjs必须显式--real-model --group=A1（随后固定B1/C1/C2/B2/A2），共享validation/req0017/v39-comparison.json；每组只执行一次、2重复共24预定尝试，四原合成例，200调用/20分钟每轮与1200调用/120分钟全局双上限。构建/协议变动、前轮未终态、次序错误或预算耗尽拒绝；不自动恢复中断。模型动作均由产品执行，账本/诊断不授予语义验收。usage记录可用reasoning_tokens，缺失为未知，不记录推理正文。判断及范围见当前REQ机制诊断文档。
