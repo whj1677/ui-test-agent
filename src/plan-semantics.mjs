@@ -11,6 +11,7 @@ import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 import { selectionTimingGaps } from './selection-timing.mjs';
 import { orderEvidenceGaps } from './order-evidence.mjs';
 import { currentPageEvidenceGaps } from './page-index-evidence.mjs';
+import { uniqueRowEvidenceGaps } from './unique-row-evidence.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -131,6 +132,13 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     // supplied locator/value/assertion. The default fixed-plan path stays full.
     if (complete !== false) {
       if (context.adaptive_readonly) {
+        const uniqueGaps = uniqueRowEvidenceGaps(original, step);
+        if (uniqueGaps.length)
+          reject(
+            'PLAN_UNIQUE_ROW_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            `原唯一记录${uniqueGaps.map((g) => g.key).join('、')}缺同表同检查点的身份+数量1证据，或单行闭合矩阵。仅键唯一/排除另一个键/以前步骤的数量不能替代；保留原字段和来源，不重放动作。`,
+          );
         const positionSourceGaps = rowPositionSourceGaps(original.expected);
         if (positionSourceGaps.length)
           reject(

@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T10:20:59+08:00`
+- Generated at: `2026-09-20T10:42:41+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `72065947b955c0160ca2ae2c53c6623948a1d2ba999a6d7dee21f74a25d2f90e`
+- Change fingerprint: `76d4721b9b316639986b583da7c397702b473caabadd8230ba8b54a3b4f9bf29`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/negative-row-scope.test.mjs tests/negative-row-review.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/unique-row-evidence.test.mjs tests/unique-row-evidence.execution.test.mjs tests/negative-row-review.test.mjs`
 - Exit code: `0`
-- Test count: `24`
+- Test count: `28`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v36-delivery.log`
-- Log SHA-256: `7885e595138e2eae97bb46f3e12b521f300c4430725808e927f903a2e99fa7a7`
+- Log path: `validation/req0017/v37-delivery.log`
+- Log SHA-256: `bae19b0fcae4858c29eebb486c2f54c1beba3ac3d9aa14eb7ed858253a26dbd2`
 
 ### Git Status
 
@@ -28,18 +28,17 @@
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
+ M src/adaptive-capabilities.mjs
  M src/adaptive-plan.mjs
+ M src/adaptive-recovery.mjs
  M src/adaptive-review.mjs
- M src/browser.mjs
- M src/partial-assertion-review.mjs
- M tests/partial-assertion-review.execution.test.mjs
-?? docs/requirements/REQ-0017-controlled-react/kimi-v36-review.md
-?? docs/requirements/REQ-0017-controlled-react/real-model-v36-result.md
-?? src/negative-row-scope.mjs
-?? tests/negative-row-review.test.mjs
-?? tests/negative-row-scope.test.mjs
+ M src/plan-semantics.mjs
+ M src/table-cardinality.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v37-result.md
+?? src/unique-row-evidence.mjs
+?? tests/unique-row-evidence.execution.test.mjs
+?? tests/unique-row-evidence.test.mjs
 ```
 
 ### Git Diff Stat
@@ -55,51 +54,50 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-capabilities.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/browser.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/partial-assertion-review.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/partial-assertion-review.execution.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/table-cardinality.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/release_runtime.md                    |   2 +
- docs/requirements/README.md                        |   2 +
- .../00_user_requirement.md                         |   3 +
+ docs/requirements/README.md                        |   2 +-
+ .../00_user_requirement.md                         |   2 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
- .../REQ-0017-controlled-react/change_log.md        |   3 +-
+ .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 314 +++++++++------------
- .../real-model-v35-result.md                       |  10 +
- .../requirement.source.json                        |  27 +-
+ .../REQ-0017-controlled-react/delivery_evidence.md | 257 +++++++++++----------
+ .../requirement.source.json                        |  24 +-
+ src/adaptive-capabilities.mjs                      |   4 +
  src/adaptive-plan.mjs                              |   2 +
- src/adaptive-review.mjs                            |  24 +-
- src/browser.mjs                                    |  44 ++-
- src/partial-assertion-review.mjs                   |   2 +-
- tests/partial-assertion-review.execution.test.mjs  |  30 +-
- 17 files changed, 252 insertions(+), 227 deletions(-)
+ src/adaptive-recovery.mjs                          |   2 +
+ src/adaptive-review.mjs                            |   2 +
+ src/plan-semantics.mjs                             |   8 +
+ src/table-cardinality.mjs                          |  31 +++
+ 17 files changed, 218 insertions(+), 135 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/kimi-v36-review.md
-docs/requirements/REQ-0017-controlled-react/real-model-v36-result.md
-src/negative-row-scope.mjs
-tests/negative-row-review.test.mjs
-tests/negative-row-scope.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v37-result.md
+src/unique-row-evidence.mjs
+tests/unique-row-evidence.execution.test.mjs
+tests/unique-row-evidence.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T10:20:39+08:00
-Command: node --test --test-concurrency=2 tests/negative-row-scope.test.mjs tests/negative-row-review.test.mjs
+Started at: 2026-09-20T10:41:28+08:00
+Command: node --test --test-concurrency=2 tests/unique-row-evidence.test.mjs tests/unique-row-evidence.execution.test.mjs tests/negative-row-review.test.mjs
 Exit code: 0
-Parsed test count: 24
+Parsed test count: 28
 Parsed failure count: 0
 Parsed skipped count: 0
 
@@ -108,156 +106,180 @@ TAP version 13
 # Subtest: program derived sampling groups distinguish joint evidence from separate times: false
 ok 1 - program derived sampling groups distinguish joint evidence from separate times: false
   ---
-  duration_ms: 2.5724
+  duration_ms: 2.9395
   type: 'test'
   ...
 # Subtest: program derived sampling groups distinguish joint evidence from separate times: true
 ok 2 - program derived sampling groups distinguish joint evidence from separate times: true
   ---
-  duration_ms: 0.3839
+  duration_ms: 0.4018
   type: 'test'
   ...
 # Subtest: same explicit negative capability reaches planner and reviewer without new predicate
 ok 3 - same explicit negative capability reaches planner and reviewer without new predicate
   ---
-  duration_ms: 0.2333
+  duration_ms: 0.2346
   type: 'test'
   ...
-# Subtest: negative key assertion requires healthy parent scope: missing
-ok 4 - negative key assertion requires healthy parent scope: missing
+# Subtest: sole-record proof through actual Controller: joint
+ok 4 - sole-record proof through actual Controller: joint
   ---
-  duration_ms: 777.2261
+  duration_ms: 14310.3749
   type: 'test'
   ...
-# Subtest: negative key assertion requires healthy parent scope: hidden
-ok 5 - negative key assertion requires healthy parent scope: hidden
+# Subtest: sole-record proof through actual Controller: extra
+ok 5 - sole-record proof through actual Controller: extra
   ---
-  duration_ms: 853.7971
+  duration_ms: 15576.389
   type: 'test'
   ...
-# Subtest: negative key assertion requires healthy parent scope: absent
-ok 6 - negative key assertion requires healthy parent scope: absent
+# Subtest: sole-record proof through actual Controller: closed
+ok 6 - sole-record proof through actual Controller: closed
   ---
-  duration_ms: 801.2757
+  duration_ms: 13993.0265
   type: 'test'
   ...
-# Subtest: negative key assertion requires healthy parent scope: present
-ok 7 - negative key assertion requires healthy parent scope: present
+# Subtest: sole-record proof through actual Controller: closed-extra
+ok 7 - sole-record proof through actual Controller: closed-extra
   ---
-  duration_ms: 995.9641
+  duration_ms: 15243.1373
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: duplicate_table
-ok 8 - invalid parent matrix never proves keyed absence: duplicate_table
+# Subtest: sole-record proof through actual Controller: persistent
+ok 8 - sole-record proof through actual Controller: persistent
   ---
-  duration_ms: 812.3817
+  duration_ms: 12130.6774
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: duplicate_keys
-ok 9 - invalid parent matrix never proves keyed absence: duplicate_keys
+# Subtest: literal sole record is a source quantity of one, not an observed default
+ok 9 - literal sole record is a source quantity of one, not an observed default
   ---
-  duration_ms: 903.1914
+  duration_ms: 3.4389
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: blank_key
-ok 10 - invalid parent matrix never proves keyed absence: blank_key
+# Subtest: identity plus exclusion of another key cannot prove sole record
+ok 10 - identity plus exclusion of another key cannot prove sole record
   ---
-  duration_ms: 779.9495
+  duration_ms: 2.3166
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: missing_key_column
-ok 11 - invalid parent matrix never proves keyed absence: missing_key_column
+# Subtest: sole record needs same-group same-table identity and total
+ok 11 - sole record needs same-group same-table identity and total
   ---
-  duration_ms: 809.7603
+  duration_ms: 7.2525
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: duplicate_column
-ok 12 - invalid parent matrix never proves keyed absence: duplicate_column
+# Subtest: one closed matrix proves sole identity, open membership does not
+ok 12 - one closed matrix proves sole identity, open membership does not
   ---
-  duration_ms: 831.8628
+  duration_ms: 1.0626
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: hidden_row
-ok 13 - invalid parent matrix never proves keyed absence: hidden_row
+# Subtest: unique source is shared by capabilities and count authorization
+ok 13 - unique source is shared by capabilities and count authorization
   ---
-  duration_ms: 796.99
+  duration_ms: 1.0253
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: hidden_cell
-ok 14 - invalid parent matrix never proves keyed absence: hidden_cell
+# Subtest: not an affirmative sole-table record source: 不要求唯一行是R009
+ok 14 - not an affirmative sole-table record source: 不要求唯一行是R009
   ---
-  duration_ms: 785.1026
+  duration_ms: 0.1222
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: merged
-ok 15 - invalid parent matrix never proves keyed absence: merged
+# Subtest: not an affirmative sole-table record source: 如果唯一行是R009
+ok 15 - not an affirmative sole-table record source: 如果唯一行是R009
   ---
-  duration_ms: 784.1248
+  duration_ms: 0.1261
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: virtual
-ok 16 - invalid parent matrix never proves keyed absence: virtual
+# Subtest: not an affirmative sole-table record source: 此前唯一行是R009
+ok 16 - not an affirmative sole-table record source: 此前唯一行是R009
   ---
-  duration_ms: 777.5861
+  duration_ms: 0.0818
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: nested
-ok 17 - invalid parent matrix never proves keyed absence: nested
+# Subtest: not an affirmative sole-table record source: 例如唯一行是R009
+ok 17 - not an affirmative sole-table record source: 例如唯一行是R009
   ---
-  duration_ms: 760.2756
+  duration_ms: 0.2332
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: sample_limit
-ok 18 - invalid parent matrix never proves keyed absence: sample_limit
+# Subtest: not an affirmative sole-table record source: 标题说明唯一行是R009
+ok 18 - not an affirmative sole-table record source: 标题说明唯一行是R009
   ---
-  duration_ms: 882.6663
+  duration_ms: 0.2691
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: busy_table
-ok 19 - invalid parent matrix never proves keyed absence: busy_table
+# Subtest: not an affirmative sole-table record source: 唯一行是R009或R010
+ok 19 - not an affirmative sole-table record source: 唯一行是R009或R010
   ---
-  duration_ms: 793.32
+  duration_ms: 0.1059
   type: 'test'
   ...
-# Subtest: invalid parent matrix never proves keyed absence: busy_parent
-ok 20 - invalid parent matrix never proves keyed absence: busy_parent
+# Subtest: not an affirmative sole-table record source: 唯一行是R009的说法不成立
+ok 20 - not an affirmative sole-table record source: 唯一行是R009的说法不成立
   ---
-  duration_ms: 849.8861
+  duration_ms: 0.0528
   type: 'test'
   ...
-# Subtest: empty healthy table is absence; missing cell column is not
-ok 21 - empty healthy table is absence; missing cell column is not
+# Subtest: not an affirmative sole-table record source: 编号唯一，记录R009可见
+ok 21 - not an affirmative sole-table record source: 编号唯一，记录R009可见
   ---
-  duration_ms: 831.0449
+  duration_ms: 0.0551
   type: 'test'
   ...
-# Subtest: negative target and positive fields share one sample without scope substitution
-ok 22 - negative target and positive fields share one sample without scope substitution
+# Subtest: not an affirmative sole-table record source: 第一行是R009
+ok 22 - not an affirmative sole-table record source: 第一行是R009
   ---
-  duration_ms: 859.3489
+  duration_ms: 0.0397
   type: 'test'
   ...
-# Subtest: parent/key mutation after locator collection cannot give a stale absence pass: remove-parent
-ok 23 - parent/key mutation after locator collection cannot give a stale absence pass: remove-parent
+# Subtest: not an affirmative sole-table record source: 前一行是R009
+ok 23 - not an affirmative sole-table record source: 前一行是R009
   ---
-  duration_ms: 1006.2504
+  duration_ms: 0.0423
   type: 'test'
   ...
-# Subtest: parent/key mutation after locator collection cannot give a stale absence pass: insert-key
-ok 24 - parent/key mutation after locator collection cannot give a stale absence pass: insert-key
+# Subtest: not an affirmative sole-table record source: 唯一行
+ok 24 - not an affirmative sole-table record source: 唯一行
   ---
-  duration_ms: 1509.1008
+  duration_ms: 0.0338
   type: 'test'
   ...
-1..24
-# tests 24
+# Subtest: not an affirmative sole-table record source: 点击唯一行按钮
+ok 25 - not an affirmative sole-table record source: 点击唯一行按钮
+  ---
+  duration_ms: 0.0362
+  type: 'test'
+  ...
+# Subtest: a rejected sole-row phrase cannot mask a separate explicit quantity
+ok 26 - a rejected sole-row phrase cannot mask a separate explicit quantity
+  ---
+  duration_ms: 0.3468
+  type: 'test'
+  ...
+# Subtest: different source, identity, key-only count, unbound text and count alone remain gaps
+ok 27 - different source, identity, key-only count, unbound text and count alone remain gaps
+  ---
+  duration_ms: 0.2868
+  type: 'test'
+  ...
+# Subtest: no new closed-population obligation for ordinary membership and no input mutation
+ok 28 - no new closed-population obligation for ordinary membership and no input mutation
+  ---
+  duration_ms: 1.164
+  type: 'test'
+  ...
+1..28
+# tests 28
 # suites 0
-# pass 24
+# pass 28
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 18689.5989
+# duration_ms 71776.0873
 ```
 
 ### Sync Record Status
@@ -276,4 +298,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-v36父表完整矩阵负向断言及拟采样分组24项交付复检；456项受影响工程已执行，不代替真实模型验收。
+唯一记录同次数量与身份；385受影响工程无失败，交付集合重叠不累加，真实模型另验

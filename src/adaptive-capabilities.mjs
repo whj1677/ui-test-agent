@@ -1,4 +1,5 @@
 import { relativeURL, redact } from './common.mjs';
+import { uniqueRowRequirements } from './unique-row-evidence.mjs';
 import {
   extractRowPositions,
   sourceSupportsPosition,
@@ -69,6 +70,9 @@ export function stepCapabilityFacts(original, base, previous = []) {
     provenance: 'current_original_step_only',
     evidence_of_pass: false,
     navigation,
+    ...(uniqueRowRequirements(original).length
+      ? { unique_rows: uniqueRowRequirements(original) }
+      : {}),
     ...(rowPositionSourceGaps(original.expected).length
       ? { row_position_source_gaps: rowPositionSourceGaps(original.expected) }
       : {}),

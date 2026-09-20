@@ -34,10 +34,38 @@ function withoutPositions(text) {
 export const hasTablePositionPhrase = (text) =>
   typeof text === 'string' && withoutPositions(text) !== text;
 
+// Literal sole-record source. Key uniqueness alone is not total cardinality.
+export function sourceUniqueRows(text) {
+  if (typeof text !== 'string') return [];
+  const result = [];
+  for (const clause of text.split(/[；;。\n，,]/u)) {
+    const match = clause.match(
+      /唯一(?:的)?(?:结果)?(?:行|记录)\s*(?:是|为)\s*[「“"']?([A-Za-z][A-Za-z0-9_-]*\d[A-Za-z0-9_-]*)(?![A-Za-z0-9_-])/u,
+    );
+    if (!match) continue;
+    const prefix = clause.slice(0, match.index);
+    if (
+      /不|未|无|非|如果|若|否则|假如|或|可能|例如|比如|示例|样例|此前|之前|原先|上次|曾经|历史|操作前|点击前|标题|按钮|输入框/u.test(
+        prefix,
+      )
+    )
+      continue;
+    if (
+      /或|如果|若|否则|假如|可能|不成立|并非|不是|不应|不一定/u.test(
+        clause.slice(match.index + match[0].length),
+      )
+    )
+      continue;
+    result.push(match[1]);
+  }
+  return [...new Set(result)];
+}
+
 export function sourceTableCounts(text) {
   if (typeof text !== 'string') return [];
   const counts = [];
   for (let clause of text.split(/[；;。\n，,]/u)) {
+    if (sourceUniqueRows(clause).length) counts.push(1);
     // A missing count is a capability/source gap, never implicit permission.
     if (
       /不|未|无需|无须|如果|若|否则|假如|可能|或|至少|至多|最少|最多|超过|大于|小于|\b(?:not|never|if|unless|maybe|or|at least|at most|more than|less than|up to)\b/iu.test(
@@ -55,6 +83,9 @@ export function sourceTableCounts(text) {
     for (const match of clause.matchAll(
       /(\d+|[零一二两三四五六七八九十百]+)\s*(?:条|行|records?\b|rows?\b|results?\b)/giu,
     )) {
+      // “一行” inside “唯一行” is not a standalone quantity. Only the
+      // context-checked sole-record source above may authorize its cardinality.
+      if (clause[match.index - 1] === '唯') continue;
       if (/^\d/u.test(match[1]) && /[A-Za-z0-9_.-]/u.test(clause[match.index - 1] ?? '')) continue;
       const value = integer(match[1]);
       if (Number.isSafeInteger(value) && value >= 0) counts.push(value);

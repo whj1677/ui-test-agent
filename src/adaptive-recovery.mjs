@@ -2,6 +2,8 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_UNIQUE_ROW_UNPROVEN:
+    'The ORIGINAL sole-row identity requires both that identity and total row_count:1 in the SAME table/checkpoint, or one exact_rows:true matrix containing just that original key. Bind both to the original sole-row source. Matching-key uniqueness, exclusion of another key, raw observation or a previous-step count is insufficient. Preserve fields and exclusions, use an assertion-only repair after completed actions, and never replay query/navigation or add budgets.',
   PLAN_ROW_POSITION_SOURCE_UNRESOLVED:
     'The CURRENT original position interval has no unambiguous supported literal identity list. Do not fill it from the DOM, weaken it to relative order, add a population count or replay actions. Preserve the original and explain this source/capability gap within the existing budget. A supported 第N至M行依次为 list maps each explicit identity to row.position, independently of exact_rows.',
   PLAN_CURRENT_PAGE_UNPROVEN:

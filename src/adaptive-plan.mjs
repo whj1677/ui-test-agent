@@ -17,6 +17,7 @@ import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
 import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 import { requireRowEvidence, ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
 import { NEGATIVE_ROW_GUIDANCE } from './negative-row-scope.mjs';
+import { UNIQUE_ROW_GUIDANCE } from './unique-row-evidence.mjs';
 import { CURRENT_PAGE_GUIDANCE } from './page-index-evidence.mjs';
 import {
   requireQueryResultEvidence,
@@ -449,6 +450,7 @@ ${TABLE_ORDER_GUIDANCE}
 ${ORDER_EVIDENCE_GUIDANCE}
 ${ROW_EVIDENCE_GUIDANCE}
 ${NEGATIVE_ROW_GUIDANCE}
+${UNIQUE_ROW_GUIDANCE}
 ${CURRENT_PAGE_GUIDANCE}
 ${QUERY_RESULT_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}

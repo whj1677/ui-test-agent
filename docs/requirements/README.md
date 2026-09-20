@@ -1,6 +1,6 @@
 # 需求索引
 
-当前：[版本36负向父范围](REQ-0017-controlled-react/real-model-v36-result.md)456项受影响工程及24项重叠交付复检无失败，官方原V02待冻结复测。[版本35第二整轮](REQ-0017-controlled-react/real-model-v35-result.md)原V01/V03完整、V02末步技术失败，两整轮稳定未达；累计36完成官方轮2674调用。原题/失败保持，先修负向采样与组合审查边界，不扩大预算碰运气。
+当前：[版本37唯一记录联合证据](REQ-0017-controlled-react/real-model-v37-result.md)385项受影响工程及28项重叠交付复检无失败，官方原V02待复测。[版本36官方V02](REQ-0017-controlled-react/real-model-v36-result.md)负向父范围已实际生效，但末步唯一性漏验，不算完整；累计37完成官方轮2698调用。[版本35第二整轮](REQ-0017-controlled-react/real-model-v35-result.md)原V01/V03完整、V02末步技术失败，两整轮稳定未达。原题/失败保持，新构建先原V02完整再原三例两整轮，不跨版本拼成功或扩大预算碰运气。
 
 官方最新：[版本35原V01](REQ-0017-controlled-react/real-model-v35-result.md)14调用后4步13断言逐义务完整，绝对位置与字段同样本实测，8媒体SHA/原输入一致；同构建原3第一整轮进行中，单例不算整轮稳定。累计34完成官方轮2542调用；旧错误和未完成范围保留。
 
