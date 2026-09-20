@@ -6,6 +6,7 @@ import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 import { orderEvidenceGaps } from './order-evidence.mjs';
 import { currentPageEvidenceGaps } from './page-index-evidence.mjs';
 import { uniqueRowEvidenceGaps } from './unique-row-evidence.mjs';
+import { contractIssues } from './expectation-contract.mjs';
 
 // Necessary structural evidence only. The same list drives the original
 // completion guard and advisory rejection feedback. Never approves execution,
@@ -20,6 +21,8 @@ export function completionIssues(
   const add = (code, field_path, reason, detail = {}) =>
     issues.push({ code, field_path, reason, ...detail });
   if (adaptiveReadonly) {
+    for (const issue of contractIssues(original, step))
+      issues.push({ ...issue, field_path: fieldPath + '.assertions' });
     const uniqueGaps = uniqueRowEvidenceGaps(original, step);
     if (uniqueGaps.length)
       add(

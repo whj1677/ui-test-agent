@@ -86,6 +86,13 @@ import {
   compileAdaptiveReply,
 } from './adaptive-protocol.mjs';
 import { ADAPTIVE_REVIEW_REFERENCES, reviewAdaptiveCandidate } from './adaptive-review.mjs';
+import {
+  EXPECTATION_INTERPRET_PROMPT,
+  EXPECTATION_REVIEW_PROMPT,
+  interpretationInput,
+  validateInterpretation,
+  approveInterpretation,
+} from './expectation-contract.mjs';
 
 // Hint overrides are included in the effective Case used throughout planning,
 // approval and execution; the immutable baseline/business steps stay intact.
@@ -2079,6 +2086,30 @@ export class Controller {
               run_scope_id: job.run_id,
               approved_plan_hash: r.approved_hash,
               runtimeBinding: this.runtimeBinding,
+              onInterpret: isAdaptivePlan(plan)
+                ? async (original, deadline) => {
+                    const signal = AbortSignal.any([
+                      job.abort.signal,
+                      AbortSignal.timeout(Math.max(1, deadline - Date.now())),
+                    ]);
+                    const input = interpretationInput(original);
+                    const draft = validateInterpretation(
+                      await this.ask(job, EXPECTATION_INTERPRET_PROMPT, input, {
+                        phase: 'expectation_interpretation',
+                        runId,
+                        signal,
+                      }),
+                      original,
+                    );
+                    const review = await this.ask(
+                      job,
+                      EXPECTATION_REVIEW_PROMPT,
+                      { ...input, interpretation: draft },
+                      { phase: 'expectation_review', runId, signal },
+                    );
+                    return approveInterpretation(draft, review, original);
+                  }
+                : undefined,
               onAdaptive: isAdaptivePlan(plan)
                 ? async (phase, input, deadline) => {
                     this.assertInput(
@@ -2124,6 +2155,7 @@ export class Controller {
                         current_fragment: input.fragment,
                         complete: input.complete,
                         previous: input.previous,
+                        expectation_contract: input.expectation_contract,
                       },
                       (reviewInput) =>
                         this.ask(

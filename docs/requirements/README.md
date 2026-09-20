@@ -1,6 +1,6 @@
 # 需求索引
 
-当前：[V39有限单变量对照](REQ-0017-controlled-react/real-model-v39-comparison.md)六轮已收口，428调用/48分29.683秒，16次业务执行另8未执行。A基线与C前置提示各两轮正常完整2/2、指定故障检出2/2，C未达到预定重复成本改善；B思考配置两轮输入截断，不能算加速。停止扩量及局部语义补丁，提交[机制诊断](REQ-0017-controlled-react/mechanism-diagnosis-v38.md)。[V38冻结复验](REQ-0017-controlled-react/real-model-v38-result.md)的S2排序漏验仍阻止发布；四例回归不替代陌生迁移或写入清理验收，整体未发布。
+当前：[V40原义务解释与证据契约](REQ-0017-controlled-react/real-model-v40-result.md)按新授权实施；工程复验已完成，原HOLD-S1/S2各一次官方复测待验，不改原题/模型配置/限额/录制。未解释义务不得完成，目标待绑定、证据不足、实际差异分开。本项单独收口后再验证录像展示解耦。[V39有限对照](REQ-0017-controlled-react/real-model-v39-comparison.md)无预定重复改善，保留基线；新范围不等于发布验收。
 
 ## 历史进度快照（以下“当前/最新”均指记录当时，不代表当前状态）
 

@@ -428,6 +428,7 @@ export class BrowserSession {
       onEvent = () => {},
       onRepair,
       onAdaptive,
+      onInterpret,
       run_scope_id,
       approved_plan_hash,
       runtimeBinding = false,
@@ -599,6 +600,7 @@ export class BrowserSession {
           emit,
           onRepair,
           onAdaptive,
+          onInterpret,
           runDirectory,
           setPhase: (value) => {
             phase = value;

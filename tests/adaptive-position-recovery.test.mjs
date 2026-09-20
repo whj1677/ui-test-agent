@@ -10,6 +10,10 @@ import { Controller } from '../src/controller.mjs';
 import { INPUT_REVIEW_PROMPT } from '../src/input-review.mjs';
 import { PLAN_AUDIT_PROMPT } from '../src/plan-quality.mjs';
 import { suggestObligations } from '../src/plans.mjs';
+import {
+  EXPECTATION_INTERPRET_PROMPT,
+  EXPECTATION_REVIEW_PROMPT,
+} from '../src/expectation-contract.mjs';
 
 // Real kernel/browser, injected model. These validate bounded recovery, not LLM quality.
 for (const scenario of [
@@ -29,7 +33,7 @@ for (const scenario of [
       ? 'PLAN_TABLE_CONSTRAINT_UNSUPPORTED'
       : scenario === 'ungrounded'
         ? 'TABLE_POSITION_UNGROUNDED'
-        : 'PLAN_ROW_POSITION_UNPROVEN';
+        : 'PLAN_CONTRACT_EVIDENCE_INSUFFICIENT';
     const rows = difference
       ? [
           ['R003', 100],
@@ -79,7 +83,38 @@ for (const scenario of [
       configured: () => true,
       json: async (prompt, input) => {
         let value;
-        if (prompt.startsWith(INPUT_REVIEW_PROMPT)) value = { issues: [] };
+        if (prompt === EXPECTATION_INTERPRET_PROMPT)
+          value = {
+            obligations: [
+              {
+                id: '1-O1',
+                status: 'INTERPRETED',
+                timing: 'AFTER_ACTIONS',
+                reason: '原首行身份与功率',
+                predicates: [
+                  {
+                    subject: 'R012首行功率',
+                    check: 'table_cells',
+                    expected: {
+                      key_column: '编号',
+                      rows: [
+                        {
+                          key: 'R012',
+                          position: 1,
+                          cells: [{ column: '功率', check: 'number', expected: 600 }],
+                        },
+                      ],
+                      ordered: false,
+                      exact_rows: false,
+                    },
+                  },
+                ],
+              },
+            ],
+          };
+        else if (prompt === EXPECTATION_REVIEW_PROMPT)
+          value = { checks: [{ id: '1-O1', status: 'SUPPORTED', reason: '原文独立复核' }] };
+        else if (prompt.startsWith(INPUT_REVIEW_PROMPT)) value = { issues: [] };
         else if (prompt.startsWith(PLAN_AUDIT_PROMPT))
           value = {
             checks: [

@@ -20,6 +20,11 @@ import { isQueryResetStep } from './adaptive-query-reset.mjs';
 import { queryFormFacts } from './query-forms.mjs';
 import { candidateIssues } from './adaptive-candidate-feedback.mjs';
 import { requireRowEvidence } from './row-evidence.mjs';
+import {
+  withExpectationContract,
+  currentExpectationContract,
+  contractIssues,
+} from './expectation-contract.mjs';
 
 export async function requireAdaptiveAssertionTargets(
   page,
@@ -161,9 +166,78 @@ async function currentActionTarget(page, action, budget, originalAction, origina
 // The model proposes one short segment; it never receives a browser/code handle.
 // All dispatched work still goes through the existing action and evidence kernel.
 export async function executeAdaptiveStep(session, run) {
+  if (!run.onInterpret) return executeAdaptiveStepInner(session, run);
+  const budget = new StepBudget(run.step.timeout_ms);
+  const original = run.c.steps.find((s) => s.step_id === run.step.step_id);
+  let contract;
+  try {
+    contract = await run.onInterpret(original, budget.deadline);
+  } catch (error) {
+    (run.result.expectation_states ??= []).push({
+      step_id: original.step_id,
+      state: 'UNINTERPRETED',
+      at: now(),
+      error: publicError(error),
+    });
+    await run.emit('EXPECTATION_UNINTERPRETED', {
+      step_id: original.step_id,
+      state: 'UNINTERPRETED',
+      message: '原义务解释未完成，未获得覆盖或执行成功证据。',
+    });
+    throw error;
+  }
+  budget.remaining();
+  (run.result.expectation_contracts ??= []).push({
+    step_id: original.step_id,
+    at: now(),
+    contract,
+  });
+  await run.emit('EXPECTATION_INTERPRETED', {
+    step_id: original.step_id,
+    obligations: contract.obligations.map((o) => ({
+      id: o.id,
+      state: o.status === 'INTERPRETED' ? 'TARGET_PENDING_BINDING' : 'UNINTERPRETED',
+    })),
+    message: '原义务已独立解释及复核；目标待现场绑定，尚无测量证据。',
+  });
+  try {
+    await withExpectationContract(contract, () =>
+      executeAdaptiveStepInner(session, { ...run, sourceBudget: budget }),
+    );
+    (run.result.expectation_states ??= []).push({
+      step_id: original.step_id,
+      state: 'MEASURED_COMPLETE',
+      at: now(),
+    });
+  } catch (error) {
+    const state =
+      error.code === 'BUSINESS_ASSERTION_FAILED'
+        ? 'ACTUAL_DIFFERENCE'
+        : error.code === 'PLAN_OBLIGATION_UNINTERPRETED' ||
+            contract.obligations.some((o) => o.status === 'UNINTERPRETED')
+          ? 'UNINTERPRETED'
+          : /LOCATOR|TARGET|NOT_VISIBLE/.test(error.code ?? '')
+            ? 'TARGET_PENDING_BINDING'
+            : 'EVIDENCE_INSUFFICIENT';
+    (run.result.expectation_states ??= []).push({
+      step_id: original.step_id,
+      state,
+      at: now(),
+      error: publicError(error),
+    });
+    await run.emit('EXPECTATION_STATE', {
+      step_id: original.step_id,
+      state,
+      message: '原义务状态已记录；技术缺口不等于实际业务差异。',
+    });
+    throw error;
+  }
+}
+
+async function executeAdaptiveStepInner(session, run) {
   const { step, stepIndex, result, page, recording, signal, guard, emit, plan, onAdaptive } = run;
   if (!onAdaptive) fail('ADAPTIVE_MODEL_REQUIRED');
-  const budget = new StepBudget(step.timeout_ms);
+  const budget = run.sourceBudget ?? new StepBudget(step.timeout_ms);
   const completed = [],
     rejected = new Set(),
     executedKeys = new Set(),
@@ -271,6 +345,9 @@ export async function executeAdaptiveStep(session, run) {
           {
             ...(repairFocus ? { repair_focus: repairFocus } : {}),
             original: run.c,
+            expectation_contract: currentExpectationContract(
+              run.c.steps.find((s) => s.step_id === step.step_id),
+            ),
             contract: plan,
             step,
             current,
@@ -366,9 +443,26 @@ export async function executeAdaptiveStep(session, run) {
         }
       }
       const bundle = fragmentAuditPlan(run.c, step, completed, fragment, run.task.target);
+      if (fragment.complete) {
+        const gaps = contractIssues(bundle.c.steps[0], bundle.plan.steps[0]);
+        if (gaps.length)
+          throw Object.assign(new Error(gaps[0].code), {
+            code: gaps[0].code,
+            plan_feedback: { reason: gaps[0].reason },
+            expectation_state: gaps[0].state,
+          });
+      }
       const audit = await onAdaptive(
         'audit',
-        { ...bundle, fragment, current, pages, previous: completed, complete: fragment.complete },
+        {
+          ...bundle,
+          fragment,
+          current,
+          pages,
+          previous: completed,
+          complete: fragment.complete,
+          expectation_contract: currentExpectationContract(bundle.c.steps[0]),
+        },
         budget.deadline,
       );
       check();

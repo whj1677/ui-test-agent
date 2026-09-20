@@ -1,3 +1,4 @@
+import { interpretedPosition } from './expectation-contract.mjs';
 // Bounded source grammar, not a general natural-language equivalence checker.
 // The original identifies a record AND an absolute visible data-row position.
 // Never derive positions from observation, incidental numbers, or data-key names.
@@ -82,7 +83,10 @@ export function extractRowPositions(text) {
 }
 
 export function sourceSupportsPosition(key, position, original) {
-  return extractRowPositions(original?.expected).some(
-    (item) => item.key === key && item.position === position,
+  return (
+    interpretedPosition(original?.expected, key, position) ||
+    extractRowPositions(original?.expected).some(
+      (item) => item.key === key && item.position === position,
+    )
   );
 }
