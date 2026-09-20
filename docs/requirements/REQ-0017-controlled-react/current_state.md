@@ -44,7 +44,7 @@
 | TK-0017-02 | DR-0017-02 / DD-0017-02 | 进行中 | 版本38共享完成证据并列反馈已实现并完成工程复检；同构建原三例两整轮各3条逐义务完整，原小组重复门达到，接续8条复杂回归及故障对照，不等于整体发布。 |
 | TK-0017-03 | DR-0017-03 / DD-0017-03 | 已实现 | 版本11实现没有HTML属性的原生dt/dd只读definition绑定，含重名/诱饵/错位及未修改manual-lab验证；真实产品效果另列。未来写入绑定仍待修复。 |
 | TK-0017-04 | DR-0017-04 / DD-0017-04 | 已实现 | 版本10同步登录后的父阶段，当前prepare/run使用对应界面流程；失败状态、原事实与未执行边界保持。 |
-| TK-0017-05 | DR-0017-05 / DD-0017-05 | 进行中 | 累计43完成官方轮2993调用/15454274ms，v38同构建原三例两整轮逐义务完整。接续既有8条复杂回归一整轮400调用/45分钟；这些已参与调试不称新迁移，原32其他能力、新迁移及写入清理仍未完成。 |
+| TK-0017-05 | DR-0017-05 / DD-0017-05 | 进行中 | 已完成轮累计43轮2993调用；V38原三例两整轮完整。八例第80调用进程中断，仅一次原剩余320调用/27分钟恢复未完成六例，旧中断保留。随后暂停扩量，有限机制诊断及单变量对照；维护只读统计3项单元验证，不替代产品验收。 |
 
 ## 当前有效验证项
 
@@ -55,6 +55,7 @@
 | VT-0017-03 | DR-0017-03 | 集成测试通过 | 执行时观察与受控技术绑定 | 命令：node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs；退出码：0；测试数量：199；失败数量：0；跳过数量：0；证据：validation/req0017/v11-fields-regression.log |
 | VT-0017-04 | DR-0017-04 | 集成测试通过 | 主流程状态与证据 | 命令：node --test --test-concurrency=3 tests/definition-fields.test.mjs tests/adaptive-review.test.mjs tests/adaptive-plan.test.mjs tests/adaptive-protocol.test.mjs tests/plan-quality.test.mjs tests/semantic-scope.test.mjs tests/adaptive-semantic-boundary.test.mjs；退出码：0；测试数量：199；失败数量：0；跳过数量：0；证据：validation/req0017/v11-fields-regression.log |
 | VT-0017-05 | DR-0017-05 | 人工待确认 | 冻结正反例与独立验证 | 命令：node --test --test-concurrency=2 tests/heldout-lab.test.mjs tests/autonomous-lab.test.mjs heldout-lab/reference.test.mjs；退出码：0；测试数量：25；失败数量：0；跳过数量：0；证据：validation/req0017/v21-final-regression.log |
+| VT-0017-06 | DR-0017-05 | 单元测试通过 | 维护侧只读日志记账，不代表产品完成 | 命令：node --test tests/model-round-diagnosis.test.mjs；退出码：0；测试数量：3；失败数量：0；跳过数量：0；证据：validation/req0017/v38-diagnosis-test.log |
 
 ## 人工待确认项
 
