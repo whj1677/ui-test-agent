@@ -14,6 +14,7 @@ import { VISIBILITY_EVIDENCE_GUIDANCE } from './expectation-visibility.mjs';
 import { SELECTION_TIMING_GUIDANCE } from './selection-timing.mjs';
 import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 import { ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
+import { CURRENT_PAGE_GUIDANCE } from './page-index-evidence.mjs';
 import { QUERY_RESULT_EVIDENCE_GUIDANCE } from './query-result-evidence.mjs';
 
 export const ADAPTIVE_REVIEW_REFERENCES = `${DEFINITION_GUIDANCE}
@@ -21,6 +22,7 @@ ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
 ${ORDER_EVIDENCE_GUIDANCE}
 ${ROW_EVIDENCE_GUIDANCE}
+${CURRENT_PAGE_GUIDANCE}
 ${QUERY_RESULT_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
 ${VISIBILITY_EVIDENCE_GUIDANCE}

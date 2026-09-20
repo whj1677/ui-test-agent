@@ -10,6 +10,7 @@ import { sourceTableCounts, hasTablePositionPhrase } from './table-cardinality.m
 import { visibilityEvidenceGaps } from './expectation-visibility.mjs';
 import { selectionTimingGaps } from './selection-timing.mjs';
 import { orderEvidenceGaps } from './order-evidence.mjs';
+import { currentPageEvidenceGaps } from './page-index-evidence.mjs';
 
 function reject(code, field_path, reason) {
   throw Object.assign(new Error(code), {
@@ -131,6 +132,13 @@ export function requirePlanSemantics(plan, c, context = {}, { complete = true } 
     if (complete !== false) {
       if (context.adaptive_readonly) {
         const orderGaps = orderEvidenceGaps(original, step);
+        const pageGaps = currentPageEvidenceGaps(original, step);
+        if (pageGaps.length)
+          reject(
+            'PLAN_CURRENT_PAGE_UNPROVEN',
+            `plan.steps[${i}].assertions`,
+            pageGaps.map((g) => g.reason).join('\n'),
+          );
         if (orderGaps.length)
           reject(
             'PLAN_TABLE_ORDER_UNPROVEN',

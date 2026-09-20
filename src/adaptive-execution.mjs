@@ -56,15 +56,21 @@ export async function requireAdaptiveAssertionTargets(
     if ((await locator.count()) !== 1) continue;
     const role = await locator.evaluate(
       (e) =>
-        e.tagName === 'TABLE' ? 'table' : e.tagName === 'TR' ? 'row' : e.getAttribute('role'),
+        ({
+          TABLE: 'table',
+          TR: 'row',
+          TD: 'cell',
+          TH: 'cell',
+          INPUT: 'textbox',
+          SELECT: 'combobox',
+          BUTTON: 'button',
+          A: 'link',
+        })[e.tagName] ?? e.getAttribute('role'),
       undefined,
       { timeout: remaining() },
     );
     requireRowEvidence(assertion, original, role === 'row');
-    if (
-      ['text', 'contains'].includes(assertion.check) &&
-      /第\s*\d+\s*\/\s*\d+\s*页/u.test(assertion.expected)
-    )
+    if (['text', 'contains'].includes(assertion.check))
       requireAdaptivePageTarget(assertion, original, role);
   }
 }

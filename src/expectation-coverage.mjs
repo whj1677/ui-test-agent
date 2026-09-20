@@ -1,5 +1,6 @@
 // Necessary coverage checks for a deliberately small literal grammar. These
 // helpers never infer business rules, approve a plan, or replace semantic audit.
+import { requireCurrentPageAssertion } from './page-index-evidence.mjs';
 const nonempty = (value) => typeof value === 'string' && value.trim().length > 0;
 const rangePattern = () =>
   /(?<![A-Za-z0-9_.-])([A-Za-z]+)(\d+)\s*(?:至|到|[-~～–—]|to\b)\s*([A-Za-z]+)(\d+)(?![A-Za-z0-9_])/gu;
@@ -160,6 +161,7 @@ function coversPage(assertion, page) {
 // This does not inspect current values to change the expected value or choose
 // another target. Unsupported accessible naming requires a corrected binding.
 export function requireAdaptivePageTarget(assertion, original, observedRole) {
+  requireCurrentPageAssertion(assertion, original, observedRole);
   if (!['text', 'contains'].includes(assertion.check)) return;
   const expectedPages = pages(assertion.expected);
   if (

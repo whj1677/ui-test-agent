@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T08:15:45+08:00`
+- Generated at: `2026-09-20T08:40:00+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `146b31f635f37bed50b2bb595a9f3eb55ff838e8d884d5484729157a72626bdd`
+- Change fingerprint: `645833e703d81ef1b58ad166b96afb09fadd53c75bf24dda9681f161c859debb`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/query-result-evidence.test.mjs tests/query-result-evidence.execution.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/page-index-evidence.test.mjs tests/page-index-evidence.execution.test.mjs`
 - Exit code: `0`
-- Test count: `33`
+- Test count: `38`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v31-delivery.log`
-- Log SHA-256: `6b3b9abdaf5817d5bc8c11e80b3222ad249a436946a7f2112655f8572645d377`
+- Log path: `validation/req0017/v32-delivery.log`
+- Log SHA-256: `dfc9d59c4a5ec738b9c054197328a5f1e01d36d992d548ba3631b4410adc38cf`
 
 ### Git Status
 
@@ -28,15 +28,18 @@
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
- M docs/requirements/REQ-0017-controlled-react/real-model-v30-result.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v31-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
+ M src/adaptive-execution.mjs
  M src/adaptive-plan.mjs
  M src/adaptive-recovery.mjs
  M src/adaptive-review.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v31-result.md
-?? src/query-result-evidence.mjs
-?? tests/query-result-evidence.execution.test.mjs
-?? tests/query-result-evidence.test.mjs
+ M src/expectation-coverage.mjs
+ M src/plan-semantics.mjs
+?? docs/requirements/REQ-0017-controlled-react/real-model-v32-result.md
+?? src/page-index-evidence.mjs
+?? tests/page-index-evidence.execution.test.mjs
+?? tests/page-index-evidence.test.mjs
 ```
 
 ### Git Diff Stat
@@ -52,13 +55,16 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v30-result.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v31-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-execution.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/expectation-coverage.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/release_runtime.md                    |   4 +-
- docs/requirements/README.md                        |   2 +-
+ docs/requirements/README.md                        |   2 +
  .../00_user_requirement.md                         |   3 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
@@ -66,244 +72,277 @@ warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced b
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
  .../REQ-0017-controlled-react/change_log.md        |   1 +
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 284 +++++++++++----------
- .../real-model-v30-result.md                       |   4 +-
+ .../REQ-0017-controlled-react/delivery_evidence.md | 320 ++++++++++++---------
+ .../real-model-v31-result.md                       |  12 +
  .../requirement.source.json                        |  25 +-
- src/adaptive-plan.mjs                              |   6 +
+ src/adaptive-execution.mjs                         |  16 +-
+ src/adaptive-plan.mjs                              |   2 +
  src/adaptive-recovery.mjs                          |   4 +
  src/adaptive-review.mjs                            |   2 +
- 15 files changed, 200 insertions(+), 151 deletions(-)
+ src/expectation-coverage.mjs                       |   2 +
+ src/plan-semantics.mjs                             |   8 +
+ 18 files changed, 254 insertions(+), 163 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v31-result.md
-src/query-result-evidence.mjs
-tests/query-result-evidence.execution.test.mjs
-tests/query-result-evidence.test.mjs
+docs/requirements/REQ-0017-controlled-react/real-model-v32-result.md
+src/page-index-evidence.mjs
+tests/page-index-evidence.execution.test.mjs
+tests/page-index-evidence.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T08:14:23+08:00
-Command: node --test --test-concurrency=2 tests/query-result-evidence.test.mjs tests/query-result-evidence.execution.test.mjs
+Started at: 2026-09-20T08:39:16+08:00
+Command: node --test --test-concurrency=2 tests/page-index-evidence.test.mjs tests/page-index-evidence.execution.test.mjs
 Exit code: 0
-Parsed test count: 33
+Parsed test count: 38
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: AND result evidence without replay: correct
-ok 1 - AND result evidence without replay: correct
+# Subtest: current page is not inferred from IDs: correct
+ok 1 - current page is not inferred from IDs: correct
   ---
-  duration_ms: 27146.7595
+  duration_ms: 9892.714
   type: 'test'
   ...
-# Subtest: AND result evidence without replay: wrong-result-name
-ok 2 - AND result evidence without replay: wrong-result-name
+# Subtest: current page is not inferred from IDs: wrong-page
+ok 2 - current page is not inferred from IDs: wrong-page
   ---
-  duration_ms: 28575.4361
+  duration_ms: 11605.6624
   type: 'test'
   ...
-# Subtest: AND result evidence without replay: persistent-input-only
-ok 3 - AND result evidence without replay: persistent-input-only
+# Subtest: current page is not inferred from IDs: persistent-missing
+ok 3 - current page is not inferred from IDs: persistent-missing
   ---
-  duration_ms: 24819.6324
+  duration_ms: 6805.6836
   type: 'test'
   ...
-# Subtest: AND result cannot complete with keyword input plus only park and state result fields
-ok 4 - AND result cannot complete with keyword input plus only park and state result fields
+# Subtest: current page is not inferred from IDs: after-navigation
+ok 4 - current page is not inferred from IDs: after-navigation
   ---
-  duration_ms: 8.1461
+  duration_ms: 14097.8728
   type: 'test'
   ...
-# Subtest: AND fields from different records cannot be assembled into one proof
-ok 5 - AND fields from different records cannot be assembled into one proof
+# Subtest: record identities alone do not prove original current page
+ok 5 - record identities alone do not prove original current page
   ---
-  duration_ms: 1.9644
+  duration_ms: 10.6672
   type: 'test'
   ...
-# Subtest: complete same-record field proof remains accepted
-ok 6 - complete same-record field proof remains accepted
+# Subtest: current-page prefix does not invent a total from the observation
+ok 6 - current-page prefix does not invent a total from the observation
   ---
-  duration_ms: 1.7006
+  duration_ms: 4.8124
   type: 'test'
   ...
-# Subtest: necessary field proof rejects missing
-ok 7 - necessary field proof rejects missing
+# Subtest: original current page does not authorize an observed total
+ok 7 - original current page does not authorize an observed total
   ---
-  duration_ms: 0.3807
+  duration_ms: 0.8024
   type: 'test'
   ...
-# Subtest: necessary field proof rejects wrong-value
-ok 8 - necessary field proof rejects wrong-value
+# Subtest: positive current page 当前第1页。
+ok 8 - positive current page 当前第1页。
   ---
-  duration_ms: 0.2096
+  duration_ms: 0.2143
   type: 'test'
   ...
-# Subtest: necessary field proof rejects contains-selector
-ok 9 - necessary field proof rejects contains-selector
+# Subtest: positive current page 回到第1页。
+ok 9 - positive current page 回到第1页。
   ---
-  duration_ms: 0.1414
+  duration_ms: 0.098
   type: 'test'
   ...
-# Subtest: necessary field proof rejects other-obligation
-ok 10 - necessary field proof rejects other-obligation
+# Subtest: positive current page 恢复到第1页。
+ok 10 - positive current page 恢复到第1页。
   ---
-  duration_ms: 0.1482
+  duration_ms: 0.0775
   type: 'test'
   ...
-# Subtest: necessary field proof rejects other-table
-ok 11 - necessary field proof rejects other-table
+# Subtest: positive current page 默认第1页显示X001至X002。
+ok 11 - positive current page 默认第1页显示X001至X002。
   ---
-  duration_ms: 0.122
+  duration_ms: 0.0709
   type: 'test'
   ...
-# Subtest: partial fragment may defer result evidence but cannot claim completion
-ok 12 - partial fragment may defer result evidence but cannot claim completion
+# Subtest: positive current page 分页显示第1页。
+ok 12 - positive current page 分页显示第1页。
   ---
-  duration_ms: 1.4855
+  duration_ms: 0.0593
   type: 'test'
   ...
-# Subtest: same-table original matrix supports each row; one bad row cannot borrow a different row field
-ok 13 - same-table original matrix supports each row; one bad row cannot borrow a different row field
+# Subtest: do not manufacture current-only source 不是第1页。
+ok 13 - do not manufacture current-only source 不是第1页。
   ---
-  duration_ms: 2.2843
+  duration_ms: 0.5498
   type: 'test'
   ...
-# Subtest: keyword may be measured with original substring, not weakened selector comparison
-ok 14 - keyword may be measured with original substring, not weakened selector comparison
+# Subtest: do not manufacture current-only source 如果当前第1页则显示。
+ok 14 - do not manufacture current-only source 如果当前第1页则显示。
   ---
-  duration_ms: 1.0185
+  duration_ms: 0.2775
   type: 'test'
   ...
-# Subtest: no positive AND requirement manufactured: 条件不按AND生效。
-ok 15 - no positive AND requirement manufactured: 条件不按AND生效。
+# Subtest: do not manufacture current-only source 例如默认第1页。
+ok 15 - do not manufacture current-only source 例如默认第1页。
   ---
-  duration_ms: 0.4031
+  duration_ms: 0.1193
   type: 'test'
   ...
-# Subtest: no positive AND requirement manufactured: 如果条件按AND生效则显示。
-ok 16 - no positive AND requirement manufactured: 如果条件按AND生效则显示。
+# Subtest: do not manufacture current-only source 显示第1页按钮。
+ok 16 - do not manufacture current-only source 显示第1页按钮。
   ---
-  duration_ms: 0.0531
+  duration_ms: 0.0593
   type: 'test'
   ...
-# Subtest: no positive AND requirement manufactured: 例如条件按AND生效。
-ok 17 - no positive AND requirement manufactured: 例如条件按AND生效。
+# Subtest: do not manufacture current-only source 操作前显示第1页。
+ok 17 - do not manufacture current-only source 操作前显示第1页。
   ---
-  duration_ms: 0.0361
+  duration_ms: 0.045
   type: 'test'
   ...
-# Subtest: no positive AND requirement manufactured: 尚未查询，不要求条件按AND生效。
-ok 18 - no positive AND requirement manufactured: 尚未查询，不要求条件按AND生效。
+# Subtest: do not manufacture current-only source 曾经显示第1页。
+ok 18 - do not manufacture current-only source 曾经显示第1页。
   ---
-  duration_ms: 0.029
+  duration_ms: 0.0359
   type: 'test'
   ...
-# Subtest: no positive AND requirement manufactured: 输入框条件已设置。
-ok 19 - no positive AND requirement manufactured: 输入框条件已设置。
+# Subtest: do not manufacture current-only source 显示第1页至第3页。
+ok 19 - do not manufacture current-only source 显示第1页至第3页。
   ---
-  duration_ms: 0.0261
+  duration_ms: 0.0369
   type: 'test'
   ...
-# Subtest: ambiguous or interrupted input never borrowed: 点击「重置」。
-ok 20 - ambiguous or interrupted input never borrowed: 点击「重置」。
+# Subtest: do not manufacture current-only source 未要求当前第1页。
+ok 20 - do not manufacture current-only source 未要求当前第1页。
   ---
-  duration_ms: 1.2234
+  duration_ms: 0.0321
   type: 'test'
   ...
-# Subtest: ambiguous or interrupted input never borrowed: 进入另一个页面。
-ok 21 - ambiguous or interrupted input never borrowed: 进入另一个页面。
+# Subtest: do not manufacture current-only source 默认第1/9页。
+ok 21 - do not manufacture current-only source 默认第1/9页。
   ---
-  duration_ms: 0.5524
+  duration_ms: 0.085
   type: 'test'
   ...
-# Subtest: ambiguous or interrupted input never borrowed: 如果需要，在「关键词」输入 阀门。
-ok 22 - ambiguous or interrupted input never borrowed: 如果需要，在「关键词」输入 阀门。
+# Subtest: do not manufacture current-only source 回到第1页；分页第1/9页。
+ok 22 - do not manufacture current-only source 回到第1页；分页第1/9页。
   ---
-  duration_ms: 0.6239
+  duration_ms: 0.1104
   type: 'test'
   ...
-# Subtest: ambiguous or interrupted input never borrowed: 在关键词输入 阀门。
-ok 23 - ambiguous or interrupted input never borrowed: 在关键词输入 阀门。
+# Subtest: weak boundary/wrong page/extra total does not prove original page: 第1
+ok 23 - weak boundary/wrong page/extra total does not prove original page: 第1
   ---
-  duration_ms: 0.5234
+  duration_ms: 0.0981
   type: 'test'
   ...
-# Subtest: ambiguous or interrupted input never borrowed: 在「状态」选择 在线，「状态」选择 离线。
-ok 24 - ambiguous or interrupted input never borrowed: 在「状态」选择 在线，「状态」选择 离线。
+# Subtest: weak boundary/wrong page/extra total does not prove original page: 第11/
+ok 24 - weak boundary/wrong page/extra total does not prove original page: 第11/
   ---
-  duration_ms: 0.5217
+  duration_ms: 0.0419
   type: 'test'
   ...
-# Subtest: later expected fields cannot substitute original query inputs
-ok 25 - later expected fields cannot substitute original query inputs
+# Subtest: weak boundary/wrong page/extra total does not prove original page: 共2条 · 第1/
+ok 25 - weak boundary/wrong page/extra total does not prove original page: 共2条 · 第1/
   ---
-  duration_ms: 1.6907
+  duration_ms: 0.035
   type: 'test'
   ...
-# Subtest: same-step literal inputs and quoted values are supported; sorting is not a result condition
-ok 26 - same-step literal inputs and quoted values are supported; sorting is not a result condition
+# Subtest: weak boundary/wrong page/extra total does not prove original page: 第1/9页
+ok 26 - weak boundary/wrong page/extra total does not prove original page: 第1/9页
   ---
-  duration_ms: 1.3484
+  duration_ms: 0.0373
   type: 'test'
   ...
-# Subtest: one column cannot prove two different named inputs just because their literals are equal
-ok 27 - one column cannot prove two different named inputs just because their literals are equal
+# Subtest: table or control is not a current-page counter label
+ok 27 - table or control is not a current-page counter label
   ---
-  duration_ms: 0.3704
+  duration_ms: 0.1029
   type: 'test'
   ...
-# Subtest: source, candidate and shared guidance remain unchanged
-ok 28 - source, candidate and shared guidance remain unchanged
+# Subtest: table or control is not a current-page counter rolebutton
+ok 28 - table or control is not a current-page counter rolebutton
   ---
-  duration_ms: 0.7391
+  duration_ms: 0.0678
   type: 'test'
   ...
-# Subtest: explicit empty results can use actual empty-table evidence, not invent a record
-ok 29 - explicit empty results can use actual empty-table evidence, not invent a record
+# Subtest: table or control is not a current-page counter roletable
+ok 29 - table or control is not a current-page counter roletable
   ---
-  duration_ms: 0.2729
+  duration_ms: 0.0452
   type: 'test'
   ...
-# Subtest: unknown matching semantics or omitted clauses remain unresolved: 「名称」输入 阀门，「园区」选择 西区。
-ok 30 - unknown matching semantics or omitted clauses remain unresolved: 「名称」输入 阀门，「园区」选择 西区。
+# Subtest: table or control is not a current-page counter roletable
+ok 30 - table or control is not a current-page counter roletable
   ---
-  duration_ms: 0.119
+  duration_ms: 0.0411
   type: 'test'
   ...
-# Subtest: unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 全部。
-ok 31 - unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 全部。
+# Subtest: table or control is not a current-page counter cell
+ok 31 - table or control is not a current-page counter cell
   ---
-  duration_ms: 0.0544
+  duration_ms: 0.0432
   type: 'test'
   ...
-# Subtest: unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 西区，然后清空条件。
-ok 32 - unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 西区，然后清空条件。
+# Subtest: same step obligation only; source/candidate immutable, shared guidance
+ok 32 - same step obligation only; source/candidate immutable, shared guidance
   ---
-  duration_ms: 0.04
+  duration_ms: 0.3776
   type: 'test'
   ...
-# Subtest: unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 西区，设置第三条件。
-ok 33 - unknown matching semantics or omitted clauses remain unresolved: 「关键词」输入 阀门，「园区」选择 西区，设置第三条件。
+# Subtest: runtime CSS aliases still cannot use a table or interactive control as counter
+ok 33 - runtime CSS aliases still cannot use a table or interactive control as counter
   ---
-  duration_ms: 0.0888
+  duration_ms: 828.4875
   type: 'test'
   ...
-1..33
-# tests 33
+# Subtest: negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 不显示第1/9页
+ok 34 - negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 不显示第1/9页
+  ---
+  duration_ms: 0.2453
+  type: 'test'
+  ...
+# Subtest: negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 如果显示第1/9页
+ok 35 - negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 如果显示第1/9页
+  ---
+  duration_ms: 0.0728
+  type: 'test'
+  ...
+# Subtest: negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 按钮显示第1/9页
+ok 36 - negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 按钮显示第1/9页
+  ---
+  duration_ms: 0.0405
+  type: 'test'
+  ...
+# Subtest: negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 之前显示第1/9页
+ok 37 - negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 之前显示第1/9页
+  ---
+  duration_ms: 0.0386
+  type: 'test'
+  ...
+# Subtest: negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 分页第1/0页
+ok 38 - negative/conditional/control/past/invalid full counter does not suppress current-page obligation: 分页第1/0页
+  ---
+  duration_ms: 0.0407
+  type: 'test'
+  ...
+1..38
+# tests 38
 # suites 0
-# pass 33
+# pass 38
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 81032.2139
+# duration_ms 42897.1958
 ```
 
 ### Sync Record Status
@@ -322,4 +361,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-版本31限定AND结果必要证据，33项重叠工程复检，不是官方模型验收；337项受影响回归另留证。
+版本32当前页必要证据，38项重叠工程复检，不是官方模型验收；341项受影响回归另留证。

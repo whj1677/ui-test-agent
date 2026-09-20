@@ -2,6 +2,10 @@ import { publicError, fail, semanticHash } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
 
 const hints = {
+  PLAN_CURRENT_PAGE_UNPROVEN:
+    'Completion lacks the original current-page proof. Read detail.reason and measure the current counter in this same step. Table IDs or a later page are not proof. Preserve original N with contains 第N/ or standalone 第N页; never invent the observed total or replay navigation. Existing source/target checks and budgets remain.',
+  PLAN_CURRENT_PAGE_SOURCE_INVALID:
+    'The original only specifies the current page, not the proposed total or extra counter text. Keep original N and use the supported bounded current-page representation on the actual independent counter; do not copy observed expected values, change source obligations or replay actions.',
   PLAN_QUERY_RESULT_UNPROVEN:
     'Completion lacks field evidence for original AND inputs. Read detail.reason; retain previous successful measurements and add the missing original conditions on the SAME returned record fields in this step. Control state/count/ID alone is insufficient. Do not borrow a future step, copy observed expected values, or repeat an already dispatched query; this remains within the original replan budget and independent review.',
   PLAN_QUERY_SOURCE_UNRESOLVED:

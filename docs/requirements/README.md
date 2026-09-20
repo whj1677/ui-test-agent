@@ -1,5 +1,7 @@
 # 需求索引
 
+当前：[版本32当前页证据](REQ-0017-controlled-react/real-model-v32-result.md)341项受影响工程无失败，官方原V03待冻结复验。[版本31原3整轮结果](REQ-0017-controlled-react/real-model-v31-result.md)三例通过标签但V03漏初始第1页，不计整轮完整；旧结果及分母保持。
+
 最新：[版本31查询结果必要证据](REQ-0017-controlled-react/real-model-v31-result.md)337项受影响工程无失败；原V02官方24调用/14媒体核验一致，4步17断言逐义务完整，S03原三条件已在结果中同次测量。单例不等于整轮稳定，接续原3例同构建复验。[版本30遗漏](REQ-0017-controlled-react/real-model-v30-result.md)及旧失败保留。
 
 最新：[版本29实际排序证据](REQ-0017-controlled-react/real-model-v29-result.md)317项受影响工程无失败，尚未官方模型复验。版本28原前三条第二轮V02出现整行摘要断言误报，稳定性未达，先修复再继续真实测试。
