@@ -18,16 +18,22 @@ for (const scenario of [
   'unresolved',
   'malformed',
   'persistent',
+  'missing-parent',
+  'hidden-parent',
 ])
   test('partial semantic review with actual Controller and browser: ' + scenario, async (t) => {
     const compound = scenario === 'valid-part';
     const server = http.createServer((q, r) => {
       r.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
-      r.end(
+      let html =
         '<h1>部分断言演练</h1><span id="a">A</span><span id="b">B</span><table aria-label="结果"><thead><tr><th>编号</th></tr></thead><tbody><tr><td>X009</td></tr>' +
-          (scenario === 'real-defect' ? '<tr><td>X001</td></tr>' : '') +
-          '</tbody></table>',
-      );
+        (scenario === 'real-defect' ? '<tr><td>X001</td></tr>' : '') +
+        '</tbody></table>';
+      if (q.url === '/result' && scenario === 'missing-parent')
+        html = html.slice(0, html.indexOf('<table'));
+      if (q.url === '/result' && scenario === 'hidden-parent')
+        html = html.replace('<table ', '<table hidden ');
+      r.end(html);
     });
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     t.after(() => new Promise((resolve) => server.close(resolve)));
@@ -176,7 +182,7 @@ for (const scenario of [
       f.status,
       scenario === 'real-defect'
         ? 'FAIL_ASSERTION'
-        : scenario === 'persistent'
+        : ['persistent', 'missing-parent', 'hidden-parent'].includes(scenario)
           ? 'TECHNICAL_FAILED'
           : 'PASS_ASSERTIONS',
       JSON.stringify(f.error),
@@ -186,7 +192,7 @@ for (const scenario of [
     assert.equal(f.actions.length, 1, 'prior navigate is never replayed');
     assert.equal(
       f.assertions.length,
-      scenario === 'persistent' ? 0 : 2,
+      ['persistent', 'missing-parent', 'hidden-parent'].includes(scenario) ? 0 : 2,
       'invalid positive X001 assertion is never dispatched',
     );
     const audit = f.adaptive_segments.find((s) => s.audit?.partial_assertion_review)?.audit;
@@ -205,4 +211,16 @@ for (const scenario of [
       assert.equal(f.assertions.at(-1).actual, 1);
       assert.equal(f.assertions.at(-1).passed, false);
     }
+    if (!compound && !['persistent', 'missing-parent', 'hidden-parent'].includes(scenario)) {
+      const negative = f.assertions.at(-1);
+      assert.equal(negative.negative_scope.scope, 'complete_current_native_table');
+      assert.equal(negative.negative_scope.key.value, 'X001');
+      assert.equal(negative.sample_id, f.assertions[0].sample_id);
+      assert.deepEqual(
+        negative.negative_scope.matrix.rows,
+        scenario === 'real-defect' ? [['X009'], ['X001']] : [['X009']],
+      );
+    }
+    if (['missing-parent', 'hidden-parent'].includes(scenario))
+      assert.match(f.error, /^ROW_NEGATIVE_SCOPE_/);
   });

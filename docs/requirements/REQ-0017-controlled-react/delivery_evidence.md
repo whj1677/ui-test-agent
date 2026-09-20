@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-20T09:50:22+08:00`
+- Generated at: `2026-09-20T10:20:59+08:00`
 - Record: `REQ-0017-controlled-react`
-- Change fingerprint: `5c79b41363ca6a2aa8d9b64153651924d01bbe2bad40880bde6e0688af8a4873`
+- Change fingerprint: `72065947b955c0160ca2ae2c53c6623948a1d2ba999a6d7dee21f74a25d2f90e`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `node --test --test-concurrency=2 tests/range-position.test.mjs tests/range-position.execution.test.mjs`
+- Command: `node --test --test-concurrency=2 tests/negative-row-scope.test.mjs tests/negative-row-review.test.mjs`
 - Exit code: `0`
-- Test count: `34`
+- Test count: `24`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/req0017/v35-delivery.log`
-- Log SHA-256: `c0b2b0594b9f392f0ffe2763b416cecc13dee36b0842bf59bbf4904823c8f316`
+- Log path: `validation/req0017/v36-delivery.log`
+- Log SHA-256: `7885e595138e2eae97bb46f3e12b521f300c4430725808e927f903a2e99fa7a7`
 
 ### Git Status
 
@@ -28,17 +28,18 @@
  M docs/requirements/REQ-0017-controlled-react/change_log.md
  M docs/requirements/REQ-0017-controlled-react/current_state.md
  M docs/requirements/REQ-0017-controlled-react/delivery_evidence.md
+ M docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md
  M docs/requirements/REQ-0017-controlled-react/requirement.source.json
- M src/adaptive-candidate-feedback.mjs
- M src/adaptive-capabilities.mjs
- M src/adaptive-recovery.mjs
- M src/plan-semantics.mjs
- M src/table-assertion.mjs
- M src/table-cardinality.mjs
- M src/table-position.mjs
-?? docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md
-?? tests/range-position.execution.test.mjs
-?? tests/range-position.test.mjs
+ M src/adaptive-plan.mjs
+ M src/adaptive-review.mjs
+ M src/browser.mjs
+ M src/partial-assertion-review.mjs
+ M tests/partial-assertion-review.execution.test.mjs
+?? docs/requirements/REQ-0017-controlled-react/kimi-v36-review.md
+?? docs/requirements/REQ-0017-controlled-react/real-model-v36-result.md
+?? src/negative-row-scope.mjs
+?? tests/negative-row-review.test.mjs
+?? tests/negative-row-scope.test.mjs
 ```
 
 ### Git Diff Stat
@@ -54,269 +55,209 @@ warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/05_
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0017-controlled-react/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-candidate-feedback.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-capabilities.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/adaptive-recovery.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/plan-semantics.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/table-assertion.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/table-cardinality.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/table-position.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-plan.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/adaptive-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/browser.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/partial-assertion-review.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/partial-assertion-review.execution.test.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/release_runtime.md                    |   2 +
  docs/requirements/README.md                        |   2 +
- .../00_user_requirement.md                         |   2 +
+ .../00_user_requirement.md                         |   3 +
  .../REQ-0017-controlled-react/02_design.md         |   2 +-
  .../REQ-0017-controlled-react/03_tasks.md          |   2 +-
  .../REQ-0017-controlled-react/04_verification.md   |   2 +-
  .../REQ-0017-controlled-react/05_trace.md          |   2 +-
- .../REQ-0017-controlled-react/change_log.md        |   1 +
+ .../REQ-0017-controlled-react/change_log.md        |   3 +-
  .../REQ-0017-controlled-react/current_state.md     |   8 +-
- .../REQ-0017-controlled-react/delivery_evidence.md | 302 +++++++++++++--------
- .../requirement.source.json                        |  26 +-
- src/adaptive-candidate-feedback.mjs                |   7 +
- src/adaptive-capabilities.mjs                      |  11 +-
- src/adaptive-recovery.mjs                          |   2 +
- src/plan-semantics.mjs                             |   9 +-
- src/table-assertion.mjs                            |   2 +-
- src/table-cardinality.mjs                          |   4 +
- src/table-position.mjs                             |  65 ++++-
- 18 files changed, 321 insertions(+), 130 deletions(-)
+ .../REQ-0017-controlled-react/delivery_evidence.md | 314 +++++++++------------
+ .../real-model-v35-result.md                       |  10 +
+ .../requirement.source.json                        |  27 +-
+ src/adaptive-plan.mjs                              |   2 +
+ src/adaptive-review.mjs                            |  24 +-
+ src/browser.mjs                                    |  44 ++-
+ src/partial-assertion-review.mjs                   |   2 +-
+ tests/partial-assertion-review.execution.test.mjs  |  30 +-
+ 17 files changed, 252 insertions(+), 227 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0017-controlled-react/real-model-v35-result.md
-tests/range-position.execution.test.mjs
-tests/range-position.test.mjs
+docs/requirements/REQ-0017-controlled-react/kimi-v36-review.md
+docs/requirements/REQ-0017-controlled-react/real-model-v36-result.md
+src/negative-row-scope.mjs
+tests/negative-row-review.test.mjs
+tests/negative-row-scope.test.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-20T09:49:07+08:00
-Command: node --test --test-concurrency=2 tests/range-position.test.mjs tests/range-position.execution.test.mjs
+Started at: 2026-09-20T10:20:39+08:00
+Command: node --test --test-concurrency=2 tests/negative-row-scope.test.mjs tests/negative-row-review.test.mjs
 Exit code: 0
-Parsed test count: 34
+Parsed test count: 24
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: source position interval through actual Controller: correct
-ok 1 - source position interval through actual Controller: correct
+# Subtest: program derived sampling groups distinguish joint evidence from separate times: false
+ok 1 - program derived sampling groups distinguish joint evidence from separate times: false
   ---
-  duration_ms: 14581.6862
+  duration_ms: 2.5724
   type: 'test'
   ...
-# Subtest: source position interval through actual Controller: shifted
-ok 2 - source position interval through actual Controller: shifted
+# Subtest: program derived sampling groups distinguish joint evidence from separate times: true
+ok 2 - program derived sampling groups distinguish joint evidence from separate times: true
   ---
-  duration_ms: 15934.1419
+  duration_ms: 0.3839
   type: 'test'
   ...
-# Subtest: source position interval through actual Controller: repeat
-ok 3 - source position interval through actual Controller: repeat
+# Subtest: same explicit negative capability reaches planner and reviewer without new predicate
+ok 3 - same explicit negative capability reaches planner and reviewer without new predicate
   ---
-  duration_ms: 12995.1601
+  duration_ms: 0.2333
   type: 'test'
   ...
-# Subtest: source position interval through actual Controller: closed-extra
-ok 4 - source position interval through actual Controller: closed-extra
+# Subtest: negative key assertion requires healthy parent scope: missing
+ok 4 - negative key assertion requires healthy parent scope: missing
   ---
-  duration_ms: 14815.3129
+  duration_ms: 777.2261
   type: 'test'
   ...
-# Subtest: source position interval through actual Controller: wrong-position
-ok 5 - source position interval through actual Controller: wrong-position
+# Subtest: negative key assertion requires healthy parent scope: hidden
+ok 5 - negative key assertion requires healthy parent scope: hidden
   ---
-  duration_ms: 14813.8057
+  duration_ms: 853.7971
   type: 'test'
   ...
-# Subtest: range source maps each literal identity to its absolute row, not ID numeric suffix
-ok 6 - range source maps each literal identity to its absolute row, not ID numeric suffix
+# Subtest: negative key assertion requires healthy parent scope: absent
+ok 6 - negative key assertion requires healthy parent scope: absent
   ---
-  duration_ms: 3.7653
+  duration_ms: 801.2757
   type: 'test'
   ...
-# Subtest: source-grounded range position is legal and a shifted prefix remains a real difference
-ok 7 - source-grounded range position is legal and a shifted prefix remains a real difference
+# Subtest: negative key assertion requires healthy parent scope: present
+ok 7 - negative key assertion requires healthy parent scope: present
   ---
-  duration_ms: 1.6321
+  duration_ms: 995.9641
   type: 'test'
   ...
-# Subtest: relative order cannot complete explicit range positions
-ok 8 - relative order cannot complete explicit range positions
+# Subtest: invalid parent matrix never proves keyed absence: duplicate_table
+ok 8 - invalid parent matrix never proves keyed absence: duplicate_table
   ---
-  duration_ms: 4.7451
+  duration_ms: 812.3817
   type: 'test'
   ...
-# Subtest: range endpoint is not a current-table row count or permission for exact_rows
-ok 9 - range endpoint is not a current-table row count or permission for exact_rows
+# Subtest: invalid parent matrix never proves keyed absence: duplicate_keys
+ok 9 - invalid parent matrix never proves keyed absence: duplicate_keys
   ---
-  duration_ms: 2.0962
+  duration_ms: 903.1914
   type: 'test'
   ...
-# Subtest: bounded range syntax maps the same original identities: 第2到4行依次是
-ok 10 - bounded range syntax maps the same original identities: 第2到4行依次是
+# Subtest: invalid parent matrix never proves keyed absence: blank_key
+ok 10 - invalid parent matrix never proves keyed absence: blank_key
   ---
-  duration_ms: 0.4313
+  duration_ms: 779.9495
   type: 'test'
   ...
-# Subtest: bounded range syntax maps the same original identities: 第二至第四行依次为
-ok 11 - bounded range syntax maps the same original identities: 第二至第四行依次为
+# Subtest: invalid parent matrix never proves keyed absence: missing_key_column
+ok 11 - invalid parent matrix never proves keyed absence: missing_key_column
   ---
-  duration_ms: 0.1718
+  duration_ms: 809.7603
   type: 'test'
   ...
-# Subtest: bounded range syntax maps the same original identities: 第2-4行依次为
-ok 12 - bounded range syntax maps the same original identities: 第2-4行依次为
+# Subtest: invalid parent matrix never proves keyed absence: duplicate_column
+ok 12 - invalid parent matrix never proves keyed absence: duplicate_column
   ---
-  duration_ms: 0.2104
+  duration_ms: 831.8628
   type: 'test'
   ...
-# Subtest: bounded range syntax maps the same original identities: 第2～4行依次为
-ok 13 - bounded range syntax maps the same original identities: 第2～4行依次为
+# Subtest: invalid parent matrix never proves keyed absence: hidden_row
+ok 13 - invalid parent matrix never proves keyed absence: hidden_row
   ---
-  duration_ms: 0.1357
+  duration_ms: 796.99
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第0至2行依次为R301、R499、R102。
-ok 14 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第0至2行依次为R301、R499、R102。
+# Subtest: invalid parent matrix never proves keyed absence: hidden_cell
+ok 14 - invalid parent matrix never proves keyed absence: hidden_cell
   ---
-  duration_ms: 0.5968
+  duration_ms: 785.1026
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第-1至1行依次为R301、R499、R102。
-ok 15 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第-1至1行依次为R301、R499、R102。
+# Subtest: invalid parent matrix never proves keyed absence: merged
+ok 15 - invalid parent matrix never proves keyed absence: merged
   ---
-  duration_ms: 0.6273
+  duration_ms: 784.1248
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第1.5至3行依次为R301、R499。
-ok 16 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第1.5至3行依次为R301、R499。
+# Subtest: invalid parent matrix never proves keyed absence: virtual
+ok 16 - invalid parent matrix never proves keyed absence: virtual
   ---
-  duration_ms: 0.5873
+  duration_ms: 777.5861
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第1000至1001行依次为R301、R499。
-ok 17 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第1000至1001行依次为R301、R499。
+# Subtest: invalid parent matrix never proves keyed absence: nested
+ok 17 - invalid parent matrix never proves keyed absence: nested
   ---
-  duration_ms: 0.2345
+  duration_ms: 760.2756
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第十一至十三行依次为R301、R499、R102。
-ok 18 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第十一至十三行依次为R301、R499、R102。
+# Subtest: invalid parent matrix never proves keyed absence: sample_limit
+ok 18 - invalid parent matrix never proves keyed absence: sample_limit
   ---
-  duration_ms: 0.18
+  duration_ms: 882.6663
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第4至2行依次为R301、R499、R102。
-ok 19 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第4至2行依次为R301、R499、R102。
+# Subtest: invalid parent matrix never proves keyed absence: busy_table
+ok 19 - invalid parent matrix never proves keyed absence: busy_table
   ---
-  duration_ms: 0.4236
+  duration_ms: 793.32
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301、R499。
-ok 20 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301、R499。
+# Subtest: invalid parent matrix never proves keyed absence: busy_parent
+ok 20 - invalid parent matrix never proves keyed absence: busy_parent
   ---
-  duration_ms: 0.1622
+  duration_ms: 849.8861
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301、R499、R499。
-ok 21 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301、R499、R499。
+# Subtest: empty healthy table is absence; missing cell column is not
+ok 21 - empty healthy table is absence; missing cell column is not
   ---
-  duration_ms: 0.1302
+  duration_ms: 831.0449
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为设备甲、设备乙、设备丙。
-ok 22 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为设备甲、设备乙、设备丙。
+# Subtest: negative target and positive fields share one sample without scope substitution
+ok 22 - negative target and positive fields share one sample without scope substitution
   ---
-  duration_ms: 0.1295
+  duration_ms: 859.3489
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301至R303。
-ok 23 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行依次为R301至R303。
+# Subtest: parent/key mutation after locator collection cannot give a stale absence pass: remove-parent
+ok 23 - parent/key mutation after locator collection cannot give a stale absence pass: remove-parent
   ---
-  duration_ms: 0.3413
+  duration_ms: 1006.2504
   type: 'test'
   ...
-# Subtest: recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行分别对应现场看到的设备。
-ok 24 - recognized ambiguous interval is a completion gap, never a relative-order pass: 第2至4行分别对应现场看到的设备。
+# Subtest: parent/key mutation after locator collection cannot give a stale absence pass: insert-key
+ok 24 - parent/key mutation after locator collection cannot give a stale absence pass: insert-key
   ---
-  duration_ms: 0.1438
+  duration_ms: 1509.1008
   type: 'test'
   ...
-# Subtest: at most 50 identities and explicit separate total remains separate
-ok 25 - at most 50 identities and explicit separate total remains separate
-  ---
-  duration_ms: 0.5187
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 不要求
-ok 26 - negative, conditional, historical or control text is not a positive position obligation: 不要求
-  ---
-  duration_ms: 0.1374
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 如果
-ok 27 - negative, conditional, historical or control text is not a positive position obligation: 如果
-  ---
-  duration_ms: 0.0416
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 例如
-ok 28 - negative, conditional, historical or control text is not a positive position obligation: 例如
-  ---
-  duration_ms: 0.0313
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 此前
-ok 29 - negative, conditional, historical or control text is not a positive position obligation: 此前
-  ---
-  duration_ms: 0.0457
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 操作前
-ok 30 - negative, conditional, historical or control text is not a positive position obligation: 操作前
-  ---
-  duration_ms: 0.0392
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 按钮显示
-ok 31 - negative, conditional, historical or control text is not a positive position obligation: 按钮显示
-  ---
-  duration_ms: 0.0312
-  type: 'test'
-  ...
-# Subtest: negative, conditional, historical or control text is not a positive position obligation: 标题说明
-ok 32 - negative, conditional, historical or control text is not a positive position obligation: 标题说明
-  ---
-  duration_ms: 0.0299
-  type: 'test'
-  ...
-# Subtest: range source grounding is immutable and cannot come from data or altered keys/ordinals
-ok 33 - range source grounding is immutable and cannot come from data or altered keys/ordinals
-  ---
-  duration_ms: 0.6846
-  type: 'test'
-  ...
-# Subtest: negative-looking field values do not erase a positive positional requirement
-ok 34 - negative-looking field values do not erase a positive positional requirement
-  ---
-  duration_ms: 0.1543
-  type: 'test'
-  ...
-1..34
-# tests 34
+1..24
+# tests 24
 # suites 0
-# pass 34
+# pass 24
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 73632.6954
+# duration_ms 18689.5989
 ```
 
 ### Sync Record Status
@@ -335,4 +276,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-v35范围绝对位置及数量边界34项交付重叠复检，301项受影响工程已执行；官方原V01尚未执行，不替代产品验收。
+v36父表完整矩阵负向断言及拟采样分组24项交付复检；456项受影响工程已执行，不代替真实模型验收。

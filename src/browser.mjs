@@ -22,6 +22,7 @@ import { stepActions, stepAssertions, stepCheckpoints } from './plan-steps.mjs';
 import { StepBudget } from './step-budget.mjs';
 import { compareTableCells, displayNumber } from './table-assertion.mjs';
 import { compareTableOrder } from './table-order.mjs';
+import { isNegativeRowAssertion, installNegativeRowSampler } from './negative-row-scope.mjs';
 import {
   needsTableBaseline,
   assertTableBaselineScope,
@@ -1528,6 +1529,7 @@ export async function checkAssertionGroup(
   { timeout = 8000, deadline = Date.now() + timeout, signal, tableBaselines, tableContext } = {},
 ) {
   const hasInvariant = assertions.some((a) => a.check === 'table_unchanged');
+  const hasNegativeRows = assertions.some(isNegativeRowAssertion);
   const oneShotOrder = assertions.some((a) => a.check === 'table_order');
   for (const a of assertions)
     if (a.check === 'table_unchanged')
@@ -1552,20 +1554,29 @@ export async function checkAssertionGroup(
     window[key] = state;
   }, observerKey);
   try {
-    if (hasInvariant) await installTableInvariantSampler(page, observerKey);
+    if (hasNegativeRows) await installNegativeRowSampler(page, observerKey);
+    else if (hasInvariant) await installTableInvariantSampler(page, observerKey);
     do {
       if (signal?.aborted) fail('STOPPED');
       const revision = await page.evaluate((key) => window[key].revision, observerKey);
-      const handles = [];
+      const handles = [],
+        negativeScopes = [];
       try {
         for (const a of assertions)
           handles.push(await handoffLocator(page, a.target).elementHandles());
+        for (const a of assertions)
+          negativeScopes.push(
+            isNegativeRowAssertion(a)
+              ? await handoffLocator(page, a.target.table).elementHandles()
+              : null,
+          );
         sampled = await page.evaluate(
-          ({ key, revision, assertions, handles }) => {
+          ({ key, revision, assertions, handles, negativeScopes }) => {
             if (
               !window[key] ||
               window[key].revision !== revision ||
-              handles.some((rows) => rows.some((e) => !e.isConnected))
+              handles.some((rows) => rows.some((e) => !e.isConnected)) ||
+              negativeScopes.some((rows) => rows?.some((e) => !e.isConnected))
             )
               return null;
             const visible = (e) => {
@@ -1589,6 +1600,12 @@ export async function checkAssertionGroup(
                   passed = false,
                   error,
                   obstruction;
+                const negativeScope =
+                  negativeScopes[i] === null
+                    ? null
+                    : window[key].sampleNegativeRowScope(negativeScopes[i], a.target);
+                if (negativeScope?.error)
+                  return { actual, passed: false, error: negativeScope.error };
                 if (a.check === 'table_unchanged') {
                   if (count !== 1) error = 'TABLE_BASELINE_TABLE_NOT_UNIQUE';
                   else {
@@ -1782,11 +1799,17 @@ export async function checkAssertionGroup(
                       Number(number) === a.expected;
                   }
                 }
-                return { actual, passed, error, ...(obstruction ? { obstruction } : {}) };
+                return {
+                  actual,
+                  passed,
+                  error,
+                  ...(obstruction ? { obstruction } : {}),
+                  ...(negativeScope ? { negative_scope: negativeScope } : {}),
+                };
               }),
             };
           },
-          { key: observerKey, revision, assertions, handles },
+          { key: observerKey, revision, assertions, handles, negativeScopes },
         );
         if (sampled)
           sampled.observations.forEach((o, i) => {
@@ -1844,6 +1867,12 @@ export async function checkAssertionGroup(
         } else if (sampled) windowObserved = true;
       } finally {
         await Promise.allSettled(handles.flat().map((h) => h.dispose()));
+        await Promise.allSettled(
+          negativeScopes
+            .flat()
+            .filter(Boolean)
+            .map((h) => h.dispose()),
+        );
       }
       if (sampled) {
         last = sampled;
@@ -1886,6 +1915,9 @@ export async function checkAssertionGroup(
       ? { numeric_projection: last.observations[i].numeric_projection }
       : {}),
     ...(last.observations[i].obstruction ? { obstruction: last.observations[i].obstruction } : {}),
+    ...(last.observations[i].negative_scope
+      ? { negative_scope: redactMatrixEvidence(last.observations[i].negative_scope) }
+      : {}),
     ...(last.observations[i].table_comparison
       ? { table_comparison: redactMatrixEvidence(last.observations[i].table_comparison) }
       : {}),

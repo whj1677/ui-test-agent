@@ -1,6 +1,6 @@
 import { fail, keys, publicError } from './common.mjs';
 import { scrubForLog } from './telemetry.mjs';
-import { stepAssertions } from './plan-steps.mjs';
+import { stepCheckpoints } from './plan-steps.mjs';
 import { validatePlanAudit } from './plan-quality.mjs';
 import {
   DEFINITION_GUIDANCE,
@@ -16,6 +16,7 @@ import { ORDER_EVIDENCE_GUIDANCE } from './order-evidence.mjs';
 import { ROW_EVIDENCE_GUIDANCE } from './row-evidence.mjs';
 import { CURRENT_PAGE_GUIDANCE } from './page-index-evidence.mjs';
 import { QUERY_RESULT_EVIDENCE_GUIDANCE } from './query-result-evidence.mjs';
+import { NEGATIVE_ROW_GUIDANCE } from './negative-row-scope.mjs';
 import {
   PARTIAL_ASSERTION_REVIEW_GUIDANCE,
   reviewPartialAssertions,
@@ -26,6 +27,7 @@ ${TAB_SELECTION_GUIDANCE}
 ${TABLE_ORDER_GUIDANCE}
 ${ORDER_EVIDENCE_GUIDANCE}
 ${ROW_EVIDENCE_GUIDANCE}
+${NEGATIVE_ROW_GUIDANCE}
 ${CURRENT_PAGE_GUIDANCE}
 ${QUERY_RESULT_EVIDENCE_GUIDANCE}
 ${EVIDENCE_SOURCE_GUIDANCE}
@@ -42,14 +44,18 @@ ${PARTIAL_ASSERTION_REVIEW_GUIDANCE}`;
 export function adaptiveAuditInput(input) {
   return {
     ...input,
-    assertion_catalog: input.candidate_plan.steps.flatMap((step) =>
-      stepAssertions(step).map((assertion, index) => ({
-        ref: `A${index + 1}`,
-        step_id: step.step_id,
-        ...assertion,
-        evidence_binding: assertionEvidenceBinding(assertion),
-      })),
-    ),
+    assertion_catalog: input.candidate_plan.steps.flatMap((step, stepIndex) => {
+      let index = 0;
+      return stepCheckpoints(step).flatMap((point, groupIndex) =>
+        point.assertions.map((assertion) => ({
+          ref: `A${++index}`,
+          step_id: step.step_id,
+          ...assertion,
+          planned_sampling_group: `step-${stepIndex + 1}-checkpoint-${groupIndex + 1}`,
+          evidence_binding: assertionEvidenceBinding(assertion),
+        })),
+      );
+    }),
   };
 }
 
