@@ -1,5 +1,7 @@
 # 需求索引
 
+官方最新：[版本33原V03](REQ-0017-controlled-react/real-model-v33-result.md)27调用后4步13断言逐义务完整，14媒体SHA/原输入一致，真实触发缺证→补测→重新完整收尾；现继续同构建原3整轮，单例不等于整体稳定或发布。
+
 当前：[版本33补证后重新收尾](REQ-0017-controlled-react/real-model-v33-result.md)已实现，230项受影响工程、7纯函数补验、8旧执行守卫和11交付专项分别无失败（重叠不累加）；官方V03待冻结复验。按真正新增成功测量允许再次完整核验，原重试/调用/步骤额度不增加。[版本32真实失败](REQ-0017-controlled-react/real-model-v32-result.md)与旧记录保留，不以工程结果代替产品验收。
 
 当前：[版本32当前页证据](REQ-0017-controlled-react/real-model-v32-result.md)341项受影响工程无失败，官方原V03待冻结复验。[版本31原3整轮结果](REQ-0017-controlled-react/real-model-v31-result.md)三例通过标签但V03漏初始第1页，不计整轮完整；旧结果及分母保持。
