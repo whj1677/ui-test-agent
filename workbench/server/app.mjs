@@ -114,10 +114,35 @@ async function readJsonBody(request, limit = 16 * 1024) {
   }
 }
 
-function trustedMutation(request) {
+async function sendCaseTemplate(response, webRoot, pathname) {
+  if (pathname !== '/examples/M3A_CASE_IMPORT_TEMPLATE_V1.xlsx') return false;
+  const file = path.join(path.dirname(webRoot), 'examples', 'M3A_CASE_IMPORT_TEMPLATE_V1.xlsx');
+  response.writeHead(200, {
+    ...securityHeaders('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+    'content-disposition': "attachment; filename*=UTF-8''M3A_CASE_IMPORT_TEMPLATE_V1.xlsx",
+  });
+  response.end(await fs.readFile(file));
+  return true;
+}
+
+async function readBinaryBody(request, limit = 10 * 1024 * 1024) {
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of request) {
+    size += chunk.length;
+    if (size > limit) throw new Error('REQUEST_TOO_LARGE');
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+function trustedLocalOrigin(request) {
   const host = request.headers.host;
-  if (!/^(127\.0\.0\.1|localhost):\d+$/.test(host || '')) return false;
-  if (request.headers.origin !== `http://${host}`) return false;
+  return /^(127\.0\.0\.1|localhost):\d+$/.test(host || '') && request.headers.origin === `http://${host}`;
+}
+
+function trustedMutation(request) {
+  if (!trustedLocalOrigin(request)) return false;
   return String(request.headers['content-type'] || '').toLowerCase().startsWith('application/json');
 }
 
@@ -133,6 +158,9 @@ function errorStatus(error) {
   if (['BUILD_TEMPLATE_NOT_ALLOWED', 'BUILD_INITIAL_NOT_ALLOWED', 'BUILD_REVISION_NOT_ALLOWED', 'BUILD_REVISION_SOURCE_INVALID'].includes(error.message)) return 400;
   if (error.message === 'REQUEST_TOO_LARGE') return 413;
   if (error.message === 'INVALID_JSON') return 400;
+  if (error.message === 'CASE_PROJECT_NOT_FOUND' || error.message === 'CASE_NOT_FOUND' || error.message === 'CASE_UPLOAD_NOT_FOUND' || error.message === 'CASE_PREVIEW_NOT_FOUND') return 404;
+  if (error.message === 'CASE_PROJECT_REVISION_CONFLICT' || error.message === 'CASE_IMPORT_PREVIEW_STALE') return 409;
+  if (error.message.startsWith('CASE_')) return 400;
   return 422;
 }
 
@@ -142,6 +170,8 @@ export function createWorkbenchServer(options = {}) {
   const buildStore = options.buildStore;
   const buildManager = options.buildManager;
   const buildRevalidationStore = options.buildRevalidationStore;
+  const caseStore = options.caseStore;
+  const caseManager = options.caseManager;
   const webRoot = options.webRoot || defaultWebRoot;
   return http.createServer(async (request, response) => {
     try {
@@ -160,6 +190,68 @@ export function createWorkbenchServer(options = {}) {
       }
       if (buildManager && request.method === 'GET' && url.pathname === '/api/build/templates') {
         sendJson(response, 200, { templates: await buildManager.templates() });
+        return;
+      }
+      if (caseStore && request.method === 'GET' && url.pathname === '/api/case-library/projects') {
+        sendJson(response, 200, { projects: await caseStore.listProjects() });
+        return;
+      }
+      if (caseManager && request.method === 'POST' && url.pathname === '/api/case-library/projects') {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        sendJson(response, 201, await caseManager.createProject(body));
+        return;
+      }
+      if (caseManager && request.method === 'POST' && url.pathname === '/api/case-library/uploads') {
+        if (!trustedLocalOrigin(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readBinaryBody(request);
+        sendJson(response, 201, await caseManager.upload({
+          fileName: String(request.headers['x-file-name'] || ''),
+          contentType: String(request.headers['content-type'] || '').toLowerCase(), body,
+        }));
+        return;
+      }
+      const projectExport = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/export$/);
+      if (caseManager && request.method === 'GET' && projectExport) {
+        const projectId = decodeURIComponent(projectExport[1]);
+        const caseIds = url.searchParams.get('case_ids')?.split(',').filter(Boolean).map(decodeURIComponent) || [];
+        const pkg = await caseManager.exportPackage(projectId, caseIds);
+        const body = Buffer.from(`${JSON.stringify(pkg, null, 2)}\n`, 'utf8');
+        response.writeHead(200, {
+          ...securityHeaders('application/json; charset=utf-8'), 'content-length': body.length,
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`${projectId}-cases.json`)}`,
+        });
+        response.end(body);
+        return;
+      }
+      const projectPreview = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/imports\/preview$/);
+      if (caseManager && request.method === 'POST' && projectPreview) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 201, await caseManager.preview(decodeURIComponent(projectPreview[1]), await readJsonBody(request, 64 * 1024)));
+        return;
+      }
+      const projectConfirm = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/imports\/([^/]+)\/confirm$/);
+      if (caseManager && request.method === 'POST' && projectConfirm) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request, 64 * 1024);
+        sendJson(response, 200, await caseManager.confirm(decodeURIComponent(projectConfirm[1]), decodeURIComponent(projectConfirm[2]), body.decisions || {}));
+        return;
+      }
+      const projectCase = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/([^/]+)$/);
+      if (caseManager && request.method === 'PATCH' && projectCase) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 200, await caseManager.updateCase(decodeURIComponent(projectCase[1]), decodeURIComponent(projectCase[2]), await readJsonBody(request, 64 * 1024)));
+        return;
+      }
+      const projectDetail = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)$/);
+      if (caseStore && request.method === 'GET' && projectDetail) {
+        const project = await caseStore.getProject(decodeURIComponent(projectDetail[1]));
+        sendJson(response, project ? 200 : 404, project || { error: 'CASE_PROJECT_NOT_FOUND' });
+        return;
+      }
+      if (caseManager && request.method === 'PATCH' && projectDetail) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 200, await caseManager.updateProject(decodeURIComponent(projectDetail[1]), await readJsonBody(request)));
         return;
       }
       if (buildStore && request.method === 'GET' && url.pathname === '/api/build/tasks') {
@@ -254,6 +346,7 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 202, await manager.stop(decodeURIComponent(stop[1])));
         return;
       }
+      if (request.method === 'GET' && await sendCaseTemplate(response, webRoot, url.pathname)) return;
       if (request.method === 'GET' && await sendStatic(response, webRoot, url.pathname)) return;
       sendJson(response, 404, { error: 'NOT_FOUND' });
     } catch (error) {

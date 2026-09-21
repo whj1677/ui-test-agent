@@ -4,6 +4,7 @@ const state = {
   buildTemplates: [], buildTasks: [], selectedBuildTaskId: null, activeBuildTaskId: null,
   buildBudget: null, buildAuthorization: null,
   selectedRevalidationByTask: {}, selectedRevalidationLaneByTask: {}, renderedRevalidationKey: null,
+  caseProjects: [], selectedProjectId: null, selectedCaseId: null, caseUpload: null, importPreview: null,
 };
 const byId = (id) => document.getElementById(id);
 
@@ -319,6 +320,106 @@ function render() {
   renderBuildTemplate(); renderBuildControls(); renderBuildHistory(); renderBuildDetail();
 }
 
+const mappingLabels = {
+  external_id: '用例编号', title: '标题', module: '模块', preconditions: '前置条件', test_data: '测试数据',
+  steps: '步骤', expected: '逐步预期', status: '内容状态',
+};
+
+function selectedProject() { return state.caseProjects.find((item) => item.project_id === state.selectedProjectId) || null; }
+function currentCase(item) { return item?.versions.find((version) => version.version === item.current_version)?.content || null; }
+
+function renderCaseLibrary() {
+  setText('case-project-count', `${state.caseProjects.length} 个项目`);
+  const list = byId('case-project-list'); clear(list);
+  for (const project of state.caseProjects) {
+    const button = make('button', `${project.name}（${project.cases.length}）`);
+    button.classList.toggle('selected', project.project_id === state.selectedProjectId);
+    button.addEventListener('click', () => { state.selectedProjectId = project.project_id; state.selectedCaseId = null; state.caseUpload = null; state.importPreview = null; renderCaseLibrary(); });
+    list.append(button);
+  }
+  const project = selectedProject();
+  byId('case-project-empty').classList.toggle('hidden', Boolean(project));
+  byId('case-project-workspace').classList.toggle('hidden', !project);
+  if (!project) return;
+  byId('project-name').value = project.name; byId('project-description').value = project.description;
+  const query = byId('case-search').value.trim().toLocaleLowerCase();
+  const body = byId('case-table-body'); clear(body);
+  for (const item of project.cases.filter((entry) => !query || entry.external_id.toLocaleLowerCase().includes(query) || entry.title.toLocaleLowerCase().includes(query))) {
+    const row = document.createElement('tr');
+    const checkboxCell = document.createElement('td'); const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.dataset.caseId = item.case_id; checkboxCell.append(checkbox);
+    row.append(checkboxCell, make('td', item.external_id), make('td', item.title), make('td', item.module || '—'), make('td', item.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'), make('td', `v${item.current_version}`));
+    row.addEventListener('click', (event) => { if (event.target === checkbox) return; state.selectedCaseId = item.case_id; renderCaseDetail(); });
+    body.append(row);
+  }
+  renderCaseDetail(); renderImportPreview();
+}
+
+function renderCaseDetail() {
+  const project = selectedProject(); const item = project?.cases.find((entry) => entry.case_id === state.selectedCaseId); const form = byId('case-detail');
+  form.classList.toggle('hidden', !item); if (!item) return;
+  const content = currentCase(item);
+  byId('case-external-id').value = content.external_id; byId('case-title').value = content.title; byId('case-module').value = content.module;
+  byId('case-status').value = content.status; byId('case-preconditions').value = content.preconditions; byId('case-test-data').value = content.test_data;
+  byId('case-steps').value = content.steps.map((step) => step.action).join('\n'); byId('case-expected').value = content.steps.map((step) => step.expected).join('\n');
+  setText('case-source', `内部ID ${item.case_id} · 根来源 ${item.root_source.stable_id} · 导入批次 ${item.import_batch_id}`);
+}
+
+function renderMapping() {
+  const upload = state.caseUpload; const box = byId('mapping-fields'); clear(box);
+  box.classList.toggle('hidden', upload?.source_type !== 'xlsx');
+  byId('case-sheet').classList.toggle('hidden', upload?.source_type !== 'xlsx');
+  byId('preview-import').classList.toggle('hidden', !upload);
+  if (upload?.source_type !== 'xlsx') return;
+  const sheet = upload.workbook.sheets.find((item) => item.name === byId('case-sheet').value) || upload.workbook.sheets[0];
+  for (const [field, labelText] of Object.entries(mappingLabels)) {
+    const label = make('label', labelText); const select = document.createElement('select'); select.dataset.field = field;
+    select.append(new Option('不映射', ''));
+    for (const header of sheet.headers) select.append(new Option(header, header));
+    select.value = sheet.headers.includes(labelText) ? labelText : ''; label.append(select); box.append(label);
+  }
+}
+
+function renderImportPreview() {
+  const preview = state.importPreview; const box = byId('import-preview'); clear(box); box.classList.toggle('hidden', !preview); if (!preview) return;
+  const summary = make('div', undefined, 'preview-summary');
+  const labels = { NEW: '新增', DUPLICATE: '重复跳过', CONFLICT: '冲突', PENDING_CLARIFICATION: '待澄清', UNIMPORTABLE: '无法导入' };
+  for (const [key, value] of Object.entries(preview.summary)) summary.append(make('span', `${labels[key]} ${value}`, 'count'));
+  box.append(summary);
+  for (const item of preview.items) {
+    const row = make('div', undefined, 'preview-item'); row.append(make('strong', `${item.content.external_id || '无编号'} · ${item.content.title || '无标题'}`), make('p', `${labels[item.classification]} · ${item.source_location.sheet || item.source_location.package_id} / ${item.source_location.row || item.source_location.index}`));
+    for (const issue of item.issues) row.append(make('p', `${issue.severity}: ${issue.message}`, 'subtle-dark'));
+    if (item.classification === 'CONFLICT') { const select = document.createElement('select'); select.dataset.conflictKey = item.candidate_key; select.append(new Option('跳过，不覆盖', 'SKIP'), new Option('作为独立副本导入', 'IMPORT_COPY')); row.append(select); }
+    box.append(row);
+  }
+  const confirm = make('button', '确认导入', 'primary'); confirm.id = 'confirm-import'; confirm.addEventListener('click', confirmImport); box.append(confirm);
+}
+
+async function refreshCaseLibrary(preferredProjectId) {
+  const result = await api('/api/case-library/projects'); state.caseProjects = result.projects;
+  if (preferredProjectId) state.selectedProjectId = preferredProjectId;
+  if (!state.caseProjects.some((item) => item.project_id === state.selectedProjectId)) state.selectedProjectId = state.caseProjects[0]?.project_id || null;
+  renderCaseLibrary();
+}
+
+async function confirmImport() {
+  const decisions = {}; document.querySelectorAll('[data-conflict-key]').forEach((select) => { decisions[select.dataset.conflictKey] = select.value; });
+  try {
+    const result = await api(`/api/case-library/projects/${encodeURIComponent(state.selectedProjectId)}/imports/${encodeURIComponent(state.importPreview.preview_id)}/confirm`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ decisions }) });
+    setText('case-message', `${result.idempotent ? '重复确认：' : ''}新增 ${result.result.added} 条，重复跳过 ${result.result.skipped_duplicate} 条，冲突跳过 ${result.result.skipped_conflict} 条。`);
+    state.importPreview = null; await refreshCaseLibrary(state.selectedProjectId);
+  } catch (error) { setText('case-message', `导入失败：${error.message}`); }
+}
+
+async function downloadCases(all) {
+  const ids = all ? [] : [...document.querySelectorAll('#case-table-body input:checked')].map((item) => item.dataset.caseId);
+  if (!all && !ids.length) return setText('case-message', '请先选择至少一条用例。');
+  const suffix = ids.length ? `?case_ids=${ids.map(encodeURIComponent).join(',')}` : '';
+  const response = await fetch(`/api/case-library/projects/${encodeURIComponent(state.selectedProjectId)}/export${suffix}`);
+  if (!response.ok) return setText('case-message', `导出失败：${(await response.json()).error}`);
+  const blob = await response.blob(); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `${state.selectedProjectId}-cases.json`; link.click(); URL.revokeObjectURL(link.href);
+  setText('case-message', `已导出 ${all ? '全部' : `${ids.length} 条`}用例；不包含脚本、执行结果和媒体。`);
+}
+
 async function refresh() {
   try {
     const [health, assets, runs, templates, buildTasks] = await Promise.all([
@@ -394,5 +495,55 @@ byId('build-stop').addEventListener('click', async () => {
   await refresh();
 });
 
+byId('create-project').addEventListener('click', async () => {
+  try {
+    const project = await api('/api/case-library/projects', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: byId('new-project-name').value, description: byId('new-project-description').value }) });
+    byId('new-project-name').value = ''; byId('new-project-description').value = ''; await refreshCaseLibrary(project.project_id);
+  } catch (error) { setText('case-message', `创建失败：${error.message}`); }
+});
+byId('save-project').addEventListener('click', async () => {
+  const project = selectedProject(); if (!project) return;
+  try {
+    await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: project.revision, name: byId('project-name').value, description: byId('project-description').value }) });
+    setText('case-message', '项目信息已保存。'); await refreshCaseLibrary(project.project_id);
+  } catch (error) { setText('case-message', `保存失败：${error.message}`); }
+});
+byId('case-search').addEventListener('input', renderCaseLibrary);
+byId('case-sheet').addEventListener('change', renderMapping);
+byId('upload-cases').addEventListener('click', async () => {
+  const file = byId('case-import-file').files[0]; if (!file || !selectedProject()) return setText('case-message', '请选择项目和 .xlsx/.json 文件。');
+  try {
+    const response = await fetch('/api/case-library/uploads', { method: 'POST', headers: { 'content-type': file.type || (file.name.endsWith('.json') ? 'application/json' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'), 'x-file-name': encodeURIComponent(file.name) }, body: file });
+    const payload = await response.json(); if (!response.ok) throw new Error(payload.error);
+    state.caseUpload = payload; state.importPreview = null;
+    const sheet = byId('case-sheet'); clear(sheet); for (const item of payload.workbook?.sheets || []) sheet.append(new Option(`${item.name}（${item.row_count} 行）`, item.name));
+    renderMapping(); renderImportPreview(); setText('case-message', `已读取 ${payload.file_name}，请核对工作表、映射后预览。`);
+  } catch (error) { setText('case-message', `读取失败：${error.message}`); }
+});
+byId('preview-import').addEventListener('click', async () => {
+  if (!state.caseUpload || !selectedProject()) return;
+  const body = { upload_id: state.caseUpload.upload_id };
+  if (state.caseUpload.source_type === 'xlsx') {
+    body.sheet_name = byId('case-sheet').value; body.mapping = {};
+    document.querySelectorAll('#mapping-fields select').forEach((select) => { body.mapping[select.dataset.field] = select.value; });
+  }
+  try {
+    state.importPreview = await api(`/api/case-library/projects/${encodeURIComponent(state.selectedProjectId)}/imports/preview`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    renderImportPreview(); setText('case-message', '预览已生成；确认前项目不会改变。');
+  } catch (error) { setText('case-message', `预览失败：${error.message}`); }
+});
+byId('case-detail').addEventListener('submit', async (event) => {
+  event.preventDefault(); const project = selectedProject(); const item = project?.cases.find((entry) => entry.case_id === state.selectedCaseId); if (!item) return;
+  const actions = byId('case-steps').value.split(/\r?\n/).map((value) => value.trim()).filter(Boolean); const expected = byId('case-expected').value.split(/\r?\n/).map((value) => value.trim());
+  const steps = actions.map((action, index) => ({ order: index + 1, action, expected: expected[index] || '' }));
+  try {
+    await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: project.revision, content: { external_id: byId('case-external-id').value, title: byId('case-title').value, module: byId('case-module').value, status: byId('case-status').value, preconditions: byId('case-preconditions').value, test_data: byId('case-test-data').value, steps } }) });
+    setText('case-message', '已形成新的用例版本。'); await refreshCaseLibrary(project.project_id);
+  } catch (error) { setText('case-message', `保存用例失败：${error.message}`); }
+});
+byId('export-selected').addEventListener('click', () => void downloadCases(false));
+byId('export-all').addEventListener('click', () => void downloadCases(true));
+
 await refresh();
+await refreshCaseLibrary();
 setInterval(refresh, 1000);

@@ -17,6 +17,63 @@
   </header>
 
   <main>
+    <section class="panel case-library" aria-labelledby="case-library-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">M3-A · CASE LIBRARY</p><h2 id="case-library-heading">项目与用例库</h2></div>
+        <span id="case-project-count" class="count">0 个项目</span>
+      </div>
+      <div class="case-layout">
+        <aside>
+          <div class="compact-form">
+            <input id="new-project-name" placeholder="项目名称" maxlength="120">
+            <textarea id="new-project-description" placeholder="项目说明（可选）" rows="2"></textarea>
+            <button id="create-project" class="primary">创建项目</button>
+          </div>
+          <nav id="case-project-list" class="project-list" aria-label="项目列表"></nav>
+        </aside>
+        <div id="case-project-empty" class="empty">创建或选择项目后管理用例。</div>
+        <div id="case-project-workspace" class="hidden">
+          <div class="project-toolbar">
+            <input id="project-name" maxlength="120" aria-label="项目名称">
+            <input id="project-description" maxlength="5000" aria-label="项目说明">
+            <button id="save-project">保存项目信息</button>
+          </div>
+          <div class="import-box">
+            <strong>导入预览</strong>
+            <p class="subtle-dark">首版支持 .xlsx 一行一条用例；步骤与逐步预期在两个单元格中逐行一一对应。也支持 workbench/case-package-v1 JSON。<a href="/examples/M3A_CASE_IMPORT_TEMPLATE_V1.xlsx" download>下载首版模板</a></p>
+            <div class="controls">
+              <input id="case-import-file" type="file" accept=".xlsx,.json">
+              <button id="upload-cases">读取文件</button>
+              <select id="case-sheet" class="hidden" aria-label="工作表"></select>
+              <button id="preview-import" class="hidden">生成预览</button>
+            </div>
+            <div id="mapping-fields" class="mapping-grid hidden"></div>
+            <p id="case-message" class="message" role="status"></p>
+            <div id="import-preview" class="hidden"></div>
+          </div>
+          <div class="case-toolbar">
+            <input id="case-search" placeholder="按编号或标题查找">
+            <button id="export-selected">导出选中</button>
+            <button id="export-all">导出全部</button>
+          </div>
+          <div class="case-table-wrap">
+            <table class="case-table"><thead><tr><th>选择</th><th>编号</th><th>标题</th><th>模块</th><th>状态</th><th>版本</th></tr></thead><tbody id="case-table-body"></tbody></table>
+          </div>
+          <form id="case-detail" class="case-detail hidden">
+            <h3>用例详情（保存后形成新版本）</h3>
+            <div class="detail-grid">
+              <label>用例编号<input id="case-external-id" required></label><label>标题<input id="case-title" required></label>
+              <label>模块<input id="case-module"></label><label>内容状态<select id="case-status"><option value="PENDING_CONFIRMATION">内容待确认</option><option value="CONFIRMED">内容已确认</option></select></label>
+              <label>前置条件<textarea id="case-preconditions" rows="3"></textarea></label><label>测试数据<textarea id="case-test-data" rows="3"></textarea></label>
+              <label>步骤（逐行）<textarea id="case-steps" rows="6" required></textarea></label><label>逐步预期（逐行）<textarea id="case-expected" rows="6"></textarea></label>
+            </div>
+            <button class="primary" type="submit">保存新版本</button>
+            <p id="case-source" class="mono break"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" aria-labelledby="asset-heading">
       <div class="section-heading">
         <div><p class="eyebrow">ASSET</p><h2 id="asset-heading">批准资产</h2></div>
