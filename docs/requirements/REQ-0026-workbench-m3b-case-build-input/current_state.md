@@ -7,7 +7,7 @@
 
 - 需求状态：已完成
 - 治理分级：G2
-- 当前版本：2
+- 当前版本：3
 - 最后更新：2026-09-21
 
 ## 当前有效用户需求
@@ -30,7 +30,7 @@
 
 | DD | DR | 状态 | 内容 |
 |---|---|---|---|
-| DD-0026-01 | DR-0026-01 / DR-0026-04 | 已确认 | 在BuildTaskManager新增project-case提交方法，由CaseLibraryStore按四元组解析确切版本并用request_id做持久化幂等。 |
+| DD-0026-01 | DR-0026-01 / DR-0026-04 | 已确认 | 在BuildTaskManager新增project-case提交方法，由CaseLibraryStore按四元组解析确切版本；request_id同时绑定项目、用例、版本、内容哈希和环境的确定指纹，内存处理中和持久化复用均先核对身份。 |
 | DD-0026-02 | DR-0026-02 / DR-0026-04 | 已确认 | 任务根目录保存input/case-snapshot.json、task.md和agent-instruction.txt，task.json登记冻结input_bundle和受控文件索引；后续启动组装复用同一来源。 |
 | DD-0026-03 | DR-0026-01 / DR-0026-02 | 已确认 | 环境固定为现有synthetic-probe无登录合成环境引用，运行URL留到受控执行时绑定；项目用例内容从不回退到PROBE-42模板。 |
 | DD-0026-04 | DR-0026-03 / DR-0026-04 | 已确认 | 双向关联由build task的source字段作为权威事实，项目页面从现有任务列表派生关联；INPUT_ONLY策略同时禁用UI启动并由后端拒绝。 |
@@ -50,10 +50,10 @@
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
-| VT-0026-01 | DR-0026-01 / DR-0026-04 | 单元测试通过 | 确切版本/哈希/项目归属、已确认与步骤预期完整性、环境白名单、幂等和INPUT_ONLY拒绝。 | 命令：npm --prefix workbench test；退出码：0；测试数量：54；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
-| VT-0026-02 | DR-0026-02 / DR-0026-03 / DR-0026-04 | 单元测试通过 | 完整快照、task.md、Agent指令、三份文件哈希、两用例差异和v1/v2冻结。 | 命令：npm --prefix workbench test；退出码：0；测试数量：54；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
+| VT-0026-01 | DR-0026-01 / DR-0026-04 | 单元测试通过 | 确切版本/哈希/项目归属、已确认与步骤预期完整性、环境白名单、五项身份幂等、同键异身份冲突和INPUT_ONLY拒绝。 | 命令：npm --prefix workbench test；退出码：0；测试数量：57；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
+| VT-0026-02 | DR-0026-02 / DR-0026-03 / DR-0026-04 | 单元测试通过 | 完整快照、task.md、Agent指令、三份文件哈希、两用例差异、v1/v2冻结及冲突后原任务文件不变。 | 命令：npm --prefix workbench test；退出码：0；测试数量：57；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
 | VT-0026-03 | DR-0026-03 / DR-0026-04 / DR-0026-05 | 集成测试通过 | 真实Chromium创建、查看输入、返回用例、关联历史、刷新和重启。 | 命令：npm --prefix workbench run test:m3b1-browser；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：validation/REQ-0026-browser.log |
-| VT-0026-04 | DR-0026-05 | 集成测试通过 | 受影响workbench回归、正式需求门禁、资产与预算不变。 | 命令：npm --prefix workbench test；退出码：0；测试数量：54；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
+| VT-0026-04 | DR-0026-05 | 集成测试通过 | 受影响workbench回归、正式需求门禁、资产与预算不变。 | 命令：npm --prefix workbench test；退出码：0；测试数量：57；失败数量：0；跳过数量：0；证据：validation/REQ-0026-workbench.log |
 
 ## 人工待确认项
 

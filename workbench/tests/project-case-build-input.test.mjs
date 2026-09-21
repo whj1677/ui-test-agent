@@ -130,3 +130,107 @@ test('v1/v2 快照独立，精确关联校验和并发幂等均 fail closed', as
     assert.equal(restored.input_bundle.snapshot.content.title, '额定参数检查 v2');
   } finally { await fs.rm(context.localRoot, { recursive: true, force: true }); }
 });
+
+test('request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突', async () => {
+  const context = await setup();
+  try {
+    const [first, second] = context.project.cases;
+    const original = request(context.project, first, 'identity');
+    const created = await context.manager.submitProjectCase(original);
+    const filesBefore = await Promise.all(created.files.map(async (file) => ({
+      file_id: file.file_id, sha256: file.sha256,
+      bytes: (await fs.readFile(path.join(context.buildStore.taskDirectory(created.task_id), file.relative_path))).length,
+    })));
+    const budgetBefore = await context.buildStore.getBudget();
+
+    assert.equal((await context.manager.submitProjectCase(structuredClone(original))).task_id, created.task_id);
+    const restarted = new BuildTaskManager({
+      store: context.buildStore, caseStore: context.caseStore, paths: context.paths,
+      idFactory: () => 'build-project-case-restart1',
+    });
+    assert.equal((await restarted.submitProjectCase(structuredClone(original))).task_id, created.task_id);
+
+    const anotherProject = await context.caseManager.createProject({ name: '身份冲突项目', description: '' });
+    const conflicts = [
+      { ...original, project_id: anotherProject.project_id },
+      { ...original, case_id: second.case_id },
+      { ...original, case_version: original.case_version + 1 },
+      { ...original, content_sha256: '0'.repeat(64) },
+      { ...original, environment_id: 'another-environment' },
+    ];
+    for (const changed of conflicts) {
+      await assert.rejects(() => restarted.submitProjectCase(changed), /CASE_BUILD_REQUEST_KEY_CONFLICT/);
+    }
+    assert.equal((await context.buildStore.listTasks()).length, 1);
+    assert.deepEqual(await context.buildStore.getBudget(), budgetBefore);
+    const persisted = await context.buildStore.getTask(created.task_id);
+    assert.equal(persisted.source.creation_request_id, original.request_id);
+    assert.deepEqual(persisted.files.map(({ file_id, sha256 }) => ({ file_id, sha256 })), filesBefore.map(({ file_id, sha256 }) => ({ file_id, sha256 })));
+    for (const file of persisted.files) {
+      assert.equal((await fs.readFile(path.join(context.buildStore.taskDirectory(created.task_id), file.relative_path))).length,
+        filesBefore.find((entry) => entry.file_id === file.file_id).bytes);
+    }
+  } finally { await fs.rm(context.localRoot, { recursive: true, force: true }); }
+});
+
+test('request_id 正在处理时只复用相同身份，不同身份立即冲突', async () => {
+  const context = await setup();
+  try {
+    const [first, second] = context.project.cases;
+    const original = request(context.project, first, 'inflight');
+    const listTasks = context.buildStore.listTasks.bind(context.buildStore);
+    let release;
+    const gate = new Promise((resolve) => { release = resolve; });
+    let delayed = true;
+    context.buildStore.listTasks = async () => {
+      if (delayed) { delayed = false; await gate; }
+      return listTasks();
+    };
+    const firstSubmission = context.manager.submitProjectCase(original);
+    const sameSubmission = context.manager.submitProjectCase(structuredClone(original));
+    const conflictingSubmission = assert.rejects(
+      () => context.manager.submitProjectCase({ ...original, case_id: second.case_id }),
+      /CASE_BUILD_REQUEST_KEY_CONFLICT/,
+    );
+    release();
+    const [created, repeated] = await Promise.all([firstSubmission, sameSubmission]);
+    assert.equal(created.task_id, repeated.task_id);
+    await conflictingSubmission;
+    assert.equal((await listTasks()).length, 1);
+    assert.equal((await context.buildStore.getBudget()).used_starts, 0);
+  } finally { await fs.rm(context.localRoot, { recursive: true, force: true }); }
+});
+
+test('旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用', async () => {
+  const context = await setup();
+  try {
+    const original = request(context.project, context.project.cases[0], 'legacyid');
+    const created = await context.manager.submitProjectCase(original);
+    await context.buildStore.updateTask(created.task_id, (task) => {
+      const source = { ...task.source };
+      delete source.creation_request_fingerprint;
+      return { ...task, source };
+    });
+
+    const restarted = new BuildTaskManager({
+      store: context.buildStore, caseStore: context.caseStore, paths: context.paths,
+      idFactory: () => 'build-project-case-legacy01',
+    });
+    assert.equal((await restarted.submitProjectCase(structuredClone(original))).task_id, created.task_id);
+
+    await context.buildStore.updateTask(created.task_id, (task) => ({
+      ...task,
+      environment_ref: { ...task.environment_ref, environment_id: undefined },
+    }));
+    const unknownIdentity = new BuildTaskManager({
+      store: context.buildStore, caseStore: context.caseStore, paths: context.paths,
+      idFactory: () => 'build-project-case-legacy02',
+    });
+    await assert.rejects(
+      () => unknownIdentity.submitProjectCase(structuredClone(original)),
+      /CASE_BUILD_REQUEST_KEY_CONFLICT/,
+    );
+    assert.equal((await context.buildStore.listTasks()).length, 1);
+    assert.equal((await context.buildStore.getBudget()).used_starts, 0);
+  } finally { await fs.rm(context.localRoot, { recursive: true, force: true }); }
+});

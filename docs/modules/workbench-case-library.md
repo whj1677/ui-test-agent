@@ -27,6 +27,8 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 创建结果仍是现有 `workbench/build-task-v1`。`source` 保存项目、用例、版本、根来源和 lineage，任务目录登记 `input/case-snapshot.json`、`task.md`、`agent-instruction.txt`；后两者逐步展开原动作和预期，不做语义概括。`execution_policy=INPUT_ONLY` 同时控制 Web 和后端启动拒绝。项目页从 task source 派生关联历史，任务页可返回来源用例，避免项目/任务双写；服务重启直接读回原 task。内容确认只说明用例正文可用于创建输入，不代表脚本批准、候选生成或测试通过。
 
+项目用例建例提交的 `request_id` 还绑定 `project_id`、`case_id`、`case_version`、`content_sha256` 与 `environment_id` 五项身份。处理中和落盘后的同键同身份请求返回原任务；同键异身份返回 `CASE_BUILD_REQUEST_KEY_CONFLICT`（HTTP 409），不创建任务、不覆盖输入且不消耗预算。新任务保存请求指纹；既有任务无指纹时从 `source` 和 `environment_ref` 推导，身份字段不全或指纹矛盾时拒绝复用。
+
 ## 验证入口
 
 - `cd workbench; npm test`
@@ -37,3 +39,4 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 - 验收报告：[workbench/docs/M3A_ACCEPTANCE_REPORT.md](../../workbench/docs/M3A_ACCEPTANCE_REPORT.md)
 - Excel 保真修订：[workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md](../../workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md)
 - M3-B1 输入接通报告：[workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md](../../workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md)
+- M3-B1 request_id 身份修订：[workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md](../../workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md)

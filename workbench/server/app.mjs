@@ -152,6 +152,7 @@ function errorStatus(error) {
   if (error.message === 'RUN_NOT_ACTIVE_OR_NOT_OWNED') return 404;
   if (['BUILD_TASK_ALREADY_ACTIVE', 'BUILD_STAGE_BUDGET_EXHAUSTED'].includes(error.message)) return 409;
   if (error.message === 'BUILD_INPUT_ONLY_TASK_NOT_STARTABLE') return 409;
+  if (error.message === 'CASE_BUILD_REQUEST_KEY_CONFLICT') return 409;
   if (['BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE', 'BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED'].includes(error.message)) return 409;
   if (error.message === 'BUILD_REVALIDATION_AUTHORIZATION_INVALID') return 400;
   if (['BUILD_STORAGE_UNAVAILABLE', 'BUILD_DIAGNOSTIC_STORAGE_FAILED'].includes(error.message)) return 503;

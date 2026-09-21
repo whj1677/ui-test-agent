@@ -19,3 +19,4 @@
 |---:|---|---|---|
 | 1 | 无 | 实现中 | 从M3-A保真收口基线接通项目单条用例到现有build task的冻结输入，不启动Harness。 |
 | 2 | workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md | 已完成 | 零模型工程与真实Chromium验证通过，停在已创建尚未启动。 |
+| 3 | workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md | 已完成 | 补齐request_id与五项请求身份的内存及持久化校验，同键异身份明确冲突。 |

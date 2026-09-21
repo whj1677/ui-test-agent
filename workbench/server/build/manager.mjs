@@ -30,6 +30,42 @@ function hashText(value) {
   return createHash('sha256').update(value).digest('hex').toUpperCase();
 }
 
+function projectCaseRequestIdentity(request) {
+  if (typeof request?.project_id !== 'string' || typeof request.case_id !== 'string' ||
+      !Number.isInteger(request.case_version) || request.case_version < 1 ||
+      !/^[A-F0-9]{64}$/.test(request.content_sha256 || '') ||
+      typeof request.environment_id !== 'string' || !request.environment_id) {
+    throw new Error('CASE_BUILD_SELECTION_INVALID');
+  }
+  return {
+    project_id: request.project_id,
+    case_id: request.case_id,
+    case_version: request.case_version,
+    content_sha256: request.content_sha256,
+    environment_id: request.environment_id,
+  };
+}
+
+function requestFingerprint(identity) { return hashText(JSON.stringify(identity)); }
+
+function persistedRequestFingerprint(task) {
+  try {
+    const identity = projectCaseRequestIdentity({
+      project_id: task.source?.project_id,
+      case_id: task.source?.case_id,
+      case_version: task.source?.case_version,
+      content_sha256: task.source?.content_sha256,
+      environment_id: task.environment_ref?.environment_id,
+    });
+    const derived = requestFingerprint(identity);
+    const stored = task.source?.creation_request_fingerprint;
+    if (stored != null && (!/^[A-F0-9]{64}$/.test(stored) || stored !== derived)) return null;
+    return derived;
+  } catch {
+    return null;
+  }
+}
+
 function lifecycleMetadata(event) {
   return Object.fromEntries(Object.entries(event || {}).filter(([key, value]) => LIFECYCLE_FIELDS.has(key) &&
     (value === null || ['string', 'number', 'boolean'].includes(typeof value))).map(([key, value]) => [
@@ -196,29 +232,40 @@ export class BuildTaskManager {
     this.#assertWritable();
     const requestId = request?.request_id;
     if (!/^case-build-request-[a-z0-9-]{8,80}$/.test(requestId || '')) throw new Error('CASE_BUILD_REQUEST_ID_INVALID');
-    if (this.caseSubmissions.has(requestId)) return this.caseSubmissions.get(requestId);
-    const operation = this.#submitProjectCase(request).finally(() => this.caseSubmissions.delete(requestId));
-    this.caseSubmissions.set(requestId, operation);
-    return operation;
+    const identity = projectCaseRequestIdentity(request);
+    const fingerprint = requestFingerprint(identity);
+    const active = this.caseSubmissions.get(requestId);
+    if (active) {
+      if (active.fingerprint !== fingerprint) throw new Error('CASE_BUILD_REQUEST_KEY_CONFLICT');
+      return active.completion;
+    }
+    let record;
+    const completion = this.#submitProjectCase(request, identity, fingerprint).finally(() => {
+      if (this.caseSubmissions.get(requestId) === record) this.caseSubmissions.delete(requestId);
+    });
+    record = { fingerprint, completion };
+    this.caseSubmissions.set(requestId, record);
+    return completion;
   }
 
-  async #submitProjectCase(request) {
+  async #submitProjectCase(request, identity, fingerprint) {
     if (!this.caseStore) throw new Error('CASE_BUILD_STORE_UNAVAILABLE');
-    if (request.environment_id !== PROJECT_CASE_ENVIRONMENT_ID) throw new Error('CASE_BUILD_ENVIRONMENT_NOT_ALLOWED');
-    if (typeof request.project_id !== 'string' || typeof request.case_id !== 'string' ||
-        !Number.isInteger(request.case_version) || request.case_version < 1 ||
-        !/^[A-F0-9]{64}$/.test(request.content_sha256 || '')) throw new Error('CASE_BUILD_SELECTION_INVALID');
-
-    const existing = (await this.store.listTasks()).find((task) => task.source?.creation_request_id === request.request_id);
-    if (existing) return existing;
-    const project = await this.caseStore.getProject(request.project_id);
+    const existing = (await this.store.listTasks()).filter((task) => task.source?.creation_request_id === request.request_id);
+    if (existing.length) {
+      if (existing.some((task) => persistedRequestFingerprint(task) !== fingerprint)) {
+        throw new Error('CASE_BUILD_REQUEST_KEY_CONFLICT');
+      }
+      return existing[0];
+    }
+    if (identity.environment_id !== PROJECT_CASE_ENVIRONMENT_ID) throw new Error('CASE_BUILD_ENVIRONMENT_NOT_ALLOWED');
+    const project = await this.caseStore.getProject(identity.project_id);
     if (!project) throw new Error('CASE_PROJECT_NOT_FOUND');
-    const item = project.cases.find((entry) => entry.case_id === request.case_id);
+    const item = project.cases.find((entry) => entry.case_id === identity.case_id);
     if (!item) throw new Error('CASE_NOT_FOUND');
-    const versionRecord = item.versions.find((entry) => entry.version === request.case_version);
+    const versionRecord = item.versions.find((entry) => entry.version === identity.case_version);
     if (!versionRecord) throw new Error('CASE_BUILD_VERSION_NOT_FOUND');
     const calculatedHash = contentHash(versionRecord.content);
-    if (calculatedHash !== versionRecord.content_sha256 || calculatedHash !== request.content_sha256) {
+    if (calculatedHash !== versionRecord.content_sha256 || calculatedHash !== identity.content_sha256) {
       throw new Error('CASE_BUILD_CONTENT_HASH_MISMATCH');
     }
     const steps = versionRecord.content?.steps;
@@ -237,7 +284,11 @@ export class BuildTaskManager {
     const files = assembled.initial_files.map(({ content, ...descriptor }) => descriptor);
     return this.store.createTask({
       schema: 'workbench/build-task-v1', task_id: this.idFactory(), template: assembled.public_template,
-      source: { ...assembled.source, creation_request_id: request.request_id },
+      source: {
+        ...assembled.source,
+        creation_request_id: request.request_id,
+        creation_request_fingerprint: fingerprint,
+      },
       environment_ref: assembled.environment_ref, input_bundle: assembled.input_bundle,
       execution_policy: { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
       created_at: now, started_at: null, finished_at: null,

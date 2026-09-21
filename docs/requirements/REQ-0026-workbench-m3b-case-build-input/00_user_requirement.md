@@ -17,6 +17,7 @@
 - 现有BuildTaskStore以task.json持久化build task，BuildTaskManager负责固定探针提交、启动、生命周期和预算；本批复用该对象与历史列表。
 - 项目用例版本已保存content、content_sha256、root_source与lineage；任务快照必须由服务端读取这些记录生成。
 - 本批只允许synthetic-probe-v1对应的无登录本地合成环境引用，创建的项目用例任务显式禁止启动。
+- request_id幂等身份由project_id、case_id、case_version、content_sha256和environment_id五项共同确定；同键异身份必须冲突关闭。
 
 ## 推断与待确认
 

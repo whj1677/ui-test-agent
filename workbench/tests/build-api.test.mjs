@@ -26,7 +26,11 @@ const buildManager = {
   active: null,
   async templates() { return [{ template_id: 'synthetic-probe-v1' }]; },
   async submit(templateId) { calls.push(['submit', templateId]); return task; },
-  async submitProjectCase(body) { calls.push(['submitProjectCase', body]); return task; },
+  async submitProjectCase(body) {
+    calls.push(['submitProjectCase', body]);
+    if (body.request_id === 'case-build-request-conflict') throw new Error('CASE_BUILD_REQUEST_KEY_CONFLICT');
+    return task;
+  },
   async start(id) { calls.push(['start', id]); return task; },
   async revise(id) { calls.push(['revise', id]); return task; },
   async stop(id) { calls.push(['stop', id]); return task; },
@@ -66,6 +70,9 @@ test('build mutations require local origin and exact fixed schemas', async () =>
   assert.equal((await post('/api/build/tasks/from-project-case', { ...projectCase, target_url: 'https://example.invalid' })).status, 400);
   assert.equal((await post('/api/build/tasks/from-project-case', projectCase)).status, 201);
   assert.deepEqual(calls.at(-1), ['submitProjectCase', projectCase]);
+  const conflict = await post('/api/build/tasks/from-project-case', { ...projectCase, request_id: 'case-build-request-conflict' });
+  assert.equal(conflict.status, 409);
+  assert.deepEqual(await conflict.json(), { error: 'CASE_BUILD_REQUEST_KEY_CONFLICT' });
 
   for (const action of ['start', 'revise', 'stop']) {
     assert.equal((await post(`/api/build/tasks/${taskId}/${action}`, { command: 'whoami' })).status, 400);
