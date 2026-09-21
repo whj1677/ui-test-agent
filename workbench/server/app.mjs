@@ -99,6 +99,18 @@ async function sendBuildFile(response, buildStore, taskId, fileId) {
   response.end(await fs.readFile(realFile));
 }
 
+async function sendBuildMedia(request, response, buildStore, taskId, fileId) {
+  const task = await buildStore.getTask(taskId);
+  const item = task?.files?.find((file) => file.file_id === fileId);
+  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|trace)$/.test(item.kind || '')) {
+    return sendJson(response, 404, { error: 'BUILD_MEDIA_NOT_FOUND' });
+  }
+  const mediaKind = item.kind.endsWith('_screenshot') ? 'screenshot' : item.kind.endsWith('_video') ? 'video' : 'trace';
+  return sendRegisteredMedia(request, response, buildStore.taskDirectory(taskId), { ...item, kind: mediaKind }, {
+    missing: 'BUILD_MEDIA_MISSING', outside: 'BUILD_MEDIA_PATH_OUTSIDE_TASK', changed: 'BUILD_MEDIA_CHANGED',
+  });
+}
+
 async function readJsonBody(request, limit = 16 * 1024) {
   const chunks = [];
   let size = 0;
@@ -153,6 +165,7 @@ function errorStatus(error) {
   if (['BUILD_TASK_ALREADY_ACTIVE', 'BUILD_STAGE_BUDGET_EXHAUSTED'].includes(error.message)) return 409;
   if (error.message === 'BUILD_INPUT_ONLY_TASK_NOT_STARTABLE') return 409;
   if (error.message === 'CASE_BUILD_REQUEST_KEY_CONFLICT') return 409;
+  if (error.message === 'BUILD_REVALIDATION_AUTHORIZATION_CONFLICT') return 409;
   if (['BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE', 'BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED'].includes(error.message)) return 409;
   if (error.message === 'BUILD_REVALIDATION_AUTHORIZATION_INVALID') return 400;
   if (['BUILD_STORAGE_UNAVAILABLE', 'BUILD_DIAGNOSTIC_STORAGE_FAILED'].includes(error.message)) return 503;
@@ -272,6 +285,11 @@ export function createWorkbenchServer(options = {}) {
         await sendRegisteredMedia(request, response, resolved.root, resolved.media, {
           missing: 'REVALIDATION_MEDIA_MISSING', outside: 'REVALIDATION_MEDIA_PATH_OUTSIDE_ROOT', changed: 'REVALIDATION_MEDIA_CHANGED',
         });
+        return;
+      }
+      const buildMedia = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/media\/([^/]+)$/);
+      if (buildStore && request.method === 'GET' && buildMedia) {
+        await sendBuildMedia(request, response, buildStore, decodeURIComponent(buildMedia[1]), decodeURIComponent(buildMedia[2]));
         return;
       }
       const buildFile = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/files\/([^/]+)$/);

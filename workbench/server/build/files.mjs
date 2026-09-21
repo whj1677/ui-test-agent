@@ -20,6 +20,9 @@ async function listFiles(root) {
 
 function category(relative, candidateRelative) {
   if (relative === candidateRelative) return { kind: 'candidate', web_visible: true, content_type: 'text/plain; charset=utf-8' };
+  if (/\/workspace\/task\.md$/i.test(`/${relative}`)) return { kind: 'attempt_task_document', web_visible: true, content_type: 'text/markdown; charset=utf-8' };
+  if (/\/workspace\/input\/case-snapshot\.json$/i.test(`/${relative}`)) return { kind: 'attempt_input_snapshot', web_visible: true, content_type: 'application/json; charset=utf-8' };
+  if (/\/workspace\/agent-instruction\.txt$/i.test(`/${relative}`)) return { kind: 'rendered_agent_instruction', web_visible: true, content_type: 'text/plain; charset=utf-8' };
   if (/\/\.playwright-mcp\/.*\.log$/i.test(`/${relative}`)) return { kind: 'tool_log', web_visible: false, content_type: 'text/plain; charset=utf-8' };
   if (/\/\.playwright-mcp\/.*\.(?:yml|yaml)$/i.test(`/${relative}`)) return { kind: 'tool_snapshot', web_visible: false, content_type: 'text/yaml; charset=utf-8' };
   if (/\/playwright-report\.json$/i.test(`/${relative}`)) return { kind: 'test_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
@@ -30,6 +33,7 @@ function category(relative, candidateRelative) {
   if (/\/verification\/negative\/artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/negative\/artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'counterexample_trace', web_visible: false, content_type: 'application/zip' };
   if (/\/verification\/(?:normal|negative)\/artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };
+  if (/\/verification\/(?:normal|negative)\/artifacts\/.*\/error-context\.md$/i.test(`/${relative}`)) return { kind: 'verification_diagnostic', web_visible: false, content_type: 'text/markdown; charset=utf-8' };
   if (/\/harness-summary\.json$/i.test(`/${relative}`)) return { kind: 'harness_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
   return null;
@@ -41,7 +45,7 @@ export async function indexAttemptFiles({ taskRoot, attemptRoot, candidatePath, 
   const unexpected = [];
   for (const absolute of await listFiles(attemptRoot)) {
     const relative = path.relative(taskRoot, absolute).replaceAll('\\', '/');
-    if (/\/(?:task\.md|feedback\.json|input\/candidate-v\d+\.spec\.mjs)$/.test(`/${relative}`)) continue;
+    if (/\/(?:feedback\.json|input\/candidate-v\d+\.spec\.mjs)$/.test(`/${relative}`)) continue;
     const descriptor = category(relative, candidateRelative);
     if (!descriptor) { unexpected.push(relative); continue; }
     const stat = await fs.stat(absolute);

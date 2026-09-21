@@ -15,11 +15,12 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALI
 
 const paths = createPaths();
 const serviceInstanceId = `service-${randomUUID()}`;
+const buildAuthorizationId = process.env.WORKBENCH_BUILD_AUTHORIZATION_ID || process.env.M2C_BUILD_AUTHORIZATION_ID || null;
 const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
 const recovered = await store.recoverInterrupted();
 const manager = new WorkbenchRunManager({ store, paths });
-const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID });
+const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: buildAuthorizationId || undefined });
 await buildStore.init();
 const buildRevalidationStore = new BuildRevalidationStore(paths.buildRevalidationsRoot, buildStore);
 await buildRevalidationStore.init();
@@ -32,7 +33,7 @@ const buildManager = new BuildTaskManager({
   caseStore,
   paths,
   serviceInstanceId,
-  authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID || null,
+  authorizationId: buildAuthorizationId,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   otherActive: () => Boolean(manager.active),
 });

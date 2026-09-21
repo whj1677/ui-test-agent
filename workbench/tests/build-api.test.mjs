@@ -102,3 +102,47 @@ test('only registered web-visible unchanged task files are served', async () => 
   await fs.appendFile(candidate, '// changed\n');
   assert.equal((await fetch(`${baseUrl}/api/build/tasks/${taskId}/files/candidate`)).status, 409);
 });
+
+test('only registered verification media are served with integrity and range checks', async () => {
+  const mediaDirectory = path.join(taskRoot(), 'attempts', 'attempt-1', 'verification', 'normal', 'artifacts');
+  await fs.mkdir(mediaDirectory, { recursive: true });
+  const video = path.join(mediaDirectory, 'video.webm');
+  const trace = path.join(mediaDirectory, 'trace.zip');
+  await fs.writeFile(video, Buffer.from('0123456789'));
+  await fs.writeFile(trace, Buffer.from('trace-bytes'));
+  const videoStat = await fs.stat(video);
+  const traceStat = await fs.stat(trace);
+  task.files = [
+    {
+      file_id: 'normal-video', kind: 'normal_video',
+      relative_path: path.relative(taskRoot(), video).replaceAll('\\', '/'),
+      file_name: 'video.webm', bytes: videoStat.size, sha256: await sha256File(video),
+      content_type: 'video/webm', web_visible: false,
+    },
+    {
+      file_id: 'normal-trace', kind: 'normal_trace',
+      relative_path: path.relative(taskRoot(), trace).replaceAll('\\', '/'),
+      file_name: 'trace.zip', bytes: traceStat.size, sha256: await sha256File(trace),
+      content_type: 'application/zip', web_visible: false,
+    },
+    {
+      file_id: 'not-media', kind: 'verification_diagnostic', relative_path: path.relative(taskRoot(), trace).replaceAll('\\', '/'),
+      file_name: 'trace.zip', bytes: traceStat.size, sha256: await sha256File(trace), content_type: 'application/zip', web_visible: false,
+    },
+  ];
+
+  const ranged = await fetch(`${baseUrl}/api/build/tasks/${taskId}/media/normal-video`, { headers: { range: 'bytes=2-5' } });
+  assert.equal(ranged.status, 206);
+  assert.equal(await ranged.text(), '2345');
+  assert.equal(ranged.headers.get('content-range'), 'bytes 2-5/10');
+  assert.equal(ranged.headers.get('content-disposition'), "inline; filename*=UTF-8''video.webm");
+
+  const traceResponse = await fetch(`${baseUrl}/api/build/tasks/${taskId}/media/normal-trace`);
+  assert.equal(traceResponse.status, 200);
+  assert.match(traceResponse.headers.get('content-disposition'), /^attachment;/);
+  assert.equal((await fetch(`${baseUrl}/api/build/tasks/${taskId}/media/not-media`)).status, 404);
+  assert.equal((await fetch(`${baseUrl}/api/build/tasks/another-task/media/normal-video`)).status, 404);
+
+  await fs.appendFile(video, 'changed');
+  assert.equal((await fetch(`${baseUrl}/api/build/tasks/${taskId}/media/normal-video`)).status, 409);
+});

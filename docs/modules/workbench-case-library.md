@@ -2,7 +2,7 @@
 
 ## 范围
 
-M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用例包的数据管理。M3-B1 将单个已确认版本接入既有 build task 的输入侧；本阶段不启动 Harness，不调用模型，不生成、批准或执行业务脚本。
+M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用例包的数据管理。M3-B1 将单个已确认版本接入既有 build task 的输入侧并默认保持 `INPUT_ONLY`。M3-B2 只对一条与固定合成环境匹配的项目用例登记单次作用域授权，使同一冻结输入可进入实际 attempt；不批量建例或自动批准。
 
 ## 数据与边界
 
@@ -29,14 +29,23 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 项目用例建例提交的 `request_id` 还绑定 `project_id`、`case_id`、`case_version`、`content_sha256` 与 `environment_id` 五项身份。处理中和落盘后的同键同身份请求返回原任务；同键异身份返回 `CASE_BUILD_REQUEST_KEY_CONFLICT`（HTTP 409），不创建任务、不覆盖输入且不消耗预算。新任务保存请求指纹；既有任务无指纹时从 `source` 和 `environment_ref` 推导，身份字段不全或指纹矛盾时拒绝复用。
 
+## 单条用例真实建例
+
+只有工作台以固定 M3-B2 授权 ID 启动时，本批新任务才使用 `SINGLE_AUTHORIZED_INITIAL`；授权记录冻结五项请求身份，最多一次 Harness 进程创建、30 次工具调用和 600 秒。历史 `INPUT_ONLY` 任务仍由 Web 与后端共同拒绝启动。attempt 从任务根目录按登记 SHA-256 复制 `task.md` 与 `input/case-snapshot.json`，再保存包含实际入口/候选路径的渲染指令；不会读取项目当前最新版覆盖任务快照。
+
+固定合成环境只在项目用例恰有一个步骤包含环境预期值时创建验证契约；不匹配用例拒绝获得本批执行任务。契约保存预期值、反例实际值和全部 `CASE_STEP_<order>` 标记。技术验证要求同一候选正常通过、反例取得确切值差异、候选哈希不变且全部项目步骤在结构化报告中可观察；这些条件最多产生“等待人工核对”，不批准脚本。
+
 ## 验证入口
 
 - `cd workbench; npm test`
 - `cd workbench; npm run test:m3a-browser`
 - `cd workbench; npm run test:m3a-fidelity-browser`
 - `cd workbench; npm run test:m3b1-browser`
+- `cd workbench; npm run test:m3b2-browser`（零模型，真实 Excel/Web/Playwright）
+- `cd workbench; powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-m3b2-real.ps1`（明确授权时的一次真实调用）
 - 首版格式：[workbench/docs/M3A_EXCEL_FORMAT_V1.md](../../workbench/docs/M3A_EXCEL_FORMAT_V1.md)
 - 验收报告：[workbench/docs/M3A_ACCEPTANCE_REPORT.md](../../workbench/docs/M3A_ACCEPTANCE_REPORT.md)
 - Excel 保真修订：[workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md](../../workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md)
 - M3-B1 输入接通报告：[workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md](../../workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md)
 - M3-B1 request_id 身份修订：[workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md](../../workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md)
+- M3-B2 单条真实建例报告：[workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md](../../workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md)

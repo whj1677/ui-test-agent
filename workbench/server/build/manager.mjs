@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { buildAdapter, usageFromEvents } from './adapter.mjs';
 import { indexAttemptFiles } from './files.mjs';
-import { counterexampleDetected, parseCandidateReport } from './report.mjs';
+import { counterexampleDetected, parseCandidateReport, projectCaseStepCoverage } from './report.mjs';
 import { BUILD_TEMPLATE_ID, loadBuildTemplate, taskDocument } from './template.mjs';
 import { contentHash } from '../cases/excel.mjs';
 import {
@@ -11,6 +11,7 @@ import {
   assembleProjectCaseInput,
   renderProjectCaseAgentInstruction,
 } from './project-case.mjs';
+import { M3B2_PROJECT_CASE_AUTHORIZATION_ID } from './store.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 
@@ -65,6 +66,18 @@ function persistedRequestFingerprint(task) {
     return null;
   }
 }
+
+function projectCaseTaskScope(task) {
+  return {
+    project_id: task.source?.project_id,
+    case_id: task.source?.case_id,
+    case_version: task.source?.case_version,
+    content_sha256: task.source?.content_sha256,
+    environment_id: task.environment_ref?.environment_id,
+  };
+}
+
+function sameIdentity(left, right) { return requestFingerprint(projectCaseRequestIdentity(left)) === requestFingerprint(projectCaseRequestIdentity(right)); }
 
 function lifecycleMetadata(event) {
   return Object.fromEntries(Object.entries(event || {}).filter(([key, value]) => LIFECYCLE_FIELDS.has(key) &&
@@ -278,9 +291,23 @@ export class BuildTaskManager {
 
     const template = await loadBuildTemplate(this.paths);
     const now = this.now().toISOString();
-    const assembled = assembleProjectCaseInput({ project, item, versionRecord, environmentTemplate: template.public, frozenAt: now });
+    const assembled = assembleProjectCaseInput({
+      project, item, versionRecord, environmentTemplate: template.public,
+      counterexampleActual: template.internal.counterexampleActual, frozenAt: now,
+    });
     const budget = await this.store.getBudget();
-    const authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
+    let authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
+    const projectCaseAuthorized = this.authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID;
+    if (projectCaseAuthorized) {
+      if (!assembled.input_bundle.verification_contract) throw new Error('CASE_BUILD_VERIFICATION_BINDING_INVALID');
+      authorization = await this.store.registerProjectCaseAuthorization({
+        schema: 'workbench/build-project-case-authorization-v1',
+        authorization_id: this.authorizationId,
+        kind: 'initial', linked_stage: 'M3-B2', max_starts: 1, used_starts: 0, claims: [],
+        scope: structuredClone(identity), limits: { max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS },
+        created_at: now,
+      });
+    }
     const files = assembled.initial_files.map(({ content, ...descriptor }) => descriptor);
     return this.store.createTask({
       schema: 'workbench/build-task-v1', task_id: this.idFactory(), template: assembled.public_template,
@@ -290,7 +317,9 @@ export class BuildTaskManager {
         creation_request_fingerprint: fingerprint,
       },
       environment_ref: assembled.environment_ref, input_bundle: assembled.input_bundle,
-      execution_policy: { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
+      execution_policy: projectCaseAuthorized
+        ? { mode: 'SINGLE_AUTHORIZED_INITIAL', launch_enabled: true, reason: 'M3_B2_SCOPED_AUTHORIZATION' }
+        : { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
       created_at: now, started_at: null, finished_at: null,
       task_status: 'SUBMITTED', generation_status: 'NOT_STARTED', verification_status: 'NOT_STARTED',
       human_review_status: 'NOT_READY', active_attempt_id: null, attempts: [], candidates: [], files,
@@ -299,7 +328,7 @@ export class BuildTaskManager {
       authorization: authorization ? {
         authorization_id: authorization.authorization_id, kind: authorization.kind,
         max_starts: authorization.max_starts, used_starts: authorization.used_starts,
-        linked_stage: authorization.linked_stage,
+        linked_stage: authorization.linked_stage, scope: authorization.scope ? structuredClone(authorization.scope) : null,
       } : null,
       runtime: { os_file_isolation: false, os_network_isolation: false, residual_risk_accepted: true },
       error: null,
@@ -337,6 +366,10 @@ export class BuildTaskManager {
         if (!authorization || authorization.authorization_id !== revalidationId || authorization.used_starts >= authorization.max_starts) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED');
         }
+        if (revalidationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID &&
+            (task.source?.kind !== 'project-case' || !sameIdentity(authorization.scope, projectCaseTaskScope(task)))) {
+          throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+        }
       }
       const credentials = this.credentialProvider();
       if (!credentials?.apiKey || !credentials?.baseUrl) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
@@ -352,7 +385,19 @@ export class BuildTaskManager {
       const candidatePath = path.join(outputRoot, 'candidate.spec.mjs');
       await fs.mkdir(inputRoot, { recursive: true });
       await fs.mkdir(outputRoot, { recursive: true });
-      await fs.writeFile(path.join(workspace, 'task.md'), taskDocument(task), { flag: 'wx' });
+      if (task.source?.kind === 'project-case') {
+        for (const relative of ['task.md', 'input/case-snapshot.json']) {
+          const descriptor = task.files.find((item) => item.attempt_id === null && item.relative_path === relative);
+          if (!descriptor) throw new Error('BUILD_PROJECT_CASE_FROZEN_INPUT_MISSING');
+          const source = path.join(taskRoot, relative);
+          if (await sha256File(source) !== descriptor.sha256) throw new Error('BUILD_PROJECT_CASE_FROZEN_INPUT_CHANGED');
+          const destination = path.join(workspace, relative);
+          await fs.mkdir(path.dirname(destination), { recursive: true });
+          await fs.copyFile(source, destination);
+        }
+      } else {
+        await fs.writeFile(path.join(workspace, 'task.md'), taskDocument(task), { flag: 'wx' });
+      }
       if (kind === 'revision') {
         const previous = task.candidates.at(-1);
         if (!previous || previous.verification_status !== 'FAILED') throw new Error('BUILD_REVISION_SOURCE_INVALID');
@@ -419,6 +464,15 @@ export class BuildTaskManager {
       normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture);
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
       const prompt = promptFor({ kind, task, entryUrl: normalServer.url, candidatePath });
+      if (task.source?.kind === 'project-case') {
+        await fs.writeFile(path.join(workspace, 'agent-instruction.txt'), prompt, { flag: 'wx' });
+        await this.store.updateTask(task.task_id, (current) => ({
+          ...current,
+          attempts: current.attempts.map((item) => item.attempt_id === attemptId
+            ? { ...item, rendered_agent_instruction: prompt }
+            : item),
+        }));
+      }
       const harnessStarted = Date.now();
       let authorizationClaimed = false;
       const harness = await this.adapter.runHarnessTask({
@@ -499,6 +553,9 @@ export class BuildTaskManager {
         negative: null,
         error: null,
         approved: false,
+        project_case_step_mapping: task.source?.kind === 'project-case'
+          ? task.input_bundle.snapshot.content.steps.map((step) => ({ order: step.order, marker: `CASE_STEP_${step.order}`, action: step.action, expected: step.expected, observed: null }))
+          : null,
       };
       await this.store.updateTask(task.task_id, (current) => ({
         ...current, task_status: 'VERIFYING', generation_status: 'GENERATED', verification_status: 'RUNNING',
@@ -523,9 +580,20 @@ export class BuildTaskManager {
       const negative = await parseCandidateReport(negativeRaw.reportPath, negativeRaw.process);
       const afterNegative = await sha256File(candidatePath);
       const sameCandidate = candidateSha === afterNormal && candidateSha === afterNegative;
-      const negativeDetected = counterexampleDetected(negative, task.template.expected, template.internal.counterexampleActual);
-      const technicalPass = normal.complete_pass && negativeDetected && sameCandidate;
-      const candidateError = technicalPass ? null : normal.error || negative.error || {
+      const verificationContract = task.source?.kind === 'project-case'
+        ? task.input_bundle.verification_contract
+        : { expected_literal: task.template.expected, counterexample_actual: template.internal.counterexampleActual };
+      const stepCoverage = task.source?.kind === 'project-case' ? projectCaseStepCoverage(normal, verificationContract) : null;
+      const negativeDetected = counterexampleDetected(negative, verificationContract.expected_literal, verificationContract.counterexample_actual);
+      const technicalPass = normal.complete_pass && negativeDetected && sameCandidate && (!stepCoverage || stepCoverage.complete);
+      const coverageError = stepCoverage && !stepCoverage.complete ? {
+        type: 'PROJECT_CASE_STEP_COVERAGE_INCOMPLETE',
+        message: '正常执行报告未包含全部登记的项目用例步骤标记。',
+        expected: verificationContract.required_step_markers.join(', '),
+        actual: stepCoverage.items.filter((item) => item.observed).map((item) => item.marker).join(', '),
+        attribution: 'PENDING_ANALYSIS',
+      } : null;
+      const candidateError = technicalPass ? null : normal.error || coverageError || negative.error || {
         type: 'COUNTEREXAMPLE_NOT_DETECTED', message: '独立错误输出未产生指定断言不符。', expected: null, actual: null, attribution: 'PENDING_ANALYSIS',
       };
       const budget = await this.store.getBudget();
@@ -552,6 +620,10 @@ export class BuildTaskManager {
         candidates: current.candidates.map((item) => item.attempt_id === attemptId ? {
           ...item, verification_status: effectivePass ? 'PASSED' : 'FAILED', normal, negative,
           same_candidate_hash: sameCandidate, counterexample_detected: negativeDetected, error: finalError,
+          project_case_step_mapping: item.project_case_step_mapping?.map((mapping) => ({
+            ...mapping,
+            observed: stepCoverage?.items.find((coverage) => coverage.marker === mapping.marker)?.observed ?? null,
+          })) || null,
         } : item),
         files: [...current.files, ...indexed.files],
         revision_allowed: !revalidationId && !effectivePass && kind === 'initial' && budget.used_starts < budget.max_starts,

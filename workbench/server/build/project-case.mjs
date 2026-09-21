@@ -4,6 +4,19 @@ import { createHash } from 'node:crypto';
 export const PROJECT_CASE_ENVIRONMENT_ID = 'synthetic-probe-normal-v1';
 export const PROJECT_CASE_TEMPLATE_ID = 'project-case-input-v1';
 
+export function bindProjectCaseVerification(content, environmentTemplate, counterexampleActual) {
+  const expectedLiteral = environmentTemplate.expected;
+  const matches = content.steps.filter((step) => step.expected.includes(expectedLiteral));
+  if (matches.length !== 1) return null;
+  return {
+    schema: 'workbench/project-case-verification-contract-v1',
+    source_step_order: matches[0].order,
+    expected_literal: expectedLiteral,
+    counterexample_actual: counterexampleActual,
+    required_step_markers: content.steps.map((step) => `CASE_STEP_${step.order}`),
+  };
+}
+
 function hashText(value) {
   return createHash('sha256').update(value).digest('hex').toUpperCase();
 }
@@ -48,6 +61,7 @@ export function projectCaseAgentInstructionTemplate() {
     'Read only task.md and input/case-snapshot.json as task inputs.',
     'Use the Playwright MCP browser tools to open exactly {{ENTRY_URL}}.',
     'Perform every ordered action from task.md and preserve each paired expected result exactly.',
+    'Wrap each ordered case step in test.step using the exact marker CASE_STEP_<order> from input/case-snapshot.json, and place that step\'s action and checks inside it.',
     'Write exactly one Playwright Test candidate to {{CANDIDATE_PATH}}.',
     'The candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.',
     'Do not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.',
@@ -60,7 +74,7 @@ export function renderProjectCaseAgentInstruction(template, { entryUrl, candidat
   return template.replaceAll('{{ENTRY_URL}}', entryUrl).replaceAll('{{CANDIDATE_PATH}}', candidatePath);
 }
 
-export function assembleProjectCaseInput({ project, item, versionRecord, environmentTemplate, frozenAt }) {
+export function assembleProjectCaseInput({ project, item, versionRecord, environmentTemplate, counterexampleActual, frozenAt }) {
   const source = {
     kind: 'project-case',
     project_id: project.project_id,
@@ -79,12 +93,14 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
     allowed_entry: structuredClone(environmentTemplate.allowed_entry),
     candidate_contract: structuredClone(environmentTemplate.candidate_contract),
   };
+  const verificationContract = bindProjectCaseVerification(versionRecord.content, environmentTemplate, counterexampleActual);
   const snapshot = {
     schema: 'workbench/project-case-build-input-v1',
     frozen_at: frozenAt,
     source,
     content: structuredClone(versionRecord.content),
     environment_ref: environmentRef,
+    verification_contract: verificationContract,
   };
   const snapshotText = `${JSON.stringify(snapshot, null, 2)}\n`;
   const taskMarkdown = projectCaseTaskDocument(snapshot);
@@ -117,6 +133,7 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
       task_markdown_sha256: hashText(taskMarkdown),
       agent_instruction_template: agentInstructionTemplate,
       agent_instruction_sha256: hashText(agentInstructionTemplate),
+      verification_contract: verificationContract,
     },
     public_template: {
       template_id: PROJECT_CASE_TEMPLATE_ID,

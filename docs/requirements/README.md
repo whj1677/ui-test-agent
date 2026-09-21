@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0027-workbench-m3b2-project-case-run](REQ-0027-workbench-m3b2-project-case-run/current_state.md)：M3-B2一条项目用例的单次真实Harness建例、正常/反例技术验证与项目页面结果媒体返回；实现中，不扩展批量、批准或自愈。
+
 当前输入接通：[REQ-0026 M3-B1项目单条用例建例输入接通](REQ-0026-workbench-m3b-case-build-input/current_state.md)只把项目内已确认的指定版本冻结为现有build task输入并展示双向关联；任务明确停在已创建、尚未启动，不调用Harness、模型或业务脚本。
 
 当前用例库：[REQ-0025 M3-A项目用例库与Excel及原生用例包导入导出](REQ-0025-workbench-m3a-case-import-export/current_state.md)只实现本地单用户的项目、用例、xlsx预览确认和JSON用例包跨项目往返；不接Harness、模型、业务脚本、审批或套件执行。

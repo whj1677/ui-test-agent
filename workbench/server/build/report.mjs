@@ -29,6 +29,7 @@ export async function parseCandidateReport(reportPath, processResult) {
   }
   const test = tests[0];
   const result = test.results?.at(-1) || null;
+  const steps = (result?.steps || []).map((step) => ({ title: step.title, category: step.category, duration: step.duration ?? null }));
   const status = result?.status || (test.expectedStatus === 'skipped' ? 'skipped' : 'notRun');
   const error = reportInternals.errorFacts(result?.error || result?.errors?.[0] || test.errors?.[0]);
   const skipped = status === 'skipped' || Number(report.stats?.skipped || 0) > 0;
@@ -38,6 +39,16 @@ export async function parseCandidateReport(reportPath, processResult) {
     test_status: skipped ? 'SKIPPED' : status === 'passed' ? 'PASSED' : status === 'failed' ? 'FAILED' : status.toUpperCase(),
     test_count: 1, error, complete_pass: completePass, stats: report.stats || null,
     process: { exit_code: processResult.exitCode, termination: processResult.termination, error: processResult.error },
+    steps,
+  };
+}
+
+export function projectCaseStepCoverage(verification, contract) {
+  const titles = new Set((verification?.steps || []).map((step) => step.title));
+  const required = contract?.required_step_markers || [];
+  return {
+    complete: required.length > 0 && required.every((marker) => titles.has(marker)),
+    items: required.map((marker) => ({ marker, observed: titles.has(marker) })),
   };
 }
 

@@ -7,10 +7,31 @@ const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANC
 const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
 export const M2C_REVALIDATION_AUTHORIZATION_ID = 'm2c-diagnostic-revalidation-20260921';
 export const M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID = 'm2c-wait-fix-validation-20260921';
+export const M3B2_PROJECT_CASE_AUTHORIZATION_ID = 'm3b2-project-case-run-20260921';
 const AUTHORIZATION_FILES = new Map([
   [M2C_REVALIDATION_AUTHORIZATION_ID, 'revalidation-authorization.json'],
   [M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'wait-fix-validation-authorization.json'],
+  [M3B2_PROJECT_CASE_AUTHORIZATION_ID, 'm3b2-project-case-authorization.json'],
 ]);
+
+function projectCaseScopeValid(scope) {
+  return scope && typeof scope.project_id === 'string' && typeof scope.case_id === 'string' &&
+    Number.isInteger(scope.case_version) && scope.case_version > 0 &&
+    /^[A-F0-9]{64}$/.test(scope.content_sha256 || '') && typeof scope.environment_id === 'string' && scope.environment_id;
+}
+
+function authorizationValid(record, authorizationId) {
+  const common = record?.authorization_id === authorizationId && record.kind === 'initial' &&
+    record.max_starts === 1 && Number.isInteger(record.used_starts) &&
+    record.used_starts >= 0 && record.used_starts <= 1 && Array.isArray(record.claims);
+  if (!common) return false;
+  if (authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID) {
+    return record.schema === 'workbench/build-project-case-authorization-v1' &&
+      record.linked_stage === 'M3-B2' && projectCaseScopeValid(record.scope) &&
+      record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000;
+  }
+  return record.schema === 'workbench/build-revalidation-authorization-v1';
+}
 
 async function readJson(file, fallback) {
   try { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -173,12 +194,25 @@ export class BuildTaskStore {
   async getRevalidationAuthorization() {
     const record = await readJson(this.revalidationAuthorizationFile, null);
     if (!record) return null;
-    if (record.schema !== 'workbench/build-revalidation-authorization-v1' ||
-        record.authorization_id !== this.authorizationId ||
-        record.kind !== 'initial' || record.max_starts !== 1 ||
-        !Number.isInteger(record.used_starts) || record.used_starts < 0 || record.used_starts > 1 ||
-        !Array.isArray(record.claims)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+    if (!authorizationValid(record, this.authorizationId)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
     return structuredClone(record);
+  }
+
+  async registerProjectCaseAuthorization(record) {
+    if (this.authorizationId !== M3B2_PROJECT_CASE_AUTHORIZATION_ID || !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
+      throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+    }
+    return this.serial(async () => {
+      const current = await readJson(this.revalidationAuthorizationFile, null);
+      if (current) {
+        if (!authorizationValid(current, this.authorizationId) || JSON.stringify(current.scope) !== JSON.stringify(record.scope)) {
+          throw new Error('BUILD_REVALIDATION_AUTHORIZATION_CONFLICT');
+        }
+        return structuredClone(current);
+      }
+      await writeJsonAtomic(this.revalidationAuthorizationFile, record, this.io);
+      return structuredClone(record);
+    });
   }
 
   async registerRevalidationAuthorization(record) {
@@ -203,7 +237,7 @@ export class BuildTaskStore {
   async claimRevalidationStart(authorizationId, taskId, attemptId, now) {
     return this.serial(async () => {
       const authorization = await readJson(this.revalidationAuthorizationFile);
-      if (authorizationId !== this.authorizationId || authorization.authorization_id !== authorizationId || authorization.kind !== 'initial' || authorization.max_starts !== 1) {
+      if (authorizationId !== this.authorizationId || !authorizationValid(authorization, authorizationId)) {
         throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
       }
       if (authorization.claims.some((claim) => claim.task_id === taskId && claim.attempt_id === attemptId)) return structuredClone(authorization);

@@ -1,6 +1,6 @@
 # 批准脚本测试工作台（第一阶段）
 
-这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 增加项目与用例数据管理。M3-B1 允许从一个已确认的项目用例创建现有 build task 的冻结输入，但明确停在“已创建，尚未启动”；本批 Harness、模型、候选和业务脚本执行均为 0。
+这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 增加项目与用例数据管理。M3-B1 允许从一个已确认的项目用例创建现有 build task 的冻结输入并停在“已创建，尚未启动”。M3-B2 只为一条明确选择、与固定无登录合成环境匹配的项目用例提供一次作用域授权，使冻结输入进入 Harness attempt、由同一候选完成正常/反例验证，并把结构化结果和登记媒体返回原项目关联任务；它不全局解除历史 `INPUT_ONLY`。
 
 第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。
 
@@ -22,7 +22,9 @@ npm start
 
 默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
 
-选择已确认且每一步动作/预期完整的用例后，可在详情中选择确切版本与固定无登录合成环境并点击“创建任务（不启动）”。服务端按项目 ID、内部用例 ID、版本和内容 SHA-256 重新读取保存版本，冻结 `input/case-snapshot.json`、`task.md` 和 `agent-instruction.txt` 到既有 build task；前端正文不作为事实源。项目用例任务带 `INPUT_ONLY` 执行策略，Web 禁用启动且后端拒绝 start，因此创建、查看、轮询和重启不会消耗 M2-C 预算。任务详情可查看实际冻结内容并返回来源用例；旧版本任务不会随项目用例的新版本变化。`request_id` 只在项目、用例、版本、内容哈希和环境五项身份均相同时幂等，同键异身份返回 409 冲突；既有任务身份无法可靠推导时拒绝复用。原验证与边界见 [M3-B1 输入接通报告](docs/M3B1_CASE_BUILD_INPUT_REPORT.md)，身份校验补充见 [M3-B1 request_id 修订记录](docs/M3B1_REQUEST_IDENTITY_REVISION.md)。
+选择已确认且每一步动作/预期完整的用例后，可在详情中选择确切版本与固定无登录合成环境并创建任务。服务端按项目 ID、内部用例 ID、版本和内容 SHA-256 重新读取保存版本，冻结 `input/case-snapshot.json`、`task.md` 和 `agent-instruction.txt` 到既有 build task；前端正文不作为事实源。默认配置下项目用例任务仍带 `INPUT_ONLY`，Web 和后端均拒绝启动。只有服务以固定 M3-B2 授权 ID启动时，本批首个任务才获得与项目、用例、版本、哈希及环境完全绑定的单次 initial 权限；授权在观察到 Harness 进程创建时消耗，历史任务不迁移、不放开。任务详情可查看实际冻结内容并返回来源用例；旧版本任务不会随项目用例的新版本变化。`request_id` 只在五项身份均相同时幂等，同键异身份返回 409 冲突；既有任务身份无法可靠推导时拒绝复用。原 M3-B1 验证与边界见 [输入接通报告](docs/M3B1_CASE_BUILD_INPUT_REPORT.md)和 [request_id 修订记录](docs/M3B1_REQUEST_IDENTITY_REVISION.md)。
+
+M3-B2 启动时先按登记哈希把两个冻结输入复制到本次 `attempt/workspace`，再把真实入口和候选输出路径渲染到 `agent-instruction.txt`；落盘指令与传给 Harness 的字符串相同。项目步骤要求使用 `CASE_STEP_<order>` 标记，结果页逐步显示原动作、原预期和结构化报告是否观察到对应步骤。正常与反例的 screenshot/video/trace 直接登记到本任务，只能通过 task/file ID读取，并在每次请求复核路径、大小和 SHA-256。正常通过、反例取得冻结契约规定的确切值差异、候选前后哈希一致且全部步骤可观察后，最多进入“技术验证通过，等待人工核对”。
 
 受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
 
@@ -43,7 +45,7 @@ npm start
 
 当前接口：`GET /api/health`、`GET /api/assets`、`GET /api/assets/:asset_id`、`GET /api/runs`、`GET /api/runs/:run_id`、`POST /api/runs` 和 `POST /api/runs/:run_id/stop`。状态变更只接受同源本地 JSON 请求，正文只允许固定字段。
 
-M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由；M3-B1 新增固定字段的 `POST /api/build/tasks/from-project-case`，只创建不可启动的项目用例输入任务。第一版不接受任意 URL、文件、代码或命令上传。已有离线复验可先通过受控登记命令写入派生索引，再由任务 API 返回精确关联记录；媒体只能从包含任务 ID、复验 ID 和登记媒体 ID 的路由读取。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
+M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由；M3-B1/M3-B2 复用固定字段的 `POST /api/build/tasks/from-project-case`。第一版不接受任意 URL、文件、代码或命令上传。M3-B2 新生成媒体使用 `GET /api/build/tasks/:task_id/media/:file_id`，只有登记为该任务本次正常/反例 screenshot、video 或 trace 的文件才可读取，视频支持字节 Range。已有离线复验仍使用包含任务 ID、复验 ID 和登记媒体 ID 的独立路由。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
 
 执行前会确认 4198 的 `/healthz` 精确标识冻结 heldout 站点并检查入口可用性；不匹配时拒绝运行，不关闭或替换未知进程。后端只从已登记资产映射入口，以参数数组启动本地锁定的 `@playwright/test`，显式使用 `workers=1`、`retries=0`，不通过 shell 或 `npx` 下载。批准脚本按原始字节复制到本次运行目录，来源和副本在运行前后分别核验哈希。
 
@@ -74,6 +76,8 @@ node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
 原 T3 工程验证包含 18 项 Node 测试和一次真实 Chromium 工作台操作流；三项复审修复后为 21 项，本次证据完整性修订后完整集合为 25 项 Node 测试。工程测试不代替批准脚本正常/故障真实组合；本次纯汇总修订按授权没有重跑业务组合。
 
 M2-C 增量工程验证使用 `npm test` 覆盖预算持久化、重启中断、重复启动、取消、报告异常、反例判定和文件边界；`npm run test:build-browser` 验证真实浏览器的提交、启动、状态与候选展示。`harness-probe` 目录仍须独立执行 `npm test`。模拟事件只证明工作台控制逻辑，不算真实 Harness 接入证据。
+
+M3-B2 的零模型验证使用 `npm run test:m3b2-browser`，其中 Harness 为捕获适配器，但 Excel 上传、工作台 Web、实际 Playwright CLI、正常/反例页面和媒体播放都是真实路径；它不算模型生成证据。唯一真实验收入口为 `npm run test:m3b2-real`，正式执行时应使用 `scripts/run-m3b2-real.ps1` 的遮蔽输入前台会话。固定本地目录已有授权、任务或总结文件时入口会拒绝重新开始，不通过换 task ID 重置一次额度。
 
 新的真实集成应从一个明确保活的前台 PowerShell 会话启动工作台服务，再从浏览器操作 Web；给外层命令的生命周期至少覆盖 10 分钟任务上限和收尾时间。按 `Ctrl+C` 触发工作台的有界取消与收尾，不能用短时命令宿主启动后让宿主先退出。发生异常时先保留 `.local` 目录、服务控制台的脱敏错误和 attempt 生命周期记录，不换 task ID 重置预算。当前历史真实任务没有这些新增记录，因此其唯一根因仍是未知。
 
@@ -117,3 +121,5 @@ M1 第一阶段集成验证、三项代码复审修复及既定证据完整性�
 终态等待修复后的独立一次性授权已从真实 Web 启动并正确绑定新 `task_id`。Harness 完整生成了新候选，但正常与反例执行均因两个安装位置的 Playwright Test 实例被同时加载而得到零测试，任务保留为 `CANDIDATE_VALIDATION_FAILED`；没有媒体、修订或替补调用。完整事实见 [终态等待修复后单次真实 Web 验证报告](docs/M2C_WAIT_FIX_VALIDATION_REPORT.md)。
 
 后续零模型修复让 workbench 的候选执行显式使用本子工程的 Playwright CLI、配置和依赖解析根，harness-probe 默认入口仍保持独立。原候选的同字节副本已在正常页实际通过，并在反例页取得 PROBE-42/PROBE-41 断言差异；两边截图、录像、Trace 均生成。详见 [Playwright 双实例修复与同候选复验](docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md)。这些既有结果现已通过派生索引接入原任务页面，原任务失败终态和原报告保持不变，展示验证见 [已有候选复验与媒体接入报告](docs/M2C_EXISTING_REVALIDATION_WEB_MEDIA.md)。
+
+M3-B2 已用一次独立作用域授权从真实项目 Web 启动一条 Excel 导入的合成用例。Harness 新候选在正常页 1 条通过，在反例页取得 `PROBE-42 / PROBE-41` 断言差异；两边截图、录像和 Trace 均由项目任务页读回，服务重启后仍可查看。结果停在“技术验证通过，等待人工核对”，没有批准或第二次 Harness，详见 [M3-B2 真实建例报告](docs/M3B2_PROJECT_CASE_REAL_REPORT.md)。

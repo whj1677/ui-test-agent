@@ -17,3 +17,5 @@ expanded-lab/cases.json text eol=lf
 expanded-lab/oracle.json text eol=lf
 expanded-lab/SPEC.md text eol=lf
 heldout-lab/** text eol=lf
+# Approved script is byte-addressed by its review record and must remain LF on Windows.
+pilot/revision-s02/tests/sorting.spec.ts text eol=lf

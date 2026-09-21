@@ -4,6 +4,7 @@ const state = {
   buildTemplates: [], buildTasks: [], selectedBuildTaskId: null, activeBuildTaskId: null,
   buildBudget: null, buildAuthorization: null,
   selectedRevalidationByTask: {}, selectedRevalidationLaneByTask: {}, renderedRevalidationKey: null,
+  renderedCandidatesKey: null,
   caseProjects: [], selectedProjectId: null, selectedCaseId: null, caseUpload: null, importPreview: null,
   caseBuildRequestId: null,
 };
@@ -98,7 +99,7 @@ function renderBuildHistory() {
     button.append(make('strong', `${task.template.title} · ${task.task_status}`));
     button.append(make('span', task.task_id));
     button.append(make('span', `${task.created_at} · 候选 ${task.candidates.length} 版`));
-    button.addEventListener('click', () => { state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; render(); });
+    button.addEventListener('click', () => { state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; state.renderedCandidatesKey = null; render(); });
     root.append(button);
   }
 }
@@ -121,7 +122,7 @@ function renderBuildDetail() {
   const facts = byId('build-facts'); clear(facts);
   addFact(facts, '任务 ID', task.task_id);
   addFact(facts, '冻结输入', task.template.input_sha256);
-  addFact(facts, '模型', task.source?.kind === 'project-case' ? '尚未调用' : 'deepseek-official / deepseek-v4-pro');
+  addFact(facts, '模型', task.attempts?.length ? 'dsh 0.1.6-alpha.2 · deepseek-official / deepseek-v4-pro' : '尚未调用');
   addFact(facts, '阶段调用预算', `${task.budget.used_starts} / ${task.budget.max_starts}`);
   if (task.authorization) addFact(facts, '本次复验授权', `${task.authorization.authorization_id} · ${task.authorization.used_starts} / ${task.authorization.max_starts}`);
   addFact(facts, 'OS隔离', '未强制，残余风险已接受');
@@ -135,19 +136,61 @@ function renderBuildDetail() {
   const inputInspector = byId('build-project-case-input');
   inputInspector.classList.toggle('hidden', task.source?.kind !== 'project-case');
   if (task.source?.kind === 'project-case') {
-    setText('build-input-state', '建例任务已创建；Harness 尚未启动；候选、测试结果和批准均不存在。');
+    setText('build-input-state', task.task_status === 'SUBMITTED'
+      ? `${task.execution_policy?.launch_enabled ? '本批单次授权已绑定' : '只创建'}；Harness 尚未启动；候选、测试结果和批准均不存在。`
+      : `任务 ${task.task_status}；候选 ${task.candidates.length} 版；人工状态 ${task.human_review_status}；尚未批准。`);
     byId('build-input-snapshot').textContent = JSON.stringify(task.input_bundle.snapshot, null, 2);
     byId('build-input-task-md').textContent = task.input_bundle.task_markdown;
-    byId('build-input-instruction').textContent = task.input_bundle.agent_instruction_template;
+    byId('build-input-instruction').textContent = task.attempts?.at(-1)?.rendered_agent_instruction || task.input_bundle.agent_instruction_template;
   }
 
-  const candidates = byId('build-candidates'); clear(candidates);
-  if (!task.candidates.length) candidates.append(make('div', '尚未生成候选。', 'empty'));
-  for (const candidate of task.candidates) {
+  const candidates = byId('build-candidates');
+  const candidateFiles = task.files.filter((file) => /^(?:normal|counterexample)_(?:screenshot|video|trace)$/.test(file.kind || ''));
+  const candidateSignature = `${task.task_id}:${JSON.stringify(task.candidates)}:${JSON.stringify(candidateFiles)}`;
+  if (state.renderedCandidatesKey !== candidateSignature) {
+    clear(candidates);
+    state.renderedCandidatesKey = candidateSignature;
+    if (!task.candidates.length) candidates.append(make('div', '尚未生成候选。', 'empty'));
+    for (const candidate of task.candidates) {
     const card = make('article', undefined, 'candidate-card');
     const linked = task.revalidations?.find((item) => item.source_candidate_version === candidate.version && item.candidate_sha256 === candidate.sha256);
     card.append(make('strong', `候选 v${candidate.version} · 原始验证 ${candidate.verification_status}`));
     card.append(make('p', candidateResultText(candidate)));
+    if (candidate.verification_status === 'PASSED') card.append(make('p', '技术验证通过，等待人工核对；候选尚未批准。', 'result-highlight'));
+    if (candidate.project_case_step_mapping?.length) {
+      const mapping = make('ol', undefined, 'preview-steps');
+      for (const step of candidate.project_case_step_mapping) {
+        mapping.append(make('li', `${step.marker} · ${step.observed ? '已在报告观察' : '未观察'} · 动作：${step.action} · 预期：${step.expected}`));
+      }
+      card.append(make('p', '原用例步骤与候选执行标记对应：'), mapping);
+    }
+    for (const [lane, label, prefix] of [['normal', '正常验证', 'normal'], ['negative', '独立反例', 'counterexample']]) {
+      const result = candidate[lane];
+      const section = make('section', undefined, 'candidate-media-lane');
+      section.append(make('strong', `${label} · ${result?.test_status || '未运行'}`));
+      if (result?.error?.expected != null || result?.error?.actual != null) {
+        section.append(make('p', `期望：${result.error?.expected ?? '—'} · 实际：${result.error?.actual ?? '—'}`));
+      }
+      if (lane === 'negative' && candidate.counterexample_detected) section.append(make('p', '与本项目用例绑定的指定错误已检出', 'result-highlight'));
+      const media = candidateFiles.filter((file) => file.attempt_id === candidate.attempt_id && file.kind.startsWith(`${prefix}_`));
+      const mediaGrid = make('div', undefined, 'media-grid');
+      if (!media.length) mediaGrid.append(make('div', '该验证没有已登记媒体。', 'empty'));
+      for (const item of media) {
+        const mediaCard = make('article', undefined, 'media-card');
+        const url = `/api/build/tasks/${encodeURIComponent(task.task_id)}/media/${encodeURIComponent(item.file_id)}`;
+        mediaCard.append(make('strong', `${item.kind} · ${item.file_name}`), make('p', `${item.bytes} bytes · ${item.sha256.slice(0, 16)}…`, 'mono'));
+        if (item.kind.endsWith('_screenshot')) {
+          const link = document.createElement('a'); link.href = url; link.target = '_blank'; link.rel = 'noopener';
+          const image = document.createElement('img'); image.src = url; image.alt = `${label} ${item.file_name}`; image.dataset.testid = `candidate-${lane}-screenshot`; link.append(image); mediaCard.append(link);
+        } else if (item.kind.endsWith('_video')) {
+          const video = document.createElement('video'); video.src = url; video.controls = true; video.preload = 'metadata'; video.dataset.testid = `candidate-${lane}-video`; mediaCard.append(video);
+        } else {
+          const link = make('a', '下载 Trace 后在本机使用 Playwright show-trace 查看'); link.href = url; link.download = item.file_name; link.dataset.testid = `candidate-${lane}-trace`; mediaCard.append(link);
+        }
+        mediaGrid.append(mediaCard);
+      }
+      section.append(mediaGrid); card.append(section);
+    }
     if (linked?.status === 'TECHNICAL_REVALIDATION_PASSED') card.append(make('p', '已有技术复验通过，尚未批准', 'result-highlight'));
     if (linked?.original_validation?.loading_errors?.length) {
       const originalError = make('details'); originalError.append(make('summary', '查看原始加载错误'));
@@ -163,6 +206,7 @@ function renderBuildDetail() {
     }
     card.append(technical);
     candidates.append(card);
+    }
   }
 
   renderBuildRevalidations(task);
@@ -413,10 +457,10 @@ function renderCaseBuildSection() {
   if (!linked.length) history.append(make('div', '该用例尚无关联建例任务。', 'empty'));
   for (const task of linked) {
     const button = make('button'); button.type = 'button';
-    button.append(make('strong', `v${task.source.case_version} · 已创建，尚未启动`), make('span', task.task_id),
+    button.append(make('strong', `v${task.source.case_version} · ${task.task_status}`), make('span', task.task_id),
       make('span', `${task.created_at} · ${task.source.content_sha256.slice(0, 16)}…`));
     button.addEventListener('click', () => {
-      state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; render();
+      state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; state.renderedCandidatesKey = null; render();
       byId('build-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     history.append(button);
