@@ -19,7 +19,8 @@
 ## 模块文档影响
 
 - 新增workbench build API、页面、持久化和测试；更新workbench README并新增M2-C脱敏验收报告。
-- 本次无需模块文档变更，原因：单次复验授权、按task_id等待和媒体登记只影响workbench独立子工程，其接口、运行与停止边界已由workbench/README.md、本REQ设计和新复验报告共同维护，不改变原产品src/public模块契约。
+- 本次无需设计变更，原因：本批只把既有按task_id终态等待的测试证据从总耗时代理改为Promise结算状态断言，不改变生产实现、接口、状态或预算语义。
+- 本次无需模块文档变更，原因：测试补准只影响workbench工程验证，既有接口、运行与停止边界继续由workbench/README.md、本REQ设计及复验报告维护，不改变原产品src/public模块契约。
 
 ## 风险与回滚
 

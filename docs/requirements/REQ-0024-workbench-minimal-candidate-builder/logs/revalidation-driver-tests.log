@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
+ok 1 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
+  ---
+  duration_ms: 611.661
+  type: 'test'
+  ...
+# Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+ok 2 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+  ---
+  duration_ms: 461.4996
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1441.8049

@@ -89,3 +89,5 @@ M1 第一阶段集成验证、三项代码复审修复及既定证据完整性�
 中断诊断批次没有启动 Harness 或调用模型；它只补齐后续任务的事件时记录、进程流收尾和存储失败关闭策略。原中断事实与预算保持不变，详见 [M2-C 中断诊断修订报告](docs/M2C_INTERRUPTION_DIAGNOSTIC.md)。
 
 诊断修订后的单次真实 Web 复验已按新增独立授权启动一次，但验收驱动误把旧 `INTERRUPTED` 历史卡片当作新任务终态，随后清理逻辑取消了刚启动的新任务。新任务保留为 `CANCELLED`，无候选且正常/反例验证未运行；独立授权已耗尽，没有重跑。驱动现已改为按新 `task_id` 等待，完整事实见 [M2-C 单次真实 Web 复验报告](docs/M2C_REVALIDATION_REPORT.md)。
+
+终态等待回归测试随后补准为直接检查 Promise 在“旧任务已终止、新任务仍生成”时保持 pending，并用原任意历史卡片扫描逻辑作预期失败对照；没有重新调用 Harness，详见 [终态等待回归测试补准记录](docs/M2C_REVALIDATION_WAIT_TEST_REVISION.md)。
