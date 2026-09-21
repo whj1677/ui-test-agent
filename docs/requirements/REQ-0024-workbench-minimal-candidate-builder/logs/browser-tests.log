@@ -1,0 +1,15 @@
+
+> ui-test-approved-workbench@0.1.0 test:build-browser
+> node tests/build-browser.integration.mjs
+
+{"build_browser_flow":"passed","task_id":"build-web-12345678","screenshot":"<TEMP>\\workbench-build-browser\\build-browser.png"}
+
+> ui-test-approved-workbench@0.1.0 test:browser
+> node tests/browser.integration.mjs
+
+{"browser_flow":"passed","run_id":"run-web-12345678","screenshot":"workbench/test-results/workbench-browser-smoke.png"}
+
+> ui-test-approved-workbench@0.1.0 test:build-revalidation-readback
+> node tests/build-revalidation-readback.integration.mjs build-20260921041411-12b52a7b
+
+{"task_id":"build-20260921041411-12b52a7b","status":"CANCELLED","screenshot":"workbench/docs/evidence/m2c-revalidation-cancelled.png"}

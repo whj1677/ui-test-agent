@@ -5,6 +5,7 @@ import { resolveInside } from '../integrity.mjs';
 
 const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANCELLING']);
 const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
+export const M2C_REVALIDATION_AUTHORIZATION_ID = 'm2c-diagnostic-revalidation-20260921';
 
 async function readJson(file, fallback) {
   try { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -38,6 +39,7 @@ export class BuildTaskStore {
   constructor(root, options = {}) {
     this.root = path.resolve(root);
     this.budgetFile = path.join(this.root, 'stage-budget.json');
+    this.revalidationAuthorizationFile = path.join(this.root, 'revalidation-authorization.json');
     this.io = options.io || fs;
     this.appendFile = options.appendFile || this.io.appendFile.bind(this.io);
   }
@@ -145,6 +147,51 @@ export class BuildTaskStore {
     const budget = await readJson(this.budgetFile);
     if (budget?.schema !== 'workbench/build-stage-budget-v1' || budget.phase !== 'M2-C') throw new Error('BUILD_BUDGET_INVALID');
     return structuredClone(budget);
+  }
+
+  async getRevalidationAuthorization() {
+    const record = await readJson(this.revalidationAuthorizationFile, null);
+    if (!record) return null;
+    if (record.schema !== 'workbench/build-revalidation-authorization-v1' ||
+        record.authorization_id !== M2C_REVALIDATION_AUTHORIZATION_ID ||
+        record.kind !== 'initial' || record.max_starts !== 1 ||
+        !Number.isInteger(record.used_starts) || record.used_starts < 0 || record.used_starts > 1 ||
+        !Array.isArray(record.claims)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+    return structuredClone(record);
+  }
+
+  async registerRevalidationAuthorization(record) {
+    return this.serial(async () => {
+      const current = await readJson(this.revalidationAuthorizationFile, null);
+      if (current) {
+        if (current.authorization_id !== record.authorization_id) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_CONFLICT');
+        return structuredClone(current);
+      }
+      const budget = await readJson(this.budgetFile);
+      if (budget.phase !== 'M2-C' || budget.used_starts !== 1 || budget.claims.length !== 1) {
+        throw new Error('BUILD_REVALIDATION_BASELINE_MISMATCH');
+      }
+      if (record.authorization_id !== M2C_REVALIDATION_AUTHORIZATION_ID || record.kind !== 'initial' || record.max_starts !== 1 || record.used_starts !== 0) {
+        throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      }
+      await writeJsonAtomic(this.revalidationAuthorizationFile, record, this.io);
+      return structuredClone(record);
+    });
+  }
+
+  async claimRevalidationStart(authorizationId, taskId, attemptId, now) {
+    return this.serial(async () => {
+      const authorization = await readJson(this.revalidationAuthorizationFile);
+      if (authorization.authorization_id !== authorizationId || authorization.kind !== 'initial' || authorization.max_starts !== 1) {
+        throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      }
+      if (authorization.claims.some((claim) => claim.task_id === taskId && claim.attempt_id === attemptId)) return structuredClone(authorization);
+      if (authorization.used_starts >= authorization.max_starts) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED');
+      authorization.used_starts += 1;
+      authorization.claims.push({ task_id: taskId, attempt_id: attemptId, claimed_at: now, trigger: 'harness_process_spawn' });
+      await writeJsonAtomic(this.revalidationAuthorizationFile, authorization, this.io);
+      return structuredClone(authorization);
+    });
   }
 
   async claimStart(taskId, attemptId, now) {

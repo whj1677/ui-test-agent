@@ -88,6 +88,7 @@ export class BuildTaskManager {
     this.serviceInstanceId = options.serviceInstanceId || `service-${randomUUID()}`;
     this.lifecycleSequences = new Map();
     this.storageFault = null;
+    this.authorizationId = options.authorizationId || null;
   }
 
   diagnostics() {
@@ -95,6 +96,7 @@ export class BuildTaskManager {
       service_instance_id: this.serviceInstanceId,
       storage_status: this.storageFault ? 'FAILED' : 'READY',
       storage_error: this.storageFault,
+      authorization_id: this.authorizationId,
     };
   }
 
@@ -146,6 +148,10 @@ export class BuildTaskManager {
     const template = await loadBuildTemplate(this.paths);
     const now = this.now().toISOString();
     const budget = await this.store.getBudget();
+    const authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
+    if (this.authorizationId && (!authorization || authorization.authorization_id !== this.authorizationId || authorization.used_starts >= authorization.max_starts)) {
+      throw new Error('BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE');
+    }
     return this.store.createTask({
       schema: 'workbench/build-task-v1',
       task_id: this.idFactory(),
@@ -163,6 +169,11 @@ export class BuildTaskManager {
       files: [],
       revision_allowed: false,
       budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts },
+      authorization: authorization ? {
+        authorization_id: authorization.authorization_id, kind: authorization.kind,
+        max_starts: authorization.max_starts, used_starts: authorization.used_starts,
+        linked_stage: authorization.linked_stage,
+      } : null,
       runtime: { os_file_isolation: false, os_network_isolation: false, residual_risk_accepted: true },
       error: null,
     });
@@ -191,6 +202,14 @@ export class BuildTaskManager {
       if (!task) throw new Error('BUILD_TASK_NOT_FOUND');
       if (kind === 'initial' && (task.task_status !== 'SUBMITTED' || task.attempts.length)) throw new Error('BUILD_INITIAL_NOT_ALLOWED');
       if (kind === 'revision' && (!task.revision_allowed || task.attempts.some((item) => item.kind === 'revision'))) throw new Error('BUILD_REVISION_NOT_ALLOWED');
+      const revalidationId = task.authorization?.authorization_id || null;
+      if (revalidationId && (kind !== 'initial' || revalidationId !== this.authorizationId)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      if (revalidationId) {
+        const authorization = await this.store.getRevalidationAuthorization();
+        if (!authorization || authorization.authorization_id !== revalidationId || authorization.used_starts >= authorization.max_starts) {
+          throw new Error('BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED');
+        }
+      }
       const credentials = this.credentialProvider();
       if (!credentials?.apiKey || !credentials?.baseUrl) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
       await this.prepareRuntime();
@@ -218,11 +237,13 @@ export class BuildTaskManager {
       }
 
       const startedAt = this.now().toISOString();
-      const budget = await this.store.claimStart(task.task_id, attemptId, startedAt);
+      const budget = revalidationId ? await this.store.getBudget() : await this.store.claimStart(task.task_id, attemptId, startedAt);
       const attempt = {
         attempt_id: attemptId, kind, started_at: startedAt, finished_at: null,
         status: 'RUNNING', max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS,
         service_instance_id: this.serviceInstanceId,
+        authorization_id: revalidationId,
+        authorization_status: revalidationId ? 'RESERVED_UNTIL_PROCESS_SPAWN' : null,
         observation: { complete: false, lifecycle_file: `attempts/${attemptId}/lifecycle.ndjson` },
         harness: null, error: null,
       };
@@ -250,7 +271,7 @@ export class BuildTaskManager {
         throw error;
       }
       this.active = { taskId: task.task_id, attemptId, controller, phase: 'GENERATING' };
-      const completion = this.#execute({ task: next, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller })
+      const completion = this.#execute({ task: next, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller, revalidationId })
         .finally(() => { if (this.active?.attemptId === attemptId) this.active = null; });
       this.completions.set(task.task_id, completion);
       void completion.catch((error) => this.#tripStorageFault(error, 'background_completion'));
@@ -261,7 +282,7 @@ export class BuildTaskManager {
   }
 
   async #execute(context) {
-    const { task, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller } = context;
+    const { task, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller, revalidationId } = context;
     const template = await loadBuildTemplate(this.paths);
     let normalServer;
     let negativeServer;
@@ -271,6 +292,7 @@ export class BuildTaskManager {
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
       const prompt = promptFor({ kind, template: task.template, entryUrl: normalServer.url, candidatePath });
       const harnessStarted = Date.now();
+      let authorizationClaimed = false;
       const harness = await this.adapter.runHarnessTask({
         task: prompt,
         workspace,
@@ -283,7 +305,25 @@ export class BuildTaskManager {
         timeoutMs: TIMEOUT_MS,
         maxToolCalls: MAX_TOOL_CALLS,
         signal: controller.signal,
-        onLifecycle: (event) => this.#recordLifecycle(task.task_id, attemptId, event),
+        onLifecycle: async (event) => {
+          if (event?.type === 'process_spawn' && revalidationId && !authorizationClaimed) {
+            try {
+              const authorization = await this.store.claimRevalidationStart(revalidationId, task.task_id, attemptId, this.now().toISOString());
+              authorizationClaimed = true;
+              await this.store.updateTask(task.task_id, (current) => ({
+                ...current,
+                authorization: { ...current.authorization, used_starts: authorization.used_starts },
+                attempts: current.attempts.map((item) => item.attempt_id === attemptId ? {
+                  ...item, authorization_status: 'CONSUMED_ON_PROCESS_SPAWN',
+                } : item),
+              }));
+            } catch (error) {
+              this.#tripStorageFault(error, 'claim_revalidation_authorization');
+              throw error;
+            }
+          }
+          await this.#recordLifecycle(task.task_id, attemptId, event);
+        },
       });
       const harnessSummary = {
         assessment: harness.assessment,
@@ -361,6 +401,7 @@ export class BuildTaskManager {
         type: 'COUNTEREXAMPLE_NOT_DETECTED', message: '独立错误输出未产生指定断言不符。', expected: null, actual: null, attribution: 'PENDING_ANALYSIS',
       };
       const budget = await this.store.getBudget();
+      const authorization = revalidationId ? await this.store.getRevalidationAuthorization() : null;
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'attempt_settled', phase: technicalPass ? 'technical_pass' : 'candidate_validation_failed', partial_observation: false });
       const indexed = await indexAttemptFiles({
         taskRoot: this.store.taskDirectory(task.task_id), attemptRoot, candidatePath, attemptId,
@@ -385,8 +426,9 @@ export class BuildTaskManager {
           same_candidate_hash: sameCandidate, counterexample_detected: negativeDetected, error: finalError,
         } : item),
         files: [...current.files, ...indexed.files],
-        revision_allowed: !effectivePass && kind === 'initial' && budget.used_starts < budget.max_starts,
+        revision_allowed: !revalidationId && !effectivePass && kind === 'initial' && budget.used_starts < budget.max_starts,
         budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts },
+        authorization: authorization ? { ...current.authorization, used_starts: authorization.used_starts } : current.authorization,
         error: finalError,
       }));
     } catch (error) {
@@ -409,6 +451,7 @@ export class BuildTaskManager {
       taskRoot: this.store.taskDirectory(taskIdValue), attemptRoot, candidatePath, attemptId, startIndex: current.files.length,
     }).catch(() => ({ files: [], unexpected: [] }));
     const budget = await this.store.getBudget();
+    const authorization = current.authorization?.authorization_id ? await this.store.getRevalidationAuthorization() : null;
     const observation = await this.store.lifecycleSummary(taskIdValue, attemptId);
     return this.store.updateTask(taskIdValue, (task) => ({
       ...task,
@@ -423,6 +466,7 @@ export class BuildTaskManager {
       files: [...task.files, ...indexed.files],
       revision_allowed: false,
       budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts },
+      authorization: authorization ? { ...task.authorization, used_starts: authorization.used_starts } : task.authorization,
       error,
     }));
   }

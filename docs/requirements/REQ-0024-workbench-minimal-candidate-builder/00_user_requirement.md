@@ -17,10 +17,11 @@
 - M2-B已验证Harness headless JSON事件、浏览器工具、候选产出、超时/取消、30次工具上限和Playwright独立验证能力。
 - 用户接受独立任务目录模式下无OS级强制文件/网络隔离的残余风险，但不授权目录外访问、任意网站、提权或安全策略变更。
 - 本轮Codex主窗口系统可见模型族为GPT-5；具体产品子型号及推理档位未由运行环境暴露，记录为未知，不推断。
-- 工程验证33项workbench测试、19项harness-probe测试及M1/M2-C两条Chromium页面流均通过。
+- 当前工程验证40项workbench测试、24项harness-probe测试及M1/M2-C Chromium页面流均通过。
 - 真实Web任务build-20260921030548-a1bf1358消耗1次初始启动后，拥有进程在Harness尚未收口时消失；重启后按规则标为INTERRUPTED，未生成候选、未执行技术验证，也未自动重放。
 - 收口工程复验复现Windows临时EPERM导致build task原子替换失败；已为build存储增加有限重试并连续10轮通过，但真实进程没有留下外层终止错误，不能把该复现写成真实中断的确定根因。
 - 诊断批次未启动Harness或模型；旧任务没有PID、exit、close、取消或到期记录，历史原因保持UNKNOWN。新实现用真实外部假子进程验证逐事件生命周期记录、exit/close收尾、存储失败关闭和重启不重放。
+- 新增独立单次初始复验授权后，真实Web任务build-20260921041411-12b52a7b观察到Harness process_spawn并消耗1/1；复验驱动误把旧INTERRUPTED卡片当作新任务终态，随后清理逻辑在50毫秒后取消新进程。任务为CANCELLED、无候选、验证未运行；没有第二次Harness启动。
 
 ## 推断与待确认
 

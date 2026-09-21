@@ -2,7 +2,7 @@ const state = {
   assets: [], runs: [], selectedRunId: null, activeRunId: null,
   selectedEnvironmentId: null,
   buildTemplates: [], buildTasks: [], selectedBuildTaskId: null, activeBuildTaskId: null,
-  buildBudget: null,
+  buildBudget: null, buildAuthorization: null,
 };
 const byId = (id) => document.getElementById(id);
 
@@ -70,13 +70,16 @@ function renderBuildTemplate() {
   setText('build-template-version', template ? `${template.template_id} · ${template.version}` : '—');
   setText('build-template-entry', template ? `${template.allowed_entry.kind} · ${template.allowed_entry.route}` : '—');
   setText('build-template-sha', template?.input_sha256);
-  setText('build-budget', state.buildBudget ? `${state.buildBudget.used_starts} / ${state.buildBudget.max_starts}` : '—');
+  setText('build-budget', state.buildAuthorization
+    ? `单次复验 ${state.buildAuthorization.used_starts} / ${state.buildAuthorization.max_starts}`
+    : state.buildBudget ? `${state.buildBudget.used_starts} / ${state.buildBudget.max_starts}` : '—');
 }
 
 function renderBuildControls() {
   const task = selectedBuildTask();
   const busy = Boolean(state.activeRunId || state.activeBuildTaskId);
-  const exhausted = !state.buildBudget || state.buildBudget.used_starts >= state.buildBudget.max_starts;
+  const allowance = state.buildAuthorization || state.buildBudget;
+  const exhausted = !allowance || allowance.used_starts >= allowance.max_starts;
   byId('build-submit').disabled = !state.buildTemplates.length || busy || exhausted;
   byId('build-start').disabled = busy || exhausted || task?.task_status !== 'SUBMITTED';
   byId('build-revise').disabled = busy || exhausted || !task?.revision_allowed;
@@ -117,6 +120,7 @@ function renderBuildDetail() {
   addFact(facts, '冻结输入', task.template.input_sha256);
   addFact(facts, '模型', 'deepseek-official / deepseek-v4-pro');
   addFact(facts, '阶段调用预算', `${task.budget.used_starts} / ${task.budget.max_starts}`);
+  if (task.authorization) addFact(facts, '本次复验授权', `${task.authorization.authorization_id} · ${task.authorization.used_starts} / ${task.authorization.max_starts}`);
   addFact(facts, 'OS隔离', '未强制，残余风险已接受');
   addFact(facts, '创建/结束', `${task.created_at} / ${task.finished_at || '—'}`);
 
@@ -216,6 +220,7 @@ async function refresh() {
     state.assets = assets.assets; state.runs = runs.runs; state.activeRunId = health.active_run_id;
     state.buildTemplates = templates.templates; state.buildTasks = buildTasks.tasks;
     state.activeBuildTaskId = health.active_build_task_id; state.buildBudget = health.build_budget;
+    state.buildAuthorization = health.build_authorization;
     if (!state.selectedRunId && state.runs[0]) state.selectedRunId = state.runs[0].run_id;
     if (!state.selectedBuildTaskId && state.buildTasks[0]) state.selectedBuildTaskId = state.buildTasks[0].task_id;
     setText('service-status', health.active_run_id || health.active_build_task_id ? '运行中' : '服务就绪');

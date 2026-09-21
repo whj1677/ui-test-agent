@@ -23,6 +23,13 @@ function category(relative, candidateRelative) {
   if (/\/\.playwright-mcp\/.*\.log$/i.test(`/${relative}`)) return { kind: 'tool_log', web_visible: false, content_type: 'text/plain; charset=utf-8' };
   if (/\/\.playwright-mcp\/.*\.(?:yml|yaml)$/i.test(`/${relative}`)) return { kind: 'tool_snapshot', web_visible: false, content_type: 'text/yaml; charset=utf-8' };
   if (/\/playwright-report\.json$/i.test(`/${relative}`)) return { kind: 'test_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
+  if (/\/verification\/normal\/artifacts\/.*\.png$/i.test(`/${relative}`)) return { kind: 'normal_screenshot', web_visible: false, content_type: 'image/png' };
+  if (/\/verification\/normal\/artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'normal_video', web_visible: false, content_type: 'video/webm' };
+  if (/\/verification\/normal\/artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'normal_trace', web_visible: false, content_type: 'application/zip' };
+  if (/\/verification\/negative\/artifacts\/.*\.png$/i.test(`/${relative}`)) return { kind: 'counterexample_screenshot', web_visible: false, content_type: 'image/png' };
+  if (/\/verification\/negative\/artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_video', web_visible: false, content_type: 'video/webm' };
+  if (/\/verification\/negative\/artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'counterexample_trace', web_visible: false, content_type: 'application/zip' };
+  if (/\/verification\/(?:normal|negative)\/artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/harness-summary\.json$/i.test(`/${relative}`)) return { kind: 'harness_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
   return null;

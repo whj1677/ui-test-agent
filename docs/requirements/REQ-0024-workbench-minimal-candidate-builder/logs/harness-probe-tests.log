@@ -1,146 +1,150 @@
+
+> ui-test-agent-deepseek-harness-probe@0.1.0 test
+> node --test tests/*.test.mjs
+
 TAP version 13
 # Subtest: 真实通过且至少一个测试才完整
 ok 1 - 真实通过且至少一个测试才完整
   ---
-  duration_ms: 1.164
+  duration_ms: 1.9658
   type: 'test'
   ...
 # Subtest: 缺失或损坏报告不能成功
 ok 2 - 缺失或损坏报告不能成功
   ---
-  duration_ms: 0.125
+  duration_ms: 0.1828
   type: 'test'
   ...
 # Subtest: 零测试、跳过和失败不能成功
 ok 3 - 零测试、跳过和失败不能成功
   ---
-  duration_ms: 0.1144
+  duration_ms: 0.1491
   type: 'test'
   ...
 # Subtest: 真实外部子进程的分段NDJSON等待close后完整结算
 ok 4 - 真实外部子进程的分段NDJSON等待close后完整结算
   ---
-  duration_ms: 151.777
+  duration_ms: 166.7415
   type: 'test'
   ...
 # Subtest: 真实外部子进程部分事件后异常退出保留原始进程事实
 ok 5 - 真实外部子进程部分事件后异常退出保留原始进程事实
   ---
-  duration_ms: 99.984
+  duration_ms: 88.6258
   type: 'test'
   ...
 # Subtest: 无换行NDJSON末行在流关闭时仍被解析
 ok 6 - 无换行NDJSON末行在流关闭时仍被解析
   ---
-  duration_ms: 89.7361
+  duration_ms: 92.3908
   type: 'test'
   ...
 # Subtest: 输出尚未完成的NDJSON末行保留为无原文的损坏事件
 ok 7 - 输出尚未完成的NDJSON末行保留为无原文的损坏事件
   ---
-  duration_ms: 92.461
+  duration_ms: 103.4251
   type: 'test'
   ...
 # Subtest: 外层取消、到期和工具额度均停止真实拥有子进程
 ok 8 - 外层取消、到期和工具额度均停止真实拥有子进程
   ---
-  duration_ms: 2279.9386
+  duration_ms: 2223.4706
   type: 'test'
   ...
 # Subtest: 浏览器插件证据单独登记且不冒充候选输出
 ok 9 - 浏览器插件证据单独登记且不冒充候选输出
   ---
-  duration_ms: 1.7308
+  duration_ms: 1.0912
   type: 'test'
   ...
 # Subtest: 任务目录内其他未登记文件仍被拒绝
 ok 10 - 任务目录内其他未登记文件仍被拒绝
   ---
-  duration_ms: 0.3056
+  duration_ms: 0.1902
   type: 'test'
   ...
 # Subtest: 完整终态、浏览器工具和文件同时存在才成功
 ok 11 - 完整终态、浏览器工具和文件同时存在才成功
   ---
-  duration_ms: 0.777
+  duration_ms: 0.7395
   type: 'test'
   ...
 # Subtest: 缺文件不能标记成功
 ok 12 - 缺文件不能标记成功
   ---
-  duration_ms: 0.1533
+  duration_ms: 0.1534
   type: 'test'
   ...
 # Subtest: 缺浏览器工具事实不能标记成功
 ok 13 - 缺浏览器工具事实不能标记成功
   ---
-  duration_ms: 0.1523
+  duration_ms: 0.1643
   type: 'test'
   ...
 # Subtest: 模型中断或不完整报告不能标记成功
 ok 14 - 模型中断或不完整报告不能标记成功
   ---
-  duration_ms: 0.1229
+  duration_ms: 0.1303
   type: 'test'
   ...
 # Subtest: 取消和超时不能标记成功
 ok 15 - 取消和超时不能标记成功
   ---
-  duration_ms: 0.1081
+  duration_ms: 0.1127
   type: 'test'
   ...
 # Subtest: 日志会遮蔽密钥、Bearer和敏感字段
 ok 16 - 日志会遮蔽密钥、Bearer和敏感字段
   ---
-  duration_ms: 0.608
+  duration_ms: 0.6902
   type: 'test'
   ...
 # Subtest: 工具调用达到上限时触发外层停止且不会超过上限
 ok 17 - 工具调用达到上限时触发外层停止且不会超过上限
   ---
-  duration_ms: 0.6318
+  duration_ms: 0.7672
   type: 'test'
   ...
 # Subtest: 文件、网络和凭据禁止项都被阻断时才允许真实修订
 ok 18 - 文件、网络和凭据禁止项都被阻断时才允许真实修订
   ---
-  duration_ms: 1.161
+  duration_ms: 1.4709
   type: 'test'
   ...
 # Subtest: 工作区外读取或写入成功会关闭总门
 ok 19 - 工作区外读取或写入成功会关闭总门
   ---
-  duration_ms: 0.1818
+  duration_ms: 0.249
   type: 'test'
   ...
 # Subtest: 候选或浏览器可访问禁止端点会关闭总门
 ok 20 - 候选或浏览器可访问禁止端点会关闭总门
   ---
-  duration_ms: 0.108
+  duration_ms: 0.1295
   type: 'test'
   ...
 # Subtest: 候选携带模型凭据会关闭总门
 ok 21 - 候选携带模型凭据会关闭总门
   ---
-  duration_ms: 0.0769
+  duration_ms: 0.1038
   type: 'test'
   ...
 # Subtest: 启动失败会返回错误且不等待到期
 ok 22 - 启动失败会返回错误且不等待到期
   ---
-  duration_ms: 7.7827
+  duration_ms: 8.7133
   type: 'test'
   ...
 # Subtest: 超时会终止本任务拥有的进程
 ok 23 - 超时会终止本任务拥有的进程
   ---
-  duration_ms: 1108.0091
+  duration_ms: 985.7612
   type: 'test'
   ...
 # Subtest: 用户取消会终止本任务拥有的进程且不重启
 ok 24 - 用户取消会终止本任务拥有的进程且不重启
   ---
-  duration_ms: 830.2426
+  duration_ms: 835.1092
   type: 'test'
   ...
 1..24
@@ -151,4 +155,4 @@ ok 24 - 用户取消会终止本任务拥有的进程且不重启
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2842.3437
+# duration_ms 2812.3147

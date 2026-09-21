@@ -23,6 +23,7 @@ const buildManager = new BuildTaskManager({
   store: buildStore,
   paths,
   serviceInstanceId,
+  authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID || null,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   otherActive: () => Boolean(manager.active),
 });

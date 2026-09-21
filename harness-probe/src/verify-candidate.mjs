@@ -16,6 +16,7 @@ export async function verifyCandidate({ candidatePath, browserExecutable, fixtur
     PROBE_URL: fixtureUrl,
     PROBE_CANDIDATE_DIR: path.dirname(candidatePath),
     PROBE_REPORT_PATH: reportPath,
+    PROBE_OUTPUT_DIR: path.join(runDirectory, 'artifacts'),
   });
   // Playwright treats positional file arguments as regular-expression filters
   // relative to testDir; an absolute Windows path is not a stable filter.

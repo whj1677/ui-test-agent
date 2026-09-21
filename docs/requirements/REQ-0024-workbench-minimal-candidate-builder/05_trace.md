@@ -20,3 +20,4 @@
 | 1 | 无 | 实现中 | 从M2-B已验证原语建立固定合成任务的最小Web建例入口 |
 | 2 | workbench/docs/M2C_ACCEPTANCE_REPORT.md | 部分实现-真实集成中断 | 工程验证通过；真实初始建例中断且无候选，未把剩余额度改作第二次初始调用。 |
 | 3 | workbench/docs/M2C_INTERRUPTION_DIAGNOSTIC.md | 部分实现-中断诊断已补齐 | 不改写历史中断；增加事件时生命周期、exit/close收尾、存储失败关闭和零模型外部进程验证。 |
+| 4 | workbench/docs/M2C_REVALIDATION_REPORT.md | 部分实现-单次复验C类收口 | 独立授权1/1已消耗；真实新任务因复验驱动误判旧历史终态而被取消，无候选和双验证；修复后不重跑。 |

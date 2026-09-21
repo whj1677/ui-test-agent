@@ -4,21 +4,22 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { BuildTaskManager } from '../server/build/manager.mjs';
-import { BuildTaskStore } from '../server/build/store.mjs';
+import { BuildTaskStore, M2C_REVALIDATION_AUTHORIZATION_ID } from '../server/build/store.mjs';
 import { createPaths } from '../server/paths.mjs';
 
 function playwrightReport(status, error = null) {
   return { stats: { expected: status === 'passed' ? 1 : 0, unexpected: status === 'failed' ? 1 : 0, skipped: 0 }, suites: [{ specs: [{ tests: [{ expectedStatus: 'passed', results: [{ status, error }] }] }] }] };
 }
 
-function fakeAdapter({ cancellation = false } = {}) {
+function fakeAdapter({ cancellation = false, emitSpawn = false } = {}) {
   let harnessStarts = 0;
   return {
     get harnessStarts() { return harnessStarts; },
     async ensureHarnessRuntime() { return { ready: true }; },
     async startFixtureServer(file) { return { url: file.endsWith('wrong-output.html') ? 'http://127.0.0.1/negative' : 'http://127.0.0.1/normal', async close() {} }; },
-    async runHarnessTask({ candidatePath, workspace, signal }) {
+    async runHarnessTask({ candidatePath, workspace, signal, onLifecycle }) {
       harnessStarts += 1;
+      if (emitSpawn) await onLifecycle({ type: 'process_spawn', pid: 4321, parent_pid: process.pid, at: new Date().toISOString() });
       if (cancellation) {
         if (!signal.aborted) await new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }));
         return {
@@ -140,5 +141,34 @@ test('duplicate start is rejected and cancel closes the owned attempt without re
     assert.equal(result.task_status, 'CANCELLED');
     assert.equal(result.verification_status, 'NOT_RUN');
     assert.equal(adapter.harnessStarts, 1);
+  } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
+});
+
+test('单次复验授权只在Harness进程启动事件时消耗且不改旧预算', async () => {
+  const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'build-manager-revalidation-'));
+  const paths = createPaths({ localRoot });
+  const store = new BuildTaskStore(paths.buildTasksRoot); await store.init();
+  await store.claimStart('build-old-12345678', 'attempt-01-initial', '2026-09-21T00:00:00Z');
+  await store.registerRevalidationAuthorization({
+    schema: 'workbench/build-revalidation-authorization-v1', authorization_id: M2C_REVALIDATION_AUTHORIZATION_ID,
+    kind: 'initial', max_starts: 1, used_starts: 0, claims: [], linked_stage: { phase: 'M2-C', historical_used_starts: 1, historical_max_starts: 2 },
+  });
+  const manager = new BuildTaskManager({
+    store, paths, adapter: fakeAdapter({ emitSpawn: true }), browserExecutable: 'fake-browser',
+    authorizationId: M2C_REVALIDATION_AUTHORIZATION_ID,
+    credentialProvider: () => ({ apiKey: 'synthetic-key', baseUrl: 'https://model.invalid' }),
+    idFactory: () => 'build-revalidation-12345678',
+  });
+  try {
+    const task = await manager.submit('synthetic-probe-v1');
+    assert.equal(task.authorization.used_starts, 0);
+    await manager.start(task.task_id);
+    const result = await manager.wait(task.task_id);
+    assert.equal(result.attempts[0].authorization_status, 'CONSUMED_ON_PROCESS_SPAWN');
+    assert.equal(result.authorization.used_starts, 1);
+    assert.equal(result.revision_allowed, false);
+    assert.equal((await store.getBudget()).used_starts, 1);
+    assert.equal((await store.getRevalidationAuthorization()).claims[0].trigger, 'harness_process_spawn');
+    await assert.rejects(() => manager.submit('synthetic-probe-v1'), /BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE/);
   } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
 });
