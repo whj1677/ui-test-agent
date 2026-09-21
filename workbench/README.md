@@ -20,6 +20,17 @@ npm start
 
 默认只监听 `http://127.0.0.1:4210`。受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
 
+查看本机已有的 M2-C 复验任务时，必须让服务显式读取同一个专用数据目录和原任务授权账本；此命令不需要模型凭据，也不会自动启动 Harness：
+
+```powershell
+cd workbench
+npm run register:m2c-runtime-revalidation
+$env:WORKBENCH_DATA_DIR = (Resolve-Path .local/m2c-acceptance).Path
+$env:M2C_BUILD_AUTHORIZATION_ID = 'm2c-wait-fix-validation-20260921'
+npm start
+# 浏览器打开 http://127.0.0.1:4210，选择 build-20260921060716-ae44c3f2
+```
+
 运行数据、报告和媒体写入被 Git 忽略的 `workbench/.local/`。JSON 使用串行写入和同目录临时文件替换；每次运行使用独立目录。服务启动会把遗留的排队、启动、运行或停止中记录标为 `INTERRUPTED`，但不会自动重放，也不会尝试接管旧 PID。
 
 每个 M2-C attempt 还会在事件发生时追加 `lifecycle.ndjson`：记录 task/attempt/服务实例、Harness PID 与工作台父 PID、阶段与工具名称元数据、主动取消/到期/工具额度停止、`error`/`exit`/`close` 和输出是否完整。它不保存模型内部推理、完整命令参数或环境变量。进程必须等到 `close` 或有界流收尾超时后才能结算，无换行的最后一条 NDJSON 也会在流关闭时解析。诊断或任务状态持续写失败会将健康状态改为 `degraded` 并拒绝新建例；`EPERM`、`EACCES`、`EBUSY` 仍只做有限重试。

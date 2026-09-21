@@ -30,6 +30,8 @@
 - 录像：正常、反例各一段，使用浏览器原生控件播放、暂停和拖动进度。
 - Trace：正常、反例各一个受控下载入口。下载后在 `workbench` 目录运行 `node node_modules/@playwright/test/cli.js show-trace <trace.zip>` 本地查看；没有上传外部网站，也未在工作台内嵌 Trace Viewer。
 
+本机查看时在 `workbench` 目录先运行 `npm run register:m2c-runtime-revalidation`，再设置 `WORKBENCH_DATA_DIR` 为 `.local/m2c-acceptance`、设置 `M2C_BUILD_AUTHORIZATION_ID` 为 `m2c-wait-fix-validation-20260921` 并执行 `npm start`。这些设置只选择现有数据目录和账本，不包含模型凭据，也不会自动启动 Harness。
+
 脱敏页面证据：[m2c-existing-revalidation-media.png](evidence/m2c-existing-revalidation-media.png)。截图展示反例页的结果、截图、Trace 入口和原生视频控件；原始录像和 Trace 未提交 Git。
 
 ## 验证事实
