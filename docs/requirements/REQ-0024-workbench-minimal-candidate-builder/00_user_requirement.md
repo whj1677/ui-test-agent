@@ -24,6 +24,7 @@
 - 新增独立单次初始复验授权后，真实Web任务build-20260921041411-12b52a7b观察到Harness process_spawn并消耗1/1；复验驱动误把旧INTERRUPTED卡片当作新任务终态，随后清理逻辑在50毫秒后取消新进程。任务为CANCELLED、无候选、验证未运行；没有第二次Harness启动。
 - 终态等待回归已补准为直接观察Promise pending再切换新任务终态；同一断言注入原任意历史卡片扫描逻辑时产生预期AssertionError，当前按task_id实现满足该断言。补准批次未启动Harness且未改取消任务、历史报告或授权账本。
 - 终态等待修复后的独立授权真实任务build-20260921060716-ae44c3f2由Web提交并只按该task_id等待。Harness完成且生成新候选，候选哈希119AC2FE622ECE98599B2D6D98B97CB9864744A5B299358DAFD9C990E6F3585A；正常与反例报告均因Playwright Test从harness-probe和workbench两个安装位置重复加载而零测试，任务为CANDIDATE_VALIDATION_FAILED。授权1/1耗尽，没有修订、重试或替补启动。
+- 零模型修复使workbench候选执行显式使用本子工程的CLI、配置和Playwright依赖解析根，harness-probe默认入口保持独立。原候选同字节副本正常1条通过，反例1条取得期望PROBE-42和实际PROBE-41；两边截图、录像、Trace齐全。原任务、NOT_RUN报告、候选哈希和授权账本未改写，新结果独立留档且尚未接入Web。
 
 ## 推断与待确认
 

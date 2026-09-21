@@ -5,9 +5,9 @@
 
 ## 元数据
 
-- 需求状态：部分实现-真实候选验证失败
+- 需求状态：部分实现-既有候选技术复验通过
 - 治理分级：G2
-- 当前版本：6
+- 当前版本：7
 - 最后更新：2026-09-21
 
 ## 当前有效用户需求
@@ -45,16 +45,18 @@
 | TK-0024-03 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 / DD-0024-01 / DD-0024-02 / DD-0024-03 / DD-0024-04 | 已完成 | 实现最小中文Web并完成工程测试。 |
 | TK-0024-04 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 / DD-0024-01 / DD-0024-02 / DD-0024-03 / DD-0024-04 | 受阻 | 从真实Web完成一次集成、脱敏报告与GitHub同步。 |
 | TK-0024-05 | DR-0024-05 / DD-0024-05 | 已完成 | 补齐中断生命周期、进程流收尾、存储失败关闭和零模型故障注入。 |
+| TK-0024-06 | DR-0024-03 / DD-0024-03 / DD-0024-04 | 已完成 | 统一workbench候选执行的Playwright运行根，并对原候选做零模型正常/反例复验和独立留档。 |
 
 ## 当前有效验证项
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
-| VT-0024-01 | DR-0024-01 / DR-0024-02 | 集成测试通过 | 存储、跨任务阶段预算、重复启动、取消和重启恢复。 | 命令：npm test --prefix workbench；退出码：0；测试数量：42；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/wait-fix-validation-tests.log |
+| VT-0024-01 | DR-0024-01 / DR-0024-02 | 集成测试通过 | 存储、跨任务阶段预算、重复启动、取消和重启恢复。 | 命令：npm test --prefix workbench；退出码：0；测试数量：44；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/runtime-fix-revalidation-tests.log |
 | VT-0024-02 | DR-0024-02 / DR-0024-03 / DR-0024-04 | 集成测试通过 | Harness终态、候选/工具/报告登记、通用报告解析和显式修订。 | 命令：npm test --prefix harness-probe；退出码：0；测试数量：24；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/wait-fix-validation-tests.log |
 | VT-0024-03 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 | 人工待确认 | 真实浏览器中的固定任务提交、状态、候选、错误、文件和按钮行为。 | npm run test:browser与npm run test:build-browser均退出0；零模型重启读回显示新任务CANCELLED、授权1/1和无候选，公开截图见workbench/docs/evidence/m2c-revalidation-cancelled.png。 |
 | VT-0024-04 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 | 无法运行 | 真实Web-Harness-候选-正常/反例集成、资产不变和远端SHA。 | 终态等待修复后的任务build-20260921060716-ae44c3f2经真实Web启动，Harness以7次工具调用生成候选；正常与反例报告均完整但目标测试数为0，原始报告显示harness-probe与workbench的Playwright Test实例重复加载。此处无法运行仅指两次目标测试均未被Playwright执行；授权1/1耗尽，无修订或替补启动。见workbench/docs/M2C_WAIT_FIX_VALIDATION_REPORT.md。 |
 | VT-0024-05 | DR-0024-05 | 集成测试通过 | 真实外部假子进程的逐事件记录、异常退出、无换行与截断末行、取消/到期/额度、存储故障和协调进程终止后恢复。 | harness-probe 24/24、workbench 38/38，均退出0；未运行build-real.integration.mjs。 |
+| VT-0024-06 | DR-0024-03 | 集成测试通过 | 统一Playwright运行根后，真实CLI发现1条测试并以同一原候选完成正常通过和独立反例断言差异验证。 | npm run revalidate:m2c-runtime-fix退出0；正常1条PASSED，反例1条FAILED且Expected PROBE-42/Received PROBE-41；候选哈希前后相同，两边截图/录像/Trace各1。原始记录在Git忽略目录，脱敏事实见workbench/docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md。 |
 
 ## 人工待确认项
 

@@ -20,7 +20,7 @@
 
 - 新增workbench build API、页面、持久化和测试；更新workbench README并新增M2-C脱敏验收报告。
 - 本次无需设计变更，原因：本批只把既有按task_id终态等待的测试证据从总耗时代理改为Promise结算状态断言，不改变生产实现、接口、状态或预算语义。
-- 本次无需模块文档变更，原因：独立单次授权、启动前检查和脱敏验证报告只影响workbench的M2-C验收入口，既有接口、运行与停止边界继续由workbench/README.md、本REQ设计及复验报告维护，不改变原产品src/public模块契约。
+- 本次无需模块文档变更，原因：候选执行器只在workbench适配层显式选择本子工程运行根和配置，harness-probe独立入口、原产品src/public模块契约及Web数据模型均不改变；边界由workbench/README.md、本REQ和独立复验报告维护。
 
 ## 风险与回滚
 

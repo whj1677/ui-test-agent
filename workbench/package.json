@@ -16,6 +16,8 @@
     "test:build-revalidation": "node tests/build-revalidation.integration.mjs",
     "test:build-wait-fix-preflight": "node tests/build-wait-fix-preflight.mjs",
     "test:build-revalidation-readback": "node tests/build-revalidation-readback.integration.mjs",
+    "revalidate:m2c-runtime-fix": "node server/revalidate-m2c-runtime-fix.mjs",
+    "test:m2c-runtime-fix-readback": "node tests/existing-candidate-web-readback.integration.mjs",
     "test:real": "node tests/real-workbench.integration.mjs",
     "test:restart": "node tests/restart-history.integration.mjs",
     "lab": "node ../heldout-lab/serve.mjs 4198"

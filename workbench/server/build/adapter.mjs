@@ -1,9 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { runHarnessTask, allowedEnvironment, DSH_BIN } from '../../../harness-probe/src/harness-runner.mjs';
 import { runOwnedProcess } from '../../../harness-probe/src/process-control.mjs';
 import { startFixtureServer } from '../../../harness-probe/src/fixture-server.mjs';
 import { verifyCandidate } from '../../../harness-probe/src/verify-candidate.mjs';
+
+const workbenchRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const candidateConfig = path.join(workbenchRoot, 'config', 'candidate.playwright.config.mjs');
 
 const REQUIRED_PLUGINS = {
   '@deepseek-ai/dsh-browser-use': '0.1.6-alpha.2',
@@ -29,7 +33,11 @@ export async function ensureHarnessRuntime(dshHome, cwd) {
   return { dsh: '0.1.6-alpha.2', plugins: REQUIRED_PLUGINS };
 }
 
-export const buildAdapter = { runHarnessTask, startFixtureServer, verifyCandidate, ensureHarnessRuntime };
+export function verifyWorkbenchCandidate(options) {
+  return verifyCandidate({ ...options, runtimeRoot: workbenchRoot, configPath: candidateConfig });
+}
+
+export const buildAdapter = { runHarnessTask, startFixtureServer, verifyCandidate: verifyWorkbenchCandidate, ensureHarnessRuntime };
 
 export function usageFromEvents(events) {
   const totals = {};

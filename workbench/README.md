@@ -93,3 +93,5 @@ M1 第一阶段集成验证、三项代码复审修复及既定证据完整性�
 终态等待回归测试随后补准为直接检查 Promise 在“旧任务已终止、新任务仍生成”时保持 pending，并用原任意历史卡片扫描逻辑作预期失败对照；没有重新调用 Harness，详见 [终态等待回归测试补准记录](docs/M2C_REVALIDATION_WAIT_TEST_REVISION.md)。
 
 终态等待修复后的独立一次性授权已从真实 Web 启动并正确绑定新 `task_id`。Harness 完整生成了新候选，但正常与反例执行均因两个安装位置的 Playwright Test 实例被同时加载而得到零测试，任务保留为 `CANDIDATE_VALIDATION_FAILED`；没有媒体、修订或替补调用。完整事实见 [终态等待修复后单次真实 Web 验证报告](docs/M2C_WAIT_FIX_VALIDATION_REPORT.md)。
+
+后续零模型修复让 workbench 的候选执行显式使用本子工程的 Playwright CLI、配置和依赖解析根，harness-probe 默认入口仍保持独立。原候选的同字节副本已在正常页实际通过，并在反例页取得 PROBE-42/PROBE-41 断言差异；两边截图、录像、Trace 均生成，但新的独立复验记录和媒体尚未接入 Web。详见 [Playwright 双实例修复与同候选复验](docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md)。
