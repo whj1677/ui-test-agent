@@ -1,0 +1,38 @@
+{
+  "schema": "m2b-isolation-public-summary-v1",
+  "run_id": "isolation-2026-09-21T01-58-18-774Z-adfd2b02",
+  "duration_ms": 1116,
+  "environment": {
+    "host": "Windows host process",
+    "container_or_sandbox_runtime_available": false,
+    "firewall_profiles_enabled": false,
+    "security_policy_changed": false
+  },
+  "execution": {
+    "harness_starts": 0,
+    "agent_steps": null,
+    "harness_browser_tool_calls": null,
+    "provider_requests": null,
+    "provider_usage": null,
+    "model_counters_note": "Not applicable because the isolation gate stopped execution before Harness startup."
+  },
+  "checks": {
+    "workspace_read_allowed": true,
+    "workspace_write_allowed": true,
+    "outside_workspace_read_blocked": false,
+    "outside_workspace_write_blocked": false,
+    "candidate_allowed_endpoint_reachable": true,
+    "candidate_denied_endpoint_blocked": false,
+    "browser_allowed_endpoint_reachable": true,
+    "browser_denied_endpoint_blocked": false,
+    "candidate_model_environment_absent": true,
+    "external_synthetic_credential_read_blocked": false
+  },
+  "assessment": {
+    "file_isolation_satisfied": false,
+    "network_isolation_satisfied": false,
+    "credential_isolation_satisfied": false,
+    "acceptable_for_real_harness_revision": false
+  },
+  "decision": "STOP_BEFORE_HARNESS"
+}

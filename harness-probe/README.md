@@ -46,4 +46,4 @@ npm run probe
 - 当前 Windows 环境没有按进程限定“仅 DeepSeek API + localhost”的现成网络沙箱；本探针通过空白工作区、无账号浏览器和无其他敏感环境变量降低影响，但这仍是进入正式集成前的隔离缺口。
 - `npm audit` 在固定 Harness 依赖链中报告 5 个 moderate、0 high、0 critical；未用破坏性升级绕开固定版本。
 
-实际结果和停止结论见 [PROBE_REPORT.md](PROBE_REPORT.md)。
+M2-A 实际结果和停止结论见 [PROBE_REPORT.md](PROBE_REPORT.md)。M2-B 对现有宿主边界作了确定性核对；文件、网络和凭据隔离均未满足，因此没有启动新的 Harness/DeepSeek 修订任务，详见 [M2B_ISOLATION_REPORT.md](M2B_ISOLATION_REPORT.md)。

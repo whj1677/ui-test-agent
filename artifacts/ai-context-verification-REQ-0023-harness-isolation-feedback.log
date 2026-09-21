@@ -1,0 +1,119 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-21T10:02:51+08:00
+Command: npm test --prefix harness-probe
+Exit code: 0
+Parsed test count: 16
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+
+> ui-test-agent-deepseek-harness-probe@0.1.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: 真实通过且至少一个测试才完整
+ok 1 - 真实通过且至少一个测试才完整
+  ---
+  duration_ms: 1.194
+  type: 'test'
+  ...
+# Subtest: 缺失或损坏报告不能成功
+ok 2 - 缺失或损坏报告不能成功
+  ---
+  duration_ms: 0.1403
+  type: 'test'
+  ...
+# Subtest: 零测试、跳过和失败不能成功
+ok 3 - 零测试、跳过和失败不能成功
+  ---
+  duration_ms: 0.1136
+  type: 'test'
+  ...
+# Subtest: 完整终态、浏览器工具和文件同时存在才成功
+ok 4 - 完整终态、浏览器工具和文件同时存在才成功
+  ---
+  duration_ms: 0.7225
+  type: 'test'
+  ...
+# Subtest: 缺文件不能标记成功
+ok 5 - 缺文件不能标记成功
+  ---
+  duration_ms: 0.1399
+  type: 'test'
+  ...
+# Subtest: 缺浏览器工具事实不能标记成功
+ok 6 - 缺浏览器工具事实不能标记成功
+  ---
+  duration_ms: 0.1453
+  type: 'test'
+  ...
+# Subtest: 模型中断或不完整报告不能标记成功
+ok 7 - 模型中断或不完整报告不能标记成功
+  ---
+  duration_ms: 0.1213
+  type: 'test'
+  ...
+# Subtest: 取消和超时不能标记成功
+ok 8 - 取消和超时不能标记成功
+  ---
+  duration_ms: 0.1058
+  type: 'test'
+  ...
+# Subtest: 日志会遮蔽密钥、Bearer和敏感字段
+ok 9 - 日志会遮蔽密钥、Bearer和敏感字段
+  ---
+  duration_ms: 0.602
+  type: 'test'
+  ...
+# Subtest: 文件、网络和凭据禁止项都被阻断时才允许真实修订
+ok 10 - 文件、网络和凭据禁止项都被阻断时才允许真实修订
+  ---
+  duration_ms: 1.1231
+  type: 'test'
+  ...
+# Subtest: 工作区外读取或写入成功会关闭总门
+ok 11 - 工作区外读取或写入成功会关闭总门
+  ---
+  duration_ms: 0.1687
+  type: 'test'
+  ...
+# Subtest: 候选或浏览器可访问禁止端点会关闭总门
+ok 12 - 候选或浏览器可访问禁止端点会关闭总门
+  ---
+  duration_ms: 0.0992
+  type: 'test'
+  ...
+# Subtest: 候选携带模型凭据会关闭总门
+ok 13 - 候选携带模型凭据会关闭总门
+  ---
+  duration_ms: 0.0721
+  type: 'test'
+  ...
+# Subtest: 启动失败会返回错误且不等待到期
+ok 14 - 启动失败会返回错误且不等待到期
+  ---
+  duration_ms: 5.814
+  type: 'test'
+  ...
+# Subtest: 超时会终止本任务拥有的进程
+ok 15 - 超时会终止本任务拥有的进程
+  ---
+  duration_ms: 823.0454
+  type: 'test'
+  ...
+# Subtest: 用户取消会终止本任务拥有的进程且不重启
+ok 16 - 用户取消会终止本任务拥有的进程且不重启
+  ---
+  duration_ms: 746.914
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1735.7897

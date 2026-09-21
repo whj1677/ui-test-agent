@@ -1,5 +1,7 @@
 # 需求索引
 
+当前隔离核对：[REQ-0023 M2-B隔离边界与候选反馈修订](REQ-0023-harness-isolation-feedback/current_state.md)先以确定性程序验证文件、网络和凭据边界；任一禁止项未被外层强制阻断即停止模型调用，只提交缺口诊断，不补算M2-A成功或进入Web集成。
+
 当前探针：[REQ-0022 DeepSeek Harness受控调用可行性探针](REQ-0022-deepseek-harness-probe/current_state.md)固定官方 Harness 与实验性 Browser Use 版本，在隔离目录内验证程序化启动、浏览器交互、候选产出/执行和有界取消；只形成 A/B/C 可行性结论，不接正式建例 Web 或修改 M1 执行链。
 
 当前复审修复：[REQ-0021 工作台M1代码复审问题集中修复](REQ-0021-workbench-m1-review-fixes/current_state.md)只处理入口选择轮询保持、非正常终态整体通过封闭和错误事实分类三项问题；先复现后修改，另做一组新真实Web正常/故障验证，不改批准脚本、原集成报告或禁止目录，不进入Harness。

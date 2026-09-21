@@ -1,0 +1,73 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0023",
+  "title": "M2-B 隔离边界确认与一次候选反馈修订验证",
+  "metadata": {"requirement_status":"已完成（隔离未满足，未启动模型）","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "original_input": "从b512d7a核对代码，先用确定性程序确认Harness、浏览器和候选脚本的文件、网络、凭据隔离。只有隔离满足后才允许针对M2-A第二份失败候选启动一次Harness修订；否则只提交代码检查和缺口报告并停止。",
+  "user_requirements": [{
+    "id":"UN-0023-01","status":"已确认",
+    "goal":"确认M2-A外层隔离是否足以承载一次受控反馈修订，并在满足条件时验证唯一一次修订候选。",
+    "constraints":"固定Harness 0.1.6-alpha.2、deepseek-v4-pro和10分钟上限；保留M2-A原候选/历史；不改批准资产、Harness核心或工作台Web；不以cwd、路径前缀、提示词或容器启动替代隔离证据。",
+    "success_criteria":"文件、网络、凭据均有允许成功与禁止阻断的确定性证据；否则停止模型调用并报告缺口。若通过，唯一新候选须分别通过正常和独立错误输出反例验证。"
+  }],
+  "confirmed_facts": [
+    "基线b512d7a59606a2e2ce7b2c45cf8342e3e3676729已在独立分支核对。",
+    "M2-A Harness和候选均由宿主Windows上的普通Node子进程运行；候选环境变量采用白名单，不包含模型凭据。",
+    "本机未发现Docker、Podman、Windows Sandbox命令或已安装WSL发行版；Windows防火墙三个profile当前均未启用。",
+    "确定性审计中，候选同等子进程可读写工作区外合成哨兵，候选进程与真实浏览器均可访问禁止端点；文件、网络、凭据隔离均不满足。",
+    "隔离总门失败后Harness启动0次，未调用DeepSeek，未生成修订候选。"
+  ],
+  "inferences_and_open_questions": [
+    "公司是否允许启用Windows Sandbox、容器或出站防火墙规则属于公司资源与安全策略决定，Codex不得代签或擅自修改。"
+  ],
+  "development_requirements": [
+    {"id":"DR-0023-01","status":"已确认","requirement":"以确定性子进程探针验证工作区外文件读写、任意网络端点和模型凭据的实际边界。","acceptance_criteria":"允许目标成功；禁止目标在OS/运行时边界被阻断；输出只记录合成哨兵和布尔事实。","constraints":"不得把应用层路径检查、cwd或提示词当隔离。"},
+    {"id":"DR-0023-02","status":"已确认","requirement":"只有DR-0023-01全部满足时，才对M2-A第二候选启动一次定向Harness修订。","acceptance_criteria":"启动次数1；旧候选字节不变；新候选单独保存；工具上限、steps、usage和墙钟可追溯。","constraints":"不得提供第一候选、替换代码或反例实现；预期保持PROBE-42。"},
+    {"id":"DR-0023-03","status":"已确认","requirement":"若修订被允许，使用同一新候选执行正常页面与最小错误输出反例。","acceptance_criteria":"正常取得PROBE-42；反例产生对应断言不符；配置与候选哈希一致。","constraints":"执行事实优先于Harness final；候选不登记为批准资产。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0023-01","dr_ids":["DR-0023-01"],"status":"已确认","summary":"新增一次性isolation-audit，使用任务自有合成哨兵和双本地端点，从候选相同子进程环境验证允许与禁止事实。","rationale":"直接测量宿主强制边界是否存在，不依赖配置宣称。"},
+    {"id":"DD-0023-02","dr_ids":["DR-0023-02","DR-0023-03"],"status":"条件未满足前禁用","summary":"真实修订由隔离审计总门控制；任一文件、网络或凭据禁止项未被阻断即不构造模型凭据、不启动dsh。","rationale":"把安全条件落实为代码门而不是人工提醒。"}
+  ],
+  "interfaces_and_data_flow": ["隔离审计协调器 -> 与候选相同的环境白名单子进程 -> 合成工作区/外部哨兵/允许端点/禁止端点 -> JSON事实与总门；总门通过时才可进入Harness修订。"],
+  "module_document_impact": ["本次无需模块文档变更，原因：仅扩展独立harness-probe诊断与M2-B脱敏报告，不改变现有产品模块或M1工作台接口。"],
+  "risks_and_rollback": [
+    "若宿主普通进程可读写工作区外或访问任意端点，则外层隔离不成立；不通过新增应用层检查掩盖。",
+    "如需启用公司安全功能或策略，必须由有权限的负责人确认；本轮不修改系统策略。",
+    "删除M2-B新增诊断文件即可回滚，M2-A候选与历史保持不变。"
+  ],
+  "tasks": [
+    {"id":"TK-0023-01","dr_ids":["DR-0023-01"],"dd_ids":["DD-0023-01"],"status":"已完成","task":"盘点外层运行环境并实现文件、网络、凭据确定性隔离审计。","verification_ids":["VT-0023-01"]},
+    {"id":"TK-0023-02","dr_ids":["DR-0023-02"],"dd_ids":["DD-0023-02"],"status":"未执行（隔离总门未通过）","task":"隔离通过后执行唯一一次Harness反馈修订；不通过则记录未启动。","verification_ids":["VT-0023-02"]},
+    {"id":"TK-0023-03","dr_ids":["DR-0023-03"],"dd_ids":["DD-0023-02"],"status":"未执行（隔离总门未通过）","task":"隔离通过后对同一新候选执行正常与最小反例验证。","verification_ids":["VT-0023-03"]},
+    {"id":"TK-0023-04","dr_ids":["DR-0023-01","DR-0023-02","DR-0023-03"],"dd_ids":["DD-0023-01","DD-0023-02"],"status":"已完成","task":"形成脱敏报告并推送独立分支。","verification_ids":["VT-0023-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0023-01","dr_ids":["DR-0023-01"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"文件、网络、凭据允许/禁止隔离审计。","evidence_standard":"确定性命令、退出码、逐项布尔事实和脱敏JSON","current_evidence":"audit:isolation运行ID isolation-2026-09-21T01-58-18-774Z-adfd2b02，退出码2；三类隔离均false，公开摘要见harness-probe/evidence/m2b-isolation-summary.json"},
+    {"id":"VT-0023-02","dr_ids":["DR-0023-02"],"confirmation_status":"已确认","execution_status":"未运行","item":"唯一一次Harness反馈修订启动与产物。","evidence_standard":"隔离总门、启动计数、steps、工具调用、usage、墙钟和候选哈希","current_evidence":"隔离总门失败；Harness启动0次，模型相关计数不适用，无新候选"},
+    {"id":"VT-0023-03","dr_ids":["DR-0023-03"],"confirmation_status":"已确认","execution_status":"未运行","item":"同一修订候选正常与最小反例验证。","evidence_standard":"两份Playwright结构化报告、相同候选哈希和配置摘要","current_evidence":"隔离总门失败且无新候选，按停止条件未执行"},
+    {"id":"VT-0023-04","dr_ids":["DR-0023-01","DR-0023-02","DR-0023-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"历史资产、敏感信息、Git提交和远端SHA核对。","evidence_standard":"哈希、变更清单、扫描及远端查询","current_evidence":"M2-A两候选和M1批准脚本按基线字节核对；脱敏报告与分支同步待最终Git核对"}
+  ],
+  "verification_environment": {"working_directory":"harness-probe","commands":["npm ci --ignore-scripts","npm test","npm run audit:isolation"],"environment":["Windows宿主；不修改公司安全策略；真实模型总门默认关闭。"],"conclusion":["工程测试16项无失败；真实隔离审计退出码2，文件、网络、凭据隔离均不满足；按总门停止且未启动模型。"]},
+  "trace_current": [
+    {"un_id":"UN-0023-01","dr_id":"DR-0023-01","dd_id":"DD-0023-01","tk_id":"TK-0023-01","vt_id":"VT-0023-01","status":"已完成：隔离不满足"},
+    {"un_id":"UN-0023-01","dr_id":"DR-0023-02","dd_id":"DD-0023-02","tk_id":"TK-0023-02","vt_id":"VT-0023-02","status":"未执行：总门失败"},
+    {"un_id":"UN-0023-01","dr_id":"DR-0023-03","dd_id":"DD-0023-02","tk_id":"TK-0023-03","vt_id":"VT-0023-03","status":"未执行：总门失败"},
+    {"un_id":"UN-0023-01","dr_id":"DR-0023-01","dd_id":"DD-0023-01","tk_id":"TK-0023-04","vt_id":"VT-0023-04","status":"已完成：脱敏诊断收口"}
+  ],
+  "trace_history": [
+    {"version":1,"link":"无","status":"环境诊断中","notes":"从M2-A结论B建立条件式M2-B；隔离不通过即停止模型调用"},
+    {"version":2,"link":"harness-probe/M2B_ISOLATION_REPORT.md","status":"已完成（隔离未满足）","notes":"真实宿主审计证明禁止文件和网络访问未被阻断；Harness启动0次，修订与候选验证未执行"}
+  ],
+  "open_questions": ["若现有环境不满足隔离，是否由公司安全负责人批准并提供受控容器/沙箱与网络策略，留待后续决定。"],
+  "prohibited_implementation": [
+    "不得在隔离总门失败后启动Harness真实修订任务。",
+    "不得修改M2-A两份候选、历史结果、M1批准资产、Harness核心或公司安全策略。",
+    "不得新增角色词法修补器、语义审核层、工作台Web、自愈或复杂业务。",
+    "不得提交.local、原始会话、凭据或私有媒体。"
+  ],
+  "changes": [
+    {"date":"2026-09-21","version":1,"type":"新建","description":"建立M2-B隔离总门与条件式单次反馈修订需求","impact":"harness-probe诊断与脱敏报告","confirmed_by":"用户当前任务"},
+    {"date":"2026-09-21","version":2,"type":"收口","description":"隔离审计失败并按停止条件禁止真实Harness修订","impact":"仅新增诊断、测试和脱敏报告；M2-A与M1资产不变","confirmed_by":"确定性运行证据"}
+  ]
+}
