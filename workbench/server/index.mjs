@@ -29,6 +29,7 @@ const caseManager = new CaseLibraryManager(caseStore);
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
 const buildManager = new BuildTaskManager({
   store: buildStore,
+  caseStore,
   paths,
   serviceInstanceId,
   authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID || null,

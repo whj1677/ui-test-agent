@@ -116,12 +116,25 @@ export class BuildTaskStore {
     };
   }
 
-  async createTask(task) {
+  async createTask(task, initialFiles = []) {
     return this.serial(async () => {
       const directory = this.taskDirectory(task.task_id);
-      await fs.mkdir(directory, { recursive: false });
-      await writeJsonAtomic(path.join(directory, 'task.json'), task, this.io);
-      return structuredClone(task);
+      await this.io.mkdir(directory, { recursive: false });
+      try {
+        for (const item of initialFiles) {
+          if (!['input/case-snapshot.json', 'task.md', 'agent-instruction.txt'].includes(item.relative_path) || typeof item.content !== 'string') {
+            throw new Error('BUILD_INITIAL_FILE_INVALID');
+          }
+          const file = resolveInside(directory, item.relative_path);
+          await this.io.mkdir(path.dirname(file), { recursive: true });
+          await this.io.writeFile(file, item.content, { flag: 'wx' });
+        }
+        await writeJsonAtomic(path.join(directory, 'task.json'), task, this.io);
+        return structuredClone(task);
+      } catch (error) {
+        await this.io.rm(directory, { recursive: true, force: true }).catch(() => {});
+        throw error;
+      }
     });
   }
 

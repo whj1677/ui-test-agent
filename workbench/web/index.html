@@ -19,7 +19,7 @@
   <main>
     <section class="panel case-library" aria-labelledby="case-library-heading">
       <div class="section-heading">
-        <div><p class="eyebrow">M3-A · CASE LIBRARY</p><h2 id="case-library-heading">项目与用例库</h2></div>
+        <div><p class="eyebrow">M3-B1 · CASE TO BUILD INPUT</p><h2 id="case-library-heading">项目与用例库</h2></div>
         <span id="case-project-count" class="count">0 个项目</span>
       </div>
       <div class="case-layout">
@@ -69,6 +69,19 @@
             </div>
             <button class="primary" type="submit">保存新版本</button>
             <p id="case-source" class="mono break"></p>
+            <section id="case-build-panel" class="case-build-box" aria-labelledby="case-build-heading">
+              <div class="section-heading compact-heading">
+                <div><p class="eyebrow">INPUT ONLY</p><h3 id="case-build-heading">创建建例任务</h3></div>
+                <span class="count">只创建，尚未运行</span>
+              </div>
+              <div class="controls">
+                <label>指定用例版本<select id="case-build-version" data-testid="case-build-version"></select></label>
+                <label>允许的无登录合成环境<select id="case-build-environment"><option value="synthetic-probe-normal-v1">正常合成探针 · /probe/s1</option></select></label>
+                <button id="case-build-create" class="primary" type="button" data-testid="case-build-create">创建任务（不启动）</button>
+              </div>
+              <p id="case-build-message" class="message" role="status"></p>
+              <h3>关联建例任务</h3><div id="case-build-history" class="history compact-history"></div>
+            </section>
           </form>
         </div>
       </div>
@@ -141,6 +154,13 @@
           <div id="build-detail" class="hidden" data-testid="build-detail">
             <div id="build-statuses" class="status-grid"></div>
             <dl id="build-facts" class="facts compact"></dl>
+            <section id="build-project-case-input" class="input-inspector hidden" data-testid="build-project-case-input">
+              <div class="section-heading compact-heading"><h3>本次建例输入</h3><button id="build-back-to-case" type="button">返回来源用例</button></div>
+              <p id="build-input-state" class="result-highlight"></p>
+              <details open><summary>冻结机器快照</summary><pre id="build-input-snapshot"></pre></details>
+              <details><summary>实际 task.md</summary><pre id="build-input-task-md"></pre></details>
+              <details><summary>准备交给 Coding Agent 的任务指令</summary><pre id="build-input-instruction"></pre></details>
+            </section>
             <h3>候选版本与差异</h3><div id="build-candidates" class="candidate-list"></div>
             <h3>候选验证记录</h3><div id="build-revalidations" data-testid="build-revalidations"></div>
             <h3>登记文件</h3><div id="build-files" class="file-list"></div>

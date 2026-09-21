@@ -1,5 +1,7 @@
 # 需求索引
 
+当前输入接通：[REQ-0026 M3-B1项目单条用例建例输入接通](REQ-0026-workbench-m3b-case-build-input/current_state.md)只把项目内已确认的指定版本冻结为现有build task输入并展示双向关联；任务明确停在已创建、尚未启动，不调用Harness、模型或业务脚本。
+
 当前用例库：[REQ-0025 M3-A项目用例库与Excel及原生用例包导入导出](REQ-0025-workbench-m3a-case-import-export/current_state.md)只实现本地单用户的项目、用例、xlsx预览确认和JSON用例包跨项目往返；不接Harness、模型、业务脚本、审批或套件执行。
 
 当前建例入口：[REQ-0024 M2-C工作台最小候选建例入口](REQ-0024-workbench-minimal-candidate-builder/current_state.md)仅支持固定无登录合成任务，以阶段最多两次真实Harness启动完成候选生成、独立验证、一次显式修订和人工待核对状态；不批准资产、不接复杂业务或自愈。

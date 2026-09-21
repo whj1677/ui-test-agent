@@ -24,6 +24,7 @@
     "test:m2c-runtime-media-readback": "node tests/existing-candidate-media-readback.integration.mjs",
     "test:m3a-browser": "node tests/case-library-browser.integration.mjs",
     "test:m3a-fidelity-browser": "node tests/excel-fidelity-browser.integration.mjs",
+    "test:m3b1-browser": "node tests/project-case-build-browser.integration.mjs",
     "test:real": "node tests/real-workbench.integration.mjs",
     "test:restart": "node tests/restart-history.integration.mjs",
     "lab": "node ../heldout-lab/serve.mjs 4198",

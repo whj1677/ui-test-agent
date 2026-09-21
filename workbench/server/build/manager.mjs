@@ -5,6 +5,12 @@ import { buildAdapter, usageFromEvents } from './adapter.mjs';
 import { indexAttemptFiles } from './files.mjs';
 import { counterexampleDetected, parseCandidateReport } from './report.mjs';
 import { BUILD_TEMPLATE_ID, loadBuildTemplate, taskDocument } from './template.mjs';
+import { contentHash } from '../cases/excel.mjs';
+import {
+  PROJECT_CASE_ENVIRONMENT_ID,
+  assembleProjectCaseInput,
+  renderProjectCaseAgentInstruction,
+} from './project-case.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 
@@ -44,7 +50,12 @@ function lineDiff(previous, current) {
   return { base: 'previous-candidate', changed: lines.length > 0, lines };
 }
 
-function promptFor({ kind, template, entryUrl, candidatePath }) {
+export function promptFor({ kind, task, entryUrl, candidatePath }) {
+  if (task.source?.kind === 'project-case') {
+    if (kind !== 'initial') throw new Error('BUILD_PROJECT_CASE_REVISION_NOT_ALLOWED');
+    return renderProjectCaseAgentInstruction(task.input_bundle.agent_instruction_template, { entryUrl, candidatePath });
+  }
+  const template = task.template;
   const common = [
     `Use the Playwright MCP browser tools to open exactly ${entryUrl}.`,
     'Perform the interaction in task.md and observe the visible result.',
@@ -71,6 +82,7 @@ function promptFor({ kind, template, entryUrl, candidatePath }) {
 export class BuildTaskManager {
   constructor(options) {
     this.store = options.store;
+    this.caseStore = options.caseStore || null;
     this.paths = options.paths;
     this.adapter = options.adapter || buildAdapter;
     this.browserExecutable = options.browserExecutable || process.env.DSH_PROBE_BROWSER_EXECUTABLE;
@@ -89,6 +101,7 @@ export class BuildTaskManager {
     this.lifecycleSequences = new Map();
     this.storageFault = null;
     this.authorizationId = options.authorizationId || null;
+    this.caseSubmissions = new Map();
   }
 
   diagnostics() {
@@ -179,6 +192,69 @@ export class BuildTaskManager {
     });
   }
 
+  async submitProjectCase(request) {
+    this.#assertWritable();
+    const requestId = request?.request_id;
+    if (!/^case-build-request-[a-z0-9-]{8,80}$/.test(requestId || '')) throw new Error('CASE_BUILD_REQUEST_ID_INVALID');
+    if (this.caseSubmissions.has(requestId)) return this.caseSubmissions.get(requestId);
+    const operation = this.#submitProjectCase(request).finally(() => this.caseSubmissions.delete(requestId));
+    this.caseSubmissions.set(requestId, operation);
+    return operation;
+  }
+
+  async #submitProjectCase(request) {
+    if (!this.caseStore) throw new Error('CASE_BUILD_STORE_UNAVAILABLE');
+    if (request.environment_id !== PROJECT_CASE_ENVIRONMENT_ID) throw new Error('CASE_BUILD_ENVIRONMENT_NOT_ALLOWED');
+    if (typeof request.project_id !== 'string' || typeof request.case_id !== 'string' ||
+        !Number.isInteger(request.case_version) || request.case_version < 1 ||
+        !/^[A-F0-9]{64}$/.test(request.content_sha256 || '')) throw new Error('CASE_BUILD_SELECTION_INVALID');
+
+    const existing = (await this.store.listTasks()).find((task) => task.source?.creation_request_id === request.request_id);
+    if (existing) return existing;
+    const project = await this.caseStore.getProject(request.project_id);
+    if (!project) throw new Error('CASE_PROJECT_NOT_FOUND');
+    const item = project.cases.find((entry) => entry.case_id === request.case_id);
+    if (!item) throw new Error('CASE_NOT_FOUND');
+    const versionRecord = item.versions.find((entry) => entry.version === request.case_version);
+    if (!versionRecord) throw new Error('CASE_BUILD_VERSION_NOT_FOUND');
+    const calculatedHash = contentHash(versionRecord.content);
+    if (calculatedHash !== versionRecord.content_sha256 || calculatedHash !== request.content_sha256) {
+      throw new Error('CASE_BUILD_CONTENT_HASH_MISMATCH');
+    }
+    const steps = versionRecord.content?.steps;
+    if (versionRecord.content?.status !== 'CONFIRMED') throw new Error('CASE_BUILD_CONTENT_NOT_CONFIRMED');
+    if (!Array.isArray(steps) || !steps.length || steps.some((step, index) =>
+      step?.order !== index + 1 || typeof step.action !== 'string' || !step.action.trim() ||
+      typeof step.expected !== 'string' || !step.expected.trim())) {
+      throw new Error('CASE_BUILD_STEPS_INCOMPLETE');
+    }
+
+    const template = await loadBuildTemplate(this.paths);
+    const now = this.now().toISOString();
+    const assembled = assembleProjectCaseInput({ project, item, versionRecord, environmentTemplate: template.public, frozenAt: now });
+    const budget = await this.store.getBudget();
+    const authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
+    const files = assembled.initial_files.map(({ content, ...descriptor }) => descriptor);
+    return this.store.createTask({
+      schema: 'workbench/build-task-v1', task_id: this.idFactory(), template: assembled.public_template,
+      source: { ...assembled.source, creation_request_id: request.request_id },
+      environment_ref: assembled.environment_ref, input_bundle: assembled.input_bundle,
+      execution_policy: { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
+      created_at: now, started_at: null, finished_at: null,
+      task_status: 'SUBMITTED', generation_status: 'NOT_STARTED', verification_status: 'NOT_STARTED',
+      human_review_status: 'NOT_READY', active_attempt_id: null, attempts: [], candidates: [], files,
+      revision_allowed: false,
+      budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts },
+      authorization: authorization ? {
+        authorization_id: authorization.authorization_id, kind: authorization.kind,
+        max_starts: authorization.max_starts, used_starts: authorization.used_starts,
+        linked_stage: authorization.linked_stage,
+      } : null,
+      runtime: { os_file_isolation: false, os_network_isolation: false, residual_risk_accepted: true },
+      error: null,
+    }, assembled.initial_files);
+  }
+
   async prepareRuntime() {
     if (!this.browserExecutable) throw new Error('BUILD_BROWSER_EXECUTABLE_REQUIRED');
     if (!this.runtimeReady) {
@@ -200,6 +276,7 @@ export class BuildTaskManager {
     try {
       const task = await this.store.getTask(taskIdValue);
       if (!task) throw new Error('BUILD_TASK_NOT_FOUND');
+      if (task.execution_policy?.launch_enabled === false) throw new Error('BUILD_INPUT_ONLY_TASK_NOT_STARTABLE');
       if (kind === 'initial' && (task.task_status !== 'SUBMITTED' || task.attempts.length)) throw new Error('BUILD_INITIAL_NOT_ALLOWED');
       if (kind === 'revision' && (!task.revision_allowed || task.attempts.some((item) => item.kind === 'revision'))) throw new Error('BUILD_REVISION_NOT_ALLOWED');
       const revalidationId = task.authorization?.authorization_id || null;
@@ -224,7 +301,7 @@ export class BuildTaskManager {
       const candidatePath = path.join(outputRoot, 'candidate.spec.mjs');
       await fs.mkdir(inputRoot, { recursive: true });
       await fs.mkdir(outputRoot, { recursive: true });
-      await fs.writeFile(path.join(workspace, 'task.md'), taskDocument(task.template), { flag: 'wx' });
+      await fs.writeFile(path.join(workspace, 'task.md'), taskDocument(task), { flag: 'wx' });
       if (kind === 'revision') {
         const previous = task.candidates.at(-1);
         if (!previous || previous.verification_status !== 'FAILED') throw new Error('BUILD_REVISION_SOURCE_INVALID');
@@ -290,7 +367,7 @@ export class BuildTaskManager {
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'fixture_starting', partial_observation: true });
       normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture);
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
-      const prompt = promptFor({ kind, template: task.template, entryUrl: normalServer.url, candidatePath });
+      const prompt = promptFor({ kind, task, entryUrl: normalServer.url, candidatePath });
       const harnessStarted = Date.now();
       let authorizationClaimed = false;
       const harness = await this.adapter.runHarnessTask({

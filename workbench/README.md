@@ -1,6 +1,6 @@
 # 批准脚本测试工作台（第一阶段）
 
-这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 在不改变两条执行链的前提下增加项目、用例、Excel 和原生 JSON 用例包的数据管理。M3-A 不调用 Harness 或模型，也不生成、批准或执行业务脚本。
+这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 增加项目与用例数据管理。M3-B1 允许从一个已确认的项目用例创建现有 build task 的冻结输入，但明确停在“已创建，尚未启动”；本批 Harness、模型、候选和业务脚本执行均为 0。
 
 第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。
 
@@ -12,6 +12,7 @@ npm ci
 node node_modules/@playwright/test/cli.js install chromium
 npm test
 npm run test:m3a-browser
+npm run test:m3b1-browser
 npm run test:build-browser
 npm run register:approved
 # 仅当本机已有该离线复验记录时登记派生索引；不执行候选或调用模型
@@ -20,6 +21,8 @@ npm start
 ```
 
 默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
+
+选择已确认且每一步动作/预期完整的用例后，可在详情中选择确切版本与固定无登录合成环境并点击“创建任务（不启动）”。服务端按项目 ID、内部用例 ID、版本和内容 SHA-256 重新读取保存版本，冻结 `input/case-snapshot.json`、`task.md` 和 `agent-instruction.txt` 到既有 build task；前端正文不作为事实源。项目用例任务带 `INPUT_ONLY` 执行策略，Web 禁用启动且后端拒绝 start，因此创建、查看、轮询和重启不会消耗 M2-C 预算。任务详情可查看实际冻结内容并返回来源用例；旧版本任务不会随项目用例的新版本变化。验证与边界见 [M3-B1 输入接通报告](docs/M3B1_CASE_BUILD_INPUT_REPORT.md)。
 
 受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
 
@@ -40,7 +43,7 @@ npm start
 
 当前接口：`GET /api/health`、`GET /api/assets`、`GET /api/assets/:asset_id`、`GET /api/runs`、`GET /api/runs/:run_id`、`POST /api/runs` 和 `POST /api/runs/:run_id/stop`。状态变更只接受同源本地 JSON 请求，正文只允许固定字段。
 
-M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由。第一版不接受任意 URL、文件、代码或命令上传。已有离线复验可先通过受控登记命令写入派生索引，再由任务 API 返回精确关联记录；媒体只能从包含任务 ID、复验 ID 和登记媒体 ID 的路由读取。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
+M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由；M3-B1 新增固定字段的 `POST /api/build/tasks/from-project-case`，只创建不可启动的项目用例输入任务。第一版不接受任意 URL、文件、代码或命令上传。已有离线复验可先通过受控登记命令写入派生索引，再由任务 API 返回精确关联记录；媒体只能从包含任务 ID、复验 ID 和登记媒体 ID 的路由读取。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
 
 执行前会确认 4198 的 `/healthz` 精确标识冻结 heldout 站点并检查入口可用性；不匹配时拒绝运行，不关闭或替换未知进程。后端只从已登记资产映射入口，以参数数组启动本地锁定的 `@playwright/test`，显式使用 `workers=1`、`retries=0`，不通过 shell 或 `npx` 下载。批准脚本按原始字节复制到本次运行目录，来源和副本在运行前后分别核验哈希。
 

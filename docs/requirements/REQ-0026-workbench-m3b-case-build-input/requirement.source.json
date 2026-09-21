@@ -1,0 +1,72 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0026",
+  "title": "M3-B1 项目单条用例建例输入接通",
+  "metadata": {"requirement_status":"已完成","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "original_input": "从dd04501基线在现有workbench中把项目内一条已确认用例接入既有build task：服务端按project_id、case_id、版本和内容哈希冻结完整用例及合成环境引用，创建但不启动Harness，并在Web展示实际快照、task.md、任务指令和双向关联。",
+  "user_requirements": [{"id":"UN-0026-01","status":"已确认","goal":"从项目用例详情创建真实待启动建例任务，完整保留版本化输入及来源，并能查看准备交给Coding Agent的实际内容。","constraints":"Harness、模型、候选生成和业务脚本执行均为0；不批量建例、不自动批准、不新建另一套任务系统；仅绑定现有无登录合成环境。","success_criteria":"真实xlsx导入的已确认用例从Web创建进入现有build task历史；快照不受后续用例修改影响，新版本形成新任务；拒绝跨项目、错误版本/哈希和待澄清输入；刷新与重启仍可双向追溯。"}],
+  "confirmed_facts": [
+    "基线dd04501de512f7fd9badb0ecb980ab7daa63c462已在独立worktree和codex/test-workbench-m3b-case-build-input分支核对。",
+    "现有BuildTaskStore以task.json持久化build task，BuildTaskManager负责固定探针提交、启动、生命周期和预算；本批复用该对象与历史列表。",
+    "项目用例版本已保存content、content_sha256、root_source与lineage；任务快照必须由服务端读取这些记录生成。",
+    "本批只允许synthetic-probe-v1对应的无登录本地合成环境引用，创建的项目用例任务显式禁止启动。"
+  ],
+  "inferences_and_open_questions": ["无阻塞业务歧义；真实模型是否能据项目用例生成有效候选留待后续独立授权验证。"],
+  "development_requirements": [
+    {"id":"DR-0026-01","status":"已确认","requirement":"项目用例详情提供版本与固定环境选择，并以项目ID、内部用例ID、版本和内容哈希创建单条建例任务。","acceptance_criteria":"服务端拒绝跨项目、未知版本、哈希不符、未确认、步骤/预期缺失和非法环境；重复请求键幂等。","constraints":"不按对外编号、标题、列表位置或前端正文定位；不猜URL。"},
+    {"id":"DR-0026-02","status":"已确认","requirement":"任务冻结完整版本内容、根来源、lineage和明确环境引用，并登记机器快照、task.md与Agent指令文件。","acceptance_criteria":"标题、模块、前置条件、测试数据、全部有序步骤及逐步预期逐字进入快照；数字样文本与多行内容不损坏；文件哈希和路径受控。","constraints":"正文由服务端读取；task.md不概括、合并、删减或改写预期；不包含密钥、环境全量或历史成功脚本。"},
+    {"id":"DR-0026-03","status":"已确认","requirement":"项目用例任务进入现有build task历史并支持从用例查看关联任务、从任务返回来源用例。","acceptance_criteria":"明确显示用例已确认、任务已创建、Harness未启动、候选未生成、无测试结果/批准；刷新和服务重启后关联仍正确。","constraints":"不改写既有项目、M1/M2任务、候选、预算或历史证据。"},
+    {"id":"DR-0026-04","status":"已确认","requirement":"冻结版本不可变；用例v1建任务后修改为v2不改变旧任务，新建任务准确引用v2。","acceptance_criteria":"两任务快照、版本与哈希各自正确，两条不同用例的task.md不同且均不退化为固定PROBE任务。","constraints":"本批项目用例任务执行策略为INPUT_ONLY，启动端点和页面均拒绝启动，不消耗预算。"},
+    {"id":"DR-0026-05","status":"已确认","requirement":"以真实Excel导入和真实Chromium完成创建、查看输入、双向关联及重启读回的零模型验证。","acceptance_criteria":"工程测试覆盖全部拒绝条件、幂等、版本冻结和生产组装逻辑；Web完成用户指定路径并保留脱敏截图。","constraints":"捕获或纯组装检查不冒充Harness已收到或执行；历史私有媒体缺失如实记录。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0026-01","dr_ids":["DR-0026-01","DR-0026-04"],"status":"已确认","summary":"在BuildTaskManager新增project-case提交方法，由CaseLibraryStore按四元组解析确切版本并用request_id做持久化幂等。","rationale":"复用现有任务存储与历史，不建立第二套任务系统，也不信任前端正文。"},
+    {"id":"DD-0026-02","dr_ids":["DR-0026-02","DR-0026-04"],"status":"已确认","summary":"任务根目录保存input/case-snapshot.json、task.md和agent-instruction.txt，task.json登记冻结input_bundle和受控文件索引；后续启动组装复用同一来源。","rationale":"机器输入、可读任务和固定指令都可哈希核对，创建后不依赖项目当前状态。"},
+    {"id":"DD-0026-03","dr_ids":["DR-0026-01","DR-0026-02"],"status":"已确认","summary":"环境固定为现有synthetic-probe无登录合成环境引用，运行URL留到受控执行时绑定；项目用例内容从不回退到PROBE-42模板。","rationale":"不从自然语言猜URL且保留固定探针兼容性。"},
+    {"id":"DD-0026-04","dr_ids":["DR-0026-03","DR-0026-04"],"status":"已确认","summary":"双向关联由build task的source字段作为权威事实，项目页面从现有任务列表派生关联；INPUT_ONLY策略同时禁用UI启动并由后端拒绝。","rationale":"避免跨存储双写和部分提交，同时封闭额度绕过路径。"},
+    {"id":"DD-0026-05","dr_ids":["DR-0026-05"],"status":"已确认","summary":"在现有单页详情中增加版本/环境选择、明确只创建CTA、关联历史及真实输入查看区；使用原生语义控件和文字状态。","rationale":"保持M3-A/M2-C视觉与交互一致，并使状态不依赖颜色理解。"}
+  ],
+  "interfaces_and_data_flow": [
+    "项目详情选择版本/固定环境 -> POST project-case build task -> 服务端读取project/case/version并核哈希 -> BuildTaskStore原子创建任务和三份输入文件。",
+    "build task source保存项目/用例/版本/哈希；项目详情按source派生关联任务，任务详情用source返回项目用例。",
+    "未来受控启动只可读取冻结input_bundle并渲染已登记task.md/指令；本批execution_policy禁止启动。"
+  ],
+  "module_document_impact": ["更新workbench case-library与candidate-build模块文档，记录项目用例输入契约、冻结文件、双向关联和INPUT_ONLY执行边界。"],
+  "risks_and_rollback": [
+    "任务与项目分属两个JSON存储；使用单向不可变source引用避免双写，项目删除本批不支持。",
+    "重复提交以客户端request_id幂等；不同request_id是用户明确创建的新任务，不按内容哈希自动吞并。",
+    "删除新增project-case提交入口与显示区即可回滚；既有build task和case project schema仍兼容。"
+  ],
+  "tasks": [
+    {"id":"TK-0026-01","dr_ids":["DR-0026-01","DR-0026-02","DR-0026-04"],"dd_ids":["DD-0026-01","DD-0026-02","DD-0026-03","DD-0026-04"],"status":"已完成","task":"实现服务端确切用例版本校验、冻结输入文件、幂等创建和INPUT_ONLY启动封闭。","verification_ids":["VT-0026-01","VT-0026-02"]},
+    {"id":"TK-0026-02","dr_ids":["DR-0026-03"],"dd_ids":["DD-0026-04"],"status":"已完成","task":"在现有build task模型和API中加入项目用例来源及双向关联读回。","verification_ids":["VT-0026-02"]},
+    {"id":"TK-0026-03","dr_ids":["DR-0026-01","DR-0026-03","DR-0026-04"],"dd_ids":["DD-0026-04","DD-0026-05"],"status":"已完成","task":"实现项目详情只创建入口、关联历史、任务完整输入查看和返回来源交互。","verification_ids":["VT-0026-03"]},
+    {"id":"TK-0026-04","dr_ids":["DR-0026-05"],"dd_ids":["DD-0026-01","DD-0026-02","DD-0026-04","DD-0026-05"],"status":"已完成","task":"完成真实Excel工程验证、真实Chromium路径、重启读回和旧能力回归。","verification_ids":["VT-0026-01","VT-0026-02","VT-0026-03","VT-0026-04"]},
+    {"id":"TK-0026-05","dr_ids":["DR-0026-01","DR-0026-02","DR-0026-03","DR-0026-04","DR-0026-05"],"dd_ids":["DD-0026-01","DD-0026-02","DD-0026-03","DD-0026-04","DD-0026-05"],"status":"已完成","task":"收口文档、脱敏证据、正式门禁并同步GitHub分支。","verification_ids":["VT-0026-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0026-01","dr_ids":["DR-0026-01","DR-0026-04"],"confirmation_status":"已确认","execution_status":"单元测试通过","item":"确切版本/哈希/项目归属、已确认与步骤预期完整性、环境白名单、幂等和INPUT_ONLY拒绝。","evidence_standard":"真实Excel进入CaseLibraryStore后的BuildTaskManager工程测试","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":54,"failure_count":0,"skipped_count":0,"log_path":"validation/REQ-0026-workbench.log"}},
+    {"id":"VT-0026-02","dr_ids":["DR-0026-02","DR-0026-03","DR-0026-04"],"confirmation_status":"已确认","execution_status":"单元测试通过","item":"完整快照、task.md、Agent指令、三份文件哈希、两用例差异和v1/v2冻结。","evidence_standard":"实际任务目录文件与生产组装逻辑逐字段核对","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":54,"failure_count":0,"skipped_count":0,"log_path":"validation/REQ-0026-workbench.log"}},
+    {"id":"VT-0026-03","dr_ids":["DR-0026-03","DR-0026-04","DR-0026-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实Chromium创建、查看输入、返回用例、关联历史、刷新和重启。","evidence_standard":"真实浏览器交互、后端task.json和脱敏截图","current_evidence":{"command":"npm --prefix workbench run test:m3b1-browser","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"validation/REQ-0026-browser.log"}},
+    {"id":"VT-0026-04","dr_ids":["DR-0026-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"受影响workbench回归、正式需求门禁、资产与预算不变。","evidence_standard":"真实命令、退出码、测试统计、差异与哈希","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":54,"failure_count":0,"skipped_count":0,"log_path":"validation/REQ-0026-workbench.log"}}
+  ],
+  "verification_environment": {"working_directory":"workbench与仓库根需求工具","commands":["npm --prefix workbench test","npm --prefix workbench run test:m3b1-browser"],"environment":["Windows；Node 22；127.0.0.1单用户；临时case/build数据根；Harness/模型凭据不需要。"],"conclusion":["项目单条用例输入接通已完成零模型工程与Web验证；不代表真实模型建例或自动化完成。"]},
+  "trace_current": [
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-01","dd_id":"DD-0026-01","tk_id":"TK-0026-01","vt_id":"VT-0026-01","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-02","dd_id":"DD-0026-02","tk_id":"TK-0026-01","vt_id":"VT-0026-02","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-02","dd_id":"DD-0026-03","tk_id":"TK-0026-01","vt_id":"VT-0026-02","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-03","dd_id":"DD-0026-04","tk_id":"TK-0026-02","vt_id":"VT-0026-02","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-04","dd_id":"DD-0026-04","tk_id":"TK-0026-03","vt_id":"VT-0026-03","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-05","dd_id":"DD-0026-05","tk_id":"TK-0026-04","vt_id":"VT-0026-04","status":"已完成"},
+    {"un_id":"UN-0026-01","dr_id":"DR-0026-05","dd_id":"DD-0026-05","tk_id":"TK-0026-05","vt_id":"VT-0026-04","status":"已完成"}
+  ],
+  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M3-A保真收口基线接通项目单条用例到现有build task的冻结输入，不启动Harness。"},{"version":2,"link":"workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md","status":"已完成","notes":"零模型工程与真实Chromium验证通过，停在已创建尚未启动。"}],
+  "open_questions": ["真实Harness消费项目用例输入、候选生成质量和业务可执行性均不在本批验证范围。"],
+  "prohibited_implementation": [
+    "不得启动Harness、调用模型、生成候选或执行业务脚本。",
+    "不得从用例自然语言猜URL、开放任意网站、回退到PROBE-42正文或提供历史成功脚本/反例答案。",
+    "不得修改既有M1/M2任务、候选、预算、历史证据、批准脚本或扩展任意Excel识别。",
+    "不得增加批量建例、测试套件、自动批准、自愈、多人权限或新Agent框架。"
+  ],
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-B1项目单条用例建例输入接通需求包","impact":"workbench case/build输入契约、API、Web、测试和报告","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"完成","description":"完成输入冻结、双向关联、INPUT_ONLY封闭和零模型Web验证","impact":"现有build task新增项目用例来源，不改变执行授权","confirmed_by":"自动化证据，待用户审阅"}]
+}

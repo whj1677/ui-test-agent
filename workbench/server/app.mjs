@@ -151,6 +151,7 @@ function errorStatus(error) {
   if (error.message === 'RUN_ALREADY_ACTIVE') return 409;
   if (error.message === 'RUN_NOT_ACTIVE_OR_NOT_OWNED') return 404;
   if (['BUILD_TASK_ALREADY_ACTIVE', 'BUILD_STAGE_BUDGET_EXHAUSTED'].includes(error.message)) return 409;
+  if (error.message === 'BUILD_INPUT_ONLY_TASK_NOT_STARTABLE') return 409;
   if (['BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE', 'BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED'].includes(error.message)) return 409;
   if (error.message === 'BUILD_REVALIDATION_AUTHORIZATION_INVALID') return 400;
   if (['BUILD_STORAGE_UNAVAILABLE', 'BUILD_DIAGNOSTIC_STORAGE_FAILED'].includes(error.message)) return 503;
@@ -289,6 +290,16 @@ export function createWorkbenchServer(options = {}) {
         const body = await readJsonBody(request);
         if (Object.keys(body).sort().join(',') !== 'template_id' || typeof body.template_id !== 'string') return sendJson(response, 400, { error: 'INVALID_BUILD_TASK_REQUEST' });
         sendJson(response, 201, await buildManager.submit(body.template_id));
+        return;
+      }
+      if (buildManager && request.method === 'POST' && url.pathname === '/api/build/tasks/from-project-case') {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        const keys = Object.keys(body).sort().join(',');
+        if (keys !== 'case_id,case_version,content_sha256,environment_id,project_id,request_id') {
+          return sendJson(response, 400, { error: 'INVALID_PROJECT_CASE_BUILD_REQUEST' });
+        }
+        sendJson(response, 201, await buildManager.submitProjectCase(body));
         return;
       }
       const buildAction = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/(start|revise|stop)$/);

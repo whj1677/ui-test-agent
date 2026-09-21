@@ -2,7 +2,7 @@
 
 ## 范围
 
-M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用例包的数据管理。模块不启动 Harness，不调用模型，不生成、批准或执行业务脚本。
+M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用例包的数据管理。M3-B1 将单个已确认版本接入既有 build task 的输入侧；本阶段不启动 Harness，不调用模型，不生成、批准或执行业务脚本。
 
 ## 数据与边界
 
@@ -21,11 +21,19 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 导出全部或选中用例，保存业务内容、当前来源版本、根来源和项目 lineage。目标项目生成新内部 ID，后续修改形成新版本且不影响源项目。包不含脚本、批准、执行结果、媒体、Cookie、凭据或绝对路径。
 
+## 单条用例建例输入
+
+详情页只允许选择项目内确切内部 ID 的已保存版本。创建请求同时携带项目 ID、内部用例 ID、版本、内容 SHA-256、固定环境 ID 和幂等 request ID；服务端重新读取版本并复算哈希，拒绝跨项目、过期版本、哈希不符、待确认、缺动作/预期或非法环境。
+
+创建结果仍是现有 `workbench/build-task-v1`。`source` 保存项目、用例、版本、根来源和 lineage，任务目录登记 `input/case-snapshot.json`、`task.md`、`agent-instruction.txt`；后两者逐步展开原动作和预期，不做语义概括。`execution_policy=INPUT_ONLY` 同时控制 Web 和后端启动拒绝。项目页从 task source 派生关联历史，任务页可返回来源用例，避免项目/任务双写；服务重启直接读回原 task。内容确认只说明用例正文可用于创建输入，不代表脚本批准、候选生成或测试通过。
+
 ## 验证入口
 
 - `cd workbench; npm test`
 - `cd workbench; npm run test:m3a-browser`
 - `cd workbench; npm run test:m3a-fidelity-browser`
+- `cd workbench; npm run test:m3b1-browser`
 - 首版格式：[workbench/docs/M3A_EXCEL_FORMAT_V1.md](../../workbench/docs/M3A_EXCEL_FORMAT_V1.md)
 - 验收报告：[workbench/docs/M3A_ACCEPTANCE_REPORT.md](../../workbench/docs/M3A_ACCEPTANCE_REPORT.md)
 - Excel 保真修订：[workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md](../../workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md)
+- M3-B1 输入接通报告：[workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md](../../workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md)

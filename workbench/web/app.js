@@ -5,6 +5,7 @@ const state = {
   buildBudget: null, buildAuthorization: null,
   selectedRevalidationByTask: {}, selectedRevalidationLaneByTask: {}, renderedRevalidationKey: null,
   caseProjects: [], selectedProjectId: null, selectedCaseId: null, caseUpload: null, importPreview: null,
+  caseBuildRequestId: null,
 };
 const byId = (id) => document.getElementById(id);
 
@@ -83,7 +84,7 @@ function renderBuildControls() {
   const allowance = state.buildAuthorization || state.buildBudget;
   const exhausted = !allowance || allowance.used_starts >= allowance.max_starts;
   byId('build-submit').disabled = !state.buildTemplates.length || busy || exhausted;
-  byId('build-start').disabled = busy || exhausted || task?.task_status !== 'SUBMITTED';
+  byId('build-start').disabled = busy || exhausted || task?.task_status !== 'SUBMITTED' || task?.execution_policy?.launch_enabled === false;
   byId('build-revise').disabled = busy || exhausted || !task?.revision_allowed;
   byId('build-stop').disabled = !state.activeBuildTaskId;
 }
@@ -120,11 +121,25 @@ function renderBuildDetail() {
   const facts = byId('build-facts'); clear(facts);
   addFact(facts, '任务 ID', task.task_id);
   addFact(facts, '冻结输入', task.template.input_sha256);
-  addFact(facts, '模型', 'deepseek-official / deepseek-v4-pro');
+  addFact(facts, '模型', task.source?.kind === 'project-case' ? '尚未调用' : 'deepseek-official / deepseek-v4-pro');
   addFact(facts, '阶段调用预算', `${task.budget.used_starts} / ${task.budget.max_starts}`);
   if (task.authorization) addFact(facts, '本次复验授权', `${task.authorization.authorization_id} · ${task.authorization.used_starts} / ${task.authorization.max_starts}`);
   addFact(facts, 'OS隔离', '未强制，残余风险已接受');
   addFact(facts, '创建/结束', `${task.created_at} / ${task.finished_at || '—'}`);
+  if (task.source?.kind === 'project-case') {
+    addFact(facts, '来源用例', `${task.source.project_id} / ${task.source.case_id} / v${task.source.case_version}`);
+    addFact(facts, '对外编号', task.source.external_id);
+    addFact(facts, '内容状态', '已确认（冻结时）');
+  }
+
+  const inputInspector = byId('build-project-case-input');
+  inputInspector.classList.toggle('hidden', task.source?.kind !== 'project-case');
+  if (task.source?.kind === 'project-case') {
+    setText('build-input-state', '建例任务已创建；Harness 尚未启动；候选、测试结果和批准均不存在。');
+    byId('build-input-snapshot').textContent = JSON.stringify(task.input_bundle.snapshot, null, 2);
+    byId('build-input-task-md').textContent = task.input_bundle.task_markdown;
+    byId('build-input-instruction').textContent = task.input_bundle.agent_instruction_template;
+  }
 
   const candidates = byId('build-candidates'); clear(candidates);
   if (!task.candidates.length) candidates.append(make('div', '尚未生成候选。', 'empty'));
@@ -158,6 +173,11 @@ function renderBuildDetail() {
     const card = make('article', undefined, 'file-card');
     card.append(make('strong', `${file.kind} · ${file.file_name}`));
     card.append(make('p', `${file.bytes} bytes · ${file.sha256.slice(0, 16)}… · ${file.web_visible ? '可在本页读取' : '仅本机登记'}`, 'mono'));
+    if (file.web_visible) {
+      const link = make('a', '查看登记原件');
+      link.href = `/api/build/tasks/${encodeURIComponent(task.task_id)}/files/${encodeURIComponent(file.file_id)}`;
+      link.target = '_blank'; link.rel = 'noopener'; card.append(link);
+    }
     files.append(card);
   }
   byId('build-error').textContent = task.error ? JSON.stringify(task.error, null, 2) : '无';
@@ -318,6 +338,7 @@ function renderDetail() {
 function render() {
   renderAsset(); renderControls(); renderHistory(); renderDetail();
   renderBuildTemplate(); renderBuildControls(); renderBuildHistory(); renderBuildDetail();
+  renderCaseBuildSection();
 }
 
 const mappingLabels = {
@@ -362,6 +383,44 @@ function renderCaseDetail() {
   byId('case-status').value = content.status; byId('case-preconditions').value = content.preconditions; byId('case-test-data').value = content.test_data;
   byId('case-steps').value = content.steps.map((step) => step.action).join('\n'); byId('case-expected').value = content.steps.map((step) => step.expected).join('\n');
   setText('case-source', `内部ID ${item.case_id} · 根来源 ${item.root_source.stable_id} · 导入批次 ${item.import_batch_id}`);
+  const versionSelect = byId('case-build-version');
+  const previousVersion = Number(versionSelect.value);
+  clear(versionSelect);
+  for (const version of item.versions) {
+    versionSelect.append(new Option(`v${version.version} · ${version.content.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'} · ${version.content_sha256.slice(0, 12)}…`, String(version.version)));
+  }
+  versionSelect.value = item.versions.some((version) => version.version === previousVersion) ? String(previousVersion) : String(item.current_version);
+  state.caseBuildRequestId = null;
+  renderCaseBuildSection();
+}
+
+function renderCaseBuildSection() {
+  const project = selectedProject();
+  const item = project?.cases.find((entry) => entry.case_id === state.selectedCaseId);
+  if (!item || byId('case-detail').classList.contains('hidden')) return;
+  const selectedVersion = Number(byId('case-build-version').value || item.current_version);
+  const version = item.versions.find((entry) => entry.version === selectedVersion);
+  const complete = version?.content.status === 'CONFIRMED' && version.content.steps?.length > 0 &&
+    version.content.steps.every((step, index) => step.order === index + 1 && step.action.trim() && step.expected.trim());
+  byId('case-build-create').disabled = !complete;
+  if (!complete) setText('case-build-message', '当前版本未确认或存在缺少动作/预期的步骤，不能创建建例任务。');
+  else if (!byId('case-build-message').textContent || byId('case-build-message').textContent.includes('不能创建')) {
+    setText('case-build-message', `将冻结 v${version.version}、完整内容及 SHA-256；只创建任务，不启动 Harness。`);
+  }
+  const history = byId('case-build-history'); clear(history);
+  const linked = state.buildTasks.filter((task) => task.source?.kind === 'project-case' &&
+    task.source.project_id === project.project_id && task.source.case_id === item.case_id);
+  if (!linked.length) history.append(make('div', '该用例尚无关联建例任务。', 'empty'));
+  for (const task of linked) {
+    const button = make('button'); button.type = 'button';
+    button.append(make('strong', `v${task.source.case_version} · 已创建，尚未启动`), make('span', task.task_id),
+      make('span', `${task.created_at} · ${task.source.content_sha256.slice(0, 16)}…`));
+    button.addEventListener('click', () => {
+      state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; render();
+      byId('build-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    history.append(button);
+  }
 }
 
 function renderMapping() {
@@ -503,6 +562,15 @@ byId('build-stop').addEventListener('click', async () => {
   await refresh();
 });
 
+byId('build-back-to-case').addEventListener('click', async () => {
+  const task = selectedBuildTask();
+  if (task?.source?.kind !== 'project-case') return;
+  state.selectedProjectId = task.source.project_id;
+  state.selectedCaseId = task.source.case_id;
+  await refreshCaseLibrary(task.source.project_id);
+  byId('case-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
 byId('create-project').addEventListener('click', async () => {
   try {
     const project = await api('/api/case-library/projects', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: byId('new-project-name').value, description: byId('new-project-description').value }) });
@@ -546,8 +614,40 @@ byId('case-detail').addEventListener('submit', async (event) => {
   const steps = actions.map((action, index) => ({ order: index + 1, action, expected: expected[index] || '' }));
   try {
     await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ revision: project.revision, content: { external_id: byId('case-external-id').value, title: byId('case-title').value, module: byId('case-module').value, status: byId('case-status').value, preconditions: byId('case-preconditions').value, test_data: byId('case-test-data').value, steps } }) });
+    byId('case-build-version').value = '';
     setText('case-message', '已形成新的用例版本。'); await refreshCaseLibrary(project.project_id);
   } catch (error) { setText('case-message', `保存用例失败：${error.message}`); }
+});
+byId('case-build-version').addEventListener('change', () => {
+  state.caseBuildRequestId = null;
+  setText('case-build-message', '');
+  renderCaseBuildSection();
+});
+byId('case-build-create').addEventListener('click', async () => {
+  const project = selectedProject();
+  const item = project?.cases.find((entry) => entry.case_id === state.selectedCaseId);
+  const version = item?.versions.find((entry) => entry.version === Number(byId('case-build-version').value));
+  if (!project || !item || !version) return;
+  state.caseBuildRequestId ||= `case-build-request-${crypto.randomUUID().toLowerCase()}`;
+  byId('case-build-create').disabled = true;
+  setText('case-build-message', '正在由服务端核对版本、哈希和完整内容并冻结输入…');
+  try {
+    const task = await api('/api/build/tasks/from-project-case', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        request_id: state.caseBuildRequestId, project_id: project.project_id, case_id: item.case_id,
+        case_version: version.version, content_sha256: version.content_sha256,
+        environment_id: byId('case-build-environment').value,
+      }),
+    });
+    state.selectedBuildTaskId = task.task_id;
+    state.caseBuildRequestId = null;
+    setText('case-build-message', `已创建 ${task.task_id}；Harness 尚未启动。`);
+    await refresh();
+  } catch (error) {
+    setText('case-build-message', `创建被拒绝：${error.message}`);
+    renderCaseBuildSection();
+  }
 });
 byId('export-selected').addEventListener('click', () => void downloadCases(false));
 byId('export-all').addEventListener('click', () => void downloadCases(true));

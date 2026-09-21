@@ -40,7 +40,9 @@ export async function loadBuildTemplate(paths) {
   };
 }
 
-export function taskDocument(template) {
+export function taskDocument(subject) {
+  if (subject?.source?.kind === 'project-case') return subject.input_bundle.task_markdown;
+  const template = subject?.template || subject;
   return [
     '# Frozen candidate task',
     '',
