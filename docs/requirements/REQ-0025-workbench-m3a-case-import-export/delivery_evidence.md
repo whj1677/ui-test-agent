@@ -124,7 +124,7 @@ Parsed skipped count: 0
 > ui-test-approved-workbench@0.1.0 test:m3a-browser
 > node tests/case-library-browser.integration.mjs
 
-{"status":"passed","projects":3,"project_a_cases":3,"project_b_cases":3,"project_c_cases":3,"screenshot":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-workbench-m3a-case-import-export\\workbench\\docs\\evidence\\M3A_CASE_LIBRARY_WEB.png"}
+{"status":"passed","projects":3,"project_a_cases":3,"project_b_cases":3,"project_c_cases":3,"screenshot":"workbench/docs/evidence/M3A_CASE_LIBRARY_WEB.png"}
 TAP version 13
 1..1
 # tests 1
