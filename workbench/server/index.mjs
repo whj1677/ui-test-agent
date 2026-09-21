@@ -19,7 +19,7 @@ const buildAuthorizationId = process.env.WORKBENCH_BUILD_AUTHORIZATION_ID || pro
 const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
 const recovered = await store.recoverInterrupted();
-const manager = new WorkbenchRunManager({ store, paths });
+const manager = new WorkbenchRunManager({ store, paths, browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE });
 const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: buildAuthorizationId || undefined });
 await buildStore.init();
 const buildRevalidationStore = new BuildRevalidationStore(paths.buildRevalidationsRoot, buildStore);

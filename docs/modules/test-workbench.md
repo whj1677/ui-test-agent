@@ -30,6 +30,8 @@ M3-B2 项目用例任务复用既有 build task、生命周期和候选执行器
 
 新建项目用例任务的模型可读输入使用 v2 快照，不再携带工作台反例验证契约。完整契约仍随任务持久化供控制器在候选生成后执行正常/反例验证，但不会写入 `task.md`、`case-snapshot.json`、实际 Agent 指令或 attempt 的其他初始模型输入。历史 v1 任务按原字节读取，其已有运行事实不变，也不追溯声称反例曾被保密。
 
+M3-C 增加 `HUMAN_FIRST_REVIEW_PASSED_SCOPED` 资产：登记器必须同时核对源任务、候选原件、限定首审记录和项目用例版本，随后把候选与首审记录按原字节保存到私有 `data/assets`。执行器按资产决定脚本文件名、入口变量、步骤与配置；限定资产使用 `PROBE_URL` 和 workbench Playwright 依赖根，不伪装为旧排序资产。正常环境属于产品入口，错误输出反例只属于受控验收入口。
+
 ## 执行约束与状态
 
 - 执行器通过已锁定依赖中的 Playwright CLI 和参数数组启动，`shell=false`、`workers=1`、`retries=0`。
@@ -46,4 +48,4 @@ M3-B2 项目用例任务复用既有 build task、生命周期和候选执行器
 
 安装、启动、登记、运行、停止、Trace 本地查看和测试命令见 `workbench/README.md`。第一阶段原始真实运行见 `workbench/docs/ACCEPTANCE_REPORT.md`；三项代码复审修复及新的真实组合见 `workbench/docs/REVIEW_FIX_REPORT.md`；整体通过与既定媒体证据的关联见 `workbench/docs/EVIDENCE_COMPLETENESS_REVISION.md`。
 
-本模块只证明从真实 Web 启动已批准脚本、保存并展示可信结果以及重启可追溯；不重新声明旧排序脚本首次业务验收，不覆盖旧正式回归，也不代表陌生页面泛化、自动建例、多人使用或产品发布完成。
+本模块只证明从真实 Web 启动已批准或限定人工首审的精确脚本资产、保存并展示可信结果以及重启可追溯；不重新声明旧排序脚本首次业务验收，不覆盖旧正式回归，也不代表陌生页面泛化、自动建例、多人使用或产品发布完成。M3-C 的具体资产、run 与媒体证据见 `workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md`。

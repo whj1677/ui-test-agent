@@ -6,6 +6,7 @@ import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { afterEach, test } from 'node:test';
 import { WorkbenchRunManager } from '../server/executor.mjs';
+import { sha256File } from '../server/integrity.mjs';
 import { createPaths } from '../server/paths.mjs';
 import { buildApprovedAsset } from '../server/registry.mjs';
 import { WorkbenchStore } from '../server/store.mjs';
@@ -110,7 +111,7 @@ test('runtime-copy integrity failure preserves the raw passing report but blocks
     stats: { expected: 1, unexpected: 0, skipped: 0 },
   };
   await fs.writeFile(path.join(runRoot, 'report.json'), JSON.stringify(report));
-  await fs.appendFile(path.join(runRoot, 'runtime', 'tests', 'sorting.spec.ts'), '\n// simulated runtime-copy change\n');
+  await fs.appendFile(path.join(setup.paths.executionRuntimeRoot, started.run_id, 'tests', 'sorting.spec.ts'), '\n// simulated runtime-copy change\n');
   setup.children[0].emit('exit', 0, null);
   const finished = await setup.manager.waitFor(started.run_id);
   assert.equal(finished.execution_status, 'INTEGRITY_FAILED');
@@ -120,4 +121,60 @@ test('runtime-copy integrity failure preserves the raw passing report but blocks
   assert.equal(finished.error.code, 'SCRIPT_HASH_CHANGED');
   assert.equal(finished.integrity.source_after_sha256, setup.asset.script.sha256);
   assert.notEqual(finished.integrity.runtime_after_sha256, setup.asset.script.sha256);
+});
+
+test('限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例', async () => {
+  let closed = 0;
+  const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'workbench-reviewed-executor-'));
+  roots.push(localRoot);
+  const paths = createPaths({ localRoot });
+  const store = new WorkbenchStore(paths.dataRoot);
+  await store.init();
+  const source = path.join(paths.repoRoot, 'pilot', 'revision-s02', 'tests', 'sorting.spec.ts');
+  const sourceBytes = await fs.readFile(source);
+  const sourceSha = await sha256File(source);
+  const fixturePath = path.join(paths.repoRoot, 'harness-probe', 'fixture', 'index.html');
+  const wrongFixturePath = path.join(paths.repoRoot, 'harness-probe', 'fixture', 'wrong-output.html');
+  const base = await buildApprovedAsset(paths);
+  const asset = {
+    ...base,
+    schema: 'approved-workbench/asset-v2', asset_id: 'reviewed-project-case-test', version: 'reviewed-v1-test',
+    approval_status: 'HUMAN_FIRST_REVIEW_PASSED_SCOPED',
+    script: { storage: 'managed_asset', relative_path: 'candidate.spec.mjs', sha256: sourceSha, bytes: sourceBytes.length },
+    execution: { entry_url_environment_variable: 'PROBE_URL', test_file_name: 'candidate.spec.mjs' },
+    allowed_environments: [{ id: 'normal', label: '正常', case_id: 'CASE-001', fixture: { path: 'harness-probe/fixture/index.html', sha256: await sha256File(fixturePath) }, steps: [{ step_id: 'CASE_STEP_1', action: '动作', expected: '预期' }] }],
+    acceptance_environments: [{ id: 'counterexample', label: '反例', case_id: 'CASE-001', fixture: { path: 'harness-probe/fixture/wrong-output.html', sha256: await sha256File(wrongFixturePath) }, steps: [{ step_id: 'CASE_STEP_1', action: '动作', expected: '预期' }] }],
+    configuration: { ...base.configuration, summary: { ...base.configuration.summary, browser_executable_env: null } },
+  };
+  const assetDirectory = store.assetVersionDirectory(asset.asset_id, asset.version);
+  await fs.mkdir(assetDirectory, { recursive: true });
+  await fs.writeFile(path.join(assetDirectory, asset.script.relative_path), sourceBytes);
+  await store.registerAsset(asset);
+  const calls = [];
+  const children = [];
+  const manager = new WorkbenchRunManager({
+    store, paths,
+    idFactory: () => `run-reviewed-${String(children.length + 1).padStart(3, '0')}`,
+    startFixture: async () => ({ url: 'http://127.0.0.1:45678/', close: async () => { closed += 1; } }),
+    spawnProcess: (command, args, options) => {
+      calls.push({ command, args, options });
+      const child = new FakeChild(44000 + children.length);
+      children.push(child);
+      return child;
+    },
+  });
+
+  await assert.rejects(manager.start(asset.asset_id, 'counterexample'), /ENVIRONMENT_NOT_ALLOWED/);
+  const normal = await manager.start(asset.asset_id, 'normal');
+  assert.equal(calls[0].options.env.PROBE_URL, 'http://127.0.0.1:45678/');
+  assert.equal(calls[0].options.env.PILOT_ENTRY_URL, undefined);
+  assert.equal(normal.run_mode, 'NORMAL_REGRESSION');
+  children[0].emit('exit', 0, null);
+  await manager.waitFor(normal.run_id);
+
+  const acceptance = await manager.startAcceptance(asset.asset_id, 'counterexample');
+  assert.equal(acceptance.run_mode, 'CONTROLLED_ACCEPTANCE');
+  children[1].emit('exit', 1, null);
+  await manager.waitFor(acceptance.run_id);
+  assert.equal(closed, 2);
 });

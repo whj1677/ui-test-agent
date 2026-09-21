@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0028-workbench-m3c-reviewed-asset-run](REQ-0028-workbench-m3c-reviewed-asset-run/current_state.md)：将指定M3-B2候选按用户已作出的限定人工首审结论登记为私有耐久资产，并从项目页面直接执行正常回归；独立反例只走受控验收入口，不调用Harness、模型或自愈。
+
 - [REQ-0027-workbench-m3b2-project-case-run](REQ-0027-workbench-m3b2-project-case-run/current_state.md)：M3-B2一条项目用例的单次真实Harness建例、正常/反例技术验证与项目页面结果媒体返回已完成；后续已将新任务的模型输入与反例验证契约分离，并保留历史输入曾暴露反例值的事实，不扩展批量、批准或自愈。
 
 当前输入接通：[REQ-0026 M3-B1项目单条用例建例输入接通](REQ-0026-workbench-m3b-case-build-input/current_state.md)只把项目内已确认的指定版本冻结为现有build task输入并展示双向关联；任务明确停在已创建、尚未启动，不调用Harness、模型或业务脚本。

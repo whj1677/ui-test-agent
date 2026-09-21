@@ -1,0 +1,70 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0028",
+  "title": "M3-C 已人工首审候选限定资产登记与项目直接回归",
+  "metadata": {"requirement_status":"已完成","governance_level":"G3","version":2,"last_updated":"2026-09-21"},
+  "original_input": "从0eba0c59基线将任务build-20260921120911-48d7c545中已由用户限定首审通过、SHA-256为4B183AD2...B0730的候选登记为仅适用于本次两步无登录合成用例的资产；从项目页面直接运行正常回归，并用受控验收入口执行一次错误输出反例，保存新报告及媒体。本批不调用Harness、不生成或修订候选、不自动审批或自愈。",
+  "user_requirements": [{"id":"UN-0028-01","status":"已确认","goal":"项目用例能够关联已人工首审的限定资产并直接由Playwright产生独立可追溯的新运行。","constraints":"只承接既有真人首审范围；候选、旧任务、历史报告和授权账本不改写；正常运行与反例验收分开；不调用Harness或模型。","success_criteria":"原字节候选被幂等登记并形成耐久私有副本；项目Web发起正常运行，受控入口发起反例；两次同哈希且各有报告、截图、录像、Trace，重启可读。"}],
+  "confirmed_facts": [
+    "基线0eba0c59d8711fbcd6af1e5f4a56150bc1cbbaff已建立独立分支codex/test-workbench-m3c-reviewed-asset-run。",
+    "既有私有数据根位于M3-B2 worktree的workbench/.local/m3b2-project-case-acceptance；首审记录SHA-256为84302DA1...CA447，候选完整SHA-256为4B183AD25305913547C309A86F273DAAB861004313385A5DEF3094385F3B0730。",
+    "首审仅确认该候选符合本次两步无登录合成用例；旧生成输入包含反例值，不证明未知反例生成、复杂业务或发布能力。",
+    "候选使用PROBE_URL和.mjs扩展；workbench锁定Playwright Test 1.62.1。"
+  ],
+  "inferences_and_open_questions": ["无阻塞性业务歧义；M3-C已在限定合成场景内完成，不外推复杂业务、未知反例、自动审批或发布能力。"],
+  "development_requirements": [
+    {"id":"DR-0028-01","status":"已确认","requirement":"从首审记录、源任务和候选原件共同校验身份，建立限定范围资产和私有耐久副本。","acceptance_criteria":"任务、attempt、候选版本/哈希、项目、用例版本/内容哈希与首审范围一致；重复登记幂等，任何错配拒绝且不覆盖。","constraints":"不从Markdown摘要重建，不补签真人批准，不上传私有原件。"},
+    {"id":"DR-0028-02","status":"已确认","requirement":"现有运行器按资产决定脚本位置、文件名、入口变量、步骤和锁定配置。","acceptance_criteria":"候选、CLI、配置从workbench Playwright 1.62.1一致加载；PROBE_URL注入且模型凭据不继承；取消、超时、哈希与证据完整性保持。","constraints":"不伪装为排序资产，不修改候选。"},
+    {"id":"DR-0028-03","status":"已确认","requirement":"项目用例页面显示绑定版本、范围、首审依据及直接正常运行入口。","acceptance_criteria":"只对精确项目/用例/v1展示并启动对应资产；v2不自动继承；新run_id进入现有历史和媒体详情。","constraints":"旧生成状态不追溯改写，不增加通用审批系统。"},
+    {"id":"DR-0028-04","status":"已确认","requirement":"正常产品运行与受控错误输出验收分离。","acceptance_criteria":"Web只提供正常环境；反例只能由受控验收入口启动，原始FAILED和PROBE-42/PROBE-41事实保留。","constraints":"反例不是每次回归必经流程。"},
+    {"id":"DR-0028-05","status":"已确认","requirement":"零模型工程验证和一次正常/一次反例真实验收后持久化收口。","acceptance_criteria":"正常1 PASSED，反例1 FAILED；同一资产哈希不变；两次各有截图、录像、Trace；重启不重放。","constraints":"外层适配最多集中修复一次；候选逻辑错误则停止。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0028-01","dr_ids":["DR-0028-01"],"status":"已确认","summary":"在现有WorkBenchStore catalog中登记HUMAN_FIRST_REVIEW_PASSED_SCOPED资产，并把候选及首审记录按原字节复制到data/assets。","rationale":"复用资产模型同时避免临时attempt成为唯一副本。"},
+    {"id":"DD-0028-02","dr_ids":["DR-0028-02"],"status":"已确认","summary":"运行器读取资产的storage、file_name、entry_env_var和configuration生成每run独立配置。","rationale":"移除排序脚本文件名、PILOT_ENTRY_URL及固定配置的隐式依赖。"},
+    {"id":"DD-0028-03","dr_ids":["DR-0028-03"],"status":"已确认","summary":"前端按project_case精确关联资产与运行，在用例详情渲染限定范围和正常运行按钮。","rationale":"不建立第二套任务或运行历史。"},
+    {"id":"DD-0028-04","dr_ids":["DR-0028-04"],"status":"已确认","summary":"asset.allowed_environments仅含正常fixture；counterexample放在acceptance_environments并只由本地验收程序调用。","rationale":"产品入口不会把故障页面变成日常回归必经路径。"},
+    {"id":"DD-0028-05","dr_ids":["DR-0028-05"],"status":"已确认","summary":"真实验收复用既有私有数据根，Web正常运行与程序受控反例各生成独立run目录，随后重启读回。","rationale":"保留原项目关联并不迁移、删除或重写历史任务。"}
+  ],
+  "interfaces_and_data_flow": [
+    "首审记录+task.json+候选原件+项目版本 -> 受控登记命令 -> catalog与data/assets耐久副本。",
+    "项目用例详情 -> 已首审资产 -> POST /api/runs正常环境 -> Playwright子进程 -> run/report/media -> 现有结果详情。",
+    "受控验收程序 -> acceptance环境 -> 同一资产执行 -> 独立反例run；Web无该启动选项。"
+  ],
+  "module_document_impact": ["更新test-workbench与workbench-case-library模块，说明限定首审资产、通用运行参数和项目直接回归。"],
+  "risks_and_rollback": [
+    "首审记录为本机追加式文件且非签名；登记以哈希和多源身份一致性校验，不宣传防管理员篡改。",
+    "删除新增登记器、通用资产字段和项目页面区域可回滚；已生成的私有资产/run目录保留供审计，不自动删除。"
+  ],
+  "tasks": [
+    {"id":"TK-0028-01","dr_ids":["DR-0028-01"],"dd_ids":["DD-0028-01"],"status":"已完成","task":"实现首审资产登记、耐久复制与拒绝/幂等测试。","verification_ids":["VT-0028-01"]},
+    {"id":"TK-0028-02","dr_ids":["DR-0028-02","DR-0028-04"],"dd_ids":["DD-0028-02","DD-0028-04"],"status":"已完成","task":"通用化现有Playwright运行器并增加受控反例验收入口。","verification_ids":["VT-0028-02"]},
+    {"id":"TK-0028-03","dr_ids":["DR-0028-03"],"dd_ids":["DD-0028-03"],"status":"已完成","task":"在项目用例页展示资产、版本关系、范围和直接运行入口。","verification_ids":["VT-0028-03"]},
+    {"id":"TK-0028-04","dr_ids":["DR-0028-05"],"dd_ids":["DD-0028-05"],"status":"已完成","task":"完成工程测试、真实Web正常和受控反例运行、媒体及重启验收。","verification_ids":["VT-0028-04"]},
+    {"id":"TK-0028-05","dr_ids":["DR-0028-01","DR-0028-02","DR-0028-03","DR-0028-04","DR-0028-05"],"dd_ids":["DD-0028-01","DD-0028-02","DD-0028-03","DD-0028-04","DD-0028-05"],"status":"已完成","task":"脱敏报告、正式门禁、提交与GitHub同步。","verification_ids":["VT-0028-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0028-01","dr_ids":["DR-0028-01"],"confirmation_status":"已确认","execution_status":"单元测试通过","item":"正确登记、重复幂等及无首审/哈希/关联错配拒绝；私有复制哈希一致。","evidence_standard":"临时数据根、实际文件、catalog和原子存储","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":65,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0028-workbench-m3c-reviewed-asset-run/logs/workbench-tests.log"}},
+    {"id":"VT-0028-02","dr_ids":["DR-0028-02","DR-0028-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"临时真实Playwright CLI覆盖正常、断言不符、零测试、缺证据、进程异常和受控反例不可从Web启动。","evidence_standard":"实际子进程、结构化报告和媒体","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":65,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0028-workbench-m3c-reviewed-asset-run/logs/workbench-tests.log"}},
+    {"id":"VT-0028-03","dr_ids":["DR-0028-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实Chromium项目用例资产展示、v1/v2关系、正常启动及结果媒体查看。","evidence_standard":"真实Web、API、catalog、run和媒体一致","current_evidence":{"command":"npm --prefix workbench run test:m3c-real","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md"}},
+    {"id":"VT-0028-04","dr_ids":["DR-0028-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"原字节资产正常/反例各一次、哈希与三类媒体、重启读回、Harness和模型0次及Git同步。","evidence_standard":"真实run ID、报告、媒体哈希、命令退出码和远端SHA","current_evidence":{"command":"npm --prefix workbench run test:m3c-real","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md"}}
+  ],
+  "verification_environment": {"working_directory":"workbench及REQ-0028正式门禁","commands":["npm --prefix workbench test（65/65，exit 0）","npm --prefix harness-probe test（24/24，exit 0）","npm --prefix workbench run test:m3c-real（exit 0）"],"environment":["Windows；Node 22；127.0.0.1；既有M3-B2私有数据根；Playwright Test 1.62.1；Microsoft Edge。"],"conclusion":["限定首审资产已从真实项目Web完成正常回归；同一资产受控反例保留FAILED与精确值差异；媒体和重启读回完成；Harness/模型0次。"]},
+  "trace_current": [
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-01","dd_id":"DD-0028-01","tk_id":"TK-0028-01","vt_id":"VT-0028-01","status":"已完成"},
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-02","dd_id":"DD-0028-02","tk_id":"TK-0028-02","vt_id":"VT-0028-02","status":"已完成"},
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-03","dd_id":"DD-0028-03","tk_id":"TK-0028-03","vt_id":"VT-0028-03","status":"已完成"},
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-04","dd_id":"DD-0028-04","tk_id":"TK-0028-02","vt_id":"VT-0028-02","status":"已完成"},
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-05","dd_id":"DD-0028-05","tk_id":"TK-0028-04","vt_id":"VT-0028-04","status":"已完成"},
+    {"un_id":"UN-0028-01","dr_id":"DR-0028-05","dd_id":"DD-0028-05","tk_id":"TK-0028-05","vt_id":"VT-0028-04","status":"已完成"}
+  ],
+  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M3-B2限定人工首审决定进入单资产登记与项目直接回归。"},{"version":2,"link":"workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md","status":"已完成","notes":"真实Web正常回归、受控反例、三类媒体与重启读回完成；范围停在限定合成场景。"}],
+  "open_questions": ["无。"],
+  "prohibited_implementation": [
+    "不得启动Harness、调用建例模型、生成或修改候选。",
+    "不得建设通用审批、批量套件、复杂业务、自愈或新Agent。",
+    "不得把反例环境开放为项目日常运行选项或把FAILED改写为业务通过。",
+    "不得提交.local、首审私有原件、原始媒体、凭据或模型会话。"
+  ],
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-C限定首审资产登记与项目直接回归需求包","impact":"workbench资产登记、通用运行器、项目页和真实验收","confirmed_by":"用户当前任务与既有人工首审消息"},{"date":"2026-09-21","version":2,"type":"完成","description":"完成限定资产登记、项目直接正常回归、受控反例、媒体与重启验收","impact":"资产reviewed-project-case-4b183ad25305可在绑定项目用例v1直接运行","confirmed_by":"真实命令、结构化报告、媒体哈希与Chromium证据"}]
+}

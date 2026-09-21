@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { resolveInside, sha256File, stripAnsi } from './integrity.mjs';
 import { analyzeRunArtifacts } from './report.mjs';
+import { startFixtureServer } from '../../harness-probe/src/fixture-server.mjs';
 
 const MAX_CONSOLE_BYTES = 2 * 1024 * 1024;
 const ENV_ALLOWLIST = [
@@ -17,32 +18,40 @@ function createRunId(now = new Date()) {
   return `run-${stamp}-${randomUUID().slice(0, 8).toLowerCase()}`;
 }
 
-function childEnvironment(entryUrl, source = process.env) {
+const ENTRY_VARIABLES = new Set(['PILOT_ENTRY_URL', 'PROBE_URL']);
+
+function childEnvironment(entryUrl, entryVariable = 'PILOT_ENTRY_URL', browserExecutable = null, source = process.env) {
+  if (!ENTRY_VARIABLES.has(entryVariable)) throw new Error('ENTRY_ENVIRONMENT_VARIABLE_NOT_ALLOWED');
   const result = {};
   for (const key of ENV_ALLOWLIST) {
     if (typeof source[key] === 'string' && source[key]) result[key] = source[key];
   }
-  result.PILOT_ENTRY_URL = entryUrl;
+  result[entryVariable] = entryUrl;
+  if (browserExecutable) result.DSH_PROBE_BROWSER_EXECUTABLE = browserExecutable;
   result.NO_PROXY = 'localhost,127.0.0.1';
   result.no_proxy = 'localhost,127.0.0.1';
   return result;
 }
 
-function runtimeConfig(reportFile, outputDirectory) {
+function runtimeConfig(reportFile, outputDirectory, asset) {
+  const summary = asset.configuration.summary;
+  const executable = summary.browser_executable_env
+    ? `\n    launchOptions: { executablePath: process.env.${summary.browser_executable_env} },`
+    : '';
   return `import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
-  testMatch: 'sorting.spec.ts',
-  retries: 0,
-  workers: 1,
-  timeout: 120_000,
-  expect: { timeout: 5_000 },
+  testMatch: ${JSON.stringify(asset.execution?.test_file_name || path.basename(asset.script.path))},
+  retries: ${summary.retries},
+  workers: ${summary.workers},
+  timeout: ${summary.timeout_ms},
+  expect: { timeout: ${summary.expect_timeout_ms} },
   reporter: [['json', { outputFile: ${JSON.stringify(reportFile)} }]],
   outputDir: ${JSON.stringify(outputDirectory)},
   use: {
-    browserName: 'chromium', headless: true, locale: 'zh-CN',
-    viewport: { width: 1440, height: 1000 },
-    trace: 'on', screenshot: 'on', video: 'on',
+    browserName: ${JSON.stringify(summary.browser)}, headless: true, locale: ${JSON.stringify(summary.locale)},${executable}
+    viewport: ${JSON.stringify(summary.viewport)},
+    trace: ${JSON.stringify(summary.trace)}, screenshot: ${JSON.stringify(summary.screenshot)}, video: ${JSON.stringify(summary.video)},
   },
 });
 `;
@@ -100,6 +109,8 @@ export class WorkbenchRunManager extends EventEmitter {
     this.spawnProcess = options.spawnProcess || spawn;
     this.killTree = options.killTree || defaultKillTree;
     this.verifySite = options.verifySite || defaultSiteVerifier;
+    this.startFixture = options.startFixture || startFixtureServer;
+    this.browserExecutable = options.browserExecutable || process.env.DSH_PROBE_BROWSER_EXECUTABLE || null;
     this.now = options.now || (() => new Date());
     this.idFactory = options.idFactory || (() => createRunId(this.now()));
     this.active = null;
@@ -107,18 +118,34 @@ export class WorkbenchRunManager extends EventEmitter {
     this.completions = new Map();
   }
 
-  async start(assetId, environmentId) {
+  async start(assetId, environmentId, options = {}) {
     if (this.starting || this.active) throw new Error('RUN_ALREADY_ACTIVE');
     this.starting = true;
     let run;
+    let fixtureServer = null;
+    let runtimeRoot = null;
     try {
       const asset = await this.store.getAsset(assetId);
-      if (!asset || asset.approval_status !== 'MIGRATED_APPROVED') throw new Error('ASSET_NOT_APPROVED');
-      const environment = asset.allowed_environments.find((item) => item.id === environmentId);
+      if (!asset || !['MIGRATED_APPROVED', 'HUMAN_FIRST_REVIEW_PASSED_SCOPED'].includes(asset.approval_status)) throw new Error('ASSET_NOT_APPROVED');
+      const environments = options.acceptance === true ? asset.acceptance_environments || [] : asset.allowed_environments;
+      const environment = environments.find((item) => item.id === environmentId);
       if (!environment) throw new Error('ENVIRONMENT_NOT_ALLOWED');
-      const site = await this.verifySite(environment);
+      if (asset.configuration.summary.browser_executable_env && !this.browserExecutable) throw new Error('BROWSER_EXECUTABLE_REQUIRED');
+      let effectiveEnvironment = environment;
+      let site;
+      if (environment.fixture) {
+        const fixturePath = resolveInside(this.paths.repoRoot, environment.fixture.path);
+        if (await sha256File(fixturePath) !== environment.fixture.sha256) throw new Error('FIXTURE_HASH_MISMATCH');
+        fixtureServer = await this.startFixture(fixturePath);
+        effectiveEnvironment = { ...environment, entry_url: fixtureServer.url };
+        site = { site: 'managed-synthetic-fixture', fixture_sha256: environment.fixture.sha256 };
+      } else {
+        site = await this.verifySite(environment);
+      }
 
-      const source = resolveInside(this.paths.repoRoot, asset.script.path);
+      const source = asset.script.storage === 'managed_asset'
+        ? resolveInside(this.store.assetVersionDirectory(asset.asset_id, asset.version), asset.script.relative_path)
+        : resolveInside(this.paths.repoRoot, asset.script.path);
       const sourceShaBefore = await sha256File(source);
       if (sourceShaBefore !== asset.script.sha256) throw new Error('APPROVED_SCRIPT_HASH_MISMATCH');
 
@@ -135,9 +162,12 @@ export class WorkbenchRunManager extends EventEmitter {
         schema: 'approved-workbench/run-v1', run_id: runId,
         asset_id: asset.asset_id, asset_version: asset.version, case_id: environment.case_id,
         source_commit: asset.source_commit, environment: {
-          id: environment.id, label: environment.label, entry_url: environment.entry_url,
+          id: environment.id, label: environment.label, entry_url: effectiveEnvironment.entry_url,
           site_identity: site,
         },
+        run_mode: options.acceptance === true ? 'CONTROLLED_ACCEPTANCE' : 'NORMAL_REGRESSION',
+        project_case: asset.project_case ? structuredClone(asset.project_case) : null,
+        review_scope: asset.scope || null,
         created_at: createdAt, started_at: null, finished_at: null,
         execution_status: 'STARTING', report_status: 'PENDING', test_status: 'PENDING', evidence_status: 'PENDING',
         process: { pid: null, state: 'STARTING', exit_code: null, signal: null },
@@ -148,24 +178,30 @@ export class WorkbenchRunManager extends EventEmitter {
       };
       await this.store.createRun(run);
       const runRoot = this.store.runDirectory(runId);
-      const runtimeRoot = path.join(runRoot, 'runtime');
+      runtimeRoot = resolveInside(this.paths.executionRuntimeRoot, runId);
       const testsRoot = path.join(runtimeRoot, 'tests');
       const outputRoot = path.join(runRoot, 'artifacts');
       const reportFile = path.join(runRoot, 'report.json');
       const consoleFile = path.join(runRoot, 'console.txt');
       await fs.mkdir(testsRoot, { recursive: true });
-      const runtimeScript = path.join(testsRoot, 'sorting.spec.ts');
+      const runtimeName = asset.execution?.test_file_name || path.basename(asset.script.path);
+      if (path.basename(runtimeName) !== runtimeName || !/^[a-z0-9][a-z0-9._-]{3,100}$/i.test(runtimeName)) throw new Error('ASSET_TEST_FILE_NAME_INVALID');
+      const runtimeScript = path.join(testsRoot, runtimeName);
       await fs.copyFile(source, runtimeScript);
       const runtimeSha = await sha256File(runtimeScript);
       if (runtimeSha !== asset.script.sha256) throw new Error('RUNTIME_SCRIPT_HASH_MISMATCH');
       const configFile = path.join(runtimeRoot, 'playwright.config.mjs');
-      await fs.writeFile(configFile, runtimeConfig(reportFile, outputRoot), { flag: 'wx' });
+      await fs.writeFile(configFile, runtimeConfig(reportFile, outputRoot, asset), { flag: 'wx' });
 
       const cli = path.join(this.paths.workbenchRoot, 'node_modules', '@playwright', 'test', 'cli.js');
       const args = [cli, 'test', '--config', configFile, '--workers=1', '--retries=0'];
       const child = this.spawnProcess(process.execPath, args, {
         cwd: this.paths.workbenchRoot,
-        env: childEnvironment(environment.entry_url),
+        env: childEnvironment(
+          effectiveEnvironment.entry_url,
+          asset.execution?.entry_url_environment_variable || 'PILOT_ENTRY_URL',
+          asset.configuration.summary.browser_executable_env ? this.browserExecutable : null,
+        ),
         shell: false,
         windowsHide: true,
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -180,12 +216,14 @@ export class WorkbenchRunManager extends EventEmitter {
         process: { ...current.process, pid: child.pid || null, state: 'RUNNING' },
         integrity: { ...current.integrity, runtime_sha256: runtimeSha },
       }));
-      const completion = this.finishOnChild(runId, child, { source, runtimeScript, reportFile, consoleFile, stdout, stderr });
+      const completion = this.finishOnChild(runId, child, { source, runtimeScript, runtimeRoot, fixtureServer, reportFile, consoleFile, stdout, stderr });
       this.completions.set(runId, completion);
       completion.finally(() => this.completions.delete(runId));
       this.emit('changed', runId);
       return run;
     } catch (error) {
+      await fixtureServer?.close().catch(() => {});
+      if (runtimeRoot) await fs.rm(runtimeRoot, { recursive: true, force: true }).catch(() => {});
       if (run?.run_id) {
         await this.store.updateRun(run.run_id, (current) => ({
           ...current, finished_at: this.now().toISOString(), execution_status: 'START_FAILED',
@@ -246,6 +284,8 @@ export class WorkbenchRunManager extends EventEmitter {
             ? { code: integrityError, message: '批准脚本来源或本次运行副本的结束哈希不一致。' }
             : startError ? { code: 'PROCESS_START_FAILED', message: stripAnsi(startError.message) } : analysis.error,
         }));
+        await context.fixtureServer?.close().catch(() => {});
+        await fs.rm(context.runtimeRoot, { recursive: true, force: true }).catch(() => {});
         this.emit('changed', runId);
         resolve(next);
       };
@@ -264,6 +304,10 @@ export class WorkbenchRunManager extends EventEmitter {
     await this.killTree(this.active.child.pid);
     this.emit('changed', runId);
     return run;
+  }
+
+  async startAcceptance(assetId, environmentId) {
+    return this.start(assetId, environmentId, { acceptance: true });
   }
 
   async waitFor(runId) {

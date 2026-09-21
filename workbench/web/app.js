@@ -48,7 +48,7 @@ function renderAsset() {
     state.selectedEnvironmentId = asset.allowed_environments[0]?.id ?? null;
   }
   for (const environment of asset.allowed_environments) {
-    const option = make('option', `${environment.label} · ${environment.entry_url}`);
+    const option = make('option', `${environment.label} · ${environment.entry_url || environment.fixture?.path || '受控入口'}`);
     option.value = environment.id;
     environmentSelect.append(option);
   }
@@ -464,6 +464,60 @@ function renderCaseBuildSection() {
       byId('build-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     history.append(button);
+  }
+  renderCaseReviewedAssets(project, item, selectedVersion);
+}
+
+function renderCaseReviewedAssets(project, item, selectedVersion) {
+  const root = byId('case-reviewed-assets'); clear(root);
+  const assets = state.assets.filter((asset) => asset.project_case?.project_id === project.project_id && asset.project_case?.case_id === item.case_id);
+  if (!assets.length) return root.append(make('div', '该用例尚无已首审脚本资产。', 'empty'));
+  for (const asset of assets) {
+    const exactVersion = asset.project_case.case_version === selectedVersion;
+    const card = make('article', undefined, 'file-card reviewed-asset-card');
+    card.dataset.assetId = asset.asset_id;
+    card.append(make('strong', `${asset.version} · 已首审，仅适用于本合成场景`));
+    card.append(make('p', `绑定用例 v${asset.project_case.case_version} · 当前选择 v${selectedVersion} · ${exactVersion ? '版本匹配' : '不自动继承'}`));
+    card.append(make('p', `范围：${asset.scope}`, 'subtle-dark'));
+    const technical = document.createElement('details'); technical.append(make('summary', '首审依据与完整哈希'));
+    technical.append(make('p', `源任务 ${asset.source_build.task_id} / ${asset.source_build.attempt_id} / 候选 v${asset.source_build.candidate_version}`));
+    technical.append(make('p', `候选 ${asset.script.sha256} · 首审记录 ${asset.review_basis.sha256}`, 'mono break'));
+    card.append(technical);
+    const runButton = make('button', '运行已首审脚本', 'primary'); runButton.type = 'button';
+    runButton.dataset.testid = 'case-reviewed-run';
+    runButton.disabled = !exactVersion || Boolean(state.activeRunId || state.activeBuildTaskId);
+    runButton.addEventListener('click', () => void startReviewedAsset(asset));
+    card.append(runButton);
+    const runs = state.runs.filter((run) => run.asset_id === asset.asset_id && run.project_case?.case_id === item.case_id);
+    if (runs.length) {
+      const list = make('div', undefined, 'history compact-history');
+      for (const run of runs) {
+        const link = make('button'); link.type = 'button'; link.dataset.runId = run.run_id;
+        link.append(make('strong', `${run.run_id} · ${run.test_status}`), make('span', `${run.run_mode} · ${run.created_at}`));
+        link.addEventListener('click', () => { state.selectedRunId = run.run_id; render(); byId('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        list.append(link);
+      }
+      card.append(make('p', '关联回归记录：'), list);
+    }
+    root.append(card);
+  }
+}
+
+async function startReviewedAsset(asset) {
+  setText('case-build-message', '正在启动该限定资产的正常 Playwright 回归…');
+  try {
+    const environment = asset.allowed_environments[0];
+    const run = await api('/api/runs', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ asset_id: asset.asset_id, environment: environment.id }),
+    });
+    state.selectedRunId = run.run_id;
+    setText('case-build-message', `已启动新运行 ${run.run_id}；未复用建例 attempt。`);
+    await refresh();
+    byId('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (error) {
+    setText('case-build-message', `启动被拒绝：${error.message}`);
+    await refresh();
   }
 }
 

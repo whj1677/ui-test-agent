@@ -38,16 +38,26 @@ export class WorkbenchStore {
     this.dataRoot = path.resolve(dataRoot);
     this.catalogFile = path.join(this.dataRoot, 'catalog.json');
     this.runsRoot = path.join(this.dataRoot, 'runs');
+    this.assetsRoot = path.join(this.dataRoot, 'assets');
   }
 
   async init() {
-    await fs.mkdir(this.runsRoot, { recursive: true });
+    await Promise.all([
+      fs.mkdir(this.runsRoot, { recursive: true }),
+      fs.mkdir(this.assetsRoot, { recursive: true }),
+    ]);
     try {
       await fs.access(this.catalogFile);
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
       await writeJsonAtomic(this.catalogFile, { schema: 'approved-workbench/catalog-v1', assets: [] });
     }
+  }
+
+  assetVersionDirectory(assetId, version) {
+    if (!/^[a-z0-9][a-z0-9-]{7,100}$/.test(assetId || '')) throw new Error('INVALID_ASSET_ID');
+    if (!/^[a-z0-9][a-z0-9.-]{2,100}$/.test(version || '')) throw new Error('INVALID_ASSET_VERSION');
+    return resolveInside(this.assetsRoot, path.join(assetId, version));
   }
 
   serial(operation) {

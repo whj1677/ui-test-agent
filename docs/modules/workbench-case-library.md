@@ -37,6 +37,10 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 技术验证要求同一候选正常通过、反例取得确切值差异、候选哈希不变且全部项目步骤在结构化报告中可观察；这些条件最多产生“等待人工核对”，不批准脚本。
 
+## 限定首审资产直接回归
+
+用户对一个精确 task/attempt/candidate SHA 作出限定人工首审后，M3-C 可把它登记为绑定项目、内部用例、版本和内容哈希的独立资产。项目详情显示资产范围与版本关系，并只在当前选择版本与资产绑定版本一致时允许正常回归；后续用例版本不会继承旧资产。新运行进入既有 run 历史，正常/受控反例的报告和媒体各自关联资产与项目用例，不改写原 build task 的历史生成状态。
+
 ## 验证入口
 
 - `cd workbench; npm test`
@@ -52,3 +56,4 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 - M3-B1 request_id 身份修订：[workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md](../../workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md)
 - M3-B2 单条真实建例报告：[workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md](../../workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md)
 - M3-B2 输入边界与候选首审：[workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md](../../workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md)
+- M3-C 限定首审资产回归：[workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md](../../workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md)
