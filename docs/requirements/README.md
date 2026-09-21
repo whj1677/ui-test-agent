@@ -1,5 +1,7 @@
 # 需求索引
 
+当前用例库：[REQ-0025 M3-A项目用例库与Excel及原生用例包导入导出](REQ-0025-workbench-m3a-case-import-export/current_state.md)只实现本地单用户的项目、用例、xlsx预览确认和JSON用例包跨项目往返；不接Harness、模型、业务脚本、审批或套件执行。
+
 当前建例入口：[REQ-0024 M2-C工作台最小候选建例入口](REQ-0024-workbench-minimal-candidate-builder/current_state.md)仅支持固定无登录合成任务，以阶段最多两次真实Harness启动完成候选生成、独立验证、一次显式修订和人工待核对状态；不批准资产、不接复杂业务或自愈。
 
 当前隔离核对：[REQ-0023 M2-B隔离边界与候选反馈修订](REQ-0023-harness-isolation-feedback/current_state.md)先以确定性程序验证文件、网络和凭据边界；任一禁止项未被外层强制阻断即停止模型调用，只提交缺口诊断，不补算M2-A成功或进入Web集成。

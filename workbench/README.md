@@ -1,6 +1,6 @@
 # 批准脚本测试工作台（第一阶段）
 
-这是独立于原产品的本地单用户子工程。M1 负责登记已批准资产、从固定入口启动 Playwright、持久化运行事实并在中文 Web 中展示结果。M2-C 在不改变 M1 执行链的前提下，增加了一个仅面向固定无登录合成探针的候选建例入口；它调用锁定的 DeepSeek Harness 生成候选并独立验证，但不会登记或批准候选。
+这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 在不改变两条执行链的前提下增加项目、用例、Excel 和原生 JSON 用例包的数据管理。M3-A 不调用 Harness 或模型，也不生成、批准或执行业务脚本。
 
 第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。
 
@@ -11,6 +11,7 @@ cd workbench
 npm ci
 node node_modules/@playwright/test/cli.js install chromium
 npm test
+npm run test:m3a-browser
 npm run test:build-browser
 npm run register:approved
 # 仅当本机已有该离线复验记录时登记派生索引；不执行候选或调用模型
@@ -18,7 +19,9 @@ npm run register:m2c-runtime-revalidation
 npm start
 ```
 
-默认只监听 `http://127.0.0.1:4210`。受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
+默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)。内容“已确认”不等于脚本批准或测试通过。
+
+受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
 
 查看本机已有的 M2-C 复验任务时，必须让服务显式读取同一个专用数据目录和原任务授权账本；此命令不需要模型凭据，也不会自动启动 Harness：
 

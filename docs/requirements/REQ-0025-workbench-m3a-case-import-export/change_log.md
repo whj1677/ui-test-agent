@@ -1,0 +1,8 @@
+<!-- generated from requirement.source.json; do not edit directly -->
+# REQ-0025 变更记录
+
+| 日期 | 版本 | 类型 | 变更内容 | 影响 | 确认人 |
+|---|---:|---|---|---|---|
+| 2026-09-21 | 1 | 新建 | 建立M3-A项目用例库、Excel和原生包导入导出需求包 | workbench case-library数据、API、Web、模板、测试和报告 | 用户当前任务 |
+
+历史记录只保留在本文件；已撤销或已替换内容不得继续出现在当前任务、验证和当前 trace 中。

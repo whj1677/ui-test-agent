@@ -1,0 +1,20 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-21T16:24:20+08:00
+Command: npm run test:m3a-browser --prefix workbench
+Exit code: 0
+Parsed test count: 1
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+
+> ui-test-approved-workbench@0.1.0 test:m3a-browser
+> node tests/case-library-browser.integration.mjs
+
+{"status":"passed","projects":3,"project_a_cases":3,"project_b_cases":3,"project_c_cases":3,"screenshot":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-workbench-m3a-case-import-export\\workbench\\docs\\evidence\\M3A_CASE_LIBRARY_WEB.png"}
+TAP version 13
+1..1
+# tests 1
+# pass 1
+# fail 0
+# skipped 0
