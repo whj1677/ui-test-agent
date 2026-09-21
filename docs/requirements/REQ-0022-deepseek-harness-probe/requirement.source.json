@@ -2,7 +2,7 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0022",
   "title": "M2-A DeepSeek Harness受控调用可行性探针",
-  "metadata": {"requirement_status":"收口中（结论B）","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "metadata": {"requirement_status":"已完成（结论B）","governance_level":"G2","version":3,"last_updated":"2026-09-21"},
   "original_input": "从M1基线7b4416cc建立独立分支，安装并以普通程序受控调用DeepSeek官方Harness；在隔离工作目录中通过浏览器工具访问无登录合成页面、产出并执行最小Playwright候选，同时验证启动失败、取消、超时和不完整结果的封闭处理。只做可行性探针，不接正式Web建例页面或Harness后续集成。",
   "user_requirements": [{
     "id":"UN-0022-01","status":"已确认",
@@ -36,13 +36,13 @@
     {"id":"TK-0022-01","dr_ids":["DR-0022-01"],"dd_ids":["DD-0022-01","DD-0022-02"],"status":"已完成","task":"核对官方接口，固定并安装DeepSeek Harness和Browser Use依赖，建立隔离配置。","verification_ids":["VT-0022-01"]},
     {"id":"TK-0022-02","dr_ids":["DR-0022-01","DR-0022-03"],"dd_ids":["DD-0022-01"],"status":"已完成","task":"实现受控协调器、合成站点、候选校验和异常/取消工程测试。","verification_ids":["VT-0022-02"]},
     {"id":"TK-0022-03","dr_ids":["DR-0022-02"],"dd_ids":["DD-0022-02"],"status":"已完成","task":"在预算内执行真实Harness探针并独立执行其候选。","verification_ids":["VT-0022-03"]},
-    {"id":"TK-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"dd_ids":["DD-0022-01","DD-0022-02"],"status":"进行中","task":"形成脱敏报告、结论与成本记录，检查并推送指定分支。","verification_ids":["VT-0022-04"]}
+    {"id":"TK-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"dd_ids":["DD-0022-01","DD-0022-02"],"status":"已完成","task":"形成脱敏报告、结论与成本记录，检查并推送指定分支。","verification_ids":["VT-0022-04"]}
   ],
   "verification_items": [
     {"id":"VT-0022-01","dr_ids":["DR-0022-01"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"固定版本安装、版本输出、配置解析和隔离边界检查。","evidence_standard":"真实命令、退出码、版本、配置摘要和路径","current_evidence":{"command":"npm run setup:harness；dsh --version；dsh --profile headless --patch config/browser.cordis.yml --help","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"harness-probe/PROBE_REPORT.md"}},
     {"id":"VT-0022-02","dr_ids":["DR-0022-01","DR-0022-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"启动失败、取消、超时、模型中断、缺文件、不完整报告、无自动重启和日志脱敏工程测试。","evidence_standard":"真实测试命令、退出码、用例数和脱敏日志","current_evidence":{"command":"cd harness-probe && npm test","exit_code":0,"test_count":12,"failure_count":0,"skipped_count":0,"log_path":"harness-probe/PROBE_REPORT.md"}},
     {"id":"VT-0022-03","dr_ids":["DR-0022-02"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"真实Harness浏览器交互、候选产出及候选Playwright执行。","evidence_standard":"Harness事件/终态、文件哈希、Playwright结构化报告和退出码","current_evidence":{"command":"cd harness-probe && npm run probe（初验一次、集中修复后复验一次）","exit_code":1,"test_count":1,"failure_count":1,"skipped_count":0,"log_path":"harness-probe/evidence/attempt-summary.json（初验为0测试，复验为1测试1失败）"}},
-    {"id":"VT-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"confirmation_status":"已确认","execution_status":"未运行","item":"敏感信息/本地产物检查，Git提交、推送和远端SHA核对。","evidence_standard":"提交清单、扫描命令、local HEAD与remote SHA","current_evidence":"待提交与远端核对"}
+    {"id":"VT-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"敏感信息/本地产物检查，Git提交、推送和远端SHA核对。","evidence_standard":"提交清单、扫描命令、local HEAD与remote SHA","current_evidence":{"command":"实际凭据扫描；git push -u origin codex/test-workbench-m2-probe；git ls-remote --heads origin refs/heads/codex/test-workbench-m2-probe","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"首批提交a77e57d35c5c42896dca48bdb9f8219d4b3206ff已与远端一致；最终收口提交后实时核对"}}
   ],
   "verification_environment": {
     "working_directory":"D:/01_AI工程/01_工程项目/ui-test-agent-workbench-m2-probe/harness-probe",
@@ -54,9 +54,9 @@
     {"un_id":"UN-0022-01","dr_id":"DR-0022-01","dd_id":"DD-0022-01","tk_id":"TK-0022-01","vt_id":"VT-0022-01","status":"已验证"},
     {"un_id":"UN-0022-01","dr_id":"DR-0022-03","dd_id":"DD-0022-01","tk_id":"TK-0022-02","vt_id":"VT-0022-02","status":"已验证"},
     {"un_id":"UN-0022-01","dr_id":"DR-0022-02","dd_id":"DD-0022-02","tk_id":"TK-0022-03","vt_id":"VT-0022-03","status":"已验证未通过完整闭环"},
-    {"un_id":"UN-0022-01","dr_id":"DR-0022-01","dd_id":"DD-0022-01","tk_id":"TK-0022-04","vt_id":"VT-0022-04","status":"进行中"}
+    {"un_id":"UN-0022-01","dr_id":"DR-0022-01","dd_id":"DD-0022-01","tk_id":"TK-0022-04","vt_id":"VT-0022-04","status":"已验证"}
   ],
-  "trace_history": [{"version":1,"link":"无","status":"实施中","notes":"建立M2-A独立探针需求包"},{"version":2,"link":"harness-probe/PROBE_REPORT.md","status":"结论B，待Git收口","notes":"两次真实Harness调用均完成浏览器交互和文件产出；复验候选独立执行1项失败，按预算停止"}],
+  "trace_history": [{"version":1,"link":"无","status":"实施中","notes":"建立M2-A独立探针需求包"},{"version":2,"link":"harness-probe/PROBE_REPORT.md","status":"结论B，待Git收口","notes":"两次真实Harness调用均完成浏览器交互和文件产出；复验候选独立执行1项失败，按预算停止"},{"version":3,"link":"harness-probe/PROBE_REPORT.md","status":"已完成（结论B）","notes":"脱敏检查和首批远端SHA核对完成；最终收口提交后再次实时核对"}],
   "open_questions": ["公司批准DeepSeek端点是否支持官方Harness当前协议，由首次真实初始化结果确认，不预设成功。"],
   "prohibited_implementation": [
     "不得使用Claude Code、Harness聊天页面自动点击或Codex手写候选冒充Harness能力。",
@@ -64,5 +64,5 @@
     "不得为探针临时建设大型安全平台、修改Harness核心、连续切换多个版本/模型或自动重启失败任务。",
     "不得提交密钥、Cookie、原始私有会话、本地媒体或完整敏感环境变量。"
   ],
-  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"创建DeepSeek Harness程序化调用与浏览器工具最小探针需求包","impact":"独立harness-probe子工程","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"验证收口","description":"完成两次预算内真实调用、工程故障验证并形成结论B；等待Git远端核对","impact":"独立harness-probe子工程","confirmed_by":"实际执行证据"}]
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"创建DeepSeek Harness程序化调用与浏览器工具最小探针需求包","impact":"独立harness-probe子工程","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"验证收口","description":"完成两次预算内真实调用、工程故障验证并形成结论B；等待Git远端核对","impact":"独立harness-probe子工程","confirmed_by":"实际执行证据"},{"date":"2026-09-21","version":3,"type":"完成","description":"脱敏报告、分支首批提交、推送及远端SHA核对完成，进入最终收口提交","impact":"独立harness-probe子工程与REQ-0022","confirmed_by":"Git与远端查询"}]
 }

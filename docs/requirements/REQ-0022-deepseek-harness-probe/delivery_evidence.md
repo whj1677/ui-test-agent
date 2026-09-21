@@ -2,9 +2,9 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-21T09:39:10+08:00`
+- Generated at: `2026-09-21T09:40:41+08:00`
 - Record: `REQ-0022-deepseek-harness-probe`
-- Change fingerprint: `a0480aaeac3894c7364b547f109eaceb9b985e3515520fa613a86f70d14ec813`
+- Change fingerprint: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
 - Verification source: `collector-executed-v1`
 - Verification state: `人工待确认`
 - Command: `npm test --prefix harness-probe`
@@ -13,104 +13,54 @@
 - Failure count: `0`
 - Skipped count: `0`
 - Log path: `docs/requirements/REQ-0022-deepseek-harness-probe/evidence/m2-probe-tests.log`
-- Log SHA-256: `d2c5a972a25ff49f180524e0e8d18e16611a064cb508c0be787178c95f70580c`
+- Log SHA-256: `bdb050acbc4c8e9dcbf3ae2d9ab188e7b80b16e390f969cec45e6642b0da4ae0`
 
 ### Git Status
 
 ```text
- M .gitignore
- M README.md
- M docs/requirements/README.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/00_user_requirement.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/01_development_requirement.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/02_design.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/03_tasks.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/04_verification.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/05_trace.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/change_log.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/current_state.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/delivery_evidence.md
-?? docs/requirements/REQ-0022-deepseek-harness-probe/evidence/m2-probe-tests.log
-?? docs/requirements/REQ-0022-deepseek-harness-probe/requirement.source.json
-?? harness-probe/PROBE_REPORT.md
-?? harness-probe/README.md
-?? harness-probe/config/browser.cordis.yml
-?? harness-probe/config/playwright.config.mjs
-?? harness-probe/evidence/attempt-1-candidate.spec.mjs
-?? harness-probe/evidence/attempt-2-candidate.spec.mjs
-?? harness-probe/evidence/attempt-summary.json
-?? harness-probe/fixture/index.html
-?? harness-probe/package-lock.json
-?? harness-probe/package.json
-?? harness-probe/src/candidate-verifier.mjs
-?? harness-probe/src/fixture-server.mjs
-?? harness-probe/src/harness-runner.mjs
-?? harness-probe/src/process-control.mjs
-?? harness-probe/src/redact.mjs
-?? harness-probe/src/run-probe.mjs
-?? harness-probe/src/setup-harness.mjs
-?? harness-probe/src/verify-candidate.mjs
-?? harness-probe/tests/candidate-verifier.test.mjs
-?? harness-probe/tests/fixtures/fake-process.mjs
-?? harness-probe/tests/harness-result.test.mjs
-?? harness-probe/tests/process-control.test.mjs
+ M docs/requirements/REQ-0022-deepseek-harness-probe/03_tasks.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/04_verification.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/05_trace.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/change_log.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/current_state.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/delivery_evidence.md
+ M docs/requirements/REQ-0022-deepseek-harness-probe/evidence/m2-probe-tests.log
+ M docs/requirements/REQ-0022-deepseek-harness-probe/requirement.source.json
 ```
 
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
- .gitignore                  | 5 +++++
- README.md                   | 2 ++
- docs/requirements/README.md | 2 ++
- 3 files changed, 9 insertions(+)
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/evidence/m2-probe-tests.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0022-deepseek-harness-probe/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
+ .../REQ-0022-deepseek-harness-probe/03_tasks.md    |   2 +-
+ .../04_verification.md                             |   2 +-
+ .../REQ-0022-deepseek-harness-probe/05_trace.md    |   3 +-
+ .../REQ-0022-deepseek-harness-probe/change_log.md  |   1 +
+ .../current_state.md                               |   8 +-
+ .../delivery_evidence.md                           | 137 +++++++--------------
+ .../evidence/m2-probe-tests.log                    |  28 ++---
+ .../requirement.source.json                        |  12 +-
+ 8 files changed, 71 insertions(+), 122 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0022-deepseek-harness-probe/00_user_requirement.md
-docs/requirements/REQ-0022-deepseek-harness-probe/01_development_requirement.md
-docs/requirements/REQ-0022-deepseek-harness-probe/02_design.md
-docs/requirements/REQ-0022-deepseek-harness-probe/03_tasks.md
-docs/requirements/REQ-0022-deepseek-harness-probe/04_verification.md
-docs/requirements/REQ-0022-deepseek-harness-probe/05_trace.md
-docs/requirements/REQ-0022-deepseek-harness-probe/change_log.md
-docs/requirements/REQ-0022-deepseek-harness-probe/current_state.md
-docs/requirements/REQ-0022-deepseek-harness-probe/delivery_evidence.md
-docs/requirements/REQ-0022-deepseek-harness-probe/evidence/m2-probe-tests.log
-docs/requirements/REQ-0022-deepseek-harness-probe/requirement.source.json
-harness-probe/PROBE_REPORT.md
-harness-probe/README.md
-harness-probe/config/browser.cordis.yml
-harness-probe/config/playwright.config.mjs
-harness-probe/evidence/attempt-1-candidate.spec.mjs
-harness-probe/evidence/attempt-2-candidate.spec.mjs
-harness-probe/evidence/attempt-summary.json
-harness-probe/fixture/index.html
-harness-probe/package-lock.json
-harness-probe/package.json
-harness-probe/src/candidate-verifier.mjs
-harness-probe/src/fixture-server.mjs
-harness-probe/src/harness-runner.mjs
-harness-probe/src/process-control.mjs
-harness-probe/src/redact.mjs
-harness-probe/src/run-probe.mjs
-harness-probe/src/setup-harness.mjs
-harness-probe/src/verify-candidate.mjs
-harness-probe/tests/candidate-verifier.test.mjs
-harness-probe/tests/fixtures/fake-process.mjs
-harness-probe/tests/harness-result.test.mjs
-harness-probe/tests/process-control.test.mjs
+(none)
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-21T09:39:07+08:00
+Started at: 2026-09-21T09:40:37+08:00
 Command: npm test --prefix harness-probe
 Exit code: 0
 Parsed test count: 12
@@ -126,73 +76,73 @@ TAP version 13
 # Subtest: 真实通过且至少一个测试才完整
 ok 1 - 真实通过且至少一个测试才完整
   ---
-  duration_ms: 1.2619
+  duration_ms: 1.2326
   type: 'test'
   ...
 # Subtest: 缺失或损坏报告不能成功
 ok 2 - 缺失或损坏报告不能成功
   ---
-  duration_ms: 0.1366
+  duration_ms: 0.1283
   type: 'test'
   ...
 # Subtest: 零测试、跳过和失败不能成功
 ok 3 - 零测试、跳过和失败不能成功
   ---
-  duration_ms: 0.1138
+  duration_ms: 0.111
   type: 'test'
   ...
 # Subtest: 完整终态、浏览器工具和文件同时存在才成功
 ok 4 - 完整终态、浏览器工具和文件同时存在才成功
   ---
-  duration_ms: 0.6381
+  duration_ms: 0.9739
   type: 'test'
   ...
 # Subtest: 缺文件不能标记成功
 ok 5 - 缺文件不能标记成功
   ---
-  duration_ms: 0.1231
+  duration_ms: 0.2272
   type: 'test'
   ...
 # Subtest: 缺浏览器工具事实不能标记成功
 ok 6 - 缺浏览器工具事实不能标记成功
   ---
-  duration_ms: 0.1579
+  duration_ms: 0.1976
   type: 'test'
   ...
 # Subtest: 模型中断或不完整报告不能标记成功
 ok 7 - 模型中断或不完整报告不能标记成功
   ---
-  duration_ms: 0.1164
+  duration_ms: 0.1641
   type: 'test'
   ...
 # Subtest: 取消和超时不能标记成功
 ok 8 - 取消和超时不能标记成功
   ---
-  duration_ms: 0.1071
+  duration_ms: 0.1202
   type: 'test'
   ...
 # Subtest: 日志会遮蔽密钥、Bearer和敏感字段
 ok 9 - 日志会遮蔽密钥、Bearer和敏感字段
   ---
-  duration_ms: 0.5511
+  duration_ms: 0.7044
   type: 'test'
   ...
 # Subtest: 启动失败会返回错误且不等待到期
 ok 10 - 启动失败会返回错误且不等待到期
   ---
-  duration_ms: 6.024
+  duration_ms: 6.6592
   type: 'test'
   ...
 # Subtest: 超时会终止本任务拥有的进程
 ok 11 - 超时会终止本任务拥有的进程
   ---
-  duration_ms: 929.6438
+  duration_ms: 861.8583
   type: 'test'
   ...
 # Subtest: 用户取消会终止本任务拥有的进程且不重启
 ok 12 - 用户取消会终止本任务拥有的进程且不重启
   ---
-  duration_ms: 686.4436
+  duration_ms: 661.5306
   type: 'test'
   ...
 1..12
@@ -203,7 +153,7 @@ ok 12 - 用户取消会终止本任务拥有的进程且不重启
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 1758.3095
+# duration_ms 1670.2948
 ```
 
 ### Sync Record Status
@@ -222,4 +172,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-工程控制测试实际12项、退出码0；真实Harness闭环结论B，复验候选1项失败，整体保持人工待确认。
+工程控制测试实际12项、退出码0；真实Harness闭环结论B，复验候选1项失败；首批提交a77e57d已推送且远端一致。
