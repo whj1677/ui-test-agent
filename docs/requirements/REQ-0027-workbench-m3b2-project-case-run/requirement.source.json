@@ -2,7 +2,7 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0027",
   "title": "M3-B2 项目单条用例真实建例与结果返回",
-  "metadata": {"requirement_status":"已完成","governance_level":"G3","version":2,"last_updated":"2026-09-21"},
+  "metadata": {"requirement_status":"已完成","governance_level":"G3","version":3,"last_updated":"2026-09-21"},
   "original_input": "从5e2a2d8基线在现有工作台中选择一条真实Excel导入的已确认合成用例，明确启动最多一次Harness，由固定deepseek-v4-pro生成新候选，使用同一候选完成正常与独立反例验证，并从项目页面查看结果、截图、录像和Trace入口；停在等待人工核对或具体失败。",
   "user_requirements": [{"id":"UN-0027-01","status":"已确认","goal":"完成项目单条用例从真实Web导入、冻结、明确启动、Harness建例、独立验证到项目页面结果和媒体读回的闭环。","constraints":"本批最多1次初始Harness启动，30次工具调用/600秒；不修订、不重试、不批量、不自动批准；历史INPUT_ONLY任务、M1/M2资产和批准脚本不变。","success_criteria":"所选项目用例冻结输入实际进入attempt工作目录并由Harness读取；产生新候选后，同一哈希在正常页通过且反例取得与该用例绑定的期望/实际差异；Web、后台、报告和媒体一致，重启可读。"}],
   "confirmed_facts": [
@@ -12,7 +12,9 @@
     "真实调用在操作员确认误暴露的旧凭据已撤销并替换后，通过遮蔽输入前台窗口提供；公开文件、提示词和普通日志未保存明文。",
     "真实任务build-20260921120911-48d7c545生成候选4B183AD25305913547C309A86F273DAAB861004313385A5DEF3094385F3B0730，正常通过、反例取得PROBE-42/PROBE-41差异并停在WAITING_HUMAN_REVIEW。",
     "唯一授权已按Harness process_spawn消耗为1/1；外层Web选择器修复后的同任务零模型读回没有增加启动次数。",
-    "正式工程验证命令npm --prefix workbench test在仓库根目录执行，退出码0，60项测试、0失败、0跳过；日志为docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log。"
+    "正式工程验证命令npm --prefix workbench test在仓库根目录执行，退出码0，60项测试、0失败、0跳过；日志为docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log。",
+    "后续只读审查确认历史任务的v1模型可读快照包含verification_contract.counterexample_actual；历史执行事实保持，但不能作为反例设计保密证据。",
+    "新建任务改用v2模型快照，反例实际值与判据仅留在控制器input_bundle；本修订Harness和模型调用均为0。"
   ],
   "inferences_and_open_questions": ["供应商接口未返回底层请求数、token usage或货币成本，均保持未知。"],
   "development_requirements": [
@@ -20,19 +22,22 @@
     {"id":"DR-0027-02","status":"已确认","requirement":"attempt工作目录必须按冻结哈希复制task.md和input/case-snapshot.json，并保存实际渲染的Agent指令。","acceptance_criteria":"生产适配器实际收到的prompt、cwd、入口和候选路径与登记文件一致；两份不同项目输入不会回退到固定探针正文。","constraints":"不得重新读取项目最新版本或让Harness查看父目录。"},
     {"id":"DR-0027-03","status":"已确认","requirement":"项目用例验证使用冻结输入绑定的合成输出义务和步骤映射，而不是旧template.expected。","acceptance_criteria":"同一候选哈希正常实际执行1条并通过；反例执行1条并在绑定检查上得到期望PROBE-42、实际PROBE-41；全部项目步骤有可读结构映射。","constraints":"零测试、定位失败或加载错误不算指定错误检出；不增加通用语义审核层。"},
     {"id":"DR-0027-04","status":"已确认","requirement":"生成结果、正常/反例事实及登记媒体自动关联项目、用例、版本、任务、attempt和候选哈希并由Web读取。","acceptance_criteria":"项目关联历史进入任务结果；正常/反例截图加载、视频播放、Trace受控下载；轮询不重置选择或播放，重启不触发模型。","constraints":"不手工编辑task.json拼接成功，不开放任意路径。"},
-    {"id":"DR-0027-05","status":"已确认","requirement":"先完成零模型生产接线、实际Playwright CLI与浏览器回归，再执行唯一真实Web建例。","acceptance_criteria":"工程测试覆盖授权、输入哈希、调用参数、同候选验证、媒体边界和重启；真实结果按等待人工核对、候选失败或阻塞之一收口。","constraints":"外层适配缺陷可对同一候选集中修复一次，不重新调用模型。"}
+    {"id":"DR-0027-05","status":"已确认","requirement":"先完成零模型生产接线、实际Playwright CLI与浏览器回归，再执行唯一真实Web建例。","acceptance_criteria":"工程测试覆盖授权、输入哈希、调用参数、同候选验证、媒体边界和重启；真实结果按等待人工核对、候选失败或阻塞之一收口。","constraints":"外层适配缺陷可对同一候选集中修复一次，不重新调用模型。"},
+    {"id":"DR-0027-06","status":"已确认","requirement":"新项目用例任务的模型可读输入与工作台反例验证资料按职责分离。","acceptance_criteria":"快照、task.md、实际Agent指令及attempt其他初始模型输入不含验证侧反例实际值、实现位置或判据；控制器仍能取得完整契约；原业务文本逐字保留。","constraints":"不追溯迁移旧任务，不以字符串替换清洗业务正文，不宣称OS级隔离。"}
   ],
   "design_decisions": [
     {"id":"DD-0027-01","dr_ids":["DR-0027-01"],"status":"已确认","summary":"扩展既有单次启动授权记录为M3-B2项目用例作用域，任务创建时只为当前配置的授权绑定五项身份并设置可启动策略。","rationale":"复用现有spawn时记账，避免全局放开或新任务系统。"},
     {"id":"DD-0027-02","dr_ids":["DR-0027-02"],"status":"已确认","summary":"从task根目录按登记哈希复制冻结输入到attempt workspace；启动fixture后将实际渲染指令写入workspace并作为Harness prompt。","rationale":"模型读取与Web展示同一冻结事实，避免读取最新版或父目录。"},
     {"id":"DD-0027-03","dr_ids":["DR-0027-03"],"status":"已确认","summary":"创建时把受支持合成环境的输出义务绑定到确切用例步骤并冻结verification_contract；验证只读取该契约。","rationale":"避免运行时回退旧template.expected，同时不引入开放式语义判定。"},
     {"id":"DD-0027-04","dr_ids":["DR-0027-04"],"status":"已确认","summary":"直接将attempt正常/反例报告和媒体登记到现有task files，并增加按task/file ID的哈希与Range读取及候选结果展示。","rationale":"真实流程自动返回结果，无需离线手工派生索引。"},
-    {"id":"DD-0027-05","dr_ids":["DR-0027-05"],"status":"已确认","summary":"使用真实Web创建并启动一条合成项目用例，测试驱动按返回task_id等待；服务由覆盖600秒上限的前台宿主持有。","rationale":"旧历史任务不能提前满足终态，宿主不能先于Harness退出。"}
+    {"id":"DD-0027-05","dr_ids":["DR-0027-05"],"status":"已确认","summary":"使用真实Web创建并启动一条合成项目用例，测试驱动按返回task_id等待；服务由覆盖600秒上限的前台宿主持有。","rationale":"旧历史任务不能提前满足终态，宿主不能先于Harness退出。"},
+    {"id":"DD-0027-06","dr_ids":["DR-0027-06"],"status":"已确认","summary":"v2快照单独组装模型所需的用例、正常环境、步骤标记和交付要求；verification_contract只保存在控制器input_bundle。","rationale":"让反例验证资料不进入Harness工作输入，同时允许相同字面值作为合法业务正文原样存在。"}
   ],
   "interfaces_and_data_flow": [
     "Excel上传/预览/确认 -> 选择确切用例版本 -> 创建带本批作用域授权的新build task -> 用户显式start。",
     "冻结task文件 -> attempt逐字复制和哈希复核 -> 渲染入口/输出路径 -> Harness专用cwd -> candidate.spec.mjs。",
-    "同一候选 -> 正常fixture与negative fixture -> Playwright结构化报告和媒体 -> task files/candidate结果 -> 项目页关联历史和任务详情。"
+    "同一候选 -> 正常fixture与negative fixture -> Playwright结构化报告和媒体 -> task files/candidate结果 -> 项目页关联历史和任务详情。",
+    "新任务冻结 -> v2模型输入快照/task.md/渲染指令进入attempt；独立verification_contract仅供工作台控制器在候选生成后执行反例验证。"
   ],
   "module_document_impact": ["更新workbench-case-library与test-workbench模块，说明项目用例单次授权、attempt输入、验证契约和直接媒体返回。"],
   "risks_and_rollback": [
@@ -44,13 +49,15 @@
     {"id":"TK-0027-01","dr_ids":["DR-0027-01","DR-0027-02"],"dd_ids":["DD-0027-01","DD-0027-02"],"status":"已完成","task":"实现作用域单次授权、attempt冻结输入复制/核验与实际指令登记。","verification_ids":["VT-0027-01"]},
     {"id":"TK-0027-02","dr_ids":["DR-0027-03","DR-0027-04"],"dd_ids":["DD-0027-03","DD-0027-04"],"status":"已完成","task":"实现项目用例验证契约、步骤映射、直接结果媒体API与中文展示。","verification_ids":["VT-0027-02","VT-0027-03"]},
     {"id":"TK-0027-03","dr_ids":["DR-0027-05"],"dd_ids":["DD-0027-05"],"status":"已完成","task":"完成零模型工程/浏览器验证并执行唯一一次真实Web建例，按事实收口。","verification_ids":["VT-0027-01","VT-0027-02","VT-0027-03","VT-0027-04"]},
-    {"id":"TK-0027-04","dr_ids":["DR-0027-01","DR-0027-02","DR-0027-03","DR-0027-04","DR-0027-05"],"dd_ids":["DD-0027-01","DD-0027-02","DD-0027-03","DD-0027-04","DD-0027-05"],"status":"已完成","task":"收口报告、正式门禁和GitHub同步。","verification_ids":["VT-0027-04"]}
+    {"id":"TK-0027-04","dr_ids":["DR-0027-01","DR-0027-02","DR-0027-03","DR-0027-04","DR-0027-05"],"dd_ids":["DD-0027-01","DD-0027-02","DD-0027-03","DD-0027-04","DD-0027-05"],"status":"已完成","task":"收口报告、正式门禁和GitHub同步。","verification_ids":["VT-0027-04"]},
+    {"id":"TK-0027-05","dr_ids":["DR-0027-06"],"dd_ids":["DD-0027-06"],"status":"已完成","task":"分离新建任务的模型输入与验证侧反例契约，并完成零模型工程回归和既有候选只读首审。","verification_ids":["VT-0027-05"]}
   ],
   "verification_items": [
     {"id":"VT-0027-01","dr_ids":["DR-0027-01","DR-0027-02"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"零模型生产调用路径取得精确cwd、prompt、两个冻结输入、渲染指令、30/600限制及一次授权；两输入不回退固定模板。","evidence_standard":"实际BuildTaskManager、临时持久化和捕获适配器","current_evidence":"project-case-build-run.test.mjs 2/2通过；真实任务根与attempt的snapshot/task.md哈希分别一致，实际渲染指令已登记。"},
     {"id":"VT-0027-02","dr_ids":["DR-0027-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实Playwright CLI临时工程正常通过、反例指定差异、候选哈希一致和步骤映射完整。","evidence_standard":"实际CLI、结构化报告与媒体文件","current_evidence":"零模型Web流与真实Harness候选均为正常1 PASSED、反例1 FAILED且PROBE-42/PROBE-41；候选哈希一致，CASE_STEP_1/2均观察到。"},
     {"id":"VT-0027-03","dr_ids":["DR-0027-04","DR-0027-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实Chromium项目导入、创建、启动、结果和媒体读回；截图加载、视频播放/暂停/定位、Trace哈希及重启读回。","evidence_standard":"真实Web、后台task、原始报告和受控媒体接口一致","current_evidence":"真实任务build-20260921120911-48d7c545；同任务零模型读回验证两图、两录像、两Trace与重启，Harness仍1次。"},
-    {"id":"VT-0027-04","dr_ids":["DR-0027-01","DR-0027-02","DR-0027-03","DR-0027-04","DR-0027-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"受影响workbench/harness-probe回归、正式门禁、批准资产及历史边界不变。","evidence_standard":"命令、退出码、统计、哈希和差异检查","current_evidence":"仓库根执行npm --prefix workbench test，退出码0，测试60、失败0、跳过0，日志docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log；harness-probe 24/24、M3-B1和M3-B2 Chromium流通过；批准脚本SHA-256保持280A7875...79A。"}
+    {"id":"VT-0027-04","dr_ids":["DR-0027-01","DR-0027-02","DR-0027-03","DR-0027-04","DR-0027-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"受影响workbench/harness-probe回归、正式门禁、批准资产及历史边界不变。","evidence_standard":"命令、退出码、统计、哈希和差异检查","current_evidence":"仓库根执行npm --prefix workbench test，退出码0，测试60、失败0、跳过0，日志docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log；harness-probe 24/24、M3-B1和M3-B2 Chromium流通过；批准脚本SHA-256保持280A7875...79A。"},
+    {"id":"VT-0027-05","dr_ids":["DR-0027-06"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"生产组装和attempt实际文件不含两个不同验证侧哨兵，控制器契约仍完整，业务同字面文本保留；旧INPUT_ONLY、身份、版本和读回回归保持。","evidence_standard":"实际BuildTaskManager、attempt捕获文件、两个独立哨兵和完整workbench回归","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":61,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/input-boundary-workbench-tests.log"}}
   ],
   "verification_environment": {"working_directory":"workbench、harness-probe与仓库根需求工具","commands":["npm --prefix workbench test","npm --prefix harness-probe test","npm --prefix workbench run test:m3b2-browser","npm --prefix workbench run test:m3b2-real","npm --prefix workbench run test:m3b2-real-readback"],"environment":["Windows；Node 22；127.0.0.1单用户；专用.gitignore数据目录；锁定dsh 0.1.6-alpha.2、deepseek-v4-pro与Playwright 1.62.1。"],"conclusion":["唯一真实Harness启动已消费1/1，候选技术验证通过并停在等待人工核对；Web选择器外层缺陷用同一任务零模型读回修复，无第二次模型启动。"]},
   "trace_current": [
@@ -59,15 +66,17 @@
     {"un_id":"UN-0027-01","dr_id":"DR-0027-03","dd_id":"DD-0027-03","tk_id":"TK-0027-02","vt_id":"VT-0027-02","status":"已完成"},
     {"un_id":"UN-0027-01","dr_id":"DR-0027-04","dd_id":"DD-0027-04","tk_id":"TK-0027-02","vt_id":"VT-0027-03","status":"已完成"},
     {"un_id":"UN-0027-01","dr_id":"DR-0027-05","dd_id":"DD-0027-05","tk_id":"TK-0027-03","vt_id":"VT-0027-04","status":"已完成"},
-    {"un_id":"UN-0027-01","dr_id":"DR-0027-05","dd_id":"DD-0027-05","tk_id":"TK-0027-04","vt_id":"VT-0027-04","status":"已完成"}
+    {"un_id":"UN-0027-01","dr_id":"DR-0027-05","dd_id":"DD-0027-05","tk_id":"TK-0027-04","vt_id":"VT-0027-04","status":"已完成"},
+    {"un_id":"UN-0027-01","dr_id":"DR-0027-06","dd_id":"DD-0027-06","tk_id":"TK-0027-05","vt_id":"VT-0027-05","status":"已完成"}
   ],
-  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M3-B1输入冻结继续一条项目用例的单次真实建例、验证和结果返回。"},{"version":2,"link":"workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md","status":"已完成","notes":"一次真实Harness生成、同候选正常/反例验证、媒体Web读回和重启可追溯完成，停在等待人工核对。"}],
+  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M3-B1输入冻结继续一条项目用例的单次真实建例、验证和结果返回。"},{"version":2,"link":"workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md","status":"已完成","notes":"一次真实Harness生成、同候选正常/反例验证、媒体Web读回和重启可追溯完成，停在等待人工核对。"},{"version":3,"link":"workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md","status":"已完成","notes":"新任务模型输入与反例契约分离；历史任务输入泄露事实追加披露；既有候选只读首审，不改变执行事实或批准状态。"}],
   "open_questions": ["真实模型供应商usage/底层请求数若接口不提供则记录未知；具体子型号和Codex推理档位不可取得时记录未知。"],
   "prohibited_implementation": [
     "不得启动第二次Harness、反馈修订、自动重试、复制旧候选或由Codex改写业务断言。",
     "不得全局解除INPUT_ONLY、清空旧账本、挪用旧额度或通过换task_id重置授权。",
     "不得开放任意URL/代码/文件、批量建例、自动批准、自愈、复杂业务或新Agent系统。",
-    "不得提交.local、凭据、原始私有会话、视频或Trace，不得修改批准排序脚本。"
+    "不得提交.local、凭据、原始私有会话、视频或Trace，不得修改批准排序脚本。",
+    "新任务不得把验证侧反例实际值、实现位置或判据写入模型快照、task.md、Agent指令或其他模型输入。"
   ],
-  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-B2项目单条用例真实建例与结果返回需求包","impact":"workbench项目用例授权、attempt输入、候选验证、媒体API/Web及验收","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"完成","description":"完成一次真实项目用例建例、双验证、媒体读回和重启核对","impact":"状态到技术验证通过并等待人工核对；无批准、无第二次Harness","confirmed_by":"实际Web、任务、报告、媒体和授权记录"}]
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-B2项目单条用例真实建例与结果返回需求包","impact":"workbench项目用例授权、attempt输入、候选验证、媒体API/Web及验收","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"完成","description":"完成一次真实项目用例建例、双验证、媒体读回和重启核对","impact":"状态到技术验证通过并等待人工核对；无批准、无第二次Harness","confirmed_by":"实际Web、任务、报告、媒体和授权记录"},{"date":"2026-09-21","version":3,"type":"修订","description":"分离新任务模型输入与验证侧反例资料，并对既有候选做只读首审","impact":"历史任务不迁移；历史执行事实保留但反例保密性不成立；新任务使用v2快照","confirmed_by":"用户当前任务及零模型工程验证"}]
 }

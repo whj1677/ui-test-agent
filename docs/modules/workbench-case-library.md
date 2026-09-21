@@ -33,7 +33,9 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 只有工作台以固定 M3-B2 授权 ID 启动时，本批新任务才使用 `SINGLE_AUTHORIZED_INITIAL`；授权记录冻结五项请求身份，最多一次 Harness 进程创建、30 次工具调用和 600 秒。历史 `INPUT_ONLY` 任务仍由 Web 与后端共同拒绝启动。attempt 从任务根目录按登记 SHA-256 复制 `task.md` 与 `input/case-snapshot.json`，再保存包含实际入口/候选路径的渲染指令；不会读取项目当前最新版覆盖任务快照。
 
-固定合成环境只在项目用例恰有一个步骤包含环境预期值时创建验证契约；不匹配用例拒绝获得本批执行任务。契约保存预期值、反例实际值和全部 `CASE_STEP_<order>` 标记。技术验证要求同一候选正常通过、反例取得确切值差异、候选哈希不变且全部项目步骤在结构化报告中可观察；这些条件最多产生“等待人工核对”，不批准脚本。
+固定合成环境只在项目用例恰有一个步骤包含环境预期值时创建验证契约；不匹配用例拒绝获得本批执行任务。新任务使用 v2 模型快照：用例正文、正常环境、正常预期、步骤标记和候选交付要求进入 `case-snapshot.json`，反例实际值、反例实现位置和验证判据只保存在工作台控制器的 `input_bundle.verification_contract`，不复制到 attempt 的模型输入。该分离按字段职责组装，不删除业务正文中碰巧相同的字符串，也不构成 OS 级隔离。历史 v1 快照不迁移，已披露其中曾包含反例实际值。
+
+技术验证要求同一候选正常通过、反例取得确切值差异、候选哈希不变且全部项目步骤在结构化报告中可观察；这些条件最多产生“等待人工核对”，不批准脚本。
 
 ## 验证入口
 
@@ -49,3 +51,4 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 - M3-B1 输入接通报告：[workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md](../../workbench/docs/M3B1_CASE_BUILD_INPUT_REPORT.md)
 - M3-B1 request_id 身份修订：[workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md](../../workbench/docs/M3B1_REQUEST_IDENTITY_REVISION.md)
 - M3-B2 单条真实建例报告：[workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md](../../workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md)
+- M3-B2 输入边界与候选首审：[workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md](../../workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md)

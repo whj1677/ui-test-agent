@@ -45,7 +45,8 @@ export function projectCaseTaskDocument(snapshot) {
     '',
   ];
   for (const step of snapshot.content.steps) {
-    lines.push(`### Step ${step.order}`, `Action: ${jsonLiteral(step.action)}`, `Expected: ${jsonLiteral(step.expected)}`, '');
+    const marker = snapshot.candidate_requirements.required_step_markers.find((item) => item.order === step.order)?.marker;
+    lines.push(`### Step ${step.order}`, `Marker: ${marker}`, `Action: ${jsonLiteral(step.action)}`, `Expected: ${jsonLiteral(step.expected)}`, '');
   }
   lines.push(
     'Use every step and its paired expected result exactly as supplied.',
@@ -94,13 +95,25 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
     candidate_contract: structuredClone(environmentTemplate.candidate_contract),
   };
   const verificationContract = bindProjectCaseVerification(versionRecord.content, environmentTemplate, counterexampleActual);
+  const candidateRequirements = {
+    schema: 'workbench/project-case-candidate-requirements-v1',
+    required_step_markers: versionRecord.content.steps.map((step) => ({
+      order: step.order,
+      marker: `CASE_STEP_${step.order}`,
+    })),
+    deliverable: {
+      kind: 'playwright-test-candidate',
+      relative_path: 'output/candidate.spec.mjs',
+      test_count: environmentTemplate.candidate_contract.test_count,
+    },
+  };
   const snapshot = {
-    schema: 'workbench/project-case-build-input-v1',
+    schema: 'workbench/project-case-build-input-v2',
     frozen_at: frozenAt,
     source,
     content: structuredClone(versionRecord.content),
     environment_ref: environmentRef,
-    verification_contract: verificationContract,
+    candidate_requirements: candidateRequirements,
   };
   const snapshotText = `${JSON.stringify(snapshot, null, 2)}\n`;
   const taskMarkdown = projectCaseTaskDocument(snapshot);
@@ -126,7 +139,7 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
     source,
     environment_ref: environmentRef,
     input_bundle: {
-      schema: 'workbench/project-case-build-bundle-v1',
+      schema: 'workbench/project-case-build-bundle-v2',
       snapshot,
       snapshot_sha256: snapshotSha256,
       task_markdown: taskMarkdown,

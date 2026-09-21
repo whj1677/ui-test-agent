@@ -95,3 +95,9 @@ node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
 - 候选仍需维护者人工核对；工作台没有批准按钮，本批也没有登记为批准业务资产。
 - 每次真实模型任务仍需要操作员通过受控方式提供凭据；凭据不会保存到任务、报告或 Git。
 - 本批到该状态停止，不进入反馈修订、批量、审批或自愈。
+
+## 2026-09-21 输入边界追加说明
+
+后续只读审查确认：本报告对应历史任务的 v1 `case-snapshot.json` 包含工作台验证侧字段 `verification_contract.counterexample_actual=PROBE-41`。因此，本报告记录的真实正常通过、反例断言失败、媒体和授权事实保持不变，但该轮不能作为“反例设计对建例器保密”的验证依据。
+
+新建任务的输入边界已在后续代码中改为模型可读 v2 快照与控制器验证契约分离；该修订不迁移、不覆盖本报告的历史任务。修订证据及候选只读首审见 [M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md](M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md)。

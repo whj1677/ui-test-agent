@@ -9,6 +9,7 @@ import { BuildTaskStore, M3B2_PROJECT_CASE_AUTHORIZATION_ID } from '../server/bu
 import { CaseLibraryManager } from '../server/cases/manager.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { createPaths } from '../server/paths.mjs';
+import { assembleProjectCaseInput } from '../server/build/project-case.mjs';
 
 const workbenchRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -47,11 +48,21 @@ function adapter(capture) {
       return { url: fixtureCount % 2 ? 'http://127.0.0.1:41001/probe' : 'http://127.0.0.1:41002/probe', async close() {} };
     },
     async runHarnessTask(options) {
+      const workspaceFiles = [];
+      async function visit(directory) {
+        for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+          const absolute = path.join(directory, entry.name);
+          if (entry.isDirectory()) await visit(absolute);
+          else workspaceFiles.push(path.relative(options.workspace, absolute).replaceAll('\\', '/'));
+        }
+      }
+      await visit(options.workspace);
       capture.push({
         task: options.task, workspace: options.workspace, maxToolCalls: options.maxToolCalls, timeoutMs: options.timeoutMs,
         taskMarkdown: await fs.readFile(path.join(options.workspace, 'task.md'), 'utf8'),
         snapshot: JSON.parse(await fs.readFile(path.join(options.workspace, 'input', 'case-snapshot.json'), 'utf8')),
         renderedInstruction: await fs.readFile(path.join(options.workspace, 'agent-instruction.txt'), 'utf8'),
+        workspaceFiles: workspaceFiles.sort(),
       });
       await options.onLifecycle({ type: 'process_spawn', pid: 24680, parent_pid: process.pid, at: new Date().toISOString() });
       await fs.mkdir(path.dirname(options.candidatePath), { recursive: true });
@@ -139,9 +150,19 @@ test('M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用�
       assert.equal(current.capture[0].timeoutMs, 600_000);
       assert.equal(current.capture[0].task, current.capture[0].renderedInstruction);
       assert.equal(current.capture[0].snapshot.source.content_sha256, current.request.content_sha256);
+      assert.equal(current.capture[0].snapshot.verification_contract, undefined);
+      assert.deepEqual(current.capture[0].snapshot.candidate_requirements.required_step_markers, [
+        { order: 1, marker: 'CASE_STEP_1' }, { order: 2, marker: 'CASE_STEP_2' },
+      ]);
+      assert.equal(result.input_bundle.verification_contract.counterexample_actual, 'PROBE-41');
       assert.match(current.capture[0].taskMarkdown, new RegExp(current.request.content_sha256));
+      assert.match(current.capture[0].taskMarkdown, /Marker: CASE_STEP_1/);
       assert.match(current.capture[0].renderedInstruction, /candidate\.spec\.mjs/);
       assert.match(current.capture[0].renderedInstruction, /http:\/\/127\.0\.0\.1:41001\/probe/);
+      assert.deepEqual(current.capture[0].workspaceFiles, ['agent-instruction.txt', 'input/case-snapshot.json', 'task.md']);
+      for (const modelInput of [JSON.stringify(current.capture[0].snapshot), current.capture[0].taskMarkdown, current.capture[0].renderedInstruction]) {
+        assert.doesNotMatch(modelInput, /counterexample_actual|PROBE-41/);
+      }
       const authorization = await current.store.getRevalidationAuthorization();
       assert.equal(authorization.used_starts, 1);
       assert.deepEqual(authorization.scope, {
@@ -162,6 +183,42 @@ test('M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用�
   } finally {
     await Promise.all([first.manager.settle(), second.manager.settle()]);
     await Promise.all([fs.rm(first.localRoot, { recursive: true, force: true }), fs.rm(second.localRoot, { recursive: true, force: true })]);
+  }
+});
+
+test('两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗', () => {
+  const content = {
+    external_id: '007', title: '保真边界', module: '合成探针',
+    preconditions: '正常页面可访问', test_data: '业务说明允许原样出现 PROBE-41', status: 'CONFIRMED',
+    steps: [
+      { order: 1, action: '确认按钮可见', expected: '按钮可见' },
+      { order: 2, action: '点击按钮', expected: '输出显示PROBE-42' },
+    ],
+  };
+  const common = {
+    project: { project_id: 'project-boundary', name: '边界项目' },
+    item: { case_id: 'case-boundary', root_source: { kind: 'excel' }, lineage: [] },
+    versionRecord: { version: 1, content_sha256: 'A'.repeat(64), content },
+    environmentTemplate: {
+      template_id: 'synthetic-probe-v1', version: '1.0.0', expected: 'PROBE-42',
+      allowed_entry: { kind: 'managed-local-fixture', route: '/probe' },
+      candidate_contract: { test_count: 1, retries: 0, workers: 1 },
+    },
+    frozenAt: '2026-09-21T00:00:00.000Z',
+  };
+  const values = ['VALIDATION_ONLY_ALPHA_7F2C', 'VALIDATION_ONLY_BETA_91D8'];
+  const assembled = values.map((counterexampleActual) => assembleProjectCaseInput({ ...common, counterexampleActual }));
+  assert.equal(assembled[0].input_bundle.snapshot_sha256, assembled[1].input_bundle.snapshot_sha256);
+  assert.equal(assembled[0].input_bundle.task_markdown_sha256, assembled[1].input_bundle.task_markdown_sha256);
+  assert.equal(assembled[0].source.content_sha256, assembled[1].source.content_sha256);
+  for (let index = 0; index < assembled.length; index += 1) {
+    const item = assembled[index];
+    const modelInputs = item.initial_files.map((file) => file.content).join('\n');
+    assert.doesNotMatch(modelInputs, new RegExp(values[index]));
+    assert.doesNotMatch(modelInputs, /counterexample_actual/);
+    assert.match(modelInputs, /业务说明允许原样出现 PROBE-41/);
+    assert.equal(item.input_bundle.verification_contract.counterexample_actual, values[index]);
+    assert.equal(item.input_bundle.verification_contract.expected_literal, 'PROBE-42');
   }
 });
 

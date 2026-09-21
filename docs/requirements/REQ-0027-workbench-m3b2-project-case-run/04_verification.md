@@ -13,6 +13,7 @@
 | VT-0027-02 | DR-0027-03 | 已确认 | 集成测试通过 | 真实Playwright CLI临时工程正常通过、反例指定差异、候选哈希一致和步骤映射完整。 | 实际CLI、结构化报告与媒体文件 | 零模型Web流与真实Harness候选均为正常1 PASSED、反例1 FAILED且PROBE-42/PROBE-41；候选哈希一致，CASE_STEP_1/2均观察到。 | - | - | - | - | - | - |
 | VT-0027-03 | DR-0027-04 / DR-0027-05 | 已确认 | 集成测试通过 | 真实Chromium项目导入、创建、启动、结果和媒体读回；截图加载、视频播放/暂停/定位、Trace哈希及重启读回。 | 真实Web、后台task、原始报告和受控媒体接口一致 | 真实任务build-20260921120911-48d7c545；同任务零模型读回验证两图、两录像、两Trace与重启，Harness仍1次。 | - | - | - | - | - | - |
 | VT-0027-04 | DR-0027-01 / DR-0027-02 / DR-0027-03 / DR-0027-04 / DR-0027-05 | 已确认 | 集成测试通过 | 受影响workbench/harness-probe回归、正式门禁、批准资产及历史边界不变。 | 命令、退出码、统计、哈希和差异检查 | 仓库根执行npm --prefix workbench test，退出码0，测试60、失败0、跳过0，日志docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log；harness-probe 24/24、M3-B1和M3-B2 Chromium流通过；批准脚本SHA-256保持280A7875...79A。 | - | - | - | - | - | - |
+| VT-0027-05 | DR-0027-06 | 已确认 | 集成测试通过 | 生产组装和attempt实际文件不含两个不同验证侧哨兵，控制器契约仍完整，业务同字面文本保留；旧INPUT_ONLY、身份、版本和读回回归保持。 | 实际BuildTaskManager、attempt捕获文件、两个独立哨兵和完整workbench回归 | 命令：npm --prefix workbench test；退出码：0；测试数量：61；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/input-boundary-workbench-tests.log | npm --prefix workbench test | 0 | 61 | 0 | 0 | docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/input-boundary-workbench-tests.log |
 
 ## 本轮命令与环境
 

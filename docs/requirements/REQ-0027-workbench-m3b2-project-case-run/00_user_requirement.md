@@ -20,6 +20,8 @@
 - 真实任务build-20260921120911-48d7c545生成候选4B183AD25305913547C309A86F273DAAB861004313385A5DEF3094385F3B0730，正常通过、反例取得PROBE-42/PROBE-41差异并停在WAITING_HUMAN_REVIEW。
 - 唯一授权已按Harness process_spawn消耗为1/1；外层Web选择器修复后的同任务零模型读回没有增加启动次数。
 - 正式工程验证命令npm --prefix workbench test在仓库根目录执行，退出码0，60项测试、0失败、0跳过；日志为docs/requirements/REQ-0027-workbench-m3b2-project-case-run/logs/workbench-tests.log。
+- 后续只读审查确认历史任务的v1模型可读快照包含verification_contract.counterexample_actual；历史执行事实保持，但不能作为反例设计保密证据。
+- 新建任务改用v2模型快照，反例实际值与判据仅留在控制器input_bundle；本修订Harness和模型调用均为0。
 
 ## 推断与待确认
 

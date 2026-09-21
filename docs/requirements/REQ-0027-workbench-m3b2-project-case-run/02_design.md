@@ -10,12 +10,14 @@
 | DD-0027-03 | DR-0027-03 | 已确认 | 创建时把受支持合成环境的输出义务绑定到确切用例步骤并冻结verification_contract；验证只读取该契约。 | 避免运行时回退旧template.expected，同时不引入开放式语义判定。 |
 | DD-0027-04 | DR-0027-04 | 已确认 | 直接将attempt正常/反例报告和媒体登记到现有task files，并增加按task/file ID的哈希与Range读取及候选结果展示。 | 真实流程自动返回结果，无需离线手工派生索引。 |
 | DD-0027-05 | DR-0027-05 | 已确认 | 使用真实Web创建并启动一条合成项目用例，测试驱动按返回task_id等待；服务由覆盖600秒上限的前台宿主持有。 | 旧历史任务不能提前满足终态，宿主不能先于Harness退出。 |
+| DD-0027-06 | DR-0027-06 | 已确认 | v2快照单独组装模型所需的用例、正常环境、步骤标记和交付要求；verification_contract只保存在控制器input_bundle。 | 让反例验证资料不进入Harness工作输入，同时允许相同字面值作为合法业务正文原样存在。 |
 
 ## 接口与数据流
 
 - Excel上传/预览/确认 -> 选择确切用例版本 -> 创建带本批作用域授权的新build task -> 用户显式start。
 - 冻结task文件 -> attempt逐字复制和哈希复核 -> 渲染入口/输出路径 -> Harness专用cwd -> candidate.spec.mjs。
 - 同一候选 -> 正常fixture与negative fixture -> Playwright结构化报告和媒体 -> task files/candidate结果 -> 项目页关联历史和任务详情。
+- 新任务冻结 -> v2模型输入快照/task.md/渲染指令进入attempt；独立verification_contract仅供工作台控制器在候选生成后执行反例验证。
 
 ## 模块文档影响
 
