@@ -13,6 +13,8 @@ node node_modules/@playwright/test/cli.js install chromium
 npm test
 npm run test:build-browser
 npm run register:approved
+# 仅当本机已有该离线复验记录时登记派生索引；不执行候选或调用模型
+npm run register:m2c-runtime-revalidation
 npm start
 ```
 
@@ -24,7 +26,7 @@ npm start
 
 当前接口：`GET /api/health`、`GET /api/assets`、`GET /api/assets/:asset_id`、`GET /api/runs`、`GET /api/runs/:run_id`、`POST /api/runs` 和 `POST /api/runs/:run_id/stop`。状态变更只接受同源本地 JSON 请求，正文只允许固定字段。
 
-M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由。第一版不接受任意 URL、文件、代码或命令上传。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
+M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由。第一版不接受任意 URL、文件、代码或命令上传。已有离线复验可先通过受控登记命令写入派生索引，再由任务 API 返回精确关联记录；媒体只能从包含任务 ID、复验 ID 和登记媒体 ID 的路由读取。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
 
 执行前会确认 4198 的 `/healthz` 精确标识冻结 heldout 站点并检查入口可用性；不匹配时拒绝运行，不关闭或替换未知进程。后端只从已登记资产映射入口，以参数数组启动本地锁定的 `@playwright/test`，显式使用 `workers=1`、`retries=0`，不通过 shell 或 `npx` 下载。批准脚本按原始字节复制到本次运行目录，来源和副本在运行前后分别核验哈希。
 
@@ -36,6 +38,8 @@ M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任
 
 同一页面的“最小候选建例”区只加载 `synthetic-probe-v1`。先“提交固定任务”冻结输入摘要，再显式“启动 Harness”。任务、候选生成、技术验证、人工核对是四个独立状态：正常页面通过且同一候选在错误输出反例上产生确切断言不符后，只进入 `WAITING_HUMAN_REVIEW`；候选失败则保留源码与实际错误，并且只允许用户显式发起一次反馈修订。页面刷新或服务重启不会恢复模型调用。
 
+源任务下的“候选验证记录”把原始 `NOT_RUN` 历史与后续技术复验并列展示。已登记复验可以分别查看正常/反例结果、截图缩略图与原图、原生视频控制和 Trace 下载入口；轮询不会重建当前选中的媒体节点。该摘要只表示“已有技术复验通过，尚未批准”，不会回填源任务终态或批准候选。
+
 阶段预算保存在 Git 忽略的数据目录中，而不是浏览器状态：整个 M2-C 验收最多两次 Harness 启动，每次最多 30 次工具调用和 10 分钟。模型供应商没有返回的底层请求数或 usage 显示为未知，不能填零或用一次 Harness 启动代替。工具日志、页面快照和原始报告分别登记；只有登记为 Web 可见且哈希未变化的候选文件可以读取。
 
 环境选择由明确的前端状态保存。轮询即使重建选项也会恢复仍在资产允许列表中的用户选择；资产不再允许该值时才回退到首个允许环境。启动请求读取该状态，不从刚重建的 DOM 猜测入口。
@@ -44,6 +48,7 @@ M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任
 - 原始 Playwright 结果保留在 `test_status`、`summary.playwright_status` 和 `summary.playwright_pass`；整体有效通过另记为 `summary.complete_pass`。只有工作台终态为 `PROCESS_ENDED`、退出码为 0、报告有效、恰好运行一个目标测试、没有跳过、登记步骤全部实际通过，并且 screenshot、video、trace 三类既定媒体齐全，整体才为真。哈希异常、取消、中断、进程、报告或证据异常不会被原始绿色结果覆盖。
 - 错误保留原消息、已确定的期望值/实际值和 `PENDING_ANALYSIS` 归因。只有同时取得具体 `Expected` 与 `Received` 值才分类为 `ASSERTION_MISMATCH`；缺元素或严格匹配冲突为 `LOCATOR_OR_TARGET`，只有单侧值或普通 expect 文本为 `ASSERTION_UNRESOLVED`，纯超时保留 `TIMEOUT`。包含超时文字但已取得 H111/H106 两值的真实比较仍是值不符。没有执行的登记步骤显示 `NOT_EXECUTED`。
 - 媒体 API 只按本运行记录中的 `media_id` 读取，并复核真实路径仍在 run 目录和文件大小未变化。截图与视频可在页面本地查看；Trace 下载后可执行：
+- 候选复验媒体同样只按任务、复验和媒体三个登记 ID 读取，并在每次请求时复核路径边界、大小和 SHA-256；缺失或变化不会替换成其他运行的文件。
 
 ```powershell
 node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
@@ -94,4 +99,4 @@ M1 第一阶段集成验证、三项代码复审修复及既定证据完整性�
 
 终态等待修复后的独立一次性授权已从真实 Web 启动并正确绑定新 `task_id`。Harness 完整生成了新候选，但正常与反例执行均因两个安装位置的 Playwright Test 实例被同时加载而得到零测试，任务保留为 `CANDIDATE_VALIDATION_FAILED`；没有媒体、修订或替补调用。完整事实见 [终态等待修复后单次真实 Web 验证报告](docs/M2C_WAIT_FIX_VALIDATION_REPORT.md)。
 
-后续零模型修复让 workbench 的候选执行显式使用本子工程的 Playwright CLI、配置和依赖解析根，harness-probe 默认入口仍保持独立。原候选的同字节副本已在正常页实际通过，并在反例页取得 PROBE-42/PROBE-41 断言差异；两边截图、录像、Trace 均生成，但新的独立复验记录和媒体尚未接入 Web。详见 [Playwright 双实例修复与同候选复验](docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md)。
+后续零模型修复让 workbench 的候选执行显式使用本子工程的 Playwright CLI、配置和依赖解析根，harness-probe 默认入口仍保持独立。原候选的同字节副本已在正常页实际通过，并在反例页取得 PROBE-42/PROBE-41 断言差异；两边截图、录像、Trace 均生成。详见 [Playwright 双实例修复与同候选复验](docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md)。这些既有结果现已通过派生索引接入原任务页面，原任务失败终态和原报告保持不变，展示验证见 [已有候选复验与媒体接入报告](docs/M2C_EXISTING_REVALIDATION_WEB_MEDIA.md)。

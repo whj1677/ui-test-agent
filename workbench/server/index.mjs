@@ -4,6 +4,7 @@ import { WorkbenchStore } from './store.mjs';
 import { WorkbenchRunManager } from './executor.mjs';
 import { BuildTaskStore } from './build/store.mjs';
 import { BuildTaskManager } from './build/manager.mjs';
+import { BuildRevalidationStore } from './build/revalidations.mjs';
 import { randomUUID } from 'node:crypto';
 
 const host = '127.0.0.1';
@@ -18,6 +19,8 @@ const recovered = await store.recoverInterrupted();
 const manager = new WorkbenchRunManager({ store, paths });
 const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID });
 await buildStore.init();
+const buildRevalidationStore = new BuildRevalidationStore(paths.buildRevalidationsRoot, buildStore);
+await buildRevalidationStore.init();
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
 const buildManager = new BuildTaskManager({
   store: buildStore,
@@ -27,7 +30,7 @@ const buildManager = new BuildTaskManager({
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   otherActive: () => Boolean(manager.active),
 });
-const server = createWorkbenchServer({ store, manager, buildStore, buildManager });
+const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);

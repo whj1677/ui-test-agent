@@ -38,19 +38,21 @@ async function sendStatic(response, webRoot, pathname) {
   return true;
 }
 
-async function sendMedia(request, response, store, runId, mediaId) {
-  const run = await store.getRun(runId);
-  const media = run?.media?.find((item) => item.media_id === mediaId);
-  if (!media) return sendJson(response, 404, { error: 'MEDIA_NOT_FOUND' });
-  const runRoot = store.runDirectory(runId);
-  const file = resolveInside(runRoot, media.relative_path);
-  const [realRoot, realFile] = await Promise.all([fs.realpath(runRoot), fs.realpath(file)]);
+async function sendRegisteredMedia(request, response, root, media, errors = {}) {
+  const file = resolveInside(root, media.relative_path);
+  let realRoot;
+  let realFile;
+  try { [realRoot, realFile] = await Promise.all([fs.realpath(root), fs.realpath(file)]); }
+  catch (error) {
+    if (error.code === 'ENOENT') return sendJson(response, 404, { error: errors.missing || 'MEDIA_FILE_MISSING' });
+    throw error;
+  }
   if (realFile !== realRoot && !realFile.startsWith(`${realRoot}${path.sep}`)) {
-    return sendJson(response, 403, { error: 'MEDIA_PATH_OUTSIDE_RUN' });
+    return sendJson(response, 403, { error: errors.outside || 'MEDIA_PATH_OUTSIDE_ROOT' });
   }
   const stat = await fs.stat(realFile);
   if (!stat.isFile() || stat.size !== media.bytes || await sha256File(realFile) !== media.sha256) {
-    return sendJson(response, 409, { error: 'MEDIA_FILE_CHANGED' });
+    return sendJson(response, 409, { error: errors.changed || 'MEDIA_FILE_CHANGED' });
   }
   const body = await fs.readFile(realFile);
   const range = String(request.headers.range || '').match(/^bytes=(\d+)-(\d*)$/);
@@ -73,6 +75,13 @@ async function sendMedia(request, response, store, runId, mediaId) {
   }
   response.writeHead(200, { ...headers, 'content-length': body.length });
   response.end(body);
+}
+
+async function sendMedia(request, response, store, runId, mediaId) {
+  const run = await store.getRun(runId);
+  const media = run?.media?.find((item) => item.media_id === mediaId);
+  if (!media) return sendJson(response, 404, { error: 'MEDIA_NOT_FOUND' });
+  return sendRegisteredMedia(request, response, store.runDirectory(runId), media, { outside: 'MEDIA_PATH_OUTSIDE_RUN' });
 }
 
 async function sendBuildFile(response, buildStore, taskId, fileId) {
@@ -132,6 +141,7 @@ export function createWorkbenchServer(options = {}) {
   const manager = options.manager;
   const buildStore = options.buildStore;
   const buildManager = options.buildManager;
+  const buildRevalidationStore = options.buildRevalidationStore;
   const webRoot = options.webRoot || defaultWebRoot;
   return http.createServer(async (request, response) => {
     try {
@@ -153,7 +163,21 @@ export function createWorkbenchServer(options = {}) {
         return;
       }
       if (buildStore && request.method === 'GET' && url.pathname === '/api/build/tasks') {
-        sendJson(response, 200, { tasks: await buildStore.listTasks() });
+        const tasks = await buildStore.listTasks();
+        if (buildRevalidationStore) {
+          for (const task of tasks) task.revalidations = await buildRevalidationStore.listForTask(task.task_id);
+        }
+        sendJson(response, 200, { tasks });
+        return;
+      }
+      const revalidationMedia = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/revalidations\/([^/]+)\/media\/([^/]+)$/);
+      if (buildRevalidationStore && request.method === 'GET' && revalidationMedia) {
+        const [taskId, validationId, mediaId] = revalidationMedia.slice(1).map(decodeURIComponent);
+        const resolved = await buildRevalidationStore.resolveMedia(taskId, validationId, mediaId);
+        if (!resolved) return sendJson(response, 404, { error: 'REVALIDATION_MEDIA_NOT_FOUND' });
+        await sendRegisteredMedia(request, response, resolved.root, resolved.media, {
+          missing: 'REVALIDATION_MEDIA_MISSING', outside: 'REVALIDATION_MEDIA_PATH_OUTSIDE_ROOT', changed: 'REVALIDATION_MEDIA_CHANGED',
+        });
         return;
       }
       const buildFile = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/files\/([^/]+)$/);
@@ -164,6 +188,7 @@ export function createWorkbenchServer(options = {}) {
       const buildTask = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)$/);
       if (buildStore && request.method === 'GET' && buildTask) {
         const task = await buildStore.getTask(decodeURIComponent(buildTask[1]));
+        if (task && buildRevalidationStore) task.revalidations = await buildRevalidationStore.listForTask(task.task_id);
         sendJson(response, task ? 200 : 404, task || { error: 'BUILD_TASK_NOT_FOUND' });
         return;
       }

@@ -17,5 +17,6 @@ export function createPaths(options = {}) {
     runsRoot: path.join(localRoot, 'data', 'runs'),
     buildTasksRoot: path.join(localRoot, 'build-tasks'),
     buildRuntimeRoot: path.join(localRoot, 'build-runtime'),
+    buildRevalidationsRoot: path.join(localRoot, 'candidate-revalidations'),
   };
 }

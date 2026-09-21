@@ -3,6 +3,7 @@ const state = {
   selectedEnvironmentId: null,
   buildTemplates: [], buildTasks: [], selectedBuildTaskId: null, activeBuildTaskId: null,
   buildBudget: null, buildAuthorization: null,
+  selectedRevalidationByTask: {}, selectedRevalidationLaneByTask: {}, renderedRevalidationKey: null,
 };
 const byId = (id) => document.getElementById(id);
 
@@ -95,7 +96,7 @@ function renderBuildHistory() {
     button.append(make('strong', `${task.template.title} · ${task.task_status}`));
     button.append(make('span', task.task_id));
     button.append(make('span', `${task.created_at} · 候选 ${task.candidates.length} 版`));
-    button.addEventListener('click', () => { state.selectedBuildTaskId = task.task_id; render(); });
+    button.addEventListener('click', () => { state.selectedBuildTaskId = task.task_id; state.renderedRevalidationKey = null; render(); });
     root.append(button);
   }
 }
@@ -128,16 +129,27 @@ function renderBuildDetail() {
   if (!task.candidates.length) candidates.append(make('div', '尚未生成候选。', 'empty'));
   for (const candidate of task.candidates) {
     const card = make('article', undefined, 'candidate-card');
-    card.append(make('strong', `候选 v${candidate.version} · ${candidate.verification_status}`));
-    card.append(make('p', `${candidate.sha256} · ${candidate.bytes} bytes`, 'mono'));
+    const linked = task.revalidations?.find((item) => item.source_candidate_version === candidate.version && item.candidate_sha256 === candidate.sha256);
+    card.append(make('strong', `候选 v${candidate.version} · 原始验证 ${candidate.verification_status}`));
     card.append(make('p', candidateResultText(candidate)));
-    if (candidate.diff_from_previous?.base) card.append(make('p', `相对前版差异：${candidate.diff_from_previous.lines.length} 行`));
-    const code = make('pre'); code.textContent = candidate.code; card.append(code);
-    if (candidate.diff_from_previous?.lines?.length) {
-      const diff = make('pre'); diff.textContent = JSON.stringify(candidate.diff_from_previous.lines, null, 2); card.append(diff);
+    if (linked?.status === 'TECHNICAL_REVALIDATION_PASSED') card.append(make('p', '已有技术复验通过，尚未批准', 'result-highlight'));
+    if (linked?.original_validation?.loading_errors?.length) {
+      const originalError = make('details'); originalError.append(make('summary', '查看原始加载错误'));
+      const pre = make('pre', linked.original_validation.loading_errors.join('\n'), 'error-box'); originalError.append(pre); card.append(originalError);
     }
+    if (candidate.diff_from_previous?.base) card.append(make('p', `相对前版差异：${candidate.diff_from_previous.lines.length} 行`));
+    const technical = document.createElement('details');
+    technical.append(make('summary', '展开候选代码与完整哈希'));
+    technical.append(make('p', `${candidate.sha256} · ${candidate.bytes} bytes`, 'mono break'));
+    const code = make('pre'); code.textContent = candidate.code; technical.append(code);
+    if (candidate.diff_from_previous?.lines?.length) {
+      const diff = make('pre'); diff.textContent = JSON.stringify(candidate.diff_from_previous.lines, null, 2); technical.append(diff);
+    }
+    card.append(technical);
     candidates.append(card);
   }
+
+  renderBuildRevalidations(task);
 
   const files = byId('build-files'); clear(files);
   if (!task.files.length) files.append(make('div', '尚无登记文件。', 'empty'));
@@ -148,6 +160,101 @@ function renderBuildDetail() {
     files.append(card);
   }
   byId('build-error').textContent = task.error ? JSON.stringify(task.error, null, 2) : '无';
+}
+
+function revalidationMediaUrl(task, record, item) {
+  return `/api/build/tasks/${encodeURIComponent(task.task_id)}/revalidations/${encodeURIComponent(record.validation_id)}/media/${encodeURIComponent(item.media_id)}`;
+}
+
+function renderBuildRevalidations(task) {
+  const root = byId('build-revalidations');
+  const records = task.revalidations || [];
+  if (!records.length) {
+    if (state.renderedRevalidationKey !== `${task.task_id}:empty`) { clear(root); root.append(make('div', '尚无已关联的候选复验。', 'empty')); }
+    state.renderedRevalidationKey = `${task.task_id}:empty`;
+    return;
+  }
+  const selectedId = records.some((item) => item.validation_id === state.selectedRevalidationByTask[task.task_id])
+    ? state.selectedRevalidationByTask[task.task_id] : records[0].validation_id;
+  state.selectedRevalidationByTask[task.task_id] = selectedId;
+  const lane = ['normal', 'negative'].includes(state.selectedRevalidationLaneByTask[task.task_id])
+    ? state.selectedRevalidationLaneByTask[task.task_id] : 'normal';
+  state.selectedRevalidationLaneByTask[task.task_id] = lane;
+  const record = records.find((item) => item.validation_id === selectedId);
+  const signature = `${task.task_id}:${selectedId}:${lane}:${JSON.stringify(record)}`;
+  if (state.renderedRevalidationKey === signature) return;
+  state.renderedRevalidationKey = signature;
+  clear(root);
+
+  const picker = make('div', undefined, 'revalidation-picker');
+  for (const item of records) {
+    const button = make('button', item.validation_id); button.type = 'button';
+    button.classList.toggle('selected', item.validation_id === selectedId);
+    button.addEventListener('click', () => {
+      state.selectedRevalidationByTask[task.task_id] = item.validation_id;
+      state.renderedRevalidationKey = null;
+      renderBuildRevalidations(task);
+    });
+    picker.append(button);
+  }
+  root.append(picker);
+
+  const summary = make('article', undefined, 'revalidation-summary');
+  summary.append(make('strong', `${record.validation_id} · ${record.status}`));
+  summary.append(make('p', `${record.finished_at || '—'} · 候选 v${record.source_candidate_version}`));
+  if (record.status === 'TECHNICAL_REVALIDATION_PASSED') summary.append(make('p', '已有技术复验通过，尚未批准', 'result-highlight'));
+  const lanes = make('div', undefined, 'lane-tabs');
+  for (const [value, label] of [['normal', '正常'], ['negative', '反例']]) {
+    const button = make('button', `${label} · ${record[value].test_status}`); button.type = 'button';
+    button.dataset.lane = value; button.classList.toggle('selected', value === lane);
+    button.addEventListener('click', () => {
+      state.selectedRevalidationLaneByTask[task.task_id] = value;
+      state.renderedRevalidationKey = null;
+      renderBuildRevalidations(task);
+    });
+    lanes.append(button);
+  }
+  summary.append(lanes);
+  const result = record[lane];
+  const resultBox = make('div', undefined, 'revalidation-result');
+  resultBox.append(make('strong', `${lane === 'normal' ? '正常' : '反例'}：${result.test_count} 条 ${result.test_status}`));
+  if (result.error?.expected != null || result.error?.actual != null) {
+    resultBox.append(make('p', `期望：${result.error?.expected ?? '—'} · 实际：${result.error?.actual ?? '—'}`));
+  }
+  if (result.specified_mismatch) resultBox.append(make('p', '指定错误已检出', 'result-highlight'));
+  if (result.error?.message) {
+    const error = make('details'); error.append(make('summary', '查看原始错误事实'));
+    const pre = make('pre', result.error.message, 'error-box'); error.append(pre); resultBox.append(error);
+  }
+  summary.append(resultBox);
+  root.append(summary);
+
+  const mediaRoot = make('div', undefined, 'media-grid revalidation-media');
+  const items = record.media.filter((item) => item.lane === lane);
+  if (!items.length) mediaRoot.append(make('div', '该验证没有已登记媒体。', 'empty'));
+  for (const item of items) {
+    const card = make('article', undefined, 'media-card');
+    card.dataset.mediaId = item.media_id;
+    const url = revalidationMediaUrl(task, record, item);
+    card.append(make('strong', `${item.kind} · ${item.file_name}`), make('p', `${item.bytes} bytes · ${item.sha256.slice(0, 16)}…`, 'mono'));
+    if (item.kind === 'screenshot') {
+      const link = document.createElement('a'); link.href = url; link.target = '_blank'; link.rel = 'noopener';
+      const image = document.createElement('img'); image.src = url; image.alt = `${lane} ${item.file_name}`; image.dataset.testid = `revalidation-${lane}-screenshot`; link.append(image); card.append(link);
+    } else if (item.kind === 'video') {
+      const video = document.createElement('video'); video.src = url; video.controls = true; video.preload = 'metadata'; video.dataset.testid = `revalidation-${lane}-video`; card.append(video);
+    } else {
+      const link = make('a', '下载 Trace 后运行 npx playwright show-trace <文件> 在本机查看'); link.href = url; link.download = item.file_name; link.dataset.testid = `revalidation-${lane}-trace`; card.append(link);
+    }
+    mediaRoot.append(card);
+  }
+  root.append(mediaRoot);
+  const technical = document.createElement('details'); technical.className = 'technical-details';
+  technical.append(make('summary', '展开关联与完整哈希'));
+  const facts = make('dl', undefined, 'facts compact');
+  addFact(facts, '源任务', record.source_task_id); addFact(facts, '源尝试', record.source_attempt_id);
+  addFact(facts, '候选版本', record.source_candidate_version); addFact(facts, '候选 SHA-256', record.candidate_sha256);
+  addFact(facts, '运行配置', record.runtime?.config_path || '—'); addFact(facts, '运行环境一致', record.runtime?.consistent ?? '—');
+  technical.append(facts); root.append(technical);
 }
 
 function renderHistory() {

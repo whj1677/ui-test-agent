@@ -13,6 +13,7 @@
 | UN-0024-01 | DR-0024-05 | DD-0024-05 | TK-0024-05 | VT-0024-05 | 已完成-工程范围 |
 | UN-0024-01 | DR-0024-01 | DD-0024-01 | TK-0024-04 | VT-0024-04 | 受阻 |
 | UN-0024-01 | DR-0024-03 | DD-0024-03 | TK-0024-06 | VT-0024-06 | 已完成-既有候选技术复验 |
+| UN-0024-01 | DR-0024-06 | DD-0024-06 | TK-0024-07 | VT-0024-07 | 已完成-既有复验Web展示 |
 
 ## 历史链路
 
@@ -25,3 +26,4 @@
 | 5 | workbench/docs/M2C_REVALIDATION_WAIT_TEST_REVISION.md | 部分实现-单次复验C类收口 | 只补准终态等待测试：直接观察pending并用旧任意历史卡片扫描逻辑作预期失败对照；未调用Harness。 |
 | 6 | workbench/docs/M2C_WAIT_FIX_VALIDATION_REPORT.md | 部分实现-真实候选验证失败 | 新独立授权完成真实Web提交与Harness候选生成；正常和反例均因Playwright Test双实例重复加载而零测试，无媒体、修订或替补调用。 |
 | 7 | workbench/docs/M2C_PLAYWRIGHT_RUNTIME_FIX_REVALIDATION.md | 部分实现-既有候选技术复验通过 | 不调用Harness或模型；统一workbench Playwright运行根后，原候选正常通过、反例取得指定断言差异且两边三类媒体齐全。原B类任务和Web展示保持。 |
+| 8 | workbench/docs/M2C_EXISTING_REVALIDATION_WEB_MEDIA.md | 部分实现-既有候选复验已接入Web | 不调用Harness、模型或候选业务执行；按机读字段关联既有复验，原历史并列保留，截图/视频/Trace受控展示及重启读回通过。 |
