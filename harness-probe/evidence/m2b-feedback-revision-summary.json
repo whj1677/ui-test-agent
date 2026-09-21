@@ -1,0 +1,59 @@
+{
+  "schema": "m2b-feedback-revision-public-summary-v1",
+  "run_id": "feedback-2026-09-21T02-20-00-389Z-44b84112",
+  "policy": {
+    "mode": "single-host-dedicated-task-directory-with-minimum-exposure",
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "residual_risk_accepted_by_user": true,
+    "max_harness_starts": 1,
+    "timeout_ms": 600000,
+    "max_tool_calls": 30,
+    "model_retry_disabled": true
+  },
+  "harness": {
+    "starts": 1,
+    "exit_code": 0,
+    "turn_end": "completed",
+    "final_present": true,
+    "wall_seconds": 31.703,
+    "observable_agent_steps": 8,
+    "total_tool_calls": 9,
+    "browser_tool_calls": 5,
+    "tool_limit_reached": false,
+    "provider_request_count": null,
+    "provider_usage": null
+  },
+  "candidate": {
+    "file": "m2b-revised-candidate.spec.mjs",
+    "bytes": 304,
+    "sha256": "5277F2E316835161F802062EEA170BEF8644800B9B37AA5B20D99526B8BC5450",
+    "same_for_both_verifications": true,
+    "approved_business_asset": false
+  },
+  "normal": {
+    "exit_code": 0,
+    "test_count": 1,
+    "passed": 1,
+    "failed": 0,
+    "complete_pass": true
+  },
+  "negative": {
+    "input_was_not_provided_to_harness": true,
+    "exit_code": 1,
+    "test_count": 1,
+    "passed": 0,
+    "failed": 1,
+    "expected_probe_42_present": true,
+    "actual_probe_41_present": true,
+    "assertion_mismatch_detected": true
+  },
+  "adapter_history": {
+    "initial_result_success": false,
+    "reason": "Playwright MCP tool evidence was initially classified as unexpected candidate output.",
+    "historical_result_preserved": true,
+    "offline_verification_after_registry_correction": true,
+    "additional_harness_starts": 0
+  },
+  "conclusion": "CANDIDATE_TECHNICAL_VERIFICATION_COMPLETE_NOT_APPROVED"
+}

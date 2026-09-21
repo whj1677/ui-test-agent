@@ -2,7 +2,7 @@
 
 独立批准脚本工作台第一阶段见 [workbench/README.md](workbench/README.md)。它使用独立端口、依赖和本地数据目录，不启动或切换旧 4179 服务；当前只做批准排序脚本的集成闭环，不改变下述原产品结论。
 
-DeepSeek Harness 的 M2-A 受控调用探针见 [harness-probe/README.md](harness-probe/README.md) 与 [脱敏结论报告](harness-probe/PROBE_REPORT.md)。该探针独立于 M1 工作台，结论仍为有限可用（B）。后续 M2-B [隔离核对报告](harness-probe/M2B_ISOLATION_REPORT.md)确认当前宿主边界不足，因而没有启动新的模型修订任务；两阶段均不代表已接入正式建例流程。
+DeepSeek Harness 的 M2-A 受控调用探针见 [harness-probe/README.md](harness-probe/README.md) 与 [脱敏结论报告](harness-probe/PROBE_REPORT.md)，结论仍为有限可用（B）。M2-B [隔离核对](harness-probe/M2B_ISOLATION_REPORT.md)确认宿主边界不足；用户明确接受残余风险后完成了[一次候选反馈修订验证](harness-probe/M2B_FEEDBACK_REVISION_REPORT.md)。这些探针独立于 M1 工作台，不代表正式建例流程已经接入或候选已经批准。
 
 测试人员先阅读 [试用说明](试用说明.md)。当前已补构建身份、同站点未清理数据保护、正常停止、中文环境检查及受控异常恢复；真实模型、干净 Windows 和独立人员验收仍未齐全，不能视为已发布。下文历史结果保留各自版本及验证边界。
 

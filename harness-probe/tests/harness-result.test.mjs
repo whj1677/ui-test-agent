@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessHarnessRun } from '../src/harness-runner.mjs';
+import { assessHarnessRun, createToolBudgetObserver } from '../src/harness-runner.mjs';
 import { redactText, redactValue } from '../src/redact.mjs';
 
 const completedEvents = [
@@ -42,4 +42,16 @@ test('日志会遮蔽密钥、Bearer和敏感字段', () => {
   assert.equal(value.apiKey, '[REDACTED]');
   assert.equal(value.nested.cookie, '[REDACTED]');
   assert.doesNotMatch(value.nested.text, /raw/);
+});
+
+test('工具调用达到上限时触发外层停止且不会超过上限', () => {
+  const reasons = [];
+  const observer = createToolBudgetObserver(3, (reason) => reasons.push(reason));
+  observer.observe({ type: 'tool_call', tool: 'one' });
+  observer.observe({ type: 'status' });
+  observer.observe({ type: 'tool_call', tool: 'two' });
+  assert.deepEqual(reasons, []);
+  observer.observe({ type: 'tool_call', tool: 'three' });
+  assert.deepEqual(reasons, ['tool_limit']);
+  assert.equal(observer.count(), 3);
 });

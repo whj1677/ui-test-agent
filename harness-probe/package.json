@@ -10,6 +10,7 @@
     "test": "node --test tests/*.test.mjs",
     "setup:harness": "node src/setup-harness.mjs",
     "audit:isolation": "node src/isolation-audit.mjs",
+    "revise:feedback": "node src/run-feedback-revision.mjs",
     "probe": "node src/run-probe.mjs",
     "verify:candidate": "node src/verify-candidate.mjs"
   },

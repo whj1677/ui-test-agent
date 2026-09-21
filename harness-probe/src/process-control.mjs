@@ -44,7 +44,7 @@ export function runOwnedProcess(command, args, options = {}) {
       };
     })();
     const abort = async () => {
-      termination = 'cancelled';
+      termination = typeof signal?.reason === 'string' ? signal.reason : 'cancelled';
       await terminateOwnedTree(child);
     };
     let timer;

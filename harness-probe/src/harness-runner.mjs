@@ -18,10 +18,27 @@ function allowedEnvironment(overrides = {}) {
 function parseEvent(line, events) {
   try {
     const parsed = JSON.parse(line);
-    if (parsed && typeof parsed === 'object') events.push(parsed);
+    if (parsed && typeof parsed === 'object') {
+      events.push(parsed);
+      return parsed;
+    }
   } catch {
     events.push({ type: 'invalid_json', line });
   }
+  return null;
+}
+
+export function createToolBudgetObserver(maxToolCalls, abort) {
+  if (!Number.isInteger(maxToolCalls) || maxToolCalls < 1) throw new Error('maxToolCalls must be a positive integer');
+  let toolCalls = 0;
+  return {
+    observe(event) {
+      if (event?.type !== 'tool_call') return;
+      toolCalls += 1;
+      if (toolCalls >= maxToolCalls) abort('tool_limit');
+    },
+    count: () => toolCalls,
+  };
 }
 
 export async function fileSummary(candidatePath, workspace) {
@@ -59,8 +76,13 @@ export function assessHarnessRun({ processResult, events, candidateExists, brows
   };
 }
 
-export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal }) {
+export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30 }) {
   const events = [];
+  const budgetController = new AbortController();
+  const forwardAbort = () => budgetController.abort('cancelled');
+  if (signal?.aborted) forwardAbort();
+  else signal?.addEventListener('abort', forwardAbort, { once: true });
+  const toolBudget = createToolBudgetObserver(maxToolCalls, (reason) => budgetController.abort(reason));
   const childEnv = allowedEnvironment({
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
@@ -77,11 +99,15 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
     cwd: workspace,
     env: childEnv,
     timeoutMs,
-    signal,
-    onStdoutLine: (line) => parseEvent(line, events),
+    signal: budgetController.signal,
+    onStdoutLine: (line) => toolBudget.observe(parseEvent(line, events)),
   });
+  signal?.removeEventListener('abort', forwardAbort);
   const candidateExists = existsSync(candidatePath);
   const assessment = assessHarnessRun({ processResult, events, candidateExists });
+  assessment.toolCalls = toolBudget.count();
+  assessment.maxToolCalls = maxToolCalls;
+  assessment.toolLimitReached = processResult.termination === 'tool_limit';
   const secrets = [apiKey];
   return {
     process: {

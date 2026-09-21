@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>DeepSeek Harness 合成反例</title>
+  </head>
+  <body>
+    <main>
+      <h1>合成页面</h1>
+      <p>此页面仅用于候选生成后的独立错误输出验证。</p>
+      <button id="run-probe" type="button">执行探针交互</button>
+      <output id="probe-result" aria-live="polite">尚未执行</output>
+    </main>
+    <script>
+      document.querySelector('#run-probe').addEventListener('click', () => {
+        document.querySelector('#probe-result').textContent = 'PROBE-41';
+      });
+    </script>
+  </body>
+</html>
