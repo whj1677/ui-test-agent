@@ -1,0 +1,67 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0024",
+  "title": "M2-C 工作台最小候选建例入口",
+  "metadata": {"requirement_status":"实现中","governance_level":"G2","version":1,"last_updated":"2026-09-21"},
+  "original_input": "从13f2c411基线建立独立分支，在现有workbench增加固定合成任务的最小建例Web入口，真实启动DeepSeek Harness、收集候选、独立验证并展示分离状态；允许一次初始建例和候选失败后一次用户显式修订，完成后停在等待人工核对或候选验证失败。",
+  "user_requirements": [{"id":"UN-0024-01","status":"已确认","goal":"在本地单用户工作台完成固定无登录合成任务的提交、真实Harness生成、独立验证、结果展示和一次显式反馈修订闭环。","constraints":"固定dsh 0.1.6-alpha.2、deepseek-v4-pro和既有浏览器插件；独立任务目录与最小资料暴露；保留无OS级隔离事实；阶段最多2次启动、每次30工具调用/10分钟；不批准资产、不接复杂业务或自愈。","success_criteria":"真实Web提交产生新的Harness候选和结构化执行报告；正常与独立错误输出反例由同一最终候选验证；任务、生成、验证、人工状态及文件索引可持久化查看；本地与远端提交一致。"}],
+  "confirmed_facts": [
+    "基线13f2c411b56962b44550fe8fc9cc4acd4866a187已在独立worktree和codex/test-workbench-m2c-build-ui分支核对。",
+    "M2-B已验证Harness headless JSON事件、浏览器工具、候选产出、超时/取消、30次工具上限和Playwright独立验证能力。",
+    "用户接受独立任务目录模式下无OS级强制文件/网络隔离的残余风险，但不授权目录外访问、任意网站、提权或安全策略变更。",
+    "本轮Codex主窗口系统可见模型族为GPT-5；具体产品子型号及推理档位未由运行环境暴露，记录为未知，不推断。"
+  ],
+  "inferences_and_open_questions": ["M2-C只证明固定合成任务的最小Web集成，不推断复杂业务建例质量、多人安全或生产可用性。"],
+  "development_requirements": [
+    {"id":"DR-0024-01","status":"已确认","requirement":"Web只允许冻结的synthetic-probe-v1结构化任务，提交时保存输入版本、摘要和入口策略。","acceptance_criteria":"无任意代码/文件/URL上传执行接口；刷新后任务仍存在。","constraints":"不接批准资产、业务数据或账号。"},
+    {"id":"DR-0024-02","status":"已确认","requirement":"通过可复用适配层启动真实Harness并持久化任务、候选、验证、人工核对四类独立状态。","acceptance_criteria":"单活动任务；重启不恢复模型调用；取消、超时、缺终态/文件均不得技术通过。","constraints":"固定版本、每次30工具/600秒，阶段总启动最多2且跨任务持久化。"},
+    {"id":"DR-0024-03","status":"已确认","requirement":"候选用锁定Playwright配置分别执行正常页面和未暴露给Harness的错误输出反例，依据结构化报告判定。","acceptance_criteria":"通用解析不硬编码样本答案；同一哈希；反例必须是取得期望/实际值的真实断言不符。","constraints":"Harness final不作通过依据；候选执行无模型凭据。"},
+    {"id":"DR-0024-04","status":"已确认","requirement":"候选失败后只允许用户显式发起一次反馈修订，并保留全部版本和错误。","acceptance_criteria":"修订输入只有原任务、失败候选和实际错误；Web展示版本、差异、文件分类和人工待核对状态。","constraints":"不自动循环、不提供人工答案、不自动批准。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0024-01","dr_ids":["DR-0024-01"],"status":"已确认","summary":"新增固定任务模板API和独立build task存储，不复用批准资产run语义。","rationale":"避免把候选与批准资产混为一类。"},
+    {"id":"DD-0024-02","dr_ids":["DR-0024-02","DR-0024-04"],"status":"已确认","summary":"新增持久化阶段预算账本、单活动BuildManager及显式start/revise/stop路由。","rationale":"刷新或新task ID不能重置模型预算。"},
+    {"id":"DD-0024-03","dr_ids":["DR-0024-02","DR-0024-03"],"status":"已确认","summary":"workbench适配层复用harness-probe的进程、事件和验证原语，业务层只负责编排与记账。","rationale":"不整体搬运一次性探针，也不修改Harness核心。"},
+    {"id":"DD-0024-04","dr_ids":["DR-0024-03","DR-0024-04"],"status":"已确认","summary":"工具证据、候选和测试报告分类登记；页面只显示登记摘要与候选代码，原始工具文件默认不公开。","rationale":"保证可追溯且限制本地文件读取面。"}
+  ],
+  "interfaces_and_data_flow": [
+    "Web固定模板 -> POST build task冻结输入 -> 显式start -> BuildManager独立目录 -> Harness适配 -> 候选索引 -> Playwright正常/反例 -> 分离状态与人工核对。",
+    "验证失败 -> 用户显式revise一次 -> 新独立attempt工作区只复制任务、上一候选和实际错误 -> 新版本保留旧版本。"
+  ],
+  "module_document_impact": ["新增workbench build API、页面、持久化和测试；更新workbench README并新增M2-C脱敏验收报告。"],
+  "risks_and_rollback": [
+    "无OS级文件/网络隔离仍是已接受残余风险，独立目录和路径校验不是沙箱。",
+    "真实模型产出可能验证失败；按预算保留结果并停止，不以刷新或新任务重试。",
+    "删除新增build模块和页面区块可回滚；M1批准执行链、M2历史资产不改。"
+  ],
+  "tasks": [
+    {"id":"TK-0024-01","dr_ids":["DR-0024-01","DR-0024-02"],"dd_ids":["DD-0024-01","DD-0024-02"],"status":"进行中","task":"实现固定任务、持久化账本、生命周期、预算和恢复。","verification_ids":["VT-0024-01"]},
+    {"id":"TK-0024-02","dr_ids":["DR-0024-02","DR-0024-03","DR-0024-04"],"dd_ids":["DD-0024-03","DD-0024-04"],"status":"待实现","task":"实现Harness适配、候选执行、文件索引和一次显式修订。","verification_ids":["VT-0024-02"]},
+    {"id":"TK-0024-03","dr_ids":["DR-0024-01","DR-0024-02","DR-0024-03","DR-0024-04"],"dd_ids":["DD-0024-01","DD-0024-02","DD-0024-03","DD-0024-04"],"status":"待实现","task":"实现最小中文Web并完成工程测试。","verification_ids":["VT-0024-03"]},
+    {"id":"TK-0024-04","dr_ids":["DR-0024-01","DR-0024-02","DR-0024-03","DR-0024-04"],"dd_ids":["DD-0024-01","DD-0024-02","DD-0024-03","DD-0024-04"],"status":"待实现","task":"从真实Web完成一次集成、脱敏报告与GitHub同步。","verification_ids":["VT-0024-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0024-01","dr_ids":["DR-0024-01","DR-0024-02"],"confirmation_status":"已确认","execution_status":"未运行","item":"存储、跨任务阶段预算、重复启动、取消和重启恢复。","evidence_standard":"workbench工程测试与持久化读回","current_evidence":"无"},
+    {"id":"VT-0024-02","dr_ids":["DR-0024-02","DR-0024-03","DR-0024-04"],"confirmation_status":"已确认","execution_status":"未运行","item":"Harness终态、候选/工具/报告登记、通用报告解析和显式修订。","evidence_standard":"模拟工程测试与真实事件分开记录","current_evidence":"无"},
+    {"id":"VT-0024-03","dr_ids":["DR-0024-01","DR-0024-02","DR-0024-03","DR-0024-04"],"confirmation_status":"已确认","execution_status":"未运行","item":"真实浏览器中的固定任务提交、状态、候选、错误、文件和按钮行为。","evidence_standard":"Chromium工程流、截图和后端记录","current_evidence":"无"},
+    {"id":"VT-0024-04","dr_ids":["DR-0024-01","DR-0024-02","DR-0024-03","DR-0024-04"],"confirmation_status":"已确认","execution_status":"未运行","item":"真实Web-Harness-候选-正常/反例集成、资产不变和远端SHA。","evidence_standard":"真实任务ID、尝试、工具计数、候选哈希、两份报告、Git查询","current_evidence":"无"}
+  ],
+  "verification_environment": {"working_directory":"workbench与harness-probe子工程","commands":["npm test --prefix harness-probe","npm test --prefix workbench","npm run test:build-browser --prefix workbench","npm run test:build-real --prefix workbench"],"environment":["127.0.0.1单用户；独立Git忽略任务目录；Edge；无OS级强制隔离；公司批准DeepSeek连接仅传Harness进程。"],"conclusion":["实现与验证中。"]},
+  "trace_current": [
+    {"un_id":"UN-0024-01","dr_id":"DR-0024-01","dd_id":"DD-0024-01","tk_id":"TK-0024-01","vt_id":"VT-0024-01","status":"进行中"},
+    {"un_id":"UN-0024-01","dr_id":"DR-0024-02","dd_id":"DD-0024-02","tk_id":"TK-0024-01","vt_id":"VT-0024-01","status":"进行中"},
+    {"un_id":"UN-0024-01","dr_id":"DR-0024-03","dd_id":"DD-0024-03","tk_id":"TK-0024-02","vt_id":"VT-0024-02","status":"待实现"},
+    {"un_id":"UN-0024-01","dr_id":"DR-0024-04","dd_id":"DD-0024-04","tk_id":"TK-0024-03","vt_id":"VT-0024-03","status":"待实现"},
+    {"un_id":"UN-0024-01","dr_id":"DR-0024-01","dd_id":"DD-0024-01","tk_id":"TK-0024-04","vt_id":"VT-0024-04","status":"待实现"}
+  ],
+  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M2-B已验证原语建立固定合成任务的最小Web建例入口"}],
+  "open_questions": ["真实初始候选是否需要一次显式修订只能由首次结构化执行结果决定；不预设结果，也不增加第三次启动。"],
+  "prohibited_implementation": [
+    "不得修改M1批准脚本、旧报告、M2原候选和历史结果。",
+    "不得开放任意上传代码/文件/URL立即执行或任意磁盘读取。",
+    "不得超过阶段2次Harness启动、单次30工具/600秒，或以新task ID重置预算。",
+    "不得自动批准、自动修订循环、接入复杂业务、自愈、多人服务或生产部署。",
+    "不得把独立目录、路径校验和环境白名单描述为操作系统沙箱。"
+  ],
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M2-C最小Web候选建例需求与阶段预算","impact":"workbench build模块、harness适配、Web、测试和报告","confirmed_by":"用户当前任务"}]
+}

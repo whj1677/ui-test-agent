@@ -50,7 +50,25 @@ const manager = {
   },
 };
 
-const server = createWorkbenchServer({ store, manager });
+const buildBudget = {
+  schema: 'workbench/build-stage-budget-v1', phase: 'M2-C', max_starts: 2, used_starts: 0, claims: [],
+};
+const buildStore = {
+  async getBudget() { return buildBudget; },
+  async listTasks() { return []; },
+};
+const buildManager = {
+  active: null,
+  async templates() {
+    return [{
+      template_id: 'synthetic-probe-v1', version: '1.0.0', title: '合成探针候选建例',
+      summary: '浏览器点击后验证固定输出。', input_sha256: 'a'.repeat(64),
+      allowed_entry: { kind: 'fixture', route: '/probe' },
+    }];
+  },
+};
+
+const server = createWorkbenchServer({ store, manager, buildStore, buildManager });
 await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
 const baseUrl = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ headless: true });

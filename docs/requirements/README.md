@@ -1,5 +1,7 @@
 # 需求索引
 
+当前建例入口：[REQ-0024 M2-C工作台最小候选建例入口](REQ-0024-workbench-minimal-candidate-builder/current_state.md)仅支持固定无登录合成任务，以阶段最多两次真实Harness启动完成候选生成、独立验证、一次显式修订和人工待核对状态；不批准资产、不接复杂业务或自愈。
+
 当前隔离核对：[REQ-0023 M2-B隔离边界与候选反馈修订](REQ-0023-harness-isolation-feedback/current_state.md)先以确定性程序验证文件、网络和凭据边界；任一禁止项未被外层强制阻断即停止模型调用，只提交缺口诊断，不补算M2-A成功或进入Web集成。
 
 当前探针：[REQ-0022 DeepSeek Harness受控调用可行性探针](REQ-0022-deepseek-harness-probe/current_state.md)固定官方 Harness 与实验性 Browser Use 版本，在隔离目录内验证程序化启动、浏览器交互、候选产出/执行和有界取消；只形成 A/B/C 可行性结论，不接正式建例 Web 或修改 M1 执行链。

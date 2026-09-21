@@ -75,6 +75,21 @@ async function sendMedia(request, response, store, runId, mediaId) {
   response.end(body);
 }
 
+async function sendBuildFile(response, buildStore, taskId, fileId) {
+  const task = await buildStore.getTask(taskId);
+  const item = task?.files?.find((file) => file.file_id === fileId);
+  if (!item) return sendJson(response, 404, { error: 'BUILD_FILE_NOT_FOUND' });
+  if (!item.web_visible) return sendJson(response, 403, { error: 'BUILD_FILE_NOT_WEB_VISIBLE' });
+  const taskRoot = buildStore.taskDirectory(taskId);
+  const file = resolveInside(taskRoot, item.relative_path);
+  const [realRoot, realFile] = await Promise.all([fs.realpath(taskRoot), fs.realpath(file)]);
+  if (realFile !== realRoot && !realFile.startsWith(`${realRoot}${path.sep}`)) return sendJson(response, 403, { error: 'BUILD_FILE_PATH_OUTSIDE_TASK' });
+  const stat = await fs.stat(realFile);
+  if (!stat.isFile() || stat.size !== item.bytes || await sha256File(realFile) !== item.sha256) return sendJson(response, 409, { error: 'BUILD_FILE_CHANGED' });
+  response.writeHead(200, { ...securityHeaders(item.content_type), 'content-length': stat.size });
+  response.end(await fs.readFile(realFile));
+}
+
 async function readJsonBody(request, limit = 16 * 1024) {
   const chunks = [];
   let size = 0;
@@ -101,6 +116,9 @@ function errorStatus(error) {
   if (['ASSET_NOT_APPROVED', 'ENVIRONMENT_NOT_ALLOWED'].includes(error.message)) return 400;
   if (error.message === 'RUN_ALREADY_ACTIVE') return 409;
   if (error.message === 'RUN_NOT_ACTIVE_OR_NOT_OWNED') return 404;
+  if (['BUILD_TASK_ALREADY_ACTIVE', 'BUILD_STAGE_BUDGET_EXHAUSTED'].includes(error.message)) return 409;
+  if (['BUILD_TASK_NOT_FOUND', 'BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED'].includes(error.message)) return 404;
+  if (['BUILD_TEMPLATE_NOT_ALLOWED', 'BUILD_INITIAL_NOT_ALLOWED', 'BUILD_REVISION_NOT_ALLOWED', 'BUILD_REVISION_SOURCE_INVALID'].includes(error.message)) return 400;
   if (error.message === 'REQUEST_TOO_LARGE') return 413;
   if (error.message === 'INVALID_JSON') return 400;
   return 422;
@@ -109,12 +127,57 @@ function errorStatus(error) {
 export function createWorkbenchServer(options = {}) {
   const store = options.store;
   const manager = options.manager;
+  const buildStore = options.buildStore;
+  const buildManager = options.buildManager;
   const webRoot = options.webRoot || defaultWebRoot;
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
       if (request.method === 'GET' && url.pathname === '/api/health') {
-        sendJson(response, 200, { service: 'approved-test-workbench', status: 'ready', active_run_id: manager?.active?.runId || null });
+        sendJson(response, 200, {
+          service: 'approved-test-workbench', status: 'ready',
+          active_run_id: manager?.active?.runId || null,
+          active_build_task_id: buildManager?.active?.taskId || null,
+          build_budget: buildStore ? await buildStore.getBudget() : null,
+        });
+        return;
+      }
+      if (buildManager && request.method === 'GET' && url.pathname === '/api/build/templates') {
+        sendJson(response, 200, { templates: await buildManager.templates() });
+        return;
+      }
+      if (buildStore && request.method === 'GET' && url.pathname === '/api/build/tasks') {
+        sendJson(response, 200, { tasks: await buildStore.listTasks() });
+        return;
+      }
+      const buildFile = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/files\/([^/]+)$/);
+      if (buildStore && request.method === 'GET' && buildFile) {
+        await sendBuildFile(response, buildStore, decodeURIComponent(buildFile[1]), decodeURIComponent(buildFile[2]));
+        return;
+      }
+      const buildTask = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)$/);
+      if (buildStore && request.method === 'GET' && buildTask) {
+        const task = await buildStore.getTask(decodeURIComponent(buildTask[1]));
+        sendJson(response, task ? 200 : 404, task || { error: 'BUILD_TASK_NOT_FOUND' });
+        return;
+      }
+      if (buildManager && request.method === 'POST' && url.pathname === '/api/build/tasks') {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        if (Object.keys(body).sort().join(',') !== 'template_id' || typeof body.template_id !== 'string') return sendJson(response, 400, { error: 'INVALID_BUILD_TASK_REQUEST' });
+        sendJson(response, 201, await buildManager.submit(body.template_id));
+        return;
+      }
+      const buildAction = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/(start|revise|stop)$/);
+      if (buildManager && request.method === 'POST' && buildAction) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        if (Object.keys(body).length) return sendJson(response, 400, { error: 'INVALID_BUILD_ACTION_REQUEST' });
+        const id = decodeURIComponent(buildAction[1]);
+        const result = buildAction[2] === 'start' ? await buildManager.start(id)
+          : buildAction[2] === 'revise' ? await buildManager.revise(id)
+            : await buildManager.stop(id);
+        sendJson(response, 202, result);
         return;
       }
       if (store && request.method === 'GET' && url.pathname === '/api/assets') {
@@ -142,6 +205,7 @@ export function createWorkbenchServer(options = {}) {
       }
       if (manager && request.method === 'POST' && url.pathname === '/api/runs') {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        if (buildManager?.active) return sendJson(response, 409, { error: 'WORKBENCH_BUSY' });
         const body = await readJsonBody(request);
         const allowedKeys = Object.keys(body).sort().join(',') === 'asset_id,environment';
         if (!allowedKeys || typeof body.asset_id !== 'string' || typeof body.environment !== 'string') {

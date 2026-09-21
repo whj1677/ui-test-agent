@@ -1,6 +1,8 @@
 const state = {
   assets: [], runs: [], selectedRunId: null, activeRunId: null,
   selectedEnvironmentId: null,
+  buildTemplates: [], buildTasks: [], selectedBuildTaskId: null, activeBuildTaskId: null,
+  buildBudget: null,
 };
 const byId = (id) => document.getElementById(id);
 
@@ -51,9 +53,97 @@ function renderAsset() {
 
 function renderControls() {
   const asset = state.assets[0];
-  byId('environment-select').disabled = !asset || Boolean(state.activeRunId);
-  byId('run-button').disabled = !asset || Boolean(state.activeRunId);
+  const busy = Boolean(state.activeRunId || state.activeBuildTaskId);
+  byId('environment-select').disabled = !asset || busy;
+  byId('run-button').disabled = !asset || busy;
   byId('stop-button').disabled = !state.activeRunId;
+}
+
+function selectedBuildTask() {
+  return state.buildTasks.find((task) => task.task_id === state.selectedBuildTaskId) || null;
+}
+
+function renderBuildTemplate() {
+  const template = state.buildTemplates[0];
+  setText('build-template-title', template?.title || '固定任务不可用');
+  setText('build-template-summary', template?.summary || '');
+  setText('build-template-version', template ? `${template.template_id} · ${template.version}` : '—');
+  setText('build-template-entry', template ? `${template.allowed_entry.kind} · ${template.allowed_entry.route}` : '—');
+  setText('build-template-sha', template?.input_sha256);
+  setText('build-budget', state.buildBudget ? `${state.buildBudget.used_starts} / ${state.buildBudget.max_starts}` : '—');
+}
+
+function renderBuildControls() {
+  const task = selectedBuildTask();
+  const busy = Boolean(state.activeRunId || state.activeBuildTaskId);
+  const exhausted = !state.buildBudget || state.buildBudget.used_starts >= state.buildBudget.max_starts;
+  byId('build-submit').disabled = !state.buildTemplates.length || busy || exhausted;
+  byId('build-start').disabled = busy || exhausted || task?.task_status !== 'SUBMITTED';
+  byId('build-revise').disabled = busy || exhausted || !task?.revision_allowed;
+  byId('build-stop').disabled = !state.activeBuildTaskId;
+}
+
+function renderBuildHistory() {
+  const root = byId('build-history'); clear(root);
+  if (!state.buildTasks.length) return root.append(make('div', '暂无建例任务。', 'empty'));
+  for (const task of state.buildTasks) {
+    const button = make('button'); button.type = 'button'; button.dataset.taskId = task.task_id;
+    button.classList.toggle('selected', task.task_id === state.selectedBuildTaskId);
+    button.append(make('strong', `${task.template.title} · ${task.task_status}`));
+    button.append(make('span', task.task_id));
+    button.append(make('span', `${task.created_at} · 候选 ${task.candidates.length} 版`));
+    button.addEventListener('click', () => { state.selectedBuildTaskId = task.task_id; render(); });
+    root.append(button);
+  }
+}
+
+function candidateResultText(candidate) {
+  const normal = candidate.normal ? `${candidate.normal.test_status}/${candidate.normal.process?.exit_code ?? '—'}` : '未运行';
+  const negative = candidate.negative ? `${candidate.negative.test_status}/${candidate.negative.process?.exit_code ?? '—'}` : '未运行';
+  return `正常 ${normal} · 反例 ${negative} · 同哈希 ${candidate.same_candidate_hash ?? '—'}`;
+}
+
+function renderBuildDetail() {
+  const task = selectedBuildTask();
+  byId('build-detail-empty').classList.toggle('hidden', Boolean(task));
+  byId('build-detail').classList.toggle('hidden', !task);
+  if (!task) return;
+  const statuses = byId('build-statuses'); clear(statuses);
+  for (const [label, value] of [['任务', task.task_status], ['候选生成', task.generation_status], ['技术验证', task.verification_status], ['人工核对', task.human_review_status]]) {
+    const item = make('div', undefined, 'status-item'); item.append(make('small', label), make('strong', value)); statuses.append(item);
+  }
+  const facts = byId('build-facts'); clear(facts);
+  addFact(facts, '任务 ID', task.task_id);
+  addFact(facts, '冻结输入', task.template.input_sha256);
+  addFact(facts, '模型', 'deepseek-official / deepseek-v4-pro');
+  addFact(facts, '阶段调用预算', `${task.budget.used_starts} / ${task.budget.max_starts}`);
+  addFact(facts, 'OS隔离', '未强制，残余风险已接受');
+  addFact(facts, '创建/结束', `${task.created_at} / ${task.finished_at || '—'}`);
+
+  const candidates = byId('build-candidates'); clear(candidates);
+  if (!task.candidates.length) candidates.append(make('div', '尚未生成候选。', 'empty'));
+  for (const candidate of task.candidates) {
+    const card = make('article', undefined, 'candidate-card');
+    card.append(make('strong', `候选 v${candidate.version} · ${candidate.verification_status}`));
+    card.append(make('p', `${candidate.sha256} · ${candidate.bytes} bytes`, 'mono'));
+    card.append(make('p', candidateResultText(candidate)));
+    if (candidate.diff_from_previous?.base) card.append(make('p', `相对前版差异：${candidate.diff_from_previous.lines.length} 行`));
+    const code = make('pre'); code.textContent = candidate.code; card.append(code);
+    if (candidate.diff_from_previous?.lines?.length) {
+      const diff = make('pre'); diff.textContent = JSON.stringify(candidate.diff_from_previous.lines, null, 2); card.append(diff);
+    }
+    candidates.append(card);
+  }
+
+  const files = byId('build-files'); clear(files);
+  if (!task.files.length) files.append(make('div', '尚无登记文件。', 'empty'));
+  for (const file of task.files) {
+    const card = make('article', undefined, 'file-card');
+    card.append(make('strong', `${file.kind} · ${file.file_name}`));
+    card.append(make('p', `${file.bytes} bytes · ${file.sha256.slice(0, 16)}… · ${file.web_visible ? '可在本页读取' : '仅本机登记'}`, 'mono'));
+    files.append(card);
+  }
+  byId('build-error').textContent = task.error ? JSON.stringify(task.error, null, 2) : '无';
 }
 
 function renderHistory() {
@@ -113,14 +203,22 @@ function renderDetail() {
   }
 }
 
-function render() { renderAsset(); renderControls(); renderHistory(); renderDetail(); }
+function render() {
+  renderAsset(); renderControls(); renderHistory(); renderDetail();
+  renderBuildTemplate(); renderBuildControls(); renderBuildHistory(); renderBuildDetail();
+}
 
 async function refresh() {
   try {
-    const [health, assets, runs] = await Promise.all([api('/api/health'), api('/api/assets'), api('/api/runs')]);
+    const [health, assets, runs, templates, buildTasks] = await Promise.all([
+      api('/api/health'), api('/api/assets'), api('/api/runs'), api('/api/build/templates'), api('/api/build/tasks'),
+    ]);
     state.assets = assets.assets; state.runs = runs.runs; state.activeRunId = health.active_run_id;
+    state.buildTemplates = templates.templates; state.buildTasks = buildTasks.tasks;
+    state.activeBuildTaskId = health.active_build_task_id; state.buildBudget = health.build_budget;
     if (!state.selectedRunId && state.runs[0]) state.selectedRunId = state.runs[0].run_id;
-    setText('service-status', health.active_run_id ? '运行中' : '服务就绪');
+    if (!state.selectedBuildTaskId && state.buildTasks[0]) state.selectedBuildTaskId = state.buildTasks[0].task_id;
+    setText('service-status', health.active_run_id || health.active_build_task_id ? '运行中' : '服务就绪');
     render();
   } catch (error) { setText('service-status', '连接失败'); setText('action-message', error.message); }
 }
@@ -142,6 +240,45 @@ byId('stop-button').addEventListener('click', async () => {
   if (!state.activeRunId) return;
   try { await api(`/api/runs/${encodeURIComponent(state.activeRunId)}/stop`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' }); setText('action-message', '已请求停止当前任务。'); }
   catch (error) { setText('action-message', `停止失败：${error.message}`); }
+  await refresh();
+});
+
+byId('build-submit').addEventListener('click', async () => {
+  const template = state.buildTemplates[0]; if (!template) return;
+  byId('build-submit').disabled = true; setText('build-message', '正在冻结固定任务输入…');
+  try {
+    const task = await api('/api/build/tasks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ template_id: template.template_id }) });
+    state.selectedBuildTaskId = task.task_id; setText('build-message', `已提交 ${task.task_id}，等待显式启动。`);
+  } catch (error) { setText('build-message', `提交失败：${error.message}`); }
+  await refresh();
+});
+
+byId('build-start').addEventListener('click', async () => {
+  const task = selectedBuildTask(); if (!task) return;
+  byId('build-start').disabled = true; setText('build-message', '正在启动真实 Harness…');
+  try {
+    await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}/start`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    setText('build-message', `已启动 ${task.task_id}`);
+  } catch (error) { setText('build-message', `启动失败：${error.message}`); }
+  await refresh();
+});
+
+byId('build-revise').addEventListener('click', async () => {
+  const task = selectedBuildTask(); if (!task) return;
+  byId('build-revise').disabled = true; setText('build-message', '正在明确发起唯一一次反馈修订…');
+  try {
+    await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}/revise`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    setText('build-message', `已发起 ${task.task_id} 的反馈修订。`);
+  } catch (error) { setText('build-message', `修订失败：${error.message}`); }
+  await refresh();
+});
+
+byId('build-stop').addEventListener('click', async () => {
+  if (!state.activeBuildTaskId) return;
+  try {
+    await api(`/api/build/tasks/${encodeURIComponent(state.activeBuildTaskId)}/stop`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+    setText('build-message', '已请求取消当前建例任务。');
+  } catch (error) { setText('build-message', `取消失败：${error.message}`); }
   await refresh();
 });
 

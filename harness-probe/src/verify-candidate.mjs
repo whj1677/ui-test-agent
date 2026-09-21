@@ -6,7 +6,7 @@ import { evaluatePlaywrightReport } from './candidate-verifier.mjs';
 import { allowedEnvironment } from './harness-runner.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export async function verifyCandidate({ candidatePath, browserExecutable, fixtureUrl, runDirectory }) {
+export async function verifyCandidate({ candidatePath, browserExecutable, fixtureUrl, runDirectory, signal }) {
   const reportPath = path.join(runDirectory, 'playwright-report.json');
   await mkdir(runDirectory, { recursive: true });
   const cli = path.join(root, 'node_modules', '@playwright', 'test', 'cli.js');
@@ -20,7 +20,7 @@ export async function verifyCandidate({ candidatePath, browserExecutable, fixtur
   // Playwright treats positional file arguments as regular-expression filters
   // relative to testDir; an absolute Windows path is not a stable filter.
   const processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(candidatePath), '--config', config], {
-    cwd: path.dirname(candidatePath), env, timeoutMs: 60_000,
+    cwd: path.dirname(candidatePath), env, timeoutMs: 60_000, signal,
   });
   let report = null;
   try { report = JSON.parse(await readFile(reportPath, 'utf8')); } catch {}

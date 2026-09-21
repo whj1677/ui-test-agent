@@ -11,7 +11,7 @@
     <div>
       <p class="eyebrow">LOCAL · APPROVED ASSETS ONLY</p>
       <h1>批准脚本测试工作台</h1>
-      <p class="subtle">第一阶段集成闭环 · 不调用模型 · 单任务串行</p>
+      <p class="subtle">批准脚本执行保持不变 · M2-C固定合成任务候选建例</p>
     </div>
     <div id="service-status" class="status-chip" data-testid="service-status">连接中</div>
   </header>
@@ -50,6 +50,48 @@
       <p id="action-message" class="message" role="status" data-testid="action-message"></p>
     </section>
 
+    <section class="panel build-panel" aria-labelledby="build-heading">
+      <div class="section-heading">
+        <div><p class="eyebrow">CANDIDATE BUILD · M2-C</p><h2 id="build-heading">最小候选建例</h2></div>
+        <span id="build-budget" class="count">0 / 2</span>
+      </div>
+      <div class="build-template" data-testid="build-template">
+        <div>
+          <h3 id="build-template-title">加载固定任务…</h3>
+          <p id="build-template-summary" class="subtle-dark"></p>
+          <p id="build-template-version" class="mono"></p>
+        </div>
+        <dl class="facts compact">
+          <div><dt>允许入口</dt><dd id="build-template-entry"></dd></div>
+          <div><dt>冻结输入SHA-256</dt><dd id="build-template-sha" class="mono break"></dd></div>
+        </dl>
+      </div>
+      <div class="controls">
+        <button id="build-submit" class="primary" data-testid="build-submit" disabled>提交固定任务</button>
+        <button id="build-start" data-testid="build-start" disabled>启动 Harness</button>
+        <button id="build-revise" data-testid="build-revise" disabled>反馈修订一次</button>
+        <button id="build-stop" class="danger" data-testid="build-stop" disabled>取消当前建例</button>
+      </div>
+      <p id="build-message" class="message" role="status" data-testid="build-message"></p>
+      <div class="build-grid">
+        <div>
+          <h3>建例历史</h3>
+          <div id="build-history" class="history" data-testid="build-history"></div>
+        </div>
+        <div>
+          <h3>候选详情</h3>
+          <div id="build-detail-empty" class="empty">提交固定任务后查看生成、验证和人工核对状态。</div>
+          <div id="build-detail" class="hidden" data-testid="build-detail">
+            <div id="build-statuses" class="status-grid"></div>
+            <dl id="build-facts" class="facts compact"></dl>
+            <h3>候选版本与差异</h3><div id="build-candidates" class="candidate-list"></div>
+            <h3>登记文件</h3><div id="build-files" class="file-list"></div>
+            <h3>实际错误</h3><pre id="build-error" class="error-box">无</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="workspace-grid">
       <section class="panel" aria-labelledby="history-heading">
         <div class="section-heading"><div><p class="eyebrow">HISTORY</p><h2 id="history-heading">运行历史</h2></div><span id="run-count" class="count">0</span></div>
@@ -70,7 +112,7 @@
     </div>
   </main>
 
-  <footer>数据仅保存在本机 workbench/.local；哈希用于完整性核对，不是防管理员篡改签名。</footer>
+  <footer>数据仅保存在本机 workbench/.local；M2-C使用独立任务目录但没有OS级强制文件/网络隔离；哈希不是防管理员篡改签名。</footer>
   <script src="/app.js" type="module"></script>
 </body>
 </html>
