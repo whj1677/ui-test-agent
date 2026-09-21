@@ -21,7 +21,10 @@ function fakeAdapter({ cancellation = false } = {}) {
       harnessStarts += 1;
       if (cancellation) {
         if (!signal.aborted) await new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }));
-        return { assessment: { success: false, termination: 'cancelled' }, candidate: null, events: [] };
+        return {
+          assessment: { success: false, termination: 'cancelled' }, candidate: null, events: [],
+          process: { pid: 1234, parentPid: process.pid, exitCode: 1, signal: null, termination: 'cancelled', exitObserved: true, closeObserved: true, outputComplete: true, observerError: null },
+        };
       }
       await fs.mkdir(path.dirname(candidatePath), { recursive: true });
       await fs.mkdir(path.join(workspace, '.playwright-mcp'), { recursive: true });
@@ -33,6 +36,7 @@ function fakeAdapter({ cancellation = false } = {}) {
         assessment: { success: true, completed: true, candidateExists: true, exitCode: 0, termination: null, finalPresent: true, turnEndReason: 'completed', toolCalls: 2, maxToolCalls: 30, toolLimitReached: false },
         candidate: { sha256: 'generated' },
         events: [{ type: 'status', phase: 'step_end' }, { type: 'tool_call', tool: 'mcp__playwright-mcp__browser_navigate' }, { type: 'tool_call', tool: 'write_file' }],
+        process: { pid: 1234, parentPid: process.pid, exitCode: 0, signal: null, termination: null, exitObserved: true, closeObserved: true, outputComplete: true, observerError: null },
       };
     },
     async verifyCandidate({ fixtureUrl, runDirectory }) {
@@ -78,6 +82,49 @@ test('failed candidate enables exactly one explicit revision and preserves both 
     assert.equal(adapter.harnessStarts, 2);
     await assert.rejects(() => manager.revise(task.task_id), /BUILD_REVISION_NOT_ALLOWED/);
     assert.equal((await store.getBudget()).used_starts, 2);
+    const lifecycle = await store.lifecycleSummary(task.task_id, 'attempt-02-revision');
+    assert.ok(lifecycle.event_count >= 4);
+  } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
+});
+
+test('生命周期存储持续失败会降级服务并拒绝继续接纳建例', async () => {
+  const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'build-manager-storage-fail-'));
+  const paths = createPaths({ localRoot });
+  try {
+    const initial = new BuildTaskStore(paths.buildTasksRoot); await initial.init();
+    const appendFile = async () => { const error = new Error('synthetic disk failure'); error.code = 'EIO'; throw error; };
+    const store = new BuildTaskStore(paths.buildTasksRoot, { appendFile });
+    const manager = new BuildTaskManager({
+      store, paths, adapter: fakeAdapter(), browserExecutable: 'fake-browser',
+      credentialProvider: () => ({ apiKey: 'synthetic-key', baseUrl: 'https://model.invalid' }),
+      idFactory: () => 'build-storage-12345678',
+    });
+    const task = await manager.submit('synthetic-probe-v1');
+    await assert.rejects(() => manager.start(task.task_id), /BUILD_DIAGNOSTIC_STORAGE_FAILED/);
+    assert.equal(manager.diagnostics().storage_status, 'FAILED');
+    await assert.rejects(() => manager.submit('synthetic-probe-v1'), /BUILD_STORAGE_UNAVAILABLE/);
+    assert.equal((await store.getTask(task.task_id)).task_status, 'FAILED');
+  } finally { await fs.rm(localRoot, { recursive: true, force: true }); }
+});
+
+test('后台completion最终状态持续写失败会被观察并关闭新建例入口', async () => {
+  const adapter = fakeAdapter();
+  const { localRoot, store, manager } = await setup(adapter);
+  const updateTask = store.updateTask.bind(store);
+  let updates = 0;
+  store.updateTask = async (...args) => {
+    updates += 1;
+    if (updates >= 2) { const error = new Error('synthetic persistent task write failure'); error.code = 'EIO'; throw error; }
+    return updateTask(...args);
+  };
+  try {
+    const task = await manager.submit('synthetic-probe-v1');
+    await manager.start(task.task_id);
+    await assert.rejects(() => manager.wait(task.task_id), /synthetic persistent task write failure/);
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(manager.diagnostics().storage_status, 'FAILED');
+    await assert.rejects(() => manager.submit('synthetic-probe-v1'), /BUILD_STORAGE_UNAVAILABLE/);
+    assert.equal((await store.getTask(task.task_id)).task_status, 'GENERATING');
   } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
 });
 

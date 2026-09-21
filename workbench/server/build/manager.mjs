@@ -10,6 +10,10 @@ import { redactText } from '../../../harness-probe/src/redact.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
+const LIFECYCLE_FIELDS = new Set([
+  'type', 'at', 'pid', 'parent_pid', 'bytes', 'exit_code', 'signal', 'reason', 'output_complete',
+  'trailing_stdout_line', 'event_type', 'phase', 'tool', 'code', 'partial_observation',
+]);
 
 function taskId(now) {
   const stamp = now.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14).toLowerCase();
@@ -18,6 +22,13 @@ function taskId(now) {
 
 function hashText(value) {
   return createHash('sha256').update(value).digest('hex').toUpperCase();
+}
+
+function lifecycleMetadata(event) {
+  return Object.fromEntries(Object.entries(event || {}).filter(([key, value]) => LIFECYCLE_FIELDS.has(key) &&
+    (value === null || ['string', 'number', 'boolean'].includes(typeof value))).map(([key, value]) => [
+      key, typeof value === 'string' ? value.slice(0, 160) : value,
+    ]));
 }
 
 function lineDiff(previous, current) {
@@ -74,6 +85,54 @@ export class BuildTaskManager {
     this.starting = false;
     this.completions = new Map();
     this.runtimeReady = null;
+    this.serviceInstanceId = options.serviceInstanceId || `service-${randomUUID()}`;
+    this.lifecycleSequences = new Map();
+    this.storageFault = null;
+  }
+
+  diagnostics() {
+    return {
+      service_instance_id: this.serviceInstanceId,
+      storage_status: this.storageFault ? 'FAILED' : 'READY',
+      storage_error: this.storageFault,
+    };
+  }
+
+  #assertWritable() {
+    if (this.storageFault) throw new Error('BUILD_STORAGE_UNAVAILABLE');
+  }
+
+  #tripStorageFault(error, operation) {
+    if (!this.storageFault) {
+      this.storageFault = {
+        code: error?.code || 'BUILD_STORAGE_FAILURE',
+        operation,
+        at: this.now().toISOString(),
+      };
+      console.error(JSON.stringify({ type: 'build_storage_failure', ...this.storageFault }));
+    }
+  }
+
+  async #recordLifecycle(taskIdValue, attemptId, event) {
+    const key = `${taskIdValue}:${attemptId}`;
+    const sequence = (this.lifecycleSequences.get(key) || 0) + 1;
+    this.lifecycleSequences.set(key, sequence);
+    try {
+      await this.store.appendLifecycle(taskIdValue, attemptId, {
+        schema: 'workbench/build-lifecycle-event-v1',
+        sequence,
+        at: event.at || this.now().toISOString(),
+        task_id: taskIdValue,
+        attempt_id: attemptId,
+        service_instance_id: this.serviceInstanceId,
+        ...lifecycleMetadata(event),
+      });
+    } catch (error) {
+      this.#tripStorageFault(error, 'append_lifecycle');
+      const wrapped = new Error('BUILD_DIAGNOSTIC_STORAGE_FAILED');
+      wrapped.code = error?.code || 'BUILD_DIAGNOSTIC_STORAGE_FAILED';
+      throw wrapped;
+    }
   }
 
   async templates() {
@@ -82,6 +141,7 @@ export class BuildTaskManager {
   }
 
   async submit(templateId) {
+    this.#assertWritable();
     if (templateId !== BUILD_TEMPLATE_ID) throw new Error('BUILD_TEMPLATE_NOT_ALLOWED');
     const template = await loadBuildTemplate(this.paths);
     const now = this.now().toISOString();
@@ -123,6 +183,7 @@ export class BuildTaskManager {
   async revise(taskId) { return this.#launch(taskId, 'revision'); }
 
   async #launch(taskIdValue, kind) {
+    this.#assertWritable();
     if (this.starting || this.active || this.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
     this.starting = true;
     try {
@@ -161,6 +222,8 @@ export class BuildTaskManager {
       const attempt = {
         attempt_id: attemptId, kind, started_at: startedAt, finished_at: null,
         status: 'RUNNING', max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS,
+        service_instance_id: this.serviceInstanceId,
+        observation: { complete: false, lifecycle_file: `attempts/${attemptId}/lifecycle.ndjson` },
         harness: null, error: null,
       };
       const next = await this.store.updateTask(task.task_id, (current) => ({
@@ -172,11 +235,25 @@ export class BuildTaskManager {
         budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts }, error: null,
       }));
       const controller = new AbortController();
+      try {
+        await this.#recordLifecycle(task.task_id, attemptId, { type: 'attempt_started', partial_observation: true });
+      } catch (error) {
+        await this.store.updateTask(task.task_id, (current) => ({
+          ...current, task_status: 'FAILED', generation_status: 'FAILED', verification_status: 'NOT_RUN',
+          active_attempt_id: null, finished_at: this.now().toISOString(),
+          attempts: current.attempts.map((item) => item.attempt_id === attemptId ? {
+            ...item, status: 'FAILED', finished_at: this.now().toISOString(),
+            error: { code: 'BUILD_DIAGNOSTIC_STORAGE_FAILED', message: '生命周期记录无法持久化；工作台已停止接纳新建例。' },
+          } : item),
+          error: { code: 'BUILD_DIAGNOSTIC_STORAGE_FAILED', message: '生命周期记录无法持久化；工作台已停止接纳新建例。' },
+        })).catch((writeError) => this.#tripStorageFault(writeError, 'persist_launch_failure'));
+        throw error;
+      }
       this.active = { taskId: task.task_id, attemptId, controller, phase: 'GENERATING' };
       const completion = this.#execute({ task: next, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller })
         .finally(() => { if (this.active?.attemptId === attemptId) this.active = null; });
       this.completions.set(task.task_id, completion);
-      completion.catch(() => {});
+      void completion.catch((error) => this.#tripStorageFault(error, 'background_completion'));
       return next;
     } finally {
       this.starting = false;
@@ -189,7 +266,9 @@ export class BuildTaskManager {
     let normalServer;
     let negativeServer;
     try {
+      await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'fixture_starting', partial_observation: true });
       normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture);
+      await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
       const prompt = promptFor({ kind, template: task.template, entryUrl: normalServer.url, candidatePath });
       const harnessStarted = Date.now();
       const harness = await this.adapter.runHarnessTask({
@@ -204,6 +283,7 @@ export class BuildTaskManager {
         timeoutMs: TIMEOUT_MS,
         maxToolCalls: MAX_TOOL_CALLS,
         signal: controller.signal,
+        onLifecycle: (event) => this.#recordLifecycle(task.task_id, attemptId, event),
       });
       const harnessSummary = {
         assessment: harness.assessment,
@@ -214,6 +294,13 @@ export class BuildTaskManager {
         provider_request_count: null,
         provider_usage: usageFromEvents(harness.events),
         tool_names: [...new Set(harness.events.filter((event) => event.type === 'tool_call').map((event) => event.tool))].sort(),
+        process: {
+          pid: harness.process.pid, parent_pid: harness.process.parentPid,
+          exit_code: harness.process.exitCode, signal: harness.process.signal,
+          termination: harness.process.termination, exit_observed: harness.process.exitObserved,
+          close_observed: harness.process.closeObserved, output_complete: harness.process.outputComplete,
+          observer_error: harness.process.observerError ? { code: harness.process.observerError.code } : null,
+        },
       };
       await fs.mkdir(attemptRoot, { recursive: true });
       await fs.writeFile(path.join(attemptRoot, 'harness-summary.json'), `${JSON.stringify(harnessSummary, null, 2)}\n`);
@@ -250,6 +337,7 @@ export class BuildTaskManager {
         candidates: [...current.candidates, candidate],
       }));
       this.active.phase = 'VERIFYING';
+      await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'verification_started', partial_observation: true });
 
       const normalRaw = await this.adapter.verifyCandidate({
         candidatePath, browserExecutable: this.browserExecutable, fixtureUrl: normalServer.url,
@@ -273,6 +361,7 @@ export class BuildTaskManager {
         type: 'COUNTEREXAMPLE_NOT_DETECTED', message: '独立错误输出未产生指定断言不符。', expected: null, actual: null, attribution: 'PENDING_ANALYSIS',
       };
       const budget = await this.store.getBudget();
+      await this.#recordLifecycle(task.task_id, attemptId, { type: 'attempt_settled', phase: technicalPass ? 'technical_pass' : 'candidate_validation_failed', partial_observation: false });
       const indexed = await indexAttemptFiles({
         taskRoot: this.store.taskDirectory(task.task_id), attemptRoot, candidatePath, attemptId,
         startIndex: (await this.store.getTask(task.task_id)).files.length,
@@ -280,6 +369,7 @@ export class BuildTaskManager {
       const unexpected = indexed.unexpected;
       const effectivePass = technicalPass && unexpected.length === 0;
       const finalError = unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', message: `发现未登记输出：${unexpected.join(', ')}` } : candidateError;
+      const observation = await this.store.lifecycleSummary(task.task_id, attemptId);
       return this.store.updateTask(task.task_id, (current) => ({
         ...current,
         task_status: effectivePass ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED',
@@ -287,7 +377,8 @@ export class BuildTaskManager {
         human_review_status: effectivePass ? 'WAITING_REVIEW' : 'NOT_READY', active_attempt_id: null,
         finished_at: this.now().toISOString(),
         attempts: current.attempts.map((item) => item.attempt_id === attemptId ? {
-          ...item, finished_at: this.now().toISOString(), status: effectivePass ? 'COMPLETED' : 'CANDIDATE_VALIDATION_FAILED', harness: harnessSummary, error: finalError,
+          ...item, finished_at: this.now().toISOString(), status: effectivePass ? 'COMPLETED' : 'CANDIDATE_VALIDATION_FAILED',
+          observation: { ...item.observation, complete: true, summary: observation }, harness: harnessSummary, error: finalError,
         } : item),
         candidates: current.candidates.map((item) => item.attempt_id === attemptId ? {
           ...item, verification_status: effectivePass ? 'PASSED' : 'FAILED', normal, negative,
@@ -300,6 +391,9 @@ export class BuildTaskManager {
       }));
     } catch (error) {
       const message = redactText(error?.message || String(error), [credentials.apiKey, credentials.baseUrl]);
+      await this.#recordLifecycle(task.task_id, attemptId, {
+        type: 'attempt_error', code: error?.code || (controller.signal.aborted ? 'BUILD_CANCELLED' : 'BUILD_EXECUTION_ERROR'), partial_observation: true,
+      }).catch(() => {});
       return this.#finishFailure(task.task_id, attemptId, {
         code: controller.signal.aborted ? 'BUILD_CANCELLED' : 'BUILD_EXECUTION_ERROR', message,
       }, null, controller.signal.aborted ? 'CANCELLED' : 'FAILED', attemptRoot, candidatePath);
@@ -315,6 +409,7 @@ export class BuildTaskManager {
       taskRoot: this.store.taskDirectory(taskIdValue), attemptRoot, candidatePath, attemptId, startIndex: current.files.length,
     }).catch(() => ({ files: [], unexpected: [] }));
     const budget = await this.store.getBudget();
+    const observation = await this.store.lifecycleSummary(taskIdValue, attemptId);
     return this.store.updateTask(taskIdValue, (task) => ({
       ...task,
       task_status: status,
@@ -322,7 +417,8 @@ export class BuildTaskManager {
       verification_status: 'NOT_RUN', human_review_status: 'NOT_READY', active_attempt_id: null,
       finished_at: this.now().toISOString(),
       attempts: task.attempts.map((item) => item.attempt_id === attemptId ? {
-        ...item, status, finished_at: this.now().toISOString(), harness: harnessSummary, error,
+        ...item, status, finished_at: this.now().toISOString(),
+        observation: { ...item.observation, complete: false, summary: observation }, harness: harnessSummary, error,
       } : item),
       files: [...task.files, ...indexed.files],
       revision_allowed: false,
@@ -333,6 +429,8 @@ export class BuildTaskManager {
 
   async stop(taskIdValue) {
     if (!this.active || this.active.taskId !== taskIdValue) throw new Error('BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED');
+    await this.#recordLifecycle(taskIdValue, this.active.attemptId, { type: 'cancel_requested', reason: 'user_cancelled', partial_observation: true })
+      .catch(() => {});
     this.active.controller.abort('cancelled');
     return this.store.updateTask(taskIdValue, (task) => ({ ...task, task_status: 'CANCELLING' }));
   }

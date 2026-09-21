@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { resolveInside } from '../integrity.mjs';
 
 const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANCELLING']);
+const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
 
 async function readJson(file, fallback) {
   try { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -13,30 +14,32 @@ async function readJson(file, fallback) {
   }
 }
 
-async function writeJsonAtomic(file, value) {
-  await fs.mkdir(path.dirname(file), { recursive: true });
+async function writeJsonAtomic(file, value, io = fs) {
+  await io.mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  await fs.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
+  await io.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
   try {
     for (let attempt = 0; ; attempt += 1) {
       try {
-        await fs.rename(temporary, file);
+        await io.rename(temporary, file);
         break;
       } catch (error) {
-        if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= 7) throw error;
+        if (!RETRYABLE_WRITE_CODES.has(error.code) || attempt >= 7) throw error;
         await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
       }
     }
   }
-  finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
+  finally { await io.rm(temporary, { force: true }).catch(() => {}); }
 }
 
 export class BuildTaskStore {
   #queue = Promise.resolve();
 
-  constructor(root) {
+  constructor(root, options = {}) {
     this.root = path.resolve(root);
     this.budgetFile = path.join(this.root, 'stage-budget.json');
+    this.io = options.io || fs;
+    this.appendFile = options.appendFile || this.io.appendFile.bind(this.io);
   }
 
   serial(operation) {
@@ -52,7 +55,7 @@ export class BuildTaskStore {
       if (error.code !== 'ENOENT') throw error;
       await writeJsonAtomic(this.budgetFile, {
         schema: 'workbench/build-stage-budget-v1', phase: 'M2-C', max_starts: 2, used_starts: 0, claims: [],
-      });
+      }, this.io);
     }
   }
 
@@ -61,11 +64,53 @@ export class BuildTaskStore {
     return resolveInside(this.root, taskId);
   }
 
+  lifecycleFile(taskId, attemptId) {
+    if (!/^attempt-\d{2}-(initial|revision)$/.test(attemptId)) throw new Error('INVALID_BUILD_ATTEMPT_ID');
+    return resolveInside(this.taskDirectory(taskId), path.join('attempts', attemptId, 'lifecycle.ndjson'));
+  }
+
+  async appendLifecycle(taskId, attemptId, event) {
+    const file = this.lifecycleFile(taskId, attemptId);
+    const line = `${JSON.stringify(event)}\n`;
+    if (Buffer.byteLength(line) > 16 * 1024) throw new Error('BUILD_LIFECYCLE_EVENT_TOO_LARGE');
+    return this.serial(async () => {
+      await fs.mkdir(path.dirname(file), { recursive: true });
+      for (let attempt = 0; ; attempt += 1) {
+        try {
+          await this.appendFile(file, line, { encoding: 'utf8', flag: 'a' });
+          return;
+        } catch (error) {
+          if (!RETRYABLE_WRITE_CODES.has(error.code) || attempt >= 7) throw error;
+          await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
+        }
+      }
+    });
+  }
+
+  async lifecycleSummary(taskId, attemptId) {
+    let text;
+    try { text = await fs.readFile(this.lifecycleFile(taskId, attemptId), 'utf8'); }
+    catch (error) {
+      if (error.code === 'ENOENT') return { event_count: 0, last_event: null, terminal_observed: false, output_complete: false };
+      throw error;
+    }
+    const events = text.split(/\r?\n/).filter(Boolean).flatMap((line) => {
+      try { return [JSON.parse(line)]; } catch { return []; }
+    });
+    const last = events.at(-1) || null;
+    return {
+      event_count: events.length,
+      last_event: last ? { sequence: last.sequence ?? null, type: last.type ?? null, at: last.at ?? null } : null,
+      terminal_observed: events.some((event) => event.type === 'process_close'),
+      output_complete: events.some((event) => event.type === 'output_complete' && event.output_complete === true),
+    };
+  }
+
   async createTask(task) {
     return this.serial(async () => {
       const directory = this.taskDirectory(task.task_id);
       await fs.mkdir(directory, { recursive: false });
-      await writeJsonAtomic(path.join(directory, 'task.json'), task);
+      await writeJsonAtomic(path.join(directory, 'task.json'), task, this.io);
       return structuredClone(task);
     });
   }
@@ -80,7 +125,7 @@ export class BuildTaskStore {
       const current = await readJson(file);
       const next = await updater(structuredClone(current));
       if (!next || next.task_id !== taskId) throw new Error('BUILD_TASK_UPDATE_INVALID');
-      await writeJsonAtomic(file, next);
+      await writeJsonAtomic(file, next, this.io);
       return structuredClone(next);
     });
   }
@@ -109,16 +154,31 @@ export class BuildTaskStore {
       if (budget.used_starts >= budget.max_starts) throw new Error('BUILD_STAGE_BUDGET_EXHAUSTED');
       budget.used_starts += 1;
       budget.claims.push({ task_id: taskId, attempt_id: attemptId, claimed_at: now });
-      await writeJsonAtomic(this.budgetFile, budget);
+      await writeJsonAtomic(this.budgetFile, budget, this.io);
       return structuredClone(budget);
     });
   }
 
-  async recoverInterrupted(now = new Date().toISOString()) {
+  async recoverInterrupted(now = new Date().toISOString(), serviceInstanceId = null) {
     const recovered = [];
     for (const task of await this.listTasks()) {
       const staleAttempt = task.attempts?.some((attempt) => attempt.status === 'RUNNING');
       if (!ACTIVE_TASK_STATES.has(task.task_status) && !staleAttempt) continue;
+      const runningAttempt = task.attempts?.find((attempt) => attempt.status === 'RUNNING');
+      const observation = runningAttempt ? await this.lifecycleSummary(task.task_id, runningAttempt.attempt_id) : null;
+      if (runningAttempt) {
+        await this.appendLifecycle(task.task_id, runningAttempt.attempt_id, {
+          schema: 'workbench/build-lifecycle-event-v1',
+          sequence: (observation?.last_event?.sequence || 0) + 1,
+          at: now,
+          task_id: task.task_id,
+          attempt_id: runningAttempt.attempt_id,
+          service_instance_id: serviceInstanceId,
+          type: 'recovered_interrupted',
+          reason: 'coordinator_restart_without_terminal',
+          partial_observation: true,
+        });
+      }
       await this.updateTask(task.task_id, (current) => ({
         ...current,
         task_status: 'INTERRUPTED',
@@ -131,9 +191,10 @@ export class BuildTaskStore {
           ...attempt,
           status: 'INTERRUPTED',
           finished_at: now,
-          error: { code: 'SERVICE_RESTARTED', message: '工作台重启时该尝试仍未收口；未自动恢复模型调用。' },
+          observation: { ...(attempt.observation || {}), complete: false, recovery: observation },
+          error: { code: 'SERVICE_RESTARTED', message: '工作台重启时该尝试仍未收口；最后事件之后缺少终态，原因未知，未自动恢复模型调用。', cause: 'UNKNOWN' },
         } : attempt),
-        error: { code: 'SERVICE_RESTARTED', message: '工作台重启时发现未收口建例任务；未自动恢复模型调用。' },
+        error: { code: 'SERVICE_RESTARTED', message: '工作台重启时发现未收口建例任务；历史原因未知，未自动恢复模型调用。', cause: 'UNKNOWN' },
       }));
       recovered.push(task.task_id);
     }

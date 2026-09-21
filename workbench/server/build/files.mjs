@@ -24,6 +24,7 @@ function category(relative, candidateRelative) {
   if (/\/\.playwright-mcp\/.*\.(?:yml|yaml)$/i.test(`/${relative}`)) return { kind: 'tool_snapshot', web_visible: false, content_type: 'text/yaml; charset=utf-8' };
   if (/\/playwright-report\.json$/i.test(`/${relative}`)) return { kind: 'test_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/harness-summary\.json$/i.test(`/${relative}`)) return { kind: 'harness_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
+  if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
   return null;
 }
 

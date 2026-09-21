@@ -23,19 +23,33 @@ function parseEvent(line, events) {
       return parsed;
     }
   } catch {
-    events.push({ type: 'invalid_json', line });
+    events.push({
+      type: 'invalid_json',
+      bytes: Buffer.byteLength(line),
+      sha256: createHash('sha256').update(line).digest('hex').toUpperCase(),
+    });
   }
   return null;
+}
+
+function eventMetadata(event) {
+  const metadata = { type: 'harness_event', at: new Date().toISOString(), event_type: event?.type || 'unknown' };
+  if (typeof event?.phase === 'string') metadata.phase = event.phase;
+  if (typeof event?.tool === 'string') metadata.tool = event.tool;
+  if (typeof event?.reason?.kind === 'string') metadata.reason = event.reason.kind;
+  if (Number.isInteger(event?.bytes)) metadata.bytes = event.bytes;
+  return metadata;
 }
 
 export function createToolBudgetObserver(maxToolCalls, abort) {
   if (!Number.isInteger(maxToolCalls) || maxToolCalls < 1) throw new Error('maxToolCalls must be a positive integer');
   let toolCalls = 0;
+  let reached = false;
   return {
     observe(event) {
-      if (event?.type !== 'tool_call') return;
+      if (event?.type !== 'tool_call' || reached) return;
       toolCalls += 1;
-      if (toolCalls >= maxToolCalls) abort('tool_limit');
+      if (toolCalls >= maxToolCalls) { reached = true; abort('tool_limit'); }
     },
     count: () => toolCalls,
   };
@@ -61,6 +75,7 @@ export function assessHarnessRun({ processResult, events, candidateExists, brows
   const final = [...events].reverse().find((event) => event.type === 'final');
   const browserCalls = events.filter((event) => event.type === 'tool_call' && /^mcp__playwright-mcp__/.test(event.tool ?? ''));
   const completed = processResult.exitCode === 0 && processResult.termination === null &&
+    processResult.outputComplete !== false && processResult.closeObserved !== false && !processResult.observerError &&
     turnEnd?.reason?.kind === 'completed' && Boolean(final);
   const success = completed && candidateExists && (!browserToolRequired || browserCalls.length > 0);
   return {
@@ -76,36 +91,54 @@ export function assessHarnessRun({ processResult, events, candidateExists, brows
   };
 }
 
-export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30 }) {
+export async function runHarnessEventProcess({
+  command, args, cwd, env, timeoutMs, signal, maxToolCalls = 30, onLifecycle,
+}) {
   const events = [];
   const budgetController = new AbortController();
-  const forwardAbort = () => budgetController.abort('cancelled');
+  const forwardAbort = () => budgetController.abort(typeof signal?.reason === 'string' ? signal.reason : 'cancelled');
   if (signal?.aborted) forwardAbort();
   else signal?.addEventListener('abort', forwardAbort, { once: true });
   const toolBudget = createToolBudgetObserver(maxToolCalls, (reason) => budgetController.abort(reason));
+  const processResult = await runOwnedProcess(command, args, {
+    cwd, env, timeoutMs, signal: budgetController.signal, onLifecycle,
+    onStdoutLine: (line) => {
+      const event = parseEvent(line, events);
+      if (event) toolBudget.observe(event);
+      const observed = event || events.at(-1);
+      if (observed) return onLifecycle?.(eventMetadata(observed));
+      return undefined;
+    },
+  });
+  signal?.removeEventListener('abort', forwardAbort);
+  return { events, processResult, toolCalls: toolBudget.count(), maxToolCalls };
+}
+
+export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
   const childEnv = allowedEnvironment({
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
     DEEPSEEK_API_KEY: apiKey,
     DEEPSEEK_BASE_URL: baseUrl,
   });
-  const processResult = await runOwnedProcess(process.execPath, [
+  const execution = await runHarnessEventProcess({ command: process.execPath, args: [
     DSH_BIN,
     '--profile', 'headless',
     '--patch', patchPath,
     '--json',
     task,
-  ], {
+  ],
     cwd: workspace,
     env: childEnv,
     timeoutMs,
-    signal: budgetController.signal,
-    onStdoutLine: (line) => toolBudget.observe(parseEvent(line, events)),
+    signal,
+    maxToolCalls,
+    onLifecycle,
   });
-  signal?.removeEventListener('abort', forwardAbort);
+  const { events, processResult } = execution;
   const candidateExists = existsSync(candidatePath);
   const assessment = assessHarnessRun({ processResult, events, candidateExists });
-  assessment.toolCalls = toolBudget.count();
+  assessment.toolCalls = execution.toolCalls;
   assessment.maxToolCalls = maxToolCalls;
   assessment.toolLimitReached = processResult.termination === 'tool_limit';
   const secrets = [apiKey];

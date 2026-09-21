@@ -117,6 +117,7 @@ function errorStatus(error) {
   if (error.message === 'RUN_ALREADY_ACTIVE') return 409;
   if (error.message === 'RUN_NOT_ACTIVE_OR_NOT_OWNED') return 404;
   if (['BUILD_TASK_ALREADY_ACTIVE', 'BUILD_STAGE_BUDGET_EXHAUSTED'].includes(error.message)) return 409;
+  if (['BUILD_STORAGE_UNAVAILABLE', 'BUILD_DIAGNOSTIC_STORAGE_FAILED'].includes(error.message)) return 503;
   if (['BUILD_TASK_NOT_FOUND', 'BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED'].includes(error.message)) return 404;
   if (['BUILD_TEMPLATE_NOT_ALLOWED', 'BUILD_INITIAL_NOT_ALLOWED', 'BUILD_REVISION_NOT_ALLOWED', 'BUILD_REVISION_SOURCE_INVALID'].includes(error.message)) return 400;
   if (error.message === 'REQUEST_TOO_LARGE') return 413;
@@ -134,11 +135,13 @@ export function createWorkbenchServer(options = {}) {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
       if (request.method === 'GET' && url.pathname === '/api/health') {
+        const buildDiagnostics = buildManager?.diagnostics?.() || null;
         sendJson(response, 200, {
-          service: 'approved-test-workbench', status: 'ready',
+          service: 'approved-test-workbench', status: buildDiagnostics?.storage_status === 'FAILED' ? 'degraded' : 'ready',
           active_run_id: manager?.active?.runId || null,
           active_build_task_id: buildManager?.active?.taskId || null,
           build_budget: buildStore ? await buildStore.getBudget() : null,
+          build_diagnostics: buildDiagnostics,
         });
         return;
       }

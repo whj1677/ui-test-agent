@@ -4,6 +4,10 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { BuildTaskStore } from '../server/build/store.mjs';
+import { runOwnedProcess } from '../../harness-probe/src/process-control.mjs';
+import { fileURLToPath } from 'node:url';
+
+const coordinatorFixture = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures', 'build-coordinator-child.mjs');
 
 test('M2-C stage budget persists across task ids and store restarts', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-store-'));
@@ -37,5 +41,60 @@ test('restart marks active build interrupted without replaying it', async () => 
     assert.equal(task.attempts[0].status, 'INTERRUPTED');
     assert.equal(task.attempts[0].finished_at, '2026-09-21T01:00:00Z');
     assert.equal(task.attempts[0].error.code, 'SERVICE_RESTARTED');
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('task状态原子替换的短暂占用有限重试后成功', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-store-retry-'));
+  try {
+    const normal = new BuildTaskStore(root); await normal.init();
+    await normal.createTask({ task_id: 'build-retry-12345678', task_status: 'SUBMITTED' });
+    let failures = 0;
+    const io = { ...fs, rename: async (...args) => {
+      if (failures < 2) { failures += 1; const error = new Error('busy'); error.code = 'EBUSY'; throw error; }
+      return fs.rename(...args);
+    } };
+    const store = new BuildTaskStore(root, { io });
+    const updated = await store.updateTask('build-retry-12345678', (task) => ({ ...task, task_status: 'FAILED' }));
+    assert.equal(updated.task_status, 'FAILED');
+    assert.equal(failures, 2);
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('task状态持续写失败会显式返回错误而非静默成功', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-store-fail-'));
+  try {
+    const normal = new BuildTaskStore(root); await normal.init();
+    await normal.createTask({ task_id: 'build-fail-12345678', task_status: 'SUBMITTED' });
+    let attempts = 0;
+    const io = { ...fs, rename: async () => { attempts += 1; const error = new Error('locked'); error.code = 'EACCES'; throw error; } };
+    const store = new BuildTaskStore(root, { io });
+    await assert.rejects(() => store.updateTask('build-fail-12345678', (task) => ({ ...task, task_status: 'FAILED' })), /locked/);
+    assert.equal(attempts, 8);
+    assert.equal((await normal.getTask('build-fail-12345678')).task_status, 'SUBMITTED');
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('协调进程被终止后重启保留逐事件记录、标中断且不重放预算', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-killed-'));
+  const taskId = 'build-killed-12345678';
+  try {
+    const controller = new AbortController();
+    const child = await runOwnedProcess(process.execPath, [coordinatorFixture, root, taskId], {
+      timeoutMs: 5_000,
+      signal: controller.signal,
+      onStdoutLine: (line) => { if (line === 'READY') controller.abort('fixture_killed'); },
+    });
+    assert.equal(child.termination, 'fixture_killed');
+    const restarted = new BuildTaskStore(root); await restarted.init();
+    assert.deepEqual(await restarted.recoverInterrupted('2026-09-21T08:00:00Z', 'service-after-restart'), [taskId]);
+    const task = await restarted.getTask(taskId);
+    assert.equal(task.task_status, 'INTERRUPTED');
+    assert.equal(task.attempts[0].error.cause, 'UNKNOWN');
+    assert.equal(task.attempts[0].observation.recovery.event_count, 1);
+    assert.equal((await restarted.getBudget()).used_starts, 1);
+    const summary = await restarted.lifecycleSummary(taskId, 'attempt-01-initial');
+    assert.equal(summary.event_count, 2);
+    assert.equal(summary.last_event.type, 'recovered_interrupted');
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });

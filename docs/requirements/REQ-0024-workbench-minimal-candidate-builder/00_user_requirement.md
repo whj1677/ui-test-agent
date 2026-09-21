@@ -20,6 +20,7 @@
 - 工程验证33项workbench测试、19项harness-probe测试及M1/M2-C两条Chromium页面流均通过。
 - 真实Web任务build-20260921030548-a1bf1358消耗1次初始启动后，拥有进程在Harness尚未收口时消失；重启后按规则标为INTERRUPTED，未生成候选、未执行技术验证，也未自动重放。
 - 收口工程复验复现Windows临时EPERM导致build task原子替换失败；已为build存储增加有限重试并连续10轮通过，但真实进程没有留下外层终止错误，不能把该复现写成真实中断的确定根因。
+- 诊断批次未启动Harness或模型；旧任务没有PID、exit、close、取消或到期记录，历史原因保持UNKNOWN。新实现用真实外部假子进程验证逐事件生命周期记录、exit/close收尾、存储失败关闭和重启不重放。
 
 ## 推断与待确认
 

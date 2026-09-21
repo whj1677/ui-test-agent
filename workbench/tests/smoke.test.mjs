@@ -27,6 +27,7 @@ test('health endpoint reports the independent workbench', async () => {
     active_run_id: null,
     active_build_task_id: null,
     build_budget: null,
+    build_diagnostics: null,
   });
 });
 

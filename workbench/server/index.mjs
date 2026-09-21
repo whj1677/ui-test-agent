@@ -4,22 +4,25 @@ import { WorkbenchStore } from './store.mjs';
 import { WorkbenchRunManager } from './executor.mjs';
 import { BuildTaskStore } from './build/store.mjs';
 import { BuildTaskManager } from './build/manager.mjs';
+import { randomUUID } from 'node:crypto';
 
 const host = '127.0.0.1';
 const port = Number(process.env.WORKBENCH_PORT || 4210);
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALID_WORKBENCH_PORT');
 
 const paths = createPaths();
+const serviceInstanceId = `service-${randomUUID()}`;
 const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
 const recovered = await store.recoverInterrupted();
 const manager = new WorkbenchRunManager({ store, paths });
 const buildStore = new BuildTaskStore(paths.buildTasksRoot);
 await buildStore.init();
-const recoveredBuilds = await buildStore.recoverInterrupted();
+const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
 const buildManager = new BuildTaskManager({
   store: buildStore,
   paths,
+  serviceInstanceId,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   otherActive: () => Boolean(manager.active),
 });
@@ -30,9 +33,20 @@ server.listen(port, host, () => {
   if (recoveredBuilds.length) console.log(`Recovered interrupted build tasks: ${recoveredBuilds.join(', ')}`);
 });
 
-async function shutdown() {
-  if (buildManager.active) await buildManager.stop(buildManager.active.taskId).catch(() => {});
-  server.close();
+let shutdownStarted = false;
+async function shutdown(signal) {
+  if (shutdownStarted) return;
+  shutdownStarted = true;
+  console.log(JSON.stringify({ type: 'service_shutdown_requested', service_instance_id: serviceInstanceId, signal }));
+  if (buildManager.active) await buildManager.stop(buildManager.active.taskId).catch((error) => {
+    console.error(JSON.stringify({ type: 'build_stop_failed', code: error?.code || error?.message || 'UNKNOWN' }));
+  });
+  const drained = await Promise.race([
+    buildManager.settle().then(() => true),
+    new Promise((resolve) => setTimeout(() => resolve(false), 5_000)),
+  ]);
+  if (!drained) console.error(JSON.stringify({ type: 'build_settlement_timeout', service_instance_id: serviceInstanceId }));
+  await new Promise((resolve) => server.close(resolve));
 }
-process.once('SIGINT', shutdown);
-process.once('SIGTERM', shutdown);
+process.once('SIGINT', () => void shutdown('SIGINT'));
+process.once('SIGTERM', () => void shutdown('SIGTERM'));

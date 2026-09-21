@@ -20,6 +20,8 @@ npm start
 
 运行数据、报告和媒体写入被 Git 忽略的 `workbench/.local/`。JSON 使用串行写入和同目录临时文件替换；每次运行使用独立目录。服务启动会把遗留的排队、启动、运行或停止中记录标为 `INTERRUPTED`，但不会自动重放，也不会尝试接管旧 PID。
 
+每个 M2-C attempt 还会在事件发生时追加 `lifecycle.ndjson`：记录 task/attempt/服务实例、Harness PID 与工作台父 PID、阶段与工具名称元数据、主动取消/到期/工具额度停止、`error`/`exit`/`close` 和输出是否完整。它不保存模型内部推理、完整命令参数或环境变量。进程必须等到 `close` 或有界流收尾超时后才能结算，无换行的最后一条 NDJSON 也会在流关闭时解析。诊断或任务状态持续写失败会将健康状态改为 `degraded` 并拒绝新建例；`EPERM`、`EACCES`、`EBUSY` 仍只做有限重试。
+
 当前接口：`GET /api/health`、`GET /api/assets`、`GET /api/assets/:asset_id`、`GET /api/runs`、`GET /api/runs/:run_id`、`POST /api/runs` 和 `POST /api/runs/:run_id/stop`。状态变更只接受同源本地 JSON 请求，正文只允许固定字段。
 
 M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由。第一版不接受任意 URL、文件、代码或命令上传。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
@@ -51,6 +53,8 @@ node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
 
 M2-C 增量工程验证使用 `npm test` 覆盖预算持久化、重启中断、重复启动、取消、报告异常、反例判定和文件边界；`npm run test:build-browser` 验证真实浏览器的提交、启动、状态与候选展示。`harness-probe` 目录仍须独立执行 `npm test`。模拟事件只证明工作台控制逻辑，不算真实 Harness 接入证据。
 
+新的真实集成应从一个明确保活的前台 PowerShell 会话启动工作台服务，再从浏览器操作 Web；给外层命令的生命周期至少覆盖 10 分钟任务上限和收尾时间。按 `Ctrl+C` 触发工作台的有界取消与收尾，不能用短时命令宿主启动后让宿主先退出。发生异常时先保留 `.local` 目录、服务控制台的脱敏错误和 attempt 生命周期记录，不换 task ID 重置预算。当前历史真实任务没有这些新增记录，因此其唯一根因仍是未知。
+
 ## 验收命令
 
 先在独立终端运行冻结站点和工作台：
@@ -81,3 +85,5 @@ M2-C 延续用户接受的“独立任务目录＋最小资料暴露”单机开
 M1 第一阶段集成验证、三项代码复审修复及既定证据完整性关联保持不变。M2-C 的最终状态以单独验收报告为准，只能是“技术验证通过，等待人工核对”或“候选验证失败”；不代表批准资产、复杂建例、自愈、多人服务、产品发布或通用平台完成。
 
 本分支的实际 M2-C 收口为“部分实现，真实集成中断”：工程验证通过，真实 Web 初始建例在候选落盘前中断并按重启规则收口，没有自动重放。完整事实、任务 ID、预算与未完成项见 [M2-C 验收报告](docs/M2C_ACCEPTANCE_REPORT.md)。
+
+中断诊断批次没有启动 Harness 或调用模型；它只补齐后续任务的事件时记录、进程流收尾和存储失败关闭策略。原中断事实与预算保持不变，详见 [M2-C 中断诊断修订报告](docs/M2C_INTERRUPTION_DIAGNOSTIC.md)。
