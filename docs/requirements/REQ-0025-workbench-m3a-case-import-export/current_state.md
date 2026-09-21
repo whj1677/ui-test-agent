@@ -7,7 +7,7 @@
 
 - 需求状态：已完成
 - 治理分级：G2
-- 当前版本：2
+- 当前版本：3
 - 最后更新：2026-09-21
 
 ## 当前有效用户需求
@@ -31,7 +31,7 @@
 | DD | DR | 状态 | 内容 |
 |---|---|---|---|
 | DD-0025-01 | DR-0025-01 / DR-0025-04 | 已确认 | 在workbench/.local下新增独立case-library JSON存储，项目单文件持有用例版本和导入记录，串行原子替换并使用project_revision做预览乐观检查。 |
-| DD-0025-02 | DR-0025-02 | 已确认 | xlsx二进制先落入私有上传目录，再用锁定ExcelJS读取工作表和单元格原始值；映射后按一行一例、双多行单元格等行数配对。 |
+| DD-0025-02 | DR-0025-02 | 已确认 | xlsx二进制先落入私有上传目录，再用锁定ExcelJS按真实物理行列读取；步骤与预期按单元格内原始行位置配对，不剥离行首或独立压缩空行。 |
 | DD-0025-03 | DR-0025-03 / DR-0025-04 | 已确认 | 原生包采用workbench/case-package-v1，导出只含业务字段、版本、根来源与逐项目lineage；导入生成新内部ID。 |
 | DD-0025-04 | DR-0025-04 | 已确认 | 预览记录冻结源文件哈希、映射、目标项目revision和每项分类；确认只接受已登记preview_id及显式冲突决策，成功后记录confirmed结果供幂等读回。 |
 | DD-0025-05 | DR-0025-05 | 已确认 | 在现有单页工作台增加紧凑项目/用例表格、按需详情和导入面板；文件上传使用受控二进制端点，下载使用受控JSON响应。 |
@@ -50,11 +50,11 @@
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
-| VT-0025-01 | DR-0025-01 / DR-0025-04 | 集成测试通过 | 项目/用例CRUD、版本、原子写入、重启和失败处理。 | 命令：npm test --prefix workbench；退出码：0；测试数量：50；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test.log |
-| VT-0025-02 | DR-0025-02 / DR-0025-04 | 集成测试通过 | 真实xlsx选表、映射、前导零/中文/多行配对、公式与结构错误。 | 命令：npm test --prefix workbench；退出码：0；测试数量：50；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test.log |
+| VT-0025-01 | DR-0025-01 / DR-0025-04 | 集成测试通过 | 项目/用例CRUD、版本、原子写入、重启和失败处理。 | 命令：npm test --prefix workbench；退出码：0；测试数量：52；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test-fidelity.log |
+| VT-0025-02 | DR-0025-02 / DR-0025-04 | 集成测试通过 | 真实xlsx选表、真实物理行列、前导零/中文/数字样文本、多行位置配对、公式与结构错误。 | 命令：npm test --prefix workbench；退出码：0；测试数量：52；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test-fidelity.log |
 | VT-0025-03 | DR-0025-03 / DR-0025-04 | 集成测试通过 | 全部/部分JSON包、跨项目独立ID、lineage、重复、冲突和往返一致。 | 命令：npm run test:m3a-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log |
-| VT-0025-04 | DR-0025-05 | 集成测试通过 | 中文Web项目列表、紧凑用例表格、详情编辑和预览确认交互。 | 命令：npm run test:m3a-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log |
-| VT-0025-05 | DR-0025-05 | 集成测试通过 | 用户指定10步真实Web闭环、重启持久化和M1/M2媒体读取回归。 | 命令：npm run test:m3a-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log |
+| VT-0025-04 | DR-0025-05 | 集成测试通过 | 中文Web项目列表、紧凑用例表格、详情编辑、原值与问题位置预览确认交互。 | 命令：npm run test:m3a-fidelity-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log |
+| VT-0025-05 | DR-0025-05 | 集成测试通过 | 用户指定10步真实Web闭环、Excel保真边界Web复验和重启持久化。 | 命令：npm run test:m3a-fidelity-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log |
 
 ## 人工待确认项
 

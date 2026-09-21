@@ -13,9 +13,9 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 ## 导入流程
 
-文件先登记到私有上传目录。Excel 由用户选择工作表和表头映射，按“一行一例、步骤/预期两个多行单元格逐行对应”解析；原生包先校验 schema、来源和步骤结构。预览冻结项目 revision，将每项分类为新增、重复、冲突、待澄清或无法导入。确认时 revision 必须仍一致，所有新增和导入记录在一次项目原子替换中提交；相同 preview 重复确认返回已有结果。
+文件先登记到私有上传目录。Excel 由用户选择工作表和表头映射，按实际物理行列读取“一行一例”结构；工作表空行可跳过但来源保留原行号，空白列不改变后续表头的真实列位置。步骤与预期两个多行单元格按单元格内原始行位置对应，不自动删除行首数字样文本，也不分别压缩空行。原生包先校验 schema、来源和步骤结构。预览冻结项目 revision，将每项分类为新增、重复、冲突、待澄清或无法导入。确认时 revision 必须仍一致，所有新增和导入记录在一次项目原子替换中提交；相同 preview 重复确认返回已有结果。
 
-公式字段拒绝，宏格式拒绝，外部链接不取值。缺少预期的用例强制保持内容待确认。
+公式字段拒绝，宏格式拒绝，外部链接不取值。有动作缺预期时保留动作并强制待确认；有预期缺动作时因归属不明而拒绝该用例。既有项目数据不自动迁移，需从保存的原文件重新预览后由用户确认。
 
 ## 导出与版本
 
@@ -25,5 +25,7 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 - `cd workbench; npm test`
 - `cd workbench; npm run test:m3a-browser`
+- `cd workbench; npm run test:m3a-fidelity-browser`
 - 首版格式：[workbench/docs/M3A_EXCEL_FORMAT_V1.md](../../workbench/docs/M3A_EXCEL_FORMAT_V1.md)
 - 验收报告：[workbench/docs/M3A_ACCEPTANCE_REPORT.md](../../workbench/docs/M3A_ACCEPTANCE_REPORT.md)
+- Excel 保真修订：[workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md](../../workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md)

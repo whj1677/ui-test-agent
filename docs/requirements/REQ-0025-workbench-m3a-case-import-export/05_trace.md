@@ -19,3 +19,4 @@
 |---:|---|---|---|
 | 1 | 无 | 实现中 | 从M2-C收口基线建立独立项目/用例数据闭环；首版Excel边界已冻结。 |
 | 2 | workbench/docs/M3A_ACCEPTANCE_REPORT.md | 已完成 | 真实Excel、原生包、Web十步、重启和既有媒体回归通过。 |
+| 3 | workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md | 已完成 | 集中修复数字样文本、物理空行/空列和步骤预期空行位置保真；既有数据不自动改写。 |

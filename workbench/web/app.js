@@ -387,6 +387,14 @@ function renderImportPreview() {
   box.append(summary);
   for (const item of preview.items) {
     const row = make('div', undefined, 'preview-item'); row.append(make('strong', `${item.content.external_id || '无编号'} · ${item.content.title || '无标题'}`), make('p', `${labels[item.classification]} · ${item.source_location.sheet || item.source_location.package_id} / ${item.source_location.row || item.source_location.index}`));
+    if (item.content.steps?.length) {
+      const steps = make('ol', undefined, 'preview-steps');
+      for (const step of item.content.steps) {
+        const expected = step.expected ? step.expected : '（缺失，待澄清）';
+        steps.append(make('li', `${step.action}｜预期：${expected}`));
+      }
+      row.append(steps);
+    }
     for (const issue of item.issues) row.append(make('p', `${issue.severity}: ${issue.message}`, 'subtle-dark'));
     if (item.classification === 'CONFLICT') { const select = document.createElement('select'); select.dataset.conflictKey = item.candidate_key; select.append(new Option('跳过，不覆盖', 'SKIP'), new Option('作为独立副本导入', 'IMPORT_COPY')); row.append(select); }
     box.append(row);

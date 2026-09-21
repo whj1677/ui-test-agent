@@ -19,7 +19,7 @@ npm run register:m2c-runtime-revalidation
 npm start
 ```
 
-默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)。内容“已确认”不等于脚本批准或测试通过。
+默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
 
 受控登记命令从仓库真实文件读取用例、批准依据、配置和依赖锁，只有脚本 SHA-256 精确等于批准值才写入 catalog；重复登记同一事实是幂等操作，冲突内容会被拒绝。
 

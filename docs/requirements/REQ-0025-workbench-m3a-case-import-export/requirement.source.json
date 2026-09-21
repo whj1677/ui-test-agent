@@ -2,14 +2,15 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0025",
   "title": "M3-A 项目用例库与Excel及原生用例包导入导出",
-  "metadata": {"requirement_status":"已完成","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "metadata": {"requirement_status":"已完成","governance_level":"G2","version":3,"last_updated":"2026-09-21"},
   "original_input": "从c122aeba基线在现有workbench实现项目和用例数据管理、真实xlsx预览确认导入、带schema版本的JSON原生用例包选择导出和跨项目重复导入；以真实Web完成A/B/空项目往返、冲突、幂等和重启验收。Harness启动0次，不调用模型，不生成或执行业务脚本。",
   "user_requirements": [{"id":"UN-0025-01","status":"已确认","goal":"本地单用户在工作台完成创建项目、多次导入、预览确认、查看维护、选择导出和导入另一个项目的数据闭环。","constraints":"保留M1/M2能力和历史；不接Harness、建例模型、业务脚本、审批、套件执行或跨项目自动同步；不提交私有原文件、.local或凭据。","success_criteria":"真实xlsx经Web上传、选表、映射、预览和确认入库；JSON包部分导出、跨项目导入、重复跳过、冲突不覆盖、版本独立和重启持久化均有真实浏览器与机读证据。"}],
   "confirmed_facts": [
     "基线c122aeba09cfc191a95871395f223567f7c94f83已在独立worktree和codex/test-workbench-m3a-case-import-export分支核对，原工作区干净。",
     "仓库未提供任何xlsx/xls/xlsm文件或现成Excel解析依赖，因此本批提供明确标注的首版合成模板，不声称适配用户实际文件。",
     "首版Excel采用一行一条用例；步骤与逐步预期分别放在两个多行单元格中并按行号一一对应。多行步骤跨Excel行归属、宏、公式和外部链接不在支持范围。",
-    "运行时Excel解析依赖候选为exceljs 4.4.0，MIT许可；最终以锁文件、npm audit和实际解析验证为准。"
+    "运行时Excel解析依赖候选为exceljs 4.4.0，MIT许可；最终以锁文件、npm audit和实际解析验证为准。",
+    "Excel保真修订取消行首序号猜测，按真实物理行列和单元格内原始行位置读取；既有项目数据不自动改写，需要依据保存的原文件重新预览并由用户确认。"
   ],
   "inferences_and_open_questions": ["无阻塞业务歧义；未提供用户模板时，首版模板和支持说明作为本批明确产品边界。"],
   "development_requirements": [
@@ -21,7 +22,7 @@
   ],
   "design_decisions": [
     {"id":"DD-0025-01","dr_ids":["DR-0025-01","DR-0025-04"],"status":"已确认","summary":"在workbench/.local下新增独立case-library JSON存储，项目单文件持有用例版本和导入记录，串行原子替换并使用project_revision做预览乐观检查。","rationale":"满足单机规模、重启持久化和全批原子确认，不引入数据库平台。"},
-    {"id":"DD-0025-02","dr_ids":["DR-0025-02"],"status":"已确认","summary":"xlsx二进制先落入私有上传目录，再用锁定ExcelJS读取工作表和单元格原始值；映射后按一行一例、双多行单元格等行数配对。","rationale":"提供明确可审查的首版适配边界，避免自动猜测结构。"},
+    {"id":"DD-0025-02","dr_ids":["DR-0025-02"],"status":"已确认","summary":"xlsx二进制先落入私有上传目录，再用锁定ExcelJS按真实物理行列读取；步骤与预期按单元格内原始行位置配对，不剥离行首或独立压缩空行。","rationale":"提供明确可审查的首版适配边界，保留小数、IP、版本和空行位置，避免自动猜测结构。"},
     {"id":"DD-0025-03","dr_ids":["DR-0025-03","DR-0025-04"],"status":"已确认","summary":"原生包采用workbench/case-package-v1，导出只含业务字段、版本、根来源与逐项目lineage；导入生成新内部ID。","rationale":"同时保留最初来源与目标项目版本，避免共享对象和来源混淆。"},
     {"id":"DD-0025-04","dr_ids":["DR-0025-04"],"status":"已确认","summary":"预览记录冻结源文件哈希、映射、目标项目revision和每项分类；确认只接受已登记preview_id及显式冲突决策，成功后记录confirmed结果供幂等读回。","rationale":"防止重复点击、并发变化和部分落盘。"},
     {"id":"DD-0025-05","dr_ids":["DR-0025-05"],"status":"已确认","summary":"在现有单页工作台增加紧凑项目/用例表格、按需详情和导入面板；文件上传使用受控二进制端点，下载使用受控JSON响应。","rationale":"复用现有本地同源边界并避免任意路径和静态目录开放。"}
@@ -45,11 +46,11 @@
     {"id":"TK-0025-05","dr_ids":["DR-0025-01","DR-0025-02","DR-0025-03","DR-0025-04","DR-0025-05"],"dd_ids":["DD-0025-01","DD-0025-02","DD-0025-03","DD-0025-04","DD-0025-05"],"status":"已完成","task":"完成真实xlsx/浏览器10步验收、旧能力回归、报告和GitHub同步。","verification_ids":["VT-0025-05"]}
   ],
   "verification_items": [
-    {"id":"VT-0025-01","dr_ids":["DR-0025-01","DR-0025-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"项目/用例CRUD、版本、原子写入、重启和失败处理。","evidence_standard":"Node工程测试与临时目录故障注入","current_evidence":{"command":"npm test --prefix workbench","exit_code":0,"test_count":50,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test.log"}},
-    {"id":"VT-0025-02","dr_ids":["DR-0025-02","DR-0025-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实xlsx选表、映射、前导零/中文/多行配对、公式与结构错误。","evidence_standard":"独立首版xlsx模板、解析结果和行级错误","current_evidence":{"command":"npm test --prefix workbench","exit_code":0,"test_count":50,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test.log"}},
+    {"id":"VT-0025-01","dr_ids":["DR-0025-01","DR-0025-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"项目/用例CRUD、版本、原子写入、重启和失败处理。","evidence_standard":"Node工程测试与临时目录故障注入","current_evidence":{"command":"npm test --prefix workbench","exit_code":0,"test_count":52,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test-fidelity.log"}},
+    {"id":"VT-0025-02","dr_ids":["DR-0025-02","DR-0025-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"真实xlsx选表、真实物理行列、前导零/中文/数字样文本、多行位置配对、公式与结构错误。","evidence_standard":"独立真实xlsx保真夹具、解析结果、原始行位置和具体单元格行错误","current_evidence":{"command":"npm test --prefix workbench","exit_code":0,"test_count":52,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/npm-test-fidelity.log"}},
     {"id":"VT-0025-03","dr_ids":["DR-0025-03","DR-0025-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"全部/部分JSON包、跨项目独立ID、lineage、重复、冲突和往返一致。","evidence_standard":"工程测试与实际下载包哈希","current_evidence":{"command":"npm run test:m3a-browser --prefix workbench","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log"}},
-    {"id":"VT-0025-04","dr_ids":["DR-0025-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"中文Web项目列表、紧凑用例表格、详情编辑和预览确认交互。","evidence_standard":"真实Chromium交互与脱敏截图","current_evidence":{"command":"npm run test:m3a-browser --prefix workbench","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log"}},
-    {"id":"VT-0025-05","dr_ids":["DR-0025-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"用户指定10步真实Web闭环、重启持久化和M1/M2媒体读取回归。","evidence_standard":"真实文件选择/下载、后端记录、重启读回和旧媒体浏览器验证","current_evidence":{"command":"npm run test:m3a-browser --prefix workbench","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log"}}
+    {"id":"VT-0025-04","dr_ids":["DR-0025-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"中文Web项目列表、紧凑用例表格、详情编辑、原值与问题位置预览确认交互。","evidence_standard":"真实Chromium上传边界xlsx、预览、确认、重启与脱敏截图","current_evidence":{"command":"npm run test:m3a-fidelity-browser --prefix workbench","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log"}},
+    {"id":"VT-0025-05","dr_ids":["DR-0025-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"用户指定10步真实Web闭环、Excel保真边界Web复验和重启持久化。","evidence_standard":"真实文件选择/下载、后端记录、边界原值/物理位置和重启读回","current_evidence":{"command":"npm run test:m3a-fidelity-browser --prefix workbench","exit_code":0,"test_count":1,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log"}}
   ],
   "verification_environment": {"working_directory":"workbench与仓库根需求工具","commands":["npm test","npm run test:m3a-browser","npm run test:m2c-runtime-media-readback"],"environment":["Windows；Node 22；127.0.0.1单用户；Git忽略私有数据目录；Harness/模型凭据不需要。"],"conclusion":["M3-A数据闭环工程与真实Web验收通过；Harness启动0次、模型调用0次、业务脚本执行0次。"]},
   "trace_current": [
@@ -61,7 +62,7 @@
     {"un_id":"UN-0025-01","dr_id":"DR-0025-04","dd_id":"DD-0025-01","tk_id":"TK-0025-01","vt_id":"VT-0025-01","status":"已完成"},
     {"un_id":"UN-0025-01","dr_id":"DR-0025-04","dd_id":"DD-0025-04","tk_id":"TK-0025-02","vt_id":"VT-0025-02","status":"已完成"}
   ],
-  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M2-C收口基线建立独立项目/用例数据闭环；首版Excel边界已冻结。"},{"version":2,"link":"workbench/docs/M3A_ACCEPTANCE_REPORT.md","status":"已完成","notes":"真实Excel、原生包、Web十步、重启和既有媒体回归通过。"}],
+  "trace_history": [{"version":1,"link":"无","status":"实现中","notes":"从M2-C收口基线建立独立项目/用例数据闭环；首版Excel边界已冻结。"},{"version":2,"link":"workbench/docs/M3A_ACCEPTANCE_REPORT.md","status":"已完成","notes":"真实Excel、原生包、Web十步、重启和既有媒体回归通过。"},{"version":3,"link":"workbench/docs/M3A_EXCEL_FIDELITY_REVISION.md","status":"已完成","notes":"集中修复数字样文本、物理空行/空列和步骤预期空行位置保真；既有数据不自动改写。"}],
   "open_questions": ["用户尚未提供实际Excel模板；本批只验收公开合成首版模板，不推断其他排版兼容。"],
   "prohibited_implementation": [
     "不得启动Harness、调用模型、生成或执行业务脚本。",
@@ -69,5 +70,5 @@
     "不得开放任意路径、任意文件执行、宏/公式计算、绝对路径导出或.local静态目录。",
     "不得自动审批、测试套件执行、多人权限、复杂数据库或跨项目自动同步。"
   ],
-  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-A项目用例库、Excel和原生包导入导出需求包","impact":"workbench case-library数据、API、Web、模板、测试和报告","confirmed_by":"用户当前任务"}]
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"建立M3-A项目用例库、Excel和原生包导入导出需求包","impact":"workbench case-library数据、API、Web、模板、测试和报告","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":3,"type":"修订","description":"修复Excel数字样文本、物理行列与步骤预期空行位置保真","impact":"workbench Excel解析、Web预览、工程测试和修订报告；已有项目数据不迁移","confirmed_by":"用户当前任务"}]
 }

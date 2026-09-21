@@ -1,0 +1,11 @@
+
+> ui-test-approved-workbench@0.1.0 test:m3a-fidelity-browser
+> node tests/excel-fidelity-browser.integration.mjs
+
+{"status":"passed","physical_rows":[2,4],"added":1,"skipped_unimportable":1,"persisted_after_restart":true,"screenshot":"D:\\01_AI工程\\01_工程项目\\ui-test-agent-workbench-m3a-case-import-export\\workbench\\docs\\evidence\\M3A_EXCEL_FIDELITY_WEB.png"}
+TAP version 13
+1..1
+# tests 1
+# pass 1
+# fail 0
+# skipped 0
