@@ -126,12 +126,12 @@ export async function analyzeRunArtifacts({ runRoot, reportFile, registeredSteps
   const testError = errorFacts(result?.error || result?.errors?.[0] || test.errors?.[0]);
   const skipped = status === 'skipped' || Number(report.stats?.skipped || 0) > 0;
   const allRegisteredStepsPassed = steps.length > 0 && steps.every((step) => step.status === 'PASSED');
+  const kinds = new Set(media.map((item) => item.kind));
+  const evidenceComplete = ['screenshot', 'video', 'trace'].every((kind) => kinds.has(kind));
   const completePass = executionStatus === 'PROCESS_ENDED'
     && exitCode === 0 && status === 'passed' && !skipped
     && Number(report.stats?.expected) === 1 && Number(report.stats?.unexpected || 0) === 0
-    && allRegisteredStepsPassed;
-  const kinds = new Set(media.map((item) => item.kind));
-  const evidenceComplete = ['screenshot', 'video', 'trace'].every((kind) => kinds.has(kind));
+    && allRegisteredStepsPassed && evidenceComplete;
   return {
     report_status: 'COMPLETE',
     test_status: skipped ? 'SKIPPED' : status === 'passed' ? 'PASSED' : status === 'failed' ? 'FAILED' : status.toUpperCase(),

@@ -23,17 +23,22 @@ function reportWith(status, steps, stats = {}) {
   };
 }
 
+async function addMedia(files, kinds = ['screenshot', 'video', 'trace']) {
+  const definitions = {
+    screenshot: ['shot.png', 'png'],
+    video: ['video.webm', 'video'],
+    trace: ['trace.zip', 'trace'],
+  };
+  const artifact = path.join(files.runRoot, 'artifacts', 'case');
+  await fs.mkdir(artifact, { recursive: true });
+  await Promise.all(kinds.map((kind) => fs.writeFile(path.join(artifact, definitions[kind][0]), definitions[kind][1])));
+}
+
 afterEach(async () => Promise.all(roots.splice(0).map((root) => fs.rm(root, { recursive: true, force: true }))));
 
 test('complete passing report requires all registered steps and all media kinds', async () => {
   const files = await fixture(reportWith('passed', registeredSteps.map(({ step_id }) => ({ title: step_id }))));
-  const artifact = path.join(files.runRoot, 'artifacts', 'case');
-  await fs.mkdir(artifact, { recursive: true });
-  await Promise.all([
-    fs.writeFile(path.join(artifact, 'shot.png'), 'png'),
-    fs.writeFile(path.join(artifact, 'video.webm'), 'video'),
-    fs.writeFile(path.join(artifact, 'trace.zip'), 'trace'),
-  ]);
+  await addMedia(files);
   const result = await analyzeRunArtifacts({ ...files, registeredSteps, exitCode: 0, executionStatus: 'PROCESS_ENDED' });
   assert.equal(result.report_status, 'COMPLETE');
   assert.equal(result.test_status, 'PASSED');
@@ -43,13 +48,33 @@ test('complete passing report requires all registered steps and all media kinds'
   assert.deepEqual(result.media.map((item) => item.kind).sort(), ['screenshot', 'trace', 'video']);
 });
 
+for (const [scenario, kinds] of [
+  ['all media are missing', []],
+  ['screenshot is missing', ['video', 'trace']],
+  ['video is missing', ['screenshot', 'trace']],
+  ['trace is missing', ['screenshot', 'video']],
+]) {
+  test(`raw passing result is not an overall pass when ${scenario}`, async () => {
+    const files = await fixture(reportWith('passed', registeredSteps.map(({ step_id }) => ({ title: step_id }))));
+    await addMedia(files, kinds);
+    const result = await analyzeRunArtifacts({ ...files, registeredSteps, exitCode: 0, executionStatus: 'PROCESS_ENDED' });
+    assert.equal(result.test_status, 'PASSED');
+    assert.equal(result.summary.playwright_status, 'passed');
+    assert.equal(result.summary.playwright_pass, true);
+    assert.equal(result.evidence_status, 'INCOMPLETE');
+    assert.equal(result.summary.complete_pass, false, scenario);
+  });
+}
+
 test('assertion mismatch remains a failed test and later steps are not executed', async () => {
   const message = 'Error: expect(locator).toHaveText(expected)\nTimed out 5000ms\nExpected: "H111"\nReceived: "H106"';
   const files = await fixture(reportWith('failed', [
     { title: 'S01' }, { title: 'S02' }, { title: 'S03', error: { message } },
   ]));
+  await addMedia(files);
   const result = await analyzeRunArtifacts({ ...files, registeredSteps, exitCode: 1, executionStatus: 'PROCESS_ENDED' });
   assert.equal(result.test_status, 'FAILED');
+  assert.equal(result.evidence_status, 'COMPLETE');
   assert.equal(result.summary.complete_pass, false);
   assert.equal(result.error.type, 'ASSERTION_MISMATCH');
   assert.equal(result.error.expected, 'H111');
@@ -84,10 +109,12 @@ test('exit code zero cannot override an incomplete step set', async () => {
 test('a passing Playwright report cannot override a non-normal execution terminal state', async () => {
   for (const executionStatus of ['INTEGRITY_FAILED', 'CANCELLED', 'INTERRUPTED', 'PROCESS_ERROR', 'START_FAILED']) {
     const files = await fixture(reportWith('passed', registeredSteps.map(({ step_id }) => ({ title: step_id }))));
+    await addMedia(files);
     const result = await analyzeRunArtifacts({ ...files, registeredSteps, exitCode: 0, executionStatus });
     assert.equal(result.test_status, 'PASSED');
     assert.equal(result.summary.playwright_status, 'passed');
     assert.equal(result.summary.playwright_pass, true);
+    assert.equal(result.evidence_status, 'COMPLETE');
     assert.equal(result.summary.complete_pass, false, executionStatus);
   }
 });

@@ -2,7 +2,7 @@
 
 这是独立于原产品的本地单用户子工程。它只负责登记已批准资产、从固定入口启动 Playwright、持久化运行事实并在中文 Web 中展示结果；不生成或修改业务脚本，也不调用任何模型、Harness 或 healer。
 
-第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；原报告没有改写。
+第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。
 
 ## 安装、登记与启动
 
@@ -32,7 +32,7 @@ npm start
 环境选择由明确的前端状态保存。轮询即使重建选项也会恢复仍在资产允许列表中的用户选择；资产不再允许该值时才回退到首个允许环境。启动请求读取该状态，不从刚重建的 DOM 猜测入口。
 
 - `execution_status` 只描述进程和工作台生命周期；`report_status` 描述 JSON 报告是否完整；`test_status` 保留 Playwright 的通过、失败、跳过或未运行；`evidence_status` 单独描述截图、视频和 Trace 是否齐全。
-- 原始 Playwright 结果保留在 `test_status`、`summary.playwright_status` 和 `summary.playwright_pass`；整体有效通过另记为 `summary.complete_pass`。只有工作台终态为 `PROCESS_ENDED`、退出码为 0、报告有效、恰好运行一个目标测试、没有跳过且登记步骤全部实际通过，整体才为真。哈希异常、取消、中断、进程或报告异常不会被原始绿色结果覆盖。
+- 原始 Playwright 结果保留在 `test_status`、`summary.playwright_status` 和 `summary.playwright_pass`；整体有效通过另记为 `summary.complete_pass`。只有工作台终态为 `PROCESS_ENDED`、退出码为 0、报告有效、恰好运行一个目标测试、没有跳过、登记步骤全部实际通过，并且 screenshot、video、trace 三类既定媒体齐全，整体才为真。哈希异常、取消、中断、进程、报告或证据异常不会被原始绿色结果覆盖。
 - 错误保留原消息、已确定的期望值/实际值和 `PENDING_ANALYSIS` 归因。只有同时取得具体 `Expected` 与 `Received` 值才分类为 `ASSERTION_MISMATCH`；缺元素或严格匹配冲突为 `LOCATOR_OR_TARGET`，只有单侧值或普通 expect 文本为 `ASSERTION_UNRESOLVED`，纯超时保留 `TIMEOUT`。包含超时文字但已取得 H111/H106 两值的真实比较仍是值不符。没有执行的登记步骤显示 `NOT_EXECUTED`。
 - 媒体 API 只按本运行记录中的 `media_id` 读取，并复核真实路径仍在 run 目录和文件大小未变化。截图与视频可在页面本地查看；Trace 下载后可执行：
 
@@ -40,7 +40,7 @@ npm start
 node node_modules/@playwright/test/cli.js show-trace <下载的-trace.zip>
 ```
 
-原 T3 工程验证包含 18 项 Node 测试和一次真实 Chromium 工作台操作流；本次复审修复后完整集合为 21 项 Node 测试，并再次执行真实 Chromium 工作台流。工程测试不代替批准脚本正常/故障真实组合。
+原 T3 工程验证包含 18 项 Node 测试和一次真实 Chromium 工作台操作流；三项复审修复后为 21 项，本次证据完整性修订后完整集合为 25 项 Node 测试。工程测试不代替批准脚本正常/故障真实组合；本次纯汇总修订按授权没有重跑业务组合。
 
 ## 验收命令
 
@@ -67,4 +67,4 @@ npm run test:restart
 - 隔离：独立依赖、端口、数据目录、运行进程、报告和媒体；不加载旧 Controller、Store 或浏览器执行主循环。
 - 禁止：任意脚本/命令/文件/URL、跨域状态变更、外部监听、模型密钥或会话继承。
 
-当前状态为 M1 第一阶段集成验证及三项代码复审修复完成。该状态仅证明受控批准资产在本机工作台中的执行、记录和追溯闭环，不重新宣称业务脚本首次验收，也不代表产品发布、陌生页面泛化、多人服务或通用平台完成。
+当前状态为 M1 第一阶段集成验证、三项代码复审修复及既定证据完整性关联完成。该状态仅证明受控批准资产在本机工作台中的执行、记录和追溯闭环，不重新宣称业务脚本首次验收，也不代表产品发布、陌生页面泛化、多人服务或通用平台完成。

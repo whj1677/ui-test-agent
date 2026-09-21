@@ -34,12 +34,12 @@
 - 子进程仅获得必要的固定环境变量，不继承模型密钥、Cookie、令牌或完整宿主环境。
 - 同时最多一个活动运行；停止只针对当前工作台记录并拥有的进程树。
 - Web 环境选择由前端状态持有；轮询重建允许项后恢复有效选择，启动请求使用该状态。只有选择不再属于当前资产允许环境时才回退。
-- 原始 Playwright 通过事实与整体有效通过分开保存。`complete_pass=true` 只允许 `PROCESS_ENDED` 正常终态再叠加退出码、报告、目标测试、跳过和步骤条件；哈希异常、取消、中断、进程或报告异常均保持整体不通过。
+- 原始 Playwright 通过事实与整体有效通过分开保存。`complete_pass=true` 只允许 `PROCESS_ENDED` 正常终态再叠加退出码、报告、目标测试、跳过、步骤及 screenshot/video/trace 三类既定媒体齐全条件；哈希异常、取消、中断、进程、报告或证据异常均保持整体不通过。
 - 错误事实只在同时解析到具体期望值和实际值时认定 `ASSERTION_MISMATCH`；缺元素、严格匹配冲突、单侧值、纯超时分别保留定位、未决断言或超时类型，归因仍为 `PENDING_ANALYSIS`。
 - 登记步骤清单与报告中的实际步骤分别保存；失败后的后续步骤显示“未执行”，不依据终态补猜。
 
 ## 运行与验证入口
 
-安装、启动、登记、运行、停止、Trace 本地查看和测试命令见 `workbench/README.md`。第一阶段原始真实运行见 `workbench/docs/ACCEPTANCE_REPORT.md`；三项代码复审修复及新的真实组合见 `workbench/docs/REVIEW_FIX_REPORT.md`。
+安装、启动、登记、运行、停止、Trace 本地查看和测试命令见 `workbench/README.md`。第一阶段原始真实运行见 `workbench/docs/ACCEPTANCE_REPORT.md`；三项代码复审修复及新的真实组合见 `workbench/docs/REVIEW_FIX_REPORT.md`；整体通过与既定媒体证据的关联见 `workbench/docs/EVIDENCE_COMPLETENESS_REVISION.md`。
 
 本模块只证明从真实 Web 启动已批准脚本、保存并展示可信结果以及重启可追溯；不重新声明旧排序脚本首次业务验收，不覆盖旧正式回归，也不代表陌生页面泛化、自动建例、多人使用或产品发布完成。
