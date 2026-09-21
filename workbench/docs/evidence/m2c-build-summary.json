@@ -1,0 +1,46 @@
+{
+  "schema": "workbench/m2c-public-summary-v1",
+  "task_id": "build-20260921030548-a1bf1358",
+  "attempt_id": "attempt-01-initial",
+  "result": {
+    "task_status": "INTERRUPTED",
+    "generation_status": "INTERRUPTED",
+    "verification_status": "NOT_STARTED",
+    "human_review_status": "NOT_READY"
+  },
+  "stage_budget": {
+    "harness_starts": 1,
+    "max_starts": 2,
+    "revision_triggered": false
+  },
+  "harness": {
+    "tool": "dsh",
+    "version": "0.1.6-alpha.2",
+    "provider_adapter": "deepseek-official",
+    "model": "deepseek-v4-pro",
+    "observable_agent_steps": null,
+    "total_tool_calls": null,
+    "browser_tool_calls": null,
+    "provider_request_count": null,
+    "provider_usage": null,
+    "local_session_projection": {
+      "uncached_input_tokens": 13183,
+      "output_tokens": 121,
+      "cache_read_tokens": 896,
+      "source_scope": "unfinished local Harness session projection; not a provider request count"
+    }
+  },
+  "artifacts": {
+    "candidate": null,
+    "playwright_reports": [],
+    "private_browser_tool_files_observed": 2,
+    "public_screenshot": {
+      "file": "m2c-build-interrupted.png",
+      "bytes": 164039,
+      "sha256": "45F4D835E573A8FE41F740072588DDF5D4DAD5590053D12B40D3605D0224161E"
+    }
+  },
+  "restart_readback": true,
+  "approved_asset_sha256_after": "280A787546AABDD87570838932663A5DC254AEE5E0C329BE3A13294E9A18079A",
+  "conclusion": "The real Web submission started Harness, but the owning process disappeared before a candidate or terminal event was collected. Recovery marked the task and attempt interrupted without replay."
+}

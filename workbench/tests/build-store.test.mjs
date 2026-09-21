@@ -23,10 +23,19 @@ test('restart marks active build interrupted without replaying it', async () => 
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-recover-'));
   try {
     const store = new BuildTaskStore(root); await store.init();
-    await store.createTask({ task_id: 'build-active-12345678', created_at: '2026-09-21', task_status: 'GENERATING', generation_status: 'RUNNING', verification_status: 'NOT_STARTED', human_review_status: 'NOT_READY' });
+    await store.createTask({
+      task_id: 'build-active-12345678', created_at: '2026-09-21', task_status: 'GENERATING',
+      generation_status: 'RUNNING', verification_status: 'NOT_STARTED', human_review_status: 'NOT_READY',
+      active_attempt_id: 'attempt-01-initial',
+      attempts: [{ attempt_id: 'attempt-01-initial', status: 'RUNNING', finished_at: null, error: null }],
+    });
     assert.deepEqual(await store.recoverInterrupted('2026-09-21T01:00:00Z'), ['build-active-12345678']);
     const task = await store.getTask('build-active-12345678');
     assert.equal(task.task_status, 'INTERRUPTED');
     assert.equal(task.generation_status, 'INTERRUPTED');
+    assert.equal(task.active_attempt_id, null);
+    assert.equal(task.attempts[0].status, 'INTERRUPTED');
+    assert.equal(task.attempts[0].finished_at, '2026-09-21T01:00:00Z');
+    assert.equal(task.attempts[0].error.code, 'SERVICE_RESTARTED');
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });

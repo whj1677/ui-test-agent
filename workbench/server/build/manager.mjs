@@ -176,6 +176,7 @@ export class BuildTaskManager {
       const completion = this.#execute({ task: next, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller })
         .finally(() => { if (this.active?.attemptId === attemptId) this.active = null; });
       this.completions.set(task.task_id, completion);
+      completion.catch(() => {});
       return next;
     } finally {
       this.starting = false;
@@ -339,5 +340,9 @@ export class BuildTaskManager {
   async wait(taskIdValue) {
     await this.completions.get(taskIdValue);
     return this.store.getTask(taskIdValue);
+  }
+
+  async settle() {
+    await Promise.allSettled([...this.completions.values()]);
   }
 }

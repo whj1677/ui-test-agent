@@ -78,7 +78,7 @@ test('failed candidate enables exactly one explicit revision and preserves both 
     assert.equal(adapter.harnessStarts, 2);
     await assert.rejects(() => manager.revise(task.task_id), /BUILD_REVISION_NOT_ALLOWED/);
     assert.equal((await store.getBudget()).used_starts, 2);
-  } finally { await fs.rm(localRoot, { recursive: true, force: true }); }
+  } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
 });
 
 test('duplicate start is rejected and cancel closes the owned attempt without restart', async () => {
@@ -93,5 +93,5 @@ test('duplicate start is rejected and cancel closes the owned attempt without re
     assert.equal(result.task_status, 'CANCELLED');
     assert.equal(result.verification_status, 'NOT_RUN');
     assert.equal(adapter.harnessStarts, 1);
-  } finally { await fs.rm(localRoot, { recursive: true, force: true }); }
+  } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
 });

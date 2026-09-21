@@ -10,6 +10,7 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node tests/browser.integration.mjs",
     "test:build-browser": "node tests/build-browser.integration.mjs",
+    "test:build-real": "node tests/build-real.integration.mjs",
     "test:real": "node tests/real-workbench.integration.mjs",
     "test:restart": "node tests/restart-history.integration.mjs",
     "lab": "node ../heldout-lab/serve.mjs 4198"

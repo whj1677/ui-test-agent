@@ -1,0 +1,137 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-21T11:22:06+08:00
+Command: npm test --prefix harness-probe
+Exit code: 0
+Parsed test count: 19
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+
+> ui-test-agent-deepseek-harness-probe@0.1.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: 真实通过且至少一个测试才完整
+ok 1 - 真实通过且至少一个测试才完整
+  ---
+  duration_ms: 1.9868
+  type: 'test'
+  ...
+# Subtest: 缺失或损坏报告不能成功
+ok 2 - 缺失或损坏报告不能成功
+  ---
+  duration_ms: 0.2409
+  type: 'test'
+  ...
+# Subtest: 零测试、跳过和失败不能成功
+ok 3 - 零测试、跳过和失败不能成功
+  ---
+  duration_ms: 0.2093
+  type: 'test'
+  ...
+# Subtest: 浏览器插件证据单独登记且不冒充候选输出
+ok 4 - 浏览器插件证据单独登记且不冒充候选输出
+  ---
+  duration_ms: 1.1199
+  type: 'test'
+  ...
+# Subtest: 任务目录内其他未登记文件仍被拒绝
+ok 5 - 任务目录内其他未登记文件仍被拒绝
+  ---
+  duration_ms: 0.2074
+  type: 'test'
+  ...
+# Subtest: 完整终态、浏览器工具和文件同时存在才成功
+ok 6 - 完整终态、浏览器工具和文件同时存在才成功
+  ---
+  duration_ms: 0.7916
+  type: 'test'
+  ...
+# Subtest: 缺文件不能标记成功
+ok 7 - 缺文件不能标记成功
+  ---
+  duration_ms: 0.1629
+  type: 'test'
+  ...
+# Subtest: 缺浏览器工具事实不能标记成功
+ok 8 - 缺浏览器工具事实不能标记成功
+  ---
+  duration_ms: 0.1515
+  type: 'test'
+  ...
+# Subtest: 模型中断或不完整报告不能标记成功
+ok 9 - 模型中断或不完整报告不能标记成功
+  ---
+  duration_ms: 0.1251
+  type: 'test'
+  ...
+# Subtest: 取消和超时不能标记成功
+ok 10 - 取消和超时不能标记成功
+  ---
+  duration_ms: 0.1042
+  type: 'test'
+  ...
+# Subtest: 日志会遮蔽密钥、Bearer和敏感字段
+ok 11 - 日志会遮蔽密钥、Bearer和敏感字段
+  ---
+  duration_ms: 0.5897
+  type: 'test'
+  ...
+# Subtest: 工具调用达到上限时触发外层停止且不会超过上限
+ok 12 - 工具调用达到上限时触发外层停止且不会超过上限
+  ---
+  duration_ms: 0.6462
+  type: 'test'
+  ...
+# Subtest: 文件、网络和凭据禁止项都被阻断时才允许真实修订
+ok 13 - 文件、网络和凭据禁止项都被阻断时才允许真实修订
+  ---
+  duration_ms: 1.0936
+  type: 'test'
+  ...
+# Subtest: 工作区外读取或写入成功会关闭总门
+ok 14 - 工作区外读取或写入成功会关闭总门
+  ---
+  duration_ms: 0.1522
+  type: 'test'
+  ...
+# Subtest: 候选或浏览器可访问禁止端点会关闭总门
+ok 15 - 候选或浏览器可访问禁止端点会关闭总门
+  ---
+  duration_ms: 0.0992
+  type: 'test'
+  ...
+# Subtest: 候选携带模型凭据会关闭总门
+ok 16 - 候选携带模型凭据会关闭总门
+  ---
+  duration_ms: 0.0779
+  type: 'test'
+  ...
+# Subtest: 启动失败会返回错误且不等待到期
+ok 17 - 启动失败会返回错误且不等待到期
+  ---
+  duration_ms: 6.2979
+  type: 'test'
+  ...
+# Subtest: 超时会终止本任务拥有的进程
+ok 18 - 超时会终止本任务拥有的进程
+  ---
+  duration_ms: 800.2608
+  type: 'test'
+  ...
+# Subtest: 用户取消会终止本任务拥有的进程且不重启
+ok 19 - 用户取消会终止本任务拥有的进程且不重启
+  ---
+  duration_ms: 683.0878
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1667.9483

@@ -17,7 +17,17 @@ async function writeJsonAtomic(file, value) {
   await fs.mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
   await fs.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
-  try { await fs.rename(temporary, file); }
+  try {
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        await fs.rename(temporary, file);
+        break;
+      } catch (error) {
+        if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= 7) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
+      }
+    }
+  }
   finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
 }
 
@@ -107,7 +117,8 @@ export class BuildTaskStore {
   async recoverInterrupted(now = new Date().toISOString()) {
     const recovered = [];
     for (const task of await this.listTasks()) {
-      if (!ACTIVE_TASK_STATES.has(task.task_status)) continue;
+      const staleAttempt = task.attempts?.some((attempt) => attempt.status === 'RUNNING');
+      if (!ACTIVE_TASK_STATES.has(task.task_status) && !staleAttempt) continue;
       await this.updateTask(task.task_id, (current) => ({
         ...current,
         task_status: 'INTERRUPTED',
@@ -116,6 +127,12 @@ export class BuildTaskStore {
         human_review_status: 'NOT_READY',
         active_attempt_id: null,
         finished_at: now,
+        attempts: (current.attempts || []).map((attempt) => attempt.status === 'RUNNING' ? {
+          ...attempt,
+          status: 'INTERRUPTED',
+          finished_at: now,
+          error: { code: 'SERVICE_RESTARTED', message: '工作台重启时该尝试仍未收口；未自动恢复模型调用。' },
+        } : attempt),
         error: { code: 'SERVICE_RESTARTED', message: '工作台重启时发现未收口建例任务；未自动恢复模型调用。' },
       }));
       recovered.push(task.task_id);
