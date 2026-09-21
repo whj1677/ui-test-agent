@@ -1,5 +1,7 @@
 # 需求索引
 
+当前探针：[REQ-0022 DeepSeek Harness受控调用可行性探针](REQ-0022-deepseek-harness-probe/current_state.md)固定官方 Harness 与实验性 Browser Use 版本，在隔离目录内验证程序化启动、浏览器交互、候选产出/执行和有界取消；只形成 A/B/C 可行性结论，不接正式建例 Web 或修改 M1 执行链。
+
 当前复审修复：[REQ-0021 工作台M1代码复审问题集中修复](REQ-0021-workbench-m1-review-fixes/current_state.md)只处理入口选择轮询保持、非正常终态整体通过封闭和错误事实分类三项问题；先复现后修改，另做一组新真实Web正常/故障验证，不改批准脚本、原集成报告或禁止目录，不进入Harness。
 
 当前实施：[REQ-0020 测试工作台第一阶段：批准脚本执行闭环](REQ-0020-test-workbench-m1/current_state.md)从批准排序资产建立本地单用户、受控入口、独立 Playwright 进程、持久化结果与中文 Web 闭环；只做工作台集成验证，不修改原脚本/冻结站点/旧结果，不接入模型、Harness 或 healer。

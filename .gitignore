@@ -22,3 +22,8 @@ workbench/.local/
 workbench/node_modules/
 workbench/test-results/
 workbench/playwright-report/
+
+# M2-A DeepSeek Harness探针的隔离配置、会话、模型输出和执行证据。
+harness-probe/.local/
+harness-probe/test-results/
+harness-probe/playwright-report/

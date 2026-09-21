@@ -1,0 +1,37 @@
+{
+  "schema": "deepseek-harness-probe-public-evidence-v1",
+  "baseline": "7b4416ccbb3ee5ebb4a68ea12e2cabc82d349590",
+  "harness": "@deepseek-ai/dsh@0.1.6-alpha.2",
+  "provider": "deepseek-official",
+  "model": "deepseek-v4-pro",
+  "browser_provider": "@deepseek-ai/dsh-experimental-browser-use-playwright-mcp@0.1.6-alpha.2",
+  "attempts": [
+    {
+      "run_id": "probe-2026-09-21T01-28-42-692Z-835e394d",
+      "duration_seconds": 23.73,
+      "harness_exit_code": 0,
+      "turn_end": "completed",
+      "browser_tool_calls": 5,
+      "candidate_sha256": "D2A75193C3F4322379571BFC20771C7017BEDF2F33459E31AEFFBDBE25E5F967",
+      "candidate_generated": true,
+      "initial_candidate_execution": {"exit_code": 1, "test_count": 0, "reason": "absolute Windows path was interpreted as a Playwright file filter"},
+      "offline_recheck_after_adapter_fix": {"exit_code": 0, "test_count": 1, "passed": 1}
+    },
+    {
+      "run_id": "probe-2026-09-21T01-29-47-892Z-8fbcbdbb",
+      "duration_seconds": 23.51,
+      "harness_exit_code": 0,
+      "turn_end": "completed",
+      "browser_tool_calls": 4,
+      "candidate_sha256": "C4C68178C3F79D60B06E8968AE962865A0A6D56A5AD18E12055AB94980C8C600",
+      "candidate_generated": true,
+      "candidate_execution": {"exit_code": 1, "test_count": 1, "passed": 0, "failed": 1, "reason": "generated locator('status') matched an element tag, not the observed accessibility role"}
+    }
+  ],
+  "model_usage": {
+    "attempt_1": {"steps": 7, "input_tokens": 15405, "output_tokens": 1356, "cache_read_tokens": 89600, "reported_total_tokens": 106361},
+    "attempt_2": {"steps": 6, "input_tokens": 15029, "output_tokens": 780, "cache_read_tokens": 72832, "reported_total_tokens": 88641},
+    "currency_cost": "not reported by company gateway"
+  },
+  "conclusion": "B"
+}

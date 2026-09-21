@@ -1,0 +1,68 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0022",
+  "title": "M2-A DeepSeek Harness受控调用可行性探针",
+  "metadata": {"requirement_status":"收口中（结论B）","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "original_input": "从M1基线7b4416cc建立独立分支，安装并以普通程序受控调用DeepSeek官方Harness；在隔离工作目录中通过浏览器工具访问无登录合成页面、产出并执行最小Playwright候选，同时验证启动失败、取消、超时和不完整结果的封闭处理。只做可行性探针，不接正式Web建例页面或Harness后续集成。",
+  "user_requirements": [{
+    "id":"UN-0022-01","status":"已确认",
+    "goal":"以固定版本DeepSeek官方Harness完成一次可审计的程序化浏览器工具调用、候选文件产出及独立执行闭环，并形成A/B/C可行性结论。",
+    "constraints":"仅暴露合成页面与专用输出目录；不使用Claude Code代替，不修改M1批准脚本与历史，不调用建例Web，不自动重试整项任务；真实模型最多初验一次及明确配置修复后复验一次。",
+    "success_criteria":"协调程序能获取进度和终态，Harness实际调用浏览器工具并写出候选，候选在隔离环境执行；失败、取消、缺文件或不完整报告均不得判成功；脱敏代码与报告推送指定新分支。"
+  }],
+  "confirmed_facts": [
+    "基线为7b4416ccbb3ee5ebb4a68ea12e2cabc82d349590，工作分支为codex/test-workbench-m2-probe。",
+    "本机初始只发现Claude Code 2.1.218，未发现DeepSeek Harness命令；用户明确要求安装和使用DeepSeek自己的Harness。",
+    "DeepSeek官方npm包@deepseek-ai/dsh当前alpha标签为0.1.6-alpha.2；官方交互式Browser Use能力同属该实验版本。"
+  ],
+  "inferences_and_open_questions": ["公司现有模型凭据和网关是否与官方DeepSeek适配器兼容，须以不泄露密钥的真实启动结果确认。"],
+  "development_requirements": [
+    {"id":"DR-0022-01","status":"已确认","requirement":"提供固定版本、隔离目录、环境变量白名单、无shell拼接的Harness启动适配器，并记录事件、终态、退出码和文件摘要。","acceptance_criteria":"版本和命令可复现；日志脱敏；输出路径受限；缺文件、非完成终态或候选执行失败均返回非成功。","constraints":"不改用户全局配置，不继承完整process.env，不暴露产品源码、批准脚本、业务数据、会话或历史答案。"},
+    {"id":"DR-0022-02","status":"已确认","requirement":"让Harness通过官方Browser Use工具操作本地合成页面，并在指定目录生成最小Playwright候选。","acceptance_criteria":"事件或工具记录可证明浏览器调用；候选真实存在且断言预期来自任务；独立Playwright执行有结构化报告和退出码。","constraints":"候选仅为探针产物，不登记为批准业务资产。"},
+    {"id":"DR-0022-03","status":"已确认","requirement":"验证启动失败、外层取消/到期、模型中断、缺失产物和报告不完整的封闭行为。","acceptance_criteria":"拥有的进程树被有界终止；无自动重启；各异常均保留原因并判定非成功。","constraints":"工程验证可使用模拟进程，但不得替代真实Harness证据。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0022-01","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"status":"已确认","summary":"新增独立harness-probe子工程，以普通Node协调程序驱动固定版dsh Headless/SDK，并把Harness home、页面、输出和证据全部置于Git忽略目录。","rationale":"最小化对M1及用户全局环境的影响，并让真实调用、工程模拟和候选执行三类证据明确分账。"},
+    {"id":"DD-0022-02","dr_ids":["DR-0022-02"],"status":"已确认","summary":"固定使用DeepSeek官方0.1.6-alpha.2 Browser Use Playwright MCP插件，不以Claude Code或Harness Web聊天界面代替程序接口。","rationale":"0.1.5-rc.2尚无官方交互式浏览器插件；实验版风险单独披露。"}
+  ],
+  "interfaces_and_data_flow": ["Node协调器 -> dsh程序接口 -> DeepSeek模型 -> 官方Browser Use/Playwright MCP -> 127.0.0.1合成页面；Harness文件工具 -> 专用输出目录 -> 协调器校验 -> 独立Playwright执行。"],
+  "module_document_impact": ["本次无需模块文档变更，原因：harness-probe是与现有产品模块隔离的限时可行性探针，其安装、接口、边界和停止结论统一由harness-probe/README.md与PROBE_REPORT.md维护；M1 workbench、src、public、pilot、heldout-lab及批准脚本不修改。"],
+  "risks_and_rollback": [
+    "官方Harness和Browser Use仍为开发预览/实验版本，固定版本可复现但不能承诺兼容后续版本。",
+    "若公司网关协议或凭据不兼容，结论降为B/C并停止，不改Harness核心或连续切换模型版本。",
+    "删除独立子工程和Git忽略的本地目录即可回滚；不触碰用户全局配置。"
+  ],
+  "tasks": [
+    {"id":"TK-0022-01","dr_ids":["DR-0022-01"],"dd_ids":["DD-0022-01","DD-0022-02"],"status":"已完成","task":"核对官方接口，固定并安装DeepSeek Harness和Browser Use依赖，建立隔离配置。","verification_ids":["VT-0022-01"]},
+    {"id":"TK-0022-02","dr_ids":["DR-0022-01","DR-0022-03"],"dd_ids":["DD-0022-01"],"status":"已完成","task":"实现受控协调器、合成站点、候选校验和异常/取消工程测试。","verification_ids":["VT-0022-02"]},
+    {"id":"TK-0022-03","dr_ids":["DR-0022-02"],"dd_ids":["DD-0022-02"],"status":"已完成","task":"在预算内执行真实Harness探针并独立执行其候选。","verification_ids":["VT-0022-03"]},
+    {"id":"TK-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"dd_ids":["DD-0022-01","DD-0022-02"],"status":"进行中","task":"形成脱敏报告、结论与成本记录，检查并推送指定分支。","verification_ids":["VT-0022-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0022-01","dr_ids":["DR-0022-01"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"固定版本安装、版本输出、配置解析和隔离边界检查。","evidence_standard":"真实命令、退出码、版本、配置摘要和路径","current_evidence":{"command":"npm run setup:harness；dsh --version；dsh --profile headless --patch config/browser.cordis.yml --help","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"harness-probe/PROBE_REPORT.md"}},
+    {"id":"VT-0022-02","dr_ids":["DR-0022-01","DR-0022-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"启动失败、取消、超时、模型中断、缺文件、不完整报告、无自动重启和日志脱敏工程测试。","evidence_standard":"真实测试命令、退出码、用例数和脱敏日志","current_evidence":{"command":"cd harness-probe && npm test","exit_code":0,"test_count":12,"failure_count":0,"skipped_count":0,"log_path":"harness-probe/PROBE_REPORT.md"}},
+    {"id":"VT-0022-03","dr_ids":["DR-0022-02"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"真实Harness浏览器交互、候选产出及候选Playwright执行。","evidence_standard":"Harness事件/终态、文件哈希、Playwright结构化报告和退出码","current_evidence":{"command":"cd harness-probe && npm run probe（初验一次、集中修复后复验一次）","exit_code":1,"test_count":1,"failure_count":1,"skipped_count":0,"log_path":"harness-probe/evidence/attempt-summary.json（初验为0测试，复验为1测试1失败）"}},
+    {"id":"VT-0022-04","dr_ids":["DR-0022-01","DR-0022-02","DR-0022-03"],"confirmation_status":"已确认","execution_status":"未运行","item":"敏感信息/本地产物检查，Git提交、推送和远端SHA核对。","evidence_standard":"提交清单、扫描命令、local HEAD与remote SHA","current_evidence":"待提交与远端核对"}
+  ],
+  "verification_environment": {
+    "working_directory":"D:/01_AI工程/01_工程项目/ui-test-agent-workbench-m2-probe/harness-probe",
+    "commands":["npm test","npm run probe","npm run verify:candidate"],
+    "environment":["Windows PowerShell，Node.js v22.19.0，npm 10.9.3。","DeepSeek Harness @deepseek-ai/dsh 0.1.6-alpha.2及同版Browser Use插件，独立DSH_HOME。"],
+    "conclusion":["结论B：程序化Harness、浏览器工具和文件产出已真实验证；集中修复后候选独立执行1项失败，未满足进入最小工作台集成的完整门槛。"]
+  },
+  "trace_current": [
+    {"un_id":"UN-0022-01","dr_id":"DR-0022-01","dd_id":"DD-0022-01","tk_id":"TK-0022-01","vt_id":"VT-0022-01","status":"已验证"},
+    {"un_id":"UN-0022-01","dr_id":"DR-0022-03","dd_id":"DD-0022-01","tk_id":"TK-0022-02","vt_id":"VT-0022-02","status":"已验证"},
+    {"un_id":"UN-0022-01","dr_id":"DR-0022-02","dd_id":"DD-0022-02","tk_id":"TK-0022-03","vt_id":"VT-0022-03","status":"已验证未通过完整闭环"},
+    {"un_id":"UN-0022-01","dr_id":"DR-0022-01","dd_id":"DD-0022-01","tk_id":"TK-0022-04","vt_id":"VT-0022-04","status":"进行中"}
+  ],
+  "trace_history": [{"version":1,"link":"无","status":"实施中","notes":"建立M2-A独立探针需求包"},{"version":2,"link":"harness-probe/PROBE_REPORT.md","status":"结论B，待Git收口","notes":"两次真实Harness调用均完成浏览器交互和文件产出；复验候选独立执行1项失败，按预算停止"}],
+  "open_questions": ["公司批准DeepSeek端点是否支持官方Harness当前协议，由首次真实初始化结果确认，不预设成功。"],
+  "prohibited_implementation": [
+    "不得使用Claude Code、Harness聊天页面自动点击或Codex手写候选冒充Harness能力。",
+    "不得修改M1批准业务脚本、历史结果、src/public/pilot/heldout-lab或用户全局模型/Harness配置。",
+    "不得为探针临时建设大型安全平台、修改Harness核心、连续切换多个版本/模型或自动重启失败任务。",
+    "不得提交密钥、Cookie、原始私有会话、本地媒体或完整敏感环境变量。"
+  ],
+  "changes": [{"date":"2026-09-21","version":1,"type":"新建","description":"创建DeepSeek Harness程序化调用与浏览器工具最小探针需求包","impact":"独立harness-probe子工程","confirmed_by":"用户当前任务"},{"date":"2026-09-21","version":2,"type":"验证收口","description":"完成两次预算内真实调用、工程故障验证并形成结论B；等待Git远端核对","impact":"独立harness-probe子工程","confirmed_by":"实际执行证据"}]
+}
