@@ -4,7 +4,11 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { BuildTaskManager } from '../server/build/manager.mjs';
-import { BuildTaskStore, M2C_REVALIDATION_AUTHORIZATION_ID } from '../server/build/store.mjs';
+import {
+  BuildTaskStore,
+  M2C_REVALIDATION_AUTHORIZATION_ID,
+  M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID,
+} from '../server/build/store.mjs';
 import { createPaths } from '../server/paths.mjs';
 
 function playwrightReport(status, error = null) {
@@ -171,4 +175,34 @@ test('单次复验授权只在Harness进程启动事件时消耗且不改旧预�
     assert.equal((await store.getRevalidationAuthorization()).claims[0].trigger, 'harness_process_spawn');
     await assert.rejects(() => manager.submit('synthetic-probe-v1'), /BUILD_REVALIDATION_AUTHORIZATION_UNAVAILABLE/);
   } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
+});
+
+test('终态等待修复验证使用独立固定授权文件且不改旧授权', async () => {
+  const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'build-manager-wait-fix-authorization-'));
+  const paths = createPaths({ localRoot });
+  const historicalStore = new BuildTaskStore(paths.buildTasksRoot); await historicalStore.init();
+  await historicalStore.claimStart('build-old-12345678', 'attempt-01-initial', '2026-09-21T00:00:00Z');
+  await historicalStore.registerRevalidationAuthorization({
+    schema: 'workbench/build-revalidation-authorization-v1', authorization_id: M2C_REVALIDATION_AUTHORIZATION_ID,
+    kind: 'initial', max_starts: 1, used_starts: 0, claims: [], linked_stage: { phase: 'M2-C', historical_used_starts: 1, historical_max_starts: 2 },
+  });
+  await historicalStore.claimRevalidationStart(
+    M2C_REVALIDATION_AUTHORIZATION_ID, 'build-cancelled-12345678', 'attempt-01-initial', '2026-09-21T00:01:00Z',
+  );
+  const store = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID });
+  await store.init();
+  await store.registerRevalidationAuthorization({
+    schema: 'workbench/build-revalidation-authorization-v1', authorization_id: M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID,
+    kind: 'initial', max_starts: 1, used_starts: 0, claims: [], linked_stage: { phase: 'M2-C', historical_used_starts: 1, historical_max_starts: 2 },
+  });
+  try {
+    assert.equal((await historicalStore.getRevalidationAuthorization()).used_starts, 1);
+    assert.equal((await store.getRevalidationAuthorization()).used_starts, 0);
+    await store.claimRevalidationStart(
+      M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'build-wait-fix-12345678', 'attempt-01-initial', '2026-09-21T00:02:00Z',
+    );
+    assert.equal((await store.getRevalidationAuthorization()).used_starts, 1);
+    assert.equal((await historicalStore.getRevalidationAuthorization()).claims[0].task_id, 'build-cancelled-12345678');
+    assert.equal((await historicalStore.getBudget()).used_starts, 1);
+  } finally { await fs.rm(localRoot, { recursive: true, force: true }); }
 });

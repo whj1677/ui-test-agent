@@ -4,7 +4,11 @@ import path from 'node:path';
 import { chromium } from '@playwright/test';
 import { createWorkbenchServer } from '../server/app.mjs';
 import { BuildTaskManager } from '../server/build/manager.mjs';
-import { BuildTaskStore, M2C_REVALIDATION_AUTHORIZATION_ID } from '../server/build/store.mjs';
+import {
+  BuildTaskStore,
+  M2C_REVALIDATION_AUTHORIZATION_ID,
+  M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID,
+} from '../server/build/store.mjs';
 import { createPaths } from '../server/paths.mjs';
 import { WorkbenchStore } from '../server/store.mjs';
 import { waitForAuthorizedTask, waitForTerminal } from './support/revalidation-driver.mjs';
@@ -12,12 +16,12 @@ import { waitForAuthorizedTask, waitForTerminal } from './support/revalidation-d
 const localRoot = path.resolve(process.env.M2C_ACCEPTANCE_ROOT || path.join(process.cwd(), '.local', 'm2c-acceptance'));
 const authorizationId = process.env.M2C_BUILD_AUTHORIZATION_ID;
 const paths = createPaths({ localRoot });
-const evidenceRoot = path.join(localRoot, 'evidence', 'm2c-revalidation');
-const screenshot = path.join(evidenceRoot, 'm2c-revalidation-web.png');
-const summaryFile = path.join(evidenceRoot, 'm2c-revalidation-summary.json');
+const evidenceRoot = path.join(localRoot, 'evidence', 'm2c-wait-fix-validation');
+const screenshot = path.join(evidenceRoot, 'm2c-wait-fix-validation-web.png');
+const summaryFile = path.join(evidenceRoot, 'm2c-wait-fix-validation-summary.json');
 await fs.mkdir(evidenceRoot, { recursive: true });
 
-if (authorizationId !== M2C_REVALIDATION_AUTHORIZATION_ID) throw new Error('M2C_REVALIDATION_AUTHORIZATION_REQUIRED');
+if (authorizationId !== M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID) throw new Error('M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_REQUIRED');
 
 async function assertLockedRuntime() {
   const required = ['DEEPSEEK_API_KEY', 'DEEPSEEK_BASE_URL', 'DSH_PROBE_BROWSER_EXECUTABLE'];
@@ -42,7 +46,7 @@ async function assertLockedRuntime() {
 
 async function makeRuntime() {
   const store = new WorkbenchStore(paths.dataRoot); await store.init();
-  const buildStore = new BuildTaskStore(paths.buildTasksRoot); await buildStore.init();
+  const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId }); await buildStore.init();
   await buildStore.recoverInterrupted();
   const manager = { active: null };
   const buildManager = new BuildTaskManager({
@@ -70,10 +74,15 @@ const startedAt = new Date().toISOString();
 try {
   const oldBudget = await runtime.buildStore.getBudget();
   const authorization = await runtime.buildStore.getRevalidationAuthorization();
-  const oldTask = await runtime.buildStore.getTask('build-20260921030548-a1bf1358');
+  const interruptedTask = await runtime.buildStore.getTask('build-20260921030548-a1bf1358');
+  const cancelledTask = await runtime.buildStore.getTask('build-20260921041411-12b52a7b');
+  const historicalStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: M2C_REVALIDATION_AUTHORIZATION_ID });
+  const previousAuthorization = await historicalStore.getRevalidationAuthorization();
   assert.equal(oldBudget.used_starts, 1);
-  assert.equal(oldTask.task_status, 'INTERRUPTED');
-  assert.equal(oldTask.error.code, 'SERVICE_RESTARTED');
+  assert.equal(interruptedTask.task_status, 'INTERRUPTED');
+  assert.equal(interruptedTask.error.code, 'SERVICE_RESTARTED');
+  assert.equal(cancelledTask.task_status, 'CANCELLED');
+  assert.equal(previousAuthorization.used_starts, 1);
   assert.equal(authorization.authorization_id, authorizationId);
   assert.equal(authorization.used_starts, 0);
   assert.equal(runtime.buildManager.active, null);
@@ -131,7 +140,7 @@ const candidate = task.candidates.at(-1) || null;
 const authorization = await runtime.buildStore.getRevalidationAuthorization();
 const lifecycle = await runtime.buildStore.lifecycleSummary(task.task_id, 'attempt-01-initial');
 const summary = {
-  schema: 'workbench/m2c-revalidation-summary-v1',
+  schema: 'workbench/m2c-wait-fix-validation-summary-v1',
   started_at: startedAt,
   finished_at: new Date().toISOString(),
   authorization: {

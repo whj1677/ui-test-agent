@@ -16,7 +16,7 @@ const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
 const recovered = await store.recoverInterrupted();
 const manager = new WorkbenchRunManager({ store, paths });
-const buildStore = new BuildTaskStore(paths.buildTasksRoot);
+const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: process.env.M2C_BUILD_AUTHORIZATION_ID });
 await buildStore.init();
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
 const buildManager = new BuildTaskManager({

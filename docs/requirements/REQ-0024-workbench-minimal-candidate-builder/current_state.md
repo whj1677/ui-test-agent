@@ -5,9 +5,9 @@
 
 ## 元数据
 
-- 需求状态：部分实现-单次复验C类收口
+- 需求状态：部分实现-真实候选验证失败
 - 治理分级：G2
-- 当前版本：5
+- 当前版本：6
 - 最后更新：2026-09-21
 
 ## 当前有效用户需求
@@ -50,10 +50,10 @@
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
-| VT-0024-01 | DR-0024-01 / DR-0024-02 | 集成测试通过 | 存储、跨任务阶段预算、重复启动、取消和重启恢复。 | 命令：npm test --prefix workbench；退出码：0；测试数量：41；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/workbench-tests.log |
-| VT-0024-02 | DR-0024-02 / DR-0024-03 / DR-0024-04 | 集成测试通过 | Harness终态、候选/工具/报告登记、通用报告解析和显式修订。 | 命令：npm test --prefix harness-probe；退出码：0；测试数量：24；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/harness-probe-tests.log |
+| VT-0024-01 | DR-0024-01 / DR-0024-02 | 集成测试通过 | 存储、跨任务阶段预算、重复启动、取消和重启恢复。 | 命令：npm test --prefix workbench；退出码：0；测试数量：42；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/wait-fix-validation-tests.log |
+| VT-0024-02 | DR-0024-02 / DR-0024-03 / DR-0024-04 | 集成测试通过 | Harness终态、候选/工具/报告登记、通用报告解析和显式修订。 | 命令：npm test --prefix harness-probe；退出码：0；测试数量：24；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0024-workbench-minimal-candidate-builder/logs/wait-fix-validation-tests.log |
 | VT-0024-03 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 | 人工待确认 | 真实浏览器中的固定任务提交、状态、候选、错误、文件和按钮行为。 | npm run test:browser与npm run test:build-browser均退出0；零模型重启读回显示新任务CANCELLED、授权1/1和无候选，公开截图见workbench/docs/evidence/m2c-revalidation-cancelled.png。 |
-| VT-0024-04 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 | 无法运行 | 真实Web-Harness-候选-正常/反例集成、资产不变和远端SHA。 | 单次复验任务build-20260921041411-12b52a7b启动Harness后被复验驱动清理取消；生命周期完整、授权1/1、候选不存在、正常/反例未运行。此处“无法运行”仅指候选后续双验证未具备输入，真实启动和取消事实见workbench/docs/M2C_REVALIDATION_REPORT.md。 |
+| VT-0024-04 | DR-0024-01 / DR-0024-02 / DR-0024-03 / DR-0024-04 | 无法运行 | 真实Web-Harness-候选-正常/反例集成、资产不变和远端SHA。 | 终态等待修复后的任务build-20260921060716-ae44c3f2经真实Web启动，Harness以7次工具调用生成候选；正常与反例报告均完整但目标测试数为0，原始报告显示harness-probe与workbench的Playwright Test实例重复加载。此处无法运行仅指两次目标测试均未被Playwright执行；授权1/1耗尽，无修订或替补启动。见workbench/docs/M2C_WAIT_FIX_VALIDATION_REPORT.md。 |
 | VT-0024-05 | DR-0024-05 | 集成测试通过 | 真实外部假子进程的逐事件记录、异常退出、无换行与截断末行、取消/到期/额度、存储故障和协调进程终止后恢复。 | harness-probe 24/24、workbench 38/38，均退出0；未运行build-real.integration.mjs。 |
 
 ## 人工待确认项

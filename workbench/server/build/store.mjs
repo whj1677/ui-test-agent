@@ -6,6 +6,11 @@ import { resolveInside } from '../integrity.mjs';
 const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANCELLING']);
 const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
 export const M2C_REVALIDATION_AUTHORIZATION_ID = 'm2c-diagnostic-revalidation-20260921';
+export const M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID = 'm2c-wait-fix-validation-20260921';
+const AUTHORIZATION_FILES = new Map([
+  [M2C_REVALIDATION_AUTHORIZATION_ID, 'revalidation-authorization.json'],
+  [M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'wait-fix-validation-authorization.json'],
+]);
 
 async function readJson(file, fallback) {
   try { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -39,7 +44,10 @@ export class BuildTaskStore {
   constructor(root, options = {}) {
     this.root = path.resolve(root);
     this.budgetFile = path.join(this.root, 'stage-budget.json');
-    this.revalidationAuthorizationFile = path.join(this.root, 'revalidation-authorization.json');
+    this.authorizationId = options.authorizationId || M2C_REVALIDATION_AUTHORIZATION_ID;
+    const authorizationFile = AUTHORIZATION_FILES.get(this.authorizationId);
+    if (!authorizationFile) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+    this.revalidationAuthorizationFile = path.join(this.root, authorizationFile);
     this.io = options.io || fs;
     this.appendFile = options.appendFile || this.io.appendFile.bind(this.io);
   }
@@ -153,7 +161,7 @@ export class BuildTaskStore {
     const record = await readJson(this.revalidationAuthorizationFile, null);
     if (!record) return null;
     if (record.schema !== 'workbench/build-revalidation-authorization-v1' ||
-        record.authorization_id !== M2C_REVALIDATION_AUTHORIZATION_ID ||
+        record.authorization_id !== this.authorizationId ||
         record.kind !== 'initial' || record.max_starts !== 1 ||
         !Number.isInteger(record.used_starts) || record.used_starts < 0 || record.used_starts > 1 ||
         !Array.isArray(record.claims)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
@@ -171,7 +179,7 @@ export class BuildTaskStore {
       if (budget.phase !== 'M2-C' || budget.used_starts !== 1 || budget.claims.length !== 1) {
         throw new Error('BUILD_REVALIDATION_BASELINE_MISMATCH');
       }
-      if (record.authorization_id !== M2C_REVALIDATION_AUTHORIZATION_ID || record.kind !== 'initial' || record.max_starts !== 1 || record.used_starts !== 0) {
+      if (record.authorization_id !== this.authorizationId || record.kind !== 'initial' || record.max_starts !== 1 || record.used_starts !== 0) {
         throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
       }
       await writeJsonAtomic(this.revalidationAuthorizationFile, record, this.io);
@@ -182,7 +190,7 @@ export class BuildTaskStore {
   async claimRevalidationStart(authorizationId, taskId, attemptId, now) {
     return this.serial(async () => {
       const authorization = await readJson(this.revalidationAuthorizationFile);
-      if (authorization.authorization_id !== authorizationId || authorization.kind !== 'initial' || authorization.max_starts !== 1) {
+      if (authorizationId !== this.authorizationId || authorization.authorization_id !== authorizationId || authorization.kind !== 'initial' || authorization.max_starts !== 1) {
         throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
       }
       if (authorization.claims.some((claim) => claim.task_id === taskId && claim.attempt_id === attemptId)) return structuredClone(authorization);

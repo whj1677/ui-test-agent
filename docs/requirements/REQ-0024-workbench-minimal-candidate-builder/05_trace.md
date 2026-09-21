@@ -22,3 +22,4 @@
 | 3 | workbench/docs/M2C_INTERRUPTION_DIAGNOSTIC.md | 部分实现-中断诊断已补齐 | 不改写历史中断；增加事件时生命周期、exit/close收尾、存储失败关闭和零模型外部进程验证。 |
 | 4 | workbench/docs/M2C_REVALIDATION_REPORT.md | 部分实现-单次复验C类收口 | 独立授权1/1已消耗；真实新任务因复验驱动误判旧历史终态而被取消，无候选和双验证；修复后不重跑。 |
 | 5 | workbench/docs/M2C_REVALIDATION_WAIT_TEST_REVISION.md | 部分实现-单次复验C类收口 | 只补准终态等待测试：直接观察pending并用旧任意历史扫描逻辑作预期失败对照；未调用Harness。 |
+| 6 | workbench/docs/M2C_WAIT_FIX_VALIDATION_REPORT.md | 部分实现-真实候选验证失败 | 新独立授权完成真实Web提交与Harness候选生成；正常和反例均因Playwright Test双实例重复加载而零测试，无媒体、修订或替补调用。 |
