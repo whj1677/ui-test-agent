@@ -1,4 +1,7 @@
-const state = { assets: [], runs: [], selectedRunId: null, activeRunId: null };
+const state = {
+  assets: [], runs: [], selectedRunId: null, activeRunId: null,
+  selectedEnvironmentId: null,
+};
 const byId = (id) => document.getElementById(id);
 
 function setText(id, value) { byId(id).textContent = value ?? '—'; }
@@ -18,11 +21,15 @@ async function api(path, options) {
 
 function renderAsset() {
   const asset = state.assets[0];
+  const environmentSelect = byId('environment-select');
   setText('asset-count', state.assets.length);
   byId('asset-empty').classList.toggle('hidden', Boolean(asset));
   byId('asset-card').classList.toggle('hidden', !asset);
-  clear(byId('environment-select'));
-  if (!asset) return;
+  clear(environmentSelect);
+  if (!asset) {
+    state.selectedEnvironmentId = null;
+    return;
+  }
   setText('asset-title', asset.title);
   setText('asset-version', `${asset.asset_id} · ${asset.version}`);
   setText('asset-case', `${asset.case_id} / ${asset.case_version}`);
@@ -30,11 +37,16 @@ function renderAsset() {
   setText('asset-sha', asset.script.sha256);
   setText('asset-approval', asset.approval_status);
   setText('asset-playwright', `${asset.dependency_lock.playwright_test} · workers=1 · retries=0`);
+  const allowedEnvironmentIds = new Set(asset.allowed_environments.map((environment) => environment.id));
+  if (!allowedEnvironmentIds.has(state.selectedEnvironmentId)) {
+    state.selectedEnvironmentId = asset.allowed_environments[0]?.id ?? null;
+  }
   for (const environment of asset.allowed_environments) {
     const option = make('option', `${environment.label} · ${environment.entry_url}`);
     option.value = environment.id;
-    byId('environment-select').append(option);
+    environmentSelect.append(option);
   }
+  if (state.selectedEnvironmentId) environmentSelect.value = state.selectedEnvironmentId;
 }
 
 function renderControls() {
@@ -113,11 +125,15 @@ async function refresh() {
   } catch (error) { setText('service-status', '连接失败'); setText('action-message', error.message); }
 }
 
+byId('environment-select').addEventListener('change', (event) => {
+  state.selectedEnvironmentId = event.currentTarget.value;
+});
+
 byId('run-button').addEventListener('click', async () => {
   const asset = state.assets[0]; if (!asset) return;
   byId('run-button').disabled = true; setText('action-message', '正在启动真实 Playwright 进程…');
   try {
-    const run = await api('/api/runs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ asset_id: asset.asset_id, environment: byId('environment-select').value }) });
+    const run = await api('/api/runs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ asset_id: asset.asset_id, environment: state.selectedEnvironmentId }) });
     state.selectedRunId = run.run_id; setText('action-message', `已启动 ${run.run_id}`); await refresh();
   } catch (error) { setText('action-message', `启动被拒绝：${error.message}`); await refresh(); }
 });

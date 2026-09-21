@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, test } from 'node:test';
-import { analyzeRunArtifacts } from '../server/report.mjs';
+import { analyzeRunArtifacts, reportInternals } from '../server/report.mjs';
 
 const roots = [];
 const registeredSteps = ['S01', 'S02', 'S03', 'S04'].map((step_id) => ({ step_id, action: `action ${step_id}`, expected: `expected ${step_id}` }));
@@ -79,4 +79,50 @@ test('exit code zero cannot override an incomplete step set', async () => {
   assert.equal(result.test_status, 'PASSED');
   assert.equal(result.summary.complete_pass, false);
   assert.equal(result.steps[3].status, 'NOT_EXECUTED');
+});
+
+test('a passing Playwright report cannot override a non-normal execution terminal state', async () => {
+  for (const executionStatus of ['INTEGRITY_FAILED', 'CANCELLED', 'INTERRUPTED', 'PROCESS_ERROR', 'START_FAILED']) {
+    const files = await fixture(reportWith('passed', registeredSteps.map(({ step_id }) => ({ title: step_id }))));
+    const result = await analyzeRunArtifacts({ ...files, registeredSteps, exitCode: 0, executionStatus });
+    assert.equal(result.test_status, 'PASSED');
+    assert.equal(result.summary.playwright_status, 'passed');
+    assert.equal(result.summary.playwright_pass, true);
+    assert.equal(result.summary.complete_pass, false, executionStatus);
+  }
+});
+
+test('error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches', () => {
+  const missing = reportInternals.errorFacts({
+    message: 'Error: expect(locator).toHaveText(expected)\nExpected: "H111"\nError: element(s) not found\nCall log: waiting for getByRole("cell")',
+  });
+  assert.equal(missing.type, 'LOCATOR_OR_TARGET');
+  assert.equal(missing.expected, 'H111');
+  assert.equal(missing.actual, null);
+
+  const strict = reportInternals.errorFacts({
+    message: 'Error: strict mode violation: getByText("H111") resolved to 2 elements\nexpect(locator).toBeVisible()',
+  });
+  assert.equal(strict.type, 'LOCATOR_OR_TARGET');
+  assert.equal(strict.actual, null);
+
+  const unavailable = reportInternals.errorFacts({
+    message: 'Error: expect(locator).toHaveText(expected)\nTimed out 5000ms\nExpected: "H111"\nReceived: <value unavailable>',
+  });
+  assert.equal(unavailable.type, 'ASSERTION_UNRESOLVED');
+  assert.equal(unavailable.expected, 'H111');
+  assert.equal(unavailable.actual, null);
+  assert.equal(unavailable.attribution, 'PENDING_ANALYSIS');
+
+  const compared = reportInternals.errorFacts({
+    message: 'Error: expect(locator).toHaveText(expected)\nTimed out 5000ms\nExpected: "H111"\nReceived: "H106"',
+  });
+  assert.equal(compared.type, 'ASSERTION_MISMATCH');
+  assert.equal(compared.expected, 'H111');
+  assert.equal(compared.actual, 'H106');
+
+  const timeout = reportInternals.errorFacts({ message: 'TimeoutError: page.click: Timeout 5000ms exceeded' });
+  assert.equal(timeout.type, 'TIMEOUT');
+  assert.equal(timeout.expected, null);
+  assert.equal(timeout.actual, null);
 });

@@ -16,10 +16,12 @@ const asset = await buildApprovedAsset(paths, { registeredAt: '2026-09-20T00:00:
 await store.registerAsset(asset);
 
 const runId = 'run-web-12345678';
+let requestedEnvironmentId = null;
 const manager = {
   active: null,
   async start(assetId, environmentId) {
     assert.equal(assetId, asset.asset_id);
+    requestedEnvironmentId = environmentId;
     const environment = asset.allowed_environments.find((item) => item.id === environmentId);
     const run = {
       schema: 'approved-workbench/run-v1', run_id: runId, asset_id: asset.asset_id, asset_version: asset.version,
@@ -59,15 +61,26 @@ page.on('console', (message) => { if (message.type() === 'error') consoleErrors.
 try {
   await page.goto(baseUrl);
   await page.getByTestId('asset-card').waitFor();
-  await page.getByTestId('environment-select').selectOption('normal');
+  await page.getByTestId('environment-select').selectOption('fault');
+  await page.waitForTimeout(2300);
+  assert.equal(await page.getByTestId('environment-select').inputValue(), 'fault');
   await page.getByTestId('run-button').click();
   await page.getByTestId('history').locator(`button[data-run-id="${runId}"]`).waitFor();
   await page.getByTestId('run-detail').waitFor();
   assert.match(await page.getByTestId('run-detail').innerText(), /RUNNING/);
+  assert.equal(requestedEnvironmentId, 'fault');
+  assert.match(await page.getByTestId('run-detail').innerText(), /\/probe\/s2/);
+  assert.equal(await page.getByTestId('environment-select').isDisabled(), true);
+  assert.equal(await page.getByTestId('run-button').isDisabled(), true);
   assert.equal(await page.locator('#injected').count(), 0);
   assert.match(await page.locator('#error').innerText(), /<img id=\\"injected\\"/);
   await page.getByTestId('stop-button').click();
   await page.getByText('CANCELLED', { exact: true }).first().waitFor();
+  assert.equal(await page.getByTestId('environment-select').isEnabled(), true);
+  await page.getByTestId('environment-select').selectOption('normal');
+  await page.waitForTimeout(1100);
+  assert.equal(await page.getByTestId('environment-select').inputValue(), 'normal');
+  assert.equal(await page.getByTestId('history').locator(`button[data-run-id="${runId}"]`).count(), 1);
   const screenshot = path.join(paths.workbenchRoot, 'test-results', 'workbench-browser-smoke.png');
   await fs.mkdir(path.dirname(screenshot), { recursive: true });
   await page.screenshot({ path: screenshot, fullPage: true });

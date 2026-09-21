@@ -1,0 +1,75 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0021",
+  "title": "工作台M1代码复审问题集中修复",
+  "metadata": {"requirement_status":"三项修复及真实Web验证完成","governance_level":"G2","version":2,"last_updated":"2026-09-21"},
+  "original_input": "基于codex/test-workbench-m1已审查HEAD集中修复三项：Web入口选择不得被轮询重置；完整性异常等非正常终态不得整体complete_pass；errorFacts不得把未取得实际值的expect类错误误判为值不符。先复现后修改，补工程测试和新复审记录，再从真实Web各执行一次正常/故障组合并推送同一开发分支。",
+  "user_requirements": [{
+    "id":"UN-0021-01","status":"已确认",
+    "goal":"集中修复工作台M1代码复审发现的入口选择、整体有效通过和错误事实分类三个问题，并以新的工程与真实Web证据收口。",
+    "constraints":"不接Harness、不调用建例模型、不修改批准业务脚本；不改写原集成报告；不修改src/public/pilot/heldout-lab；不扩大业务范围。",
+    "success_criteria":"修前问题可复现；修后fault选择跨至少两次轮询保持且启动记录一致；非正常终态整体不通过但原始Playwright事实保留；错误分类反例正确；新Web正常/故障组合、工程测试、资产哈希和GitHub同步均有证据。"
+  }],
+  "confirmed_facts": [
+    "已审查版本、本地HEAD与远端codex/test-workbench-m1均为edc0888999e0c1fc7d678398beb0e7f5de427a5e。",
+    "批准脚本pilot/revision-s02/tests/sorting.spec.ts当前SHA-256为280A787546AABDD87570838932663A5DC254AEE5E0C329BE3A13294E9A18079A。",
+    "原REQ-0020及workbench/docs/ACCEPTANCE_REPORT.md作为M1原集成事实保留，本轮另建复审修复记录。"
+  ],
+  "inferences_and_open_questions": ["无阻塞未知项；三项预期、真实Web组合和停止点已由用户明确。"],
+  "development_requirements": [
+    {"id":"DR-0021-01","status":"已确认","requirement":"前端以明确状态保存环境选择，周期刷新不得重置，启动请求必须使用该状态；正常入口、活动运行禁用和历史查看保持。","acceptance_criteria":"选择fault后等待至少两次1秒轮询仍为fault，点击启动的请求参数与新运行记录环境均为fault。","constraints":"不增加前端框架或静态伪运行数据。"},
+    {"id":"DR-0021-02","status":"已确认","requirement":"区分原始Playwright测试事实与整体有效通过，完整性失败、取消、中断、进程异常、报告异常均不得complete_pass=true。","acceptance_criteria":"正常通过保持true；INTEGRITY_FAILED等非正常终态在原报告passed时仍为false并保留playwright_status、测试状态和错误事实。","constraints":"使用临时夹具或模拟报告，不篡改批准脚本。"},
+    {"id":"DR-0021-03","status":"已确认","requirement":"errorFacts仅在同时取得明确期望值和实际值时分类为ASSERTION_MISMATCH；缺元素、严格匹配冲突和未取得实际值须保留可核对的技术类型或待分析事实。","acceptance_criteria":"补齐缺元素、严格匹配冲突、未取得实际值及H111/H106值比较反例；不把所有超时归为同一技术错误，不使用模型补判。","constraints":"保留原消息、期望/实际字段和PENDING_ANALYSIS归因。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0021-01","dr_ids":["DR-0021-01"],"status":"已确认","summary":"在现有state中增加selectedEnvironmentId，由change事件更新；render只按允许环境校准并恢复选择，启动读取状态。","rationale":"最小改动消除DOM重建导致的选择丢失，同时保持后端允许列表为事实源。"},
+    {"id":"DD-0021-02","dr_ids":["DR-0021-02"],"status":"已确认","summary":"完整通过只允许PROCESS_ENDED正常终态，并继续叠加退出码、报告统计、目标步骤和跳过条件。","rationale":"以明确允许条件替代仅排除CANCELLED，避免新增异常终态漏网。"},
+    {"id":"DD-0021-03","dr_ids":["DR-0021-03"],"status":"已确认","summary":"错误分类优先识别严格匹配、定位目标和等待期限事实，只有成对解析出Expected与Received具体值才认定ASSERTION_MISMATCH。","rationale":"消息出现expect并不证明已取得实际值；保持确定事实与待分析归因分离。"}
+  ],
+  "interfaces_and_data_flow": [
+    "Web轮询更新资产/运行事实，但selectedEnvironmentId由用户change事件拥有；POST /api/runs只发送登记asset_id与该选择。",
+    "executor把终态传入report分析；report同时输出原始test_status/playwright_status与受整体终态约束的summary.complete_pass。",
+    "Playwright原错误消息经确定性errorFacts解析为类型、expected、actual与PENDING_ANALYSIS，不调用模型。"
+  ],
+  "module_document_impact": ["更新docs/modules/test-workbench.md的前端选择状态、整体有效通过和错误事实分类约束；新增workbench/docs/REVIEW_FIX_REPORT.md，不改原ACCEPTANCE_REPORT.md。"],
+  "risks_and_rollback": [
+    "前端状态与资产允许环境不一致时应回退到首个允许项，禁止发送失效值。",
+    "错误文本格式存在版本差异；无法成对取得值时宁可保持定位/超时/TEST_ERROR与PENDING_ANALYSIS，不夸大为值不符。",
+    "真实Web验证只运行一组新normal/fault；若实现缺陷则集中修复后最多重做该组合，不无改动碰运气。"
+  ],
+  "tasks": [
+    {"id":"TK-0021-01","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"dd_ids":["DD-0021-01","DD-0021-02","DD-0021-03"],"status":"已完成","task":"建立修前可失败的前端轮询、非正常终态和错误分类回归证据。","verification_ids":["VT-0021-01"]},
+    {"id":"TK-0021-02","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"dd_ids":["DD-0021-01","DD-0021-02","DD-0021-03"],"status":"已完成","task":"集中修改前端选择状态、整体通过条件和确定性错误分类，并更新必要文档。","verification_ids":["VT-0021-02"]},
+    {"id":"TK-0021-03","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"dd_ids":["DD-0021-01","DD-0021-02","DD-0021-03"],"status":"已完成","task":"完成工程测试及新的真实Web正常/故障组合，核对三方事实和批准资产未变。","verification_ids":["VT-0021-03"]},
+    {"id":"TK-0021-04","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"dd_ids":["DD-0021-01","DD-0021-02","DD-0021-03"],"status":"已完成","task":"形成独立复审修复报告，完成正式门禁、内容检查、提交和同分支推送。","verification_ids":["VT-0021-04"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0021-01","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"修前回归应分别暴露fault选择被刷新为normal、INTEGRITY_FAILED仍complete_pass、expect类未取值误判；该项只保留问题复现，不作为修后通过证据。","evidence_standard":"新复审报告记录原命令、退出码和断言，不以代码阅读替代复现。","current_evidence":"修前实际输出与三项断言见workbench/docs/REVIEW_FIX_REPORT.md#修前复现。"},
+    {"id":"VT-0021-02","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"修后定向与完整工程测试覆盖三项修复及正常/指定错序/缺报告/未执行步骤原语义。","evidence_standard":"命令、退出码、测试统计及浏览器操作证据。","current_evidence":{"command":"npm --prefix workbench test；npm --prefix workbench run test:browser","exit_code":0,"test_count":22,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/REVIEW_FIX_REPORT.md#修后工程验证"}},
+    {"id":"VT-0021-03","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"从真实Web各运行一次新normal/fault；fault选择跨两次轮询，核对入口、步骤、原始错误、整体状态和未执行项。","evidence_standard":"新run_id、run.json、report.json、Web截图和哈希对应；旧运行不替代。","current_evidence":{"command":"npm --prefix workbench run test:real","exit_code":0,"test_count":2,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/REVIEW_FIX_REPORT.md#新的真实-web-组合"}},
+    {"id":"VT-0021-04","dr_ids":["DR-0021-01","DR-0021-02","DR-0021-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"批准脚本及禁止目录不变，私有运行材料未提交，本地HEAD与远端同分支SHA一致。","evidence_standard":"哈希、git diff/status、敏感扫描、提交与ls-remote。","current_evidence":{"command":"Get-FileHash；git diff/status；git ls-remote","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"workbench/docs/REVIEW_FIX_REPORT.md#资产与停止点"}}
+  ],
+  "verification_environment": {
+    "working_directory":"隔离工作树D:/01_AI工程/01_工程项目/ui-test-agent-workbench-m1，分支codex/test-workbench-m1。",
+    "commands":["npm --prefix workbench test","npm --prefix workbench run test:browser","新的真实Web正常/故障组合脚本","python scripts/sync_requirement_status.py、collect_delivery_evidence.py、check_ai_context.py"],
+    "environment":["Windows PowerShell，Node.js 22，锁定@playwright/test 1.62.1，127.0.0.1本地端口。"],
+    "conclusion":["三项问题修前均复现；修后21项Node测试和1项真实Chromium工作台流通过；新normal/fault组合一次完成，原资产未变。"]
+  },
+  "trace_current": [
+    {"un_id":"UN-0021-01","dr_id":"DR-0021-01","dd_id":"DD-0021-01","tk_id":"TK-0021-01","vt_id":"VT-0021-01","status":"已完成"},
+    {"un_id":"UN-0021-01","dr_id":"DR-0021-02","dd_id":"DD-0021-02","tk_id":"TK-0021-02","vt_id":"VT-0021-02","status":"已完成"},
+    {"un_id":"UN-0021-01","dr_id":"DR-0021-03","dd_id":"DD-0021-03","tk_id":"TK-0021-03","vt_id":"VT-0021-03","status":"已完成"},
+    {"un_id":"UN-0021-01","dr_id":"DR-0021-01","dd_id":"DD-0021-01","tk_id":"TK-0021-04","vt_id":"VT-0021-04","status":"已完成"}
+  ],
+  "trace_history": [{"version":1,"link":"REQ-0020-test-workbench-m1","status":"基于已完成M1复审","notes":"原集成报告和运行事实保持不变；本轮只修复三项复审问题。"}],
+  "open_questions": ["无。"],
+  "prohibited_implementation": [
+    "不得修改src/**、public/**、pilot/**、heldout-lab/**或批准业务脚本。",
+    "不得接入Harness、调用建例模型、LLM或healer，不增加语义审核层或通用框架。",
+    "不得改写workbench/docs/ACCEPTANCE_REPORT.md或用旧运行替代本轮真实Web组合。"
+  ],
+  "changes": [
+    {"date":"2026-09-21","version":1,"type":"新增","description":"登记M1代码复审三项集中修复、修前复现和新真实Web验收。","impact":"workbench前端状态、报告判定、错误事实分类及对应测试/文档","confirmed_by":"用户当前任务"},
+    {"date":"2026-09-21","version":2,"type":"实现与验证","description":"三项问题集中修复；21项Node、Chromium流和新normal/fault组合完成。","impact":"仅workbench前端状态、报告解析、测试及新文档；原报告和批准资产不变","confirmed_by":"真实命令与运行记录"}
+  ]
+}

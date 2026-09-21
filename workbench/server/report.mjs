@@ -30,9 +30,10 @@ function errorFacts(error) {
   const expected = message.match(/Expected(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
   const actual = message.match(/Received(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
   let type = 'TEST_ERROR';
-  if (/Expected(?: string)?:|Received(?: string)?:|expect\(/i.test(message)) type = 'ASSERTION_MISMATCH';
+  if (expected !== null && actual !== null) type = 'ASSERTION_MISMATCH';
+  else if (/strict mode violation|element\(s\) not found|resolved to \d+ elements|waiting for (?:getBy|locator)|未找到表头列/i.test(message)) type = 'LOCATOR_OR_TARGET';
+  else if (/Expected(?: string)?:|Received(?: string)?:|expect\(/i.test(message)) type = 'ASSERTION_UNRESOLVED';
   else if (/TimeoutError|timed out|timeout \d+ms exceeded/i.test(message)) type = 'TIMEOUT';
-  else if (/strict mode violation|locator|未找到表头列/i.test(message)) type = 'LOCATOR_OR_TARGET';
   return { type, message, expected, actual, attribution: 'PENDING_ANALYSIS' };
 }
 
@@ -125,7 +126,7 @@ export async function analyzeRunArtifacts({ runRoot, reportFile, registeredSteps
   const testError = errorFacts(result?.error || result?.errors?.[0] || test.errors?.[0]);
   const skipped = status === 'skipped' || Number(report.stats?.skipped || 0) > 0;
   const allRegisteredStepsPassed = steps.length > 0 && steps.every((step) => step.status === 'PASSED');
-  const completePass = executionStatus !== 'CANCELLED'
+  const completePass = executionStatus === 'PROCESS_ENDED'
     && exitCode === 0 && status === 'passed' && !skipped
     && Number(report.stats?.expected) === 1 && Number(report.stats?.unexpected || 0) === 0
     && allRegisteredStepsPassed;
@@ -138,7 +139,8 @@ export async function analyzeRunArtifacts({ runRoot, reportFile, registeredSteps
     media, steps,
     summary: {
       process_ended: true, exit_code: exitCode, report_complete: true, target_test_count: 1,
-      playwright_status: status, complete_pass: completePass, stats: report.stats || null,
+      playwright_status: status, playwright_pass: status === 'passed',
+      complete_pass: completePass, stats: report.stats || null,
     },
     error: testError,
   };

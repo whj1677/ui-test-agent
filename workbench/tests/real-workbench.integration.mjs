@@ -27,12 +27,18 @@ async function waitForTerminal(runId, timeoutMs = 180000) {
 
 async function startFromWeb(page, environment) {
   await page.getByTestId('environment-select').selectOption(environment);
+  if (environment === 'fault') await page.waitForTimeout(2300);
+  assert.equal(await page.getByTestId('environment-select').inputValue(), environment);
+  const requestPromise = page.waitForRequest((request) => request.method() === 'POST' && new URL(request.url()).pathname === '/api/runs');
   await page.getByTestId('run-button').click();
+  const request = await requestPromise;
+  assert.equal(request.postDataJSON().environment, environment);
   await page.waitForFunction(() => /^已启动 run-[a-z0-9-]+$/.test(document.querySelector('[data-testid="action-message"]')?.textContent || ''));
   const message = await page.getByTestId('action-message').innerText();
   const runId = message.match(/run-[a-z0-9-]+/)?.[0];
   assert.ok(runId, `页面未返回run_id: ${message}`);
   const run = await waitForTerminal(runId);
+  assert.equal(run.environment.id, environment);
   await page.reload();
   await page.getByTestId('history').locator(`button[data-run-id="${runId}"]`).click();
   await page.getByTestId('run-detail').waitFor();

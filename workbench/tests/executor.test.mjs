@@ -98,3 +98,26 @@ test('unapproved, wrong-hash, traversal and illegal environment records are refu
   const validSetup = await harness();
   await assert.rejects(validSetup.manager.start(validSetup.asset.asset_id, 'other'), /ENVIRONMENT_NOT_ALLOWED/);
 });
+
+test('runtime-copy integrity failure preserves the raw passing report but blocks overall pass', async () => {
+  const setup = await harness();
+  const started = await setup.manager.start(setup.asset.asset_id, 'normal');
+  const runRoot = setup.store.runDirectory(started.run_id);
+  const report = {
+    suites: [{ specs: [{ tests: [{ expectedStatus: 'passed', results: [{
+      status: 'passed', steps: started.steps.map((step) => ({ title: step.step_id })),
+    }] }] }] }],
+    stats: { expected: 1, unexpected: 0, skipped: 0 },
+  };
+  await fs.writeFile(path.join(runRoot, 'report.json'), JSON.stringify(report));
+  await fs.appendFile(path.join(runRoot, 'runtime', 'tests', 'sorting.spec.ts'), '\n// simulated runtime-copy change\n');
+  setup.children[0].emit('exit', 0, null);
+  const finished = await setup.manager.waitFor(started.run_id);
+  assert.equal(finished.execution_status, 'INTEGRITY_FAILED');
+  assert.equal(finished.test_status, 'PASSED');
+  assert.equal(finished.summary.playwright_pass, true);
+  assert.equal(finished.summary.complete_pass, false);
+  assert.equal(finished.error.code, 'SCRIPT_HASH_CHANGED');
+  assert.equal(finished.integrity.source_after_sha256, setup.asset.script.sha256);
+  assert.notEqual(finished.integrity.runtime_after_sha256, setup.asset.script.sha256);
+});
