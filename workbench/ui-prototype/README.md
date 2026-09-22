@@ -34,12 +34,13 @@ node workbench/ui-prototype/serve.mjs 4311
 ## 文件
 
 - `demo-data.js`：合成项目、用例、任务、脚本和运行数据。
-- `app.js`、`styles.css`：hash 路由、交互与砂岩陶土视觉层。
+- `app.js`、`styles.css`：hash 路由、交互与冷白／靛蓝视觉层（按用户后续要求替换砂岩陶土）。
 - `assets/`：公开合成媒体，不是真实测试证据。
 - `screenshots/`：六张独立核心界面截图。
 - `API_MAPPING.md`：现有能力与正式接入缺口。
 - `DESIGN_NOTES.md`：页面、状态和交互设计说明。
 - `UI_D1_ACCEPTANCE_REPORT.md`：工程和浏览器验收记录。
 - `UI_D1_CONSISTENCY_REVISION.md`：版本快照、阶段条和真实JSON下载的后续修订验证。
+- `UI_D1_VISUAL_REFRESH.md`：冷白／靛蓝重设计说明、验证范围与六张新版截图。
 
 停止点：原型待用户核对；不自动替换正式 UI。

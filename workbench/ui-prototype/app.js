@@ -95,7 +95,7 @@ function shell(content, active, project, title) {
   const count = projectContext ? counts(project.id) : null;
   return `<div class="shell">
     <aside class="sidebar" aria-label="工作台导航">
-      <div class="brand"><span class="brand-mark">✓</span><strong>测试工作台</strong></div>
+      <div class="brand"><span class="brand-mark">${icons.cases}</span><div><strong>测试工作台</strong><small>TEST WORKSPACE</small></div></div>
       <nav class="side-nav"><button class="side-link ${active === 'projects' ? 'active' : ''}" data-route="#/projects">${icons.projects}<span>所有项目</span></button></nav>
       ${projectContext ? `<div class="project-context"><strong>${esc(project.name)}</strong><span>${count.cases}条用例 · 演示项目</span></div>
         <nav class="side-nav" aria-label="项目内导航">
@@ -105,7 +105,7 @@ function shell(content, active, project, title) {
           <button class="side-link ${active === 'settings' ? 'active' : ''}" data-route="#/projects/${project.id}/settings">${icons.settings}<span>项目设置</span></button>
         </nav>` : ''}
       <div class="side-spacer"></div>
-      <div class="prototype-note"><strong>砂岩 × 陶土</strong><span>交互原型 · 演示数据</span><small>不连接真实后台</small></div>
+      <div class="prototype-note"><span class="workspace-indicator"></span><div><strong>本地演示工作区</strong><small>交互原型 · 演示数据</small></div></div>
     </aside>
     <div class="workspace">
       <header class="topbar"><div class="breadcrumbs"><button data-route="#/projects">所有项目</button>${projectContext ? `<span>/</span><button data-route="#/projects/${project.id}/cases">${esc(project.name)}</button>` : ''}${title ? `<span>/</span><strong>${esc(title)}</strong>` : ''}</div><div class="top-actions"><span class="demo-pill">配色示例 · 演示数据</span><button class="button ghost" id="reset-demo">${icons.reset}重置演示</button></div></header>
@@ -126,10 +126,9 @@ function renderProjects() {
   const query = state.ui.projectSearch.trim().toLowerCase();
   const projects = state.projects.filter((item) => !query || `${item.name} ${item.description}`.toLowerCase().includes(query));
   const content = `${pageHeading('项目工作区', '所有项目', '从项目进入用例、建例任务和执行记录。', `<button class="button primary" id="new-project">${icons.plus}新建项目</button>`)}
-    <div class="toolbar compact"><label class="search-field"><span class="sr-only">搜索项目</span><input id="project-search" value="${esc(state.ui.projectSearch)}" placeholder="搜索项目名称或说明"></label><span class="toolbar-note">${projects.length} / ${state.projects.length}个项目</span></div>
-    <div class="table-wrap project-table"><table data-testid="projects-table"><thead><tr><th>项目名称</th><th>说明</th><th>用例数</th><th>最近活动</th><th>操作</th></tr></thead><tbody>
-      ${projects.map((item) => `<tr><td><button class="row-link" data-route="#/projects/${item.id}/cases">${esc(item.name)}</button></td><td>${esc(item.description)}</td><td class="num">${counts(item.id).cases}</td><td>${esc(item.lastActivity)}</td><td><button class="button small" data-route="#/projects/${item.id}/cases">进入项目</button></td></tr>`).join('') || `<tr><td colspan="5"><div class="empty-state compact"><strong>没有匹配项目</strong><p>调整关键词或清空搜索。</p><button class="button" id="clear-project-search">清空搜索</button></div></td></tr>`}
-    </tbody></table></div>`;
+    <section class="workspace-overview"><div><span class="eyebrow">从用例到结果</span><h2>让每一次验证，都有据可查。</h2><p>选择一个项目，继续维护用例、核对候选或查看执行结果。</p></div><div class="overview-metrics"><div><strong>${state.projects.length}</strong><span>项目</span></div><div><strong>${state.cases.length}</strong><span>用例</span></div><div><strong>${state.builds.length}</strong><span>建例任务</span></div></div></section>
+    <div class="toolbar compact project-toolbar"><label class="search-field"><span class="sr-only">搜索项目</span><input id="project-search" value="${esc(state.ui.projectSearch)}" placeholder="搜索项目名称或说明"></label><span class="toolbar-note">${projects.length} / ${state.projects.length} 个项目</span></div>
+    <div class="project-grid" data-testid="projects-table">${projects.map((item,index) => { const summary=counts(item.id); return `<article class="project-card"><div class="project-card-top"><span class="project-symbol variant-${index % 3}">${icons.projects}</span><span class="demo-label">演示项目</span></div><button class="project-title" data-route="#/projects/${item.id}/cases">${esc(item.name)}</button><p>${esc(item.description)}</p><div class="project-metrics"><div><strong>${summary.cases}</strong><span>用例</span></div><div><strong>${summary.confirmed}</strong><span>内容已确认</span></div><div><strong>${summary.scripted}</strong><span>适用脚本</span></div></div><footer><small>最近活动 · ${esc(item.lastActivity)}</small><button class="link-button" data-route="#/projects/${item.id}/cases">进入项目 <span aria-hidden="true">→</span></button></footer></article>`; }).join('') || `<div class="empty-state"><strong>没有匹配项目</strong><p>调整关键词或清空搜索。</p><button class="button" id="clear-project-search">清空搜索</button></div>`}</div>`;
   app.innerHTML = shell(content, 'projects', null, '');
 }
 
@@ -424,6 +423,6 @@ function bindRun(run) {
   document.querySelector('[data-open-image]')?.addEventListener('click', (event) => { const img = event.currentTarget.querySelector('img'); openModal({ title: '演示截图原图', description: '合成媒体，非真实测试证据。', body: `<img class="full-image" src="${img.getAttribute('src')}" alt="${esc(img.alt)}">`, footer: '<button class="button primary" data-close-modal>关闭</button>' }, event.currentTarget); modalRoot.querySelectorAll('[data-close-modal]').forEach((node) => node.addEventListener('click',closeModal)); });
 }
 
-window.addEventListener('hashchange', render);
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
 if (!location.hash) history.replaceState(null,'','#/projects');
 render();

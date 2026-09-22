@@ -48,9 +48,8 @@ test('结果页保留原始事实且步骤切换不重建视频', () => {
   assert.match(app, /不下载伪造ZIP/);
 });
 
-test('砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项', () => {
-  for (const token of ['#F5F3EF','#ECE7E0','#FFFDF9','#DCD4CA','#332F2B','#6C635B','#805E49','#6B4C39','#EEE1D5']) assert.match(css, new RegExp(token,'i'));
-  assert.doesNotMatch(css, /#315ee7/i);
+test('冷白靛蓝主题保持状态区分且能力映射不伪装缺失项', () => {
+  for (const token of ['#F6F7FB','#FFFFFF','#E6E9F0','#202B40','#69758B','#4F5BD5','#3F49B7','#EEF0FF']) assert.match(css, new RegExp(token,'i'));
   for (const missing of ['批量执行','通用Web审批','通用环境管理','多人权限']) assert.match(mapping, new RegExp(missing));
 });
 
