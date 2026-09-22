@@ -32,11 +32,14 @@
     "test:m3c-real": "node tests/reviewed-asset-real.integration.mjs",
     "test:m4a-cli-preflight": "node tests/m4a-query-cli.integration.mjs",
     "test:m4a-real": "node tests/m4a-query-case-real.integration.mjs",
+    "test:ui-d2a-browser": "node tests/ui-d2a-browser.integration.mjs",
     "test:real": "node tests/real-workbench.integration.mjs",
     "test:restart": "node tests/restart-history.integration.mjs",
     "lab": "node ../heldout-lab/serve.mjs 4198",
     "generate:case-template": "node scripts/generate-case-template.mjs",
-    "generate:hold-q1-package": "node scripts/generate-hold-q1-case-package.mjs"
+    "generate:hold-q1-package": "node scripts/generate-hold-q1-case-package.mjs",
+    "generate:ui-d2a-samples": "node scripts/generate-ui-d2a-samples.mjs",
+    "generate:ui-d2a-native-sample": "node scripts/generate-ui-d2a-native-sample.mjs"
   },
   "dependencies": {
     "@playwright/test": "1.62.1",

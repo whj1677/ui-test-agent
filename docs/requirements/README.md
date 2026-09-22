@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0031-ui-d2a-real-case-library](REQ-0031-ui-d2a-real-case-library/current_state.md)：将已选定的墨白极简界面通过同源 `/workspace/` 接入现有真实项目与用例后端，完成 xlsx/原生包导入、版本编辑、正式导出、跨项目再导入和重启读回；保留旧 UI，不调用 Harness、模型或业务脚本。
+
 - [REQ-0030-ui-d1-workbench-prototype](REQ-0030-ui-d1-workbench-prototype/current_state.md)：独立可点击的测试工程师项目工作台原型；只用合成演示数据，不替换正式UI、不调用Harness或业务脚本，完成后等待用户核对。
 
 - [REQ-0029-m4a-query-case](REQ-0029-m4a-query-case/current_state.md)：M4-A 单条 HOLD-Q1 列表查询用例迁移；复用现有项目用例与建例链路，正常输入与反例资料分离，真实结果最多到等待人工首审。

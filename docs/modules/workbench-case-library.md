@@ -41,6 +41,17 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 用户对一个精确 task/attempt/candidate SHA 作出限定人工首审后，M3-C 可把它登记为绑定项目、内部用例、版本和内容哈希的独立资产。项目详情显示资产范围与版本关系，并只在当前选择版本与资产绑定版本一致时允许正常回归；后续用例版本不会继承旧资产。新运行进入既有 run 历史，正常/受控反例的报告和媒体各自关联资产与项目用例，不改写原 build task 的历史生成状态。
 
+## UI-D2A 墨白真实项目与用例入口
+
+`workbench/web-v2` 在同一工作台服务下提供 `/workspace/`。它复用本模块现有项目、上传、预览确认、版本和导出接口；不复制 UI-D1 的演示数据，也不以浏览器存储作为业务事实。服务端只对白名单路径提供 `index.html`、`app.js`、`api.js` 和 `styles.css`，旧首页 `/` 继续可用。
+
+新页面覆盖项目创建/修改、紧凑用例列表、历史版本正文、真实 `.xlsx`/原生 JSON 包上传、服务端预览确认、选中/全部正式导出、跨项目再导入和 revision 冲突展示。前端不推导服务端分类，不把空选择解释为导出全部，也不会在 API 失败时回落演示成功。建例任务和执行记录在本阶段明确显示未接入；页面不会调用 Harness、模型或业务执行接口。
+
+- 用户指南：[workbench/docs/UI_D2A_USER_TRIAL_GUIDE.md](../../workbench/docs/UI_D2A_USER_TRIAL_GUIDE.md)
+- API 映射：[workbench/docs/UI_D2A_API_MAPPING.md](../../workbench/docs/UI_D2A_API_MAPPING.md)
+- 验收报告：[workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md](../../workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md)
+- 专项浏览器验证：`cd workbench; npm run test:ui-d2a-browser`
+
 ## 验证入口
 
 - `cd workbench; npm test`

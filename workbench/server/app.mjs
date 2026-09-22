@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { resolveInside, sha256File } from './integrity.mjs';
 
 const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
+const defaultWorkspaceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web-v2');
 
 function sendJson(response, status, value) {
   response.writeHead(status, {
@@ -25,16 +26,23 @@ function securityHeaders(contentType) {
   };
 }
 
-async function sendStatic(response, webRoot, pathname) {
+async function sendStatic(response, webRoot, workspaceRoot, pathname) {
   const files = new Map([
     ['/', ['index.html', 'text/html; charset=utf-8']],
     ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
     ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
-  const selected = files.get(pathname);
+  const workspaceFiles = new Map([
+    ['/workspace', ['index.html', 'text/html; charset=utf-8']],
+    ['/workspace/', ['index.html', 'text/html; charset=utf-8']],
+    ['/workspace/app.js', ['app.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/api.js', ['api.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+  ]);
+  const selected = files.get(pathname) || workspaceFiles.get(pathname);
   if (!selected) return false;
   response.writeHead(200, securityHeaders(selected[1]));
-  response.end(await fs.readFile(path.join(webRoot, selected[0])));
+  response.end(await fs.readFile(path.join(workspaceFiles.has(pathname) ? workspaceRoot : webRoot, selected[0])));
   return true;
 }
 
@@ -189,6 +197,7 @@ export function createWorkbenchServer(options = {}) {
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
   const webRoot = options.webRoot || defaultWebRoot;
+  const workspaceRoot = options.workspaceRoot || defaultWorkspaceRoot;
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
@@ -382,7 +391,7 @@ export function createWorkbenchServer(options = {}) {
         return;
       }
       if (request.method === 'GET' && await sendCaseTemplate(response, webRoot, url.pathname)) return;
-      if (request.method === 'GET' && await sendStatic(response, webRoot, url.pathname)) return;
+      if (request.method === 'GET' && await sendStatic(response, webRoot, workspaceRoot, url.pathname)) return;
       sendJson(response, 404, { error: 'NOT_FOUND' });
     } catch (error) {
       sendJson(response, errorStatus(error), { error: error.message.split(':')[0] });
