@@ -16,10 +16,45 @@ const types = new Map([
   ['.md', 'text/markdown; charset=utf-8'],
 ]);
 
+async function readFormBody(request) {
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of request) {
+    size += chunk.length;
+    if (size > 2 * 1024 * 1024) throw Object.assign(new Error('BODY_TOO_LARGE'), { statusCode: 413 });
+    chunks.push(chunk);
+  }
+  return new URLSearchParams(Buffer.concat(chunks).toString('utf8'));
+}
+
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, 'http://127.0.0.1');
     const pathname = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname);
+    if (request.method === 'POST' && pathname === '/demo-download') {
+      const form = await readFormBody(request);
+      const payload = form.get('payload') || '';
+      const parsed = JSON.parse(payload);
+      if (parsed.schema !== 'workbench/case-package-v1' || parsed.demo_only !== true || !Array.isArray(parsed.cases)) {
+        response.writeHead(400, { 'content-type': 'text/plain; charset=utf-8' }).end('Invalid demo package');
+        return;
+      }
+      const filename = (form.get('filename') || 'demo-cases.json').replace(/[^a-zA-Z0-9._-]/g, '_');
+      const body = Buffer.from(payload, 'utf8');
+      response.writeHead(200, {
+        'content-type': 'application/json; charset=utf-8',
+        'content-length': body.length,
+        'content-disposition': `attachment; filename="${filename}"`,
+        'cache-control': 'no-store',
+        'x-content-type-options': 'nosniff',
+      });
+      response.end(body);
+      return;
+    }
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
+      response.writeHead(405, { allow: 'GET, HEAD, POST' }).end('Method not allowed');
+      return;
+    }
     const target = path.resolve(root, `.${pathname}`);
     if (target !== root && !target.startsWith(`${root}${path.sep}`)) {
       response.writeHead(403).end('Forbidden');
@@ -31,7 +66,7 @@ const server = http.createServer(async (request, response) => {
       'content-length': body.length,
       'cache-control': 'no-store',
       'x-content-type-options': 'nosniff',
-      'content-security-policy': "default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
+      'content-security-policy': "default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self'; script-src 'self'; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
     });
     response.end(body);
   } catch (error) {

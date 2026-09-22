@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { createDemoState } from './demo-data.js';
+import { appendCaseVersion, createDemoState, freezeCaseVersion, generationPhase, humanReviewPhase, makeCasePackage, registrationPhase, technicalValidationPhase } from './demo-data.js';
 
 const app = await readFile(new URL('./app.js', import.meta.url), 'utf8');
 const html = await readFile(new URL('./index.html', import.meta.url), 'utf8');
@@ -52,4 +52,60 @@ test('砂岩陶土主题使用附件指定关键色值且能力映射不伪装�
   for (const token of ['#F5F3EF','#ECE7E0','#FFFDF9','#DCD4CA','#332F2B','#6C635B','#805E49','#6B4C39','#EEE1D5']) assert.match(css, new RegExp(token,'i'));
   assert.doesNotMatch(css, /#315ee7/i);
   for (const missing of ['批量执行','通用Web审批','通用环境管理','多人权限']) assert.match(mapping, new RegExp(missing));
+});
+
+test('用例版本正文与建例任务快照在修改和序列化后保持独立', () => {
+  const state = createDemoState();
+  const testCase = state.cases.find((item) => item.id === 'demo-case-query');
+  const v1 = testCase.versions.find((item) => item.version === 1);
+  const snapshot = freezeCaseVersion(testCase, v1, 'demo-env-synthetic');
+  const original = structuredClone({ preconditions: v1.preconditions, testData: v1.testData, steps: v1.steps });
+
+  const v2 = appendCaseVersion(testCase, {
+    preconditions: 'v2前置：使用新的演示上下文。',
+    testData: 'v2数据第一行\nv2数据第二行',
+    steps: [{ order: 1, action: '执行v2动作。', expected: '得到v2结果。' }],
+  }, state.demoClock);
+
+  assert.deepEqual({ preconditions: v1.preconditions, testData: v1.testData, steps: v1.steps }, original);
+  assert.deepEqual({ preconditions: snapshot.preconditions, testData: snapshot.testData, steps: snapshot.steps }, original);
+  assert.equal(v2.preconditions, 'v2前置：使用新的演示上下文。');
+  assert.equal(v2.testData, 'v2数据第一行\nv2数据第二行');
+  assert.equal(v2.steps[0].action, '执行v2动作。');
+
+  const restored = JSON.parse(JSON.stringify({ testCase, snapshot }));
+  assert.equal(restored.testCase.versions[0].preconditions, original.preconditions);
+  assert.equal(restored.testCase.versions[1].preconditions, v2.preconditions);
+  assert.equal(restored.snapshot.preconditions, original.preconditions);
+});
+
+test('阶段条使用明确映射且技术验证不会被单项正常通过提前完成', () => {
+  assert.deepEqual(generationPhase('未开始'), { state: 'pending', label: '待开始' });
+  assert.deepEqual(generationPhase('正在生成候选'), { state: 'active', label: '进行中' });
+  assert.deepEqual(generationPhase('候选已生成'), { state: 'done', label: '已完成' });
+  assert.deepEqual(generationPhase('生成异常'), { state: 'error', label: '错误' });
+  assert.deepEqual(generationPhase('供应商新状态'), { state: 'unknown', label: '未知' });
+  assert.deepEqual(technicalValidationPhase({ normal: '通过', counterexample: '未运行', mapping: '结构验证失败', businessReview: '未进行' }), { state: 'error', label: '错误' });
+  assert.deepEqual(technicalValidationPhase({ normal: '通过', counterexample: '断言不符', mapping: '已完成', businessReview: '检查范围待确认' }), { state: 'active', label: '进行中' });
+  assert.deepEqual(technicalValidationPhase({ normal: '通过', counterexample: '断言不符', mapping: '已完成', businessReview: '已完成' }), { state: 'done', label: '已完成' });
+  assert.deepEqual(humanReviewPhase('范围待确认'), { state: 'active', label: '进行中' });
+  assert.deepEqual(registrationPhase('未登记'), { state: 'pending', label: '待开始' });
+});
+
+test('JSON用例包按明确选择导出且保留所选版本完整正文', () => {
+  const state = createDemoState();
+  const project = state.projects.find((item) => item.id === 'demo-project-inspection');
+  const selected = state.cases.filter((item) => item.projectId === project.id && ['demo-case-query', 'demo-case-reviewed'].includes(item.id));
+  const selectedPackage = makeCasePackage(project, selected);
+  assert.equal(selectedPackage.schema, 'workbench/case-package-v1');
+  assert.equal(selectedPackage.demo_only, true);
+  assert.equal(selectedPackage.cases.length, 2);
+  assert.deepEqual(selectedPackage.cases.map((item) => item.external_id), ['DEMO-Q-001', 'DEMO-S-001']);
+  assert.equal(selectedPackage.cases[0].preconditions, selected[0].versions[0].preconditions);
+  assert.deepEqual(selectedPackage.cases[0].steps, selected[0].versions[0].steps);
+
+  const all = state.cases.filter((item) => item.projectId === project.id);
+  const allPackage = makeCasePackage(project, all);
+  assert.equal(allPackage.cases.length, 120);
+  assert.ok(allPackage.cases.every((item) => item.source_identity.startsWith(`${project.id}/`)));
 });

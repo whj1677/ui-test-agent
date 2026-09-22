@@ -1,4 +1,4 @@
-export const DEMO_STORAGE_KEY = 'ui-d1:sandstone-clay:v1';
+export const DEMO_STORAGE_KEY = 'ui-d1:sandstone-clay:v2';
 
 const querySteps = [
   { order: 1, action: '打开设备列表，保持默认筛选状态。', expected: '默认标题、计数器与初始记录完整显示。' },
@@ -98,12 +98,25 @@ export function createDemoState() {
     ...makeProjectCases('demo-project-alerts', 8, 'DEMO-A'),
     ...makeProjectCases('demo-project-imports', 4, 'DEMO-I'),
   ];
+  for (const testCase of cases) {
+    for (const version of testCase.versions) {
+      version.preconditions ??= testCase.preconditions;
+      version.testData ??= testCase.testData;
+    }
+  }
   const builds = [
     { id: 'demo-build-scope', projectId: inspection, caseId: 'demo-case-query', caseVersion: 1, createdAt: '2026-09-22 09:40', status: '要求待确认', generation: '候选已生成', normal: '通过', counterexample: '断言不符', mapping: '已完成', businessReview: '检查范围待确认', humanReview: '范围待确认', registration: '未登记', candidate: '候选脚本 v1', candidateHash: 'CA38…6914', currentIssue: 'S03中的名称字段是否属于本轮必验范围，等待测试负责人确认。', attempts: 1 },
     { id: 'demo-build-generating', projectId: inspection, caseId: 'demo-case-generating', caseVersion: 1, createdAt: '2026-09-22 10:44', status: '生成中', generation: '正在生成候选', normal: '未运行', counterexample: '未运行', mapping: '未运行', businessReview: '未进行', humanReview: '未进行', registration: '未登记', candidate: '尚未生成', candidateHash: '未记录', currentIssue: '演示状态：没有真实模型任务正在运行。', attempts: 1 },
     { id: 'demo-build-error', projectId: inspection, caseId: 'demo-case-evidence', caseVersion: 1, createdAt: '2026-09-21 18:06', status: '生成异常', generation: '进程中断', normal: '未运行', counterexample: '未运行', mapping: '未运行', businessReview: '未进行', humanReview: '未进行', registration: '未登记', candidate: '文件不完整', candidateHash: '未记录', currentIssue: '进程退出且候选文件不完整；已保存生命周期记录，原因待分析。', attempts: 1 },
     { id: 'demo-build-reviewed', projectId: inspection, caseId: 'demo-case-reviewed', caseVersion: 1, createdAt: '2026-09-22 08:58', status: '待人工核对', generation: '候选已生成', normal: '通过', counterexample: '断言不符', mapping: '已完成', businessReview: '已完成', humanReview: '待核对', registration: '尚未登记', candidate: '候选脚本 v1', candidateHash: '9E2A…74C1', currentIssue: '技术验证已经完成，等待人工核对；不自动登记为批准资产。', attempts: 1 },
   ];
+  for (const build of builds) {
+    const sourceCase = cases.find((item) => item.projectId === build.projectId && item.id === build.caseId);
+    const sourceVersion = sourceCase?.versions.find((item) => item.version === build.caseVersion);
+    build.inputSnapshot = sourceCase && sourceVersion
+      ? freezeCaseVersion(sourceCase, sourceVersion, 'demo-env-synthetic')
+      : null;
+  }
   const runs = [
     { id: 'demo-run-pass', projectId: inspection, caseId: 'demo-case-reviewed', caseVersion: 1, scriptVersion: 1, mode: '正常回归', createdAt: '2026-09-22 10:42', status: '通过', execution: '进程已结束', report: '报告完整', evidence: '证据齐全', duration: '18.4秒', screenshot: '/assets/result-normal.svg', video: '/assets/demo-normal.webm', trace: false, steps: [
       { order: 1, label: '打开设备列表', status: '通过', expected: '默认显示6条记录和第一页3条数据。', actual: '完整显示6条记录，当前为第1/2页。' },
@@ -128,14 +141,84 @@ export function currentCaseVersion(testCase) {
   return testCase.versions.find((item) => item.version === testCase.currentVersion);
 }
 
+export function freezeCaseVersion(testCase, version, environmentRef) {
+  return structuredClone({
+    projectId: testCase.projectId,
+    caseId: testCase.id,
+    externalId: testCase.externalId,
+    title: testCase.title,
+    module: testCase.module,
+    caseVersion: version.version,
+    contentHash: version.contentHash,
+    sourceType: testCase.sourceType,
+    sourceBatch: testCase.sourceBatch,
+    preconditions: version.preconditions,
+    testData: version.testData,
+    steps: version.steps,
+    environmentRef,
+  });
+}
+
+export function appendCaseVersion(testCase, draft, createdAt) {
+  const next = testCase.currentVersion + 1;
+  const version = structuredClone({
+    version: next,
+    contentHash: `${testCase.externalId}-V${next}-DEMO`,
+    createdAt,
+    preconditions: draft.preconditions,
+    testData: draft.testData,
+    steps: draft.steps,
+  });
+  testCase.versions.push(version);
+  testCase.currentVersion = next;
+  testCase.preconditions = version.preconditions;
+  testCase.testData = version.testData;
+  return version;
+}
+
+const phase = (state, label) => ({ state, label });
+
+export function generationPhase(value) {
+  if (value === '未开始') return phase('pending', '待开始');
+  if (value === '正在生成候选' || value === '生成中') return phase('active', '进行中');
+  if (value === '候选已生成' || value === '已生成') return phase('done', '已完成');
+  if (value === '生成异常' || value === '进程中断' || value === '文件不完整') return phase('error', '错误');
+  return phase('unknown', '未知');
+}
+
+export function technicalValidationPhase(build) {
+  const values = [build.normal, build.counterexample, build.mapping, build.businessReview];
+  if (values.every((value) => value === '未运行' || value === '未进行')) return phase('pending', '待开始');
+  if (values.some((value) => /失败|异常|缺失|中断/.test(value))) return phase('error', '错误');
+  if (values.some((value) => !['通过', '断言不符', '已完成', '未运行', '未进行', '检查范围待确认'].includes(value))) return phase('unknown', '未知');
+  if (build.normal === '通过' && build.counterexample === '断言不符' && build.mapping === '已完成' && build.businessReview === '已完成') return phase('done', '已完成');
+  return phase('active', '进行中');
+}
+
+export function humanReviewPhase(value) {
+  if (value === '已核对') return phase('done', '已完成');
+  if (value === '待核对' || value === '范围待确认') return phase('active', '进行中');
+  if (value === '未进行') return phase('pending', '待开始');
+  return phase('unknown', '未知');
+}
+
+export function registrationPhase(value) {
+  if (value === '已登记') return phase('done', '已完成');
+  if (value === '未登记' || value === '尚未登记') return phase('pending', '待开始');
+  return phase('unknown', '未知');
+}
+
 export function makeCasePackage(project, selectedCases) {
   return {
     schema: 'workbench/case-package-v1', demo_only: true, exported_at: '2026-09-22T14:00:00+08:00',
     source_project: { id: project.id, name: project.name },
-    cases: selectedCases.map((item) => ({
-      source_identity: `${item.projectId}/${item.id}`, external_id: item.externalId, title: item.title, module: item.module,
-      content_status: item.contentStatus, current_version: item.currentVersion, preconditions: item.preconditions, test_data: item.testData,
-      steps: currentCaseVersion(item).steps.map((step) => ({ order: step.order, action: step.action, expected: step.expected })),
-    })),
+    cases: selectedCases.map((item) => {
+      const version = currentCaseVersion(item);
+      return {
+        source_identity: `${item.projectId}/${item.id}`, external_id: item.externalId, title: item.title, module: item.module,
+        content_status: item.contentStatus, current_version: item.currentVersion, preconditions: version.preconditions, test_data: version.testData,
+        steps: version.steps.map((step) => ({ order: step.order, action: step.action, expected: step.expected })),
+      };
+    }),
   };
 }

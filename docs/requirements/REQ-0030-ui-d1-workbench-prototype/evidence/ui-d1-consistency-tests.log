@@ -1,0 +1,73 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-22T14:55:04+08:00
+Command: node --test workbench/ui-prototype/prototype.test.mjs
+Exit code: 0
+Parsed test count: 9
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: 演示边界明确且不调用正式API
+ok 1 - 演示边界明确且不调用正式API
+  ---
+  duration_ms: 0.794
+  type: 'test'
+  ...
+# Subtest: 六个核心界面都有独立路由和业务内容
+ok 2 - 六个核心界面都有独立路由和业务内容
+  ---
+  duration_ms: 0.3006
+  type: 'test'
+  ...
+# Subtest: 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
+ok 3 - 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
+  ---
+  duration_ms: 4.4775
+  type: 'test'
+  ...
+# Subtest: 导入预览、幂等与明确冲突选择均有确定性交互
+ok 4 - 导入预览、幂等与明确冲突选择均有确定性交互
+  ---
+  duration_ms: 0.2045
+  type: 'test'
+  ...
+# Subtest: 结果页保留原始事实且步骤切换不重建视频
+ok 5 - 结果页保留原始事实且步骤切换不重建视频
+  ---
+  duration_ms: 0.1473
+  type: 'test'
+  ...
+# Subtest: 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
+ok 6 - 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
+  ---
+  duration_ms: 0.2187
+  type: 'test'
+  ...
+# Subtest: 用例版本正文与建例任务快照在修改和序列化后保持独立
+ok 7 - 用例版本正文与建例任务快照在修改和序列化后保持独立
+  ---
+  duration_ms: 1.1161
+  type: 'test'
+  ...
+# Subtest: 阶段条使用明确映射且技术验证不会被单项正常通过提前完成
+ok 8 - 阶段条使用明确映射且技术验证不会被单项正常通过提前完成
+  ---
+  duration_ms: 0.3085
+  type: 'test'
+  ...
+# Subtest: JSON用例包按明确选择导出且保留所选版本完整正文
+ok 9 - JSON用例包按明确选择导出且保留所选版本完整正文
+  ---
+  duration_ms: 0.7215
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 132.6853

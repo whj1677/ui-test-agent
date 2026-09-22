@@ -29,6 +29,8 @@ node workbench/ui-prototype/serve.mjs 4311
 
 演示导入使用确定性内置夹具，不声称解析了任意用户文件；导出的 JSON 明确包含 `demo_only: true`。录像没有步骤时间戳，因此步骤切换不会伪造视频定位。
 
+用例的前置条件、测试数据和步骤均按版本保存；建例任务创建后保存独立冻结快照，后续形成新版本不会改变旧任务。JSON下载由同一原型服务的受控`/demo-download`端点返回附件，该端点只接受当前页面生成且带`workbench/case-package-v1`与`demo_only=true`的演示包，不写入服务器文件。
+
 ## 文件
 
 - `demo-data.js`：合成项目、用例、任务、脚本和运行数据。
@@ -38,5 +40,6 @@ node workbench/ui-prototype/serve.mjs 4311
 - `API_MAPPING.md`：现有能力与正式接入缺口。
 - `DESIGN_NOTES.md`：页面、状态和交互设计说明。
 - `UI_D1_ACCEPTANCE_REPORT.md`：工程和浏览器验收记录。
+- `UI_D1_CONSISTENCY_REVISION.md`：版本快照、阶段条和真实JSON下载的后续修订验证。
 
 停止点：原型待用户核对；不自动替换正式 UI。

@@ -142,6 +142,11 @@ tbody tr:last-child td { border-bottom: 0; }
 .task-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
 .task-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 15px; margin-bottom: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
 .phase-bar { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); margin-bottom: 14px; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.phase-bar li { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 10px; color: var(--muted); background: var(--surface-subtle); border-right: 1px solid var(--border); }
+.phase-bar li:last-child { border-right: 0; }
+.phase-bar li > span { display: grid; place-items: center; width: 22px; height: 22px; flex: 0 0 22px; border: 1px solid var(--border-strong); border-radius: 50%; font-weight: 800; }
+.phase-bar li div { min-width: 0; }.phase-bar li strong, .phase-bar li small { display: block; }.phase-bar li small { margin-top: 2px; font-size: 11px; }
+.phase-bar li.done { color: #315E49; background: var(--success-soft); }.phase-bar li.active { color: #6B4C39; background: var(--accent-soft); box-shadow: inset 0 -3px 0 var(--accent); }.phase-bar li.error { color: #7D3832; background: var(--danger-soft); }.phase-bar li.unknown { color: var(--text); background: var(--surface); }
 .mini-step { padding: 10px 11px; color: var(--muted); background: var(--surface-subtle); border-right: 1px solid var(--border); font-size: 12px; }.mini-step:last-child { border-right: 0; }
 .mini-step strong { display: block; color: var(--text); }.mini-step.done { background: var(--success-soft); }.mini-step.active { background: var(--accent-soft); box-shadow: inset 0 -3px 0 var(--accent); }.mini-step.failed { background: var(--danger-soft); }
 .result-matrix { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
