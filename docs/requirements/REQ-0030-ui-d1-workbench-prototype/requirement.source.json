@@ -1,0 +1,255 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0030",
+  "title": "UI-D1 测试工作台第一版交互设计与可点击原型",
+  "metadata": {
+    "requirement_status": "待用户核对",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-22"
+  },
+  "original_input": "UI-D1：将现有工程验证控制台设计为测试工程师按项目使用的工作台，交付独立、可在浏览器打开点击的原型；覆盖项目列表、项目用例库、Excel/原生用例包导入、用例详情与关联建例任务、执行记录与结果详情，并用三条真实浏览器原型流程在1440×900和1920×1080核对。原型只使用独立合成演示数据，不调用真实写接口、Harness、模型或业务脚本，不替换正式UI或扩展后端。",
+  "user_requirements": [
+    {
+      "id": "UN-0030-01",
+      "status": "已确认",
+      "goal": "交付面向测试工程师、按项目组织的第一版可点击工作台原型，并清楚区分内容、自动化、运行、人工核对和批准状态。",
+      "constraints": "独立保存于workbench/ui-prototype；只用合成数据和模拟交互；不修改正式workbench/web、后端行为、真实项目、凭据、私有媒体或模型授权。",
+      "success_criteria": "浏览器可走通创建项目与导入、用例详情与关联任务、运行记录与媒体结果三条流程；1440×900和1920×1080无遮挡；交付说明、能力边界和关键截图。"
+    }
+  ],
+  "confirmed_facts": [
+    "现有工作台已实现项目/用例、xlsx与JSON用例包预览确认、用例版本、单条建例任务、限定场景候选验证、已首审资产运行、运行报告及受控媒体读取。",
+    "现有正式页面为单页长控制台；本批原型必须与workbench/web分离，不调用其写接口。",
+    "批量执行、通用Web审批和环境管理尚未实现；限定合成场景能力不得包装为通用能力。",
+    "基线为54bf3d5a187327a6bd727b0dd18230c2df69abe4，独立分支为codex/test-workbench-ui-d1。"
+  ],
+  "inferences_and_open_questions": [
+    "Codex具体子型号和推理档位不可从当前任务取得，记录为未知；不影响静态原型交付。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0030-01",
+      "status": "已确认",
+      "requirement": "建立项目列表和项目内四区导航，以紧凑表格呈现用例、建例任务和执行记录。",
+      "acceptance_criteria": "项目可创建并进入；项目内可在用例库、建例任务、执行记录、项目设置之间切换；批量和未实现入口明确禁用。",
+      "constraints": "不修改正式页面或后端，不接真实数据。"
+    },
+    {
+      "id": "DR-0030-02",
+      "status": "已确认",
+      "requirement": "提供Excel和平台用例包的多次导入向导及新增、重复、冲突、待澄清预览。",
+      "acceptance_criteria": "创建项目后可随时再次导入；Excel和JSON来源均可选择；确认前展示分类明细，确认后回到用例列表。",
+      "constraints": "只模拟合成文件，不上传或解析真实文件。"
+    },
+    {
+      "id": "DR-0030-03",
+      "status": "已确认",
+      "requirement": "用例详情成对展示动作与预期，并关联版本、建例任务、候选与脚本版本。",
+      "acceptance_criteria": "内容状态、自动化状态、最近运行结果分开展示；原用例、任务、候选、脚本和运行记录可相互定位；技术字段折叠展示。",
+      "constraints": "人工核对、批准和技术验证不可合并成一个成功状态。"
+    },
+    {
+      "id": "DR-0030-04",
+      "status": "已确认",
+      "requirement": "执行记录和结果详情默认突出中文步骤、预期/实际及截图、录像区域。",
+      "acceptance_criteria": "可选择正常、断言不符和中断等记录；步骤状态与整体状态分开；截图可打开，合成录像可播放；Trace只给本地查看说明。",
+      "constraints": "没有步骤级时间戳时不得伪造精确视频定位；全部媒体标注为演示。"
+    },
+    {
+      "id": "DR-0030-05",
+      "status": "已确认",
+      "requirement": "记录现有API可接入项、限定能力和缺失能力，并完成两种桌面分辨率的真实浏览器验收。",
+      "acceptance_criteria": "三条流程均可点击走通；1440×900和1920×1080下主要操作、列表、详情和弹窗无遮挡；关键页面截图可追溯。",
+      "constraints": "演示状态不作为真实执行证据，原型停在用户核对。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0030-01",
+      "dr_ids": ["DR-0030-01", "DR-0030-03", "DR-0030-04"],
+      "status": "已确认",
+      "summary": "采用桌面项目工作台壳层：全局项目入口、项目内固定侧栏、单一主内容区和可回退的详情页。",
+      "rationale": "把现有纵向控制台重组为符合测试工程师心智模型的项目工作流，同时保持信息密度和清晰返回路径。"
+    },
+    {
+      "id": "DD-0030-02",
+      "dr_ids": ["DR-0030-02"],
+      "status": "已确认",
+      "summary": "导入采用四步模态向导：来源、文件与映射、预览分类、完成。",
+      "rationale": "把原文件读取、字段映射、冲突处理和确认分层，避免一次呈现全部复杂信息。"
+    },
+    {
+      "id": "DD-0030-03",
+      "dr_ids": ["DR-0030-03", "DR-0030-04"],
+      "status": "已确认",
+      "summary": "业务结果优先，技术详情折叠；状态使用文字、图形和颜色三重表达。",
+      "rationale": "测试人员先判断步骤与证据，必要时再查看哈希、代码、模型配置、JSON和日志。"
+    },
+    {
+      "id": "DD-0030-04",
+      "dr_ids": ["DR-0030-05"],
+      "status": "已确认",
+      "summary": "使用无依赖HTML/CSS/JS、内联SVG图标和浏览器生成的合成演示录像，独立Node静态服务启动。",
+      "rationale": "不引入生产框架、外部字体或第三方网络服务，同时保持原型可点击、可演示和可复核。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "独立demoState → hash路由 → 项目/用例/任务/运行视图；所有修改只作用于当前浏览器内存。",
+    "创建项目 → 打开导入向导 → 选择Excel或平台用例包 → 映射与预览 → 模拟确认 → 返回紧凑用例表格。",
+    "用例详情 → 版本与步骤 → 关联建例任务/候选/脚本 → 对应运行记录 → 结果步骤与合成媒体。"
+  ],
+  "module_document_impact": [
+    "本次无需模块文档变更，原因：本批只新增与正式workbench/web和server完全分离的静态交互原型、说明、验收报告和脱敏截图，不改变任何正式模块接口、状态或运行行为。"
+  ],
+  "risks_and_rollback": [
+    "原型数据可能被误认为真实结果；所有页面和媒体持续标注交互原型/演示数据，并在文档声明不可作为执行证据。",
+    "原型与现有API字段可能漂移；交付能力矩阵明确区分可直接接入、限定场景和缺失能力。",
+    "回滚只需删除独立ui-prototype目录和REQ-0030，不影响正式工作台。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0030-01",
+      "dr_ids": ["DR-0030-01", "DR-0030-05"],
+      "dd_ids": ["DD-0030-01", "DD-0030-04"],
+      "status": "已完成",
+      "task": "核对现有页面、API和状态，建立能力矩阵与原型信息架构。",
+      "verification_ids": ["VT-0030-01"]
+    },
+    {
+      "id": "TK-0030-02",
+      "dr_ids": ["DR-0030-01", "DR-0030-02", "DR-0030-03", "DR-0030-04"],
+      "dd_ids": ["DD-0030-01", "DD-0030-02", "DD-0030-03", "DD-0030-04"],
+      "status": "已完成",
+      "task": "实现独立可点击HTML/CSS/JS原型及合成数据和媒体。",
+      "verification_ids": ["VT-0030-02", "VT-0030-03"]
+    },
+    {
+      "id": "TK-0030-03",
+      "dr_ids": ["DR-0030-05"],
+      "dd_ids": ["DD-0030-04"],
+      "status": "已完成",
+      "task": "使用真实浏览器走通三条流程并核对1440×900与1920×1080布局，保存关键截图。",
+      "verification_ids": ["VT-0030-04"]
+    },
+    {
+      "id": "TK-0030-04",
+      "dr_ids": ["DR-0030-01", "DR-0030-02", "DR-0030-03", "DR-0030-04", "DR-0030-05"],
+      "dd_ids": ["DD-0030-01", "DD-0030-02", "DD-0030-03", "DD-0030-04"],
+      "status": "已完成",
+      "task": "完成说明、验收报告、敏感检查、提交及GitHub同步。",
+      "verification_ids": ["VT-0030-01", "VT-0030-02", "VT-0030-03", "VT-0030-04"]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0030-01",
+      "dr_ids": ["DR-0030-01", "DR-0030-05"],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "现有能力矩阵逐项对应真实页面/API/状态，未实现能力不伪装可用。",
+      "evidence_standard": "代码路径、接口列表和交互说明",
+      "current_evidence": {
+        "command": "node --test workbench/ui-prototype/prototype.test.mjs",
+        "exit_code": 0,
+        "test_count": 3,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md"
+      }
+    },
+    {
+      "id": "VT-0030-02",
+      "dr_ids": ["DR-0030-01", "DR-0030-02", "DR-0030-03"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "项目创建、多次导入预览、紧凑用例表、成对步骤、状态分层和跨对象定位可点击。",
+      "evidence_standard": "静态检查与真实浏览器操作",
+      "current_evidence": {
+        "command": "Chromium 1440x900: 创建项目 → Excel导入 → 映射 → 预览 → 确认 → 用例列表",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/ui-prototype/evidence/02-import-preview-1440x900.png"
+      }
+    },
+    {
+      "id": "VT-0030-03",
+      "dr_ids": ["DR-0030-04"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "运行详情可查看中文步骤、预期/实际、演示截图和可控合成录像，技术信息折叠且无伪造时间点。",
+      "evidence_standard": "真实浏览器媒体交互和DOM状态",
+      "current_evidence": {
+        "command": "Chromium 1920x1080: 结果详情 → 截图加载 → WebM播放/暂停 → Trace说明",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/ui-prototype/evidence/04-run-result-1920x1080.png"
+      }
+    },
+    {
+      "id": "VT-0030-04",
+      "dr_ids": ["DR-0030-05"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "A/B/C三条流程在真实浏览器走通，并在1440×900和1920×1080检查无遮挡。",
+      "evidence_standard": "浏览器步骤记录、视口尺寸、关键截图路径和限制",
+      "current_evidence": {
+        "command": "Chromium A/B/C流程；视口1440x900与1920x1080",
+        "exit_code": 0,
+        "test_count": 3,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "独立worktree的workbench/ui-prototype；不启动正式workbench服务。",
+    "commands": [
+      "node workbench/ui-prototype/serve.mjs 4321",
+      "浏览器访问 http://127.0.0.1:4321 并执行A/B/C流程"
+    ],
+    "environment": [
+      "Windows本机；Node.js 22；桌面Chromium；本地127.0.0.1静态服务。"
+    ],
+    "conclusion": [
+      "静态测试3/3通过；真实Chromium三条原型流程通过；原型交付停在用户核对，不作为真实执行或批准证据。"
+    ]
+  },
+  "trace_current": [
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-01","dd_id":"DD-0030-01","tk_id":"TK-0030-01","vt_id":"VT-0030-01","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-02","dd_id":"DD-0030-02","tk_id":"TK-0030-02","vt_id":"VT-0030-02","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-03","dd_id":"DD-0030-03","tk_id":"TK-0030-02","vt_id":"VT-0030-02","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-04","dd_id":"DD-0030-03","tk_id":"TK-0030-02","vt_id":"VT-0030-03","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-05","dd_id":"DD-0030-04","tk_id":"TK-0030-03","vt_id":"VT-0030-04","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-05","dd_id":"DD-0030-04","tk_id":"TK-0030-04","vt_id":"VT-0030-04","status":"已完成"}
+  ],
+  "trace_history": [
+    {"version":1,"link":"无","status":"实施中","notes":"建立UI-D1独立原型需求包，冻结范围、能力边界和浏览器验收。"},
+    {"version":1,"link":"workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md","status":"待用户核对","notes":"可点击原型、三条真实浏览器流程、两种桌面视口和关键截图已交付；不替换正式UI。"}
+  ],
+  "open_questions": [
+    "无阻塞项；原型完成后等待用户核对，不自动替换正式UI。"
+  ],
+  "prohibited_implementation": [
+    "不得修改workbench/web、现有后端行为或真实数据。",
+    "不得调用Harness、模型、业务脚本或新增模型授权。",
+    "不得把演示进度、合成截图或录像描述为真实执行证据。",
+    "不得把内容确认、技术验证、人工核对、脚本批准或整体验收合并为同一成功状态。",
+    "不得伪装批量执行、Web审批或环境管理已经可用。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-22",
+      "version": 1,
+      "type": "需求确认",
+      "description": "冻结UI-D1独立可点击原型、五个页面区域、三条流程、两种桌面分辨率和停止边界。",
+      "impact": "新增workbench/ui-prototype及设计验收文档；正式工作台不变",
+      "confirmed_by": "用户当前任务"
+    }
+  ]
+}

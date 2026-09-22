@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0030-ui-d1-workbench-prototype](REQ-0030-ui-d1-workbench-prototype/current_state.md)：独立可点击的测试工程师项目工作台原型；只用合成演示数据，不替换正式UI、不调用Harness或业务脚本，完成后等待用户核对。
+
 - [REQ-0029-m4a-query-case](REQ-0029-m4a-query-case/current_state.md)：M4-A 单条 HOLD-Q1 列表查询用例迁移；复用现有项目用例与建例链路，正常输入与反例资料分离，真实结果最多到等待人工首审。
 
 - [REQ-0028-workbench-m3c-reviewed-asset-run](REQ-0028-workbench-m3c-reviewed-asset-run/current_state.md)：将指定M3-B2候选按用户已作出的限定人工首审结论登记为私有耐久资产，并从项目页面直接执行正常回归；独立反例只走受控验收入口，不调用Harness、模型或自愈。

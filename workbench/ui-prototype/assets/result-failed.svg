@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#f4f7fb"/>
+  <rect x="44" y="36" width="1192" height="648" rx="18" fill="#fff" stroke="#d8e0ec"/>
+  <rect x="44" y="36" width="1192" height="72" rx="18" fill="#172033"/>
+  <text x="84" y="82" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="26" fill="#fff">巡检任务台账 · 合成故障页面截图</text>
+  <rect x="84" y="144" width="798" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="902" y="144" width="294" height="44" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="938" y="173" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="18" font-weight="600" fill="#b91c1c">共6条 · 第1/2页</text>
+  <rect x="84" y="220" width="1112" height="54" fill="#f1f5f9"/>
+  <g font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="17" fill="#475569">
+    <text x="112" y="254">编号</text><text x="286" y="254">任务名称</text><text x="500" y="254">所属站点</text><text x="700" y="254">任务类型</text><text x="914" y="254">额定功率</text>
+  </g>
+  <g font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="19" fill="#172033">
+    <text x="112" y="326">H102</text><text x="286" y="326">循环泵</text><text x="500" y="326">西站</text><text x="700" y="326">检修</text><text x="914" y="326">120 kW</text>
+    <text x="112" y="398">H104</text><text x="286" y="398">离心风机</text><text x="500" y="398">西站</text><text x="700" y="398">巡检</text><text x="914" y="398">95 kW</text>
+    <text x="112" y="470">H106</text><text x="286" y="470">循环泵</text><text x="500" y="470">西站</text><text x="700" y="470">检修</text><text x="914" y="470">220 kW</text>
+  </g>
+  <g stroke="#e2e8f0"><path d="M84 346h1112M84 418h1112M84 490h1112"/></g>
+  <rect x="84" y="550" width="1112" height="82" rx="12" fill="#fff1f2" stroke="#fda4af"/>
+  <circle cx="120" cy="591" r="14" fill="#be123c"/><path d="M114 585l12 12m0-12-12 12" stroke="#fff" stroke-width="4"/>
+  <text x="148" y="586" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="18" font-weight="600" fill="#9f1239">断言不符：期望“共3条 · 第1/1页”</text>
+  <text x="148" y="612" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="18" fill="#9f1239">实际“共6条 · 第1/2页” · 归因待分析</text>
+</svg>
