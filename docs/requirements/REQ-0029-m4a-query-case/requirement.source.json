@@ -3,9 +3,9 @@
   "req_id": "REQ-0029",
   "title": "M4-A 一条列表查询用例的工作台迁移验证",
   "metadata": {
-    "requirement_status": "部分完成（离线映射通过，业务核查有缺项）",
+    "requirement_status": "部分完成（离线映射通过，名称列验收范围待确认）",
     "governance_level": "G2",
-    "version": 3,
+    "version": 4,
     "last_updated": "2026-09-22"
   },
   "original_input": "M4-A：使用 heldout-lab/cases.json 中 HOLD-Q1 完整原用例，完成项目导入、冻结输入、一次有限 Coding Agent 建例、正常与既定反例验证、Web 结果及媒体查看，状态最多到等待人工首审；不扩展批量、详情、写入、自动批准或自愈。",
@@ -24,7 +24,8 @@
     "建例端固定既有 dsh 0.1.6-alpha.2、浏览器插件、deepseek-v4-pro 和 Playwright 1.62.1。"
   ],
   "inferences_and_open_questions": [
-    "真实模型的底层请求数与 usage 若供应商事件未提供则保持未知；不得填零。"
+    "真实模型的底层请求数与 usage 若供应商事件未提供则保持未知；不得填零。",
+    "生成前材料未明确 expected_records 是否要求逐字段断言；名称列属于原必验字段还是仅属记录信息，保持待确认。"
   ],
   "development_requirements": [
     {
@@ -136,6 +137,14 @@
       "status": "已完成",
       "task": "实现版本化步骤标题映射、统一失败归属、独立补充评估持久化和Web展示，并只读核查原候选。",
       "verification_ids": ["VT-0029-04"]
+    },
+    {
+      "id": "TK-0029-04",
+      "dr_ids": ["DR-0029-03"],
+      "dd_ids": ["DD-0029-01"],
+      "status": "已完成",
+      "task": "只读核对生成前原件，区分 expected_records 数据字段与步骤配对预期，收口名称列验收范围。",
+      "verification_ids": ["VT-0029-05"]
     }
   ],
   "verification_items": [
@@ -176,6 +185,15 @@
       "item": "零模型验证版本化步骤映射、失败归属、原文件完整性、派生记录和Web重启读回，并对已有候选完成逐义务只读核查。",
       "evidence_standard": "单元夹具、真实Playwright CLI临时样例、原报告哈希、Web截图和登记前后哈希",
       "current_evidence": "workbench 78/78、harness-probe 24/24；真实Playwright临时样例1条通过；project-case-step-title-v2正确映射原三步且反例错误归属CASE_STEP_3；原候选/两报告/task/授权哈希不变；S03未断言expected_records任务名称列，补充结论BUSINESS_REVIEW_GAPS。"
+    },
+    {
+      "id": "VT-0029-05",
+      "dr_ids": ["DR-0029-03"],
+      "confirmation_status": "已确认",
+      "execution_status": "仅静态检查",
+      "item": "基于生成前已生效材料和本机原件，核定名称列是否属于 HOLD-Q1 已冻结必验范围。",
+      "evidence_standard": "原候选、原报告、冻结快照、task.md、实际Agent指令和生成前REQ的哈希与逐项对照",
+      "current_evidence": "候选及两份报告哈希与指定值一致；冻结快照和task.md的根目录/attempt副本一致。expected_records含name，但S03配对预期及Agent指令未规定测试数据逐字段断言，结论为验收范围待确认；详见 workbench/docs/M4A_Q1_SCOPE_REVIEW.md。"
     }
   ],
   "verification_environment": {
@@ -191,7 +209,7 @@
       "Windows 本机；Node.js 22；Playwright 1.62.1；专用 Git 忽略任务目录。"
     ],
     "conclusion": [
-      "工程验证通过；原 deepseek-v4-pro 调用 HTTP 404。新增独立 deepseek-flash 授权完成1次生成；旧精确标题失败保留。补充离线评估按v2规则映射三步并将反例错误归属S03，但发现S03未断言测试数据中的任务名称列，尚不可进入人工首审。"
+      "工程验证通过；原 deepseek-v4-pro 调用 HTTP 404。新增独立 deepseek-flash 授权完成1次生成；旧精确标题失败保留。补充离线评估按v2规则映射三步并将反例错误归属S03；后续范围溯源确认名称列是否属于必验字段无法由生成前材料唯一确定，当前保持验收范围待确认，尚不可进入人工首审。"
     ]
   },
   "trace_current": [
@@ -218,6 +236,14 @@
       "tk_id": "TK-0029-03",
       "vt_id": "VT-0029-04",
       "status": "已完成"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-03",
+      "dd_id": "DD-0029-01",
+      "tk_id": "TK-0029-04",
+      "vt_id": "VT-0029-05",
+      "status": "验收范围待确认"
     },
     {
       "un_id": "UN-0029-01",
@@ -262,10 +288,16 @@
       "link": "UN-0029-01 -> DR-0029-04 -> DD-0029-04 -> TK-0029-03 -> VT-0029-04",
       "status": "已完成",
       "notes": "零模型补充评估：兼容步骤标题映射与S03错误归属成立，但逐义务核查发现任务名称列断言缺失。"
+    },
+    {
+      "version": 4,
+      "link": "UN-0029-01 -> DR-0029-03 -> DD-0029-01 -> TK-0029-04 -> VT-0029-05",
+      "status": "验收范围待确认",
+      "notes": "保留版本3的严格解释与原始记录；生成前材料不能唯一确定expected_records名称字段是否属于S03必验范围。"
     }
   ],
   "open_questions": [
-    "补充映射已解决说明标题关联，但S03仍缺少原测试数据中的任务名称列断言；候选保持原字节，是否另行授权定向修订由后续任务决定。"
+    "本次 HOLD-Q1 是否要求逐字段核对 data.expected_records 中的任务名称，还是以 S03 配对预期正文明确列出的编号、站点、类型和额定功率作为本轮必验字段？"
   ],
   "prohibited_implementation": [
     "不得修改 HOLD-Q1、冻结页面或 oracle。",
@@ -297,6 +329,14 @@
       "type": "离线补充评估",
       "description": "增加有限步骤标题兼容、统一失败归属和独立派生评估；原候选三步可映射，但S03任务名称列未断言。",
       "impact": "workbench项目用例步骤契约、报告解析、补充评估与Web展示",
+      "confirmed_by": "用户当前任务"
+    },
+    {
+      "date": "2026-09-22",
+      "version": 4,
+      "type": "原验收范围核对",
+      "description": "只读回查生成前原件，确认expected_records包含名称，但步骤配对预期和Agent指令未建立逐字段断言规则；名称列改列为验收范围待确认。",
+      "impact": "HOLD-Q1候选首审材料与当前范围结论；不改候选、报告、媒体或授权",
       "confirmed_by": "用户当前任务"
     }
   ]
