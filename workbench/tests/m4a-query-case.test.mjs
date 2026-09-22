@@ -12,12 +12,13 @@ import { createPaths } from '../server/paths.mjs';
 import { holdQ1CasePackage, loadHoldQ1Source } from '../server/build/heldout-query.mjs';
 
 function playwrightReport(status, errorMessage = 'Expected: "3 matching rows"\nReceived: "6 matching rows"') {
+  const error = status === 'failed' ? { message: errorMessage } : null;
   return {
     stats: { expected: status === 'passed' ? 1 : 0, unexpected: status === 'failed' ? 1 : 0, skipped: 0 },
     suites: [{ specs: [{ tests: [{ expectedStatus: 'passed', results: [{
       status,
-      error: status === 'failed' ? { message: errorMessage } : null,
-      steps: [1, 2, 3].map((order) => ({ title: `CASE_STEP_${order}`, category: 'test.step', duration: 5 })),
+      error,
+      steps: [1, 2, 3].map((order) => ({ title: `CASE_STEP_${order}`, category: 'test.step', duration: 5, error: status === 'failed' && order === 3 ? error : null })),
     }] }] }] }],
   };
 }

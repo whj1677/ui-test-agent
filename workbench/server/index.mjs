@@ -5,6 +5,7 @@ import { WorkbenchRunManager } from './executor.mjs';
 import { BuildTaskStore } from './build/store.mjs';
 import { BuildTaskManager } from './build/manager.mjs';
 import { BuildRevalidationStore } from './build/revalidations.mjs';
+import { BuildSupplementalAssessmentStore } from './build/assessments.mjs';
 import { CaseLibraryStore } from './cases/store.mjs';
 import { CaseLibraryManager } from './cases/manager.mjs';
 import { randomUUID } from 'node:crypto';
@@ -24,6 +25,8 @@ const buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: b
 await buildStore.init();
 const buildRevalidationStore = new BuildRevalidationStore(paths.buildRevalidationsRoot, buildStore);
 await buildRevalidationStore.init();
+const buildAssessmentStore = new BuildSupplementalAssessmentStore(paths.buildAssessmentsRoot, buildStore);
+await buildAssessmentStore.init();
 const caseStore = new CaseLibraryStore(paths.caseLibraryRoot);
 await caseStore.init();
 const caseManager = new CaseLibraryManager(caseStore);
@@ -37,7 +40,7 @@ const buildManager = new BuildTaskManager({
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   otherActive: () => Boolean(manager.active),
 });
-const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, caseStore, caseManager });
+const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);

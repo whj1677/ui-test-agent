@@ -210,6 +210,7 @@ function renderBuildDetail() {
     }
   }
 
+  renderBuildSupplementalAssessments(task);
   renderBuildRevalidations(task);
 
   const files = byId('build-files'); clear(files);
@@ -226,6 +227,37 @@ function renderBuildDetail() {
     files.append(card);
   }
   byId('build-error').textContent = task.error ? JSON.stringify(task.error, null, 2) : '无';
+}
+
+function renderBuildSupplementalAssessments(task) {
+  const root = byId('build-supplemental-assessments'); clear(root);
+  const assessments = task.supplemental_assessments || [];
+  if (!assessments.length) {
+    root.append(make('div', '暂无补充离线评估；原始验证状态保持不变。', 'empty'));
+    return;
+  }
+  for (const assessment of assessments) {
+    const card = make('article', undefined, 'candidate-card');
+    card.append(make('strong', `${assessment.assessment_id} · ${assessment.mapping_rule_version}`));
+    card.append(make('p', `原始状态保留：${assessment.original_task_state.task_status} / ${assessment.original_task_state.verification_status}`));
+    card.append(make('p', `${assessment.conclusion} · ${assessment.conclusion_text}`, assessment.conclusion === 'ELIGIBLE_FOR_HUMAN_REVIEW' ? 'result-highlight' : 'error-box'));
+    const mapping = make('ol', undefined, 'preview-steps');
+    for (const item of assessment.normal.step_mapping.items) {
+      const negative = assessment.negative.step_mapping.items.find((value) => value.step_id === item.step_id);
+      const failure = negative?.error_attributed ? ' · 反例错误归属本步骤' : '';
+      mapping.append(make('li', `${item.step_id} · ${item.observed ? '已映射' : '未映射'} · ${item.execution_status} · raw_title：${item.raw_title || '—'}${failure}`));
+    }
+    card.append(make('p', `正常 ${assessment.normal.test_status}；反例 ${assessment.negative.test_status}；指定错误归属：${assessment.negative.specified_mismatch ? '成立' : '不成立'}`), mapping);
+    if (assessment.negative.error) {
+      card.append(make('p', `反例错误：${assessment.negative.error.type} · 期望：${assessment.negative.error.expected ?? '—'} · 实际：${assessment.negative.error.actual ?? '—'}`));
+    }
+    const review = make('ul', undefined, 'preview-steps');
+    for (const item of assessment.business_review) {
+      review.append(make('li', `${item.step_id} · ${item.status} · ${item.requirement} · 代码：${item.code_locations.join(', ')} · 依据：${item.evidence}`));
+    }
+    card.append(make('p', '逐义务只读核查（AI技术核查，不是人工批准）：'), review);
+    root.append(card);
+  }
 }
 
 function revalidationMediaUrl(task, record, item) {

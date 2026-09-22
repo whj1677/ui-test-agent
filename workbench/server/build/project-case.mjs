@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { PROJECT_CASE_STEP_TITLE_RULE_VERSION } from './report.mjs';
 
 export const PROJECT_CASE_ENVIRONMENT_ID = 'synthetic-probe-normal-v1';
 export const PROJECT_CASE_TEMPLATE_ID = 'project-case-input-v1';
@@ -14,6 +15,7 @@ export function bindProjectCaseVerification(content, environmentDefinition) {
   } else return null;
   return {
     ...structuredClone(environmentDefinition.internal.verification),
+    step_title_rule_version: PROJECT_CASE_STEP_TITLE_RULE_VERSION,
     required_step_markers: content.steps.map((step) => `CASE_STEP_${step.order}`),
   };
 }
@@ -50,6 +52,9 @@ export function projectCaseTaskDocument(snapshot) {
     lines.push(`### Step ${step.order}`, `Marker: ${marker}`, `Action: ${jsonLiteral(step.action)}`, `Expected: ${jsonLiteral(step.expected)}`, '');
   }
   lines.push(
+    `Step title rule: ${snapshot.candidate_requirements.step_title_rule.version}`,
+    `Allowed step titles: ${snapshot.candidate_requirements.step_title_rule.allowed_forms.join(' | ')}`,
+    '',
     'Use every step and its paired expected result exactly as supplied.',
     'Do not summarize, merge, delete, reorder, infer, or rewrite business expectations.',
     '',
@@ -63,7 +68,9 @@ export function projectCaseAgentInstructionTemplate() {
     'Read only task.md and input/case-snapshot.json as task inputs.',
     'Use the Playwright MCP browser tools to open exactly {{ENTRY_URL}}.',
     'Perform every ordered action from task.md and preserve each paired expected result exactly.',
-    'Wrap each ordered case step in test.step using the exact marker CASE_STEP_<order> from input/case-snapshot.json, and place that step\'s action and checks inside it.',
+    'Wrap each ordered case step in test.step and place that step\'s action and checks inside it.',
+    'The title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.',
+    'Allowed separators are: one or more spaces or tabs; colon ":"; Chinese colon "："; or a spaced hyphen/dash " - ", " – ", " — ". Other fuzzy containment is invalid.',
     'Write exactly one Playwright Test candidate to {{CANDIDATE_PATH}}.',
     'The candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.',
     'Do not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.',
@@ -119,11 +126,23 @@ export function assembleProjectCaseInput(options) {
   }
   const verificationContract = bindProjectCaseVerification(versionRecord.content, environmentDefinition);
   const candidateRequirements = {
-    schema: 'workbench/project-case-candidate-requirements-v1',
+    schema: 'workbench/project-case-candidate-requirements-v2',
     required_step_markers: versionRecord.content.steps.map((step) => ({
       order: step.order,
       marker: `CASE_STEP_${step.order}`,
     })),
+    step_title_rule: {
+      version: PROJECT_CASE_STEP_TITLE_RULE_VERSION,
+      allowed_forms: [
+        'CASE_STEP_<order>',
+        'CASE_STEP_<order> <description>',
+        'CASE_STEP_<order>: <description>',
+        'CASE_STEP_<order>：<description>',
+        'CASE_STEP_<order> - <description>',
+        'CASE_STEP_<order> – <description>',
+        'CASE_STEP_<order> — <description>',
+      ],
+    },
     deliverable: {
       kind: 'playwright-test-candidate',
       relative_path: 'output/candidate.spec.mjs',

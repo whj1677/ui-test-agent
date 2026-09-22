@@ -185,6 +185,7 @@ export function createWorkbenchServer(options = {}) {
   const buildStore = options.buildStore;
   const buildManager = options.buildManager;
   const buildRevalidationStore = options.buildRevalidationStore;
+  const buildAssessmentStore = options.buildAssessmentStore;
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
   const webRoot = options.webRoot || defaultWebRoot;
@@ -274,6 +275,9 @@ export function createWorkbenchServer(options = {}) {
         if (buildRevalidationStore) {
           for (const task of tasks) task.revalidations = await buildRevalidationStore.listForTask(task.task_id);
         }
+        if (buildAssessmentStore) {
+          for (const task of tasks) task.supplemental_assessments = await buildAssessmentStore.listForTask(task.task_id);
+        }
         sendJson(response, 200, { tasks });
         return;
       }
@@ -301,6 +305,7 @@ export function createWorkbenchServer(options = {}) {
       if (buildStore && request.method === 'GET' && buildTask) {
         const task = await buildStore.getTask(decodeURIComponent(buildTask[1]));
         if (task && buildRevalidationStore) task.revalidations = await buildRevalidationStore.listForTask(task.task_id);
+        if (task && buildAssessmentStore) task.supplemental_assessments = await buildAssessmentStore.listForTask(task.task_id);
         sendJson(response, task ? 200 : 404, task || { error: 'BUILD_TASK_NOT_FOUND' });
         return;
       }

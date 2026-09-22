@@ -3,9 +3,9 @@
   "req_id": "REQ-0029",
   "title": "M4-A 一条列表查询用例的工作台迁移验证",
   "metadata": {
-    "requirement_status": "部分完成（候选验证失败）",
+    "requirement_status": "部分完成（离线映射通过，业务核查有缺项）",
     "governance_level": "G2",
-    "version": 2,
+    "version": 3,
     "last_updated": "2026-09-22"
   },
   "original_input": "M4-A：使用 heldout-lab/cases.json 中 HOLD-Q1 完整原用例，完成项目导入、冻结输入、一次有限 Coding Agent 建例、正常与既定反例验证、Web 结果及媒体查看，状态最多到等待人工首审；不扩展批量、详情、写入、自动批准或自愈。",
@@ -47,6 +47,13 @@
       "requirement": "项目Web展示候选、步骤映射、正常/反例原始结果与媒体，并完成原义务技术核查。",
       "acceptance_criteria": "S01-S03 每项要求分别核查覆盖与遗漏；最终状态最多为等待人工首审；重启后记录可读且不重放。",
       "constraints": "AI技术核查不登记为真人首审，不手工修改 task.json 拼接结果。"
+    },
+    {
+      "id": "DR-0029-04",
+      "status": "已确认",
+      "requirement": "以版本化有限规则兼容标题起始处的CASE_STEP裸标记或明确分隔说明，并用同一映射完成步骤覆盖和失败归属。",
+      "acceptance_criteria": "保留raw_title、层级和原错误；1与10、正文包含、非法分隔、重复、缺失、额外和顺序错误均不能误通过；已有候选只读生成独立补充评估。",
+      "constraints": "不修改原候选、原报告、原任务状态或授权账本；不调用模型或重跑业务用例。"
     }
   ],
   "design_decisions": [
@@ -76,6 +83,13 @@
       "status": "已确认",
       "summary": "在保留 deepseek-v4-pro 默认配置的同时，以显式 flash patch、独立单次授权和指定 DSH home 执行用户授权的追加复验。",
       "rationale": "隔离新授权与旧账本及默认模型语义，并让 Web 展示、任务记录和实际运行模型保持一致。"
+    },
+    {
+      "id": "DD-0029-04",
+      "dr_ids": ["DR-0029-03", "DR-0029-04"],
+      "status": "已确认",
+      "summary": "新增project-case-step-title-v2确定性映射和独立派生评估索引；新任务声明兼容格式，旧任务仅并列展示补充结论。",
+      "rationale": "修复格式契约过严问题，同时避免模糊包含、错误步骤归因或追溯改写历史事实。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -83,7 +97,7 @@
     "反例入口和冻结故障说明仅由验证场景配置持有，不进入模型可读文件或指令。"
   ],
   "module_document_impact": [
-    "workbench 建例环境配置、任务管理、受控夹具服务、验证报告与项目页面；heldout-lab 原资产只读。",
+    "workbench 建例输入契约、结构化报告步骤映射、派生评估索引与项目页面；heldout-lab 原资产只读。",
     "本次无需模块文档变更，原因：仓库没有与本增量对应的独立模块文档，运行入口、边界和实际失败状态已同步到 workbench/README.md、REQ-0029 与专项验收报告。"
   ],
   "risks_and_rollback": [
@@ -114,6 +128,14 @@
       "status": "受阻",
       "task": "从真实Web进行有限Harness建例、同候选正常/反例验证、媒体读回和义务核查。",
       "verification_ids": ["VT-0029-03"]
+    },
+    {
+      "id": "TK-0029-03",
+      "dr_ids": ["DR-0029-03", "DR-0029-04"],
+      "dd_ids": ["DD-0029-04"],
+      "status": "已完成",
+      "task": "实现版本化步骤标题映射、统一失败归属、独立补充评估持久化和Web展示，并只读核查原候选。",
+      "verification_ids": ["VT-0029-04"]
     }
   ],
   "verification_items": [
@@ -145,6 +167,15 @@
       "item": "真实Web初始建例（必要时一次定向修订）、正常与既定反例执行、媒体查看、重启读回及逐义务技术核查。",
       "evidence_standard": "真实任务ID、候选哈希、原始报告、媒体索引、Web证据和调用记账",
       "current_evidence": "原任务 build-20260922014848-604af86d 首次模型请求 HTTP 404。用户新增授权后，flash任务 build-20260922022951-0e638858 生成候选 CA3819EF...B6914；正常1条通过、反例1条取得期望3条/实际6条，但步骤标题未使用精确CASE_STEP标记，整体候选验证失败；两组媒体和重启读回完成。"
+    },
+    {
+      "id": "VT-0029-04",
+      "dr_ids": ["DR-0029-03", "DR-0029-04"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "零模型验证版本化步骤映射、失败归属、原文件完整性、派生记录和Web重启读回，并对已有候选完成逐义务只读核查。",
+      "evidence_standard": "单元夹具、真实Playwright CLI临时样例、原报告哈希、Web截图和登记前后哈希",
+      "current_evidence": "workbench 78/78、harness-probe 24/24；真实Playwright临时样例1条通过；project-case-step-title-v2正确映射原三步且反例错误归属CASE_STEP_3；原候选/两报告/task/授权哈希不变；S03未断言expected_records任务名称列，补充结论BUSINESS_REVIEW_GAPS。"
     }
   ],
   "verification_environment": {
@@ -153,12 +184,14 @@
       "npm test（workbench）",
       "npm test（harness-probe）",
       "node tests/m4a-query-case-real.integration.mjs（仅前置全部通过后，最多一次初始和一次有依据修订）"
+      ,"node tests/step-title-compat-cli.integration.mjs（零模型临时Playwright样例）"
+      ,"node tests/m4a-step-compat-offline.integration.mjs（只读原报告与Web读回，不执行业务候选）"
     ],
     "environment": [
       "Windows 本机；Node.js 22；Playwright 1.62.1；专用 Git 忽略任务目录。"
     ],
     "conclusion": [
-      "工程验证通过；原 deepseek-v4-pro 调用 HTTP 404。新增独立 deepseek-flash 授权完成1次生成，候选业务断言正常通过且反例发生真实差异，但步骤精确标记契约不满足，未进入人工首审。"
+      "工程验证通过；原 deepseek-v4-pro 调用 HTTP 404。新增独立 deepseek-flash 授权完成1次生成；旧精确标题失败保留。补充离线评估按v2规则映射三步并将反例错误归属S03，但发现S03未断言测试数据中的任务名称列，尚不可进入人工首审。"
     ]
   },
   "trace_current": [
@@ -177,6 +210,14 @@
       "tk_id": "TK-0029-02",
       "vt_id": "VT-0029-03",
       "status": "受阻"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-04",
+      "dd_id": "DD-0029-04",
+      "tk_id": "TK-0029-03",
+      "vt_id": "VT-0029-04",
+      "status": "已完成"
     },
     {
       "un_id": "UN-0029-01",
@@ -215,16 +256,23 @@
       "link": "UN-0029-01 -> DR-0029-02/03 -> DD-0029-03 -> TK-0029-02 -> VT-0029-03",
       "status": "受阻",
       "notes": "追加 deepseek-flash 单次真实复验：候选已生成并执行，但精确步骤标记契约不符合。"
+    },
+    {
+      "version": 3,
+      "link": "UN-0029-01 -> DR-0029-04 -> DD-0029-04 -> TK-0029-03 -> VT-0029-04",
+      "status": "已完成",
+      "notes": "零模型补充评估：兼容步骤标题映射与S03错误归属成立，但逐义务核查发现任务名称列断言缺失。"
     }
   ],
   "open_questions": [
-    "deepseek-flash 新候选未使用精确 CASE_STEP_<order> 标题，整体技术验证失败；本次一次性授权已耗尽，候选保持原字节，是否另行人工审查或授权定向修订由后续任务决定。"
+    "补充映射已解决说明标题关联，但S03仍缺少原测试数据中的任务名称列断言；候选保持原字节，是否另行授权定向修订由后续任务决定。"
   ],
   "prohibited_implementation": [
     "不得修改 HOLD-Q1、冻结页面或 oracle。",
     "不得向 Harness 提供故障页面、故障答案、旧参考脚本或历史正确候选。",
     "不得把正常通过、步骤标记或工程测试数量当作完整业务覆盖证明。",
     "不得自动批准候选、批量运行、扩展复杂业务或自愈。"
+    ,"不得用补充评估覆盖原CANDIDATE_VALIDATION_FAILED、改写原报告或把步骤映射等同于完整业务覆盖。"
   ],
   "changes": [
     {
@@ -242,6 +290,14 @@
       "description": "用户明确同意改用已登录的 deepseek-flash 进行一次独立 M4-A 复验；保留原 HTTP 404 任务，新增任务生成候选但因步骤标记契约不符停在验证失败。",
       "impact": "workbench 单条 HOLD-Q1 候选生成、正常/反例验证与媒体读回",
       "confirmed_by": "用户明确回复可以使用 flash"
+    },
+    {
+      "date": "2026-09-22",
+      "version": 3,
+      "type": "离线补充评估",
+      "description": "增加有限步骤标题兼容、统一失败归属和独立派生评估；原候选三步可映射，但S03任务名称列未断言。",
+      "impact": "workbench项目用例步骤契约、报告解析、补充评估与Web展示",
+      "confirmed_by": "用户当前任务"
     }
   ]
 }

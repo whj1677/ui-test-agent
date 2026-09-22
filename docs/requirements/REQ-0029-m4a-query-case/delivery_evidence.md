@@ -2,23 +2,24 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-22T10:48:27+08:00`
+- Generated at: `2026-09-22T11:33:11+08:00`
 - Record: `REQ-0029-m4a-query-case`
-- Change fingerprint: `18f219be6d53bf79995b940a25d18c93a78355090bc3e7e9fdd6af9ea2dbfe12`
+- Change fingerprint: `a13f449e8c2a41273e83efaba502ce02bdc3716841f830906b7f44bb983895c4`
 - Verification source: `collector-executed-v1`
-- Verification state: `工程回归通过，真实候选验证失败`
+- Verification state: `工程回归通过，离线映射通过，业务核查有缺项`
 - Command: `npm --prefix workbench test`
 - Exit code: `0`
-- Test count: `70`
+- Test count: `78`
 - Failure count: `0`
 - Skipped count: `0`
 - Log path: `artifacts/ai-context-verification-REQ-0029-m4a-query-case.log`
-- Log SHA-256: `3118ddc967d0fd94b111984fb979fbc3950134deb71320a86fe0fda00674a32c`
+- Log SHA-256: `51198652d4c7d95159b8687cf22cc8aa78f3b414c21870adabe6de46752a8447`
 
 ### Git Status
 
 ```text
  M artifacts/ai-context-verification-REQ-0029-m4a-query-case.log
+ M docs/requirements/REQ-0029-m4a-query-case/01_development_requirement.md
  M docs/requirements/REQ-0029-m4a-query-case/02_design.md
  M docs/requirements/REQ-0029-m4a-query-case/03_tasks.md
  M docs/requirements/REQ-0029-m4a-query-case/04_verification.md
@@ -27,23 +28,29 @@
  M docs/requirements/REQ-0029-m4a-query-case/current_state.md
  M docs/requirements/REQ-0029-m4a-query-case/delivery_evidence.md
  M docs/requirements/REQ-0029-m4a-query-case/requirement.source.json
- M harness-probe/src/harness-runner.mjs
  M workbench/README.md
- M workbench/server/build/manager.mjs
- M workbench/server/build/store.mjs
- M workbench/tests/m4a-query-case-real.integration.mjs
+ M workbench/server/app.mjs
+ M workbench/server/build/project-case.mjs
+ M workbench/server/build/report.mjs
+ M workbench/server/index.mjs
+ M workbench/server/paths.mjs
+ M workbench/tests/build-report.test.mjs
  M workbench/tests/m4a-query-case.test.mjs
  M workbench/web/app.js
-?? harness-probe/config/browser-flash.cordis.yml
-?? workbench/docs/M4A_FLASH_RETRY_REPORT.md
-?? workbench/docs/evidence/M4A_QUERY_CASE_FLASH_RETRY_WEB.png
-?? workbench/tests/m4a-query-case-flash-resume.integration.mjs
+ M workbench/web/index.html
+?? workbench/docs/M4A_STEP_COMPAT_OFFLINE_REPORT.md
+?? workbench/docs/evidence/M4A_STEP_COMPAT_OFFLINE_WEB.png
+?? workbench/server/build/assessments.mjs
+?? workbench/tests/build-assessments.test.mjs
+?? workbench/tests/m4a-step-compat-offline.integration.mjs
+?? workbench/tests/step-title-compat-cli.integration.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
 warning: in the working copy of 'artifacts/ai-context-verification-REQ-0029-m4a-query-case.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/02_design.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/04_verification.md', LF will be replaced by CRLF the next time Git touches it
@@ -52,49 +59,58 @@ warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/chang
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0029-m4a-query-case/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/src/harness-runner.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/manager.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/store.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/m4a-query-case-real.integration.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/app.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/project-case.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/report.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/index.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/paths.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/build-report.test.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/tests/m4a-query-case.test.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/web/app.js', LF will be replaced by CRLF the next time Git touches it
- ...ontext-verification-REQ-0029-m4a-query-case.log | 234 ++++++++--------
- .../REQ-0029-m4a-query-case/02_design.md           |   1 +
- .../REQ-0029-m4a-query-case/03_tasks.md            |   2 +-
- .../REQ-0029-m4a-query-case/04_verification.md     |   4 +-
+warning: in the working copy of 'workbench/web/index.html', LF will be replaced by CRLF the next time Git touches it
+ ...ontext-verification-REQ-0029-m4a-query-case.log | 334 +++++++++-------
+ .../01_development_requirement.md                  |   1 +
+ .../REQ-0029-m4a-query-case/02_design.md           |   3 +-
+ .../REQ-0029-m4a-query-case/03_tasks.md            |   1 +
+ .../REQ-0029-m4a-query-case/04_verification.md     |   5 +-
  .../REQ-0029-m4a-query-case/05_trace.md            |   2 +
  .../REQ-0029-m4a-query-case/change_log.md          |   1 +
  .../REQ-0029-m4a-query-case/current_state.md       |  11 +-
- .../REQ-0029-m4a-query-case/delivery_evidence.md   | 312 +++++++++++----------
- .../requirement.source.json                        |  41 ++-
- harness-probe/src/harness-runner.mjs               |   8 +-
+ .../REQ-0029-m4a-query-case/delivery_evidence.md   | 423 ++++++++++++---------
+ .../requirement.source.json                        |  66 +++-
  workbench/README.md                                |   2 +
- workbench/server/build/manager.mjs                 |  24 +-
- workbench/server/build/store.mjs                   |   9 +-
- .../tests/m4a-query-case-real.integration.mjs      |  18 +-
- workbench/tests/m4a-query-case.test.mjs            |  44 ++-
- workbench/web/app.js                               |   3 +-
- 16 files changed, 420 insertions(+), 296 deletions(-)
+ workbench/server/app.mjs                           |   5 +
+ workbench/server/build/project-case.mjs            |  23 +-
+ workbench/server/build/report.mjs                  | 153 +++++++-
+ workbench/server/index.mjs                         |   5 +-
+ workbench/server/paths.mjs                         |   1 +
+ workbench/tests/build-report.test.mjs              |  81 +++-
+ workbench/tests/m4a-query-case.test.mjs            |   5 +-
+ workbench/web/app.js                               |  32 ++
+ workbench/web/index.html                           |   1 +
+ 20 files changed, 807 insertions(+), 348 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-harness-probe/config/browser-flash.cordis.yml
-workbench/docs/M4A_FLASH_RETRY_REPORT.md
-workbench/docs/evidence/M4A_QUERY_CASE_FLASH_RETRY_WEB.png
-workbench/tests/m4a-query-case-flash-resume.integration.mjs
+workbench/docs/M4A_STEP_COMPAT_OFFLINE_REPORT.md
+workbench/docs/evidence/M4A_STEP_COMPAT_OFFLINE_WEB.png
+workbench/server/build/assessments.mjs
+workbench/tests/build-assessments.test.mjs
+workbench/tests/m4a-step-compat-offline.integration.mjs
+workbench/tests/step-title-compat-cli.integration.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-22T10:48:10+08:00
+Started at: 2026-09-22T11:32:54+08:00
 Command: npm --prefix workbench test
 Exit code: 0
-Parsed test count: 70
+Parsed test count: 78
 Parsed failure count: 0
 Parsed skipped count: 0
 
@@ -107,434 +123,482 @@ TAP version 13
 # Subtest: state changes require exact local origin and JSON schema
 ok 1 - state changes require exact local origin and JSON schema
   ---
-  duration_ms: 63.8997
+  duration_ms: 72.3727
   type: 'test'
   ...
 # Subtest: stop route accepts only an empty JSON object from local origin
 ok 2 - stop route accepts only an empty JSON object from local origin
   ---
-  duration_ms: 6.7202
+  duration_ms: 7.0932
   type: 'test'
   ...
 # Subtest: build mutations require local origin and exact fixed schemas
 ok 3 - build mutations require local origin and exact fixed schemas
   ---
-  duration_ms: 139.1834
+  duration_ms: 137.4043
   type: 'test'
   ...
 # Subtest: only registered web-visible unchanged task files are served
 ok 4 - only registered web-visible unchanged task files are served
   ---
-  duration_ms: 43.8671
+  duration_ms: 41.8971
   type: 'test'
   ...
 # Subtest: only registered verification media are served with integrity and range checks
 ok 5 - only registered verification media are served with integrity and range checks
   ---
-  duration_ms: 27.134
+  duration_ms: 53.8675
+  type: 'test'
+  ...
+# Subtest: registers an idempotent derived assessment without rewriting the original task
+ok 6 - registers an idempotent derived assessment without rewriting the original task
+  ---
+  duration_ms: 274.1857
+  type: 'test'
+  ...
+# Subtest: rejects changed candidate or report identity and keeps a business gap out of human review
+ok 7 - rejects changed candidate or report identity and keeps a business gap out of human review
+  ---
+  duration_ms: 153.1475
+  type: 'test'
+  ...
+# Subtest: serves supplemental assessment beside the unchanged original failure
+ok 8 - serves supplemental assessment beside the unchanged original failure
+  ---
+  duration_ms: 125.4747
   type: 'test'
   ...
 # Subtest: failed candidate enables exactly one explicit revision and preserves both versions
-ok 6 - failed candidate enables exactly one explicit revision and preserves both versions
+ok 9 - failed candidate enables exactly one explicit revision and preserves both versions
   ---
-  duration_ms: 369.1411
+  duration_ms: 457.858
   type: 'test'
   ...
-# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-22T02:48:12.065Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-22T03:32:56.230Z"}
 # Subtest: 生命周期存储持续失败会降级服务并拒绝继续接纳建例
-ok 7 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
+ok 10 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
   ---
-  duration_ms: 48.911
+  duration_ms: 66.355
   type: 'test'
   ...
-# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-22T02:48:12.135Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-22T03:32:56.310Z"}
 # Subtest: 后台completion最终状态持续写失败会被观察并关闭新建例入口
-ok 8 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
+ok 11 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
   ---
-  duration_ms: 62.3443
+  duration_ms: 74.3673
   type: 'test'
   ...
 # Subtest: duplicate start is rejected and cancel closes the owned attempt without restart
-ok 9 - duplicate start is rejected and cancel closes the owned attempt without restart
+ok 12 - duplicate start is rejected and cancel closes the owned attempt without restart
   ---
-  duration_ms: 67.261
+  duration_ms: 70.453
   type: 'test'
   ...
 # Subtest: 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
-ok 10 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
+ok 13 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
   ---
-  duration_ms: 119.3229
+  duration_ms: 124.3984
   type: 'test'
   ...
 # Subtest: 终态等待修复验证使用独立固定授权文件且不改旧授权
-ok 11 - 终态等待修复验证使用独立固定授权文件且不改旧授权
+ok 14 - 终态等待修复验证使用独立固定授权文件且不改旧授权
   ---
-  duration_ms: 33.3864
+  duration_ms: 37.3395
   type: 'test'
   ...
 # Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
-ok 12 - candidate report parser keeps normal pass and concrete assertion mismatch separate
+ok 15 - candidate report parser keeps normal pass and concrete assertion mismatch separate
   ---
-  duration_ms: 15.7751
+  duration_ms: 21.1698
   type: 'test'
   ...
 # Subtest: missing report and locator errors cannot become technical pass or specified mismatch
-ok 13 - missing report and locator errors cannot become technical pass or specified mismatch
+ok 16 - missing report and locator errors cannot become technical pass or specified mismatch
   ---
-  duration_ms: 8.8008
+  duration_ms: 38.0315
+  type: 'test'
+  ...
+# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
+ok 17 - versioned step title rule accepts only bare or explicitly separated leading markers
+  ---
+  duration_ms: 0.8535
+  type: 'test'
+  ...
+# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+ok 18 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+  ---
+  duration_ms: 2.4093
+  type: 'test'
+  ...
+# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+ok 19 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+  ---
+  duration_ms: 1.0509
+  type: 'test'
+  ...
+# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
+ok 20 - steps after the attributed failure remain not executed without hiding the specified mismatch
+  ---
+  duration_ms: 0.3387
+  type: 'test'
+  ...
+# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
+ok 21 - parser preserves raw title hierarchy raw error and expected actual facts
+  ---
+  duration_ms: 15.0567
   type: 'test'
   ...
 # Subtest: associates exact task candidate and registers the same record idempotently
-ok 14 - associates exact task candidate and registers the same record idempotently
+ok 22 - associates exact task candidate and registers the same record idempotently
   ---
-  duration_ms: 271.4428
+  duration_ms: 247.8722
   type: 'test'
   ...
 # Subtest: rejects candidate hash mismatch and does not associate media across tasks
-ok 15 - rejects candidate hash mismatch and does not associate media across tasks
+ok 23 - rejects candidate hash mismatch and does not associate media across tasks
   ---
-  duration_ms: 169.4253
+  duration_ms: 200.4143
   type: 'test'
   ...
 # Subtest: serves only registered unchanged media with byte ranges
-ok 16 - serves only registered unchanged media with byte ranges
+ok 24 - serves only registered unchanged media with byte ranges
   ---
-  duration_ms: 208.8952
+  duration_ms: 310.1001
   type: 'test'
   ...
 # Subtest: M2-C stage budget persists across task ids and store restarts
-ok 17 - M2-C stage budget persists across task ids and store restarts
+ok 25 - M2-C stage budget persists across task ids and store restarts
   ---
-  duration_ms: 110.7911
+  duration_ms: 104.4097
   type: 'test'
   ...
 # Subtest: restart marks active build interrupted without replaying it
-ok 18 - restart marks active build interrupted without replaying it
+ok 26 - restart marks active build interrupted without replaying it
   ---
-  duration_ms: 78.2477
+  duration_ms: 84.0889
   type: 'test'
   ...
 # Subtest: task状态原子替换的短暂占用有限重试后成功
-ok 19 - task状态原子替换的短暂占用有限重试后成功
+ok 27 - task状态原子替换的短暂占用有限重试后成功
   ---
-  duration_ms: 120.9231
+  duration_ms: 135.119
   type: 'test'
   ...
 # Subtest: task状态持续写失败会显式返回错误而非静默成功
-ok 20 - task状态持续写失败会显式返回错误而非静默成功
+ok 28 - task状态持续写失败会显式返回错误而非静默成功
   ---
-  duration_ms: 667.1142
+  duration_ms: 687.5574
   type: 'test'
   ...
 # Subtest: 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
-ok 21 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
+ok 29 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
   ---
-  duration_ms: 847.0573
+  duration_ms: 783.776
   type: 'test'
   ...
 # Subtest: case library API requires local origin and serves only registered operations
-ok 22 - case library API requires local origin and serves only registered operations
+ok 30 - case library API requires local origin and serves only registered operations
   ---
-  duration_ms: 160.8029
+  duration_ms: 189.8706
   type: 'test'
   ...
 # Subtest: real xlsx and native package round trip preserve fields, lineage and project isolation
-ok 23 - real xlsx and native package round trip preserve fields, lineage and project isolation
+ok 31 - real xlsx and native package round trip preserve fields, lineage and project isolation
   ---
-  duration_ms: 470.258
+  duration_ms: 509.9277
   type: 'test'
   ...
 # Subtest: formula cells and stale or cross-project confirmations fail closed
-ok 24 - formula cells and stale or cross-project confirmations fail closed
+ok 32 - formula cells and stale or cross-project confirmations fail closed
   ---
-  duration_ms: 118.6325
+  duration_ms: 131.3454
   type: 'test'
   ...
 # Subtest: real xlsx preserves numeric-looking text, physical rows and blank columns
-ok 25 - real xlsx preserves numeric-looking text, physical rows and blank columns
+ok 33 - real xlsx preserves numeric-looking text, physical rows and blank columns
   ---
-  duration_ms: 105.0198
+  duration_ms: 125.6239
   type: 'test'
   ...
 # Subtest: real xlsx keeps step and expected cell-line positions instead of compacting blanks
-ok 26 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
+ok 34 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
   ---
-  duration_ms: 28.5602
+  duration_ms: 32.7175
   type: 'test'
   ...
 # Subtest: approved run uses fixed argument arrays and a reduced environment
-ok 27 - approved run uses fixed argument arrays and a reduced environment
+ok 35 - approved run uses fixed argument arrays and a reduced environment
   ---
-  duration_ms: 193.3426
+  duration_ms: 261.6399
   type: 'test'
   ...
 # Subtest: duplicate starts are rejected and stop targets only the owned process
-ok 28 - duplicate starts are rejected and stop targets only the owned process
+ok 36 - duplicate starts are rejected and stop targets only the owned process
   ---
-  duration_ms: 185.5874
+  duration_ms: 114.9434
   type: 'test'
   ...
 # Subtest: unapproved, wrong-hash, traversal and illegal environment records are refused
-ok 29 - unapproved, wrong-hash, traversal and illegal environment records are refused
+ok 37 - unapproved, wrong-hash, traversal and illegal environment records are refused
   ---
-  duration_ms: 223.6151
+  duration_ms: 244.0188
   type: 'test'
   ...
 # Subtest: runtime-copy integrity failure preserves the raw passing report but blocks overall pass
-ok 30 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
+ok 38 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
   ---
-  duration_ms: 123.7995
+  duration_ms: 163.9098
   type: 'test'
   ...
 # Subtest: 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
-ok 31 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
+ok 39 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
   ---
-  duration_ms: 153.3377
+  duration_ms: 185.2618
   type: 'test'
   ...
 # Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
-ok 32 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+ok 40 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
   ---
-  duration_ms: 119.8041
+  duration_ms: 140.4162
   type: 'test'
   ...
 # Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
-ok 33 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+ok 41 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
   ---
-  duration_ms: 239.4379
+  duration_ms: 298.3545
   type: 'test'
   ...
 # Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
-ok 34 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+ok 42 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
   ---
-  duration_ms: 185.7547
+  duration_ms: 200.3185
   type: 'test'
   ...
 # Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
-ok 35 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+ok 43 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
   ---
-  duration_ms: 54.2917
+  duration_ms: 56.1546
   type: 'test'
   ...
 # Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
-ok 36 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+ok 44 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
   ---
-  duration_ms: 433.5529
+  duration_ms: 372.1072
   type: 'test'
   ...
 # Subtest: only indexed media for the selected run can be read
-ok 37 - only indexed media for the selected run can be read
+ok 45 - only indexed media for the selected run can be read
   ---
-  duration_ms: 135.9726
+  duration_ms: 139.6504
   type: 'test'
   ...
 # Subtest: changed media bytes are not served as the registered attachment
-ok 38 - changed media bytes are not served as the registered attachment
+ok 46 - changed media bytes are not served as the registered attachment
   ---
-  duration_ms: 17.4559
+  duration_ms: 6.8724
   type: 'test'
   ...
 # Subtest: 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
-ok 39 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
+ok 47 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
   ---
-  duration_ms: 268.5349
+  duration_ms: 288.7684
   type: 'test'
   ...
 # Subtest: v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
-ok 40 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
+ok 48 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
   ---
-  duration_ms: 201.3913
+  duration_ms: 205.869
   type: 'test'
   ...
 # Subtest: request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
-ok 41 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
+ok 49 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
   ---
-  duration_ms: 128.3211
+  duration_ms: 132.5058
   type: 'test'
   ...
 # Subtest: request_id 正在处理时只复用相同身份，不同身份立即冲突
-ok 42 - request_id 正在处理时只复用相同身份，不同身份立即冲突
+ok 50 - request_id 正在处理时只复用相同身份，不同身份立即冲突
   ---
-  duration_ms: 124.3016
+  duration_ms: 150.4391
   type: 'test'
   ...
 # Subtest: 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
-ok 43 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
+ok 51 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
   ---
-  duration_ms: 229.4542
+  duration_ms: 129.1635
   type: 'test'
   ...
 # Subtest: M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
-ok 44 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
+ok 52 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
   ---
-  duration_ms: 570.455
+  duration_ms: 666.6151
   type: 'test'
   ...
 # Subtest: 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
-ok 45 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
+ok 53 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
   ---
-  duration_ms: 2.1247
+  duration_ms: 2.8331
   type: 'test'
   ...
 # Subtest: M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
-ok 46 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
+ok 54 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
   ---
-  duration_ms: 170.2159
+  duration_ms: 156.4144
   type: 'test'
   ...
 # Subtest: approved sorting asset is derived from the real frozen records
-ok 47 - approved sorting asset is derived from the real frozen records
+ok 55 - approved sorting asset is derived from the real frozen records
   ---
-  duration_ms: 21.5917
+  duration_ms: 31.4135
   type: 'test'
   ...
 # Subtest: hash mismatch is rejected instead of becoming a new approval
-ok 48 - hash mismatch is rejected instead of becoming a new approval
+ok 56 - hash mismatch is rejected instead of becoming a new approval
   ---
-  duration_ms: 15.2412
+  duration_ms: 34.0919
   type: 'test'
   ...
 # Subtest: complete passing report requires all registered steps and all media kinds
-ok 49 - complete passing report requires all registered steps and all media kinds
+ok 57 - complete passing report requires all registered steps and all media kinds
   ---
-  duration_ms: 60.0192
+  duration_ms: 104.2946
   type: 'test'
   ...
 # Subtest: raw passing result is not an overall pass when all media are missing
-ok 50 - raw passing result is not an overall pass when all media are missing
+ok 58 - raw passing result is not an overall pass when all media are missing
   ---
-  duration_ms: 30.9307
+  duration_ms: 32.8677
   type: 'test'
   ...
 # Subtest: raw passing result is not an overall pass when screenshot is missing
-ok 51 - raw passing result is not an overall pass when screenshot is missing
+ok 59 - raw passing result is not an overall pass when screenshot is missing
   ---
-  duration_ms: 52.8685
+  duration_ms: 40.6618
   type: 'test'
   ...
 # Subtest: raw passing result is not an overall pass when video is missing
-ok 52 - raw passing result is not an overall pass when video is missing
+ok 60 - raw passing result is not an overall pass when video is missing
   ---
-  duration_ms: 48.8464
+  duration_ms: 41.5392
   type: 'test'
   ...
 # Subtest: raw passing result is not an overall pass when trace is missing
-ok 53 - raw passing result is not an overall pass when trace is missing
+ok 61 - raw passing result is not an overall pass when trace is missing
   ---
-  duration_ms: 33.5859
+  duration_ms: 26.4972
   type: 'test'
   ...
 # Subtest: assertion mismatch remains a failed test and later steps are not executed
-ok 54 - assertion mismatch remains a failed test and later steps are not executed
+ok 62 - assertion mismatch remains a failed test and later steps are not executed
   ---
-  duration_ms: 32.4559
+  duration_ms: 23.8234
   type: 'test'
   ...
 # Subtest: missing, corrupt, skipped and zero-target reports fail closed
-ok 55 - missing, corrupt, skipped and zero-target reports fail closed
+ok 63 - missing, corrupt, skipped and zero-target reports fail closed
   ---
-  duration_ms: 29.488
+  duration_ms: 23.0524
   type: 'test'
   ...
 # Subtest: exit code zero cannot override an incomplete step set
-ok 56 - exit code zero cannot override an incomplete step set
+ok 64 - exit code zero cannot override an incomplete step set
   ---
-  duration_ms: 7.0683
+  duration_ms: 6.6355
   type: 'test'
   ...
 # Subtest: a passing Playwright report cannot override a non-normal execution terminal state
-ok 57 - a passing Playwright report cannot override a non-normal execution terminal state
+ok 65 - a passing Playwright report cannot override a non-normal execution terminal state
   ---
-  duration_ms: 124.9074
+  duration_ms: 98.8993
   type: 'test'
   ...
 # Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
-ok 58 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+ok 66 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
   ---
-  duration_ms: 1.304
+  duration_ms: 1.6432
   type: 'test'
   ...
 # Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
-ok 59 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
+ok 67 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
   ---
-  duration_ms: 1295.3378
+  duration_ms: 1257.6581
   type: 'test'
   ...
 # Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
-ok 60 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+ok 68 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
   ---
-  duration_ms: 911.2819
+  duration_ms: 1523.3209
   type: 'test'
   ...
 # Subtest: 项目用例新版本不会自动继承旧版本的限定首审资产
-ok 61 - 项目用例新版本不会自动继承旧版本的限定首审资产
+ok 69 - 项目用例新版本不会自动继承旧版本的限定首审资产
   ---
-  duration_ms: 1924.8791
+  duration_ms: 2054.8062
   type: 'test'
   ...
 # Subtest: 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
-ok 62 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+ok 70 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
   ---
-  duration_ms: 145.6178
+  duration_ms: 148.6758
   type: 'test'
   ...
 # Subtest: 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
-ok 63 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+ok 71 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
   ---
-  duration_ms: 174.9221
+  duration_ms: 225.2299
   type: 'test'
   ...
 # Subtest: health endpoint reports the independent workbench
-ok 64 - health endpoint reports the independent workbench
+ok 72 - health endpoint reports the independent workbench
   ---
-  duration_ms: 53.151
+  duration_ms: 59.5709
   type: 'test'
   ...
 # Subtest: unknown routes fail closed
-ok 65 - unknown routes fail closed
+ok 73 - unknown routes fail closed
   ---
-  duration_ms: 11.7292
+  duration_ms: 9.5865
   type: 'test'
   ...
 # Subtest: asset registration is persistent and idempotent
-ok 66 - asset registration is persistent and idempotent
+ok 74 - asset registration is persistent and idempotent
   ---
-  duration_ms: 31.5266
+  duration_ms: 52.8318
   type: 'test'
   ...
 # Subtest: runs remain readable and active records become interrupted after restart
-ok 67 - runs remain readable and active records become interrupted after restart
+ok 75 - runs remain readable and active records become interrupted after restart
   ---
-  duration_ms: 32.1887
+  duration_ms: 48.2903
   type: 'test'
   ...
 # Subtest: run ids cannot escape the data root
-ok 68 - run ids cannot escape the data root
+ok 76 - run ids cannot escape the data root
   ---
-  duration_ms: 8.4506
+  duration_ms: 16.8861
   type: 'test'
   ...
 # Subtest: workbench候选使用同一Playwright运行根并真实执行正常与反例
-ok 69 - workbench候选使用同一Playwright运行根并真实执行正常与反例
+ok 77 - workbench候选使用同一Playwright运行根并真实执行正常与反例
   ---
-  duration_ms: 11415.3601
+  duration_ms: 11651.3232
   type: 'test'
   ...
 # Subtest: harness-probe默认运行根保持独立可执行
-ok 70 - harness-probe默认运行根保持独立可执行
+ok 78 - harness-probe默认运行根保持独立可执行
   ---
-  duration_ms: 2756.2864
+  duration_ms: 2688.3746
   type: 'test'
   ...
-1..70
-# tests 70
+1..78
+# tests 78
 # suites 0
-# pass 70
+# pass 78
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 15424.6467
+# duration_ms 15702.7247
 ```
 
 ### Sync Record Status
@@ -553,4 +617,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-M4-A flash 单次真实复验；Harness 生成候选，正常 Playwright 通过、反例断言失败，但精确步骤标记契约不符合，因此候选验证失败。
+零模型步骤兼容与已有候选离线补充评估；原任务失败保持，S03任务名称列断言缺失。

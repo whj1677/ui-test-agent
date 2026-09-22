@@ -20,6 +20,7 @@ export function createPaths(options = {}) {
     buildTasksRoot: path.join(localRoot, 'build-tasks'),
     buildRuntimeRoot: path.join(localRoot, 'build-runtime'),
     buildRevalidationsRoot: path.join(localRoot, 'candidate-revalidations'),
+    buildAssessmentsRoot: path.join(localRoot, 'candidate-assessments'),
     caseLibraryRoot: path.join(localRoot, 'case-library'),
     executionRuntimeRoot: path.join(path.resolve(options.workbenchRoot || workbenchRoot), '.local', 'execution-runtime', runtimeNamespace),
   };
