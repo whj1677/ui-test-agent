@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "已确认",
     "governance_level": "G2",
-    "version": 1,
+    "version": 2,
     "last_updated": "2026-09-22"
   },
   "original_input": "用户要求按附件《UI-D2A_墨白界面接入真实项目与用例后端_需求说明_v1.0.md》直接实施：在独立分支把选定的墨白极简界面接入现有真实项目与用例后端，完成真实 Excel/JSON 导入预览确认、版本编辑、导出、跨项目再导入和重启持久化；保留旧工作台与 UI-D1 原型；自动验收使用独立数据目录；不启动 Harness、建例模型或被测业务脚本；提供样例、指南、浏览器证据并推送 GitHub。",
@@ -22,10 +22,11 @@
     "视觉基线为 b5f33a24e5fec2ddcfe372c7bb081ffe14c932d8 的墨白极简 UI-D1，数据与行为事实以当前实际后端 API 为准。",
     "新入口采用工作台同源 /workspace/，默认工作台端口 4210；旧 / 与独立 4311 UI-D1 原型均保留。",
     "现有后端已提供项目 CRUD 子集、原始字节上传、Excel/JSON 预览确认、用例新版本及正式 case-package-v1 导出。",
-    "样例和验收均为合成内容，真实项目正文、历史任务、媒体、批准资产和预算不在本批修改范围。"
+    "样例和验收均为合成内容，真实项目正文、历史任务、媒体、批准资产和预算不在本批修改范围。",
+    "收尾核对发现用户下载目录的 case-import.json 明确属于本机合成巡维演练台，ui-d2a-trial 中没有项目或用例；不得将其改称真实业务试点。"
   ],
   "inferences_and_open_questions": [
-    "无阻塞业务问题；实现时若当前接口与附件清单漂移，以实际代码和既有测试为证据做最小适配并记录。"
+    "真实项目三用例试点仍需用户给出原始文件路径/编号、环境与只读范围、账号角色和登录方式，以及是否允许外部模型接收用例和页面资料。"
   ],
   "development_requirements": [
     {
@@ -55,12 +56,26 @@
       "requirement": "提供两份真实 xlsx 合成样例、一个由正式后端导出并验证的 JSON 包、中文体验指南和脱敏验收证据。",
       "acceptance_criteria": "真实 Chromium 走通 A/B 项目上传、下载、跨项目导入、编辑和服务重启读回；1440×900、1920×1080 与 1280×800 可操作；报告区分工程测试和浏览器流程。",
       "constraints": "验收数据位于 git 忽略的独立目录；公开仓库不含 .local、凭据、私有媒体或用户文件。"
+    },
+    {
+      "id": "DR-0031-05",
+      "status": "已确认",
+      "requirement": "严格按当前用例解析详情版本，并在锁定依赖就绪后复验候选运行根测试。",
+      "acceptance_criteria": "无版本参数只显示该用例 current_version；显式版本非法或不存在时明确失败；历史只读；真实浏览器覆盖跨用例、刷新、后退与直接链接；原两项依赖失败和全量测试实际重跑。",
+      "constraints": "不运行 Harness/模型/业务脚本，不升级依赖或修改锁文件。"
+    },
+    {
+      "id": "DR-0031-06",
+      "status": "已确认",
+      "requirement": "仅在取得可确认的真实项目资料时导入最多三条只读用例，否则记录精确输入缺口和下一轮最小接入项。",
+      "acceptance_criteria": "不得用合成巡维演练台或公开样例冒充真实项目；资料缺失时列出项目/用例/环境/登录/范围/外发许可缺口。",
+      "constraints": "不扫描无关目录，不访问真实系统，不索取明文凭据，不启动建例或执行。"
     }
   ],
   "design_decisions": [
     {
       "id": "DD-0031-01",
-      "dr_ids": ["DR-0031-01", "DR-0031-02", "DR-0031-03"],
+      "dr_ids": ["DR-0031-01", "DR-0031-02", "DR-0031-03", "DR-0031-05"],
       "status": "已确认",
       "summary": "在 workbench/web-v2 提供无构建步骤的同源 HTML/CSS/JS 客户端，并由 server/app.mjs 通过限定路径提供资源。",
       "rationale": "最大复用现有单机服务与墨白原型布局，保持可回退且不引入第二套持久化或前端框架。"
@@ -74,7 +89,7 @@
     },
     {
       "id": "DD-0031-03",
-      "dr_ids": ["DR-0031-04"],
+      "dr_ids": ["DR-0031-04", "DR-0031-06"],
       "status": "已确认",
       "summary": "验收服务与用户体验分别使用 ui-d2a-acceptance 和 ui-d2a-trial 数据根，样例公开、运行数据私有。",
       "rationale": "证明真实后端持久化，同时不污染已有项目、历史证据和用户体验数据。"
@@ -98,28 +113,34 @@
     {"id":"TK-0031-01","dr_ids":["DR-0031-01"],"dd_ids":["DD-0031-01","DD-0031-02"],"status":"已完成","task":"实现限定静态入口、API 客户端、项目列表/设置和用例列表/详情/版本编辑。","verification_ids":["VT-0031-01"]},
     {"id":"TK-0031-02","dr_ids":["DR-0031-02"],"dd_ids":["DD-0031-01","DD-0031-02"],"status":"已完成","task":"实现真实 xlsx/JSON 上传、映射、后端预览、冲突决策和确认结果。","verification_ids":["VT-0031-02"]},
     {"id":"TK-0031-03","dr_ids":["DR-0031-03"],"dd_ids":["DD-0031-02"],"status":"已完成","task":"实现选中/全部正式导出、跨项目再导入、重复与 revision 冲突处理。","verification_ids":["VT-0031-03"]},
-    {"id":"TK-0031-04","dr_ids":["DR-0031-04"],"dd_ids":["DD-0031-03"],"status":"已完成","task":"生成合成样例，完成工程与真实浏览器验收、重启读回、文档、截图和 GitHub 推送。","verification_ids":["VT-0031-04"]}
+    {"id":"TK-0031-04","dr_ids":["DR-0031-04"],"dd_ids":["DD-0031-03"],"status":"已完成","task":"生成合成样例，完成工程与真实浏览器验收、重启读回、文档、截图和 GitHub 推送。","verification_ids":["VT-0031-04"]},
+    {"id":"TK-0031-05","dr_ids":["DR-0031-05"],"dd_ids":["DD-0031-01","DD-0031-02"],"status":"已完成","task":"修复详情版本选择，准备锁定 harness-probe 依赖并完成专项、浏览器和全量回归。","verification_ids":["VT-0031-05"]},
+    {"id":"TK-0031-06","dr_ids":["DR-0031-06"],"dd_ids":["DD-0031-03"],"status":"受阻","task":"选择一个真实项目模块的最多三条只读用例，经新界面预览确认、导出和重启读回。","verification_ids":["VT-0031-06"]}
   ],
   "verification_items": [
     {"id":"VT-0031-01","dr_ids":["DR-0031-01"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证 /workspace 与旧首页并存，项目/用例/版本/草稿和错误状态来自真实后端且刷新可读回。","evidence_standard":"受影响 Node 测试、HTTP 状态、真实 Chromium 页面与重启读回记录；浏览器明细见 workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md。","current_evidence":{"command":"node --test workbench/tests/ui-d2a.test.mjs","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-verification.log"}},
     {"id":"VT-0031-02","dr_ids":["DR-0031-02"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证真实 A/B xlsx 上传、工作表映射、预览分类、确认前后数量、保真字段及冲突/待澄清处理。","evidence_standard":"原始样例固定预期、后端记录、浏览器上传与预览截图；浏览器明细见 workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md。","current_evidence":{"command":"node --test workbench/tests/ui-d2a.test.mjs","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-verification.log"}},
     {"id":"VT-0031-03","dr_ids":["DR-0031-03"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证选中/全部实际下载、正式包解析、跨项目导入、重复幂等、项目独立编辑和 409 处理。","evidence_standard":"下载文件字节与 JSON 断言、项目计数/版本/来源记录、浏览器流程；浏览器明细见 workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md。","current_evidence":{"command":"node --test workbench/tests/ui-d2a.test.mjs","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-verification.log"}},
-    {"id":"VT-0031-04","dr_ids":["DR-0031-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证独立数据根、三种桌面尺寸、服务重启与空白浏览器读回，且 Harness/模型/业务脚本调用为 0。","evidence_standard":"实际命令、退出码、测试统计、截图、数据根与进程记录；浏览器明细见 workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md。","current_evidence":{"command":"node --test workbench/tests/ui-d2a.test.mjs","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-verification.log"}}
+    {"id":"VT-0031-04","dr_ids":["DR-0031-04"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证独立数据根、三种桌面尺寸、服务重启与空白浏览器读回，且 Harness/模型/业务脚本调用为 0。","evidence_standard":"实际命令、退出码、测试统计、截图、数据根与进程记录；浏览器明细见 workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md。","current_evidence":{"command":"node --test workbench/tests/ui-d2a.test.mjs","exit_code":0,"test_count":3,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-verification.log"}},
+    {"id":"VT-0031-05","dr_ids":["DR-0031-05"],"confirmation_status":"已确认","execution_status":"集成测试通过","item":"验证跨用例版本不串用、非法/缺失版本不回退、历史只读，以及锁定依赖就绪后的完整工程回归。","evidence_standard":"修前失败、修后真实 Chromium、两项专项和全量测试命令/退出码/计数；详见 workbench/docs/UI_D2A_CLOSEOUT_AND_REAL_PILOT_PREP.md。","current_evidence":{"command":"npm --prefix workbench test","exit_code":0,"test_count":81,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0031-ui-d2a-real-case-library/ui-d2a-closeout-verification.log"}},
+    {"id":"VT-0031-06","dr_ids":["DR-0031-06"],"confirmation_status":"已确认","execution_status":"无法运行","item":"验证一个真实项目单模块最多三条只读用例的预览确认、正式导出和重启读回。","evidence_standard":"原文件、明确编号、环境/角色/范围、预览与导出记录。","current_evidence":"ui-d2a-trial 项目/用例为 0；唯一现成 case-import.json 明确为本机合成巡维演练台，不能作为真实业务试点。未上传、未创建项目、未访问业务环境。"}
   ],
   "verification_environment": {
-    "working_directory": "独立 worktree C:/Users/20240082/.codex/worktrees/workbench-ui-d2a-case-library/ui-test-agent。",
+    "working_directory": "独立 Git worktree（codex/test-workbench-ui-d2a-case-library）。",
     "commands": ["npm --prefix workbench test（先核对无真实 Harness/业务执行）", "独立 WORKBENCH_DATA_DIR 与空闲端口启动 npm --prefix workbench start", "真实 Chromium /workspace/ 流程及下载/重启核对"],
     "environment": ["Windows PowerShell", "Node.js 与 workbench package-lock 锁定依赖", "本机 Chromium/Playwright；无需模型凭据"],
-    "conclusion": ["UI-D2A 项目与用例真实数据闭环通过：浏览器上传、预览确认、下载、跨项目导入、版本编辑与重启读回均取得实际证据；Harness、模型、业务脚本调用为 0。全量 npm test 的 2 个既有 Harness 运行根用例因 harness-probe 依赖未安装未就绪，不影响本批路径且未为此扩大范围。"]
+    "conclusion": ["UI-D2A 数据闭环保持通过；版本路由收尾和锁定依赖准备后，全量 npm test 为 81/81。真实项目三用例资料未取得，试导入无法运行；Harness、模型、业务脚本调用仍为 0。"]
   },
   "trace_current": [
     {"un_id":"UN-0031-01","dr_id":"DR-0031-01","dd_id":"DD-0031-01","tk_id":"TK-0031-01","vt_id":"VT-0031-01","status":"已通过"},
     {"un_id":"UN-0031-01","dr_id":"DR-0031-02","dd_id":"DD-0031-02","tk_id":"TK-0031-02","vt_id":"VT-0031-02","status":"已通过"},
     {"un_id":"UN-0031-01","dr_id":"DR-0031-03","dd_id":"DD-0031-02","tk_id":"TK-0031-03","vt_id":"VT-0031-03","status":"已通过"},
-    {"un_id":"UN-0031-01","dr_id":"DR-0031-04","dd_id":"DD-0031-03","tk_id":"TK-0031-04","vt_id":"VT-0031-04","status":"已通过"}
+    {"un_id":"UN-0031-01","dr_id":"DR-0031-04","dd_id":"DD-0031-03","tk_id":"TK-0031-04","vt_id":"VT-0031-04","status":"已通过"},
+    {"un_id":"UN-0031-01","dr_id":"DR-0031-05","dd_id":"DD-0031-01","tk_id":"TK-0031-05","vt_id":"VT-0031-05","status":"已通过"},
+    {"un_id":"UN-0031-01","dr_id":"DR-0031-06","dd_id":"DD-0031-03","tk_id":"TK-0031-06","vt_id":"VT-0031-06","status":"受阻"}
   ],
-  "trace_history": [{"version":1,"link":"附件 UI-D2A 需求说明 v1.0（本机输入，不提交原件）","status":"已确认","notes":"用户明确要求直接实施、真实浏览器验收并推送独立分支。"}],
-  "open_questions": ["无阻塞待确认项；若现有接口事实与附件清单不一致，以实际代码与既有测试为依据做最小兼容并在验收报告中记录。"],
+  "trace_history": [{"version":1,"link":"附件 UI-D2A 需求说明 v1.0（本机输入，不提交原件）","status":"已确认","notes":"用户明确要求直接实施、真实浏览器验收并推送独立分支。"},{"version":2,"link":"用户本轮 UI-D2A 收尾与真实三用例试点请求","status":"部分完成","notes":"版本与依赖收尾已通过；真实用例资料不足，试导入无法运行。"}],
+  "open_questions": ["请提供真实项目用例文件的明确路径及最多三条编号、环境入口与只读授权、账号角色/登录方式、允许页面/动作和 DeepSeek 外发许可。"],
   "prohibited_implementation": ["不得用 demo-data、sessionStorage、Mock API 或预设成功结果冒充真实接入。", "不得启动 Harness、建例模型、被测业务脚本或改变批准/预算/历史结果。", "不得开放任意静态路径、任意上传类型或跨域写入。", "不得自动扩展建例、执行、审批、媒体、批量套件或产品发布。"],
-  "changes": [{"date":"2026-09-22","version":1,"type":"新建并确认","description":"冻结 UI-D2A 真实项目与用例管理接入范围、验收和停止点。","impact":"workbench 新 web-v2 入口、限定静态路由、项目用例 UI、样例与文档","confirmed_by":"用户附件及本轮明确请求"},{"date":"2026-09-22","version":1,"type":"实现与验证","description":"完成真实后端接入、合成样例、真实浏览器上传下载与重启读回，并形成脱敏证据。","impact":"REQ-0031 四项任务和四项验证转为已完成/已通过；未扩展建例与执行。","confirmed_by":"工程测试与真实 Chromium 验收"}]
+  "changes": [{"date":"2026-09-22","version":1,"type":"新建并确认","description":"冻结 UI-D2A 真实项目与用例管理接入范围、验收和停止点。","impact":"workbench 新 web-v2 入口、限定静态路由、项目用例 UI、样例与文档","confirmed_by":"用户附件及本轮明确请求"},{"date":"2026-09-22","version":1,"type":"实现与验证","description":"完成真实后端接入、合成样例、真实浏览器上传下载与重启读回，并形成脱敏证据。","impact":"REQ-0031 四项任务和四项验证转为已完成/已通过；未扩展建例与执行。","confirmed_by":"工程测试与真实 Chromium 验收"},{"date":"2026-09-22","version":2,"type":"收尾与试点准备","description":"修复严格版本选择，补齐 harness-probe 锁定依赖并收口 81/81；核对真实试点输入并记录阻塞与最小接入清单。","impact":"web-v2 用例详情、浏览器回归、验收追加说明；无真实业务文件入库。","confirmed_by":"用户本轮请求、工程测试与本机资料核对"}]
 }

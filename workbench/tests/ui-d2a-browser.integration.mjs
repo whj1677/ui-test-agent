@@ -73,6 +73,14 @@ try {
   projectA = await caseStore.getProject(projectAId); assert.equal(projectA.cases.find((item) => item.external_id === 'UI-D2A-001').current_version, 1);
   await page.getByRole('button', { name:/v1 · 内容已确认/ }).click(); await page.getByText(/测试服务已启动/).waitFor(); assert.match(await page.locator('.definition-grid').innerText(), /测试服务已启动/); assert.doesNotMatch(await page.locator('.definition-grid').innerText(), /项目B独立/);
   await page.getByRole('button', { name:/v2 · 内容已确认/ }).click(); await page.getByText(/项目B独立前置条件/).waitFor(); assert.match(await page.locator('.definition-grid').innerText(), /项目B独立前置条件/);
+  const projectACase = projectA.cases.find((item) => item.external_id === 'UI-D2A-001');
+  await page.goto(`${baseUrl}/workspace/#/projects/${projectAId}/cases/${projectACase.case_id}?version=1`); await page.getByText('设备监控 · v1').waitFor();
+  await page.goto(`${baseUrl}/workspace/#/projects/${projectBId}/cases/${edited.case_id}`); await page.getByText('设备监控 · v2').waitFor(); assert.match(await page.locator('.definition-grid').innerText(), /项目B独立前置条件/); assert.equal(await page.getByRole('button', { name:'编辑当前版本' }).isVisible(), true);
+  await page.reload(); await page.getByText('设备监控 · v2').waitFor();
+  await page.goto(`${baseUrl}/workspace/#/projects/${projectBId}/cases/${edited.case_id}?version=9999`); await page.getByRole('heading', { name:'无法显示用例版本' }).waitFor(); assert.match(await page.locator('main').innerText(), /版本 9999 不存在/); assert.equal(await page.getByRole('button', { name:'编辑当前版本' }).count(), 0);
+  await page.goto(`${baseUrl}/workspace/#/projects/${projectBId}/cases/${edited.case_id}?version=bad`); await page.getByRole('heading', { name:'无法显示用例版本' }).waitFor(); assert.match(await page.locator('main').innerText(), /版本参数无效/);
+  await page.goBack(); await page.getByRole('heading', { name:'无法显示用例版本' }).waitFor();
+  await page.goBack(); await page.getByText('设备监控 · v2').waitFor();
   await page.setViewportSize({ width:1920, height:1080 }); assert.equal(await page.locator('body').evaluate((body) => body.scrollWidth <= document.documentElement.clientWidth + 1), true); await page.screenshot({ path:path.join(evidenceRoot, '03-version-detail-1920x1080.png'), fullPage:true });
 
   const conflict = structuredClone(allPackage); conflict.package_id = 'ui-d2a-conflict-package'; conflict.cases[0].content.title = '同来源变化内容';

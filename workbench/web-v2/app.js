@@ -224,8 +224,29 @@ function bindImport(project, draft, stage) {
   if (stage === 4) document.querySelector('#import-another').addEventListener('click', () => { Object.assign(draft, { upload:null, preview:null, result:null, sheet:null, mapping:null }); renderImport(project); });
 }
 
+function resolveCaseVersion(item, requestedVersion) {
+  if (requestedVersion === null) {
+    const current = item.versions.find((entry) => entry.version === item.current_version);
+    return current ? { version:current } : { error:'CURRENT_VERSION_MISSING' };
+  }
+  if (!/^[1-9]\d*$/.test(requestedVersion)) return { error:'INVALID_VERSION' };
+  const versionNumber = Number(requestedVersion);
+  if (!Number.isSafeInteger(versionNumber)) return { error:'INVALID_VERSION' };
+  const version = item.versions.find((entry) => entry.version === versionNumber);
+  return version ? { version } : { error:'VERSION_NOT_FOUND', versionNumber };
+}
+function renderCaseVersionError(project, item, requestedVersion, result) {
+  state.caseVersion = null;
+  setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name, href:`#/projects/${encodeURIComponent(project.project_id)}/cases` }, { label:item.external_id }, { label:'版本不可用' }]);
+  const detail = result.error === 'VERSION_NOT_FOUND' ? `版本 ${result.versionNumber} 不存在。` : result.error === 'CURRENT_VERSION_MISSING' ? `当前版本 v${item.current_version} 的正文不存在。` : `版本参数无效：${requestedVersion || '空值'}。只接受正整数。`;
+  showPage(`<div class="page-heading"><div><p class="eyebrow">CASE VERSION</p><h1>无法显示用例版本</h1><p>${esc(detail)}</p></div></div>
+    ${projectTabs(project, 'cases')}
+    <section class="empty"><h2>${esc(item.external_id)} · ${esc(item.title)}</h2><p>系统没有回退到其他版本，也没有替换链接中的版本选择。</p><a class="button primary" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}?version=${item.current_version}">查看当前版本 v${item.current_version}</a></section>`);
+}
 function renderCaseDetail(project, item, requestedVersion) {
-  const versionNumber = Number(requestedVersion || state.caseVersion || item.current_version); const version = item.versions.find((entry) => entry.version === versionNumber) || item.versions.at(-1); state.caseVersion = version.version; const content = version.content;
+  const resolved = resolveCaseVersion(item, requestedVersion);
+  if (!resolved.version) return renderCaseVersionError(project, item, requestedVersion, resolved);
+  const version = resolved.version; state.caseVersion = version.version; const content = version.content;
   setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name, href:`#/projects/${encodeURIComponent(project.project_id)}/cases` }, { label:item.external_id }]);
   const versions = [...item.versions].sort((a,b) => b.version - a.version).map((entry) => `<button data-version="${entry.version}" class="${entry.version === version.version ? 'active' : ''}"><strong>v${entry.version} · ${entry.content.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'}</strong><span>${esc(fmtDate(entry.created_at))} · ${esc(short(entry.content_sha256))}</span></button>`).join('');
   const steps = content.steps.map((step) => `<article class="step-pair"><div class="step-number">${step.order}</div><div><small>动作</small><p>${esc(step.action)}</p></div><div><small>对应预期</small><p>${esc(step.expected || '（缺失，内容待确认）')}</p></div></article>`).join('');

@@ -47,6 +47,8 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 
 新页面覆盖项目创建/修改、紧凑用例列表、历史版本正文、真实 `.xlsx`/原生 JSON 包上传、服务端预览确认、选中/全部正式导出、跨项目再导入和 revision 冲突展示。前端不推导服务端分类，不把空选择解释为导出全部，也不会在 API 失败时回落演示成功。建例任务和执行记录在本阶段明确显示未接入；页面不会调用 Harness、模型或业务执行接口。
 
+详情版本由 URL 和当前用例共同确定：无 `version` 参数时使用该用例自己的 `current_version`；显式参数必须是正整数并精确命中该用例版本。非法、不存在或正文缺失的版本显示明确错误，不回退到其他版本。历史版本只读，只有最新版本允许进入编辑。
+
 - 用户指南：[workbench/docs/UI_D2A_USER_TRIAL_GUIDE.md](../../workbench/docs/UI_D2A_USER_TRIAL_GUIDE.md)
 - API 映射：[workbench/docs/UI_D2A_API_MAPPING.md](../../workbench/docs/UI_D2A_API_MAPPING.md)
 - 验收报告：[workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md](../../workbench/docs/UI_D2A_ACCEPTANCE_REPORT.md)

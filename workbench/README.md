@@ -23,7 +23,7 @@ npm run register:m2c-runtime-revalidation
 npm start
 ```
 
-默认只监听 `http://127.0.0.1:4210`。UI-D2A 新墨白真实页面位于 `http://127.0.0.1:4210/workspace/#/projects`，旧首页仍位于 `/`，UI-D1 原型目录也保持不变。新页面直接使用现有项目与用例 API，不以演示数据或 `sessionStorage` 作为业务存储。体验命令、样例与操作顺序见 [UI-D2A 用户体验指南](docs/UI_D2A_USER_TRIAL_GUIDE.md)，实际接入边界见 [API 映射](docs/UI_D2A_API_MAPPING.md)，验收结果见 [UI-D2A 验收报告](docs/UI_D2A_ACCEPTANCE_REPORT.md)。
+默认只监听 `http://127.0.0.1:4210`。UI-D2A 新墨白真实页面位于 `http://127.0.0.1:4210/workspace/#/projects`，旧首页仍位于 `/`，UI-D1 原型目录也保持不变。新页面直接使用现有项目与用例 API，不以演示数据或 `sessionStorage` 作为业务存储。体验命令、样例与操作顺序见 [UI-D2A 用户体验指南](docs/UI_D2A_USER_TRIAL_GUIDE.md)，实际接入边界见 [API 映射](docs/UI_D2A_API_MAPPING.md)，验收结果见 [UI-D2A 验收报告](docs/UI_D2A_ACCEPTANCE_REPORT.md)，版本路由收尾、81/81 回归和真实试点输入缺口见 [UI-D2A 收尾与真实试点准备报告](docs/UI_D2A_CLOSEOUT_AND_REAL_PILOT_PREP.md)。
 
 页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
 
