@@ -3,7 +3,7 @@
   "req_id": "REQ-0029",
   "title": "M4-A 一条列表查询用例的工作台迁移验证",
   "metadata": {
-    "requirement_status": "实施中",
+    "requirement_status": "部分完成（真实建例受阻）",
     "governance_level": "G2",
     "version": 1,
     "last_updated": "2026-09-22"
@@ -60,6 +60,15 @@
       "status": "已确认",
       "summary": "增加数据驱动的项目用例运行场景注册，复用既有冻结输入、Harness适配、Playwright验证和媒体登记。",
       "rationale": "满足单条查询用例迁移，同时避免为每条用例复制控制器或将样本答案写入通用逻辑。"
+    },
+    {
+      "id": "DD-0029-02",
+      "dr_ids": [
+        "DR-0029-02"
+      ],
+      "status": "已确认",
+      "summary": "真实启动使用与项目、用例版本及环境绑定的固定授权；没有候选时停止，不把修订额度改作替补初稿。",
+      "rationale": "确保一次失败仍可追溯并遵守用户规定的有限调用和停止边界。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -67,7 +76,8 @@
     "反例入口和冻结故障说明仅由验证场景配置持有，不进入模型可读文件或指令。"
   ],
   "module_document_impact": [
-    "workbench 建例环境配置、任务管理、受控夹具服务、验证报告与项目页面；heldout-lab 原资产只读。"
+    "workbench 建例环境配置、任务管理、受控夹具服务、验证报告与项目页面；heldout-lab 原资产只读。",
+    "本次无需模块文档变更，原因：仓库没有与本增量对应的独立模块文档，运行入口、边界和实际失败状态已同步到 workbench/README.md、REQ-0029 与专项验收报告。"
   ],
   "risks_and_rollback": [
     "候选可能遗漏义务或真实调用中断；保留全部尝试和原始事实，必要时仅按授权进行一次定向修订。",
@@ -83,7 +93,7 @@
       "dd_ids": [
         "DD-0029-01"
       ],
-      "status": "实施中",
+      "status": "已完成",
       "task": "实现 HOLD-Q1 原生包转换、显式场景配置、冻结输入及零模型接线验证。",
       "verification_ids": [
         "VT-0029-01",
@@ -93,8 +103,8 @@
     {
       "id": "TK-0029-02",
       "dr_ids": ["DR-0029-02", "DR-0029-03"],
-      "dd_ids": ["DD-0029-01"],
-      "status": "待实现",
+      "dd_ids": ["DD-0029-01", "DD-0029-02"],
+      "status": "受阻",
       "task": "从真实Web进行有限Harness建例、同候选正常/反例验证、媒体读回和义务核查。",
       "verification_ids": ["VT-0029-03"]
     }
@@ -106,28 +116,28 @@
         "DR-0029-01"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "真实解析与生产组装逐项保留 HOLD-Q1 前置条件、数据、S01-S03 动作及预期，反例资料不进入模型输入。",
       "evidence_standard": "真实命令、退出码、测试统计和产物路径",
-      "current_evidence": "无"
+      "current_evidence": "workbench npm test 69/69；M4-A 原生包与生产 attempt 文件测试通过，反例资料不进入模型输入。"
     },
     {
       "id": "VT-0029-02",
       "dr_ids": ["DR-0029-01", "DR-0029-02"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "实际 CLI/配置/任务目录完成零模型测试，验证任务身份、依赖一致、报告媒体登记和当前 task_id 等待。",
       "evidence_standard": "真实命令、退出码、测试统计和产物路径",
-      "current_evidence": "无"
+      "current_evidence": "npm run test:m4a-cli-preflight 退出码0；真实 Playwright CLI 完成正常/反例夹具、结构化报告与三类媒体；Harness 0次。"
     },
     {
       "id": "VT-0029-03",
       "dr_ids": ["DR-0029-02", "DR-0029-03"],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "无法运行",
       "item": "真实Web初始建例（必要时一次定向修订）、正常与既定反例执行、媒体查看、重启读回及逐义务技术核查。",
       "evidence_standard": "真实任务ID、候选哈希、原始报告、媒体索引、Web证据和调用记账",
-      "current_evidence": "无"
+      "current_evidence": "真实任务 build-20260922014848-604af86d 从Web启动；首次模型请求 HTTP 404，工具调用0、候选缺失，正常/反例及媒体均 NOT_RUN；重启读回成功。"
     }
   ],
   "verification_environment": {
@@ -141,7 +151,7 @@
       "Windows 本机；Node.js 22；Playwright 1.62.1；专用 Git 忽略任务目录。"
     ],
     "conclusion": [
-      "未运行。工程验证、真实Harness调用和业务结果必须分别记录。"
+      "工程验证通过；真实 Harness 已启动 1 次但在首次模型请求阶段 HTTP 404，未生成候选，业务正常/反例验证未运行。"
     ]
   },
   "trace_current": [
@@ -151,15 +161,15 @@
       "dd_id": "DD-0029-01",
       "tk_id": "TK-0029-01",
       "vt_id": "VT-0029-01",
-      "status": "实施中"
+      "status": "已完成"
     },
     {
       "un_id": "UN-0029-01",
       "dr_id": "DR-0029-02",
-      "dd_id": "DD-0029-01",
+      "dd_id": "DD-0029-02",
       "tk_id": "TK-0029-02",
       "vt_id": "VT-0029-03",
-      "status": "待实现"
+      "status": "受阻"
     },
     {
       "un_id": "UN-0029-01",
@@ -167,7 +177,7 @@
       "dd_id": "DD-0029-01",
       "tk_id": "TK-0029-01",
       "vt_id": "VT-0029-02",
-      "status": "实施中"
+      "status": "已完成"
     },
     {
       "un_id": "UN-0029-01",
@@ -175,7 +185,7 @@
       "dd_id": "DD-0029-01",
       "tk_id": "TK-0029-02",
       "vt_id": "VT-0029-03",
-      "status": "待实现"
+      "status": "受阻"
     }
   ],
   "trace_history": [
@@ -187,7 +197,7 @@
     }
   ],
   "open_questions": [
-    "无阻塞性待确认项；若真实候选缺失义务，是否使用一次修订由实际证据决定。"
+    "真实调用已在首次模型请求阶段返回 HTTP 404；需要维护者另行确认锁定模型在所配端点和账号中的可用路由后，才可能申请新的初始调用。现有剩余修订额度不能替代初稿。"
   ],
   "prohibited_implementation": [
     "不得修改 HOLD-Q1、冻结页面或 oracle。",

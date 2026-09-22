@@ -52,6 +52,8 @@ npm start
 
 M2-C 还提供固定结构的 `/api/build/templates`、`/api/build/tasks` 及任务 `start`、`revise`、`stop` 路由；M3-B1/M3-B2 复用固定字段的 `POST /api/build/tasks/from-project-case`。第一版不接受任意 URL、文件、代码或命令上传。M3-B2 新生成媒体使用 `GET /api/build/tasks/:task_id/media/:file_id`，只有登记为该任务本次正常/反例 screenshot、video 或 trace 的文件才可读取，视频支持字节 Range。已有离线复验仍使用包含任务 ID、复验 ID 和登记媒体 ID 的独立路由。启动真实建例前还需在 `harness-probe` 执行 `npm ci`，并为工作台进程提供现有的 `DEEPSEEK_API_KEY`、`DEEPSEEK_BASE_URL` 与 `DSH_PROBE_BROWSER_EXECUTABLE`。这些值仅传给 Harness 子进程；候选验证进程使用收缩后的独立环境，不注入模型密钥、Cookie 或完整宿主环境。
 
+可运行 `pwsh -NoProfile -File .\scripts\save-deepseek-credential.ps1`，以不可见输入将 Key 保存为当前 Windows 用户/本机绑定的 DPAPI 密文，位置为 `%LOCALAPPDATA%\ui-test-agent\credentials\`。随后 M4-A 前台脚本会自动读取，并在结束时清除自己注入的进程环境变量。密文、Key 和模型会话均不进入 Git；运行中的 Harness 仍会取得本次调用所需 Key，这项便利不构成操作系统级文件或网络隔离。
+
 执行前会确认 4198 的 `/healthz` 精确标识冻结 heldout 站点并检查入口可用性；不匹配时拒绝运行，不关闭或替换未知进程。后端只从已登记资产映射入口，以参数数组启动本地锁定的 `@playwright/test`，显式使用 `workers=1`、`retries=0`，不通过 shell 或 `npx` 下载。批准脚本按原始字节复制到本次运行目录，来源和副本在运行前后分别核验哈希。
 
 同一时间最多一个活动运行。停止只接受当前服务持有的活动 `run_id`，Windows 上仅对该子进程 PID 调用进程树终止；已结束、旧服务遗留或其他 PID 不会被处理。子进程仅继承 Playwright 运行需要的系统路径/临时目录变量，不继承模型 Key、Cookie 或任意完整 `process.env`。
@@ -130,3 +132,5 @@ M1 第一阶段集成验证、三项代码复审修复及既定证据完整性�
 M3-B2 已用一次独立作用域授权从真实项目 Web 启动一条 Excel 导入的合成用例。Harness 新候选在正常页 1 条通过，在反例页取得 `PROBE-42 / PROBE-41` 断言差异；两边截图、录像和 Trace 均由项目任务页读回，服务重启后仍可查看。结果停在“技术验证通过，等待人工核对”，没有批准或第二次 Harness，详见 [M3-B2 真实建例报告](docs/M3B2_PROJECT_CASE_REAL_REPORT.md)。
 
 该候选随后已由用户按明确范围完成人工首审。M3-C 登记的限定资产已从项目 Web 完成一次正常回归，并以同一原字节资产完成一次受控反例验收；新结果与三类媒体在重启后仍可读取。该状态只说明此脚本可用于本合成场景的项目直接回归，不扩展为未知反例、复杂业务、自动审批、自愈或发布能力。
+
+M4-A 已把当前基线的完整 HOLD-Q1 经原生用例包从真实项目 Web 导入并冻结为独立 build task。第一次真实 Harness 启动在首次模型请求阶段收到 HTTP 404，浏览器工具调用为 0、候选未生成，故正常/既定反例和媒体均未运行；任务保留失败事实，未用剩余修订额度重抽初稿。完整边界、任务 ID 和工程验证见 [M4-A HOLD-Q1 迁移验证报告](docs/M4A_QUERY_CASE_MIGRATION_REPORT.md)。

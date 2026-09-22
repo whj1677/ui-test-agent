@@ -1,10 +1,27 @@
 $ErrorActionPreference = 'Stop'
 
-$secureKey = Read-Host '请输入本次 DeepSeek API Key（输入不可见）' -AsSecureString
-$pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+$credentialDirectory = Join-Path $env:LOCALAPPDATA 'ui-test-agent\credentials'
+$credentialFile = Join-Path $credentialDirectory 'deepseek-api-key.dpapi'
+$baseUrlFile = Join-Path $credentialDirectory 'deepseek-base-url.txt'
+$loadedKey = $false
+$loadedBaseUrl = $false
+$pointer = [IntPtr]::Zero
 try {
-  $env:DEEPSEEK_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
-  $env:DEEPSEEK_BASE_URL = 'https://api.deepseek.com'
+  if (-not $env:DEEPSEEK_API_KEY) {
+    if (-not (Test-Path -LiteralPath $credentialFile)) {
+      throw '未找到已保存凭据。请先运行：pwsh -NoProfile -File .\scripts\save-deepseek-credential.ps1'
+    }
+    $secureKey = Get-Content -LiteralPath $credentialFile -Raw | ConvertTo-SecureString
+    $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+    $env:DEEPSEEK_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+    $loadedKey = $true
+  }
+  if (-not $env:DEEPSEEK_BASE_URL) {
+    $env:DEEPSEEK_BASE_URL = if (Test-Path -LiteralPath $baseUrlFile) {
+      (Get-Content -LiteralPath $baseUrlFile -Raw).Trim()
+    } else { 'https://api.deepseek.com' }
+    $loadedBaseUrl = $true
+  }
   if (-not $env:DSH_PROBE_BROWSER_EXECUTABLE) {
     $env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
   }
@@ -12,7 +29,7 @@ try {
   exit $LASTEXITCODE
 }
 finally {
-  $env:DEEPSEEK_API_KEY = $null
-  $env:DEEPSEEK_BASE_URL = $null
-  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
+  if ($loadedKey) { $env:DEEPSEEK_API_KEY = $null }
+  if ($loadedBaseUrl) { $env:DEEPSEEK_BASE_URL = $null }
+  if ($pointer -ne [IntPtr]::Zero) { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }
 }
