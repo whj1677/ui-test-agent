@@ -23,7 +23,9 @@ npm run register:m2c-runtime-revalidation
 npm start
 ```
 
-默认只监听 `http://127.0.0.1:4210`。页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
+默认只监听 `http://127.0.0.1:4210`。UI-D2A 新墨白真实页面位于 `http://127.0.0.1:4210/workspace/#/projects`，旧首页仍位于 `/`，UI-D1 原型目录也保持不变。新页面直接使用现有项目与用例 API，不以演示数据或 `sessionStorage` 作为业务存储。体验命令、样例与操作顺序见 [UI-D2A 用户体验指南](docs/UI_D2A_USER_TRIAL_GUIDE.md)，实际接入边界见 [API 映射](docs/UI_D2A_API_MAPPING.md)，验收结果见 [UI-D2A 验收报告](docs/UI_D2A_ACCEPTANCE_REPORT.md)。
+
+页面顶部“项目与用例库”支持创建/修改项目、按编号或标题筛选、查看和形成用例新版本、真实 `.xlsx` 选表/映射/预览确认，以及选择或全部导出 JSON 用例包。首版模板可从页面下载，格式和不支持项见 [M3-A Excel 首版格式](docs/M3A_EXCEL_FORMAT_V1.md)；原真实 Web 验收结果见 [M3-A 验收报告](docs/M3A_ACCEPTANCE_REPORT.md)，后续 Excel 保真修订见 [M3-A Excel 导入保真修订记录](docs/M3A_EXCEL_FIDELITY_REVISION.md)。内容“已确认”不等于脚本批准或测试通过。
 
 选择已确认且每一步动作/预期完整的用例后，可在详情中选择确切版本与固定无登录合成环境并创建任务。服务端按项目 ID、内部用例 ID、版本和内容 SHA-256 重新读取保存版本，冻结 `input/case-snapshot.json`、`task.md` 和 `agent-instruction.txt` 到既有 build task；前端正文不作为事实源。默认配置下项目用例任务仍带 `INPUT_ONLY`，Web 和后端均拒绝启动。只有服务以固定 M3-B2 授权 ID启动时，本批首个任务才获得与项目、用例、版本、哈希及环境完全绑定的单次 initial 权限；授权在观察到 Harness 进程创建时消耗，历史任务不迁移、不放开。任务详情可查看实际冻结内容并返回来源用例；旧版本任务不会随项目用例的新版本变化。`request_id` 只在五项身份均相同时幂等，同键异身份返回 409 冲突；既有任务身份无法可靠推导时拒绝复用。原 M3-B1 验证与边界见 [输入接通报告](docs/M3B1_CASE_BUILD_INPUT_REPORT.md)和 [request_id 修订记录](docs/M3B1_REQUEST_IDENTITY_REVISION.md)。
 
