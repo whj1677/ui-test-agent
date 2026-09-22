@@ -48,8 +48,10 @@ test('结果页保留原始事实且步骤切换不重建视频', () => {
   assert.match(app, /不下载伪造ZIP/);
 });
 
-test('冷白靛蓝主题保持状态区分且能力映射不伪装缺失项', () => {
-  for (const token of ['#F6F7FB','#FFFFFF','#E6E9F0','#202B40','#69758B','#4F5BD5','#3F49B7','#EEF0FF']) assert.match(css, new RegExp(token,'i'));
+test('选定墨白主题保持语义状态且移除靛蓝和宣传横幅', () => {
+  for (const token of ['#FFFFFF','#F7F8F7','#E4E8E5','#232726','#666F6B','#277054','#8D621A','#A84444']) assert.match(css, new RegExp(token,'i'));
+  assert.doesNotMatch(css, /#4F5BD5|#EEF0FF|linear-gradient/i);
+  assert.doesNotMatch(app, /workspace-overview/);
   for (const missing of ['批量执行','通用Web审批','通用环境管理','多人权限']) assert.match(mapping, new RegExp(missing));
 });
 

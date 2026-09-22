@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>工作台 · 视觉方向对比</title><link rel="stylesheet" href="directions.css"></head>
+<body data-theme="paper">
+  <div class="study">
+    <header class="study-heading"><div><span class="overline">TEST WORKSPACE / DESIGN STUDY</span><h1>先选气质，再定界面。</h1><p>同一份用例列表，三种视觉方向。仅供对比，不替换现有六屏原型。</p></div><a href="/">返回现有原型 ↗</a></header>
+    <nav class="directions" aria-label="视觉方案">
+      <button data-theme-choice="paper" aria-pressed="true"><span class="option-index">01</span><span><strong>墨白极简 <em>推荐</em></strong><small>黑白为主 · 去装饰 · 长时间工作</small></span><span class="swatches paper" aria-hidden="true"><i></i><i></i><i></i></span></button>
+      <button data-theme-choice="graphite" aria-pressed="false"><span class="option-index">02</span><span><strong>石墨深色</strong><small>深灰层次 · 少量青柠 · 开发工具感</small></span><span class="swatches graphite" aria-hidden="true"><i></i><i></i><i></i></span></button>
+      <button data-theme-choice="navy" aria-pressed="false"><span class="option-index">03</span><span><strong>深蓝分区</strong><small>深色导航 · 白色内容 · 清晰分区</small></span><span class="swatches navy" aria-hidden="true"><i></i><i></i><i></i></span></button>
+    </nav>
+    <div class="workspace-preview">
+      <aside>
+        <div class="brand"><span class="logo" aria-hidden="true">t<span>·</span></span><strong>测试工作台</strong></div>
+        <div class="project"><span class="project-icon">Q</span><div><strong>设备巡检</strong><small>项目工作区</small></div><span aria-hidden="true">⌄</span></div>
+        <div class="nav-label">工作区</div>
+        <div class="nav-item active"><svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>用例库 <span class="nav-count">120</span></div>
+        <div class="nav-item"><svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 9 9-9 9-9-9zM8 12h8M12 8v8"/></svg>建例任务 <span class="nav-count">4</span></div>
+        <div class="nav-item"><svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/></svg>执行记录</div>
+        <div class="nav-item"><svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M9 3v6M15 9v6M8 15v6"/></svg>项目设置</div>
+        <div class="side-note"><span class="live-dot"></span><div>独立视觉样稿<small>合成数据 · 不执行任务</small></div></div>
+      </aside>
+      <main>
+        <header class="crumb"><span>项目 <b>/</b> 设备巡检 <b>/</b> <strong>用例库</strong></span><span class="prototype">交互原型 / 演示数据</span></header>
+        <div class="main-body">
+          <div class="title-row"><div><span class="overline">CASE LIBRARY</span><h2>用例库<span>120</span></h2><p>维护测试要求，追溯每一次建例和执行。</p></div><div class="actions"><span class="sample-control">导出用例</span><span class="sample-control primary">＋ 导入用例</span></div></div>
+          <div class="view-tabs"><span class="selected">全部用例 <b>120</b></span><span>待处理 <b>8</b></span><span>已有脚本 <b>1</b></span><small>仅展示视觉样式，未连接业务操作</small></div>
+          <div class="filter-row"><span class="search-sample">搜索用例编号或标题 <kbd>⌘ K</kbd></span><span class="filter">模块：全部 <span>⌄</span></span><span class="filter">内容状态 <span>⌄</span></span><span class="filter">自动化状态 <span>⌄</span></span></div>
+          <div class="table-scroll"><table><thead><tr><th class="check">□</th><th>用例名称</th><th>模块</th><th>内容状态</th><th>自动化状态</th><th>最近结果</th><th>版本</th></tr></thead><tbody>
+            <tr class="selected-row"><td class="check">□</td><td><span class="case-id">Q-001</span><strong>列表查询与结果核对</strong></td><td>列表查询</td><td><span class="status success">已确认</span></td><td><span class="status warning">待人工核对</span></td><td><span class="status danger">断言不符</span></td><td class="version">v1</td></tr>
+            <tr><td class="check">□</td><td><span class="case-id">S-002</span><strong>设备排序与分页</strong></td><td>列表排序</td><td><span class="status success">已确认</span></td><td><span class="status">已有适用脚本</span></td><td><span class="status success">通过</span></td><td class="version">v2</td></tr>
+            <tr><td class="check">□</td><td><span class="case-id">A-003</span><strong>告警列表筛选</strong></td><td>告警管理</td><td><span class="status success">已确认</span></td><td><span class="status">未建例</span></td><td class="muted">—</td><td class="version">v1</td></tr>
+            <tr><td class="check">□</td><td><span class="case-id">Q-004</span><strong>任务名称字段范围确认</strong></td><td>列表查询</td><td><span class="status warning">待澄清</span></td><td><span class="status warning">范围待确认</span></td><td class="muted">—</td><td class="version">v1</td></tr>
+            <tr><td class="check">□</td><td><span class="case-id">D-005</span><strong>设备状态与基础信息</strong></td><td>设备管理</td><td><span class="status success">已确认</span></td><td><span class="status">候选已生成</span></td><td><span class="status danger">运行中断</span></td><td class="version">v1</td></tr>
+          </tbody></table></div>
+          <footer class="table-footer"><span>展示 5 条演示用例 / 共 120 条</span><span>上一页 <b>1</b> 2 3 <span>…</span> 下一页</span></footer>
+          <section class="detail"><header><div><span class="overline">当前用例</span><h3>列表查询与结果核对</h3></div><span class="review-status">待人工核对</span></header><div class="detail-body"><div class="step-index">03</div><div><small>操作</small><p>点击查询，核对结果集。</p></div><div><small>预期结果</small><p>数量、顺序及约定字段符合原用例要求。</p></div><div class="detail-link">版本与关联记录 ↗</div></div></section>
+        </div>
+      </main>
+    </div>
+    <footer class="study-footer"><p id="rationale" aria-live="polite">01 / 墨白极简：用明度、字重和留白建立层级；主按钮用墨黑，彩色只留给执行状态。不用大面积渐变或宣传区。</p><span>ui-ux-pro-max · 方向样稿，尚未选定</span></footer>
+  </div>
+  <script src="directions.js"></script>
+</body></html>
