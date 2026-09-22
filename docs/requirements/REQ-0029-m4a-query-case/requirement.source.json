@@ -3,9 +3,9 @@
   "req_id": "REQ-0029",
   "title": "M4-A 一条列表查询用例的工作台迁移验证",
   "metadata": {
-    "requirement_status": "部分完成（真实建例受阻）",
+    "requirement_status": "部分完成（候选验证失败）",
     "governance_level": "G2",
-    "version": 1,
+    "version": 2,
     "last_updated": "2026-09-22"
   },
   "original_input": "M4-A：使用 heldout-lab/cases.json 中 HOLD-Q1 完整原用例，完成项目导入、冻结输入、一次有限 Coding Agent 建例、正常与既定反例验证、Web 结果及媒体查看，状态最多到等待人工首审；不扩展批量、详情、写入、自动批准或自愈。",
@@ -69,6 +69,13 @@
       "status": "已确认",
       "summary": "真实启动使用与项目、用例版本及环境绑定的固定授权；没有候选时停止，不把修订额度改作替补初稿。",
       "rationale": "确保一次失败仍可追溯并遵守用户规定的有限调用和停止边界。"
+    },
+    {
+      "id": "DD-0029-03",
+      "dr_ids": ["DR-0029-02", "DR-0029-03"],
+      "status": "已确认",
+      "summary": "在保留 deepseek-v4-pro 默认配置的同时，以显式 flash patch、独立单次授权和指定 DSH home 执行用户授权的追加复验。",
+      "rationale": "隔离新授权与旧账本及默认模型语义，并让 Web 展示、任务记录和实际运行模型保持一致。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -103,7 +110,7 @@
     {
       "id": "TK-0029-02",
       "dr_ids": ["DR-0029-02", "DR-0029-03"],
-      "dd_ids": ["DD-0029-01", "DD-0029-02"],
+      "dd_ids": ["DD-0029-01", "DD-0029-02", "DD-0029-03"],
       "status": "受阻",
       "task": "从真实Web进行有限Harness建例、同候选正常/反例验证、媒体读回和义务核查。",
       "verification_ids": ["VT-0029-03"]
@@ -137,7 +144,7 @@
       "execution_status": "无法运行",
       "item": "真实Web初始建例（必要时一次定向修订）、正常与既定反例执行、媒体查看、重启读回及逐义务技术核查。",
       "evidence_standard": "真实任务ID、候选哈希、原始报告、媒体索引、Web证据和调用记账",
-      "current_evidence": "真实任务 build-20260922014848-604af86d 从Web启动；首次模型请求 HTTP 404，工具调用0、候选缺失，正常/反例及媒体均 NOT_RUN；重启读回成功。"
+      "current_evidence": "原任务 build-20260922014848-604af86d 首次模型请求 HTTP 404。用户新增授权后，flash任务 build-20260922022951-0e638858 生成候选 CA3819EF...B6914；正常1条通过、反例1条取得期望3条/实际6条，但步骤标题未使用精确CASE_STEP标记，整体候选验证失败；两组媒体和重启读回完成。"
     }
   ],
   "verification_environment": {
@@ -151,7 +158,7 @@
       "Windows 本机；Node.js 22；Playwright 1.62.1；专用 Git 忽略任务目录。"
     ],
     "conclusion": [
-      "工程验证通过；真实 Harness 已启动 1 次但在首次模型请求阶段 HTTP 404，未生成候选，业务正常/反例验证未运行。"
+      "工程验证通过；原 deepseek-v4-pro 调用 HTTP 404。新增独立 deepseek-flash 授权完成1次生成，候选业务断言正常通过且反例发生真实差异，但步骤精确标记契约不满足，未进入人工首审。"
     ]
   },
   "trace_current": [
@@ -186,6 +193,14 @@
       "tk_id": "TK-0029-02",
       "vt_id": "VT-0029-03",
       "status": "受阻"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-02",
+      "dd_id": "DD-0029-03",
+      "tk_id": "TK-0029-02",
+      "vt_id": "VT-0029-03",
+      "status": "受阻"
     }
   ],
   "trace_history": [
@@ -194,10 +209,16 @@
       "link": "无",
       "status": "无",
       "notes": "新建需求包"
+    },
+    {
+      "version": 2,
+      "link": "UN-0029-01 -> DR-0029-02/03 -> DD-0029-03 -> TK-0029-02 -> VT-0029-03",
+      "status": "受阻",
+      "notes": "追加 deepseek-flash 单次真实复验：候选已生成并执行，但精确步骤标记契约不符合。"
     }
   ],
   "open_questions": [
-    "真实调用已在首次模型请求阶段返回 HTTP 404；需要维护者另行确认锁定模型在所配端点和账号中的可用路由后，才可能申请新的初始调用。现有剩余修订额度不能替代初稿。"
+    "deepseek-flash 新候选未使用精确 CASE_STEP_<order> 标题，整体技术验证失败；本次一次性授权已耗尽，候选保持原字节，是否另行人工审查或授权定向修订由后续任务决定。"
   ],
   "prohibited_implementation": [
     "不得修改 HOLD-Q1、冻结页面或 oracle。",
@@ -213,6 +234,14 @@
       "description": "冻结 M4-A 单条 HOLD-Q1 迁移、有限建例、独立验证与停止边界。",
       "impact": "workbench 单条项目用例建例与验证链路",
       "confirmed_by": "用户当前任务"
+    },
+    {
+      "date": "2026-09-22",
+      "version": 2,
+      "type": "追加复验",
+      "description": "用户明确同意改用已登录的 deepseek-flash 进行一次独立 M4-A 复验；保留原 HTTP 404 任务，新增任务生成候选但因步骤标记契约不符停在验证失败。",
+      "impact": "workbench 单条 HOLD-Q1 候选生成、正常/反例验证与媒体读回",
+      "confirmed_by": "用户明确回复可以使用 flash"
     }
   ]
 }

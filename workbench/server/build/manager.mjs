@@ -10,7 +10,7 @@ import {
   assembleProjectCaseInput,
   renderProjectCaseAgentInstruction,
 } from './project-case.mjs';
-import { M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID } from './store.mjs';
+import { M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from './store.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 
@@ -156,6 +156,9 @@ export class BuildTaskManager {
     this.lifecycleSequences = new Map();
     this.storageFault = null;
     this.authorizationId = options.authorizationId || null;
+    this.harnessDshHome = options.harnessDshHome || path.join(this.paths.buildRuntimeRoot, 'dsh');
+    this.harnessPatchPath = options.harnessPatchPath || path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml');
+    this.useStoredDshCredentials = options.useStoredDshCredentials === true;
     this.caseSubmissions = new Map();
   }
 
@@ -301,14 +304,15 @@ export class BuildTaskManager {
     });
     const budget = await this.store.getBudget();
     let authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
-    const projectCaseAuthorized = [M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID].includes(this.authorizationId);
+    const projectCaseAuthorized = [M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(this.authorizationId);
     if (projectCaseAuthorized) {
       if (!assembled.input_bundle.verification_contract) throw new Error('CASE_BUILD_VERIFICATION_BINDING_INVALID');
       const m4 = this.authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
+      const flashRetry = this.authorizationId === M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID;
       authorization = await this.store.registerProjectCaseAuthorization({
         schema: 'workbench/build-project-case-authorization-v1',
         authorization_id: this.authorizationId,
-        kind: m4 ? 'initial-with-optional-revision' : 'initial', linked_stage: m4 ? 'M4-A' : 'M3-B2',
+        kind: m4 ? 'initial-with-optional-revision' : 'initial', linked_stage: m4 ? 'M4-A' : (flashRetry ? 'M4-A-FLASH-RETRY' : 'M3-B2'),
         max_starts: m4 ? 2 : 1, used_starts: 0, claims: [],
         scope: structuredClone(identity), limits: { max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS },
         created_at: now,
@@ -345,7 +349,7 @@ export class BuildTaskManager {
     if (!this.browserExecutable) throw new Error('BUILD_BROWSER_EXECUTABLE_REQUIRED');
     if (!this.runtimeReady) {
       this.runtimeReady = this.adapter.ensureHarnessRuntime(
-        path.join(this.paths.buildRuntimeRoot, 'dsh'),
+        this.harnessDshHome,
         this.paths.workbenchRoot,
       ).catch((error) => { this.runtimeReady = null; throw error; });
     }
@@ -373,13 +377,13 @@ export class BuildTaskManager {
         if (!authorization || authorization.authorization_id !== revalidationId || authorization.used_starts >= authorization.max_starts) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED');
         }
-        if ([M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID].includes(revalidationId) &&
+        if ([M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(revalidationId) &&
             (task.source?.kind !== 'project-case' || !sameIdentity(authorization.scope, projectCaseTaskScope(task)))) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
         }
       }
-      const credentials = this.credentialProvider();
-      if (!credentials?.apiKey || !credentials?.baseUrl) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
+      const credentials = this.useStoredDshCredentials ? { apiKey: null, baseUrl: null } : this.credentialProvider();
+      if (!this.useStoredDshCredentials && (!credentials?.apiKey || !credentials?.baseUrl)) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
       await this.prepareRuntime();
 
       const attemptNumber = task.attempts.length + 1;
@@ -487,8 +491,8 @@ export class BuildTaskManager {
       const harness = await this.adapter.runHarnessTask({
         task: prompt,
         workspace,
-        dshHome: path.join(this.paths.buildRuntimeRoot, 'dsh'),
-        patchPath: path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml'),
+        dshHome: this.harnessDshHome,
+        patchPath: this.harnessPatchPath,
         candidatePath,
         browserExecutable: this.browserExecutable,
         apiKey: credentials.apiKey,
@@ -644,7 +648,7 @@ export class BuildTaskManager {
         error: finalError,
       }));
     } catch (error) {
-      const message = redactText(error?.message || String(error), [credentials.apiKey, credentials.baseUrl]);
+      const message = redactText(error?.message || String(error), [credentials.apiKey, credentials.baseUrl].filter(Boolean));
       await this.#recordLifecycle(task.task_id, attemptId, {
         type: 'attempt_error', code: error?.code || (controller.signal.aborted ? 'BUILD_CANCELLED' : 'BUILD_EXECUTION_ERROR'), partial_observation: true,
       }).catch(() => {});

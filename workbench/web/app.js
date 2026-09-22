@@ -122,7 +122,8 @@ function renderBuildDetail() {
   const facts = byId('build-facts'); clear(facts);
   addFact(facts, '任务 ID', task.task_id);
   addFact(facts, '冻结输入', task.template.input_sha256);
-  addFact(facts, '模型', task.attempts?.length ? 'dsh 0.1.6-alpha.2 · deepseek-official / deepseek-v4-pro' : '尚未调用');
+  const model = task.authorization?.linked_stage === 'M4-A-FLASH-RETRY' ? 'deepseek-flash' : 'deepseek-v4-pro';
+  addFact(facts, '模型', task.attempts?.length ? `dsh 0.1.6-alpha.2 · deepseek-official / ${model}` : '尚未调用');
   addFact(facts, '阶段调用预算', `${task.budget.used_starts} / ${task.budget.max_starts}`);
   if (task.authorization) addFact(facts, '本次复验授权', `${task.authorization.authorization_id} · ${task.authorization.used_starts} / ${task.authorization.max_starts}`);
   addFact(facts, 'OS隔离', '未强制，残余风险已接受');

@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { chromium } from '@playwright/test';
 import { createWorkbenchServer } from '../server/app.mjs';
 import { BuildTaskManager } from '../server/build/manager.mjs';
-import { BuildTaskStore, M4A_QUERY_CASE_AUTHORIZATION_ID } from '../server/build/store.mjs';
+import { BuildTaskStore, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from '../server/build/store.mjs';
 import { CaseLibraryManager } from '../server/cases/manager.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { holdQ1CasePackage, loadHoldQ1Source } from '../server/build/heldout-query.mjs';
@@ -17,9 +17,13 @@ const privateInput = path.join(localRoot, 'private-input', 'hold-q1.case-package
 const evidenceRoot = path.join(localRoot, 'evidence');
 const summaryFile = path.join(evidenceRoot, 'm4a-real-summary.json');
 const privateScreenshot = path.join(evidenceRoot, 'm4a-query-case-web.png');
-const publicScreenshot = path.resolve('docs/evidence/M4A_QUERY_CASE_REAL_WEB.png');
+const publicScreenshot = path.resolve(process.env.M4A_PUBLIC_SCREENSHOT || 'docs/evidence/M4A_QUERY_CASE_REAL_WEB.png');
 const browserExecutable = process.env.DSH_PROBE_BROWSER_EXECUTABLE || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const requiredSecrets = ['DEEPSEEK_API_KEY', 'DEEPSEEK_BASE_URL'];
+const useStoredDshCredentials = process.env.M4A_USE_STORED_DSH_CREDENTIALS === '1';
+const authorizationId = process.env.M4A_FLASH_RETRY === '1' ? M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID : M4A_QUERY_CASE_AUTHORIZATION_ID;
+const requiredSecrets = useStoredDshCredentials ? [] : ['DEEPSEEK_API_KEY', 'DEEPSEEK_BASE_URL'];
+const harnessDshHome = process.env.M4A_DSH_HOME ? path.resolve(process.env.M4A_DSH_HOME) : undefined;
+const harnessPatchPath = process.env.M4A_HARNESS_PATCH ? path.resolve(process.env.M4A_HARNESS_PATCH) : undefined;
 const terminalStates = new Set(['WAITING_HUMAN_REVIEW', 'CANDIDATE_VALIDATION_FAILED', 'FAILED', 'CANCELLED', 'INTERRUPTED']);
 
 function hash(buffer) { return createHash('sha256').update(buffer).digest('hex').toUpperCase(); }
@@ -79,11 +83,12 @@ let caseStore; let caseManager; let buildStore; let buildManager; let server; le
 async function constructRuntime() {
   caseStore = new CaseLibraryStore(paths.caseLibraryRoot); await caseStore.init();
   caseManager = new CaseLibraryManager(caseStore);
-  buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: M4A_QUERY_CASE_AUTHORIZATION_ID }); await buildStore.init();
+  buildStore = new BuildTaskStore(paths.buildTasksRoot, { authorizationId }); await buildStore.init();
   await buildStore.recoverInterrupted();
   buildManager = new BuildTaskManager({
-    store: buildStore, caseStore, paths, authorizationId: M4A_QUERY_CASE_AUTHORIZATION_ID,
+    store: buildStore, caseStore, paths, authorizationId,
     browserExecutable, otherActive: () => Boolean(runManager.active),
+    harnessDshHome, harnessPatchPath, useStoredDshCredentials,
   });
   server = createWorkbenchServer({ store: emptyRunStore, manager: runManager, buildStore, buildManager, caseStore, caseManager });
   baseUrl = await listen(server);
@@ -123,7 +128,7 @@ try {
   assert.equal(task.source.external_id, 'HOLD-Q1');
   assert.equal(task.source.content_sha256, source.content_sha256);
   assert.equal(task.environment_ref.environment_id, 'heldout-query-q1-v1');
-  assert.equal(task.authorization.max_starts, 2);
+  assert.equal(task.authorization.max_starts, process.env.M4A_FLASH_RETRY === '1' ? 1 : 2);
   await page.waitForFunction(() => !document.querySelector('[data-testid="build-start"]')?.disabled);
   await page.getByTestId('build-start').click();
   task = await waitForTask(buildStore, taskId, 0);
@@ -194,6 +199,7 @@ const authorization = await buildStore.getRevalidationAuthorization();
 const candidate = task?.candidates?.at(-1) || null;
 const summary = {
   schema: 'workbench/m4a-query-case-real-summary-v1', started_at: startedAt, finished_at: new Date().toISOString(),
+  model_configuration: { provider: 'deepseek-official', model: process.env.M4A_MODEL_LABEL || 'deepseek-v4-pro', credential_source: useStoredDshCredentials ? 'dsh-home' : 'process-environment' },
   task_id: taskId, task_status: task?.task_status, generation_status: task?.generation_status,
   verification_status: task?.verification_status, human_review_status: task?.human_review_status,
   source: task?.source, environment_ref: task?.environment_ref,

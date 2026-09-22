@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { BuildTaskManager } from '../server/build/manager.mjs';
-import { BuildTaskStore, M4A_QUERY_CASE_AUTHORIZATION_ID } from '../server/build/store.mjs';
+import { BuildTaskStore, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from '../server/build/store.mjs';
 import { CaseLibraryManager } from '../server/cases/manager.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { contentHash } from '../server/cases/excel.mjs';
@@ -24,13 +24,14 @@ function playwrightReport(status, errorMessage = 'Expected: "3 matching rows"\nR
 
 function adapter(capture) {
   return {
-    async ensureHarnessRuntime() { return { dsh: '0.1.6-alpha.2' }; },
+    async ensureHarnessRuntime(dshHome) { capture.runtimeHome = dshHome; return { dsh: '0.1.6-alpha.2' }; },
     async startFixtureServer(file, options) {
       capture.routes.push({ file, route: options.route });
       return { url: `http://127.0.0.1:43000${options.route}`, async close() {} };
     },
     async runHarnessTask(options) {
       capture.harnessStarts += 1;
+      capture.runOptions = { dshHome: options.dshHome, patchPath: options.patchPath, apiKey: options.apiKey, baseUrl: options.baseUrl };
       const snapshotText = await fs.readFile(path.join(options.workspace, 'input', 'case-snapshot.json'), 'utf8');
       const taskMarkdown = await fs.readFile(path.join(options.workspace, 'task.md'), 'utf8');
       const instruction = await fs.readFile(path.join(options.workspace, 'agent-instruction.txt'), 'utf8');
@@ -59,7 +60,7 @@ function adapter(capture) {
   };
 }
 
-async function setup() {
+async function setup(options = {}) {
   const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'm4a-query-case-'));
   const paths = createPaths({ localRoot });
   const caseStore = new CaseLibraryStore(paths.caseLibraryRoot); await caseStore.init();
@@ -71,12 +72,15 @@ async function setup() {
   const imported = await caseManager.confirm(project.project_id, preview.preview_id, {});
   const item = imported.project.cases[0];
   const version = item.versions[0];
-  const store = new BuildTaskStore(paths.buildTasksRoot, { authorizationId: M4A_QUERY_CASE_AUTHORIZATION_ID }); await store.init();
+  const authorizationId = options.authorizationId || M4A_QUERY_CASE_AUTHORIZATION_ID;
+  const store = new BuildTaskStore(paths.buildTasksRoot, { authorizationId }); await store.init();
   const capture = { routes: [], modelInputs: [], harnessStarts: 0, failFirstNormal: false };
   const manager = new BuildTaskManager({
-    store, caseStore, paths, adapter: adapter(capture), authorizationId: M4A_QUERY_CASE_AUTHORIZATION_ID,
+    store, caseStore, paths, adapter: adapter(capture), authorizationId,
     browserExecutable: 'engineering-fixture-browser', credentialProvider: () => ({ apiKey: 'test-only', baseUrl: 'https://model.invalid' }),
     idFactory: () => 'build-m4a-query-case-test0001',
+    harnessDshHome: options.harnessDshHome, harnessPatchPath: options.harnessPatchPath,
+    useStoredDshCredentials: options.useStoredDshCredentials,
   });
   return { localRoot, paths, caseStore, imported, item, version, store, manager, capture, preview };
 }
@@ -98,6 +102,36 @@ test('HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确
     });
     assert.deepEqual(context.version.content.steps, frozen.sourceCase.steps.map((step, index) => ({ order: index + 1, action: step.action, expected: step.expected })));
   } finally { await fs.rm(context.localRoot, { recursive: true, force: true }); }
+});
+
+test('M4-A flash复验使用独立单次授权和显式已登录DSH运行配置', async () => {
+  const context = await setup({
+    authorizationId: M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID,
+    harnessDshHome: 'D:/isolated/dsh-home', harnessPatchPath: 'D:/isolated/browser-flash.cordis.yml',
+    useStoredDshCredentials: true,
+  });
+  try {
+    const created = await context.manager.submitProjectCase({
+      request_id: 'case-build-request-m4aflash01', project_id: context.imported.project.project_id,
+      case_id: context.item.case_id, case_version: 1, content_sha256: context.version.content_sha256,
+      environment_id: 'heldout-query-q1-v1',
+    });
+    assert.equal(created.execution_policy.mode, 'SINGLE_AUTHORIZED_INITIAL');
+    assert.equal(created.authorization.authorization_id, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID);
+    assert.equal(created.authorization.max_starts, 1);
+    await context.manager.start(created.task_id);
+    const result = await context.manager.wait(created.task_id);
+    assert.equal(result.task_status, 'WAITING_HUMAN_REVIEW');
+    assert.equal(result.revision_allowed, false);
+    assert.deepEqual(context.capture.runOptions, {
+      dshHome: 'D:/isolated/dsh-home', patchPath: 'D:/isolated/browser-flash.cordis.yml', apiKey: null, baseUrl: null,
+    });
+    assert.equal(context.capture.runtimeHome, 'D:/isolated/dsh-home');
+    assert.equal((await context.store.getRevalidationAuthorization()).used_starts, 1);
+  } finally {
+    await context.manager.settle();
+    await fs.rm(context.localRoot, { recursive: true, force: true });
+  }
 });
 
 test('M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2', async () => {

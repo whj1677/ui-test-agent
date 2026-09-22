@@ -114,11 +114,13 @@ export async function runHarnessEventProcess({
 }
 
 export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
+  const providerEnvironment = {};
+  if (apiKey) providerEnvironment.DEEPSEEK_API_KEY = apiKey;
+  if (baseUrl) providerEnvironment.DEEPSEEK_BASE_URL = baseUrl;
   const childEnv = allowedEnvironment({
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
-    DEEPSEEK_API_KEY: apiKey,
-    DEEPSEEK_BASE_URL: baseUrl,
+    ...providerEnvironment,
   });
   const execution = await runHarnessEventProcess({ command: process.execPath, args: [
     DSH_BIN,
@@ -140,7 +142,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
   assessment.toolCalls = execution.toolCalls;
   assessment.maxToolCalls = maxToolCalls;
   assessment.toolLimitReached = processResult.termination === 'tool_limit';
-  const secrets = [apiKey];
+  const secrets = [apiKey].filter(Boolean);
   return {
     process: {
       ...processResult,
