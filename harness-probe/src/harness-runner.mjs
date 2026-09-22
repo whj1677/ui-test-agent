@@ -66,7 +66,6 @@ export async function fileSummary(candidatePath, workspace) {
     path: path.relative(workspace, resolved).replaceAll('\\', '/'),
     bytes: content.length,
     sha256: createHash('sha256').update(content).digest('hex').toUpperCase(),
-    containsExpectedAssertion: /PROBE-42/.test(content.toString('utf8')),
   };
 }
 

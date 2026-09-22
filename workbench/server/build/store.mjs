@@ -8,10 +8,12 @@ const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
 export const M2C_REVALIDATION_AUTHORIZATION_ID = 'm2c-diagnostic-revalidation-20260921';
 export const M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID = 'm2c-wait-fix-validation-20260921';
 export const M3B2_PROJECT_CASE_AUTHORIZATION_ID = 'm3b2-project-case-run-20260921';
+export const M4A_QUERY_CASE_AUTHORIZATION_ID = 'm4a-query-case-run-20260922';
 const AUTHORIZATION_FILES = new Map([
   [M2C_REVALIDATION_AUTHORIZATION_ID, 'revalidation-authorization.json'],
   [M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'wait-fix-validation-authorization.json'],
   [M3B2_PROJECT_CASE_AUTHORIZATION_ID, 'm3b2-project-case-authorization.json'],
+  [M4A_QUERY_CASE_AUTHORIZATION_ID, 'm4a-query-case-authorization.json'],
 ]);
 
 function projectCaseScopeValid(scope) {
@@ -21,13 +23,20 @@ function projectCaseScopeValid(scope) {
 }
 
 function authorizationValid(record, authorizationId) {
-  const common = record?.authorization_id === authorizationId && record.kind === 'initial' &&
-    record.max_starts === 1 && Number.isInteger(record.used_starts) &&
-    record.used_starts >= 0 && record.used_starts <= 1 && Array.isArray(record.claims);
+  const isM4 = authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
+  const common = record?.authorization_id === authorizationId &&
+    record.kind === (isM4 ? 'initial-with-optional-revision' : 'initial') &&
+    record.max_starts === (isM4 ? 2 : 1) && Number.isInteger(record.used_starts) &&
+    record.used_starts >= 0 && record.used_starts <= record.max_starts && Array.isArray(record.claims);
   if (!common) return false;
   if (authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID) {
     return record.schema === 'workbench/build-project-case-authorization-v1' &&
       record.linked_stage === 'M3-B2' && projectCaseScopeValid(record.scope) &&
+      record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000;
+  }
+  if (authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID) {
+    return record.schema === 'workbench/build-project-case-authorization-v1' &&
+      record.linked_stage === 'M4-A' && projectCaseScopeValid(record.scope) &&
       record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000;
   }
   return record.schema === 'workbench/build-revalidation-authorization-v1';
@@ -199,7 +208,8 @@ export class BuildTaskStore {
   }
 
   async registerProjectCaseAuthorization(record) {
-    if (this.authorizationId !== M3B2_PROJECT_CASE_AUTHORIZATION_ID || !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
+    if (![M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID].includes(this.authorizationId) ||
+        !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
       throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
     }
     return this.serial(async () => {

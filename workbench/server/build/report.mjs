@@ -52,11 +52,20 @@ export function projectCaseStepCoverage(verification, contract) {
   };
 }
 
-export function counterexampleDetected(verification, expected, actual) {
-  return verification?.report_status === 'COMPLETE'
+export function counterexampleDetected(verification, expectedOrContract, actual) {
+  const base = verification?.report_status === 'COMPLETE'
     && verification.test_status === 'FAILED'
     && verification.test_count === 1
-    && verification.error?.type === 'ASSERTION_MISMATCH'
-    && verification.error.expected === expected
-    && verification.error.actual === actual;
+    && verification.error?.type === 'ASSERTION_MISMATCH';
+  if (!base) return false;
+  if (expectedOrContract?.detection?.kind === 'assertion-mismatch-at-step') {
+    return (verification.steps || []).some((step) => step.title === expectedOrContract.detection.step_marker);
+  }
+  const expected = expectedOrContract?.detection?.kind === 'literal-assertion-mismatch'
+    ? expectedOrContract.detection.expected
+    : expectedOrContract?.expected_literal ?? expectedOrContract;
+  const received = expectedOrContract?.detection?.kind === 'literal-assertion-mismatch'
+    ? expectedOrContract.detection.actual
+    : expectedOrContract?.counterexample_actual ?? actual;
+  return verification.error.expected === expected && verification.error.actual === received;
 }

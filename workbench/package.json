@@ -30,10 +30,13 @@
     "test:m3b2-real": "node tests/project-case-build-real.integration.mjs",
     "test:m3b2-real-readback": "node tests/project-case-build-real-readback.integration.mjs",
     "test:m3c-real": "node tests/reviewed-asset-real.integration.mjs",
+    "test:m4a-cli-preflight": "node tests/m4a-query-cli.integration.mjs",
+    "test:m4a-real": "node tests/m4a-query-case-real.integration.mjs",
     "test:real": "node tests/real-workbench.integration.mjs",
     "test:restart": "node tests/restart-history.integration.mjs",
     "lab": "node ../heldout-lab/serve.mjs 4198",
-    "generate:case-template": "node scripts/generate-case-template.mjs"
+    "generate:case-template": "node scripts/generate-case-template.mjs",
+    "generate:hold-q1-package": "node scripts/generate-hold-q1-case-package.mjs"
   },
   "dependencies": {
     "@playwright/test": "1.62.1",

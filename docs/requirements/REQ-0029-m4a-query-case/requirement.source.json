@@ -1,0 +1,208 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0029",
+  "title": "M4-A 一条列表查询用例的工作台迁移验证",
+  "metadata": {
+    "requirement_status": "实施中",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-22"
+  },
+  "original_input": "M4-A：使用 heldout-lab/cases.json 中 HOLD-Q1 完整原用例，完成项目导入、冻结输入、一次有限 Coding Agent 建例、正常与既定反例验证、Web 结果及媒体查看，状态最多到等待人工首审；不扩展批量、详情、写入、自动批准或自愈。",
+  "user_requirements": [
+    {
+      "id": "UN-0029-01",
+      "status": "已确认",
+      "goal": "在现有工作台中迁移并验证一条完整 HOLD-Q1 列表查询用例。",
+      "constraints": "原用例、冻结页面、oracle 与历史事实不修改；模型只接收正常用例和正常页面；总计最多一次初始与一次有依据的修订，每次30工具调用/600秒。",
+      "success_criteria": "真实Web完成导入与建例；同一最终候选在正常页执行并在既定反例页产生对应真实不符；结果、媒体和完整性核查可追溯，停在人工首审前。"
+    }
+  ],
+  "confirmed_facts": [
+    "基线为 58a7b9f6013164012ae760bdd1240bedc57911e1；HOLD-Q1 正常入口为 /probe/q1，冻结对照入口为 /probe/q2。",
+    "HOLD-Q1 包含前置条件、测试数据和 S01-S03 三个有序步骤；原始资料来自 heldout-lab/cases.json 与 oracle.json。",
+    "建例端固定既有 dsh 0.1.6-alpha.2、浏览器插件、deepseek-v4-pro 和 Playwright 1.62.1。"
+  ],
+  "inferences_and_open_questions": [
+    "真实模型的底层请求数与 usage 若供应商事件未提供则保持未知；不得填零。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0029-01",
+      "status": "已确认",
+      "requirement": "以现有项目用例、build task 和验证链路支持 HOLD-Q1 显式环境，完整冻结并向模型传递正常业务输入。",
+      "acceptance_criteria": "生产组装出的 task.md、case-snapshot.json 与 attempt 输入逐项保留原字段，且不含反例入口、故障说明或 oracle。",
+      "constraints": "不按 HOLD-Q1 结果常量改写通用判定器；反例资料只在控制器侧。"
+    },
+    {
+      "id": "DR-0029-02",
+      "status": "已确认",
+      "requirement": "有限启动真实 Harness，并以同一候选完成正常与既定反例的独立 Playwright 验证。",
+      "acceptance_criteria": "每次运行有独立报告、截图、录像与 Trace；候选哈希前后一致；零测试、加载失败和任意超时不计为指定缺陷检出。",
+      "constraints": "初始最多1次；仅明确候选错误时允许1次修订；达限停止。"
+    },
+    {
+      "id": "DR-0029-03",
+      "status": "已确认",
+      "requirement": "项目Web展示候选、步骤映射、正常/反例原始结果与媒体，并完成原义务技术核查。",
+      "acceptance_criteria": "S01-S03 每项要求分别核查覆盖与遗漏；最终状态最多为等待人工首审；重启后记录可读且不重放。",
+      "constraints": "AI技术核查不登记为真人首审，不手工修改 task.json 拼接结果。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0029-01",
+      "dr_ids": [
+        "DR-0029-01",
+        "DR-0029-02",
+        "DR-0029-03"
+      ],
+      "status": "已确认",
+      "summary": "增加数据驱动的项目用例运行场景注册，复用既有冻结输入、Harness适配、Playwright验证和媒体登记。",
+      "rationale": "满足单条查询用例迁移，同时避免为每条用例复制控制器或将样本答案写入通用逻辑。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "heldout-lab/cases.json → 原生用例包 → Web 导入预览确认 → 项目用例版本 → build task 冻结快照 → 专用 attempt 工作区 → Harness 候选 → 正常/反例验证 → 项目 Web 读回。",
+    "反例入口和冻结故障说明仅由验证场景配置持有，不进入模型可读文件或指令。"
+  ],
+  "module_document_impact": [
+    "workbench 建例环境配置、任务管理、受控夹具服务、验证报告与项目页面；heldout-lab 原资产只读。"
+  ],
+  "risks_and_rollback": [
+    "候选可能遗漏义务或真实调用中断；保留全部尝试和原始事实，必要时仅按授权进行一次定向修订。",
+    "模型输入意外包含反例会破坏独立性；通过实际 attempt 文件检查和双哨兵工程测试阻断。",
+    "回滚为撤销本分支改动；不修改原用例、页面、历史账本或已有资产。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0029-01",
+      "dr_ids": [
+        "DR-0029-01"
+      ],
+      "dd_ids": [
+        "DD-0029-01"
+      ],
+      "status": "实施中",
+      "task": "实现 HOLD-Q1 原生包转换、显式场景配置、冻结输入及零模型接线验证。",
+      "verification_ids": [
+        "VT-0029-01",
+        "VT-0029-02"
+      ]
+    },
+    {
+      "id": "TK-0029-02",
+      "dr_ids": ["DR-0029-02", "DR-0029-03"],
+      "dd_ids": ["DD-0029-01"],
+      "status": "待实现",
+      "task": "从真实Web进行有限Harness建例、同候选正常/反例验证、媒体读回和义务核查。",
+      "verification_ids": ["VT-0029-03"]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0029-01",
+      "dr_ids": [
+        "DR-0029-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "真实解析与生产组装逐项保留 HOLD-Q1 前置条件、数据、S01-S03 动作及预期，反例资料不进入模型输入。",
+      "evidence_standard": "真实命令、退出码、测试统计和产物路径",
+      "current_evidence": "无"
+    },
+    {
+      "id": "VT-0029-02",
+      "dr_ids": ["DR-0029-01", "DR-0029-02"],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "实际 CLI/配置/任务目录完成零模型测试，验证任务身份、依赖一致、报告媒体登记和当前 task_id 等待。",
+      "evidence_standard": "真实命令、退出码、测试统计和产物路径",
+      "current_evidence": "无"
+    },
+    {
+      "id": "VT-0029-03",
+      "dr_ids": ["DR-0029-02", "DR-0029-03"],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "真实Web初始建例（必要时一次定向修订）、正常与既定反例执行、媒体查看、重启读回及逐义务技术核查。",
+      "evidence_standard": "真实任务ID、候选哈希、原始报告、媒体索引、Web证据和调用记账",
+      "current_evidence": "无"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "独立 worktree codex/test-workbench-m4a-query-case 的 workbench 与 harness-probe 子工程。",
+    "commands": [
+      "npm test（workbench）",
+      "npm test（harness-probe）",
+      "node tests/m4a-query-case-real.integration.mjs（仅前置全部通过后，最多一次初始和一次有依据修订）"
+    ],
+    "environment": [
+      "Windows 本机；Node.js 22；Playwright 1.62.1；专用 Git 忽略任务目录。"
+    ],
+    "conclusion": [
+      "未运行。工程验证、真实Harness调用和业务结果必须分别记录。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-01",
+      "dd_id": "DD-0029-01",
+      "tk_id": "TK-0029-01",
+      "vt_id": "VT-0029-01",
+      "status": "实施中"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-02",
+      "dd_id": "DD-0029-01",
+      "tk_id": "TK-0029-02",
+      "vt_id": "VT-0029-03",
+      "status": "待实现"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-01",
+      "dd_id": "DD-0029-01",
+      "tk_id": "TK-0029-01",
+      "vt_id": "VT-0029-02",
+      "status": "实施中"
+    },
+    {
+      "un_id": "UN-0029-01",
+      "dr_id": "DR-0029-03",
+      "dd_id": "DD-0029-01",
+      "tk_id": "TK-0029-02",
+      "vt_id": "VT-0029-03",
+      "status": "待实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "无阻塞性待确认项；若真实候选缺失义务，是否使用一次修订由实际证据决定。"
+  ],
+  "prohibited_implementation": [
+    "不得修改 HOLD-Q1、冻结页面或 oracle。",
+    "不得向 Harness 提供故障页面、故障答案、旧参考脚本或历史正确候选。",
+    "不得把正常通过、步骤标记或工程测试数量当作完整业务覆盖证明。",
+    "不得自动批准候选、批量运行、扩展复杂业务或自愈。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-22",
+      "version": 1,
+      "type": "需求确认",
+      "description": "冻结 M4-A 单条 HOLD-Q1 迁移、有限建例、独立验证与停止边界。",
+      "impact": "workbench 单条项目用例建例与验证链路",
+      "confirmed_by": "用户当前任务"
+    }
+  ]
+}

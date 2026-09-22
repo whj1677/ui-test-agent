@@ -1,10 +1,12 @@
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 
-export async function startFixtureServer(htmlPath) {
+export async function startFixtureServer(htmlPath, options = {}) {
   const html = await readFile(htmlPath);
+  const route = options.route || '/probe';
+  if (!/^\/probe(?:\/[a-z0-9-]+)?$/.test(route)) throw new Error('FIXTURE_ROUTE_INVALID');
   const server = http.createServer((request, response) => {
-    if (request.method !== 'GET' || request.url !== '/probe') {
+    if (request.method !== 'GET' || request.url !== route) {
       response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
       response.end('not found');
       return;
@@ -22,7 +24,7 @@ export async function startFixtureServer(htmlPath) {
   });
   const address = server.address();
   return {
-    url: `http://127.0.0.1:${address.port}/probe`,
+    url: `http://127.0.0.1:${address.port}${route}`,
     close: () => new Promise((resolve) => server.close(resolve)),
   };
 }

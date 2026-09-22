@@ -4,14 +4,13 @@ import { createHash, randomUUID } from 'node:crypto';
 import { buildAdapter, usageFromEvents } from './adapter.mjs';
 import { indexAttemptFiles } from './files.mjs';
 import { counterexampleDetected, parseCandidateReport, projectCaseStepCoverage } from './report.mjs';
-import { BUILD_TEMPLATE_ID, loadBuildTemplate, taskDocument } from './template.mjs';
+import { BUILD_TEMPLATE_ID, loadBuildTemplate, loadProjectCaseEnvironment, taskDocument } from './template.mjs';
 import { contentHash } from '../cases/excel.mjs';
 import {
-  PROJECT_CASE_ENVIRONMENT_ID,
   assembleProjectCaseInput,
   renderProjectCaseAgentInstruction,
 } from './project-case.mjs';
-import { M3B2_PROJECT_CASE_AUTHORIZATION_ID } from './store.mjs';
+import { M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID } from './store.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 
@@ -101,8 +100,15 @@ function lineDiff(previous, current) {
 
 export function promptFor({ kind, task, entryUrl, candidatePath }) {
   if (task.source?.kind === 'project-case') {
-    if (kind !== 'initial') throw new Error('BUILD_PROJECT_CASE_REVISION_NOT_ALLOWED');
-    return renderProjectCaseAgentInstruction(task.input_bundle.agent_instruction_template, { entryUrl, candidatePath });
+    const initial = renderProjectCaseAgentInstruction(task.input_bundle.agent_instruction_template, { entryUrl, candidatePath });
+    if (kind === 'initial') return initial;
+    return [
+      'Revise the failed Playwright candidate in this dedicated task workspace.',
+      'Read task.md, input/case-snapshot.json, feedback.json, and input/candidate-v1.spec.mjs only.',
+      'Fix only the actual normal-page failure or missing original-case step described in feedback.json.',
+      'Do not change the frozen actions or expected results, remove assertions, swallow errors, skip work, or infer any counterexample.',
+      initial.replace('Create one Playwright Test candidate', 'Write one revised Playwright Test candidate'),
+    ].join('\n');
   }
   const template = task.template;
   const common = [
@@ -270,7 +276,7 @@ export class BuildTaskManager {
       }
       return existing[0];
     }
-    if (identity.environment_id !== PROJECT_CASE_ENVIRONMENT_ID) throw new Error('CASE_BUILD_ENVIRONMENT_NOT_ALLOWED');
+    const environmentDefinition = await loadProjectCaseEnvironment(this.paths, identity.environment_id);
     const project = await this.caseStore.getProject(identity.project_id);
     if (!project) throw new Error('CASE_PROJECT_NOT_FOUND');
     const item = project.cases.find((entry) => entry.case_id === identity.case_id);
@@ -289,21 +295,21 @@ export class BuildTaskManager {
       throw new Error('CASE_BUILD_STEPS_INCOMPLETE');
     }
 
-    const template = await loadBuildTemplate(this.paths);
     const now = this.now().toISOString();
     const assembled = assembleProjectCaseInput({
-      project, item, versionRecord, environmentTemplate: template.public,
-      counterexampleActual: template.internal.counterexampleActual, frozenAt: now,
+      project, item, versionRecord, environmentDefinition, frozenAt: now,
     });
     const budget = await this.store.getBudget();
     let authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
-    const projectCaseAuthorized = this.authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID;
+    const projectCaseAuthorized = [M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID].includes(this.authorizationId);
     if (projectCaseAuthorized) {
       if (!assembled.input_bundle.verification_contract) throw new Error('CASE_BUILD_VERIFICATION_BINDING_INVALID');
+      const m4 = this.authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
       authorization = await this.store.registerProjectCaseAuthorization({
         schema: 'workbench/build-project-case-authorization-v1',
         authorization_id: this.authorizationId,
-        kind: 'initial', linked_stage: 'M3-B2', max_starts: 1, used_starts: 0, claims: [],
+        kind: m4 ? 'initial-with-optional-revision' : 'initial', linked_stage: m4 ? 'M4-A' : 'M3-B2',
+        max_starts: m4 ? 2 : 1, used_starts: 0, claims: [],
         scope: structuredClone(identity), limits: { max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS },
         created_at: now,
       });
@@ -318,7 +324,7 @@ export class BuildTaskManager {
       },
       environment_ref: assembled.environment_ref, input_bundle: assembled.input_bundle,
       execution_policy: projectCaseAuthorized
-        ? { mode: 'SINGLE_AUTHORIZED_INITIAL', launch_enabled: true, reason: 'M3_B2_SCOPED_AUTHORIZATION' }
+        ? { mode: this.authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID ? 'AUTHORIZED_INITIAL_OPTIONAL_REVISION' : 'SINGLE_AUTHORIZED_INITIAL', launch_enabled: true, reason: `${authorization.linked_stage.replace('-', '_')}_SCOPED_AUTHORIZATION` }
         : { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
       created_at: now, started_at: null, finished_at: null,
       task_status: 'SUBMITTED', generation_status: 'NOT_STARTED', verification_status: 'NOT_STARTED',
@@ -360,13 +366,14 @@ export class BuildTaskManager {
       if (kind === 'initial' && (task.task_status !== 'SUBMITTED' || task.attempts.length)) throw new Error('BUILD_INITIAL_NOT_ALLOWED');
       if (kind === 'revision' && (!task.revision_allowed || task.attempts.some((item) => item.kind === 'revision'))) throw new Error('BUILD_REVISION_NOT_ALLOWED');
       const revalidationId = task.authorization?.authorization_id || null;
-      if (revalidationId && (kind !== 'initial' || revalidationId !== this.authorizationId)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      const m4Authorization = revalidationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
+      if (revalidationId && (revalidationId !== this.authorizationId || (!m4Authorization && kind !== 'initial'))) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
       if (revalidationId) {
         const authorization = await this.store.getRevalidationAuthorization();
         if (!authorization || authorization.authorization_id !== revalidationId || authorization.used_starts >= authorization.max_starts) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_EXHAUSTED');
         }
-        if (revalidationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID &&
+        if ([M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID].includes(revalidationId) &&
             (task.source?.kind !== 'project-case' || !sameIdentity(authorization.scope, projectCaseTaskScope(task)))) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
         }
@@ -456,12 +463,14 @@ export class BuildTaskManager {
 
   async #execute(context) {
     const { task, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller, revalidationId } = context;
-    const template = await loadBuildTemplate(this.paths);
+    const template = task.source?.kind === 'project-case'
+      ? await loadProjectCaseEnvironment(this.paths, task.environment_ref.environment_id)
+      : await loadBuildTemplate(this.paths);
     let normalServer;
     let negativeServer;
     try {
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'fixture_starting', partial_observation: true });
-      normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture);
+      normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture, { route: template.internal.normalRoute || '/probe' });
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
       const prompt = promptFor({ kind, task, entryUrl: normalServer.url, candidatePath });
       if (task.source?.kind === 'project-case') {
@@ -572,7 +581,7 @@ export class BuildTaskManager {
       const afterNormal = await sha256File(candidatePath);
       await normalServer.close();
       normalServer = null;
-      negativeServer = await this.adapter.startFixtureServer(template.internal.negativeFixture);
+      negativeServer = await this.adapter.startFixtureServer(template.internal.negativeFixture, { route: template.internal.negativeRoute || '/probe' });
       const negativeRaw = await this.adapter.verifyCandidate({
         candidatePath, browserExecutable: this.browserExecutable, fixtureUrl: negativeServer.url,
         runDirectory: path.join(attemptRoot, 'verification', 'negative'), signal: controller.signal,
@@ -584,7 +593,7 @@ export class BuildTaskManager {
         ? task.input_bundle.verification_contract
         : { expected_literal: task.template.expected, counterexample_actual: template.internal.counterexampleActual };
       const stepCoverage = task.source?.kind === 'project-case' ? projectCaseStepCoverage(normal, verificationContract) : null;
-      const negativeDetected = counterexampleDetected(negative, verificationContract.expected_literal, verificationContract.counterexample_actual);
+      const negativeDetected = counterexampleDetected(negative, verificationContract);
       const technicalPass = normal.complete_pass && negativeDetected && sameCandidate && (!stepCoverage || stepCoverage.complete);
       const coverageError = stepCoverage && !stepCoverage.complete ? {
         type: 'PROJECT_CASE_STEP_COVERAGE_INCOMPLETE',
@@ -626,7 +635,10 @@ export class BuildTaskManager {
           })) || null,
         } : item),
         files: [...current.files, ...indexed.files],
-        revision_allowed: !revalidationId && !effectivePass && kind === 'initial' && budget.used_starts < budget.max_starts,
+        revision_allowed: kind === 'initial' && !effectivePass &&
+          ((!revalidationId && budget.used_starts < budget.max_starts) ||
+            (revalidationId === M4A_QUERY_CASE_AUTHORIZATION_ID && authorization.used_starts < authorization.max_starts &&
+              (!normal.complete_pass || Boolean(coverageError)))),
         budget: { phase: budget.phase, max_starts: budget.max_starts, used_starts: budget.used_starts },
         authorization: authorization ? { ...current.authorization, used_starts: authorization.used_starts } : current.authorization,
         error: finalError,

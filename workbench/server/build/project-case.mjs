@@ -4,15 +4,16 @@ import { createHash } from 'node:crypto';
 export const PROJECT_CASE_ENVIRONMENT_ID = 'synthetic-probe-normal-v1';
 export const PROJECT_CASE_TEMPLATE_ID = 'project-case-input-v1';
 
-export function bindProjectCaseVerification(content, environmentTemplate, counterexampleActual) {
-  const expectedLiteral = environmentTemplate.expected;
-  const matches = content.steps.filter((step) => step.expected.includes(expectedLiteral));
-  if (matches.length !== 1) return null;
+export function bindProjectCaseVerification(content, environmentDefinition) {
+  const binding = environmentDefinition.internal.binding;
+  if (binding.kind === 'expected-literal') {
+    const matches = content.steps.filter((step) => step.expected.includes(binding.expected_literal));
+    if (matches.length !== 1) return null;
+  } else if (binding.kind === 'exact-content') {
+    if (content.external_id !== binding.case_id) return null;
+  } else return null;
   return {
-    schema: 'workbench/project-case-verification-contract-v1',
-    source_step_order: matches[0].order,
-    expected_literal: expectedLiteral,
-    counterexample_actual: counterexampleActual,
+    ...structuredClone(environmentDefinition.internal.verification),
     required_step_markers: content.steps.map((step) => `CASE_STEP_${step.order}`),
   };
 }
@@ -75,7 +76,25 @@ export function renderProjectCaseAgentInstruction(template, { entryUrl, candidat
   return template.replaceAll('{{ENTRY_URL}}', entryUrl).replaceAll('{{CANDIDATE_PATH}}', candidatePath);
 }
 
-export function assembleProjectCaseInput({ project, item, versionRecord, environmentTemplate, counterexampleActual, frozenAt }) {
+export function assembleProjectCaseInput(options) {
+  const { project, item, versionRecord, environmentTemplate, counterexampleActual, frozenAt } = options;
+  let environmentDefinition = options.environmentDefinition;
+  if (!environmentDefinition && environmentTemplate) {
+    environmentDefinition = {
+      environment_id: PROJECT_CASE_ENVIRONMENT_ID,
+      public: environmentTemplate,
+      internal: {
+        binding: { kind: 'expected-literal', expected_literal: environmentTemplate.expected },
+        verification: {
+          schema: 'workbench/project-case-verification-contract-v2',
+          expected_literal: environmentTemplate.expected,
+          counterexample_actual: counterexampleActual,
+          detection: { kind: 'literal-assertion-mismatch', expected: environmentTemplate.expected, actual: counterexampleActual },
+        },
+      },
+    };
+  }
+  const publicTemplate = environmentDefinition.public;
   const source = {
     kind: 'project-case',
     project_id: project.project_id,
@@ -88,13 +107,17 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
     lineage: structuredClone(item.lineage),
   };
   const environmentRef = {
-    environment_id: PROJECT_CASE_ENVIRONMENT_ID,
-    template_id: environmentTemplate.template_id,
-    template_version: environmentTemplate.version,
-    allowed_entry: structuredClone(environmentTemplate.allowed_entry),
-    candidate_contract: structuredClone(environmentTemplate.candidate_contract),
+    environment_id: environmentDefinition.environment_id,
+    template_id: publicTemplate.template_id,
+    template_version: publicTemplate.version,
+    allowed_entry: structuredClone(publicTemplate.allowed_entry),
+    candidate_contract: structuredClone(publicTemplate.candidate_contract),
   };
-  const verificationContract = bindProjectCaseVerification(versionRecord.content, environmentTemplate, counterexampleActual);
+  const binding = environmentDefinition.internal.binding;
+  if (binding.kind === 'exact-content' && versionRecord.content_sha256 !== binding.content_sha256) {
+    throw new Error('CASE_BUILD_ENVIRONMENT_CASE_MISMATCH');
+  }
+  const verificationContract = bindProjectCaseVerification(versionRecord.content, environmentDefinition);
   const candidateRequirements = {
     schema: 'workbench/project-case-candidate-requirements-v1',
     required_step_markers: versionRecord.content.steps.map((step) => ({
@@ -104,7 +127,7 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
     deliverable: {
       kind: 'playwright-test-candidate',
       relative_path: 'output/candidate.spec.mjs',
-      test_count: environmentTemplate.candidate_contract.test_count,
+      test_count: publicTemplate.candidate_contract.test_count,
     },
   };
   const snapshot = {
@@ -153,8 +176,8 @@ export function assembleProjectCaseInput({ project, item, versionRecord, environ
       version: '1.0.0',
       title: `${versionRecord.content.external_id} · ${versionRecord.content.title}`,
       summary: `项目“${project.name}”用例 v${versionRecord.version} 的冻结建例输入`,
-      candidate_contract: structuredClone(environmentTemplate.candidate_contract),
-      allowed_entry: structuredClone(environmentTemplate.allowed_entry),
+      candidate_contract: structuredClone(publicTemplate.candidate_contract),
+      allowed_entry: structuredClone(publicTemplate.allowed_entry),
       input_sha256: snapshotSha256,
     },
     initial_files: files,
