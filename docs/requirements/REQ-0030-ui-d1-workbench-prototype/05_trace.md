@@ -17,4 +17,5 @@
 | 版本 | 链路 | 状态 | 说明 |
 |---:|---|---|---|
 | 1 | 无 | 实施中 | 建立UI-D1独立原型需求包，冻结范围、能力边界和浏览器验收。 |
-| 1 | workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md | 待用户核对 | 可点击原型、三条真实浏览器流程、两种桌面视口和关键截图已交付；不替换正式UI。 |
+| 1 | workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md | 待用户核对 | 首版可点击原型、三条浏览器流程和两种桌面视口已交付；不替换正式UI。 |
+| 2 | workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md | 待用户核对 | 按附件权威MD完成砂岩陶土版六屏、三流程、三种桌面视口、API映射及六张独立截图。 |

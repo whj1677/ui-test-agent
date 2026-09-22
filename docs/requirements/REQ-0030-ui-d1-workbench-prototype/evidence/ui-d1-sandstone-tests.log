@@ -1,0 +1,55 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-22T14:31:00+08:00
+Command: node --test workbench/ui-prototype/prototype.test.mjs
+Exit code: 0
+Parsed test count: 6
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: 演示边界明确且不调用正式API
+ok 1 - 演示边界明确且不调用正式API
+  ---
+  duration_ms: 0.8106
+  type: 'test'
+  ...
+# Subtest: 六个核心界面都有独立路由和业务内容
+ok 2 - 六个核心界面都有独立路由和业务内容
+  ---
+  duration_ms: 0.4985
+  type: 'test'
+  ...
+# Subtest: 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
+ok 3 - 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
+  ---
+  duration_ms: 4.341
+  type: 'test'
+  ...
+# Subtest: 导入预览、幂等与明确冲突选择均有确定性交互
+ok 4 - 导入预览、幂等与明确冲突选择均有确定性交互
+  ---
+  duration_ms: 0.2349
+  type: 'test'
+  ...
+# Subtest: 结果页保留原始事实且步骤切换不重建视频
+ok 5 - 结果页保留原始事实且步骤切换不重建视频
+  ---
+  duration_ms: 0.1582
+  type: 'test'
+  ...
+# Subtest: 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
+ok 6 - 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
+  ---
+  duration_ms: 0.2476
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 120.7015
