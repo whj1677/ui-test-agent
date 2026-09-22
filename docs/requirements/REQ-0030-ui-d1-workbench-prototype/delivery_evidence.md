@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-22T14:55:05+08:00`
+- Generated at: `2026-09-22T15:26:50+08:00`
 - Record: `REQ-0030-ui-d1-workbench-prototype`
-- Change fingerprint: `6de12460999b1260a7ec0e05f890f1dfabc045123cbfa345e533e2544aea38c0`
+- Change fingerprint: `a90a864fa30073204d235225597488a7c8e17bb7160c405acfdeb1b975911f22`
 - Verification source: `collector-executed-v1`
-- Verification state: `单元测试通过`
-- Command: `node --test workbench/ui-prototype/prototype.test.mjs`
+- Verification state: `静态检查通过`
+- Command: `node -e "const fs=require('fs'); const s=fs.readFileSync('workbench/ui-prototype/USER_TRIAL_GUIDE.md','utf8'); const required=['案例背景','启动与入口','路线 A：准备项目与导入','路线 B：理解用例、任务与版本','路线 C：查看运行与失败现场','恢复初始演示状态','模拟操作与真实文件','体验反馈表','我的UI体验项目','DEMO-Q-001','DEMO-S-001','DEMO-C-004']; for (const x of required) if (!s.includes(x)) throw new Error('MISSING:'+x); JSON.parse(fs.readFileSync('docs/requirements/REQ-0030-ui-d1-workbench-prototype/requirement.source.json','utf8')); console.log('USER_TRIAL_GUIDE_CHECK_OK checks='+required.length); console.log('1 passed, 0 skipped');"`
 - Exit code: `0`
-- Test count: `9`
+- Test count: `1`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/ui-d1-consistency-tests.log`
-- Log SHA-256: `03a5d27b2604b9b647426a70cf537a882b696e59c026e82a9c6b813185060b31`
+- Log path: `docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/user-trial-guide-check.log`
+- Log SHA-256: `bbe84249bb9a84d8f878b52bc303414b175b78f7939b329f17ef2992f0ab5149`
 
 ### Git Status
 
@@ -26,16 +26,18 @@
  M docs/requirements/REQ-0030-ui-d1-workbench-prototype/current_state.md
  M docs/requirements/REQ-0030-ui-d1-workbench-prototype/delivery_evidence.md
  M docs/requirements/REQ-0030-ui-d1-workbench-prototype/requirement.source.json
- M workbench/ui-prototype/README.md
- M workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md
  M workbench/ui-prototype/app.js
- M workbench/ui-prototype/demo-data.js
  M workbench/ui-prototype/prototype.test.mjs
- M workbench/ui-prototype/screenshots/05-build-task-detail.png
- M workbench/ui-prototype/serve.mjs
  M workbench/ui-prototype/styles.css
-?? docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/ui-d1-consistency-tests.log
-?? workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md
+?? docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/user-trial-guide-check.log
+?? workbench/ui-prototype/DIRECTION_OPTIONS.md
+?? workbench/ui-prototype/USER_TRIAL_GUIDE.md
+?? workbench/ui-prototype/directions.css
+?? workbench/ui-prototype/directions.html
+?? workbench/ui-prototype/directions.js
+?? workbench/ui-prototype/screenshots/directions/graphite.png
+?? workbench/ui-prototype/screenshots/directions/navy.png
+?? workbench/ui-prototype/screenshots/directions/paper.png
 ```
 
 ### Git Diff Stat
@@ -49,115 +51,51 @@ warning: in the working copy of 'docs/requirements/REQ-0030-ui-d1-workbench-prot
 warning: in the working copy of 'docs/requirements/REQ-0030-ui-d1-workbench-prototype/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0030-ui-d1-workbench-prototype/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0030-ui-d1-workbench-prototype/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/ui-prototype/README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/ui-prototype/app.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/ui-prototype/demo-data.js', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/ui-prototype/prototype.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/ui-prototype/serve.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/ui-prototype/styles.css', LF will be replaced by CRLF the next time Git touches it
- .../02_design.md                                   |   2 +
+ .../02_design.md                                   |   1 +
  .../REQ-0030-ui-d1-workbench-prototype/03_tasks.md |   1 +
- .../04_verification.md                             |   3 +-
+ .../04_verification.md                             |   3 +
  .../REQ-0030-ui-d1-workbench-prototype/05_trace.md |   2 +
  .../change_log.md                                  |   1 +
  .../current_state.md                               |   4 +-
- .../delivery_evidence.md                           | 127 ++++++++++-----------
- .../requirement.source.json                        |  46 +++++++-
- workbench/ui-prototype/README.md                   |   3 +
- workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md  |   4 +
- workbench/ui-prototype/app.js                      |  31 +++--
- workbench/ui-prototype/demo-data.js                |  95 ++++++++++++++-
- workbench/ui-prototype/prototype.test.mjs          |  58 +++++++++-
- .../screenshots/05-build-task-detail.png           | Bin 100366 -> 142969 bytes
- workbench/ui-prototype/serve.mjs                   |  37 +++++-
- workbench/ui-prototype/styles.css                  |   5 +
- 16 files changed, 329 insertions(+), 90 deletions(-)
+ .../delivery_evidence.md                           | 142 ++++++--------------
+ .../requirement.source.json                        |  49 ++++++-
+ workbench/ui-prototype/app.js                      |   1 -
+ workbench/ui-prototype/prototype.test.mjs          |   6 +-
+ workbench/ui-prototype/styles.css                  | 145 +++++++++++++--------
+ 11 files changed, 190 insertions(+), 165 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/ui-d1-consistency-tests.log
-workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md
+docs/requirements/REQ-0030-ui-d1-workbench-prototype/evidence/user-trial-guide-check.log
+workbench/ui-prototype/DIRECTION_OPTIONS.md
+workbench/ui-prototype/USER_TRIAL_GUIDE.md
+workbench/ui-prototype/directions.css
+workbench/ui-prototype/directions.html
+workbench/ui-prototype/directions.js
+workbench/ui-prototype/screenshots/directions/graphite.png
+workbench/ui-prototype/screenshots/directions/navy.png
+workbench/ui-prototype/screenshots/directions/paper.png
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-22T14:55:04+08:00
-Command: node --test workbench/ui-prototype/prototype.test.mjs
+Started at: 2026-09-22T15:26:49+08:00
+Command: node -e "const fs=require('fs'); const s=fs.readFileSync('workbench/ui-prototype/USER_TRIAL_GUIDE.md','utf8'); const required=['案例背景','启动与入口','路线 A：准备项目与导入','路线 B：理解用例、任务与版本','路线 C：查看运行与失败现场','恢复初始演示状态','模拟操作与真实文件','体验反馈表','我的UI体验项目','DEMO-Q-001','DEMO-S-001','DEMO-C-004']; for (const x of required) if (!s.includes(x)) throw new Error('MISSING:'+x); JSON.parse(fs.readFileSync('docs/requirements/REQ-0030-ui-d1-workbench-prototype/requirement.source.json','utf8')); console.log('USER_TRIAL_GUIDE_CHECK_OK checks='+required.length); console.log('1 passed, 0 skipped');"
 Exit code: 0
-Parsed test count: 9
+Parsed test count: 1
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
-TAP version 13
-# Subtest: 演示边界明确且不调用正式API
-ok 1 - 演示边界明确且不调用正式API
-  ---
-  duration_ms: 0.794
-  type: 'test'
-  ...
-# Subtest: 六个核心界面都有独立路由和业务内容
-ok 2 - 六个核心界面都有独立路由和业务内容
-  ---
-  duration_ms: 0.3006
-  type: 'test'
-  ...
-# Subtest: 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
-ok 3 - 演示数据覆盖高密度、空项目、跨项目同编号和分层状态
-  ---
-  duration_ms: 4.4775
-  type: 'test'
-  ...
-# Subtest: 导入预览、幂等与明确冲突选择均有确定性交互
-ok 4 - 导入预览、幂等与明确冲突选择均有确定性交互
-  ---
-  duration_ms: 0.2045
-  type: 'test'
-  ...
-# Subtest: 结果页保留原始事实且步骤切换不重建视频
-ok 5 - 结果页保留原始事实且步骤切换不重建视频
-  ---
-  duration_ms: 0.1473
-  type: 'test'
-  ...
-# Subtest: 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
-ok 6 - 砂岩陶土主题使用附件指定关键色值且能力映射不伪装缺失项
-  ---
-  duration_ms: 0.2187
-  type: 'test'
-  ...
-# Subtest: 用例版本正文与建例任务快照在修改和序列化后保持独立
-ok 7 - 用例版本正文与建例任务快照在修改和序列化后保持独立
-  ---
-  duration_ms: 1.1161
-  type: 'test'
-  ...
-# Subtest: 阶段条使用明确映射且技术验证不会被单项正常通过提前完成
-ok 8 - 阶段条使用明确映射且技术验证不会被单项正常通过提前完成
-  ---
-  duration_ms: 0.3085
-  type: 'test'
-  ...
-# Subtest: JSON用例包按明确选择导出且保留所选版本完整正文
-ok 9 - JSON用例包按明确选择导出且保留所选版本完整正文
-  ---
-  duration_ms: 0.7215
-  type: 'test'
-  ...
-1..9
-# tests 9
-# suites 0
-# pass 9
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 132.6853
+USER_TRIAL_GUIDE_CHECK_OK checks=12
+1 passed, 0 skipped
 ```
 
 ### Sync Record Status
@@ -176,4 +114,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-真实Chromium另完成v1/v2/旧任务刷新读回、四类阶段条核对及选中2条/全部120条JSON下载解析，见UI_D1_CONSISTENCY_REVISION.md
+仅新增体验指南和REQ追踪；原型代码与演示数据未修改，因此未重跑无关原型测试。真实浏览器三条路线已在本轮复走。

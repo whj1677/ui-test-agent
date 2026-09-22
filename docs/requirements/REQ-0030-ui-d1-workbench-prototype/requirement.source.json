@@ -5,7 +5,7 @@
   "metadata": {
     "requirement_status": "待用户核对",
     "governance_level": "G2",
-    "version": 3,
+    "version": 4,
     "last_updated": "2026-09-22"
   },
   "original_input": "UI-D1：以附件《测试工作台_UI原型需求说明_砂岩陶土_v1.0.md》为功能和交互权威依据，配色预览只参考视觉方向；交付独立、可在浏览器打开点击的砂岩陶土原型，完整覆盖项目列表、项目用例库、Excel/原生用例包导入、用例详情、建例任务详情、执行结果详情六个核心界面和A/B/C三条流程。原型只使用独立合成演示数据，不调用真实写接口、Harness、模型或业务脚本，不替换正式UI或扩展后端。附件ZIP SHA-256为8FE9778D85475613241E7E084E570C2F0389A82F9EB4688D76EF903B73FBA470，权威MD SHA-256为6FCFAD116F022110FABA5667BAF15677F68F9A1796A596460B79D03045BC8724。",
@@ -104,7 +104,8 @@
   "module_document_impact": [
     "本次无需模块文档变更，原因：本批只新增与正式workbench/web和server完全分离的静态交互原型、说明、验收报告和脱敏截图，不改变任何正式模块接口、状态或运行行为。",
     "本次无需设计变更，原因：交互一致性收尾只落实既有DD-0030-02/03中的版本冻结、状态分层和导出行为，不改变六屏信息架构、砂岩陶土视觉方向或三条流程。",
-    "本次无需模块文档变更，原因：修订仍完全位于独立ui-prototype；本地下载端点仅回传当前页面生成的演示JSON，不改变正式workbench/web、server、真实数据或任何生产模块契约。"
+    "本次无需模块文档变更，原因：修订仍完全位于独立ui-prototype；本地下载端点仅回传当前页面生成的演示JSON，不改变正式workbench/web、server、真实数据或任何生产模块契约。",
+    "本次无需模块文档变更，原因：版本4只新增独立原型的测试人员体验指南和REQ追踪，没有修改原型代码、演示数据、正式模块接口、状态或运行行为。"
   ],
   "risks_and_rollback": [
     "原型数据可能被误认为真实结果；所有页面和媒体持续标注交互原型/演示数据，并在文档声明不可作为执行证据。",
@@ -151,6 +152,14 @@
       "status": "已完成",
       "task": "修正版本正文与任务冻结快照、确定性阶段映射，并完成选中与全部JSON真实下载验证。",
       "verification_ids": ["VT-0030-05"]
+    },
+    {
+      "id": "TK-0030-06",
+      "dr_ids": ["DR-0030-01", "DR-0030-02", "DR-0030-03", "DR-0030-04", "DR-0030-05"],
+      "dd_ids": ["DD-0030-01", "DD-0030-02", "DD-0030-03", "DD-0030-04"],
+      "status": "已完成",
+      "task": "准备设备巡检回归的可重复用户体验案例，提供面向测试人员的逐步指南，并从重置状态复走导入、版本冻结、待澄清和媒体结果路线。",
+      "verification_ids": ["VT-0030-06"]
     }
   ],
   "verification_items": [
@@ -233,19 +242,37 @@
         "skipped_count": 0,
         "log_path": "workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md"
       }
+    },
+    {
+      "id": "VT-0030-06",
+      "dr_ids": ["DR-0030-01", "DR-0030-02", "DR-0030-03", "DR-0030-04", "DR-0030-05"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "从重置后的原型按用户指南复走三条体验路线，核对按钮名称、对象、导入数量、冻结版本、待澄清原因、真实下载事件、运行差异和媒体控制。",
+      "evidence_standard": "真实浏览器可见页面、下载事件、录像加载与播放状态及指南逐步预期",
+      "current_evidence": {
+        "command": "Codex in-app Chromium：http://127.0.0.1:4311/#/projects，从重置状态执行 USER_TRIAL_GUIDE.md 路线 A/B/C",
+        "exit_code": 0,
+        "test_count": 3,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/ui-prototype/USER_TRIAL_GUIDE.md"
+      }
     }
   ],
   "verification_environment": {
     "working_directory": "独立worktree的workbench/ui-prototype；不启动正式workbench服务。",
     "commands": [
       "node workbench/ui-prototype/serve.mjs 4311",
-      "浏览器访问 http://127.0.0.1:4311/#/projects 并执行A/B/C流程"
+      "浏览器访问 http://127.0.0.1:4311/#/projects 并执行A/B/C流程",
+      "按 workbench/ui-prototype/USER_TRIAL_GUIDE.md 从重置状态复走用户体验案例"
     ],
     "environment": [
       "Windows本机；Node.js 22；桌面Chromium；本地127.0.0.1静态服务。"
     ],
     "conclusion": [
-      "原六屏与三流程证据保留；一致性修订测试9/9通过，真实Chromium版本快照、阶段条和选中/全部JSON下载通过；原型交付仍停在用户核对，不作为真实执行或批准证据。"
+      "原六屏与三流程证据保留；一致性修订测试9/9通过，真实Chromium版本快照、阶段条和选中/全部JSON下载通过；原型交付仍停在用户核对，不作为真实执行或批准证据。",
+      "用户体验案例已从重置状态复走：Excel预览2/1/1/1/1，JSON首次新增2条、重复导入3条，选中2条触发真实下载；DEMO-Q-001的v1与旧任务冻结内容在形成v2后保持，DEMO-C-004禁用原因明确；DEMO-S-001的新演示运行、预置失败差异、未执行步骤、截图和录像加载/播放均已核对。"
     ]
   },
   "trace_current": [
@@ -255,13 +282,15 @@
     {"un_id":"UN-0030-01","dr_id":"DR-0030-04","dd_id":"DD-0030-03","tk_id":"TK-0030-02","vt_id":"VT-0030-03","status":"已完成"},
     {"un_id":"UN-0030-01","dr_id":"DR-0030-05","dd_id":"DD-0030-04","tk_id":"TK-0030-03","vt_id":"VT-0030-04","status":"已完成"},
     {"un_id":"UN-0030-01","dr_id":"DR-0030-05","dd_id":"DD-0030-04","tk_id":"TK-0030-04","vt_id":"VT-0030-04","status":"已完成"},
-    {"un_id":"UN-0030-01","dr_id":"DR-0030-03","dd_id":"DD-0030-03","tk_id":"TK-0030-05","vt_id":"VT-0030-05","status":"已完成"}
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-03","dd_id":"DD-0030-03","tk_id":"TK-0030-05","vt_id":"VT-0030-05","status":"已完成"},
+    {"un_id":"UN-0030-01","dr_id":"DR-0030-05","dd_id":"DD-0030-04","tk_id":"TK-0030-06","vt_id":"VT-0030-06","status":"已完成"}
   ],
   "trace_history": [
     {"version":1,"link":"无","status":"实施中","notes":"建立UI-D1独立原型需求包，冻结范围、能力边界和浏览器验收。"},
     {"version":1,"link":"workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md","status":"待用户核对","notes":"首版可点击原型、三条浏览器流程和两种桌面视口已交付；不替换正式UI。"},
     {"version":2,"link":"workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md","status":"待用户核对","notes":"按附件权威MD完成砂岩陶土版六屏、三流程、三种桌面视口、API映射及六张独立截图。"},
-    {"version":3,"link":"workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md","status":"待用户核对","notes":"修正历史版本正文、任务冻结快照和阶段条，完成选中与全部JSON真实下载文件核对；首次报告的未捕获事实保留。"}
+    {"version":3,"link":"workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md","status":"待用户核对","notes":"修正历史版本正文、任务冻结快照和阶段条，完成选中与全部JSON真实下载文件核对；首次报告的未捕获事实保留。"},
+    {"version":4,"link":"workbench/ui-prototype/USER_TRIAL_GUIDE.md","status":"待用户体验","notes":"准备设备巡检回归的可重复体验案例和逐步指南；从重置状态复走导入、冻结版本、待澄清、运行失败和媒体路线，等待用户评价配色、组织与流程。"}
   ],
   "open_questions": [
     "无阻塞项；原型完成后等待用户核对，不自动替换正式UI。"
@@ -297,6 +326,14 @@
       "description": "完整版本正文与任务冻结快照分离，阶段条改为确定性映射，并补齐选中与全部JSON真实下载验证。",
       "impact": "仅修改独立workbench/ui-prototype与REQ-0030；生产存储、状态机和正式工作台不变",
       "confirmed_by": "用户当前收尾任务"
+    },
+    {
+      "date": "2026-09-22",
+      "version": 4,
+      "type": "用户体验案例",
+      "description": "新增设备巡检平台回归准备与结果查看的可重复体验指南，明确三条路线、具体对象、可见预期、重置范围和反馈表，并从重置后的原型实际复走。",
+      "impact": "只新增独立原型用户指南并更新REQ-0030追踪；演示数据、原型代码、正式工作台和真实数据不变",
+      "confirmed_by": "用户当前任务"
     }
   ]
 }

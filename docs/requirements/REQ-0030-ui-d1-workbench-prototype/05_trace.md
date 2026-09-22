@@ -12,6 +12,7 @@
 | UN-0030-01 | DR-0030-05 | DD-0030-04 | TK-0030-03 | VT-0030-04 | 已完成 |
 | UN-0030-01 | DR-0030-05 | DD-0030-04 | TK-0030-04 | VT-0030-04 | 已完成 |
 | UN-0030-01 | DR-0030-03 | DD-0030-03 | TK-0030-05 | VT-0030-05 | 已完成 |
+| UN-0030-01 | DR-0030-05 | DD-0030-04 | TK-0030-06 | VT-0030-06 | 已完成 |
 
 ## 历史链路
 
@@ -21,3 +22,4 @@
 | 1 | workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md | 待用户核对 | 首版可点击原型、三条浏览器流程和两种桌面视口已交付；不替换正式UI。 |
 | 2 | workbench/ui-prototype/UI_D1_ACCEPTANCE_REPORT.md | 待用户核对 | 按附件权威MD完成砂岩陶土版六屏、三流程、三种桌面视口、API映射及六张独立截图。 |
 | 3 | workbench/ui-prototype/UI_D1_CONSISTENCY_REVISION.md | 待用户核对 | 修正历史版本正文、任务冻结快照和阶段条，完成选中与全部JSON真实下载文件核对；首次报告的未捕获事实保留。 |
+| 4 | workbench/ui-prototype/USER_TRIAL_GUIDE.md | 待用户体验 | 准备设备巡检回归的可重复体验案例和逐步指南；从重置状态复走导入、冻结版本、待澄清、运行失败和媒体路线，等待用户评价配色、组织与流程。 |

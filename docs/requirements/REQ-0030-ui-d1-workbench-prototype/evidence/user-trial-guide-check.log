@@ -1,0 +1,11 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-22T15:26:49+08:00
+Command: node -e "const fs=require('fs'); const s=fs.readFileSync('workbench/ui-prototype/USER_TRIAL_GUIDE.md','utf8'); const required=['案例背景','启动与入口','路线 A：准备项目与导入','路线 B：理解用例、任务与版本','路线 C：查看运行与失败现场','恢复初始演示状态','模拟操作与真实文件','体验反馈表','我的UI体验项目','DEMO-Q-001','DEMO-S-001','DEMO-C-004']; for (const x of required) if (!s.includes(x)) throw new Error('MISSING:'+x); JSON.parse(fs.readFileSync('docs/requirements/REQ-0030-ui-d1-workbench-prototype/requirement.source.json','utf8')); console.log('USER_TRIAL_GUIDE_CHECK_OK checks='+required.length); console.log('1 passed, 0 skipped');"
+Exit code: 0
+Parsed test count: 1
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+USER_TRIAL_GUIDE_CHECK_OK checks=12
+1 passed, 0 skipped
