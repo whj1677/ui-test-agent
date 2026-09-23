@@ -13,6 +13,7 @@ import {
 import { E2E01_PROJECT_CASE_AUTHORIZATION_ID, M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from './store.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
+import { dshHomeSecrets, harnessStderrDiagnostic } from './diagnostic.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
@@ -100,6 +101,20 @@ function e2eAuthorizationMatches(authorization, scope) {
       item.environment_id === scope.environment_id);
 }
 
+export function e2eTrialReadiness(candidate) {
+  const runs = candidate?.trial_runs || [];
+  const normal = runs.filter((run) => run.run_type === 'normal').at(-1);
+  const negative = runs.filter((run) => run.run_type === 'negative').at(-1);
+  return Boolean(normal && negative &&
+    normal.candidate_sha256 === candidate.sha256 && negative.candidate_sha256 === candidate.sha256 &&
+    normal.status === 'PASSED' && normal.complete_pass === true && normal.step_coverage?.complete === true &&
+    negative.status === 'FAILED' && negative.complete_pass === false && negative.specified_defect_detected === true &&
+    (normal.same_candidate_hash === true || (normal.same_candidate_hash == null && candidate.same_candidate_hash === true)) &&
+    negative.same_candidate_hash === true &&
+    !normal.technical_error && !negative.technical_error &&
+    normal.media_file_ids?.length === 3 && negative.media_file_ids?.length === 3);
+}
+
 function lifecycleMetadata(event) {
   return Object.fromEntries(Object.entries(event || {}).filter(([key, value]) => LIFECYCLE_FIELDS.has(key) &&
     (value === null || ['string', 'number', 'boolean'].includes(typeof value))).map(([key, value]) => [
@@ -179,7 +194,8 @@ export class BuildTaskManager {
     this.storageFault = null;
     this.authorizationId = options.authorizationId || null;
     this.harnessDshHome = options.harnessDshHome || path.join(this.paths.buildRuntimeRoot, 'dsh');
-    this.harnessPatchPath = options.harnessPatchPath || path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml');
+    const configuredPatch = options.harnessPatchPath || path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml');
+    this.harnessPatchPath = path.isAbsolute(configuredPatch) ? configuredPatch : path.resolve(configuredPatch);
     this.useStoredDshCredentials = options.useStoredDshCredentials === true;
     this.modelConfiguration = options.modelConfiguration || null;
     this.caseSubmissions = new Map();
@@ -483,12 +499,19 @@ export class BuildTaskManager {
         technical_error: indexed.unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', files: indexed.unexpected } : null,
       };
       if (!run.same_candidate_hash) throw new Error('E2E01_CANDIDATE_CHANGED_DURING_TRIAL');
+      const ready = e2eTrialReadiness({ ...candidate, trial_runs: [...(candidate.trial_runs || []), run] });
       return await this.store.updateTask(taskId, (current) => ({
-        ...current, task_status: 'WAITING_E2E_TRIALS', verification_status: 'INCOMPLETE',
-        human_review_status: 'NOT_READY', finished_at: this.now().toISOString(),
+        ...current,
+        task_status: ready ? 'WAITING_HUMAN_REVIEW' : 'WAITING_E2E_TRIALS',
+        verification_status: ready ? 'TECHNICAL_VALIDATION_PASSED' : 'INCOMPLETE',
+        human_review_status: ready ? 'WAITING_REVIEW' : 'NOT_READY',
+        finished_at: this.now().toISOString(),
         candidates: current.candidates.map((item) => item.version === candidate.version ? {
           ...item, trial_runs: [...(item.trial_runs || []), run],
-          ...(runType === 'normal' ? { normal: verification, verification_status: verification.complete_pass && stepCoverage.complete ? 'NORMAL_PASSED_AWAITING_PAIR' : 'FAILED' } : { negative: verification }),
+          ...(runType === 'normal' ? { normal: verification } : { negative: verification }),
+          verification_status: ready ? 'TECHNICAL_VALIDATION_PASSED'
+            : (runType === 'negative' ? 'PAIR_VALIDATION_FAILED'
+              : verification.complete_pass && stepCoverage.complete ? 'NORMAL_PASSED_AWAITING_PAIR' : 'FAILED'),
           ...(runType === 'negative' ? { counterexample_detected: detected } : {}),
           error: runType === 'normal' ? (verification.error || (stepCoverage.complete ? null : { code: 'STEP_COVERAGE_INCOMPLETE' })) : item.error,
         } : item),
@@ -499,6 +522,25 @@ export class BuildTaskManager {
       if (this.active?.taskId === taskId) this.active = null;
       this.starting = false;
     }
+  }
+
+  async reconcileE2E01Task(taskId) {
+    this.#assertWritable();
+    if (this.active || this.starting) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
+    const task = await this.store.getTask(taskId);
+    if (!task?.trial_binding || task.authorization?.authorization_id !== E2E01_PROJECT_CASE_AUTHORIZATION_ID ||
+        this.authorizationId !== E2E01_PROJECT_CASE_AUTHORIZATION_ID) throw new Error('E2E01_TRIAL_NOT_ALLOWED');
+    const candidate = task.candidates.at(-1);
+    if (!candidate) throw new Error('E2E01_CANDIDATE_IDENTITY_MISMATCH');
+    const candidatePath = path.join(this.store.taskDirectory(taskId), 'attempts', candidate.attempt_id, 'workspace', 'output', 'candidate.spec.mjs');
+    if (await sha256File(candidatePath) !== candidate.sha256) throw new Error('E2E01_CANDIDATE_FILE_CHANGED');
+    if (!e2eTrialReadiness(candidate)) throw new Error('E2E01_TRIALS_INCOMPLETE');
+    return this.store.updateTask(taskId, (current) => ({
+      ...current, task_status: 'WAITING_HUMAN_REVIEW', verification_status: 'TECHNICAL_VALIDATION_PASSED',
+      human_review_status: 'WAITING_REVIEW',
+      candidates: current.candidates.map((item) => item.version === candidate.version
+        ? { ...item, verification_status: 'TECHNICAL_VALIDATION_PASSED' } : item),
+    }));
   }
 
   async #launch(taskIdValue, kind) {
@@ -669,6 +711,7 @@ export class BuildTaskManager {
           await this.#recordLifecycle(task.task_id, attemptId, event);
         },
       });
+      const diagnosticSecrets = this.useStoredDshCredentials ? await dshHomeSecrets(this.harnessDshHome) : [];
       const harnessSummary = {
         model_configuration: this.modelConfiguration ? structuredClone(this.modelConfiguration) : null,
         assessment: harness.assessment,
@@ -685,6 +728,7 @@ export class BuildTaskManager {
           termination: harness.process.termination, exit_observed: harness.process.exitObserved,
           close_observed: harness.process.closeObserved, output_complete: harness.process.outputComplete,
           observer_error: harness.process.observerError ? { code: harness.process.observerError.code } : null,
+          stderr_diagnostic: harnessStderrDiagnostic(harness.process.stderr, [credentials.apiKey, credentials.baseUrl, ...diagnosticSecrets]),
         },
       };
       await fs.mkdir(attemptRoot, { recursive: true });

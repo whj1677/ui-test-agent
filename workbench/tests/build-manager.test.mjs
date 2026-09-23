@@ -17,12 +17,15 @@ function playwrightReport(status, error = null) {
 
 function fakeAdapter({ cancellation = false, emitSpawn = false } = {}) {
   let harnessStarts = 0;
+  let lastPatchPath = null;
   return {
     get harnessStarts() { return harnessStarts; },
+    get lastPatchPath() { return lastPatchPath; },
     async ensureHarnessRuntime() { return { ready: true }; },
     async startFixtureServer(file) { return { url: file.endsWith('wrong-output.html') ? 'http://127.0.0.1/negative' : 'http://127.0.0.1/normal', async close() {} }; },
-    async runHarnessTask({ candidatePath, workspace, signal, onLifecycle }) {
+    async runHarnessTask({ candidatePath, workspace, signal, onLifecycle, patchPath }) {
       harnessStarts += 1;
+      lastPatchPath = patchPath;
       if (emitSpawn) await onLifecycle({ type: 'process_spawn', pid: 4321, parent_pid: process.pid, at: new Date().toISOString() });
       if (cancellation) {
         if (!signal.aborted) await new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }));
@@ -58,11 +61,11 @@ function fakeAdapter({ cancellation = false, emitSpawn = false } = {}) {
   };
 }
 
-async function setup(adapter) {
+async function setup(adapter, managerOptions = {}) {
   const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'build-manager-'));
   const paths = createPaths({ localRoot });
   const store = new BuildTaskStore(paths.buildTasksRoot); await store.init();
-  const manager = new BuildTaskManager({ store, paths, adapter, browserExecutable: 'fake-browser', credentialProvider: () => ({ apiKey: 'synthetic-key', baseUrl: 'https://model.invalid' }), idFactory: () => 'build-manager-12345678' });
+  const manager = new BuildTaskManager({ store, paths, adapter, browserExecutable: 'fake-browser', credentialProvider: () => ({ apiKey: 'synthetic-key', baseUrl: 'https://model.invalid' }), idFactory: () => 'build-manager-12345678', ...managerOptions });
   return { localRoot, store, manager };
 }
 
@@ -89,6 +92,19 @@ test('failed candidate enables exactly one explicit revision and preserves both 
     assert.equal((await store.getBudget()).used_starts, 2);
     const lifecycle = await store.lifecycleSummary(task.task_id, 'attempt-02-revision');
     assert.ok(lifecycle.event_count >= 4);
+  } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
+});
+
+test('relative Harness patch resolves before task workspace changes', async () => {
+  const adapter = fakeAdapter();
+  const configured = path.join('..', 'harness-probe', 'config', 'browser-flash.cordis.yml');
+  const { localRoot, manager } = await setup(adapter, { harnessPatchPath: configured });
+  try {
+    const task = await manager.submit('synthetic-probe-v1');
+    await manager.start(task.task_id);
+    await manager.wait(task.task_id);
+    assert.equal(adapter.lastPatchPath, path.resolve(configured));
+    assert.equal(path.isAbsolute(adapter.lastPatchPath), true);
   } finally { await manager.settle(); await fs.rm(localRoot, { recursive: true, force: true }); }
 });
 

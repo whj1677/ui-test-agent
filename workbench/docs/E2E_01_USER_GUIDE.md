@@ -1,42 +1,48 @@
-# E2E-01 六用例工作台使用说明
+# E2E-01 六用例工作台体验指南
 
-## 当前可用状态
+现在打开 <http://127.0.0.1:4322/workspace/>，先选项目 **E2E-01 六用例工作台自动建例闭环**。三份候选和六条目标运行已准备好；你只需查看，无须输入密钥、编辑 JSON、运行测试命令或重新启动建例。
 
-工作台新页面：<http://127.0.0.1:4322/workspace/>。被测设备台账站点：<http://127.0.0.1:4320>。
+被测设备台账页面的三组入口分别是：组合查询 [正常 /ui/a](http://127.0.0.1:4320/ui/a) / [故障 /ui/b](http://127.0.0.1:4320/ui/b)，功率排序 [正常 /ui/c](http://127.0.0.1:4320/ui/c) / [故障 /ui/d](http://127.0.0.1:4320/ui/d)，设备详情 [正常 /ui/e](http://127.0.0.1:4320/ui/e) / [故障 /ui/f](http://127.0.0.1:4320/ui/f)。它们是本机固定设备数据，不连接真实公司站点。
 
-本机当前数据目录为 `workbench/.local/six-case-e2e`。已经通过新页面创建项目并导入官方六用例 JSON 包；项目名称为 **E2E-01 六用例工作台自动建例闭环**。已在本机 DSH_HOME `.env` 配置凭据，并确认不带工具的官方文本请求可返回 `OK`；但带 Browser 工具的两个真实初稿任务启动均异常退出，当前仍没有候选或产品运行记录。不要把工程样例或文本连通检查当成产品结果。查看详情请见 [验收记录](E2E_01_ACCEPTANCE_REPORT.md)。
+## 如果本机服务没有运行
 
-## 启动
-
-先确认本机设备台账站点 `http://127.0.0.1:4320` 仍由本仓库 `workbench/trial-site/server.mjs` 提供；不要关闭来源不明的占用进程。再开 PowerShell：
+先在浏览器试开 `/ui/a` 和工作台地址。若设备台账服务未运行，在一个 PowerShell 窗口执行并保持窗口开启：
 
 ```powershell
-Set-Location "<本仓库>\workbench"
-$env:WORKBENCH_PORT = "4322"
-$env:WORKBENCH_DATA_DIR = (Join-Path $PWD ".local\six-case-e2e")
-$env:WORKBENCH_TEST_SITE_BASE_URL = "http://127.0.0.1:4320"
-$env:WORKBENCH_BUILD_AUTHORIZATION_ID = "e2e01-six-case-project-20260923"
+Set-Location 'C:\Users\20240082\.codex\worktrees\test-workbench-six-case-e2e\ui-test-agent\workbench'
+npm run start:trial-site
+```
+
+若工作台服务未运行，再在第二个 PowerShell 窗口执行：
+
+```powershell
+$trialRepo = 'C:\Users\20240082\.codex\worktrees\test-workbench-six-case-e2e\ui-test-agent'
+Set-Location (Join-Path $trialRepo 'workbench')
+$env:WORKBENCH_PORT = '4322'
+$env:WORKBENCH_DATA_DIR = (Join-Path $PWD '.local\six-case-e2e')
+$env:WORKBENCH_TEST_SITE_BASE_URL = 'http://127.0.0.1:4320'
+$env:WORKBENCH_BUILD_AUTHORIZATION_ID = 'e2e01-six-case-project-20260923'
+$env:WORKBENCH_DSH_HOME = 'C:\Users\20240082\.codex\worktrees\workbench-m4a-query-case\ui-test-agent\workbench\.local\m4a-query-case-acceptance\build-runtime\dsh'
+$env:WORKBENCH_HARNESS_PATCH = (Join-Path $trialRepo 'harness-probe\config\browser-flash.cordis.yml')
+$env:WORKBENCH_USE_STORED_DSH_CREDENTIALS = '1'
+$env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 npm start
 ```
 
-以上是前台进程；保持窗口开启，按 `Ctrl+C` 停止。此命令不启动 Harness。当前本机已用的 DSH_HOME 是 `C:\Users\20240082\.codex\worktrees\workbench-m4a-query-case\ui-test-agent\workbench\.local\m4a-query-case-acceptance\build-runtime\dsh`；密钥应写入该目录的 `.env`（变量名 `DEEPSEEK_API_KEY`，不加引号）。该目录在另一既有本机 worktree 的 `.local` 下，受当前服务环境引用；不要将密钥写入命令、报告或仓库。文本连通已确认，但带工具的建例仍报错，不能视为 E2E Harness 可用。
+两个命令都是前台服务，窗口关闭即停止。已有正确服务时不要重复启动，也不要关闭来源不明的占用进程。密钥位于本机 DSH_HOME 下 Git 忽略的 `.env`，无需在命令中填写；不要把它复制到仓库或报告。仅查看现有记录不会调用模型。
 
-## 查看本次导入与项目
-
-1. 打开 <http://127.0.0.1:4322/workspace/>，点击“项目”。
-2. 选择 **E2E-01 六用例工作台自动建例闭环**。本次通过界面建立的项目 ID 为 `project-61579c25-2833-4c41-b592-357e1b306026`。
-3. 进入“用例”查看 TC-001～TC-006。导入包为 `workbench/examples/ui-six-cases/UI_TRIAL_6_CASES.workbench.json`；预览后已确认 6 条新增，0 重复、0 冲突、0 不可导入。
-4. 当前可以查看版本正文、任务与执行记录页面；本批任务页中 TC-001 有一条“已创建、尚未启动”的任务。因为 Harness 连通检查失败，先不要把它描述成已生成候选或已执行。
-
-## 目标闭环的页面操作（模型恢复可用后再执行）
+## 按页面查看六条结果
 
 | 步骤 | 在哪里点击 | 应该看到什么 |
 |---|---|---|
-| 1 | 项目 → **E2E-01 六用例工作台自动建例闭环** → 用例 → TC-001 → 创建演示建例任务 | 冻结任务为已创建、尚未启动；输入只包含 TC-001 正常场景。TC-004 对照入口不会进入建例输入。 |
-| 2 | 建例任务 → 对应 TC-001 任务 → **生成并试跑正常入口** | 明确启动一次工作台 Harness 会话；候选应显示实际来源、attempt 和哈希。不得刷新页面来启动。 |
-| 3 | 任务详情 → **运行 TC-004 对照入口** | 对同一候选哈希运行 TC-004，保留独立 run ID、步骤、原始 FAILED/complete_pass=false 和媒体；若检出指定缺陷另标明“对照验证检出指定缺陷”。 |
-| 4 | 对 TC-002 重复步骤 1～3，配对 TC-005 | 第二份新候选，只从 TC-002 正常用例生成；TC-005 使用同哈希做对照。 |
-| 5 | 对 TC-003 重复步骤 1～3，配对 TC-006 | 第三份新候选，只从 TC-003 正常用例生成；TC-006 的未执行后续步骤应保持未执行。 |
-| 6 | 项目 → 执行记录 → 分别打开 TC-001～TC-006 记录 | 六个独立实际运行记录及步骤、预期/实际、错误、截图、可播放录像和 Trace。刷新/重启只读回记录，不重放任务。 |
+| 1 | 工作台 → **项目** → **E2E-01 六用例工作台自动建例闭环** → **用例** | TC-001～TC-006 六条已确认的 v1 用例；正文保留动作、逐步预期、前置条件和测试数据。 |
+| 2 | 项目 → **建例任务** → 选 **TC-001 · v1** 的新任务（ID 结尾 `03dfb09e`） | 工作台生成的候选 v2；首稿 v1 的正常页定位失败也在任务历史中，v2 经正常页反馈修订。任务显示 `TECHNICAL_VALIDATION_PASSED / WAITING_REVIEW`，并未批准。 |
+| 3 | 同一任务 → **候选与运行** | TC-001 正常记录 `run-91f7c675-239d-4736-8f10-43e9e1d46525` 为 PASSED；TC-004 对照记录 `run-c0dffdf4-5953-4c38-b6b2-71be1c43d04e` 为 FAILED。后者在 CASE_STEP_3 期望“共2条”，实际“共3条”。 |
+| 4 | 项目 → **建例任务** → 选 **TC-002 · v1** 的新任务（ID 结尾 `98c45421`） | 候选 v1；TC-002 正常记录 `run-0271a569-5ac4-46d0-b6a6-2892c57cbc9a` 为 PASSED。TC-005 对照记录 `run-f08aadb1-4ae7-40e8-aa40-3b5e9e88fc2c` 在 CASE_STEP_2 为 FAILED：第二行期望 DEV-006，实际 DEV-002。 |
+| 5 | 项目 → **建例任务** → 选 **TC-003 · v1** 的新任务（ID 结尾 `922a763f`） | 候选 v1；TC-003 正常记录 `run-181fe9f3-5c98-4426-bfd9-96ba54210031` 为 PASSED。TC-006 对照记录 `run-0d50b295-883d-4454-ab25-ad62375033df` 在 CASE_STEP_2 为 FAILED：期望 220 kW，实际 320 kW；CASE_STEP_3 保持 NOT_EXECUTED。 |
+| 6 | 项目 → **执行记录** → 按上面的运行 ID 找六条目标记录 | 每条都有独立运行 ID、实际执行用例、来源候选哈希和步骤状态。同组正常/故障记录使用相同候选哈希；故障运行原始状态保持 FAILED、`complete_pass=false`，另显示“对照验证检出指定缺陷”。 |
+| 7 | 在任一目标记录中点击 **查看截图**、操作录像播放/暂停/拖动，或点击 **下载 Trace** | 浏览器实际读取工作台保存的媒体；六条记录各有截图、录像和 Trace。刷新页面后仍可查看，不会重新建例或执行。 |
 
-界面上的模拟工程预检只验证接线，不是产品运行结果。本轮没有产品候选、六条 run ID 或产品截图/录像/Trace，因此当前没有这些证据可供查看。不要运行 Harness 来“补齐”报告，除非另行确认模型连接已恢复并明确授权续跑；原预算状态见验收记录。
+项目执行记录总数是 **8**，因为旧失败也保留：TC-001 首稿正常页定位失败，以及 TC-005 解析修复前的对照运行 `run-d59a52e9-bf00-4acb-a3c3-0b7218160147`。体验六条目标结果时按表中的运行 ID 选择，不把这两条旧记录误认为丢失或新增业务用例。
+
+“技术验证通过”仅表示三组同哈希候选完成正常与指定故障对照，仍需你人工看候选和界面。不要把故障记录的 `FAILED` 改理解为业务通过，也不需要确认“所有功能通过”。你可以只记录哪一步不好找、看不懂，或媒体是否顺手。完整的修复依据、哈希和运行结果见[实际验证记录](E2E_01_ACCEPTANCE_REPORT.md)。

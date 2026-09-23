@@ -31,7 +31,7 @@ function authorizationValid(record, authorizationId) {
   const isE2E01 = authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID;
   const common = record?.authorization_id === authorizationId &&
     record.kind === (isM4 || isE2E01 ? 'initial-with-optional-revision' : 'initial') &&
-    record.max_starts === (isE2E01 ? 6 : isM4 ? 2 : 1) && Number.isInteger(record.used_starts) &&
+    (isE2E01 ? [6, 7].includes(record.max_starts) : record.max_starts === (isM4 ? 2 : 1)) && Number.isInteger(record.used_starts) &&
     record.used_starts >= 0 && record.used_starts <= record.max_starts && Array.isArray(record.claims);
   if (!common) return false;
   if (authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID) {
@@ -53,9 +53,12 @@ function authorizationValid(record, authorizationId) {
     return record.schema === 'workbench/e2e01-build-authorization-v1' &&
       record.linked_stage === 'E2E-01' && typeof record.project_id === 'string' &&
       Array.isArray(record.scopes) && record.scopes.length === 3 &&
-      record.kind === 'initial-with-optional-revision' && record.max_starts === 6 &&
+      record.kind === 'initial-with-optional-revision' &&
+      (record.max_starts === 6 || (record.max_starts === 7 &&
+        record.extensions?.length === 1 && record.extensions[0]?.from === 6 &&
+        record.extensions[0]?.to === 7 && record.extensions[0]?.reason === 'USER_AUTHORIZED_RUNTIME_RECOVERY')) &&
       Number.isInteger(record.used_starts) && record.used_starts >= 0 &&
-      record.used_starts <= 6 && Array.isArray(record.claims) &&
+      record.used_starts <= record.max_starts && Array.isArray(record.claims) &&
       record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000 &&
       new Set(record.scopes.map((scope) => scope.external_id)).size === 3 &&
       record.scopes.every((scope) => scope.project_id === record.project_id &&
@@ -302,6 +305,23 @@ export class BuildTaskStore {
       throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
     }
     return this.registerProjectCaseAuthorization(record);
+  }
+
+  async extendE2E01RuntimeRecovery(now) {
+    if (this.authorizationId !== E2E01_PROJECT_CASE_AUTHORIZATION_ID) throw new Error('E2E01_RECOVERY_NOT_ALLOWED');
+    return this.serial(async () => {
+      const record = await readJson(this.revalidationAuthorizationFile);
+      if (!authorizationValid(record, this.authorizationId)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      if (record.max_starts === 7) return structuredClone(record);
+      if (record.max_starts !== 6 || record.used_starts !== 6 || record.claims.length !== 6) throw new Error('E2E01_RECOVERY_BASELINE_MISMATCH');
+      const extended = {
+        ...record,
+        max_starts: 7,
+        extensions: [{ from: 6, to: 7, at: now, reason: 'USER_AUTHORIZED_RUNTIME_RECOVERY' }],
+      };
+      await writeJsonAtomic(this.revalidationAuthorizationFile, extended, this.io);
+      return structuredClone(extended);
+    });
   }
 
   async claimStart(taskId, attemptId, now) {

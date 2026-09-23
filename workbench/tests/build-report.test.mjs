@@ -43,6 +43,34 @@ test('missing report and locator errors cannot become technical pass or specifie
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
 
+test('Playwright array text diff preserves the expected and actual row order at the failed step', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'build-array-diff-'));
+  try {
+    const file = path.join(root, 'report.json');
+    const message = [
+      'Error: expect(locator).toHaveText(expected) failed',
+      "Locator: locator('#device-rows tr').locator('td:first-child')",
+      '- Expected  - 1', '+ Received  + 1', '  Array [',
+      '    "DEV-005",', '-   "DEV-006",', '    "DEV-002",', '+   "DEV-006",', '  ]',
+      '  14 × locator resolved to 3 elements',
+    ].join('\n');
+    const raw = report('failed', { message });
+    raw.suites[0].specs[0].tests[0].results[0].steps = [
+      { title: 'CASE_STEP_1', steps: [] },
+      { title: 'CASE_STEP_2', error: { message }, steps: [] },
+    ];
+    await fs.writeFile(file, JSON.stringify(raw));
+    const parsed = await parseCandidateReport(file, { exitCode: 1, termination: null });
+    assert.equal(parsed.error.type, 'ASSERTION_MISMATCH');
+    assert.deepEqual(JSON.parse(parsed.error.expected), ['DEV-005', 'DEV-006', 'DEV-002']);
+    assert.deepEqual(JSON.parse(parsed.error.actual), ['DEV-005', 'DEV-002', 'DEV-006']);
+    assert.equal(counterexampleDetected(parsed, {
+      required_step_markers: ['CASE_STEP_1', 'CASE_STEP_2'],
+      detection: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_2' },
+    }), true);
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
 test('versioned step title rule accepts only bare or explicitly separated leading markers', () => {
   for (const title of ['CASE_STEP_1', 'CASE_STEP_1 说明', 'CASE_STEP_1: 说明', 'CASE_STEP_1：说明', 'CASE_STEP_1 - 说明', 'CASE_STEP_1 – 说明', 'CASE_STEP_1 — 说明']) {
     const parsed = parseProjectCaseStepTitle(title);

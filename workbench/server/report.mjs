@@ -27,10 +27,35 @@ function walkSteps(steps, result = []) {
 function errorFacts(error) {
   if (!error) return null;
   const message = stripAnsi(error.message || error.value || String(error)).slice(0, 20000);
-  const expected = message.match(/Expected(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
-  const actual = message.match(/Received(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
+  let expected = message.match(/Expected(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
+  let actual = message.match(/Received(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
+  if (expected === null && actual === null && /expect\(locator\)\.toHaveText\(expected\)/.test(message)) {
+    const lines = message.split(/\r?\n/);
+    const start = lines.findIndex((line) => /^\s*Array \[$/.test(line));
+    if (start >= 0) {
+      const left = [];
+      const right = [];
+      let changed = false;
+      for (const line of lines.slice(start + 1)) {
+        if (/^\s*\]$/.test(line)) break;
+        const value = /^\s*([+-])?\s*("(?:\\.|[^"\\])*"),?\s*$/.exec(line);
+        if (!value) continue;
+        try {
+          const item = JSON.parse(value[2]);
+          if (value[1] !== '+') left.push(item);
+          if (value[1] !== '-') right.push(item);
+          changed ||= Boolean(value[1]);
+        } catch { changed = false; break; }
+      }
+      if (changed && left.length && right.length && JSON.stringify(left) !== JSON.stringify(right)) {
+        expected = JSON.stringify(left);
+        actual = JSON.stringify(right);
+      }
+    }
+  }
   let type = 'TEST_ERROR';
-  if (expected !== null && actual !== null) type = 'ASSERTION_MISMATCH';
+  const missingLocator = /locator resolved to 0 elements?/.test(message);
+  if (expected !== null && actual !== null && !missingLocator) type = 'ASSERTION_MISMATCH';
   else if (/strict mode violation|element\(s\) not found|resolved to \d+ elements|waiting for (?:getBy|locator)|未找到表头列/i.test(message)) type = 'LOCATOR_OR_TARGET';
   else if (/Expected(?: string)?:|Received(?: string)?:|expect\(/i.test(message)) type = 'ASSERTION_UNRESOLVED';
   else if (/TimeoutError|timed out|timeout \d+ms exceeded/i.test(message)) type = 'TIMEOUT';
