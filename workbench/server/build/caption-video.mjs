@@ -35,6 +35,16 @@ async function loadVideo(page, sourceBytes) {
   }, sourceBytes.toString('base64'));
 }
 
+export function selectTemporalMatch(samples) {
+  const plausible = samples.filter((item) => Number.isFinite(item.second) && item.error <= 8);
+  const best = plausible.reduce((current, item) => item.error < current.error ? item : current,
+    { error: Infinity, second: null });
+  if (!Number.isFinite(best.second)) return { ...best, ambiguous: false, plausible_count: 0 };
+  // A repeated or near-identical screen does not identify a single video time.
+  const ambiguous = plausible.some((item) => Math.abs(item.second - best.second) >= 0.08);
+  return { ...best, ambiguous, plausible_count: plausible.length };
+}
+
 export async function mapTraceFramesToEncodedVideo(page, sourceBytes, tracePath) {
   const bytes = await fs.readFile(tracePath);
   const contextEvents = trialTimelineInternals.zipEntry(bytes, '0-trace.trace').split(/\r?\n/).filter(Boolean).map(JSON.parse);
@@ -55,7 +65,7 @@ export async function mapTraceFramesToEncodedVideo(page, sourceBytes, tracePath)
   const frameImages = [...uniqueFrames.values()];
   if (frameImages.length < 3) return { status: 'UNAVAILABLE', reason: 'TRACE_VISUAL_STATE_MATCH_COUNT_INSUFFICIENT', page_id: pageId,
     unique_visual_frames: frameImages.length };
-  const matches = await page.evaluate(async ({ videoBase64, frameImages }) => {
+  const candidateMatches = await page.evaluate(async ({ videoBase64, frameImages }) => {
     let video = document.querySelector('#source');
     if (!video) { video = document.createElement('video'); video.id = 'source'; video.muted = true; video.playsInline = true; document.body.append(video); }
     await new Promise((resolve, reject) => {
@@ -68,7 +78,7 @@ export async function mapTraceFramesToEncodedVideo(page, sourceBytes, tracePath)
     }));
     const canvas = document.createElement('canvas'); canvas.width = 64; canvas.height = 36;
     const context = canvas.getContext('2d', { willReadFrequently: true });
-    const best = images.map(() => ({ error: Infinity, second: null }));
+    const candidates = images.map(() => []);
     const waitSeek = (second) => new Promise((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error('VIDEO_FRAME_SCAN_TIMEOUT')), 5000);
       video.addEventListener('seeked', () => { clearTimeout(timer); resolve(); }, { once: true }); video.currentTime = second;
@@ -84,15 +94,20 @@ export async function mapTraceFramesToEncodedVideo(page, sourceBytes, tracePath)
         for (let index = 0; index < encoded.length; index += 4)
           error += (Math.abs(encoded[index] - traced[index]) + Math.abs(encoded[index + 1] - traced[index + 1]) + Math.abs(encoded[index + 2] - traced[index + 2])) / 3;
         error /= 64 * 36;
-        if (error < best[frameIndex].error) best[frameIndex] = { error, second: video.currentTime };
+        if (error <= 8) candidates[frameIndex].push({ error, second: video.currentTime });
       });
     }
-    return best;
+    return candidates;
   }, { videoBase64: sourceBytes.toString('base64'), frameImages });
+  const matches = candidateMatches.map(selectTemporalMatch);
   const paired = frameImages.map((frame, index) => ({ trace_time_ms: frame.timestamp_ms, video_second: matches[index].second,
-    mean_abs_pixel_error: matches[index].error, trace_frame_sha1: frame.sha1, visual_sha256: frame.visual_sha256 }));
-  const accepted = paired.filter((item) => item.mean_abs_pixel_error <= 8 && Number.isFinite(item.video_second));
-  if (accepted.length < 3) return { status: 'UNAVAILABLE', reason: 'TRACE_VIDEO_FRAME_MATCH_INSUFFICIENT', page_id: pageId, matches: paired };
+    mean_abs_pixel_error: matches[index].error, ambiguous: matches[index].ambiguous,
+    plausible_count: matches[index].plausible_count,
+    trace_frame_sha1: frame.sha1, visual_sha256: frame.visual_sha256 }));
+  const accepted = paired.filter((item) => !item.ambiguous && Number.isFinite(item.video_second));
+  if (accepted.length < 3) return { status: 'UNAVAILABLE',
+    reason: paired.some((item) => item.ambiguous) ? 'TRACE_VIDEO_UNAMBIGUOUS_FRAME_COUNT_INSUFFICIENT' : 'TRACE_VIDEO_FRAME_MATCH_INSUFFICIENT',
+    page_id: pageId, matches: paired };
   // Both Trace timestamps and test.step times are emitted by monotonicTime() in ms;
   // WebM PTS is seconds. Estimate only the origin from actual decoded-frame matches.
   const slope = 0.001;

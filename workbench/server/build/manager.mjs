@@ -18,7 +18,7 @@ import { renderCaptionVideo } from './caption-video.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
-const TRIAL_RUNNER_VERSION = 'e2e01-caption-timeline-v2';
+const TRIAL_RUNNER_VERSION = 'e2e01-caption-timeline-v3';
 
 async function captionEvidence({ reportPath, runDirectory, caseContent, coverage, runId, candidateSha256, browserExecutable }) {
   try {
@@ -130,8 +130,9 @@ export function e2eTrialReadiness(candidate) {
   const runs = candidate?.trial_runs || [];
   const normal = runs.filter((run) => run.run_type === 'normal').at(-1);
   const negative = runs.filter((run) => run.run_type === 'negative').at(-1);
-  const mediaReady = (run) => run.runner_version === TRIAL_RUNNER_VERSION
-    ? run.caption_timeline?.status === 'VERIFIED' && run.media_file_ids?.length >= 4
+  const mediaReady = (run) => /^e2e01-caption-timeline-v\d+$/.test(run.runner_version || '')
+    ? run.runner_version === TRIAL_RUNNER_VERSION && run.caption_timeline?.status === 'VERIFIED' &&
+      run.caption_timeline?.schema === 'workbench/trial-timeline-v2' && run.media_file_ids?.length >= 4
     : run.media_file_ids?.length === 3;
   return Boolean(normal && negative &&
     normal.candidate_sha256 === candidate.sha256 && negative.candidate_sha256 === candidate.sha256 &&
@@ -235,6 +236,7 @@ export class BuildTaskManager {
       storage_status: this.storageFault ? 'FAILED' : 'READY',
       storage_error: this.storageFault,
       authorization_id: this.authorizationId,
+      trial_runner_version: TRIAL_RUNNER_VERSION,
     };
   }
 

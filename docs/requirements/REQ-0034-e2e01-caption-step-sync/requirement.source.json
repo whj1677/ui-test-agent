@@ -3,9 +3,9 @@
   "req_id": "REQ-0034",
   "title": "E2E-01 录像字幕与步骤联动及开发者自测",
   "metadata": {
-    "requirement_status": "开发自测部分完成，时间映射仍需收尾",
+    "requirement_status": "开发未完成：详情组录像时间映射证据不足",
     "governance_level": "G2",
-    "version": 5,
+    "version": 6,
     "last_updated": "2026-09-23"
   },
   "original_input": "用户本轮任务：E2E-01 录像字幕与步骤联动补齐，并完成开发者端到端自测。原文保留在当前对话，不转发给建例器。",
@@ -15,7 +15,7 @@
       "status": "已确认",
       "goal": "六条E2E-01记录保留原运行结果、中文字幕、派生视频和步骤面板；指定run_id精确选择且无效目标不串记录；时间轴仅在Trace页面身份、Trace截图与实际解码WebM帧及步骤间隔共同证明后允许精确定位。",
       "constraints": "不改候选字节、原用例、业务断言、被测页面或人工批准；旧运行、报告、录像和结论不覆盖；本批不调用Harness、不生成候选；证据不足时保留旧字幕和步骤信息并关闭精确跳转。",
-      "success_criteria": "真实工作台浏览器验证无run_id默认、有效、空值、非法、不存在、跨项目、刷新和前进后退；独立本机彩色页面的真实编码WebM验证零点及至少两个步骤边界；六条旧媒体逐条实测，任何不满足时间精度及相邻边界条件者明确降级，不倒填状态。"
+      "success_criteria": "真实工作台浏览器验证run_id身份；六条新产品运行逐条用实际解码画面证明字幕与步骤定位且不跨业务动作。首组TC-003/006不能证明时，停止其余组并保留不可精确定位，不倒填状态。"
     }
   ],
   "confirmed_facts": [
@@ -25,17 +25,18 @@
     "无动态视觉时标的静止校准页曾被严格映射门槛拒绝；增加仅用于隔离夹具的可见色带后完成稳定校准，生产匹配容差未放宽。",
     "六条历史录像的首个Trace截图均不等于PTS 0画面；按页面ID和解码画面匹配后，排序组两个匹配的精度界分别106ms和111ms，但其相邻步骤半间距小于精度界，不能安全定位。",
     "无效run_id修复前真实页面复现为回退到最新TC-006并展示其步骤、错误和录像；本轮真实浏览器修复验证见新增行为回归。",
-    "4322当前服务经健康接口核对属于目标E2E-01授权及项目且无活动运行；加载v2运行器需要受控重启，但执行环境拒绝重启操作，未强制终止，故没有产品重录。",
+    "上一轮4322服务受控重启被执行环境拒绝；本轮重新核对后正常停止并启动，v2实例实际返回运行器版本，详情正常与故障各新增一次产品运行；安全修复后v3服务已启用。",
+    "TC-003新run-03fa813c-4c77-4eaf-858c-95c4e513ff40业务PASSED，但相邻步骤起点最小间距58.352ms，25fps量化40ms，解码WebM重复画面导致同一Trace帧对应多个PTS；TC-006新run-b2c74b41-1d44-40cf-ad1f-91e61a071d87业务FAILED，第二步仍为220 kW/320 kW、第三步未执行，Trace仅2帧且视频0秒已呈现弹窗。两条均无法证明精确步骤定位或生成新字幕版。",
     "本轮自测清单及收尾记录在workbench/docs/E2E_01_CAPTION_SELF_TEST.md。"
   ],
   "inferences_and_open_questions": [
     "历史v1 VERIFIED只表示旧算法内部时间轴一致，不再作为视频零点已验证的证据；六条旧记录继续显示现有字幕/步骤/运行事实，但统一不提供精确定位。",
-    "本轮未重跑产品候选；更可靠的产品录制映射还需新运行证据，当前既有六条业务结果保持不变。"
+    "本轮仅追加详情组2次产品运行，查询及排序组未重录；缺失首步录制画面和断言步骤视觉事件无法从同一原始媒体离线恢复，不能通过反复重录或放宽误差门槛判为已校准。"
   ],
   "development_requirements": [
     {
       "id": "DR-0034-01",
-      "status": "运行身份已修复；历史时间轴已安全降级，新版产品时间映射未完成",
+      "status": "运行身份已修复；详情组产品重录后时间映射证据不足，其余组按约定暂停",
       "requirement": "运行记录按明确run_id精确选择；缺省只按started_at选择最新，有参目标无效或跨项目时仅提示并由用户主动返回；录像精确定位需要匹配同页Trace画面与实际解码WebM帧，记录映射来源、残差和精度并拒绝会跨相邻步骤的不确定性。",
       "acceptance_criteria": "真实浏览器覆盖有效/缺省/无效/跨项目/刷新/历史；独立编码视频校准证明PTS 0和至少两个边界；旧六条记录不伪造时间轴，仍可播放旧字幕与查看步骤、结果。",
       "constraints": "不得以平均时长或步骤序号代替时间轴，不提前显示执行结论，不复制预期为实际，不让页面叠字污染候选定位和业务断言。"
@@ -47,7 +48,7 @@
       "dr_ids": [
         "DR-0034-01"
       ],
-      "status": "旧方案被复审证据否定；新方案部分实施",
+      "status": "旧方案被复审证据否定；新版详情组实测仍不可精确定位",
       "summary": "保留原WebM；Trace monotonic时间仅通过同页Trace JPEG与实际解码WebM帧匹配估计PTS映射，精度不小于匹配残差加25fps量化；相邻步骤间隔不足时拒绝精确定位。历史v1时间轴保留旧版本但前端标为未校准并禁用跳转。",
       "rationale": "页面创建时间和Trace首帧都不能单独证明WebM零点；视觉编码帧提供独立播放时钟证据，不满足时安全降级。"
     }
@@ -70,7 +71,7 @@
       "dd_ids": [
         "DD-0034-01"
       ],
-      "status": "身份选择修复完成；独立校准通过；六条旧时间轴已复核；产品重录受服务重启策略阻塞",
+      "status": "身份选择修复完成；v3服务已启用；详情组v2产品运行2次均缺时间映射依据，其余4条未重录",
       "task": "修复运行记录无效ID回退并以真实工作台浏览器回归；增加独立本机录制视觉校准；复核六条原媒体并在不覆盖历史的条件下仅对证据充分记录提供精确时间轴。",
       "verification_ids": [
         "VT-0034-01"
@@ -85,15 +86,15 @@
       ],
       "confirmation_status": "已确认",
       "execution_status": "集成测试通过",
-      "item": "工作台运行ID身份行为、独立真实编码视频校准和六条旧录像逐条映射能力复核；工作台行为测试通过，但六条旧记录不具备足以安全跳转的产品时间轴。",
+      "item": "工作台运行身份、独立编码校准、六条旧录像及详情组两条新产品运行核对；新运行可播放原视频并保留业务结果，但没有可验证的字幕与步骤定位。",
       "evidence_standard": "真实命令、退出码、测试统计和产物路径",
       "current_evidence": {
-        "command": "npm run test:e2e01-clock-calibration",
+        "command": "node tests/e2e01-product-unavailable-browser.integration.mjs",
         "exit_code": 0,
-        "test_count": 1,
+        "test_count": 2,
         "failure_count": 0,
         "skipped_count": 0,
-        "log_path": "workbench/.local/e2e01-video-clock-calibration-*/calibration-summary.json"
+        "log_path": "workbench/.local/e2e01-product-unavailable-browser/"
       }
     }
   ],
@@ -103,13 +104,14 @@
       "npm run test:e2e01-clock-calibration",
       "node --test tests/e2e01-caption-timeline.test.mjs",
       "node tests/e2e01-caption-browser.integration.mjs",
+      "node tests/e2e01-product-unavailable-browser.integration.mjs",
       "node --check server/build/caption-video.mjs && node --check server/build/trial-timeline.mjs && node --check web-v2/app.js"
     ],
     "environment": [
       "本机Node锁定依赖；Playwright 1.62.1；工作台4322；原六条运行使用独立数据目录workbench/.local/six-case-e2e；校准媒体留在workbench/.local/e2e01-video-clock-calibration-*。"
     ],
     "conclusion": [
-      "真实工作台浏览器身份选择回归和独立编码视频校准完成；历史六条业务运行原PASSED/FAILED未变化。四条旧视频映射不充分，排序两条的精度仍跨相邻步骤界线；六条均禁用精确跳转。未重录产品运行，故整体开发自测未完成，不宣称时间轴收尾通过。"
+      "v2服务实际用于详情组2次产品运行；业务结果为TC-003 PASSED、TC-006指定断言FAILED，但原视频画面缺乏唯一时间锚且短步骤精度不足，未生成新字幕版。v3安全拒绝重复画面锚已加载；其余四条按首组门槛暂停，整体开发自测未完成。"
     ]
   },
   "trace_current": [
@@ -119,10 +121,16 @@
       "dd_id": "DD-0034-01",
       "tk_id": "TK-0034-01",
       "vt_id": "VT-0034-01",
-      "status": "开发自测部分完成，产品时间映射仍未完成"
+      "status": "开发未完成，详情组产品时间映射缺证，其余组暂停"
     }
   ],
   "trace_history": [
+    {
+      "version": 6,
+      "link": "workbench/docs/E2E_01_CAPTION_SELF_TEST.md",
+      "status": "开发未完成，详情组产品时间映射缺证",
+      "notes": "v2详情组实际运行2次且业务结果保留；两条无法精确定位，新增v3重复画面锚安全拒绝并在重启后加载；其余4条未重录。"
+    },
     {
       "version": 5,
       "link": "workbench/docs/E2E_01_CAPTION_SELF_TEST.md",
@@ -200,6 +208,14 @@
       "description": "确认所有旧产品录像均无法安全精确跳转，因此需要加载v2运行器后追加产品运行；目标4322服务空闲且数据身份匹配，但受控重启被执行环境策略拒绝，未停止未知进程或启动共享数据的并行服务。",
       "impact": "未改变任何产品用例、候选、运行或媒体；六条历史记录继续精确定位禁用。",
       "confirmed_by": "2026-09-23本机4322健康与项目数据读取；进程PID 31856及受控重启命令的执行策略拒绝结果。"
+    },
+    {
+      "date": "2026-09-23",
+      "version": 6,
+      "type": "产品重录与方法适用性阻塞",
+      "description": "正常重启后加载v2，从工作台实际追加TC-003/006两条运行；保留业务通过/指定失败，解码帧证实静止重复画面与Trace不足。v3拒绝多解视觉锚并防止旧版本被误认新字幕证据；首组未成立，暂停其余四条。",
+      "impact": "工作台详情组运行、录像映射安全判定、运行器版本可观测性与回归测试；候选和历史媒体不覆盖。",
+      "confirmed_by": "2026-09-23目标工作台浏览器、Playwright真实产品运行、Trace/编码WebM画面对照与重启读回。"
     }
   ]
 }

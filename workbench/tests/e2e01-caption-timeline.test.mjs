@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { deriveTrialTimeline } from '../server/build/trial-timeline.mjs';
-import { addWebmDuration } from '../server/build/caption-video.mjs';
+import { addWebmDuration, selectTemporalMatch } from '../server/build/caption-video.mjs';
 import { indexAttemptFiles } from '../server/build/files.mjs';
 
 function traceZip(entries) {
@@ -45,6 +45,12 @@ const contextOptions = { type: 'context-options', playwrightVersion: '1.62.1' };
 const clockMap = { status: 'VERIFIED', page_id: 'page-1', slope: 0.001, intercept_seconds: -1.04,
   guaranteed_precision_ms: 80, max_residual_seconds: 0.04,
   matches: [1040, 1500, 2000].map((time) => ({ trace_time_ms: time, trace_frame_sha1: `frame-${time}` })) };
+
+test('static or visually repeated frames cannot be used as a unique video clock anchor', () => {
+  assert.equal(selectTemporalMatch([{ error: 3, second: 0.04 }, { error: 4, second: 0.4 }]).ambiguous, true);
+  assert.equal(selectTemporalMatch([{ error: 3, second: 0.04 }, { error: 4, second: 0.08 }]).ambiguous, false);
+  assert.equal(selectTemporalMatch([{ error: 12, second: 0.04 }]).plausible_count, 0);
+});
 
 test('trace-derived timeline preserves source timing and unexecuted step', async () => {
   const folder = await fs.mkdtemp(path.join(os.tmpdir(), `e2e01-timeline-${randomUUID()}-`));

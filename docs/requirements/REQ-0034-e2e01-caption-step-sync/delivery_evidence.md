@@ -2,180 +2,153 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-23T17:17:42+08:00`
+- Generated at: `2026-09-23T18:05:37+08:00`
 - Record: `REQ-0034-e2e01-caption-step-sync`
-- Change fingerprint: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+- Change fingerprint: `92493ed1b61e1ac0069d598ad05711663a12db923f8b872669e3c1d98a5f3ad0`
 - Verification source: `collector-executed-v1`
 - Verification state: `集成测试通过`
-- Command: `npm --prefix workbench run test:e2e01-clock-calibration`
+- Command: `node --test workbench/tests/e2e01-caption-timeline.test.mjs workbench/tests/e2e01-trial-readiness.test.mjs`
 - Exit code: `0`
-- Test count: `1`
+- Test count: `7`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `workbench/.local/e2e01-delivery-clock-final-report.log`
-- Log SHA-256: `4128298966ed4956ad8ef8e27ed3956e49092b8c81edbd75bdef36ede847c3b2`
+- Log path: `workbench/.local/e2e01-v3-delivery.log`
+- Log SHA-256: `891c5156531b115e367814c59727f6b6c6ea2c3bd3e5503524217a924dc765e7`
 
 ### Git Status
 
 ```text
+ M docs/modules/test-workbench.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md
  M docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json
  M workbench/docs/E2E_01_CAPTION_SELF_TEST.md
+ M workbench/server/build/caption-video.mjs
+ M workbench/server/build/manager.mjs
+ M workbench/tests/e2e01-caption-timeline.test.mjs
+ M workbench/tests/e2e01-trial-readiness.test.mjs
+?? workbench/tests/e2e01-product-clock-diagnostic.mjs
+?? workbench/tests/e2e01-product-rerun-browser.mjs
+?? workbench/tests/e2e01-product-unavailable-browser.integration.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
+warning: in the working copy of 'docs/modules/test-workbench.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/docs/E2E_01_CAPTION_SELF_TEST.md', LF will be replaced by CRLF the next time Git touches it
- .../00_user_requirement.md                         |   1 +
+warning: in the working copy of 'workbench/server/build/caption-video.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/manager.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/e2e01-caption-timeline.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/e2e01-trial-readiness.test.mjs', LF will be replaced by CRLF the next time Git touches it
+ docs/modules/test-workbench.md                     |   2 +
+ .../00_user_requirement.md                         |   7 +-
+ .../01_development_requirement.md                  |   2 +-
+ .../REQ-0034-e2e01-caption-step-sync/02_design.md  |   2 +-
  .../REQ-0034-e2e01-caption-step-sync/03_tasks.md   |   2 +-
- .../REQ-0034-e2e01-caption-step-sync/05_trace.md   |   1 +
+ .../04_verification.md                             |   5 +-
+ .../REQ-0034-e2e01-caption-step-sync/05_trace.md   |   3 +-
  .../REQ-0034-e2e01-caption-step-sync/change_log.md |   1 +
- .../current_state.md                               |   4 +-
- .../delivery_evidence.md                           | 162 ++++++++-------------
- .../requirement.source.json                        |  19 ++-
- workbench/docs/E2E_01_CAPTION_SELF_TEST.md         |   6 +-
- 8 files changed, 87 insertions(+), 109 deletions(-)
+ .../current_state.md                               |  12 +-
+ .../delivery_evidence.md                           | 227 +++++++++------------
+ .../requirement.source.json                        |  44 ++--
+ workbench/docs/E2E_01_CAPTION_SELF_TEST.md         |  34 +++
+ workbench/server/build/caption-video.mjs           |  29 ++-
+ workbench/server/build/manager.mjs                 |   8 +-
+ workbench/tests/e2e01-caption-timeline.test.mjs    |   8 +-
+ workbench/tests/e2e01-trial-readiness.test.mjs     |   4 +-
+ 16 files changed, 222 insertions(+), 168 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-(none)
+workbench/tests/e2e01-product-clock-diagnostic.mjs
+workbench/tests/e2e01-product-rerun-browser.mjs
+workbench/tests/e2e01-product-unavailable-browser.integration.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-23T17:17:31+08:00
-Command: npm --prefix workbench run test:e2e01-clock-calibration
+Started at: 2026-09-23T18:05:34+08:00
+Command: node --test workbench/tests/e2e01-caption-timeline.test.mjs workbench/tests/e2e01-trial-readiness.test.mjs
 Exit code: 0
-Parsed test count: 1
+Parsed test count: 7
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
-
-> ui-test-approved-workbench@0.1.0 test:e2e01-clock-calibration
-> node tests/e2e01-video-clock-calibration.integration.mjs
-
-
-Running 1 test using 1 worker
-
-  ok 1 tests\e2e01-video-clock-calibration.spec.mjs:3:1 › 独立录制页的视觉状态对应真实 test.step 边界 (2.5s)
-
-  1 passed (3.7s)
-(node:36740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
-(Use `node --trace-warnings ...` to show where the warning was created)
-{
-  "status": "VERIFIED",
-  "run_id": "isolated-calibration-only",
-  "page_id": "page@1ab9b64be963c45602f37df18bcbbebd",
-  "startup_delay_ms": 500,
-  "video_zero_pixel_rgb": [
-    0,
-    0,
-    0
-  ],
-  "matched_frame_count": 26,
-  "max_fit_residual_ms": 50,
-  "guaranteed_precision_ms": 91,
-  "max_measured_boundary_deviation_ms": 61,
-  "boundary_comparisons": [
-    {
-      "step": "CAL_STEP_1 画面变红",
-      "expected_second_from_trace_map": 0.4992419999999995,
-      "visual_transition_second": 0.56,
-      "deviation_ms": 61,
-      "nearest_adjacent_boundary_ms": 175
-    },
-    {
-      "step": "CAL_STEP_2 画面变绿",
-      "expected_second_from_trace_map": 0.8489819999999997,
-      "visual_transition_second": 0.84,
-      "deviation_ms": 9,
-      "nearest_adjacent_boundary_ms": 173
-    },
-    {
-      "step": "CAL_STEP_3 画面变紫",
-      "expected_second_from_trace_map": 1.19431,
-      "visual_transition_second": 1.2,
-      "deviation_ms": 6,
-      "nearest_adjacent_boundary_ms": 173
-    },
-    {
-      "step": "CAL_STEP_4 画面变青",
-      "expected_second_from_trace_map": 1.541774,
-      "visual_transition_second": 1.56,
-      "deviation_ms": 18,
-      "nearest_adjacent_boundary_ms": 174
-    }
-  ],
-  "visual_state_transitions": [
-    {
-      "state": "CAL_STATE_0",
-      "video_second": 0.04,
-      "pixel": [
-        48,
-        67,
-        85
-      ]
-    },
-    {
-      "state": "CAL_STATE_1",
-      "video_second": 0.56,
-      "pixel": [
-        181,
-        29,
-        21
-      ]
-    },
-    {
-      "state": "CAL_STATE_2",
-      "video_second": 0.84,
-      "pixel": [
-        1,
-        120,
-        86
-      ]
-    },
-    {
-      "state": "CAL_STATE_3",
-      "video_second": 1.2,
-      "pixel": [
-        123,
-        35,
-        205
-      ]
-    },
-    {
-      "state": "CAL_STATE_4",
-      "video_second": 1.56,
-      "pixel": [
-        0,
-        106,
-        154
-      ]
-    }
-  ],
-  "media_paths": {
-    "trace": "C:\\Users\\20240082\\.codex\\worktrees\\test-workbench-six-case-e2e\\ui-test-agent\\workbench\\.local\\e2e01-video-clock-calibration-2026-09-23T09-17-32-797Z\\e2e01-video-clock-calibration-独立录制页的视觉状态对应真实-test-step-边界\\trace.zip",
-    "video": "C:\\Users\\20240082\\.codex\\worktrees\\test-workbench-six-case-e2e\\ui-test-agent\\workbench\\.local\\e2e01-video-clock-calibration-2026-09-23T09-17-32-797Z\\e2e01-video-clock-calibration-独立录制页的视觉状态对应真实-test-step-边界\\video.webm"
-  }
-}
+TAP version 13
+# Subtest: static or visually repeated frames cannot be used as a unique video clock anchor
+ok 1 - static or visually repeated frames cannot be used as a unique video clock anchor
+  ---
+  duration_ms: 0.7907
+  type: 'test'
+  ...
+# Subtest: trace-derived timeline preserves source timing and unexecuted step
+ok 2 - trace-derived timeline preserves source timing and unexecuted step
+  ---
+  duration_ms: 9.6648
+  type: 'test'
+  ...
+# Subtest: missing or uncalibrated trace never invents a seek timeline
+ok 3 - missing or uncalibrated trace never invents a seek timeline
+  ---
+  duration_ms: 3.136
+  type: 'test'
+  ...
+# Subtest: derived WebM duration is explicit and invalid media fails closed
+ok 4 - derived WebM duration is explicit and invalid media fails closed
+  ---
+  duration_ms: 0.5982
+  type: 'test'
+  ...
+# Subtest: versioned derived caption video is indexed as caption media without replacing v1
+ok 5 - versioned derived caption video is indexed as caption media without replacing v1
+  ---
+  duration_ms: 15.486
+  type: 'test'
+  ...
+# Subtest: E2E-01 reaches human review only after a passing normal run and the specified raw failure
+ok 6 - E2E-01 reaches human review only after a passing normal run and the specified raw failure
+  ---
+  duration_ms: 0.7034
+  type: 'test'
+  ...
+# Subtest: caption runner requires verified timeline and four registered media for both lanes
+ok 7 - caption runner requires verified timeline and four registered media for both lanes
+  ---
+  duration_ms: 0.2135
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 719.503
 ```
 
 ### Sync Record Status
@@ -194,4 +167,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-隔离视频时钟校准通过；六条产品旧录像不满足精确定位，且产品重录受已记录的服务重启策略阻塞。
+工程回归通过；产品TC-003/006时间轴均UNAVAILABLE，其他四条未重录

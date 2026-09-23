@@ -105,3 +105,37 @@
 ### 产品重录阻塞核查
 
 旧六条逐条映射均被当前判定门槛拒绝，产品级重录确有必要；重录必须由已加载 `e2e01-caption-timeline-v2` 的工作台运行器完成。只读核对 `http://127.0.0.1:4322/api/health` 确认授权身份为 `e2e01-six-case-project-20260923`、目标项目为 `project-61579c25-2833-4c41-b592-357e1b306026`、`active_run_id` 与 `active_build_task_id` 均为空；监听进程为 PID 31856、命令行为 `server/index.mjs`。受控重启操作被执行环境策略拒绝，服务未被停止；没有改用强制终止，也没有启动第二个服务并与原服务共写数据目录。因此本轮产品重录数量为0，尚未生成新run_id或 `trial-timeline-v2` 产品派生版。此项是运行环境阻塞，不是用户需要排错；工作台当前可查看六条历史结果/录像，但其精确步骤定位继续禁用。
+
+## 2026-09-23 新版运行器启用与详情组产品复验
+
+本节更新上节的**当时**服务阻塞状态，不删改旧记录。当前结论仍为“开发未完成”：新版运行器已实际启用，但首组产品录像不能证明字幕和步骤精确定位；按本批停止规则，查询与排序组没有重录。此结论不是请用户继续排错，也不是候选人工批准。
+
+### 服务与录制前门槛
+
+- 在目标分支 `codex/test-workbench-six-case-e2e` 的独立工作树核对：开始时本地及远端均为 `37c9301e2009958bbe18b982b0baeda42c36a742`，工作区干净。4322 为本项目授权 `e2e01-six-case-project-20260923`、无活动任务；旧 PID 31856 启动于 15:42，早于该提交的 17:18，故未用它录制。
+- 本轮 `Stop-Process -Id 31856` 正常退出码 0；以目标工作树 `workbench/` 为工作目录、同一 `workbench/.local/six-case-e2e` 数据目录、4322 端口、原授权身份及本机 Edge 路径，用隐藏窗口 `Start-Process` 启动 PID 5876。实际 `/api/health` 返回新实例 `service-6ee21331-b4fb-4132-b69f-ae11c0a2cf72`、`trial_runner_version=e2e01-caption-timeline-v2`、活动任务均空。这次重启没有复用旧 PID，也没有并发实例。
+- 锁定 Playwright 1.62.1 的 `test.step` 与 Trace 帧 `timestamp` 用单调时钟；录像器用 `frameSwapWallTime` 以首个编码帧归零并按 25fps 量化。v2 新运行会保存本次 Trace/JPEG、原 WebM、同页解码帧匹配与校准诊断；**没有**新增直接暴露首个录像帧绝对时间的采集字段。静止、相近画面可有多个匹配时刻；短步骤与纯断言也可能没有独立可见帧。因此重录本身不是校准依据，首组必须逐条核对实际画面。
+- 本机最终详情候选文件 SHA-256 与登记值一致：`1F1C3CD75E2BAAC6338B1C86273C32D52D2B848852B903D2F05E5A1E862B6A04`。4320 正常入口可访问。内置浏览器可查看工作台，但对该页原生 `confirm()` 的点击未获得可接受的确认框，后台核对没有新增运行；随后使用独立 Playwright **点击同一工作台按钮并接受确认框**，未让测试脚本操作被测业务页面，也未直接调用启动 API。
+
+### 首组实际结果与独立画面证据
+
+| 用例 / 新 run_id | 工作台原始结果 | 时间映射与交付字幕 |
+|---|---|---|
+| TC-003 `run-03fa813c-4c77-4eaf-858c-95c4e513ff40` | PASSED / `complete_pass=true`，原 3 步均执行 | `UNAVAILABLE`；初始 v2 判 `VIDEO_CLOCK_UNCERTAINTY_CROSSES_ADJACENT_STEP_BOUNDARY`，离线严格复核判 `TRACE_VIDEO_UNAMBIGUOUS_FRAME_COUNT_INSUFFICIENT`。新带字幕视频未生成，所有步骤跳转禁用。 |
+| TC-006 `run-b2c74b41-1d44-40cf-ad1f-91e61a071d87` | FAILED / `complete_pass=false`；第 2 步仍为预期 `220 kW`、实际 `320 kW`，第 3 步未执行；“检出指定缺陷”与原始失败分别记录 | `UNAVAILABLE` / `TRACE_FRAME_MATCH_COUNT_INSUFFICIENT`；只有 2 帧 Trace。新带字幕视频未生成，所有步骤跳转禁用。 |
+
+两次均为工作台产品试跑，候选 SHA 相同、入口分别为 `/ui/e` 和 `/ui/f`、运行器记录 v2；没有 Harness 或建例模型调用。开始至结束各约 8.8 秒（包含试跑与录像处理，不代表费用）。原始报告、录像、截图、Trace 和旧字幕均追加保留在 `workbench/.local/six-case-e2e/build-tasks/build-20260923025549-922a763f/attempts/attempt-01-initial/verification/{normal|negative}/runs/<run_id>/`，未提交 Git。
+
+实际解码对照：TC-003 相邻步骤起点分别差 91.383ms 与 58.352ms，最近半间距仅 29.176ms；WebM 25fps 的量化步长为 40ms。同一 Trace JPEG 在 WebM 0 秒和约 0.16 秒的近似画面均有可接受像素差，而原算法独立选取全局最小差导致匹配顺序逆转。TC-006 原视频第 0 秒已是弹窗画面：与第二条 Trace 帧缩略图误差 0，与第一条误差约 87.94/255；第 1 步动作无可证明的视频片段。第 2 步是断言，弹窗持续不变，不能从相同画面唯一定位失败发生时刻。失败截图实际解码显示详情额定功率 `320 kW`，非历史备注中的 `220 kW`；页面同时保留“历史额定功率记录 220 kW”，不能误读为当前被检字段。没有把预期复制为实际。
+
+### 集中修复、复验与停止点
+
+- v3 的最小安全修复只在 Trace/JPEG 与**实际解码**的 WebM 帧之间选择时间唯一的匹配；同一画面在相隔至少 80ms 的两个可接受 PTS 出现时，将该锚标为多解并排除。少于 3 个无歧义锚即降级；没有放宽像素阈值、拟合残差或步骤边界精度。运行器健康诊断现在报告版本；候选试跑准备判定要求当前字幕运行器、已验证 v2 时间轴和 4 件媒体，不能把旧 v1/v2 记录按“普通 3 件媒体”误计为新字幕证据。
+- `node --test tests/e2e01-caption-timeline.test.mjs tests/e2e01-trial-readiness.test.mjs` 退出码 0，7/7；包含静止重复画面锚拒绝、短步边界、未执行、旧版不继承准备状态。`npm run test:e2e01-clock-calibration` 退出码 0，隔离工程录制 1/1；动态色带页 25 个匹配帧、最大拟合残差 45ms、含量化的精度界 85ms、四个边界实测最大偏差 75ms，**只证明隔离页**。
+- `node tests/e2e01-product-unavailable-browser.integration.mjs` 退出码 0；浏览器实际加载/播放/暂停/拖动两条原录像、解码画面，核对错误、已禁用步骤、没有新字幕下载、截图 PNG、Trace 注册 SHA-256、刷新后 31 条运行不增加。证据为 `workbench/.local/e2e01-product-unavailable-browser/TC-00{3,6}-*-detail.png`；`node tests/e2e01-caption-browser.integration.mjs` 退出码 0，继续核对旧六条的身份行为和旧字幕降级，不将其当新产品验证。
+- 第一轮完整 `npm test` 为退出码 1、94/95：运行器版本由 v2 升为 v3 时，准备门禁测试仍写旧版本。更新门禁对 v1/v2 的拒绝条件后，受影响 7/7 已复验；随后完整 `npm test` 退出码 0、95/95。本轮工程全绿不替代首组产品录像失败，更不替代六条完成。
+- 代码更新后空闲受控重启 PID 5876 至 PID 21688；`/api/health` 实际返回新实例 `service-796d7671-50f9-4764-aaf1-254be3d4b4f1` 和 `trial_runner_version=e2e01-caption-timeline-v3`。重启后浏览器刷新仍可读 TC-006 第 2 步差异、第 3 步未执行和原录像；查看/刷新未增加运行。v3 尚无新的产品运行，本批两条新记录明确标记 v2。
+- 最终门禁代码改动后再次确认无活动任务，正常停止 PID 21688 并隐藏启动 PID 15660；健康检查实际返回实例 `service-759d0cf2-bc7f-45e6-9774-cb8ef169da1b`、v3 运行器和正确项目授权。重启后 `node tests/e2e01-product-unavailable-browser.integration.mjs` 再次退出码 0，两条媒体可解码，运行数仍为 31。未声称仅凭该版本响应就证明未来产品字幕可定位。
+- 正式记录使用 REQ-0034 事实源渲染；`sync_requirement_status.py --apply --req REQ-0034-e2e01-caption-step-sync` 退出码 0。首次证据收集因验证状态不属于允许枚举且缺模块说明而退出码 1，已将产品未完成写进验证内容并更新 `docs/modules/test-workbench.md`；最终 `collect_delivery_evidence.py` 退出码 0（受影响 7/7，日志 `workbench/.local/e2e01-v3-delivery.log`），`check_ai_context.py` 退出码 0。证据收集的“集成测试通过”只描述工程测试，REQ 和本报告仍明确产品开发未完成。
+
+本轮产品试跑 **2 次**，工程隔离录制另计 **1 次**；其余四条及允许的额外详情配对复验均 **0 次**。不再重录原因是 TC-006 第一步原录像未捕获、断言步骤无视觉变化，v3 仅消除伪锚，不增加录制事件；再跑同一方案不能可靠补证。若未来要达到六条可定位，需要在运行器/录制适配层建立与编码首帧同源的时间和页面身份关联，并证明短步覆盖，再按本批上限另行审慎复验；本批未用长等待、画面色条或业务页面改动规避。用户当前可从 `http://127.0.0.1:4322/workspace/` 选 E2E-01 项目 → 执行记录查看两条新增结果与原录像，但**不能体验新运行的同步字幕或精确步骤跳转**。候选仍未批准。
