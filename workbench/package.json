@@ -31,6 +31,7 @@
     "test:m3b2-browser": "node tests/project-case-build-run-browser.integration.mjs",
     "test:m3b2-real": "node tests/project-case-build-real.integration.mjs",
     "test:m3b2-real-readback": "node tests/project-case-build-real-readback.integration.mjs",
+    "test:e2e01-clock-calibration": "node tests/e2e01-video-clock-calibration.integration.mjs",
     "test:m3c-real": "node tests/reviewed-asset-real.integration.mjs",
     "test:m4a-cli-preflight": "node tests/m4a-query-cli.integration.mjs",
     "test:m4a-real": "node tests/m4a-query-case-real.integration.mjs",

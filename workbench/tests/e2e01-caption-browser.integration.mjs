@@ -34,6 +34,39 @@ const context = await browser.newContext({ viewport: { width: 1280, height: 800 
 const page = await context.newPage();
 const summary = [];
 try {
+  const validLatest = [...records].sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))).at(-1);
+  await page.goto(`${base}/workspace/#/projects/${projectId}/execution-records`);
+  await page.locator(`.execution-detail[data-run-id="${validLatest.run_id}"]`).waitFor();
+  assert.equal(await page.locator('video[data-testid="execution-video"]').count(), 1, 'no query selects the latest sorted run');
+  await page.reload();
+  await page.locator(`.execution-detail[data-run-id="${validLatest.run_id}"]`).waitFor();
+  for (const invalid of ['', 'run-does-not-exist', 'not-a-run-id']) {
+    const query = invalid === '' ? '?run_id=' : `?run_id=${encodeURIComponent(invalid)}`;
+    await page.goto(`${base}/workspace/#/projects/${projectId}/execution-records${query}`);
+    await page.getByTestId('run-record-not-found').waitFor();
+    assert.equal(await page.locator('.execution-detail').count(), 0, 'invalid requested target renders no other run detail');
+    assert.equal(await page.locator('video').count(), 0, 'invalid requested target renders no other recording');
+    assert.equal(await page.locator('.execution-step').count(), 0, 'invalid requested target renders no other step list');
+  }
+  const foreignProjectId = process.env.E2E01_FOREIGN_PROJECT_ID || 'project-0d8cab05-a2b0-4626-b6fb-fd17879c751f';
+  const foreignRecordsResponse = await fetch(`${base}/api/case-library/projects/${foreignProjectId}/execution-records`);
+  assert.equal(foreignRecordsResponse.ok, true);
+  assert.deepEqual((await foreignRecordsResponse.json()).records, [], 'other project has no run records in this isolated dataset');
+  await page.goto(`${base}/workspace/#/projects/${foreignProjectId}/execution-records?run_id=${validLatest.run_id}`);
+  await page.getByTestId('run-record-not-found').waitFor();
+  assert.equal(await page.locator('.execution-detail, video, .execution-step').count(), 0,
+    'a run belonging to project A never displays project B detail or media');
+  const first = selected[0]; const second = selected[1];
+  await page.goto(`${base}/workspace/#/projects/${projectId}/execution-records?run_id=${first.run_id}`);
+  await page.locator(`.execution-detail[data-run-id="${first.run_id}"]`).waitFor();
+  await page.goto(`${base}/workspace/#/projects/${projectId}/execution-records?run_id=${second.run_id}`);
+  await page.locator(`.execution-detail[data-run-id="${second.run_id}"]`).waitFor();
+  await page.goBack();
+  await page.locator(`.execution-detail[data-run-id="${first.run_id}"]`).waitFor();
+  await page.goForward();
+  await page.locator(`.execution-detail[data-run-id="${second.run_id}"]`).waitFor();
+  summary.push({ check: 'run-id-selection', default_latest: validLatest.run_id, invalid_ids: 3,
+    cross_project_id: validLatest.run_id, history: 'back-forward-refresh' });
   for (let index = 0; index < selected.length; index += 1) {
     const run = selected[index]; const id = run.executed_external_id;
     await page.goto(`${base}/workspace/#/projects/${projectId}/execution-records?run_id=${run.run_id}`);
@@ -43,6 +76,8 @@ try {
     assert.equal(run.status, index < 3 ? 'PASSED' : 'FAILED');
     assert.equal(run.complete_pass, index < 3);
     assert.equal(run.caption_timeline?.status, 'VERIFIED');
+    assert.notEqual(run.caption_timeline?.schema, 'workbench/trial-timeline-v2', 'historical v1 timing is explicitly not accepted as calibrated');
+    assert.match(await detail.innerText(), /旧版带中文字幕录像[\s\S]*时间未验证|旧版中文字幕录像[\s\S]*时间零点尚未验证/);
     if (index >= 3) {
       assert.deepEqual([run.failure_step, run.error?.expected, run.error?.actual], faultOracle[id]);
       assert.equal(run.specified_defect_detected, true);
@@ -60,33 +95,21 @@ try {
     await video.evaluate((node) => node.pause());
     await video.evaluate((node, seconds) => { node.currentTime = seconds; }, duration / 2);
     await page.waitForFunction((seconds) => Math.abs(document.querySelector('[data-testid="execution-video"]')?.currentTime - seconds) < 0.15, duration / 2);
-    assert.match(await detail.locator('#execution-playing-step').innerText(), /播放位置：步骤/);
+    assert.equal(await detail.locator('[data-step-seek]:not([disabled])').count(), 0,
+      'legacy timeline never offers a seek position that is not supported by decoded-frame evidence');
     await video.evaluate((node) => { node.playbackRate = 2; node.currentTime = Math.max(0, node.duration - 0.35); });
     assert.equal(await video.evaluate((node) => node.playbackRate), 2);
     await video.evaluate((node) => { node.playbackRate = 1; node.currentTime = 0; });
-    const first = detail.locator('[data-step-seek]:not([disabled])').first();
-    await first.click();
-    assert.match(await detail.locator('#execution-playing-step').innerText(), /步骤 1/);
     if (index >= 3) {
       const failed = run.caption_timeline.steps.find((step) => step.execution_status === 'FAILED');
       assert.ok(failed && failed.actual !== '未单独采集实际值');
-      await detail.locator(`[data-step-seek="${failed.step_id}"]`).click();
-      await page.waitForFunction((order) => document.querySelector('#execution-playing-step')?.textContent.includes(`步骤 ${order}`), failed.order);
-      assert.match(await detail.locator('#execution-playing-step').innerText(), new RegExp(`步骤 ${failed.order}`));
+      assert.equal(await detail.locator(`[data-step-seek="${failed.step_id}"]`).isDisabled(), true);
       assert.match(await detail.innerText(), /预期：|预期\n/);
       const beforeInspect = await video.evaluate((node) => node.currentTime);
       await detail.getByText('查看原始错误').click();
       assert.ok(Math.abs(await video.evaluate((node) => node.currentTime) - beforeInspect) < 0.15,
         `${id} inspecting error does not rebuild or reset the player`);
-      const segment = run.caption_timeline.presentation.segments.find((item) => item.step_id === failed.step_id);
-      await video.evaluate((node, seconds) => new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('WORKBENCH_SEEK_TIMEOUT')), 5000);
-        node.addEventListener('seeked', () => { clearTimeout(timeout); resolve(); }, { once: true });
-        node.currentTime = seconds;
-      }), Math.min(duration - 0.2, segment.result_start_seconds + 0.35));
-      await page.waitForTimeout(250);
-      await page.waitForFunction(() => document.querySelector('#execution-playing-step')?.textContent.includes('结果'));
-      await video.screenshot({ path: path.join(evidence, `${id}-${run.run_id}-failure-caption.png`) });
+      assert.match(await detail.innerText(), new RegExp(failed.actual.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     }
     if (id === 'TC-006') {
       assert.equal(await detail.locator('[data-step-seek="CASE_STEP_3"]').isDisabled(), true);
@@ -165,11 +188,11 @@ try {
     await route.fulfill({ json: { records: [item] } });
   });
   for (const [variant, expected] of [['no-media', '本次运行没有可用录像'],
-    ['no-timeline', '缺少已校准时间轴'], ['interrupted', '中断']]) {
+    ['no-timeline', '时间零点尚未验证'], ['interrupted', '中断']]) {
     await fixturePage.goto(`${base}/workspace/#/projects/${projectId}/execution-records?run_id=run-fixture-${variant}&fixture=${variant}`);
     await fixturePage.locator(`.execution-detail[data-run-id="run-fixture-${variant}"]`).waitFor();
     assert.match(await fixturePage.locator('.execution-detail').innerText(), new RegExp(expected));
-    if (variant !== 'no-timeline') assert.equal(await fixturePage.locator('[data-step-seek]:not([disabled])').count(), 0);
+    assert.equal(await fixturePage.locator('[data-step-seek]:not([disabled])').count(), 0);
   }
   await fixturePage.route('**/api/build/tasks/**/media/**', (route) => route.abort());
   await fixturePage.goto(`${base}/workspace/#/projects/${projectId}/execution-records?run_id=run-fixture-load-error&fixture=load-error`);

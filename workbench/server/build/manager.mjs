@@ -18,7 +18,7 @@ import { renderCaptionVideo } from './caption-video.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
-const TRIAL_RUNNER_VERSION = 'e2e01-caption-timeline-v1';
+const TRIAL_RUNNER_VERSION = 'e2e01-caption-timeline-v2';
 
 async function captionEvidence({ reportPath, runDirectory, caseContent, coverage, runId, candidateSha256, browserExecutable }) {
   try {
@@ -35,7 +35,7 @@ async function captionEvidence({ reportPath, runDirectory, caseContent, coverage
     const tracePath = attachmentPath('trace');
     if (!sourcePath || !tracePath) throw new Error('TRIAL_MEDIA_SOURCE_MISSING');
     return await renderCaptionVideo({ sourcePath, tracePath,
-      outputPath: path.join(runDirectory, 'artifacts', 'captioned.webm'),
+      outputPath: path.join(runDirectory, 'artifacts', 'captioned-v2.webm'),
       caseContent, coverage, runId, candidateSha256, browserExecutable });
   } catch (error) {
     return { timeline: { status: 'UNAVAILABLE', run_id: runId, candidate_sha256: candidateSha256,

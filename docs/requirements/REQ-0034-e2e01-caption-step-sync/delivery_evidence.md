@@ -2,677 +2,221 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-23T15:41:51+08:00`
+- Generated at: `2026-09-23T17:08:39+08:00`
 - Record: `REQ-0034-e2e01-caption-step-sync`
-- Change fingerprint: `46f0b2f76d8a04fad3f26bf510db902757b6b67f89266a79b8435f8de412bf6c`
+- Change fingerprint: `f1299ea322c10295767b6f3c64132053d2fbab50d3661c946eba819f82975cd6`
 - Verification source: `collector-executed-v1`
-- Verification state: `单元测试通过`
-- Command: `npm --prefix workbench test`
+- Verification state: `集成测试通过`
+- Command: `npm --prefix workbench run test:e2e01-clock-calibration`
 - Exit code: `0`
-- Test count: `93`
+- Test count: `1`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `docs/requirements/REQ-0034-e2e01-caption-step-sync/verification.log`
-- Log SHA-256: `08df347d5ec73b3849dad893ed293a6e5f15422a25f724100f32949130de750d`
+- Log path: `workbench/.local/e2e01-delivery-clock-final-selftest.log`
+- Log SHA-256: `8e1ee6f637c2cde8b8914d292f77f03610b40ab87ac02a4395682c9659d5e7f5`
 
 ### Git Status
 
 ```text
- M docs/modules/workbench-case-library.md
- M docs/requirements/README.md
- M workbench/server/app.mjs
+ M docs/modules/test-workbench.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md
+ M docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json
+ M workbench/docs/E2E_01_CAPTION_SELF_TEST.md
+ M workbench/package.json
+ M workbench/server/build/caption-video.mjs
  M workbench/server/build/files.mjs
  M workbench/server/build/manager.mjs
- M workbench/tests/e2e01-trial-readiness.test.mjs
+ M workbench/server/build/trial-timeline.mjs
+ M workbench/tests/e2e01-caption-browser.integration.mjs
+ M workbench/tests/e2e01-caption-timeline.test.mjs
  M workbench/web-v2/app.js
- M workbench/web-v2/styles.css
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json
-?? docs/requirements/REQ-0034-e2e01-caption-step-sync/verification.log
-?? workbench/docs/E2E_01_CAPTION_SELF_TEST.md
-?? workbench/server/build/caption-video.mjs
-?? workbench/server/build/trial-timeline.mjs
-?? workbench/tests/e2e01-caption-browser.integration.mjs
-?? workbench/tests/e2e01-caption-timeline.test.mjs
+?? workbench/tests/e2e01-video-clock-calibration.config.mjs
+?? workbench/tests/e2e01-video-clock-calibration.integration.mjs
+?? workbench/tests/e2e01-video-clock-calibration.spec.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of 'docs/modules/workbench-case-library.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/app.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/modules/test-workbench.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/docs/E2E_01_CAPTION_SELF_TEST.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/caption-video.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/server/build/files.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/server/build/manager.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/e2e01-trial-readiness.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/trial-timeline.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/e2e01-caption-browser.integration.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/e2e01-caption-timeline.test.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/web-v2/app.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/web-v2/styles.css', LF will be replaced by CRLF the next time Git touches it
- docs/modules/workbench-case-library.md         |  6 +++
- docs/requirements/README.md                    |  2 +
- workbench/server/app.mjs                       |  5 +-
- workbench/server/build/files.mjs               |  2 +
- workbench/server/build/manager.mjs             | 37 ++++++++++++-
- workbench/tests/e2e01-trial-readiness.test.mjs | 12 +++++
- workbench/web-v2/app.js                        | 74 ++++++++++++++++++++++----
- workbench/web-v2/styles.css                    | 17 ++++++
- 8 files changed, 143 insertions(+), 12 deletions(-)
+ docs/modules/test-workbench.md                     |   2 +
+ .../00_user_requirement.md                         |  13 +-
+ .../01_development_requirement.md                  |   2 +-
+ .../REQ-0034-e2e01-caption-step-sync/02_design.md  |   2 +-
+ .../REQ-0034-e2e01-caption-step-sync/03_tasks.md   |   2 +-
+ .../04_verification.md                             |  10 +-
+ .../REQ-0034-e2e01-caption-step-sync/05_trace.md   |   4 +-
+ .../REQ-0034-e2e01-caption-step-sync/change_log.md |   2 +
+ .../current_state.md                               |  14 +-
+ .../delivery_evidence.md                           | 816 +++++----------------
+ .../requirement.source.json                        |  85 ++-
+ workbench/docs/E2E_01_CAPTION_SELF_TEST.md         |  51 +-
+ workbench/package.json                             |   1 +
+ workbench/server/build/caption-video.mjs           |  84 ++-
+ workbench/server/build/files.mjs                   |   4 +-
+ workbench/server/build/manager.mjs                 |   4 +-
+ workbench/server/build/trial-timeline.mjs          |  52 +-
+ .../tests/e2e01-caption-browser.integration.mjs    |  59 +-
+ workbench/tests/e2e01-caption-timeline.test.mjs    |  43 +-
+ workbench/web-v2/app.js                            |  14 +-
+ 20 files changed, 527 insertions(+), 737 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0034-e2e01-caption-step-sync/00_user_requirement.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/01_development_requirement.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/02_design.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/03_tasks.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/04_verification.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/05_trace.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/change_log.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/current_state.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/delivery_evidence.md
-docs/requirements/REQ-0034-e2e01-caption-step-sync/requirement.source.json
-docs/requirements/REQ-0034-e2e01-caption-step-sync/verification.log
-workbench/docs/E2E_01_CAPTION_SELF_TEST.md
-workbench/server/build/caption-video.mjs
-workbench/server/build/trial-timeline.mjs
-workbench/tests/e2e01-caption-browser.integration.mjs
-workbench/tests/e2e01-caption-timeline.test.mjs
+workbench/tests/e2e01-video-clock-calibration.config.mjs
+workbench/tests/e2e01-video-clock-calibration.integration.mjs
+workbench/tests/e2e01-video-clock-calibration.spec.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-23T15:41:33+08:00
-Command: npm --prefix workbench test
+Started at: 2026-09-23T17:08:24+08:00
+Command: npm --prefix workbench run test:e2e01-clock-calibration
 Exit code: 0
-Parsed test count: 93
+Parsed test count: 1
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 
-> ui-test-approved-workbench@0.1.0 test
-> node --test tests/*.test.mjs
+> ui-test-approved-workbench@0.1.0 test:e2e01-clock-calibration
+> node tests/e2e01-video-clock-calibration.integration.mjs
 
-TAP version 13
-# Subtest: state changes require exact local origin and JSON schema
-ok 1 - state changes require exact local origin and JSON schema
-  ---
-  duration_ms: 61.2823
-  type: 'test'
-  ...
-# Subtest: stop route accepts only an empty JSON object from local origin
-ok 2 - stop route accepts only an empty JSON object from local origin
-  ---
-  duration_ms: 4.9741
-  type: 'test'
-  ...
-# Subtest: build mutations require local origin and exact fixed schemas
-ok 3 - build mutations require local origin and exact fixed schemas
-  ---
-  duration_ms: 124.4737
-  type: 'test'
-  ...
-# Subtest: only registered web-visible unchanged task files are served
-ok 4 - only registered web-visible unchanged task files are served
-  ---
-  duration_ms: 18.7176
-  type: 'test'
-  ...
-# Subtest: only registered verification media are served with integrity and range checks
-ok 5 - only registered verification media are served with integrity and range checks
-  ---
-  duration_ms: 28.0989
-  type: 'test'
-  ...
-# Subtest: registers an idempotent derived assessment without rewriting the original task
-ok 6 - registers an idempotent derived assessment without rewriting the original task
-  ---
-  duration_ms: 160.5879
-  type: 'test'
-  ...
-# Subtest: rejects changed candidate or report identity and keeps a business gap out of human review
-ok 7 - rejects changed candidate or report identity and keeps a business gap out of human review
-  ---
-  duration_ms: 92.0023
-  type: 'test'
-  ...
-# Subtest: serves supplemental assessment beside the unchanged original failure
-ok 8 - serves supplemental assessment beside the unchanged original failure
-  ---
-  duration_ms: 179.0038
-  type: 'test'
-  ...
-# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
-ok 9 - Harness stderr diagnostic keeps error context and redacts credentials
-  ---
-  duration_ms: 2.6219
-  type: 'test'
-  ...
-# Subtest: stored DSH credential is redacted even without a sk prefix
-ok 10 - stored DSH credential is redacted even without a sk prefix
-  ---
-  duration_ms: 13.1283
-  type: 'test'
-  ...
-# Subtest: failed candidate enables exactly one explicit revision and preserves both versions
-ok 11 - failed candidate enables exactly one explicit revision and preserves both versions
-  ---
-  duration_ms: 373.7519
-  type: 'test'
-  ...
-# Subtest: relative Harness patch resolves before task workspace changes
-ok 12 - relative Harness patch resolves before task workspace changes
-  ---
-  duration_ms: 130.9084
-  type: 'test'
-  ...
-# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-23T07:41:36.455Z"}
-# Subtest: 生命周期存储持续失败会降级服务并拒绝继续接纳建例
-ok 13 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
-  ---
-  duration_ms: 79.9483
-  type: 'test'
-  ...
-# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-23T07:41:36.555Z"}
-# Subtest: 后台completion最终状态持续写失败会被观察并关闭新建例入口
-ok 14 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
-  ---
-  duration_ms: 139.6132
-  type: 'test'
-  ...
-# Subtest: duplicate start is rejected and cancel closes the owned attempt without restart
-ok 15 - duplicate start is rejected and cancel closes the owned attempt without restart
-  ---
-  duration_ms: 381.2599
-  type: 'test'
-  ...
-# Subtest: 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
-ok 16 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
-  ---
-  duration_ms: 152.4055
-  type: 'test'
-  ...
-# Subtest: 终态等待修复验证使用独立固定授权文件且不改旧授权
-ok 17 - 终态等待修复验证使用独立固定授权文件且不改旧授权
-  ---
-  duration_ms: 33.7273
-  type: 'test'
-  ...
-# Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
-ok 18 - candidate report parser keeps normal pass and concrete assertion mismatch separate
-  ---
-  duration_ms: 18.6931
-  type: 'test'
-  ...
-# Subtest: missing report and locator errors cannot become technical pass or specified mismatch
-ok 19 - missing report and locator errors cannot become technical pass or specified mismatch
-  ---
-  duration_ms: 14.7385
-  type: 'test'
-  ...
-# Subtest: Playwright array text diff preserves the expected and actual row order at the failed step
-ok 20 - Playwright array text diff preserves the expected and actual row order at the failed step
-  ---
-  duration_ms: 15.7007
-  type: 'test'
-  ...
-# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
-ok 21 - versioned step title rule accepts only bare or explicitly separated leading markers
-  ---
-  duration_ms: 0.8601
-  type: 'test'
-  ...
-# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
-ok 22 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
-  ---
-  duration_ms: 1.497
-  type: 'test'
-  ...
-# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
-ok 23 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
-  ---
-  duration_ms: 1.2461
-  type: 'test'
-  ...
-# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
-ok 24 - steps after the attributed failure remain not executed without hiding the specified mismatch
-  ---
-  duration_ms: 0.5485
-  type: 'test'
-  ...
-# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
-ok 25 - parser preserves raw title hierarchy raw error and expected actual facts
-  ---
-  duration_ms: 30.2658
-  type: 'test'
-  ...
-# Subtest: associates exact task candidate and registers the same record idempotently
-ok 26 - associates exact task candidate and registers the same record idempotently
-  ---
-  duration_ms: 131.566
-  type: 'test'
-  ...
-# Subtest: rejects candidate hash mismatch and does not associate media across tasks
-ok 27 - rejects candidate hash mismatch and does not associate media across tasks
-  ---
-  duration_ms: 102.5233
-  type: 'test'
-  ...
-# Subtest: serves only registered unchanged media with byte ranges
-ok 28 - serves only registered unchanged media with byte ranges
-  ---
-  duration_ms: 241.4473
-  type: 'test'
-  ...
-# Subtest: M2-C stage budget persists across task ids and store restarts
-ok 29 - M2-C stage budget persists across task ids and store restarts
-  ---
-  duration_ms: 69.8311
-  type: 'test'
-  ...
-# Subtest: restart marks active build interrupted without replaying it
-ok 30 - restart marks active build interrupted without replaying it
-  ---
-  duration_ms: 75.8509
-  type: 'test'
-  ...
-# Subtest: task状态原子替换的短暂占用有限重试后成功
-ok 31 - task状态原子替换的短暂占用有限重试后成功
-  ---
-  duration_ms: 125.533
-  type: 'test'
-  ...
-# Subtest: task状态持续写失败会显式返回错误而非静默成功
-ok 32 - task状态持续写失败会显式返回错误而非静默成功
-  ---
-  duration_ms: 668.6157
-  type: 'test'
-  ...
-# Subtest: 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
-ok 33 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
-  ---
-  duration_ms: 1104.7897
-  type: 'test'
-  ...
-# Subtest: case library API requires local origin and serves only registered operations
-ok 34 - case library API requires local origin and serves only registered operations
-  ---
-  duration_ms: 154.86
-  type: 'test'
-  ...
-# Subtest: real xlsx and native package round trip preserve fields, lineage and project isolation
-ok 35 - real xlsx and native package round trip preserve fields, lineage and project isolation
-  ---
-  duration_ms: 564.0166
-  type: 'test'
-  ...
-# Subtest: formula cells and stale or cross-project confirmations fail closed
-ok 36 - formula cells and stale or cross-project confirmations fail closed
-  ---
-  duration_ms: 201.4258
-  type: 'test'
-  ...
-# Subtest: E2E-01 recovery adds one start while retaining all six original claims
-ok 37 - E2E-01 recovery adds one start while retaining all six original claims
-  ---
-  duration_ms: 105.4139
-  type: 'test'
-  ...
-# Subtest: trace-derived timeline preserves source timing and unexecuted step
-ok 38 - trace-derived timeline preserves source timing and unexecuted step
-  ---
-  duration_ms: 22.3261
-  type: 'test'
-  ...
-# Subtest: missing or uncalibrated trace never invents a seek timeline
-ok 39 - missing or uncalibrated trace never invents a seek timeline
-  ---
-  duration_ms: 15.4301
-  type: 'test'
-  ...
-# Subtest: derived WebM duration is explicit and invalid media fails closed
-ok 40 - derived WebM duration is explicit and invalid media fails closed
-  ---
-  duration_ms: 1.3352
-  type: 'test'
-  ...
-# Subtest: E2E-01 reaches human review only after a passing normal run and the specified raw failure
-ok 41 - E2E-01 reaches human review only after a passing normal run and the specified raw failure
-  ---
-  duration_ms: 1.6746
-  type: 'test'
-  ...
-# Subtest: caption runner requires verified timeline and four registered media for both lanes
-ok 42 - caption runner requires verified timeline and four registered media for both lanes
-  ---
-  duration_ms: 0.5368
-  type: 'test'
-  ...
-# Subtest: real xlsx preserves numeric-looking text, physical rows and blank columns
-ok 43 - real xlsx preserves numeric-looking text, physical rows and blank columns
-  ---
-  duration_ms: 118.7403
-  type: 'test'
-  ...
-# Subtest: real xlsx keeps step and expected cell-line positions instead of compacting blanks
-ok 44 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
-  ---
-  duration_ms: 25.8551
-  type: 'test'
-  ...
-# Subtest: approved run uses fixed argument arrays and a reduced environment
-ok 45 - approved run uses fixed argument arrays and a reduced environment
-  ---
-  duration_ms: 149.6491
-  type: 'test'
-  ...
-# Subtest: duplicate starts are rejected and stop targets only the owned process
-ok 46 - duplicate starts are rejected and stop targets only the owned process
-  ---
-  duration_ms: 149.0074
-  type: 'test'
-  ...
-# Subtest: unapproved, wrong-hash, traversal and illegal environment records are refused
-ok 47 - unapproved, wrong-hash, traversal and illegal environment records are refused
-  ---
-  duration_ms: 257.3006
-  type: 'test'
-  ...
-# Subtest: runtime-copy integrity failure preserves the raw passing report but blocks overall pass
-ok 48 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
-  ---
-  duration_ms: 173.3587
-  type: 'test'
-  ...
-# Subtest: 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
-ok 49 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
-  ---
-  duration_ms: 186.0346
-  type: 'test'
-  ...
-# Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
-ok 50 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
-  ---
-  duration_ms: 90.815
-  type: 'test'
-  ...
-# Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
-ok 51 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
-  ---
-  duration_ms: 376.2689
-  type: 'test'
-  ...
-# Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
-ok 52 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
-  ---
-  duration_ms: 495.6585
-  type: 'test'
-  ...
-# Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
-ok 53 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
-  ---
-  duration_ms: 57.5265
-  type: 'test'
-  ...
-# Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
-ok 54 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
-  ---
-  duration_ms: 343.0747
-  type: 'test'
-  ...
-# Subtest: only indexed media for the selected run can be read
-ok 55 - only indexed media for the selected run can be read
-  ---
-  duration_ms: 148.1648
-  type: 'test'
-  ...
-# Subtest: changed media bytes are not served as the registered attachment
-ok 56 - changed media bytes are not served as the registered attachment
-  ---
-  duration_ms: 12.1074
-  type: 'test'
-  ...
-# Subtest: 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
-ok 57 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
-  ---
-  duration_ms: 314.5417
-  type: 'test'
-  ...
-# Subtest: v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
-ok 58 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
-  ---
-  duration_ms: 593.9899
-  type: 'test'
-  ...
-# Subtest: request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
-ok 59 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
-  ---
-  duration_ms: 137.1186
-  type: 'test'
-  ...
-# Subtest: request_id 正在处理时只复用相同身份，不同身份立即冲突
-ok 60 - request_id 正在处理时只复用相同身份，不同身份立即冲突
-  ---
-  duration_ms: 128.4842
-  type: 'test'
-  ...
-# Subtest: 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
-ok 61 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
-  ---
-  duration_ms: 124.0782
-  type: 'test'
-  ...
-# Subtest: M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
-ok 62 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
-  ---
-  duration_ms: 1006.6773
-  type: 'test'
-  ...
-# Subtest: 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
-ok 63 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
-  ---
-  duration_ms: 2.7181
-  type: 'test'
-  ...
-# Subtest: M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
-ok 64 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
-  ---
-  duration_ms: 161.9573
-  type: 'test'
-  ...
-# Subtest: approved sorting asset is derived from the real frozen records
-ok 65 - approved sorting asset is derived from the real frozen records
-  ---
-  duration_ms: 17.787
-  type: 'test'
-  ...
-# Subtest: hash mismatch is rejected instead of becoming a new approval
-ok 66 - hash mismatch is rejected instead of becoming a new approval
-  ---
-  duration_ms: 22.5309
-  type: 'test'
-  ...
-# Subtest: complete passing report requires all registered steps and all media kinds
-ok 67 - complete passing report requires all registered steps and all media kinds
-  ---
-  duration_ms: 50.116
-  type: 'test'
-  ...
-# Subtest: raw passing result is not an overall pass when all media are missing
-ok 68 - raw passing result is not an overall pass when all media are missing
-  ---
-  duration_ms: 16.0801
-  type: 'test'
-  ...
-# Subtest: raw passing result is not an overall pass when screenshot is missing
-ok 69 - raw passing result is not an overall pass when screenshot is missing
-  ---
-  duration_ms: 14.2289
-  type: 'test'
-  ...
-# Subtest: raw passing result is not an overall pass when video is missing
-ok 70 - raw passing result is not an overall pass when video is missing
-  ---
-  duration_ms: 13.9704
-  type: 'test'
-  ...
-# Subtest: raw passing result is not an overall pass when trace is missing
-ok 71 - raw passing result is not an overall pass when trace is missing
-  ---
-  duration_ms: 46.0464
-  type: 'test'
-  ...
-# Subtest: assertion mismatch remains a failed test and later steps are not executed
-ok 72 - assertion mismatch remains a failed test and later steps are not executed
-  ---
-  duration_ms: 36.8442
-  type: 'test'
-  ...
-# Subtest: missing, corrupt, skipped and zero-target reports fail closed
-ok 73 - missing, corrupt, skipped and zero-target reports fail closed
-  ---
-  duration_ms: 27.4046
-  type: 'test'
-  ...
-# Subtest: exit code zero cannot override an incomplete step set
-ok 74 - exit code zero cannot override an incomplete step set
-  ---
-  duration_ms: 8.4879
-  type: 'test'
-  ...
-# Subtest: a passing Playwright report cannot override a non-normal execution terminal state
-ok 75 - a passing Playwright report cannot override a non-normal execution terminal state
-  ---
-  duration_ms: 66.4545
-  type: 'test'
-  ...
-# Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
-ok 76 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
-  ---
-  duration_ms: 1.0456
-  type: 'test'
-  ...
-# Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
-ok 77 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
-  ---
-  duration_ms: 1745.9056
-  type: 'test'
-  ...
-# Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
-ok 78 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
-  ---
-  duration_ms: 821.9596
-  type: 'test'
-  ...
-# Subtest: 项目用例新版本不会自动继承旧版本的限定首审资产
-ok 79 - 项目用例新版本不会自动继承旧版本的限定首审资产
-  ---
-  duration_ms: 2083.8761
-  type: 'test'
-  ...
-# Subtest: 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
-ok 80 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
-  ---
-  duration_ms: 201.0093
-  type: 'test'
-  ...
-# Subtest: 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
-ok 81 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
-  ---
-  duration_ms: 390.1657
-  type: 'test'
-  ...
-# Subtest: health endpoint reports the independent workbench
-ok 82 - health endpoint reports the independent workbench
-  ---
-  duration_ms: 66.309
-  type: 'test'
-  ...
-# Subtest: unknown routes fail closed
-ok 83 - unknown routes fail closed
-  ---
-  duration_ms: 9.4559
-  type: 'test'
-  ...
-# Subtest: asset registration is persistent and idempotent
-ok 84 - asset registration is persistent and idempotent
-  ---
-  duration_ms: 88.1592
-  type: 'test'
-  ...
-# Subtest: runs remain readable and active records become interrupted after restart
-ok 85 - runs remain readable and active records become interrupted after restart
-  ---
-  duration_ms: 124.5293
-  type: 'test'
-  ...
-# Subtest: run ids cannot escape the data root
-ok 86 - run ids cannot escape the data root
-  ---
-  duration_ms: 8.337
-  type: 'test'
-  ...
-# Subtest: workspace entry is a same-origin whitelist and old workbench remains available
-ok 87 - workspace entry is a same-origin whitelist and old workbench remains available
-  ---
-  duration_ms: 170.1976
-  type: 'test'
-  ...
-# Subtest: UI-D2A xlsx samples preserve exact source text and classifications through real parser
-ok 88 - UI-D2A xlsx samples preserve exact source text and classifications through real parser
-  ---
-  duration_ms: 364.0086
-  type: 'test'
-  ...
-# Subtest: committed native sample came from supported export schema and survives official import parser
-ok 89 - committed native sample came from supported export schema and survives official import parser
-  ---
-  duration_ms: 45.7419
-  type: 'test'
-  ...
-# Subtest: six-case xlsx uses the supported mapping and preserves paired business expectations
-ok 90 - six-case xlsx uses the supported mapping and preserves paired business expectations
-  ---
-  duration_ms: 332.2738
-  type: 'test'
-  ...
-# Subtest: committed six-case json is a formal backend package and reimports all six cases
-ok 91 - committed six-case json is a formal backend package and reimports all six cases
-  ---
-  duration_ms: 172.0719
-  type: 'test'
-  ...
-# Subtest: workbench候选使用同一Playwright运行根并真实执行正常与反例
-ok 92 - workbench候选使用同一Playwright运行根并真实执行正常与反例
-  ---
-  duration_ms: 11325.575
-  type: 'test'
-  ...
-# Subtest: harness-probe默认运行根保持独立可执行
-ok 93 - harness-probe默认运行根保持独立可执行
-  ---
-  duration_ms: 2556.0423
-  type: 'test'
-  ...
-1..93
-# tests 93
-# suites 0
-# pass 93
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 15686.645
+
+Running 1 test using 1 worker
+
+  ok 1 tests\e2e01-video-clock-calibration.spec.mjs:3:1 › 独立录制页的视觉状态对应真实 test.step 边界 (4.5s)
+
+  1 passed (5.7s)
+(node:38172) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "status": "VERIFIED",
+  "run_id": "isolated-calibration-only",
+  "page_id": "page@a8e2300580f10b5436dc8e0ef83922f2",
+  "startup_delay_ms": 500,
+  "video_zero_pixel_rgb": [
+    0,
+    0,
+    0
+  ],
+  "matched_frame_count": 25,
+  "max_fit_residual_ms": 53,
+  "guaranteed_precision_ms": 93,
+  "max_measured_boundary_deviation_ms": 43,
+  "boundary_comparisons": [
+    {
+      "step": "CAL_STEP_1 画面变红",
+      "expected_second_from_trace_map": 0.5382150000000001,
+      "visual_transition_second": 0.56,
+      "deviation_ms": 22,
+      "nearest_adjacent_boundary_ms": 173
+    },
+    {
+      "step": "CAL_STEP_2 画面变绿",
+      "expected_second_from_trace_map": 0.8840689999999993,
+      "visual_transition_second": 0.92,
+      "deviation_ms": 36,
+      "nearest_adjacent_boundary_ms": 170
+    },
+    {
+      "step": "CAL_STEP_3 画面变紫",
+      "expected_second_from_trace_map": 1.223553,
+      "visual_transition_second": 1.24,
+      "deviation_ms": 16,
+      "nearest_adjacent_boundary_ms": 167
+    },
+    {
+      "step": "CAL_STEP_4 画面变青",
+      "expected_second_from_trace_map": 1.556760999999999,
+      "visual_transition_second": 1.6,
+      "deviation_ms": 43,
+      "nearest_adjacent_boundary_ms": 167
+    }
+  ],
+  "visual_state_transitions": [
+    {
+      "state": "CAL_STATE_0",
+      "video_second": 0.04,
+      "pixel": [
+        47,
+        66,
+        83
+      ]
+    },
+    {
+      "state": "CAL_STATE_1",
+      "video_second": 0.56,
+      "pixel": [
+        178,
+        30,
+        25
+      ]
+    },
+    {
+      "state": "CAL_STATE_2",
+      "video_second": 0.92,
+      "pixel": [
+        4,
+        119,
+        85
+      ]
+    },
+    {
+      "state": "CAL_STATE_3",
+      "video_second": 1.24,
+      "pixel": [
+        121,
+        36,
+        204
+      ]
+    },
+    {
+      "state": "CAL_STATE_4",
+      "video_second": 1.6,
+      "pixel": [
+        3,
+        105,
+        160
+      ]
+    }
+  ],
+  "media_paths": {
+    "trace": "C:\\Users\\20240082\\.codex\\worktrees\\test-workbench-six-case-e2e\\ui-test-agent\\workbench\\.local\\e2e01-video-clock-calibration-2026-09-23T09-08-24-964Z\\e2e01-video-clock-calibration-独立录制页的视觉状态对应真实-test-step-边界\\trace.zip",
+    "video": "C:\\Users\\20240082\\.codex\\worktrees\\test-workbench-six-case-e2e\\ui-test-agent\\workbench\\.local\\e2e01-video-clock-calibration-2026-09-23T09-08-24-964Z\\e2e01-video-clock-calibration-独立录制页的视觉状态对应真实-test-step-边界\\video.webm"
+  }
+}
 ```
 
 ### Sync Record Status
@@ -691,4 +235,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-六条产品运行与真实浏览器媒体检查另见 workbench/docs/E2E_01_CAPTION_SELF_TEST.md；人工候选批准未发生
+隔离视频时钟校准通过；六条产品旧录像不满足精确定位门槛，整体E2E-01收尾仍未完成。

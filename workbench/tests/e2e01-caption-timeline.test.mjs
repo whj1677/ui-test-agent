@@ -6,6 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { deriveTrialTimeline } from '../server/build/trial-timeline.mjs';
 import { addWebmDuration } from '../server/build/caption-video.mjs';
+import { indexAttemptFiles } from '../server/build/files.mjs';
 
 function traceZip(entries) {
   const local = []; const central = []; let offset = 0;
@@ -40,14 +41,19 @@ const coverage = { items: [
   { marker: 'CASE_STEP_3', order: 3, observed: false, execution_status: 'NOT_EXECUTED' },
 ] };
 const lines = (values) => values.map((value) => JSON.stringify(value)).join('\n');
+const contextOptions = { type: 'context-options', playwrightVersion: '1.62.1' };
+const clockMap = { status: 'VERIFIED', page_id: 'page-1', slope: 0.001, intercept_seconds: -1.04,
+  guaranteed_precision_ms: 80, max_residual_seconds: 0.04,
+  matches: [1040, 1500, 2000].map((time) => ({ trace_time_ms: time, trace_frame_sha1: `frame-${time}` })) };
 
 test('trace-derived timeline preserves source timing and unexecuted step', async () => {
   const folder = await fs.mkdtemp(path.join(os.tmpdir(), `e2e01-timeline-${randomUUID()}-`));
   try {
     const tracePath = path.join(folder, 'trace.zip');
+    const frames = [1040, 1500, 2000].map((time) => ({ type: 'screencast-frame', pageId: 'page-1', timestamp: time,
+      frameSwapWallTime: time + 10, sha1: `frame-${time}` }));
     await fs.writeFile(tracePath, traceZip({
-      '0-trace.trace': lines([{ type: 'event', method: 'page', time: 1000 },
-        { type: 'screencast-frame', timestamp: 1040 }]),
+      '0-trace.trace': lines([contextOptions, { type: 'event', method: 'page', time: 1000, params: { pageId: 'page-1' } }, ...frames]),
       'test.trace': lines([
         { type: 'before', method: 'test.step', title: 'CASE_STEP_1', callId: 's1', startTime: 1200 },
         { type: 'after', callId: 's1', endTime: 1700 },
@@ -56,10 +62,10 @@ test('trace-derived timeline preserves source timing and unexecuted step', async
       ]),
     }));
     const result = await deriveTrialTimeline({ tracePath, durationSeconds: 2.7, caseContent: content,
-      coverage, runId: 'run-synthetic', candidateSha256: 'SYNTHETIC' });
+      coverage, runId: 'run-synthetic', candidateSha256: 'SYNTHETIC', clockMap });
     assert.equal(result.status, 'VERIFIED');
-    assert.equal(result.steps[0].source_video_start_seconds, 0.2);
-    assert.equal(result.steps[1].source_video_end_seconds, 1.45);
+    assert.ok(Math.abs(result.steps[0].source_video_start_seconds - 0.16) < 1e-9);
+    assert.ok(Math.abs(result.steps[1].source_video_end_seconds - 1.41) < 1e-9);
     assert.equal(result.steps[1].actual, '320 kW');
     assert.equal(result.steps[0].actual, '未单独采集实际值');
     assert.equal(result.steps[2].source_video_start_seconds, null);
@@ -75,14 +81,14 @@ test('missing or uncalibrated trace never invents a seek timeline', async () => 
   try {
     const tracePath = path.join(folder, 'trace.zip');
     await fs.writeFile(tracePath, traceZip({
-      '0-trace.trace': lines([{ type: 'event', method: 'page', time: 1000 },
-        { type: 'screencast-frame', timestamp: 1800 }]),
+      '0-trace.trace': lines([contextOptions, { type: 'event', method: 'page', time: 1000, params: { pageId: 'page-1' } },
+        { type: 'screencast-frame', timestamp: 1800, pageId: 'page-1', frameSwapWallTime: 1810, sha1: 'frame-a' }]),
       'test.trace': lines([]),
     }));
     const result = await deriveTrialTimeline({ tracePath, durationSeconds: 3, caseContent: content,
-      coverage, runId: 'uncalibrated', candidateSha256: 'SYNTHETIC' });
+      coverage, runId: 'uncalibrated', candidateSha256: 'SYNTHETIC', clockMap });
     assert.equal(result.status, 'UNAVAILABLE');
-    assert.equal(result.reason, 'VIDEO_ANCHOR_UNVERIFIED');
+    assert.equal(result.reason, 'TRACE_VIDEO_CLOCK_MAP_UNVERIFIED');
   } finally { await fs.rm(folder, { recursive: true, force: true }); }
 });
 
@@ -94,4 +100,23 @@ test('derived WebM duration is explicit and invalid media fails closed', () => {
   assert.equal(output.subarray(14, 17).toString('hex'), '448988');
   assert.equal(output.readDoubleBE(17), 7500);
   assert.throws(() => addWebmDuration(Buffer.from('not webm'), 7.5), /WEBM_DURATION_PATCH_UNAVAILABLE/);
+});
+
+test('versioned derived caption video is indexed as caption media without replacing v1', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), `e2e01-caption-files-${randomUUID()}-`));
+  try {
+    const taskRoot = path.join(root, 'task');
+    const attemptRoot = path.join(taskRoot, 'attempts', 'attempt-01-initial');
+    const candidatePath = path.join(attemptRoot, 'workspace', 'input', 'candidate-v1.spec.mjs');
+    const artifactRoot = path.join(attemptRoot, 'verification', 'normal', 'runs', 'run-test', 'artifacts');
+    await fs.mkdir(path.dirname(candidatePath), { recursive: true });
+    await fs.mkdir(artifactRoot, { recursive: true });
+    await fs.writeFile(candidatePath, 'candidate bytes');
+    await fs.writeFile(path.join(artifactRoot, 'captioned.webm'), 'v1 media');
+    await fs.writeFile(path.join(artifactRoot, 'captioned-v2.webm'), 'v2 media');
+    const indexed = await indexAttemptFiles({ taskRoot, attemptRoot, candidatePath, attemptId: 'attempt-01-initial', runId: 'run-test' });
+    assert.deepEqual(indexed.unexpected, []);
+    const videos = indexed.files.filter((file) => file.kind === 'normal_caption_video');
+    assert.deepEqual(videos.map((file) => file.file_name).sort(), ['captioned-v2.webm', 'captioned.webm']);
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
