@@ -21,3 +21,15 @@ test('E2E-01 reaches human review only after a passing normal run and the specif
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, { ...negative, candidate_sha256: 'B'.repeat(64) }] }), false);
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, { ...negative, media_file_ids: [] }] }), false);
 });
+
+test('caption runner requires verified timeline and four registered media for both lanes', () => {
+  const hash = 'C'.repeat(64);
+  const base = { candidate_sha256: hash, same_candidate_hash: true, technical_error: null,
+    runner_version: 'e2e01-caption-timeline-v1', caption_timeline: { status: 'VERIFIED' },
+    media_file_ids: ['screenshot', 'video', 'trace', 'caption-video'] };
+  const normal = { ...base, run_type: 'normal', status: 'PASSED', complete_pass: true, step_coverage: { complete: true } };
+  const negative = { ...base, run_type: 'negative', status: 'FAILED', complete_pass: false, specified_defect_detected: true };
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, negative] }), true);
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, { ...negative, media_file_ids: base.media_file_ids.slice(0, 3) }] }), false);
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, caption_timeline: { status: 'UNAVAILABLE' } }, negative] }), false);
+});

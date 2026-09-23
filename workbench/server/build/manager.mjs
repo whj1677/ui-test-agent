@@ -14,9 +14,34 @@ import { E2E01_PROJECT_CASE_AUTHORIZATION_ID, M3B2_PROJECT_CASE_AUTHORIZATION_ID
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 import { dshHomeSecrets, harnessStderrDiagnostic } from './diagnostic.mjs';
+import { renderCaptionVideo } from './caption-video.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
+const TRIAL_RUNNER_VERSION = 'e2e01-caption-timeline-v1';
+
+async function captionEvidence({ reportPath, runDirectory, caseContent, coverage, runId, candidateSha256, browserExecutable }) {
+  try {
+    const report = JSON.parse(await fs.readFile(reportPath, 'utf8'));
+    const suites = report.suites || [];
+    const tests = suites.flatMap((suite) => suite.specs?.flatMap((spec) => spec.tests || []) || []);
+    const attachments = tests[0]?.results?.at(-1)?.attachments || [];
+    const attachmentPath = (name) => {
+      const absolute = attachments.find((entry) => entry.name === name)?.path;
+      const relative = absolute && path.relative(runDirectory, absolute);
+      return relative && !relative.startsWith('..') && !path.isAbsolute(relative) ? absolute : null;
+    };
+    const sourcePath = attachmentPath('video');
+    const tracePath = attachmentPath('trace');
+    if (!sourcePath || !tracePath) throw new Error('TRIAL_MEDIA_SOURCE_MISSING');
+    return await renderCaptionVideo({ sourcePath, tracePath,
+      outputPath: path.join(runDirectory, 'artifacts', 'captioned.webm'),
+      caseContent, coverage, runId, candidateSha256, browserExecutable });
+  } catch (error) {
+    return { timeline: { status: 'UNAVAILABLE', run_id: runId, candidate_sha256: candidateSha256,
+      reason: error.message }, videoPath: null };
+  }
+}
 const LIFECYCLE_FIELDS = new Set([
   'type', 'at', 'pid', 'parent_pid', 'bytes', 'exit_code', 'signal', 'reason', 'output_complete',
   'trailing_stdout_line', 'event_type', 'phase', 'tool', 'code', 'partial_observation',
@@ -105,6 +130,9 @@ export function e2eTrialReadiness(candidate) {
   const runs = candidate?.trial_runs || [];
   const normal = runs.filter((run) => run.run_type === 'normal').at(-1);
   const negative = runs.filter((run) => run.run_type === 'negative').at(-1);
+  const mediaReady = (run) => run.runner_version === TRIAL_RUNNER_VERSION
+    ? run.caption_timeline?.status === 'VERIFIED' && run.media_file_ids?.length >= 4
+    : run.media_file_ids?.length === 3;
   return Boolean(normal && negative &&
     normal.candidate_sha256 === candidate.sha256 && negative.candidate_sha256 === candidate.sha256 &&
     normal.status === 'PASSED' && normal.complete_pass === true && normal.step_coverage?.complete === true &&
@@ -112,7 +140,7 @@ export function e2eTrialReadiness(candidate) {
     (normal.same_candidate_hash === true || (normal.same_candidate_hash == null && candidate.same_candidate_hash === true)) &&
     negative.same_candidate_hash === true &&
     !normal.technical_error && !negative.technical_error &&
-    normal.media_file_ids?.length === 3 && negative.media_file_ids?.length === 3);
+    mediaReady(normal) && mediaReady(negative));
 }
 
 function lifecycleMetadata(event) {
@@ -471,6 +499,9 @@ export class BuildTaskManager {
       const hashAfter = await sha256File(candidatePath);
       const stepCoverage = projectCaseStepCoverage(verification, task.input_bundle.verification_contract);
       const detected = runType === 'negative' && counterexampleDetected(verification, task.input_bundle.verification_contract);
+      const caption = await captionEvidence({ reportPath: raw.reportPath, runDirectory,
+        caseContent: versionRecord.content, coverage: stepCoverage, runId, candidateSha256: candidate.sha256,
+        browserExecutable: this.browserExecutable });
       const indexed = await indexAttemptFiles({
         taskRoot: this.store.taskDirectory(taskId), attemptRoot, candidatePath,
         attemptId: candidate.attempt_id, runId, startIndex: task.files.length,
@@ -495,8 +526,10 @@ export class BuildTaskManager {
         step_coverage: stepCoverage, specified_defect_detected: detected,
         same_candidate_hash: hashAfter === candidate.sha256,
         media_file_ids: files.filter((file) => /_(?:screenshot|video|trace)$/.test(file.kind)).map((file) => file.file_id),
+        caption_timeline: caption.timeline, runner_version: TRIAL_RUNNER_VERSION,
         started_at: startedAt, finished_at: this.now().toISOString(), origin: 'WORKBENCH_CANDIDATE_TRIAL',
-        technical_error: indexed.unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', files: indexed.unexpected } : null,
+        technical_error: indexed.unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', files: indexed.unexpected }
+          : caption.timeline.status !== 'VERIFIED' || !caption.videoPath ? { code: 'CAPTION_EVIDENCE_UNAVAILABLE', reason: caption.timeline.reason } : null,
       };
       if (!run.same_candidate_hash) throw new Error('E2E01_CANDIDATE_CHANGED_DURING_TRIAL');
       const ready = e2eTrialReadiness({ ...candidate, trial_runs: [...(candidate.trial_runs || []), run] });

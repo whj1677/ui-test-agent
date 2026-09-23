@@ -343,6 +343,7 @@ const statusLabels = {
   NORMAL_PASSED_AWAITING_PAIR: '正常试跑通过，等待对照试跑', PAIR_VALIDATION_FAILED: '对照验证未通过',
   TECHNICAL_VALIDATION_PASSED: '技术验证通过', PASSED: '通过', NOT_READY: '尚不可核对',
   WAITING_REVIEW: '等待人工核对', APPROVED: '已批准',
+  ASSERTION_MISMATCH: '断言不符',
 };
 function statusText(value) { return statusLabels[value] || (value ? `未知状态（${value}）` : '未记录'); }
 function resultBadge(status) {
@@ -379,7 +380,7 @@ function renderBuildTaskDetail(project, task) {
   const harness=task.attempts?.map((attempt)=>`<li>${esc(attempt.attempt_id)} · ${esc(statusText(attempt.status))} · 工具调用 ${attempt.harness?.total_tool_calls ?? '未知'} · 模型 ${esc(attempt.harness?.model_configuration?.model || '未知')}</li>`).join('') || '尚未启动';
   const pairText=task.trial_binding ? `${task.trial_binding.source.external_id} → ${task.trial_binding.paired.external_id}；候选来源与本次执行用例分别记录。` : '';
   const media=(latest?.trial_runs || []).flatMap((run)=>run.media_file_ids.map((fileId)=>({run,file:task.files.find((item)=>item.file_id===fileId)}))).filter((item)=>item.file);
-  const mediaHtml=media.map(({run,file})=>file.kind.endsWith('_screenshot')?`<a href="${buildMediaUrl(task.task_id,file.file_id)}" target="_blank" rel="noreferrer">${esc(run.executed_external_id)} 截图 · ${esc(file.file_name)}</a>`:file.kind.endsWith('_video')?`<label>${esc(run.executed_external_id)} 录像 · ${esc(file.file_name)}<video controls preload="metadata" src="${buildMediaUrl(task.task_id,file.file_id)}"></video></label>`:`<a href="${buildMediaUrl(task.task_id,file.file_id)}" download>下载 ${esc(run.executed_external_id)} Trace</a>`).join('');
+  const mediaHtml=(latest?.trial_runs||[]).map((run)=>`<a data-nav href="#/projects/${encodeURIComponent(project.project_id)}/execution-records?run_id=${encodeURIComponent(run.run_id)}">查看 ${esc(run.executed_external_id)} · ${esc(run.run_id)} 的步骤、录像与媒体</a>`).join('')+media.filter(({file})=>file.kind.endsWith('_screenshot')).map(({run,file})=>`<a href="${buildMediaUrl(task.task_id,file.file_id)}" target="_blank" rel="noreferrer">${esc(run.executed_external_id)} 截图 · ${esc(file.file_name)}</a>`).join('');
   showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(task.task_id)}</p><h1>${esc(task.source?.external_id || task.template?.title || '建例任务')} · v${esc(task.source?.case_version || '')}</h1><p>任务状态：${esc(statusText(task.task_status))} · 生成：${esc(statusText(task.generation_status))} · 验证：${esc(statusText(task.verification_status))} · 人工核对：${esc(statusText(task.human_review_status))}</p></div><div class="actions">${buildTaskActions(project,task)}</div></div>${projectTabs(project,'build-tasks')}<div class="detail-layout"><div class="detail-main"><section class="panel"><div class="panel-header"><h2>本次冻结输入</h2><span class="mono">${esc(short(task.source?.content_sha256,20))}</span></div><div class="panel-body"><dl class="definition-grid"><div><dt>标题</dt><dd>${esc(content?.title)}</dd></div><div><dt>前置条件</dt><dd>${esc(content?.preconditions)}</dd></div><div class="wide"><dt>测试数据</dt><dd>${esc(content?.test_data)}</dd></div></dl><div class="step-list">${steps}</div><p class="notice">${esc(pairText)} Harness 输入只包含当前正常用例、正常入口及页面观察；对照入口信息由工作台执行端保管。</p></div></section><section class="panel"><div class="panel-header"><h2>候选与运行</h2><span class="muted">${latest ? `v${latest.version} · ${esc(short(latest.sha256,20))}` : '候选尚未生成'}</span></div><div class="panel-body">${runs || '<p class="muted">目前没有候选运行记录。</p>'}${mediaHtml ? `<div class="source-box">${mediaHtml}</div>`:''}</div></section></div><aside class="panel"><div class="panel-header"><h2>建例来源</h2></div><div class="panel-body"><p>${esc(task.source?.external_id || '固定模板')}</p><p>任务状态：${esc(statusText(task.task_status))}</p><p>人工核对：${esc(statusText(task.human_review_status))}；尚未登记批准。</p><h3>Harness 启动记录</h3><ul>${harness}</ul><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/execution-records">查看项目执行记录</a></div></aside></div>`);
   const refresh=async()=>{if(BUILD_TERMINAL.has(task.task_status))return;try{const fresh=await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}`);if(!BUILD_TERMINAL.has(fresh.task_status)){setTimeout(refresh,1500);return;}renderBuildTaskDetail(project,fresh);}catch{}};
   if(!BUILD_TERMINAL.has(task.task_status)) setTimeout(refresh,1500);
@@ -396,18 +397,73 @@ async function renderBuildTasksRoute(project, taskId = null) {
   if(!taskId){const {tasks}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/build-tasks`);return renderBuildTasks(project,tasks);}
   const task=await api(`/api/build/tasks/${encodeURIComponent(taskId)}`);if(task.source?.project_id!==project.project_id)throw new ApiError('BUILD_TASK_NOT_FOUND',404);return renderBuildTaskDetail(project,task);
 }
+function executionSteps(run) {
+  if (run.caption_timeline?.steps?.length) return run.caption_timeline.steps;
+  return (run.step_coverage?.items || []).map((item) => {
+    const source = run.frozen_case_content?.steps?.find((step) => step.order === item.order);
+    const mismatch = item.attributed_errors?.find((entry) => entry.error?.type === 'ASSERTION_MISMATCH')?.error;
+    return { step_id: item.marker, order: item.order, action: source?.action || '原步骤动作未取得',
+      expected: source?.expected || '原步骤预期未取得', execution_status: item.execution_status,
+      actual: mismatch?.actual ?? '未单独采集实际值', assertion_expected: mismatch?.expected ?? null };
+  });
+}
+
+function failureSummary(run) {
+  if (!run.error) return '';
+  const expected = run.error.expected;
+  const actual = run.error.actual;
+  return `<div class="notice danger"><strong>${esc(statusText(run.error.type)||'执行失败')}</strong>${expected!=null?`<p>预期：${esc(expected)}</p><p>实际：${esc(actual??'未采集')}</p>`:'<p>本次执行未得到可核对的业务实际值。</p>'}<details><summary>查看原始错误</summary><pre>${esc(run.error.message||run.error.type)}</pre></details></div>`;
+}
+
 async function renderExecutionRecords(project) {
   const {records}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/execution-records`);
   setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'执行记录'}]);
   const recordsUrl = `#/projects/${encodeURIComponent(project.project_id)}/execution-records`;
-  const rows=records.map((run)=>`<tr><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td>${esc(short(run.candidate_sha256,16))}</td><td>${esc(run.run_id)}</td><td>${resultBadge(run.status)}</td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${recordsUrl}?run_id=${encodeURIComponent(run.run_id)}">查看详情</a> · <a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
-  const detail=records.map((run)=>`<article class="preview-item"><header><div><h3>${esc(run.executed_external_id)} · ${esc(run.run_id)}</h3><p>候选来源 ${esc(run.source_external_id)} v${run.source_case_version} · 当前执行 ${esc(run.executed_external_id)} v${run.executed_case_version}</p><p>候选 v${run.candidate_version} · SHA-256 ${esc(run.candidate_sha256)} · build ${esc(run.source_build_task_id)}</p></div>${resultBadge(run.status)}</header><p>入口：${esc(run.entry_route)} · 失败步骤：${esc(run.failure_step || '无')} · 媒体：${run.files.length}</p>${run.error ? `<p>${esc(run.error.type || run.error.message)}${run.error.expected ? ` · 期望 ${esc(run.error.expected)} / 实际 ${esc(run.error.actual)}`:''}</p>`:''}${run.specified_defect_detected?'对照验证检出指定缺陷（原始业务状态仍为失败）。':''}<ol>${(run.step_coverage?.items || []).map((step)=>`<li>${esc(step.marker)} · ${esc(statusText(step.execution_status))}${step.attributed_errors?.length?` · ${esc(step.attributed_errors[0].error?.expected)} / ${esc(step.attributed_errors[0].error?.actual)}`:''}</li>`).join('')}</ol><div class="source-box">${run.files.map((file)=>file.kind.endsWith('_screenshot')?`<a href="${buildMediaUrl(run.source_build_task_id,file.file_id)}" target="_blank" rel="noreferrer">查看截图 ${esc(file.file_name)}</a>`:file.kind.endsWith('_video')?`<label>录像 · ${esc(file.file_name)}<video controls preload="metadata" src="${buildMediaUrl(run.source_build_task_id,file.file_id)}"></video></label>`:`<a href="${buildMediaUrl(run.source_build_task_id,file.file_id)}" download>下载 Trace · ${esc(file.file_name)}</a>`).join('')}</div></article>`).join('');
-  showPage(`<div class="page-heading"><div><p class="eyebrow">CANDIDATE TRIAL RECORDS</p><h1>项目执行记录</h1><p>展示真实候选试跑记录；故障入口的原始结果保持失败，未登记为批准结果。</p></div></div>${projectTabs(project,'execution-records')}<section class="panel"><div class="panel-header"><h2>运行索引</h2><span class="muted">${records.length} 条</span></div><div class="panel-body">${rows?`<div class="table-wrap"><table><thead><tr><th>执行用例</th><th>生成来源</th><th>候选哈希</th><th>Run ID</th><th>原始结果</th><th>失败步骤</th><th>详情</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty"><h2>暂无执行记录</h2><p>从 TC-001、TC-002、TC-003 创建任务，明确启动生成并试跑正常入口；随后在任务详情启动对应对照入口。</p></div>'}</div></section><section class="panel"><div class="panel-header"><h2>步骤与媒体</h2></div><div class="panel-body preview-list">${detail || '<p class="muted">完成试跑后，这里会显示步骤、错误、截图、录像和 Trace。</p>'}</div></section>`);
-  const requestedRunId = route().query.get('run_id');
-  if (requestedRunId) {
-    const target = [...document.querySelectorAll('.preview-item')].find((item) => item.querySelector('h3')?.textContent.includes(requestedRunId));
-    if (target) { target.tabIndex = -1; target.style.scrollMarginTop = '72px'; target.scrollIntoView({ block:'start' }); target.focus({ preventScroll:true }); }
-  }
+  const selected=records.find((run)=>run.run_id===route().query.get('run_id')) || records.at(-1) || null;
+  const rows=records.map((run)=>`<tr${selected?.run_id===run.run_id?' class="selected-run"':''}><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td>${esc(short(run.candidate_sha256,16))}</td><td>${esc(run.run_id)}</td><td>${resultBadge(run.status)}</td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${recordsUrl}?run_id=${encodeURIComponent(run.run_id)}">查看详情</a> · <a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
+  const steps=selected?executionSteps(selected):[];
+  const derived=selected?.files.find((file)=>file.kind.endsWith('_caption_video'));
+  const original=selected?.files.find((file)=>file.kind.endsWith('_video')&&!file.kind.endsWith('_caption_video'));
+  const screenshot=selected?.files.find((file)=>file.kind.endsWith('_screenshot'));
+  const trace=selected?.files.find((file)=>file.kind.endsWith('_trace'));
+  const timelineReady=selected?.caption_timeline?.status==='VERIFIED' && Boolean(derived);
+  const stepCards=steps.map((step)=>{
+    const segment=timelineReady?selected.caption_timeline.presentation?.segments?.find((item)=>item.step_id===step.step_id):null;
+    const runnable=segment&&step.execution_status!=='NOT_EXECUTED';
+    return `<li class="execution-step" data-step-id="${esc(step.step_id)}"><button type="button" class="execution-step-select" data-step-seek="${esc(step.step_id)}" ${runnable?'':'disabled'} aria-label="${runnable?'定位到':'无法定位'}步骤 ${step.order}">${esc(step.order)}. ${esc(step.action)}</button><span class="badge ${step.execution_status==='FAILED'?'danger':step.execution_status==='PASSED'?'success':'warning'}">${esc(statusText(step.execution_status))}</span><dl><dt>预期</dt><dd>${esc(step.expected)}</dd><dt>实际</dt><dd>${esc(step.actual)}</dd>${step.execution_status==='FAILED'&&step.assertion_expected?`<dt>失败断言预期</dt><dd>${esc(step.assertion_expected)}</dd>`:''}</dl></li>`;
+  }).join('');
+  const detail=selected?`<article class="preview-item execution-detail" data-run-id="${esc(selected.run_id)}"><header><div><h3>${esc(selected.executed_external_id)} · ${esc(selected.run_id)}</h3><p>候选来源 ${esc(selected.source_external_id)} v${selected.source_case_version} · 当前执行 ${esc(selected.executed_external_id)} v${selected.executed_case_version}</p><p>候选 v${selected.candidate_version} · SHA-256 ${esc(selected.candidate_sha256)} · build ${esc(selected.source_build_task_id)}</p></div>${resultBadge(selected.status)}</header><p>入口：${esc(selected.entry_route)} · 失败步骤：${esc(selected.failure_step||'无')} · 运行器：${esc(selected.runner_version||'历史版本未记录')}</p>${failureSummary(selected)}${selected.specified_defect_detected?'<p>对照验证检出指定缺陷；原始业务状态仍为失败。</p>':''}<div class="execution-evidence-layout"><div class="execution-media"><h4>${derived?'带中文字幕的交付录像':'原始录像'}</h4>${derived||original?`<video data-testid="execution-video" controls preload="metadata" src="${buildMediaUrl(selected.source_build_task_id,(derived||original).file_id)}"></video><p id="execution-video-message" role="status">${timelineReady?'播放位置随步骤更新。':'此历史记录缺少已校准时间轴，无法精确定位；可查看原始录像和完整步骤说明。'}</p>`:'<p class="notice danger">本次运行没有可用录像。</p>'}${derived?`<a href="${buildMediaUrl(selected.source_build_task_id,derived.file_id)}" download="${esc(selected.executed_external_id)}-captioned.webm">下载带字幕视频</a>`:''}${original?`<a href="${buildMediaUrl(selected.source_build_task_id,original.file_id)}" target="_blank" rel="noreferrer">打开原始录像</a>`:''}${screenshot?`<a href="${buildMediaUrl(selected.source_build_task_id,screenshot.file_id)}" target="_blank" rel="noreferrer">查看本次截图</a>`:'<span>截图未采集</span>'}${trace?`<a href="${buildMediaUrl(selected.source_build_task_id,trace.file_id)}" download>下载本次 Trace</a>`:'<span>Trace 未采集</span>'}</div><div class="execution-steps"><h4>本次运行步骤</h4><p id="execution-playing-step">播放位置：尚未播放</p><ol>${stepCards}</ol></div></div></article>`:'<p class="muted">尚无运行记录。</p>';
+  showPage(`<div class="page-heading"><div><p class="eyebrow">CANDIDATE TRIAL RECORDS</p><h1>项目执行记录</h1><p>故障入口的原始结果保持失败；候选尚未批准。</p></div></div>${projectTabs(project,'execution-records')}<section class="panel"><div class="panel-header"><h2>运行索引</h2><span class="muted">${records.length} 条</span></div><div class="panel-body">${rows?`<div class="table-wrap"><table><thead><tr><th>执行用例</th><th>生成来源</th><th>候选哈希</th><th>Run ID</th><th>原始结果</th><th>失败步骤</th><th>详情</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty"><h2>暂无执行记录</h2><p>从用例创建任务并试跑后，记录会显示在这里。</p></div>'}</div></section><section class="panel"><div class="panel-header"><h2>步骤与媒体</h2></div><div class="panel-body">${detail}</div></section>`);
+  const video=document.querySelector('[data-testid="execution-video"]');
+  if(!video)return;
+  const disableSeeking=()=>document.querySelectorAll('[data-step-seek]').forEach((button)=>{button.disabled=true;});
+  video.addEventListener('error',()=>{document.querySelector('#execution-video-message').textContent='录像加载失败，请核对本次运行媒体；业务结果未改变。';disableSeeking();});
+  const checkDuration=()=>{
+    if(!Number.isFinite(video.duration)||video.duration<=0){
+      document.querySelector('#execution-video-message').textContent='这段录像缺少可校验时长，不能精确定位步骤；请查看原始录像。';
+      disableSeeking();
+    }
+  };
+  video.addEventListener('loadedmetadata',checkDuration);
+  if(video.readyState>=1)checkDuration();
+  if(!timelineReady)return;
+  const segments=selected.caption_timeline.presentation?.segments||[];
+  const playing=document.querySelector('#execution-playing-step');
+  const updatePlayback=()=>{
+    const segment=[...segments].reverse().find((item)=>video.currentTime>=item.action_start_seconds-0.08&&video.currentTime<item.end_seconds+0.08);
+    document.querySelectorAll('.execution-step').forEach((item)=>item.classList.toggle('playing',item.dataset.stepId===segment?.step_id));
+    playing.textContent=segment?`播放位置：步骤 ${steps.find((item)=>item.step_id===segment.step_id)?.order} · ${video.currentTime>=segment.result_start_seconds?'结果':'操作'}`:'播放位置：步骤间';
+  };
+  video.addEventListener('timeupdate',updatePlayback);
+  video.addEventListener('seeked',updatePlayback);
+  document.querySelectorAll('[data-step-seek]').forEach((button)=>button.addEventListener('click',()=>{
+    const segment=segments.find((item)=>item.step_id===button.dataset.stepSeek);if(!segment)return;
+    document.querySelectorAll('.execution-step').forEach((item)=>item.classList.toggle('selected',item.dataset.stepId===button.dataset.stepSeek));
+    const step=steps.find((item)=>item.step_id===button.dataset.stepSeek);
+    video.currentTime=step?.execution_status==='FAILED'
+      ? Math.max(segment.action_start_seconds,segment.result_start_seconds-0.35)
+      : segment.action_start_seconds;
+  }));
 }
 
 function focusExecutionRecord(runId) {

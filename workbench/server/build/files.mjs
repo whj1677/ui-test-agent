@@ -27,9 +27,11 @@ function category(relative, candidateRelative) {
   if (/\/\.playwright-mcp\/.*\.(?:yml|yaml)$/i.test(`/${relative}`)) return { kind: 'tool_snapshot', web_visible: false, content_type: 'text/yaml; charset=utf-8' };
   if (/\/playwright-report\.json$/i.test(`/${relative}`)) return { kind: 'test_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/verification\/normal\/(?:runs\/[^/]+\/)?artifacts\/.*\.png$/i.test(`/${relative}`)) return { kind: 'normal_screenshot', web_visible: false, content_type: 'image/png' };
+  if (/\/verification\/normal\/(?:runs\/[^/]+\/)?artifacts\/captioned\.webm$/i.test(`/${relative}`)) return { kind: 'normal_caption_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/normal\/(?:runs\/[^/]+\/)?artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'normal_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/normal\/(?:runs\/[^/]+\/)?artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'normal_trace', web_visible: false, content_type: 'application/zip' };
   if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/.*\.png$/i.test(`/${relative}`)) return { kind: 'counterexample_screenshot', web_visible: false, content_type: 'image/png' };
+  if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/captioned\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_caption_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'counterexample_trace', web_visible: false, content_type: 'application/zip' };
   if (/\/verification\/(?:normal|negative)\/(?:runs\/[^/]+\/)?artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };

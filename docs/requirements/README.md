@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0034-e2e01-caption-step-sync](REQ-0034-e2e01-caption-step-sync/current_state.md)：E2E-01 六用例录像字幕、可信步骤时间轴、双向联动及开发者浏览器自测；当前实施中。
+
 - [REQ-0032-test-site-six-cases](REQ-0032-test-site-six-cases/current_state.md)：独立设备台账站点的三组正常/故障入口、六条同预期配对用例、真实 Excel 与正式后端导出 JSON，以及 3 通过/3 指定业务失败的参考自检；不调用 Harness、模型或既有批准脚本。
 
 - [REQ-0031-ui-d2a-real-case-library](REQ-0031-ui-d2a-real-case-library/current_state.md)：将已选定的墨白极简界面通过同源 `/workspace/` 接入现有真实项目与用例后端，完成 xlsx/原生包导入、版本编辑、正式导出、跨项目再导入和重启读回；保留旧 UI，不调用 Harness、模型或业务脚本。

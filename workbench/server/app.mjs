@@ -110,7 +110,7 @@ async function sendBuildFile(response, buildStore, taskId, fileId) {
 async function sendBuildMedia(request, response, buildStore, taskId, fileId) {
   const task = await buildStore.getTask(taskId);
   const item = task?.files?.find((file) => file.file_id === fileId);
-  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|trace)$/.test(item.kind || '')) {
+  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|caption_video|trace)$/.test(item.kind || '')) {
     return sendJson(response, 404, { error: 'BUILD_MEDIA_NOT_FOUND' });
   }
   const mediaKind = item.kind.endsWith('_screenshot') ? 'screenshot' : item.kind.endsWith('_video') ? 'video' : 'trace';
@@ -285,9 +285,12 @@ export function createWorkbenchServer(options = {}) {
       if (buildStore && request.method === 'GET' && projectExecutionRecords) {
         const projectId = decodeURIComponent(projectExecutionRecords[1]);
         const tasks = (await buildStore.listTasks()).filter((task) => task.source?.project_id === projectId);
+        const project = caseStore ? await caseStore.getProject(projectId) : null;
         const records = tasks.flatMap((task) => (task.candidates || []).flatMap((candidate) => (candidate.trial_runs || []).map((run) => ({
           ...run, project_id: projectId, project_name: task.source.project_name, source_build_task_id: task.task_id,
           candidate_version: candidate.version, candidate_sha256: candidate.sha256,
+          frozen_case_content: project?.cases.find((item) => item.case_id === run.executed_case_id)
+            ?.versions.find((version) => version.version === run.executed_case_version)?.content || null,
           files: (task.files || []).filter((file) => run.media_file_ids?.includes(file.file_id)),
         }))));
         sendJson(response, 200, { records: records.sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))) });
