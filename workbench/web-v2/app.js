@@ -142,7 +142,33 @@ function filteredCases(project) {
     return (!query || `${item.external_id} ${item.title}`.toLocaleLowerCase().includes(query)) && (!state.module || item.module === state.module) && (!state.status || content?.status === state.status);
   });
 }
-function renderCases(project) {
+async function loadProjectTestOverview(project) {
+  const id = encodeURIComponent(project.project_id);
+  const [taskResult, recordResult] = await Promise.all([
+    api(`/api/case-library/projects/${id}/build-tasks`),
+    api(`/api/case-library/projects/${id}/execution-records`),
+  ]);
+  return { tasks: taskResult.tasks || [], records: recordResult.records || [] };
+}
+function projectTestOverview(project, activity) {
+  const { tasks, records } = activity;
+  const latestByCase = new Map();
+  for (const record of records) {
+    const key = record.executed_case_id || `${record.executed_external_id}@v${record.executed_case_version}`;
+    const previous = latestByCase.get(key);
+    if (!previous || String(record.started_at) >= String(previous.started_at)) latestByCase.set(key, record);
+  }
+  const caseResults = [...latestByCase.values()].sort((left, right) => left.executed_external_id.localeCompare(right.executed_external_id, 'en'));
+  const passed = caseResults.filter((record) => record.status === 'PASSED').length;
+  const failed = caseResults.filter((record) => record.status === 'FAILED').length;
+  const other = caseResults.length - passed - failed;
+  const latest = records.at(-1);
+  const recordsUrl = `#/projects/${encodeURIComponent(project.project_id)}/execution-records`;
+  const resultRows = caseResults.map((record) => `<a class="project-test-case" data-nav href="${recordsUrl}?run_id=${encodeURIComponent(record.run_id)}" aria-label="${esc(record.executed_external_id)} ${esc(statusText(record.status))}，查看测试详情"><span><strong>${esc(record.executed_external_id)}</strong><small>v${record.executed_case_version} · ${esc(fmtDate(record.finished_at || record.started_at))}${record.failure_step ? ` · ${esc(record.failure_step)}` : ''}</small></span>${resultBadge(record.status)}<span class="project-test-case-action">查看详情 →</span></a>`).join('');
+  return `<section class="panel project-test-overview"><div class="panel-header"><div><h2>测试概况</h2><span class="muted">${records.length ? `最近结果 · ${caseResults.length} 条用例 / ${records.length} 次运行 · 建例任务 ${tasks.length} 个` : '尚无测试运行记录'}</span></div><a class="button small" data-nav href="${recordsUrl}">查看全部测试记录</a></div><div class="panel-body"><div class="project-test-metrics"><div><span>已测试用例</span><strong>${caseResults.length}</strong></div><div><span>最近通过</span><strong>${passed}</strong></div><div><span>最近失败</span><strong>${failed}</strong></div><div><span>其他状态</span><strong>${other}</strong></div></div>${caseResults.length ? `<div class="project-test-case-list">${resultRows}</div>` : `<p class="muted project-test-empty">${tasks.length ? `已有 ${tasks.length} 个建例任务，尚未产生测试运行记录。` : '该项目还没有建例任务或测试运行。'}</p>`}${latest ? `<div class="project-test-latest"><span>最近运行：${esc(latest.executed_external_id)} · ${esc(statusText(latest.status))} · ${esc(fmtDate(latest.finished_at || latest.started_at))}</span><a class="button link" data-nav href="${recordsUrl}?run_id=${encodeURIComponent(latest.run_id)}">查看最近运行 →</a></div>` : ''}</div></section>`;
+}
+async function renderCases(project, activity = null) {
+  activity ||= await loadProjectTestOverview(project);
   setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name }, { label:'用例库' }]);
   const filtered = filteredCases(project); const pageCount = Math.max(1, Math.ceil(filtered.length / state.pageSize)); state.page = Math.min(state.page, pageCount);
   const start = (state.page - 1) * state.pageSize; const pageItems = filtered.slice(start, start + state.pageSize); const selected = selection(project.project_id);
@@ -158,16 +184,17 @@ function renderCases(project) {
   showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(project.project_id)}</p><h1>${esc(project.name)}</h1><p>${esc(project.description || '暂无项目说明')}</p></div><div class="actions"><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/settings">项目设置</a><a class="button primary" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/import">导入用例</a></div></div>
     ${projectTabs(project, 'cases')}
     <section class="summary-strip"><div><span>全部用例</span><strong>${project.cases.length}</strong></div><div><span>内容已确认</span><strong>${confirmed}</strong></div><div><span>内容待确认</span><strong>${project.cases.length - confirmed}</strong></div><div><span>项目修订</span><strong>r${project.revision}</strong></div></section>
+    ${projectTestOverview(project, activity)}
     <section class="panel"><div class="panel-header"><h2>项目用例</h2><span class="muted">默认每页 25 条</span></div><div class="panel-body">
       <div class="table-toolbar"><div class="filters"><label class="search"><span class="sr-only">搜索用例</span><input id="case-search" value="${esc(state.query)}" placeholder="按编号或标题搜索"></label>
         <select id="module-filter" aria-label="模块筛选"><option value="">全部模块</option>${modules.map((value) => `<option ${value === state.module ? 'selected' : ''}>${esc(value)}</option>`).join('')}</select>
         <select id="status-filter" aria-label="内容状态筛选"><option value="">全部内容状态</option><option value="CONFIRMED" ${state.status === 'CONFIRMED' ? 'selected' : ''}>内容已确认</option><option value="PENDING_CONFIRMATION" ${state.status === 'PENDING_CONFIRMATION' ? 'selected' : ''}>内容待确认</option></select></div>
         <div class="actions"><button class="button small" id="export-selected" ${selected.size ? '' : 'disabled'}>导出选中（${selected.size}）</button><button class="button small" id="export-all" ${project.cases.length ? '' : 'disabled'}>导出全部（${project.cases.length}）</button></div></div>
-      <p class="selection-note">已选择 ${selected.size} 条${selected.size && !pageItems.some((item) => selected.has(item.case_id)) ? '，当前筛选未显示已选用例' : ''}。自动化状态与最近执行结果本阶段未接入，因此不显示推测值。</p>
+      <p class="selection-note">已选择 ${selected.size} 条${selected.size && !pageItems.some((item) => selected.has(item.case_id)) ? '，当前筛选未显示已选用例' : ''}。</p>
       ${project.cases.length ? `<div class="table-wrap"><table><thead><tr><th><input id="page-select" class="checkbox" type="checkbox" aria-label="选择当前页"></th><th>编号 / 标题</th><th>模块</th><th>内容状态</th><th>版本</th><th>更新时间</th></tr></thead><tbody>${rows || '<tr><td colspan="6">当前筛选无结果</td></tr>'}</tbody></table></div>
       <div class="pagination"><span>第 ${state.page} / ${pageCount} 页，共 ${filtered.length} 条</span><div><button class="button small" id="prev-page" ${state.page <= 1 ? 'disabled' : ''}>上一页</button><button class="button small" id="next-page" ${state.page >= pageCount ? 'disabled' : ''}>下一页</button></div></div>` : '<div class="empty"><h2>暂无用例</h2><p>上传 Excel 或平台 JSON 包，预览确认后才会写入项目。</p></div>'}
     </div></section>`);
-  const rerender = () => renderCases(project);
+  const rerender = () => renderCases(project, activity);
   document.querySelector('#case-search')?.addEventListener('input', (event) => { state.query = event.target.value; state.page = 1; rerender(); });
   document.querySelector('#module-filter')?.addEventListener('change', (event) => { state.module = event.target.value; state.page = 1; rerender(); });
   document.querySelector('#status-filter')?.addEventListener('change', (event) => { state.status = event.target.value; state.page = 1; rerender(); });
@@ -372,9 +399,21 @@ async function renderBuildTasksRoute(project, taskId = null) {
 async function renderExecutionRecords(project) {
   const {records}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/execution-records`);
   setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'执行记录'}]);
-  const rows=records.map((run)=>`<tr><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td>${esc(short(run.candidate_sha256,16))}</td><td>${esc(run.run_id)}</td><td>${resultBadge(run.status)}</td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
+  const recordsUrl = `#/projects/${encodeURIComponent(project.project_id)}/execution-records`;
+  const rows=records.map((run)=>`<tr><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td>${esc(short(run.candidate_sha256,16))}</td><td>${esc(run.run_id)}</td><td>${resultBadge(run.status)}</td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${recordsUrl}?run_id=${encodeURIComponent(run.run_id)}">查看详情</a> · <a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
   const detail=records.map((run)=>`<article class="preview-item"><header><div><h3>${esc(run.executed_external_id)} · ${esc(run.run_id)}</h3><p>候选来源 ${esc(run.source_external_id)} v${run.source_case_version} · 当前执行 ${esc(run.executed_external_id)} v${run.executed_case_version}</p><p>候选 v${run.candidate_version} · SHA-256 ${esc(run.candidate_sha256)} · build ${esc(run.source_build_task_id)}</p></div>${resultBadge(run.status)}</header><p>入口：${esc(run.entry_route)} · 失败步骤：${esc(run.failure_step || '无')} · 媒体：${run.files.length}</p>${run.error ? `<p>${esc(run.error.type || run.error.message)}${run.error.expected ? ` · 期望 ${esc(run.error.expected)} / 实际 ${esc(run.error.actual)}`:''}</p>`:''}${run.specified_defect_detected?'对照验证检出指定缺陷（原始业务状态仍为失败）。':''}<ol>${(run.step_coverage?.items || []).map((step)=>`<li>${esc(step.marker)} · ${esc(statusText(step.execution_status))}${step.attributed_errors?.length?` · ${esc(step.attributed_errors[0].error?.expected)} / ${esc(step.attributed_errors[0].error?.actual)}`:''}</li>`).join('')}</ol><div class="source-box">${run.files.map((file)=>file.kind.endsWith('_screenshot')?`<a href="${buildMediaUrl(run.source_build_task_id,file.file_id)}" target="_blank" rel="noreferrer">查看截图 ${esc(file.file_name)}</a>`:file.kind.endsWith('_video')?`<label>录像 · ${esc(file.file_name)}<video controls preload="metadata" src="${buildMediaUrl(run.source_build_task_id,file.file_id)}"></video></label>`:`<a href="${buildMediaUrl(run.source_build_task_id,file.file_id)}" download>下载 Trace · ${esc(file.file_name)}</a>`).join('')}</div></article>`).join('');
   showPage(`<div class="page-heading"><div><p class="eyebrow">CANDIDATE TRIAL RECORDS</p><h1>项目执行记录</h1><p>展示真实候选试跑记录；故障入口的原始结果保持失败，未登记为批准结果。</p></div></div>${projectTabs(project,'execution-records')}<section class="panel"><div class="panel-header"><h2>运行索引</h2><span class="muted">${records.length} 条</span></div><div class="panel-body">${rows?`<div class="table-wrap"><table><thead><tr><th>执行用例</th><th>生成来源</th><th>候选哈希</th><th>Run ID</th><th>原始结果</th><th>失败步骤</th><th>详情</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty"><h2>暂无执行记录</h2><p>从 TC-001、TC-002、TC-003 创建任务，明确启动生成并试跑正常入口；随后在任务详情启动对应对照入口。</p></div>'}</div></section><section class="panel"><div class="panel-header"><h2>步骤与媒体</h2></div><div class="panel-body preview-list">${detail || '<p class="muted">完成试跑后，这里会显示步骤、错误、截图、录像和 Trace。</p>'}</div></section>`);
+  const requestedRunId = route().query.get('run_id');
+  if (requestedRunId) {
+    const target = [...document.querySelectorAll('.preview-item')].find((item) => item.querySelector('h3')?.textContent.includes(requestedRunId));
+    if (target) { target.tabIndex = -1; target.style.scrollMarginTop = '72px'; target.scrollIntoView({ block:'start' }); target.focus({ preventScroll:true }); }
+  }
+}
+
+function focusExecutionRecord(runId) {
+  if (!runId) return;
+  const target = [...document.querySelectorAll('.preview-item')].find((item) => item.querySelector('h3')?.textContent.includes(runId));
+  if (target) { target.tabIndex = -1; target.style.scrollMarginTop = '72px'; target.scrollIntoView({ block:'start' }); target.focus({ preventScroll:true }); }
 }
 
 function renderSettings(project) {
@@ -397,9 +436,9 @@ async function render(force = false) {
     if (parts[2] === 'import') return renderImport(project);
     if (parts[2] === 'settings') return renderSettings(project);
     if (parts[2] === 'build-tasks') return renderBuildTasksRoute(project, parts[3] || null);
-    if (parts[2] === 'execution-records') return renderExecutionRecords(project);
+    if (parts[2] === 'execution-records') { await renderExecutionRecords(project); focusExecutionRecord(value.query.get('run_id')); return; }
     if (parts[2] === 'cases' && parts[3]) { const item = project.cases.find((entry) => entry.case_id === parts[3]); if (!item) throw new ApiError('CASE_NOT_FOUND', 404); return renderCaseDetail(project, item, value.query.get('version')); }
-    return renderCases(project);
+    return await renderCases(project);
   } catch (error) { showFatal(error); }
 }
 
