@@ -1,0 +1,50 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0032",
+  "title": "TEST-SITE-01 设备台账六条通过失败案例",
+  "metadata": {"requirement_status":"已确认","governance_level":"G2","version":1,"last_updated":"2026-09-23"},
+  "original_input": "按附件 TEST-SITE-01_被测前端与六条通过失败用例_Codex任务.md 新建独立设备台账前端，准备三组正常/故障入口、六条同预期配对用例、真实 Excel 与正式后端导出 JSON，独立执行得到 3 PASSED/3 指定业务 FAILED，并通过 UI-D2A 工作台实际验证上传、预览、入库和导出。",
+  "user_requirements": [{"id":"UN-0032-01","status":"已确认","goal":"提供可在本机亲自操作的设备台账案例及六条完整人工用例。","constraints":"独立 trial-site 与独立数据目录；不调用 Harness、建例模型、既有批准脚本、批量调度或自愈；不修改 HOLD/LAB 和历史事实。","success_criteria":"三组正常/故障入口使用相同业务预期；独立参考执行为 3 通过和 3 个指定业务失败；Excel 经真实 UI-D2A 后端入库并导出正式 JSON，中文指南可重复操作。"}],
+  "confirmed_facts": [
+    "被测站点监听 127.0.0.1:4320，路由 /ui/a 到 /ui/f 共用同一数据和页面逻辑，仅故障入口注入三个指定实现缺陷。",
+    "固定设备数据为 DEV-001 到 DEV-006；查询、功率排序、设备详情各有一条正常用例和一条同预期故障用例。",
+    "工作台正式导入列为用例编号、标题、模块、前置条件、测试数据、步骤、逐步预期、内容状态。"
+  ],
+  "inferences_and_open_questions": ["当前 Codex 具体子型号和推理档位不可从仓库取得，记录为未知；不影响离线站点和确定性参考测试。"],
+  "development_requirements": [
+    {"id":"DR-0032-01","status":"已确认","requirement":"实现共享模板的设备台账页面与 a-f 六个路由，包含筛选、排序、查询、重置、计数、表格和详情弹窗。","acceptance_criteria":"a/c/e 满足业务预期；b 忽略状态筛选，d 在功率降序时交换第 2/3 行整行，f 仅将 DEV-005 详情额定功率显示为 320 kW。","constraints":"不重做工作台 UI，不增加生产上传接口，不改旧站点。"},
+    {"id":"DR-0032-02","status":"已确认","requirement":"交付六条一行一用例 Excel，并通过正式后端导入后导出 workbench/case-package-v1 JSON。","acceptance_criteria":"Excel 六条均内容已确认、逐步动作预期成对；后端预览新增 6、确认导入 6；JSON 重新导入预览新增 6。","constraints":"不得手工伪造正式导出包。"},
+    {"id":"DR-0032-03","status":"已确认","requirement":"提供独立 Playwright 参考自检和用户中文操作指南。","acceptance_criteria":"单 worker、零重试完整执行六条，原始结果 3 PASSED/3 FAILED；所有用例保留截图、录像和 trace；三条失败精确归属指定业务差异。","constraints":"参考测试不登记为人工首审或批准资产，不作为 Coding Agent 能力验收。"}
+  ],
+  "design_decisions": [
+    {"id":"DD-0032-01","dr_ids":["DR-0032-01"],"status":"已确认","summary":"trial-site 使用一个静态页面模块和 route profile 注入缺陷，Node 仅提供白名单静态文件。","rationale":"保证每组正常/故障入口除实现缺陷外使用同一 UI、数据和业务逻辑。"},
+    {"id":"DD-0032-02","dr_ids":["DR-0032-02"],"status":"已确认","summary":"Excel 采用当前后端映射列，JSON 只接受 CaseLibraryManager.exportPackage 的实际响应。","rationale":"让文件与当前 UI-D2A 真实解析和导出契约一致。"},
+    {"id":"DD-0032-03","dr_ids":["DR-0032-03"],"status":"已确认","summary":"六条测试共享配对步骤函数，Playwright 原生断言自然产生三个失败并输出原始报告与媒体。","rationale":"失败来自页面预设缺陷，不用 test.fail、skip、throw 或报告篡改制造。"}
+  ],
+  "interfaces_and_data_flow": [
+    "浏览器 -> 127.0.0.1:4320/ui/{a..f} -> trial-site 静态资源与固定设备数据。",
+    "UI_TRIAL_6_CASES.xlsx -> /workspace/ 文件上传 -> 后端预览 -> 独立项目确认入库 -> 正式导出 UI_TRIAL_6_CASES.workbench.json -> 新项目重新预览。"
+  ],
+  "module_document_impact": ["本次无需模块文档变更，原因：仅新增与正式工作台执行链隔离的 trial-site、六案例文件和专项参考测试，不改变现有产品模块、公开接口或配置语义；启动、路由、预设缺陷、文件闭环和未接入边界均由 workbench/trial-site 文档与 REQ-0032 维护。"],
+  "risks_and_rollback": ["站点与数据均在新增目录；回滚可删除新增目录和 REQ-0032，不影响旧工作台数据。","参考执行预期返回非零；必须从原始报告核对恰为指定三条业务失败，不能把退出码 1 当成测试基础设施故障。"],
+  "tasks": [
+    {"id":"TK-0032-01","dr_ids":["DR-0032-01"],"dd_ids":["DD-0032-01"],"status":"已完成","task":"实现并验证设备台账页面、固定数据和六路由。","verification_ids":["VT-0032-01"]},
+    {"id":"TK-0032-02","dr_ids":["DR-0032-02"],"dd_ids":["DD-0032-02"],"status":"已完成","task":"生成 Excel，经真实工作台导入后导出 JSON 并复验。","verification_ids":["VT-0032-02"]},
+    {"id":"TK-0032-03","dr_ids":["DR-0032-03"],"dd_ids":["DD-0032-03"],"status":"已完成","task":"编写独立参考测试、执行六条并形成指南和报告。","verification_ids":["VT-0032-03"]}
+  ],
+  "verification_items": [
+    {"id":"VT-0032-01","dr_ids":["DR-0032-01"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"站点 DOM/交互和三种缺陷精确符合冻结规格。","evidence_standard":"真实浏览器命令、退出码、断言和媒体路径","current_evidence":{"command":"npm run test:trial-site（脚本随后更名为 self-check:trial-site，配置未变）","exit_code":1,"test_count":6,"failure_count":3,"skipped_count":0,"log_path":"workbench/.local/ui-six-cases/reference/raw-report.json；六条均有截图、录像、trace，三个失败均为冻结规格指定业务差异"}},
+    {"id":"VT-0032-02","dr_ids":["DR-0032-02"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"Excel 后端预览/确认及正式 JSON 导出/重新预览均为六条。","evidence_standard":"独立数据目录、后端响应、浏览器可见反馈和产物路径","current_evidence":{"command":"真实 /workspace/ 浏览器流程；npm --prefix workbench test","exit_code":0,"test_count":83,"failure_count":0,"skipped_count":0,"log_path":"docs/requirements/REQ-0032-test-site-six-cases/logs/workbench-tests-rerun.log；独立数据根 workbench/.local/ui-six-cases/workbench-trial；因同一交付含预期非零的3个业务失败，正式状态统一保留人工待确认"}},
+    {"id":"VT-0032-03","dr_ids":["DR-0032-03"],"confirmation_status":"已确认","execution_status":"人工待确认","item":"完整参考执行得到 TC-001/002/003 通过，TC-004/005/006 在指定步骤业务断言失败。","evidence_standard":"Playwright 原始 JSON/HTML 报告、3/3 汇总、截图录像 trace","current_evidence":{"command":"npm run test:trial-site（脚本随后更名为 self-check:trial-site，配置未变）","exit_code":1,"test_count":6,"failure_count":3,"skipped_count":0,"log_path":"workbench/trial-site/REFERENCE_SELF_CHECK.md；workbench/.local/ui-six-cases/reference/"}}
+  ],
+  "verification_environment": {"working_directory":"仓库根与 workbench。","commands":["npm run self-check:trial-site（当前复跑命令）","npm --prefix workbench test","真实浏览器访问 127.0.0.1:4321/workspace/"],"environment":["Windows PowerShell","Node.js >=22","Chromium from locked @playwright/test 1.62.1","Codex 子型号/推理档位：未知"],"conclusion":["六条参考执行为 3 PASSED/3 指定业务 FAILED，六条均有三类媒体。","工作台回归 83/83 无失败；隔离浏览器流程完成 Excel 新增6、正式导出6、JSON复导新增6。","未启动 Harness、未调用模型、未登记人工首审或批准资产。"]},
+  "trace_current": [
+    {"un_id":"UN-0032-01","dr_id":"DR-0032-01","dd_id":"DD-0032-01","tk_id":"TK-0032-01","vt_id":"VT-0032-01","status":"已确认"},
+    {"un_id":"UN-0032-01","dr_id":"DR-0032-02","dd_id":"DD-0032-02","tk_id":"TK-0032-02","vt_id":"VT-0032-02","status":"已确认"},
+    {"un_id":"UN-0032-01","dr_id":"DR-0032-03","dd_id":"DD-0032-03","tk_id":"TK-0032-03","vt_id":"VT-0032-03","status":"已确认"}
+  ],
+  "trace_history": [{"version":1,"link":"用户附件与当前对话","status":"已确认","notes":"附件事实与用户补充共同冻结本轮范围"}],
+  "open_questions": ["无待确认问题；当前范围与验收均已由用户明确。"],
+  "prohibited_implementation": ["不得调用 Harness、建例模型、批量调度或自愈。","不得运行或修改既有批准脚本、HOLD/LAB 页面和历史结果。","不得用错误预期、test.fail、跳过、故意 throw、吞异常或改报告制造失败。","不得把参考脚本结果或演示记录冒充 Coding Agent 执行。"],
+  "changes": [{"date":"2026-09-23","version":1,"type":"新建并确认","description":"建立 TEST-SITE-01 独立站点、六用例、文件和验证交付范围","impact":"trial-site、用例样例和 UI-D2A 隔离导入验证","confirmed_by":"用户当前请求及附件"}]
+}

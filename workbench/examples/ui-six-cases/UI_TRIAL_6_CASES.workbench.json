@@ -1,0 +1,314 @@
+{
+  "schema": "workbench/case-package-v1",
+  "package_id": "case-package-0cf9e8c7-0f24-4f44-8574-138ac85ed030",
+  "exported_at": "2026-09-23T01:12:33.287Z",
+  "source_project": {
+    "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+    "name": "TEST-SITE-01 六案例导入验证",
+    "revision": 2
+  },
+  "cases": [
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-d360e3a5-498f-4f51-94af-f60774d9bd8e:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:2",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 2
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-d360e3a5-498f-4f51-94af-f60774d9bd8e",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-d360e3a5-498f-4f51-94af-f60774d9bd8e",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-001",
+        "title": "西站检修设备组合查询（入口 /ui/a）",
+        "module": "设备台账 / 组合查询",
+        "preconditions": "已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。",
+        "test_data": "站点=西站\n状态=检修\n排序=设备编号升序\n入口=http://127.0.0.1:4320/ui/a",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 打开指定入口，查看初始设备列表",
+            "expected": "显示“共6条”，按 DEV-001 至 DEV-006 升序展示"
+          },
+          {
+            "order": 2,
+            "action": "S02 选择“西站”和“检修”，暂不点击查询",
+            "expected": "筛选控件显示西站、检修；列表仍为6条"
+          },
+          {
+            "order": 3,
+            "action": "S03 点击“查询”，核对结果数量和设备行",
+            "expected": "显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-3e862889-5a13-46f8-b04a-de58a157dd15:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:3",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 3
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-002",
+        "title": "额定功率降序排列（入口 /ui/c）",
+        "module": "设备台账 / 功率排序",
+        "preconditions": "已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。",
+        "test_data": "站点=全部站点\n状态=全部状态\n排序=额定功率降序\n入口=http://127.0.0.1:4320/ui/c",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+            "expected": "初始仍显示共6条，第一行为 DEV-001"
+          },
+          {
+            "order": 2,
+            "action": "S02 点击“查询”，核对六条完整设备行顺序",
+            "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:4",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 4
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-003",
+        "title": "查看 DEV-005 设备详情（入口 /ui/e）",
+        "module": "设备台账 / 设备详情",
+        "preconditions": "已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。",
+        "test_data": "目标设备=DEV-005\n设备名称=冷却泵\n额定功率=220 kW\n入口=http://127.0.0.1:4320/ui/e",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 在 DEV-005 行点击“详情”",
+            "expected": "打开标题为“设备详情 · DEV-005”的弹窗"
+          },
+          {
+            "order": 2,
+            "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW"
+          },
+          {
+            "order": 3,
+            "action": "S03 点击“关闭”",
+            "expected": "详情弹窗关闭并返回设备列表"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-68fa06f1-ad5c-40f2-86ab-ffb79071294b:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:5",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 5
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-68fa06f1-ad5c-40f2-86ab-ffb79071294b",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-68fa06f1-ad5c-40f2-86ab-ffb79071294b",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-004",
+        "title": "西站检修设备组合查询（入口 /ui/b）",
+        "module": "设备台账 / 组合查询",
+        "preconditions": "已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。",
+        "test_data": "站点=西站\n状态=检修\n排序=设备编号升序\n入口=http://127.0.0.1:4320/ui/b",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 打开指定入口，查看初始设备列表",
+            "expected": "显示“共6条”，按 DEV-001 至 DEV-006 升序展示"
+          },
+          {
+            "order": 2,
+            "action": "S02 选择“西站”和“检修”，暂不点击查询",
+            "expected": "筛选控件显示西站、检修；列表仍为6条"
+          },
+          {
+            "order": 3,
+            "action": "S03 点击“查询”，核对结果数量和设备行",
+            "expected": "显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-08408afe-af8e-46c7-8780-82e27668466f:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:6",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 6
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-08408afe-af8e-46c7-8780-82e27668466f",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-08408afe-af8e-46c7-8780-82e27668466f",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-005",
+        "title": "额定功率降序排列（入口 /ui/d）",
+        "module": "设备台账 / 功率排序",
+        "preconditions": "已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。",
+        "test_data": "站点=全部站点\n状态=全部状态\n排序=额定功率降序\n入口=http://127.0.0.1:4320/ui/d",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+            "expected": "初始仍显示共6条，第一行为 DEV-001"
+          },
+          {
+            "order": 2,
+            "action": "S02 点击“查询”，核对六条完整设备行顺序",
+            "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0:case-04216ec1-a074-46b6-9b71-3e5dbc210f5a:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:7",
+        "file_name": "UI_TRIAL_6_CASES.xlsx",
+        "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+        "sheet": "六条用例",
+        "row": 7
+      },
+      "lineage": [
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-04216ec1-a074-46b6-9b71-3e5dbc210f5a",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-23T01:12:03.361Z"
+        },
+        {
+          "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+          "case_id": "case-04216ec1-a074-46b6-9b71-3e5dbc210f5a",
+          "version": 1,
+          "exported_at": "2026-09-23T01:12:33.287Z"
+        }
+      ],
+      "content": {
+        "external_id": "TC-006",
+        "title": "查看 DEV-005 设备详情（入口 /ui/f）",
+        "module": "设备台账 / 设备详情",
+        "preconditions": "已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。",
+        "test_data": "目标设备=DEV-005\n设备名称=冷却泵\n额定功率=220 kW\n入口=http://127.0.0.1:4320/ui/f",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 在 DEV-005 行点击“详情”",
+            "expected": "打开标题为“设备详情 · DEV-005”的弹窗"
+          },
+          {
+            "order": 2,
+            "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW"
+          },
+          {
+            "order": 3,
+            "action": "S03 点击“关闭”",
+            "expected": "详情弹窗关闭并返回设备列表"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  ]
+}

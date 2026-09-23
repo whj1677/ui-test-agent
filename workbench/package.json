@@ -8,6 +8,8 @@
   },
   "scripts": {
     "start": "node server/index.mjs",
+    "start:trial-site": "node trial-site/server.mjs",
+    "self-check:trial-site": "playwright test --config trial-site/reference/playwright.config.mjs",
     "register:approved": "node server/register-approved.mjs",
     "register:reviewed": "node server/register-reviewed-asset.mjs",
     "authorize:m2c-revalidation": "node server/register-m2c-revalidation.mjs",

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>设备台账 · TEST-SITE-01</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">TEST-SITE-01 · 独立被测前端</p>
+      <h1>设备台账</h1>
+      <p>查询设备、核对功率排序，并查看设备详情。</p>
+    </div>
+    <span id="route-badge" class="route-badge"></span>
+  </header>
+  <main>
+    <section class="filter-panel" aria-labelledby="filter-title">
+      <div class="section-heading"><h2 id="filter-title">查询条件</h2><span>修改条件后请点击“查询”</span></div>
+      <div class="filters">
+        <label><span>所属站点</span><select id="station-filter"><option value="ALL">全部站点</option><option value="东站">东站</option><option value="西站">西站</option></select></label>
+        <label><span>设备状态</span><select id="status-filter"><option value="ALL">全部状态</option><option value="运行">运行</option><option value="检修">检修</option></select></label>
+        <label><span>排序方式</span><select id="sort-filter"><option value="ID_ASC">设备编号升序</option><option value="POWER_DESC">额定功率降序</option></select></label>
+        <div class="filter-actions"><button id="query-button" class="primary" type="button">查询</button><button id="reset-button" type="button">重置</button></div>
+      </div>
+    </section>
+    <section class="table-panel" aria-labelledby="list-title">
+      <div class="section-heading"><h2 id="list-title">设备列表</h2><strong id="result-count">共6条</strong></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>设备编号</th><th>设备名称</th><th>所属站点</th><th>状态</th><th class="number">额定功率</th><th>操作</th></tr></thead>
+          <tbody id="device-rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <div id="modal-root"></div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
