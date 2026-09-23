@@ -100,4 +100,8 @@
 | `node --test tests/e2e01-caption-timeline.test.mjs` | 退出码0；4/4 | Trace→PTS映射契约、相邻步骤门槛、缺证降级、v1/v2字幕媒体索引分类 |
 | `node --check server/build/caption-video.mjs`、`node --check server/build/trial-timeline.mjs`、`node --check server/build/manager.mjs`、`node --check web-v2/app.js`及新增校准脚本 | 退出码0 | 受影响文件语法检查 |
 
-本批未执行Harness、建例模型、候选或被测站点；未改三份候选、业务断言、用例和人工批准。开发收尾仍未完成：虽修复run_id串记录并完成独立时钟校准，但六条既有媒体均不满足逐条精确跳转证据门槛，尚无新产品运行或可展示的 `trial-timeline-v2` 记录。候选业务结果保持历史状态；不要把本节工程校准说成六条产品时间轴通过。
+本批未执行Harness、建例模型或被测站点；未改三份候选、业务断言、用例和人工批准。开发收尾仍未完成：虽修复run_id串记录并完成独立时钟校准，但六条既有媒体均不满足逐条精确跳转证据门槛，尚无新产品运行或可展示的 `trial-timeline-v2` 记录。候选业务结果保持历史状态；不要把本节工程校准说成六条产品时间轴通过。
+
+### 产品重录阻塞核查
+
+旧六条逐条映射均被当前判定门槛拒绝，产品级重录确有必要；重录必须由已加载 `e2e01-caption-timeline-v2` 的工作台运行器完成。只读核对 `http://127.0.0.1:4322/api/health` 确认授权身份为 `e2e01-six-case-project-20260923`、目标项目为 `project-61579c25-2833-4c41-b592-357e1b306026`、`active_run_id` 与 `active_build_task_id` 均为空；监听进程为 PID 31856、命令行为 `server/index.mjs`。受控重启操作被执行环境策略拒绝，服务未被停止；没有改用强制终止，也没有启动第二个服务并与原服务共写数据目录。因此本轮产品重录数量为0，尚未生成新run_id或 `trial-timeline-v2` 产品派生版。此项是运行环境阻塞，不是用户需要排错；工作台当前可查看六条历史结果/录像，但其精确步骤定位继续禁用。

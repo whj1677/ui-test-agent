@@ -11,6 +11,7 @@
 
 | 版本 | 链路 | 状态 | 说明 |
 |---:|---|---|---|
+| 5 | workbench/docs/E2E_01_CAPTION_SELF_TEST.md | 开发自测部分完成，产品时间映射未完成 | 目标4322服务空闲且项目/授权身份核对一致；受控重启被执行策略拒绝，产品重录为0；未强停服务或并发共享数据目录。 |
 | 4 | workbench/docs/E2E_01_CAPTION_SELF_TEST.md | 开发自测部分完成，产品时间映射未完成 | 无效run_id串记录已修复；增加动态视觉校准标记后独立WebM校准通过；历史六条保留字幕和结果但均无精确跳转，未重录。 |
 | 3 | workbench/docs/E2E_01_CAPTION_SELF_TEST.md | 开发自测部分完成，产品时间映射未完成 | 无效run_id串记录已修复；独立WebM校准完成；历史六条保留字幕和结果但均无精确跳转，未重录。 |
 | 1 | workbench/docs/E2E_01_CAPTION_SELF_TEST.md | 实施登记 | 新建需求包并冻结自测清单 |
