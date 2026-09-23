@@ -9,6 +9,7 @@ const state = {
 const app = document.querySelector('#app');
 const loading = document.querySelector('#page-loading');
 const breadcrumbs = document.querySelector('#breadcrumbs');
+const sideNav = document.querySelector('.side-nav');
 const modalRoot = document.querySelector('#modal-root');
 const errorLabels = {
   WORKBENCH_UNREACHABLE: '无法连接工作台服务，请确认前台服务仍在运行。',
@@ -45,6 +46,15 @@ function selection(projectId) { if (!state.selected.has(projectId)) state.select
 function toast(message, kind = '') { const node = document.querySelector('#toast'); node.textContent = message; node.className = `toast visible ${kind}`; clearTimeout(toast.timer); toast.timer = setTimeout(() => { node.className = 'toast'; }, 3600); }
 function messageFor(error) { return errorLabels[error?.code || error?.message] || `操作失败：${error?.code || error?.message || 'UNKNOWN'}`; }
 function setService(ok) { document.querySelector('.top-status').classList.toggle('error', !ok); document.querySelector('#service-label').textContent = ok ? '服务就绪 · 真实后端' : '服务连接失败'; }
+function setSidebarNavigation(project, section = 'projects') {
+  const link = (label, icon, href, active) => `<a class="side-link${active ? ' active' : ''}" data-nav href="${href}"${active ? ' aria-current="page"' : ''}><span class="nav-icon" aria-hidden="true">${icon}</span>${label}</a>`;
+  const disabled = (label, icon) => `<span class="side-link disabled" aria-disabled="true"><span class="nav-icon" aria-hidden="true">${icon}</span>${label}<small>请先选择项目</small></span>`;
+  const id = project && encodeURIComponent(project.project_id);
+  sideNav.innerHTML = link('项目', '◇', '#/projects', section === 'projects') +
+    (id ? link('建例任务', '○', `#/projects/${id}/build-tasks`, section === 'build-tasks') +
+      link('执行记录', '□', `#/projects/${id}/execution-records`, section === 'execution-records') :
+      disabled('建例任务', '○') + disabled('执行记录', '□'));
+}
 function isDirty() { return Boolean(state.editing?.dirty); }
 function go(hash, force = false) {
   if (!force && isDirty() && !confirm('当前修改尚未保存，离开后草稿会丢失。是否继续？')) return false;
@@ -85,6 +95,7 @@ function setBreadcrumb(items) { breadcrumbs.innerHTML = items.map((item, index) 
 function showPage(html) { loading.hidden = true; app.hidden = false; app.innerHTML = html; }
 function showFatal(error) {
   loading.hidden = true; app.hidden = false; state.error = error; setService(false);
+  setSidebarNavigation(null);
   showPage(`<section class="empty"><h2>无法读取真实数据</h2><p>${esc(messageFor(error))}</p><button class="button primary" id="retry">重新连接</button></section>`);
   document.querySelector('#retry')?.addEventListener('click', () => render(true));
 }
@@ -100,6 +111,7 @@ function openModal({ title, body, confirmLabel = '确认', onConfirm }) {
 }
 
 function renderProjects() {
+  setSidebarNavigation(null);
   setBreadcrumb([{ label:'项目' }]);
   const cards = state.projects.map((project, index) => `<article class="project-card" data-project-id="${esc(project.project_id)}">
     <div class="project-card-top"><span class="project-symbol">${String(index + 1).padStart(2, '0')}</span><span class="badge ${project.cases.some((item) => item.status !== 'CONFIRMED') ? 'warning' : 'success'}">${project.cases.some((item) => item.status !== 'CONFIRMED') ? '有待确认内容' : '内容已核对'}</span></div>
@@ -370,6 +382,7 @@ async function render(force = false) {
     if (!parts.length || parts[0] !== 'projects') return go('#/projects', true);
     if (parts.length === 1) return renderProjects();
     const projectId = parts[1]; if (!state.project || state.project.project_id !== projectId || force) await loadProject(projectId); const project = state.project;
+    setSidebarNavigation(project, parts[2] === 'build-tasks' ? 'build-tasks' : parts[2] === 'execution-records' ? 'execution-records' : 'projects');
     if (parts[2] === 'import') return renderImport(project);
     if (parts[2] === 'settings') return renderSettings(project);
     if (parts[2] === 'build-tasks') return renderBuildTasksRoute(project, parts[3] || null);
