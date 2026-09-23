@@ -126,3 +126,32 @@ test('versioned derived caption video is indexed as caption media without replac
     assert.deepEqual(videos.map((file) => file.file_name).sort(), ['captioned-v2.webm', 'captioned.webm']);
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
+
+test('step replay, source screenshots and observer record are independently indexed', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), `e2e01-step-replay-files-${randomUUID()}-`));
+  try {
+    const taskRoot = path.join(root, 'task');
+    const attemptRoot = path.join(taskRoot, 'attempts', 'attempt-01-initial');
+    const candidatePath = path.join(attemptRoot, 'workspace', 'output', 'candidate.spec.mjs');
+    const runRoot = path.join(attemptRoot, 'verification', 'normal', 'runs', 'run-test');
+    const artifacts = path.join(runRoot, 'artifacts');
+    await fs.mkdir(path.dirname(candidatePath), { recursive: true });
+    await fs.mkdir(path.join(artifacts, 'step-evidence'), { recursive: true });
+    await fs.mkdir(path.join(runRoot, 'observer-entry'), { recursive: true });
+    await fs.writeFile(candidatePath, 'candidate bytes');
+    await fs.writeFile(path.join(artifacts, 'step-replay-v1.webm'), 'new replay bytes');
+    await fs.writeFile(path.join(artifacts, 'step-evidence', 'case_step_1-after.png'), 'step image');
+    await fs.writeFile(path.join(artifacts, 'step-evidence', 'step-observations.ndjson'), '{}\n');
+    await fs.writeFile(path.join(runRoot, 'observer-entry', 'observed.spec.mjs'), 'wrapper');
+    const indexed = await indexAttemptFiles({ taskRoot, attemptRoot, candidatePath, attemptId: 'attempt-01-initial', runId: 'run-test' });
+    assert.deepEqual(indexed.unexpected, []);
+    assert.equal(indexed.files.find((file) => file.kind === 'normal_step_replay_video')?.file_name, 'step-replay-v1.webm');
+    assert.equal(indexed.files.find((file) => file.kind === 'normal_screenshot')?.file_name, 'case_step_1-after.png');
+    assert.equal(indexed.files.find((file) => file.kind === 'step_observations')?.file_name, 'step-observations.ndjson');
+    assert(indexed.files.every((file) => /^[A-F0-9]{64}$/.test(file.sha256)));
+  } finally {
+    if (path.dirname(path.resolve(root)) !== path.resolve(os.tmpdir()) || !path.basename(root).startsWith('e2e01-step-replay-files-'))
+      throw new Error('UNSAFE_TEMP_CLEANUP_TARGET');
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});

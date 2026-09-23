@@ -49,24 +49,37 @@ export async function inspectPlaywrightRuntime({ candidatePath, runtimeRoot = ro
 
 export async function verifyCandidate({
   candidatePath, browserExecutable, fixtureUrl, runDirectory, signal,
+  stepObservation = null,
   runtimeRoot = root, configPath = path.join(runtimeRoot, 'config', 'playwright.config.mjs'),
 }) {
   const reportPath = path.join(runDirectory, 'playwright-report.json');
   await mkdir(runDirectory, { recursive: true });
   const runtime = await inspectPlaywrightRuntime({ candidatePath, runtimeRoot, configPath });
+  if (stepObservation && !runtime.consistent) throw new Error('STEP_OBSERVER_PLAYWRIGHT_INSTALL_MISMATCH');
+  let entryPath = candidatePath;
+  if (stepObservation) {
+    const observerPath = path.join(runtimeRoot, 'server', 'build', 'step-observer.mjs');
+    const wrapperDir = path.join(runDirectory, 'observer-entry');
+    await mkdir(wrapperDir, { recursive: true });
+    entryPath = path.join(wrapperDir, 'observed.spec.mjs');
+    const { writeFile } = await import('node:fs/promises');
+    await writeFile(entryPath, `import { installStepObserver } from ${JSON.stringify(new URL(`file:///${observerPath.replaceAll('\\', '/')}`).href)};\n` +
+      `installStepObserver(${JSON.stringify({ directory: path.join(runDirectory, 'artifacts', 'step-evidence'), identity: stepObservation })});\n` +
+      `await import(${JSON.stringify(new URL(`file:///${candidatePath.replaceAll('\\', '/')}`).href)});\n`);
+  }
   const cli = runtime.cli_path;
   const config = runtime.config_path;
   const env = allowedEnvironment({
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
     PROBE_URL: fixtureUrl,
-    PROBE_CANDIDATE_DIR: path.dirname(candidatePath),
+    PROBE_CANDIDATE_DIR: path.dirname(entryPath),
     PROBE_REPORT_PATH: reportPath,
     PROBE_OUTPUT_DIR: path.join(runDirectory, 'artifacts'),
   });
   // Playwright treats positional file arguments as regular-expression filters
   // relative to testDir; an absolute Windows path is not a stable filter.
-  const processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(candidatePath), '--config', config], {
-    cwd: path.dirname(candidatePath), env, timeoutMs: 60_000, signal,
+  const processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(entryPath), '--config', config], {
+    cwd: path.dirname(entryPath), env, timeoutMs: 60_000, signal,
   });
   let report = null;
   try { report = JSON.parse(await readFile(reportPath, 'utf8')); } catch {}

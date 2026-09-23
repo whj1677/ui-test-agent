@@ -22,16 +22,18 @@ test('E2E-01 reaches human review only after a passing normal run and the specif
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, { ...negative, media_file_ids: [] }] }), false);
 });
 
-test('caption runner requires verified timeline and four registered media for both lanes', () => {
+test('new trial readiness requires execution-time replay and four registered media for both lanes', () => {
   const hash = 'C'.repeat(64);
   const base = { candidate_sha256: hash, same_candidate_hash: true, technical_error: null,
-    runner_version: 'e2e01-caption-timeline-v3', caption_timeline: { schema: 'workbench/trial-timeline-v2', status: 'VERIFIED' },
-    media_file_ids: ['screenshot', 'video', 'trace', 'caption-video'] };
+    runner_version: 'e2e01-step-evidence-replay-v1', step_replay: { schema: 'workbench/step-evidence-replay-v1', status: 'READY', evidence_complete: true },
+    media_file_ids: ['screenshot', 'video', 'trace', 'step-replay'] };
   const normal = { ...base, run_type: 'normal', status: 'PASSED', complete_pass: true, step_coverage: { complete: true } };
   const negative = { ...base, run_type: 'negative', status: 'FAILED', complete_pass: false, specified_defect_detected: true };
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, negative] }), true);
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, runner_version: 'e2e01-caption-timeline-v3' }, negative] }), false);
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, runner_version: 'e2e01-caption-timeline-v2' }, negative] }), false);
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, runner_version: 'e2e01-caption-timeline-v1' }, negative] }), false);
   assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [normal, { ...negative, media_file_ids: base.media_file_ids.slice(0, 3) }] }), false);
-  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, caption_timeline: { status: 'UNAVAILABLE' } }, negative] }), false);
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, step_replay: { status: 'UNAVAILABLE' } }, negative] }), false);
+  assert.equal(e2eTrialReadiness({ sha256: hash, trial_runs: [{ ...normal, step_replay: { status: 'READY', evidence_complete: false } }, negative] }), false);
 });

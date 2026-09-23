@@ -3,13 +3,20 @@
   "req_id": "REQ-0034",
   "title": "E2E-01 录像字幕与步骤联动及开发者自测",
   "metadata": {
-    "requirement_status": "开发未完成：详情组录像时间映射证据不足",
+    "requirement_status": "开发未完成：新版服务切换受执行策略阻止，六条产品回放未验证",
     "governance_level": "G2",
-    "version": 6,
+    "version": 7,
     "last_updated": "2026-09-23"
   },
-  "original_input": "用户本轮任务：E2E-01 录像字幕与步骤联动补齐，并完成开发者端到端自测。原文保留在当前对话，不转发给建例器。",
+  "original_input": "用户本轮方案变更：保留原始连续录像且不冒称精确定位；执行时直接绑定步骤截图与真实结果，另行合成明确标识为非原始连续录像的中文步骤证据回放。工程有序采集验证后先跑详情组，可靠再跑查询和排序组；六条产品运行及浏览器自测完成才交付。原文保留在当前对话，不转发给建例器。",
   "user_requirements": [
+    {
+      "id": "UN-0034-02",
+      "status": "已确认",
+      "goal": "原始连续录像与执行时采集的中文步骤证据回放分开提供，回放章节支持准确跳转、字幕可独立下载；原录像精确定位仍未完成。",
+      "constraints": "不改候选、原用例、业务断言、被测站点、历史媒体或批准状态；Harness与建例模型调用均为0；最多六条产品运行，详情组有依据修复后可追加正常/故障各一次。",
+      "success_criteria": "工程静态页证明有序采图与错误保真；详情组先核对通过后其余四条均从工作台试跑；六条实际结果、中文步骤截图、回放章节和独立视频经真实浏览器检查。"
+    },
     {
       "id": "UN-0034-01",
       "status": "已确认",
@@ -35,6 +42,13 @@
   ],
   "development_requirements": [
     {
+      "id": "DR-0034-02",
+      "status": "工程实现已验证；产品试跑未完成",
+      "requirement": "在同一Playwright Test worker中包装现有test.step回调并同步采集开始前/结束后/失败后画面，失败采图不覆盖业务原异常；报告、步骤证据、回放使用同一运行身份和冻结步骤事实。",
+      "acceptance_criteria": "短步、纯断言、失败清理与采图异常的工程验证；六条产品运行图片内容和业务结果核对；章节范围来自实际合成输出，未执行步骤无片段。",
+      "constraints": "回放显著标记非原始连续录像；不以Trace画面拟合作为回放前提，不虚构实际值和动作片段。"
+    },
+    {
       "id": "DR-0034-01",
       "status": "运行身份已修复；详情组产品重录后时间映射证据不足，其余组按约定暂停",
       "requirement": "运行记录按明确run_id精确选择；缺省只按started_at选择最新，有参目标无效或跨项目时仅提示并由用户主动返回；录像精确定位需要匹配同页Trace画面与实际解码WebM帧，记录映射来源、残差和精度并拒绝会跨相邻步骤的不确定性。",
@@ -43,6 +57,13 @@
     }
   ],
   "design_decisions": [
+    {
+      "id": "DD-0034-02",
+      "dr_ids": ["DR-0034-02"],
+      "status": "工程实现已验证；产品试跑未完成",
+      "summary": "通过独立wrapper在同一锁定Playwright安装中包裹候选test.step；完成回调并同步截图后才返回候选。按本次步骤证据合成停帧式中文回放，保留原WebM，章节使用合成视频自身时间。",
+      "rationale": "普通设备页的静止或近似画面及短断言无法以Trace/WebM视觉拟合证明唯一原录像时间，执行时关联比倒推可靠。"
+    },
     {
       "id": "DD-0034-01",
       "dr_ids": [
@@ -64,6 +85,14 @@
   ],
   "tasks": [
     {
+      "id": "TK-0034-02",
+      "dr_ids": ["DR-0034-02"],
+      "dd_ids": ["DD-0034-02"],
+      "status": "工程实现已验证；产品试跑未完成",
+      "task": "实现步骤观察、中文回放与工作台双媒体入口；工程样例后试跑详情组，再试跑其余四条并做六条浏览器自测。",
+      "verification_ids": ["VT-0034-02"]
+    },
+    {
       "id": "TK-0034-01",
       "dr_ids": [
         "DR-0034-01"
@@ -79,6 +108,22 @@
     }
   ],
   "verification_items": [
+    {
+      "id": "VT-0034-02",
+      "dr_ids": ["DR-0034-02"],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "观察适配器有序采集、六条产品运行及工作台/独立媒体真实浏览器检查。",
+      "evidence_standard": "命令、退出码、截图、视频解码画面、运行ID与哈希",
+      "current_evidence": {
+        "command": "node tests/step-observer.integration.mjs && node tests/step-replay-browser.integration.mjs",
+        "exit_code": 0,
+        "test_count": 35,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/.local/step-observer-check-YO7U01/ and workbench/.local/step-replay-browser/ (engineering only)"
+      }
+    },
     {
       "id": "VT-0034-01",
       "dr_ids": [
@@ -105,16 +150,27 @@
       "node --test tests/e2e01-caption-timeline.test.mjs",
       "node tests/e2e01-caption-browser.integration.mjs",
       "node tests/e2e01-product-unavailable-browser.integration.mjs",
+      "node tests/step-observer.integration.mjs",
+      "node tests/step-replay-browser.integration.mjs",
+      "npm test",
       "node --check server/build/caption-video.mjs && node --check server/build/trial-timeline.mjs && node --check web-v2/app.js"
     ],
     "environment": [
       "本机Node锁定依赖；Playwright 1.62.1；工作台4322；原六条运行使用独立数据目录workbench/.local/six-case-e2e；校准媒体留在workbench/.local/e2e01-video-clock-calibration-*。"
     ],
     "conclusion": [
-      "v2服务实际用于详情组2次产品运行；业务结果为TC-003 PASSED、TC-006指定断言FAILED，但原视频画面缺乏唯一时间锚且短步骤精度不足，未生成新字幕版。v3安全拒绝重复画面锚已加载；其余四条按首组门槛暂停，整体开发自测未完成。"
+      "历史v2服务实际用于详情组2次产品运行并保留业务结果；当前新方案通过工程步骤采图和回放浏览器夹具，但4322仍加载v3，正常重启被执行策略拒绝。本批新版产品运行0次、六条回放未验证，整体开发自测未完成。"
     ]
   },
   "trace_current": [
+    {
+      "un_id": "UN-0034-02",
+      "dr_id": "DR-0034-02",
+      "dd_id": "DD-0034-02",
+      "tk_id": "TK-0034-02",
+      "vt_id": "VT-0034-02",
+      "status": "工程回放验证通过；目标服务策略阻断新版加载，产品六条未执行"
+    },
     {
       "un_id": "UN-0034-01",
       "dr_id": "DR-0034-01",
@@ -125,6 +181,12 @@
     }
   ],
   "trace_history": [
+    {
+      "version": 7,
+      "link": "workbench/docs/E2E_01_CAPTION_SELF_TEST.md",
+      "status": "开发未完成，产品六条步骤证据回放未验证",
+      "notes": "执行时有序采图和中文回放工程验证完成；目标服务正常切换命令被执行策略拒绝，保留v3服务与31条历史记录，新产品运行0次。"
+    },
     {
       "version": 6,
       "link": "workbench/docs/E2E_01_CAPTION_SELF_TEST.md",

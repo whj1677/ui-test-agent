@@ -110,7 +110,7 @@ async function sendBuildFile(response, buildStore, taskId, fileId) {
 async function sendBuildMedia(request, response, buildStore, taskId, fileId) {
   const task = await buildStore.getTask(taskId);
   const item = task?.files?.find((file) => file.file_id === fileId);
-  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|caption_video|trace)$/.test(item.kind || '')) {
+  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|caption_video|step_replay_video|trace)$/.test(item.kind || '')) {
     return sendJson(response, 404, { error: 'BUILD_MEDIA_NOT_FOUND' });
   }
   const mediaKind = item.kind.endsWith('_screenshot') ? 'screenshot' : item.kind.endsWith('_video') ? 'video' : 'trace';
