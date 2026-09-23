@@ -10,12 +10,14 @@ export const M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID = 'm2c-wait-fix-validation
 export const M3B2_PROJECT_CASE_AUTHORIZATION_ID = 'm3b2-project-case-run-20260921';
 export const M4A_QUERY_CASE_AUTHORIZATION_ID = 'm4a-query-case-run-20260922';
 export const M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID = 'm4a-query-case-flash-retry-20260922';
+export const E2E01_PROJECT_CASE_AUTHORIZATION_ID = 'e2e01-six-case-project-20260923';
 const AUTHORIZATION_FILES = new Map([
   [M2C_REVALIDATION_AUTHORIZATION_ID, 'revalidation-authorization.json'],
   [M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'wait-fix-validation-authorization.json'],
   [M3B2_PROJECT_CASE_AUTHORIZATION_ID, 'm3b2-project-case-authorization.json'],
   [M4A_QUERY_CASE_AUTHORIZATION_ID, 'm4a-query-case-authorization.json'],
   [M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID, 'm4a-query-case-flash-retry-authorization.json'],
+  [E2E01_PROJECT_CASE_AUTHORIZATION_ID, 'e2e01-project-case-authorization.json'],
 ]);
 
 function projectCaseScopeValid(scope) {
@@ -26,9 +28,10 @@ function projectCaseScopeValid(scope) {
 
 function authorizationValid(record, authorizationId) {
   const isM4 = authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
+  const isE2E01 = authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID;
   const common = record?.authorization_id === authorizationId &&
-    record.kind === (isM4 ? 'initial-with-optional-revision' : 'initial') &&
-    record.max_starts === (isM4 ? 2 : 1) && Number.isInteger(record.used_starts) &&
+    record.kind === (isM4 || isE2E01 ? 'initial-with-optional-revision' : 'initial') &&
+    record.max_starts === (isE2E01 ? 6 : isM4 ? 2 : 1) && Number.isInteger(record.used_starts) &&
     record.used_starts >= 0 && record.used_starts <= record.max_starts && Array.isArray(record.claims);
   if (!common) return false;
   if (authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID) {
@@ -45,6 +48,21 @@ function authorizationValid(record, authorizationId) {
     return record.schema === 'workbench/build-project-case-authorization-v1' &&
       record.linked_stage === 'M4-A-FLASH-RETRY' && projectCaseScopeValid(record.scope) &&
       record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000;
+  }
+  if (authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID) {
+    return record.schema === 'workbench/e2e01-build-authorization-v1' &&
+      record.linked_stage === 'E2E-01' && typeof record.project_id === 'string' &&
+      Array.isArray(record.scopes) && record.scopes.length === 3 &&
+      record.kind === 'initial-with-optional-revision' && record.max_starts === 6 &&
+      Number.isInteger(record.used_starts) && record.used_starts >= 0 &&
+      record.used_starts <= 6 && Array.isArray(record.claims) &&
+      record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000 &&
+      new Set(record.scopes.map((scope) => scope.external_id)).size === 3 &&
+      record.scopes.every((scope) => scope.project_id === record.project_id &&
+        /^case-[a-z0-9-]{8,80}$/.test(scope.case_id || '') && scope.case_version === 1 &&
+        /^[A-F0-9]{64}$/.test(scope.content_sha256 || '') &&
+        [['TC-001','test-site-01-query-v1'],['TC-002','test-site-01-sorting-v1'],['TC-003','test-site-01-detail-v1']]
+          .some(([externalId, environmentId]) => scope.external_id === externalId && scope.environment_id === environmentId));
   }
   return record.schema === 'workbench/build-revalidation-authorization-v1';
 }
@@ -215,6 +233,19 @@ export class BuildTaskStore {
   }
 
   async registerProjectCaseAuthorization(record) {
+    if (this.authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID) {
+      if (!authorizationValid(record, this.authorizationId) || record.used_starts !== 0) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      return this.serial(async () => {
+        const current = await readJson(this.revalidationAuthorizationFile, null);
+        if (current) {
+          if (!authorizationValid(current, this.authorizationId) || current.project_id !== record.project_id ||
+              JSON.stringify(current.scopes) !== JSON.stringify(record.scopes)) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_CONFLICT');
+          return structuredClone(current);
+        }
+        await writeJsonAtomic(this.revalidationAuthorizationFile, record, this.io);
+        return structuredClone(record);
+      });
+    }
     if (![M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(this.authorizationId) ||
         !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
       throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
@@ -264,6 +295,13 @@ export class BuildTaskStore {
       await writeJsonAtomic(this.revalidationAuthorizationFile, authorization, this.io);
       return structuredClone(authorization);
     });
+  }
+
+  async registerE2E01Authorization(record) {
+    if (this.authorizationId !== E2E01_PROJECT_CASE_AUTHORIZATION_ID || !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
+      throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+    }
+    return this.registerProjectCaseAuthorization(record);
   }
 
   async claimStart(taskId, attemptId, now) {

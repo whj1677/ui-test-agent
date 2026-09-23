@@ -10,7 +10,7 @@ import {
   assembleProjectCaseInput,
   renderProjectCaseAgentInstruction,
 } from './project-case.mjs';
-import { M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from './store.mjs';
+import { E2E01_PROJECT_CASE_AUTHORIZATION_ID, M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID } from './store.mjs';
 import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 
@@ -77,6 +77,28 @@ function projectCaseTaskScope(task) {
 }
 
 function sameIdentity(left, right) { return requestFingerprint(projectCaseRequestIdentity(left)) === requestFingerprint(projectCaseRequestIdentity(right)); }
+
+const E2E01_CASES = [
+  { external_id: 'TC-001', paired_external_id: 'TC-004', environment_id: 'test-site-01-query-v1' },
+  { external_id: 'TC-002', paired_external_id: 'TC-005', environment_id: 'test-site-01-sorting-v1' },
+  { external_id: 'TC-003', paired_external_id: 'TC-006', environment_id: 'test-site-01-detail-v1' },
+];
+
+function normalizeTrialContent(content, route) {
+  const copy = structuredClone(content);
+  copy.external_id = '<registered-pair-id>';
+  copy.title = copy.title.replace(`入口 ${route}`, '入口 <registered-route>');
+  copy.test_data = copy.test_data.replace(`入口=http://127.0.0.1:4320${route}`, '入口=<registered-route>');
+  return copy;
+}
+
+function e2eAuthorizationMatches(authorization, scope) {
+  return authorization?.authorization_id === E2E01_PROJECT_CASE_AUTHORIZATION_ID &&
+    authorization.project_id === scope.project_id && authorization.scopes.some((item) =>
+      item.case_id === scope.case_id && item.external_id === scope.external_id &&
+      item.case_version === scope.case_version && item.content_sha256 === scope.content_sha256 &&
+      item.environment_id === scope.environment_id);
+}
 
 function lifecycleMetadata(event) {
   return Object.fromEntries(Object.entries(event || {}).filter(([key, value]) => LIFECYCLE_FIELDS.has(key) &&
@@ -159,6 +181,7 @@ export class BuildTaskManager {
     this.harnessDshHome = options.harnessDshHome || path.join(this.paths.buildRuntimeRoot, 'dsh');
     this.harnessPatchPath = options.harnessPatchPath || path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml');
     this.useStoredDshCredentials = options.useStoredDshCredentials === true;
+    this.modelConfiguration = options.modelConfiguration || null;
     this.caseSubmissions = new Map();
   }
 
@@ -290,6 +313,24 @@ export class BuildTaskManager {
     if (calculatedHash !== versionRecord.content_sha256 || calculatedHash !== identity.content_sha256) {
       throw new Error('CASE_BUILD_CONTENT_HASH_MISMATCH');
     }
+    let trialBinding = null;
+    if (E2E01_CASES.some((entry) => entry.external_id === versionRecord.content.external_id)) {
+      const group = E2E01_CASES.find((entry) => entry.external_id === versionRecord.content.external_id);
+      if (identity.environment_id !== group.environment_id) throw new Error('E2E01_CASE_ENVIRONMENT_MISMATCH');
+      const paired = project.cases.find((entry) => entry.external_id === group.paired_external_id);
+      const pairedVersion = paired?.versions.find((entry) => entry.version === paired.current_version);
+      const pairedRoute = `/${group.paired_external_id === 'TC-004' ? 'ui/b' : group.paired_external_id === 'TC-005' ? 'ui/d' : 'ui/f'}`;
+      const sourceRoute = `/${group.external_id === 'TC-001' ? 'ui/a' : group.external_id === 'TC-002' ? 'ui/c' : 'ui/e'}`;
+      if (!paired || !pairedVersion || pairedVersion.version !== identity.case_version ||
+          JSON.stringify(normalizeTrialContent(versionRecord.content, sourceRoute)) !== JSON.stringify(normalizeTrialContent(pairedVersion.content, pairedRoute))) {
+        throw new Error('E2E01_PAIRED_CASE_CONTENT_MISMATCH');
+      }
+      trialBinding = {
+        schema: 'workbench/e2e01-paired-case-binding-v1', pair_group: group.environment_id,
+        source: { case_id: item.case_id, external_id: group.external_id, case_version: versionRecord.version, content_sha256: calculatedHash, entry_route: sourceRoute },
+        paired: { case_id: paired.case_id, external_id: group.paired_external_id, case_version: pairedVersion.version, content_sha256: pairedVersion.content_sha256, entry_route: pairedRoute },
+      };
+    }
     const steps = versionRecord.content?.steps;
     if (versionRecord.content?.status !== 'CONFIRMED') throw new Error('CASE_BUILD_CONTENT_NOT_CONFIRMED');
     if (!Array.isArray(steps) || !steps.length || steps.some((step, index) =>
@@ -304,19 +345,36 @@ export class BuildTaskManager {
     });
     const budget = await this.store.getBudget();
     let authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
-    const projectCaseAuthorized = [M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(this.authorizationId);
+    const projectCaseAuthorized = [M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID, E2E01_PROJECT_CASE_AUTHORIZATION_ID].includes(this.authorizationId);
     if (projectCaseAuthorized) {
       if (!assembled.input_bundle.verification_contract) throw new Error('CASE_BUILD_VERIFICATION_BINDING_INVALID');
       const m4 = this.authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
       const flashRetry = this.authorizationId === M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID;
-      authorization = await this.store.registerProjectCaseAuthorization({
+      const e2e01 = this.authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID;
+      if (e2e01 && !trialBinding) throw new Error('E2E01_CASE_NOT_AUTHORIZED');
+      const registeredAuthorization = e2e01 ? {
+        schema: 'workbench/e2e01-build-authorization-v1', authorization_id: this.authorizationId,
+        kind: 'initial-with-optional-revision', linked_stage: 'E2E-01', project_id: project.project_id,
+        max_starts: 6, used_starts: 0, claims: [],
+        scopes: E2E01_CASES.map((entry) => {
+          const allowed = project.cases.find((candidate) => candidate.external_id === entry.external_id);
+          const allowedVersion = allowed?.versions.find((candidate) => candidate.version === allowed.current_version);
+          if (!allowed || allowed.current_version !== 1 || !allowedVersion || allowedVersion.content.status !== 'CONFIRMED') throw new Error('E2E01_PROJECT_CASE_SET_INVALID');
+          return { project_id: project.project_id, case_id: allowed.case_id, external_id: entry.external_id, case_version: 1, content_sha256: allowedVersion.content_sha256, environment_id: entry.environment_id };
+        }),
+        limits: { max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS }, created_at: now,
+      } : {
         schema: 'workbench/build-project-case-authorization-v1',
         authorization_id: this.authorizationId,
         kind: m4 ? 'initial-with-optional-revision' : 'initial', linked_stage: m4 ? 'M4-A' : (flashRetry ? 'M4-A-FLASH-RETRY' : 'M3-B2'),
         max_starts: m4 ? 2 : 1, used_starts: 0, claims: [],
         scope: structuredClone(identity), limits: { max_tool_calls: MAX_TOOL_CALLS, timeout_ms: TIMEOUT_MS },
         created_at: now,
-      });
+      };
+      authorization = await this.store.registerProjectCaseAuthorization(registeredAuthorization);
+      if (e2e01 && !e2eAuthorizationMatches(authorization, {
+        ...identity, external_id: versionRecord.content.external_id,
+      })) throw new Error('E2E01_CASE_NOT_AUTHORIZED');
     }
     const files = assembled.initial_files.map(({ content, ...descriptor }) => descriptor);
     return this.store.createTask({
@@ -327,6 +385,7 @@ export class BuildTaskManager {
         creation_request_fingerprint: fingerprint,
       },
       environment_ref: assembled.environment_ref, input_bundle: assembled.input_bundle,
+      ...(trialBinding ? { trial_binding: trialBinding } : {}),
       execution_policy: projectCaseAuthorized
         ? { mode: this.authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID ? 'AUTHORIZED_INITIAL_OPTIONAL_REVISION' : 'SINGLE_AUTHORIZED_INITIAL', launch_enabled: true, reason: `${authorization.linked_stage.replace('-', '_')}_SCOPED_AUTHORIZATION` }
         : { mode: 'INPUT_ONLY', launch_enabled: false, reason: 'M3_B1_INPUT_ONLY' },
@@ -338,7 +397,7 @@ export class BuildTaskManager {
       authorization: authorization ? {
         authorization_id: authorization.authorization_id, kind: authorization.kind,
         max_starts: authorization.max_starts, used_starts: authorization.used_starts,
-        linked_stage: authorization.linked_stage, scope: authorization.scope ? structuredClone(authorization.scope) : null,
+        linked_stage: authorization.linked_stage, scope: authorization.scope ? structuredClone(authorization.scope) : (trialBinding ? { ...structuredClone(identity), external_id: versionRecord.content.external_id } : null),
       } : null,
       runtime: { os_file_isolation: false, os_network_isolation: false, residual_risk_accepted: true },
       error: null,
@@ -359,6 +418,89 @@ export class BuildTaskManager {
   async start(taskId) { return this.#launch(taskId, 'initial'); }
   async revise(taskId) { return this.#launch(taskId, 'revision'); }
 
+  async runProjectCaseTrial(taskId, request) {
+    this.#assertWritable();
+    if (this.starting || this.active || this.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
+    this.starting = true;
+    try {
+      const task = await this.store.getTask(taskId);
+      if (!task?.trial_binding || task.source?.kind !== 'project-case' || task.authorization?.authorization_id !== E2E01_PROJECT_CASE_AUTHORIZATION_ID || this.authorizationId !== E2E01_PROJECT_CASE_AUTHORIZATION_ID) throw new Error('E2E01_TRIAL_NOT_ALLOWED');
+      const authorization = await this.store.getRevalidationAuthorization();
+      if (!e2eAuthorizationMatches(authorization, task.authorization.scope)) throw new Error('E2E01_TRIAL_AUTHORIZATION_INVALID');
+      const candidate = task.candidates.at(-1);
+      if (!candidate || candidate.sha256 !== request?.candidate_sha256 || candidate.version !== request?.candidate_version) throw new Error('E2E01_CANDIDATE_IDENTITY_MISMATCH');
+      const allowedCase = request.executed_external_id === task.trial_binding.source.external_id
+        ? task.trial_binding.source
+        : request.executed_external_id === task.trial_binding.paired.external_id ? task.trial_binding.paired : null;
+      if (!allowedCase || request.case_id !== allowedCase.case_id || request.case_version !== allowedCase.case_version ||
+          request.content_sha256 !== allowedCase.content_sha256) throw new Error('E2E01_EXECUTION_CASE_NOT_ALLOWED');
+      const project = await this.caseStore.getProject(task.source.project_id);
+      const caseItem = project?.cases.find((entry) => entry.case_id === allowedCase.case_id);
+      const versionRecord = caseItem?.versions.find((entry) => entry.version === allowedCase.case_version);
+      if (!versionRecord || contentHash(versionRecord.content) !== allowedCase.content_sha256) throw new Error('E2E01_EXECUTION_CASE_VERSION_MISMATCH');
+      const candidatePath = path.join(this.store.taskDirectory(taskId), 'attempts', candidate.attempt_id, 'workspace', 'output', 'candidate.spec.mjs');
+      if (await sha256File(candidatePath) !== candidate.sha256) throw new Error('E2E01_CANDIDATE_FILE_CHANGED');
+      const runId = `run-${randomUUID()}`;
+      const runType = request.executed_external_id === task.trial_binding.source.external_id ? 'normal' : 'negative';
+      const template = await loadProjectCaseEnvironment(this.paths, task.environment_ref.environment_id);
+      const fixtureUrl = runType === 'normal' ? template.internal.normalUrl : template.internal.pairedUrl;
+      if (!fixtureUrl) throw new Error('E2E01_EXECUTION_ENTRY_UNAVAILABLE');
+      const attemptRoot = path.join(this.store.taskDirectory(taskId), 'attempts', candidate.attempt_id);
+      const runDirectory = path.join(attemptRoot, 'verification', runType, 'runs', runId);
+      const controller = new AbortController();
+      this.active = { taskId, attemptId: runId, controller, phase: 'TRIAL_RUNNING' };
+      const startedAt = this.now().toISOString();
+      const raw = await this.adapter.verifyCandidate({ candidatePath, browserExecutable: this.browserExecutable, fixtureUrl, runDirectory, signal: controller.signal });
+      const verification = await parseCandidateReport(raw.reportPath, raw.process);
+      const hashAfter = await sha256File(candidatePath);
+      const stepCoverage = projectCaseStepCoverage(verification, task.input_bundle.verification_contract);
+      const detected = runType === 'negative' && counterexampleDetected(verification, task.input_bundle.verification_contract);
+      const indexed = await indexAttemptFiles({
+        taskRoot: this.store.taskDirectory(taskId), attemptRoot, candidatePath,
+        attemptId: candidate.attempt_id, runId, startIndex: task.files.length,
+        alreadyIndexed: task.files.map((file) => file.relative_path),
+      });
+      const files = indexed.files.filter((file) => file.run_id === runId);
+      const failure = verification.error?.type === 'ASSERTION_MISMATCH' ? verification.error : null;
+      const failureMap = stepCoverage.items.find((item) => item.error_attributed);
+      const storedAuthorization = await this.store.getRevalidationAuthorization();
+      const revisionAllowed = runType === 'normal' && (!verification.complete_pass || !stepCoverage.complete) &&
+        !task.attempts.some((attempt) => attempt.kind === 'revision') && storedAuthorization.used_starts < storedAuthorization.max_starts;
+      const run = {
+        schema: 'workbench/e2e01-case-run-v1', run_id: runId, run_type: runType,
+        source_build_task_id: task.task_id, source_case_id: task.source.case_id,
+        source_external_id: task.source.external_id, source_case_version: task.source.case_version,
+        executed_case_id: allowedCase.case_id, executed_external_id: allowedCase.external_id,
+        executed_case_version: allowedCase.case_version, executed_content_sha256: allowedCase.content_sha256,
+        environment_id: task.environment_ref.environment_id, entry_route: allowedCase.entry_route,
+        candidate_version: candidate.version, candidate_sha256: candidate.sha256,
+        status: verification.test_status, complete_pass: verification.complete_pass,
+        failure_step: failureMap?.marker || null, error: verification.error,
+        step_coverage: stepCoverage, specified_defect_detected: detected,
+        same_candidate_hash: hashAfter === candidate.sha256,
+        media_file_ids: files.filter((file) => /_(?:screenshot|video|trace)$/.test(file.kind)).map((file) => file.file_id),
+        started_at: startedAt, finished_at: this.now().toISOString(), origin: 'WORKBENCH_CANDIDATE_TRIAL',
+        technical_error: indexed.unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', files: indexed.unexpected } : null,
+      };
+      if (!run.same_candidate_hash) throw new Error('E2E01_CANDIDATE_CHANGED_DURING_TRIAL');
+      return await this.store.updateTask(taskId, (current) => ({
+        ...current, task_status: 'WAITING_E2E_TRIALS', verification_status: 'INCOMPLETE',
+        human_review_status: 'NOT_READY', finished_at: this.now().toISOString(),
+        candidates: current.candidates.map((item) => item.version === candidate.version ? {
+          ...item, trial_runs: [...(item.trial_runs || []), run],
+          ...(runType === 'normal' ? { normal: verification, verification_status: verification.complete_pass && stepCoverage.complete ? 'NORMAL_PASSED_AWAITING_PAIR' : 'FAILED' } : { negative: verification }),
+          ...(runType === 'negative' ? { counterexample_detected: detected } : {}),
+          error: runType === 'normal' ? (verification.error || (stepCoverage.complete ? null : { code: 'STEP_COVERAGE_INCOMPLETE' })) : item.error,
+        } : item),
+        files: [...current.files, ...files],
+        revision_allowed: revisionAllowed,
+      }));
+    } finally {
+      if (this.active?.taskId === taskId) this.active = null;
+      this.starting = false;
+    }
+  }
+
   async #launch(taskIdValue, kind) {
     this.#assertWritable();
     if (this.starting || this.active || this.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
@@ -371,7 +513,9 @@ export class BuildTaskManager {
       if (kind === 'revision' && (!task.revision_allowed || task.attempts.some((item) => item.kind === 'revision'))) throw new Error('BUILD_REVISION_NOT_ALLOWED');
       const revalidationId = task.authorization?.authorization_id || null;
       const m4Authorization = revalidationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
-      if (revalidationId && (revalidationId !== this.authorizationId || (!m4Authorization && kind !== 'initial'))) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      const e2e01Authorization = revalidationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID;
+      if (revalidationId && (revalidationId !== this.authorizationId || (!m4Authorization && !e2e01Authorization && kind !== 'initial'))) throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+      if (e2e01Authorization && kind === 'revision' && (!task.trial_binding || task.attempts.filter((item) => item.kind === 'revision').length)) throw new Error('BUILD_REVISION_NOT_ALLOWED');
       if (revalidationId) {
         const authorization = await this.store.getRevalidationAuthorization();
         if (!authorization || authorization.authorization_id !== revalidationId || authorization.used_starts >= authorization.max_starts) {
@@ -379,6 +523,9 @@ export class BuildTaskManager {
         }
         if ([M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(revalidationId) &&
             (task.source?.kind !== 'project-case' || !sameIdentity(authorization.scope, projectCaseTaskScope(task)))) {
+          throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
+        }
+        if (e2e01Authorization && !e2eAuthorizationMatches(authorization, { ...projectCaseTaskScope(task), external_id: task.source?.external_id })) {
           throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
         }
       }
@@ -474,7 +621,9 @@ export class BuildTaskManager {
     let negativeServer;
     try {
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'fixture_starting', partial_observation: true });
-      normalServer = await this.adapter.startFixtureServer(template.internal.normalFixture, { route: template.internal.normalRoute || '/probe' });
+      normalServer = template.internal.e2e01
+        ? { url: template.internal.normalUrl, close: async () => {} }
+        : await this.adapter.startFixtureServer(template.internal.normalFixture, { route: template.internal.normalRoute || '/probe' });
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'harness_starting', partial_observation: true });
       const prompt = promptFor({ kind, task, entryUrl: normalServer.url, candidatePath });
       if (task.source?.kind === 'project-case') {
@@ -521,6 +670,7 @@ export class BuildTaskManager {
         },
       });
       const harnessSummary = {
+        model_configuration: this.modelConfiguration ? structuredClone(this.modelConfiguration) : null,
         assessment: harness.assessment,
         wall_ms: Date.now() - harnessStarted,
         observable_agent_steps: harness.events.filter((event) => event.type === 'status' && event.phase === 'step_end').length,
@@ -585,6 +735,61 @@ export class BuildTaskManager {
       const afterNormal = await sha256File(candidatePath);
       await normalServer.close();
       normalServer = null;
+      if (template.internal.e2e01) {
+        const stepCoverage = projectCaseStepCoverage(normal, task.input_bundle.verification_contract);
+        const normalRunId = `run-${randomUUID()}`;
+        const indexed = await indexAttemptFiles({
+          taskRoot: this.store.taskDirectory(task.task_id), attemptRoot, candidatePath, attemptId,
+          runId: normalRunId, startIndex: (await this.store.getTask(task.task_id)).files.length,
+        });
+        const normalMedia = indexed.files.filter((file) => file.run_id === normalRunId && /_(?:screenshot|video|trace)$/.test(file.kind)).map((file) => file.file_id);
+        const normalTrialRun = {
+          schema: 'workbench/e2e01-case-run-v1', run_id: normalRunId, run_type: 'normal',
+          source_build_task_id: task.task_id, source_case_id: task.source.case_id,
+          source_external_id: task.source.external_id, source_case_version: task.source.case_version,
+          executed_case_id: task.trial_binding.source.case_id, executed_external_id: task.trial_binding.source.external_id,
+          executed_case_version: task.trial_binding.source.case_version, executed_content_sha256: task.trial_binding.source.content_sha256,
+          environment_id: task.environment_ref.environment_id, entry_route: task.trial_binding.source.entry_route,
+          candidate_version: candidate.version, candidate_sha256: candidateSha,
+          status: normal.test_status, complete_pass: normal.complete_pass, error: normal.error,
+          step_coverage: stepCoverage, media_file_ids: normalMedia,
+          started_at: this.now().toISOString(), finished_at: this.now().toISOString(),
+          origin: 'WORKBENCH_CANDIDATE_TRIAL',
+        };
+        const budget = await this.store.getBudget();
+        const authorization = revalidationId ? await this.store.getRevalidationAuthorization() : null;
+        const normalReady = normal.complete_pass && stepCoverage.complete && candidateSha === afterNormal;
+        const coverageError = !stepCoverage.complete ? {
+          type: 'PROJECT_CASE_STEP_COVERAGE_INCOMPLETE', message: '正常页报告未覆盖完整的原用例步骤。',
+          expected: task.input_bundle.verification_contract.required_step_markers.join(', '),
+          actual: stepCoverage.items.filter((item) => item.observed).map((item) => item.marker).join(', '),
+          attribution: 'PENDING_ANALYSIS',
+        } : null;
+        const indexedError = indexed.unexpected.length ? { code: 'UNREGISTERED_ATTEMPT_OUTPUT', message: `发现未登记输出：${indexed.unexpected.join(', ')}` } : null;
+        const normalError = indexedError || normal.error || coverageError || (candidateSha !== afterNormal ? { code: 'CANDIDATE_HASH_CHANGED', message: '正常页执行期间候选字节发生变化。' } : null);
+        const observation = await this.store.lifecycleSummary(task.task_id, attemptId);
+        await this.#recordLifecycle(task.task_id, attemptId, { type: 'attempt_settled', phase: 'normal_trial_settled', partial_observation: false });
+        return this.store.updateTask(task.task_id, (current) => ({
+          ...current,
+          task_status: 'WAITING_E2E_TRIALS', generation_status: 'GENERATED', verification_status: 'INCOMPLETE',
+          human_review_status: 'NOT_READY', active_attempt_id: null, finished_at: this.now().toISOString(),
+          attempts: current.attempts.map((item) => item.attempt_id === attemptId ? {
+            ...item, finished_at: this.now().toISOString(), status: 'COMPLETED',
+            observation: { ...item.observation, complete: true, summary: observation }, harness: harnessSummary, error: normalError,
+          } : item),
+          candidates: current.candidates.map((item) => item.attempt_id === attemptId ? {
+            ...item, verification_status: normalReady ? 'NORMAL_PASSED_AWAITING_PAIR' : 'FAILED',
+            normal, negative: null, same_candidate_hash: candidateSha === afterNormal, counterexample_detected: null,
+            error: normalError, trial_runs: [...(item.trial_runs || []), normalTrialRun],
+            project_case_step_mapping: item.project_case_step_mapping?.map((mapping) => ({
+              ...mapping, observed: stepCoverage?.items.find((coverage) => coverage.marker === mapping.marker)?.observed ?? null,
+            })) || null,
+          } : item),
+          files: [...current.files, ...indexed.files],
+          revision_allowed: kind === 'initial' && !normalReady && Boolean(authorization?.used_starts < authorization?.max_starts),
+          error: normalError,
+        }));
+      }
       negativeServer = await this.adapter.startFixtureServer(template.internal.negativeFixture, { route: template.internal.negativeRoute || '/probe' });
       const negativeRaw = await this.adapter.verifyCandidate({
         candidatePath, browserExecutable: this.browserExecutable, fixtureUrl: negativeServer.url,

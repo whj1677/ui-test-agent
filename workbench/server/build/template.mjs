@@ -89,6 +89,63 @@ export async function loadProjectCaseEnvironment(paths, environmentId) {
       },
     };
   }
+  const e2eGroups = {
+    'test-site-01-query-v1': { source: 'TC-001', paired: 'TC-004', normal: '/ui/a', counterexample: '/ui/b', defect: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_3' }, expected: '2 条：DEV-002、DEV-005', actual: '3 条：DEV-002、DEV-004、DEV-005' },
+    'test-site-01-sorting-v1': { source: 'TC-002', paired: 'TC-005', normal: '/ui/c', counterexample: '/ui/d', defect: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_2' }, expected: '第 2 行 DEV-006，之后 DEV-002', actual: '第 2 行 DEV-002，之后 DEV-006' },
+    'test-site-01-detail-v1': { source: 'TC-003', paired: 'TC-006', normal: '/ui/e', counterexample: '/ui/f', defect: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_2' }, expected: '220 kW', actual: '320 kW' },
+  };
+  const e2eGroup = e2eGroups[environmentId];
+  if (e2eGroup) {
+    const baseUrl = String(process.env.WORKBENCH_TEST_SITE_BASE_URL || 'http://127.0.0.1:4320').replace(/\/$/, '');
+    const base = new URL(baseUrl);
+    if (base.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(base.hostname) || base.port !== '4320') {
+      throw new Error('E2E01_SITE_ORIGIN_NOT_ALLOWED');
+    }
+    const resources = [e2eGroup.normal, '/app.js', '/styles.css'];
+    const observed = [];
+    for (const resource of resources) {
+      const response = await fetch(new URL(resource, base));
+      if (!response.ok) throw new Error(`E2E01_SITE_RESOURCE_UNAVAILABLE:${resource}:${response.status}`);
+      const bytes = Buffer.from(await response.arrayBuffer());
+      observed.push({ path: resource, status: response.status, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex').toUpperCase() });
+    }
+    for (const route of [e2eGroup.normal, e2eGroup.counterexample]) {
+      const response = await fetch(new URL(route, base));
+      if (!response.ok) throw new Error(`E2E01_SITE_ROUTE_UNAVAILABLE:${route}:${response.status}`);
+    }
+    const packagePath = path.join(paths.workbenchRoot, 'examples', 'ui-six-cases', 'UI_TRIAL_6_CASES.workbench.json');
+    const sourcePackage = JSON.parse(await fs.readFile(packagePath, 'utf8'));
+    const original = sourcePackage.cases.find((item) => item.content?.external_id === e2eGroup.source);
+    const paired = sourcePackage.cases.find((item) => item.content?.external_id === e2eGroup.paired);
+    if (!original || !paired || JSON.stringify(original.content.steps) !== JSON.stringify(paired.content.steps)) {
+      throw new Error('E2E01_SOURCE_CASE_PAIR_INVALID');
+    }
+    const publicTemplate = {
+      template_id: environmentId, version: '1.0.0', title: 'TEST-SITE-01 只读设备台账场景',
+      summary: `${e2eGroup.source} 正常页面观察与逐步预期`,
+      candidate_contract: { url_environment_variable: 'PROBE_URL', test_count: 1, retries: 0, workers: 1 },
+      allowed_entry: { kind: 'registered-local-read-only-trial-site', route: e2eGroup.normal, origin: base.origin, login_required: false, scope: '只读查看设备台账；不修改站点数据' },
+      source: { resources: observed },
+    };
+    return {
+      environment_id: environmentId,
+      public: { ...publicTemplate, input_sha256: digest(publicTemplate) },
+      internal: {
+        normalUrl: new URL(e2eGroup.normal, base).href,
+        pairedUrl: new URL(e2eGroup.counterexample, base).href,
+        pairedExternalId: e2eGroup.paired,
+        sourceExternalId: e2eGroup.source,
+        pairGroup: environmentId,
+        binding: { kind: 'exact-content', case_id: e2eGroup.source, content_sha256: original.content_sha256 || digest(original.content) },
+        verification: {
+          schema: 'workbench/project-case-verification-contract-v2',
+          detection: e2eGroup.defect,
+          frozen_fault: { expected: e2eGroup.expected, actual: e2eGroup.actual },
+        },
+        e2e01: true,
+      },
+    };
+  }
   throw new Error('CASE_BUILD_ENVIRONMENT_NOT_ALLOWED');
 }
 

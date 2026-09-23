@@ -9,6 +9,7 @@ import { BuildSupplementalAssessmentStore } from './build/assessments.mjs';
 import { CaseLibraryStore } from './cases/store.mjs';
 import { CaseLibraryManager } from './cases/manager.mjs';
 import { randomUUID } from 'node:crypto';
+import fs from 'node:fs/promises';
 
 const host = '127.0.0.1';
 const port = Number(process.env.WORKBENCH_PORT || 4210);
@@ -17,6 +18,16 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALI
 const paths = createPaths();
 const serviceInstanceId = `service-${randomUUID()}`;
 const buildAuthorizationId = process.env.WORKBENCH_BUILD_AUTHORIZATION_ID || process.env.M2C_BUILD_AUTHORIZATION_ID || null;
+const harnessDshHome = process.env.WORKBENCH_DSH_HOME ? process.env.WORKBENCH_DSH_HOME : undefined;
+const harnessPatchPath = process.env.WORKBENCH_HARNESS_PATCH ? process.env.WORKBENCH_HARNESS_PATCH : undefined;
+const useStoredDshCredentials = process.env.WORKBENCH_USE_STORED_DSH_CREDENTIALS === '1';
+let modelConfiguration = null;
+if (harnessPatchPath) {
+  const patchText = await fs.readFile(harnessPatchPath, 'utf8');
+  const provider = /^\s*provider:\s*([\w-]+)\s*$/m.exec(patchText)?.[1] || null;
+  const model = /^\s*model:\s*([\w.-]+)\s*$/m.exec(patchText)?.[1] || null;
+  modelConfiguration = { provider, model, profile: 'headless', protocol: provider === 'deepseek-official' ? 'official' : 'configured-provider', credential_source: useStoredDshCredentials ? 'saved-dsh-home' : 'process-environment', dsh_version: '0.1.6-alpha.2' };
+}
 const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
 const recovered = await store.recoverInterrupted();
@@ -38,6 +49,10 @@ const buildManager = new BuildTaskManager({
   serviceInstanceId,
   authorizationId: buildAuthorizationId,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
+  harnessDshHome,
+  harnessPatchPath,
+  useStoredDshCredentials,
+  modelConfiguration,
   otherActive: () => Boolean(manager.active),
 });
 const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager });

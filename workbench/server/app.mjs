@@ -274,6 +274,25 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, project ? 200 : 404, project || { error: 'CASE_PROJECT_NOT_FOUND' });
         return;
       }
+      const projectBuildTasks = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/build-tasks$/);
+      if (buildStore && request.method === 'GET' && projectBuildTasks) {
+        const projectId = decodeURIComponent(projectBuildTasks[1]);
+        const tasks = (await buildStore.listTasks()).filter((task) => task.source?.project_id === projectId);
+        sendJson(response, 200, { tasks });
+        return;
+      }
+      const projectExecutionRecords = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/execution-records$/);
+      if (buildStore && request.method === 'GET' && projectExecutionRecords) {
+        const projectId = decodeURIComponent(projectExecutionRecords[1]);
+        const tasks = (await buildStore.listTasks()).filter((task) => task.source?.project_id === projectId);
+        const records = tasks.flatMap((task) => (task.candidates || []).flatMap((candidate) => (candidate.trial_runs || []).map((run) => ({
+          ...run, project_id: projectId, project_name: task.source.project_name, source_build_task_id: task.task_id,
+          candidate_version: candidate.version, candidate_sha256: candidate.sha256,
+          files: (task.files || []).filter((file) => run.media_file_ids?.includes(file.file_id)),
+        }))));
+        sendJson(response, 200, { records: records.sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))) });
+        return;
+      }
       if (caseManager && request.method === 'PATCH' && projectDetail) {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
         sendJson(response, 200, await caseManager.updateProject(decodeURIComponent(projectDetail[1]), await readJsonBody(request)));
@@ -345,6 +364,16 @@ export function createWorkbenchServer(options = {}) {
           : buildAction[2] === 'revise' ? await buildManager.revise(id)
             : await buildManager.stop(id);
         sendJson(response, 202, result);
+        return;
+      }
+      const buildTrialRun = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/trial-runs$/);
+      if (buildManager && request.method === 'POST' && buildTrialRun) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        if (Object.keys(body).sort().join(',') !== 'candidate_sha256,candidate_version,case_id,case_version,content_sha256,executed_external_id') {
+          return sendJson(response, 400, { error: 'INVALID_E2E01_TRIAL_REQUEST' });
+        }
+        sendJson(response, 202, await buildManager.runProjectCaseTrial(decodeURIComponent(buildTrialRun[1]), body));
         return;
       }
       if (store && request.method === 'GET' && url.pathname === '/api/assets') {
