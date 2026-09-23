@@ -4,7 +4,7 @@
 
 工作台新页面：<http://127.0.0.1:4322/workspace/>。被测设备台账站点：<http://127.0.0.1:4320>。
 
-本机当前数据目录为 `workbench/.local/six-case-e2e`。已经通过新页面创建项目并导入官方六用例 JSON 包；项目名称为 **E2E-01 六用例工作台自动建例闭环**。这批资料尚未产生产品候选或产品运行记录：一次独立官方模型连通性检查在 Harness 终态报错，故建例没有启动，不能把工程样例当成产品结果。查看具体限制请见 [验收记录](E2E_01_ACCEPTANCE_REPORT.md)。
+本机当前数据目录为 `workbench/.local/six-case-e2e`。已经通过新页面创建项目并导入官方六用例 JSON 包；项目名称为 **E2E-01 六用例工作台自动建例闭环**。已在本机 DSH_HOME `.env` 配置凭据，并确认不带工具的官方文本请求可返回 `OK`；但带 Browser 工具的两个真实初稿任务启动均异常退出，当前仍没有候选或产品运行记录。不要把工程样例或文本连通检查当成产品结果。查看详情请见 [验收记录](E2E_01_ACCEPTANCE_REPORT.md)。
 
 ## 启动
 
@@ -19,7 +19,7 @@ $env:WORKBENCH_BUILD_AUTHORIZATION_ID = "e2e01-six-case-project-20260923"
 npm start
 ```
 
-以上是前台进程；保持窗口开启，按 `Ctrl+C` 停止。此命令不启动 Harness。只有在本机已经配置并核实受控 DeepSeek DSH profile 后，才设置该本地 profile 对应的 `WORKBENCH_DSH_HOME`、锁定的 browser-flash patch 和存储凭据选项；本次 profile 连通性检查失败，不能据本指南声称模型入口当前可用。不要把密钥写入命令、报告或仓库。
+以上是前台进程；保持窗口开启，按 `Ctrl+C` 停止。此命令不启动 Harness。当前本机已用的 DSH_HOME 是 `C:\Users\20240082\.codex\worktrees\workbench-m4a-query-case\ui-test-agent\workbench\.local\m4a-query-case-acceptance\build-runtime\dsh`；密钥应写入该目录的 `.env`（变量名 `DEEPSEEK_API_KEY`，不加引号）。该目录在另一既有本机 worktree 的 `.local` 下，受当前服务环境引用；不要将密钥写入命令、报告或仓库。文本连通已确认，但带工具的建例仍报错，不能视为 E2E Harness 可用。
 
 ## 查看本次导入与项目
 
