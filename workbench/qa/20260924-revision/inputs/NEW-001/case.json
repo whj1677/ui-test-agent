@@ -1,0 +1,33 @@
+{
+  "external_id": "NEW-001",
+  "title": "分页筛选北站后翻页并返回",
+  "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。",
+  "test_data": {
+    "records": "P01..P08，奇数北站，偶数南站",
+    "page_size": 2,
+    "filter": "北站"
+  },
+  "steps": [
+    {
+      "order": 1,
+      "action": "打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+      "expected": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部"
+    },
+    {
+      "order": 2,
+      "action": "站点筛选选择北站，点击筛选",
+      "expected": "显示P01、P03；共4条，1/2页；当前筛选为北站"
+    },
+    {
+      "order": 3,
+      "action": "点击下一页",
+      "expected": "显示P05、P07；共4条，2/2页；当前筛选仍为北站"
+    },
+    {
+      "order": 4,
+      "action": "点击上一页",
+      "expected": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站"
+    }
+  ],
+  "entry_url": "http://127.0.0.1:4345/?scene=paging&variant=normal"
+}

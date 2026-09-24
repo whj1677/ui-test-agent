@@ -1,0 +1,236 @@
+{
+  "run": {
+    "variant": "normal",
+    "status": "PASSED",
+    "complete_pass": true,
+    "coverage": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": true,
+      "order_valid": true,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4"
+      ],
+      "duplicates": [],
+      "missing": [],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 点击下一页",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击上一页",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "same_candidate_hash": true,
+    "report_sha256": "05C597FC4065EEE1E36233510392358EF34E03864DD01D5ED7C9ACD36984295C",
+    "error": null,
+    "mapping": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": true,
+      "order_valid": true,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4"
+      ],
+      "duplicates": [],
+      "missing": [],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 点击下一页",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击上一页",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "specified_defect_detected": null
+  },
+  "parsed": {
+    "report_status": "COMPLETE",
+    "test_status": "PASSED",
+    "test_count": 1,
+    "error": null,
+    "complete_pass": true,
+    "stats": {
+      "startTime": "2026-09-24T15:04:48.387Z",
+      "duration": 3402.626,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 0,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+        "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+        "category": null,
+        "duration": 251,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+        "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+        "category": null,
+        "duration": 140,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3: 点击下一页",
+        "raw_title": "CASE_STEP_3: 点击下一页",
+        "category": null,
+        "duration": 108,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4: 点击上一页",
+        "raw_title": "CASE_STEP_4: 点击上一页",
+        "category": null,
+        "duration": 110,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      }
+    ]
+  },
+  "process": {
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] .local\\qa-fix-20260924\\attempts\\NEW-001\\output\\candidate-v2.spec.mjs:6:3 › 分页筛选北站后翻页并返回 › 分页筛选北站后翻页并返回\n  1 passed (3.4s)\n",
+    "stderr": "(node:12548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+    "termination": null,
+    "pid": 15704,
+    "parentPid": 11512,
+    "exitObserved": true,
+    "closeObserved": true,
+    "outputComplete": true,
+    "trailingStdoutLine": false,
+    "observerError": null
+  }
+}

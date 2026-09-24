@@ -42,7 +42,7 @@ function category(relative, candidateRelative) {
   if (/\/verification\/(?:normal|negative)\/(?:runs\/[^/]+\/)?artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/verification\/(?:normal|negative)\/(?:runs\/[^/]+\/)?artifacts\/.*\/error-context\.md$/i.test(`/${relative}`)) return { kind: 'verification_diagnostic', web_visible: false, content_type: 'text/markdown; charset=utf-8' };
   if (/\/harness-summary\.json$/i.test(`/${relative}`)) return { kind: 'harness_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
-  if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
+  if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', integrity_state: 'PENDING_FINALIZATION', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
   return null;
 }
 

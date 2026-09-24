@@ -1,0 +1,159 @@
+TAP version 13
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+not ok 1 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 9.9058
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\qa-parser-regression.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'LOCATOR_OR_TARGET'
+    - 'ASSERTION_MISMATCH'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'ASSERTION_MISMATCH'
+  actual: 'LOCATOR_OR_TARGET'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/qa-parser-regression.test.mjs:11:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: string
+ok 2 - string
+  ---
+  duration_ms: 0.9477
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 3 - ansi
+  ---
+  duration_ms: 0.1067
+  type: 'test'
+  ...
+# Subtest: missing
+ok 4 - missing
+  ---
+  duration_ms: 0.1724
+  type: 'test'
+  ...
+# Subtest: strict
+not ok 5 - strict
+  ---
+  duration_ms: 0.2973
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\qa-parser-regression.test.mjs:28:4'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ASSERTION_MISMATCH'
+    - 'LOCATOR_OR_TARGET'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'LOCATOR_OR_TARGET'
+  actual: 'ASSERTION_MISMATCH'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/qa-parser-regression.test.mjs:28:28)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: single side
+ok 6 - single side
+  ---
+  duration_ms: 0.0958
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 7 - timeout
+  ---
+  duration_ms: 0.1873
+  type: 'test'
+  ...
+# Subtest: truncated array
+not ok 8 - truncated array
+  ---
+  duration_ms: 0.514
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\qa-parser-regression.test.mjs:28:4'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ASSERTION_MISMATCH'
+    - 'ASSERTION_UNRESOLVED'
+                 ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'ASSERTION_UNRESOLVED'
+  actual: 'ASSERTION_MISMATCH'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/qa-parser-regression.test.mjs:28:28)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: truncated diff
+ok 9 - truncated diff
+  ---
+  duration_ms: 0.4787
+  type: 'test'
+  ...
+# Subtest: array
+ok 10 - array
+  ---
+  duration_ms: 0.5702
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+not ok 11 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.4814
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\qa-parser-regression.test.mjs:30:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    null !== 'a'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'a'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/qa-parser-regression.test.mjs:32:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 7
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 167.4079

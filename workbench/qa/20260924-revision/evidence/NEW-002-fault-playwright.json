@@ -1,0 +1,195 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate-v2.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/attempts/NEW-002/output",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/runs/NEW-002/fault/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/attempts/NEW-002/output",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-002\\fault\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate-v2.spec.mjs",
+      "file": "candidate-v2.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "NEW-002 遥测首次失败后重试成功并关闭",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7542,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:82:51\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:72:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                      "column": 51,
+                      "line": 82
+                    },
+                    "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                        "column": 51,
+                        "line": 82
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n\n\n  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:82:51\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:72:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+                      "duration": 205
+                    },
+                    {
+                      "title": "CASE_STEP_2: 点击查看遥测",
+                      "duration": 96
+                    },
+                    {
+                      "title": "CASE_STEP_3: 等待约450毫秒",
+                      "duration": 484
+                    },
+                    {
+                      "title": "CASE_STEP_4: 点击重试",
+                      "duration": 55
+                    },
+                    {
+                      "title": "CASE_STEP_5: 再等待约650毫秒",
+                      "duration": 5705,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:82:51\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:72:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                          "column": 51,
+                          "line": 82
+                        },
+                        "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-24T15:07:11.357Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                    "column": 51,
+                    "line": 82
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c7a01941dbe1404f52ca-5162325a43250886baac",
+          "file": "candidate-v2.spec.mjs",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-24T15:07:10.552Z",
+    "duration": 9112.139000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

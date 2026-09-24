@@ -1,0 +1,314 @@
+{
+  "run": {
+    "variant": "normal",
+    "status": "PASSED",
+    "complete_pass": true,
+    "coverage": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": true,
+      "order_valid": true,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "duplicates": [],
+      "missing": [],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 点击查看遥测",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 等待约450毫秒",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击重试",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_5",
+          "step_id": "CASE_STEP_5",
+          "order": 5,
+          "observed": true,
+          "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+          "report_path": [
+            4
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_6",
+          "step_id": "CASE_STEP_6",
+          "order": 6,
+          "observed": true,
+          "raw_title": "CASE_STEP_6: 点击关闭",
+          "report_path": [
+            5
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "same_candidate_hash": true,
+    "report_sha256": "4E4ED4C592BEE0DE4E3144785E85BDF0FAA09591D96FAC1AEC1D2956391E512C",
+    "error": null,
+    "mapping": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": true,
+      "order_valid": true,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "duplicates": [],
+      "missing": [],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 点击查看遥测",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 等待约450毫秒",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击重试",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_5",
+          "step_id": "CASE_STEP_5",
+          "order": 5,
+          "observed": true,
+          "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+          "report_path": [
+            4
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_6",
+          "step_id": "CASE_STEP_6",
+          "order": 6,
+          "observed": true,
+          "raw_title": "CASE_STEP_6: 点击关闭",
+          "report_path": [
+            5
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "specified_defect_detected": null
+  },
+  "parsed": {
+    "report_status": "COMPLETE",
+    "test_status": "PASSED",
+    "test_count": 1,
+    "error": null,
+    "complete_pass": true,
+    "stats": {
+      "startTime": "2026-09-24T15:07:04.899Z",
+      "duration": 4515.875,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 0,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "category": null,
+        "duration": 180,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2: 点击查看遥测",
+        "raw_title": "CASE_STEP_2: 点击查看遥测",
+        "category": null,
+        "duration": 90,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3: 等待约450毫秒",
+        "raw_title": "CASE_STEP_3: 等待约450毫秒",
+        "category": null,
+        "duration": 521,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4: 点击重试",
+        "raw_title": "CASE_STEP_4: 点击重试",
+        "category": null,
+        "duration": 70,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_5: 再等待约650毫秒",
+        "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+        "category": null,
+        "duration": 739,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_6: 点击关闭",
+        "raw_title": "CASE_STEP_6: 点击关闭",
+        "category": null,
+        "duration": 73,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      }
+    ]
+  },
+  "process": {
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] .local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭\n  1 passed (4.5s)\n",
+    "stderr": "(node:12852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+    "termination": null,
+    "pid": 33492,
+    "parentPid": 11512,
+    "exitObserved": true,
+    "closeObserved": true,
+    "outputComplete": true,
+    "trailingStdoutLine": false,
+    "observerError": null
+  }
+}

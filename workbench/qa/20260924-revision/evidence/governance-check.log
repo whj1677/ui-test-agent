@@ -1,0 +1,26 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0036-ui-ux-01-workbench-usability-review\04_verification.md
+   Problem: Verification state `已完成` is not allowed.
+   Fix: Use one of: 人工待确认、仅静态检查、单元测试通过、无法运行、未运行、编译通过、集成测试通过
+2. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: .auth01-run/expire-drive.mjs, .auth01-run/expire1.log, .auth01-run/fixture.err.log, .auth01-run/fixture.log, .auth01-run/login-drive.mjs, .auth01-run/login.log, .auth01-run/login2.log, .auth01-run/login3.log 等 32 个文件
+3. docs\requirements\REQ-0033-e2e-01-six-case-workbench\02_design.md
+   Problem: Code/test/config changed but `02_design.md` was not updated and has no explicit no-design-change reason.
+   Fix: Update `02_design.md`, or add `本次无需设计变更，原因：...` when the change truly does not affect design.
+4. docs\requirements\REQ-0033-e2e-01-six-case-workbench\04_verification.md
+   Problem: Code/test/config changed but `04_verification.md` was not updated and has no explicit no-verification-change reason.
+   Fix: Update verification status/evidence, or add `本次无需验证变更，原因：...`.
+5. docs\modules
+   Problem: Code/test/config changed but no concrete module document was updated, and no explicit no-module-doc-change reason was recorded in the changed requirement design.
+   Fix: Create or update the affected `docs/modules/<module>.md` file. If the change truly has no module impact, add `本次无需模块文档变更，原因：...` to the changed requirement `02_design.md`.
+6. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: REQ delivery evidence fingerprint is missing or stale for the current behavior diff.
+   Fix: Re-run `python scripts/collect_delivery_evidence.py --req REQ-0033-e2e-01-six-case-workbench ...` after the final code/test/config edit.
+7. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: REQ delivery evidence does not bind every current behavior file.
+   Fix: Regenerate evidence. Missing: workbench/qa/20260924-revision/candidates/NEW-001-v2.spec.mjs, workbench/qa/20260924-revision/candidates/NEW-002-v2.spec.mjs, workbench/qa/20260924-revision/evidence/NEW-001-fault-assessment.json, workbench/qa/20260924-revision/evidence/NEW-001-fault-playwright.json, workbench/qa/20260924-revision/evidence/NEW-001-normal-assessment.json, workbench/qa/20260924-revision/evidence/NEW-001-normal-playwright.json, workbench/qa/20260924-revision/evidence/NEW-001-tool-calls.json, workbench/qa/20260924-revision/evidence/NEW-002-fault-assessment.json, workbench/qa/20260924-revision/evidence/NEW-002-fault-playwright.json, workbench/qa/20260924-revision/evidence/NEW-002-normal-assessment.json, workbench/qa/20260924-revision/evidence/NEW-002-normal-playwright.json, workbench/qa/20260924-revision/evidence/NEW-002-tool-calls.json, workbench/qa/20260924-revision/evidence/TC-005-supplemental-assessment.json, workbench/qa/20260924-revision/evidence/core-grouping.json, workbench/qa/20260924-revision/evidence/input-scope-audit.json, workbench/qa/20260924-revision/evidence/old-lifecycle-supplement.json, workbench/qa/20260924-revision/evidence/revision-ledger.json, workbench/qa/20260924-revision/evidence/workbench-dependency-scope.json, workbench/qa/20260924-revision/inputs/NEW-001/case.json, workbench/qa/20260924-revision/inputs/NEW-001/normal-feedback.json, workbench/qa/20260924-revision/inputs/NEW-002/case.json, workbench/qa/20260924-revision/inputs/NEW-002/normal-feedback.json, workbench/qa/20260924-revision/manifest.json, workbench/scripts/start-workbench.ps1, workbench/scripts/verify-start-config.ps1, workbench/server/app.mjs, workbench/server/auth/session.mjs, workbench/server/index.mjs, workbench/tests/fixtures/qa-browser-semantics.html, workbench/tests/fixtures/qa-tc005-report.json, workbench/tests/qa-browser-semantics.test.mjs, workbench/tests/qa-lifecycle.test.mjs, workbench/tests/qa-parser-regression.test.mjs, workbench/web-v2/app.js, .auth01-run/expire-drive.mjs, .auth01-run/login-drive.mjs, .auth01-run/mid-run-clear.mjs, .auth01-run/mid-run-expire.mjs, .auth01-run/ports.ps1, .auth01-run/probe-browser.mjs, .auth01-run/restart-workbench.ps1, .auth01-run/setup-result.json, .auth01-run/setup.mjs, .auth01-run/start-services.ps1, .auth01-run/stop-workbench.ps1
+8. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: REQ pass evidence is not bound to a collector-executed verification log.
+   Fix: Run the collector with `--verify-command`; caller-supplied exit/count values and pre-existing logs are not trusted.

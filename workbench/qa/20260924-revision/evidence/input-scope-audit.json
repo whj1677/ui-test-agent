@@ -1,0 +1,32 @@
+[
+  {
+    "id": "NEW-001",
+    "tool_calls": 19,
+    "tool_types": [
+      "read",
+      "mcp__playwright-mcp__browser_navigate",
+      "mcp__playwright-mcp__browser_evaluate",
+      "mcp__playwright-mcp__browser_select_option",
+      "mcp__playwright-mcp__browser_click",
+      "write",
+      "glob"
+    ],
+    "recorded_scope_violations": [],
+    "limitation": "Tool event audit plus instruction boundary; shared repository remains accessible, not strong isolation."
+  },
+  {
+    "id": "NEW-002",
+    "tool_calls": 28,
+    "tool_types": [
+      "read",
+      "glob",
+      "mcp__playwright-mcp__browser_navigate",
+      "mcp__playwright-mcp__browser_snapshot",
+      "mcp__playwright-mcp__browser_evaluate",
+      "mcp__playwright-mcp__browser_click",
+      "write"
+    ],
+    "recorded_scope_violations": [],
+    "limitation": "Tool event audit plus instruction boundary; shared repository remains accessible, not strong isolation."
+  }
+]

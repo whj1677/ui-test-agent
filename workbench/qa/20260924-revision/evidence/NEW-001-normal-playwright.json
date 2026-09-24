@@ -1,0 +1,161 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate-v2.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/attempts/NEW-001/output",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/runs/NEW-001/normal/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/qa-fix-20260924/attempts/NEW-001/output",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-001\\normal\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate-v2.spec.mjs",
+      "file": "candidate-v2.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "分页筛选北站后翻页并返回",
+          "file": "candidate-v2.spec.mjs",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "分页筛选北站后翻页并返回",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1450,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                          "duration": 251
+                        },
+                        {
+                          "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                          "duration": 140
+                        },
+                        {
+                          "title": "CASE_STEP_3: 点击下一页",
+                          "duration": 108
+                        },
+                        {
+                          "title": "CASE_STEP_4: 点击上一页",
+                          "duration": 110
+                        }
+                      ],
+                      "startTime": "2026-09-24T15:04:49.367Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-001\\normal\\artifacts\\candidate-v2-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-001\\normal\\artifacts\\candidate-v2-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\runs\\NEW-001\\normal\\artifacts\\candidate-v2-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c7a01941dbe1404f52ca-6a7dea138346488d519f",
+              "file": "candidate-v2.spec.mjs",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-24T15:04:48.387Z",
+    "duration": 3402.626,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
+ok 1 - candidate report parser keeps normal pass and concrete assertion mismatch separate
+  ---
+  duration_ms: 21.69
+  type: 'test'
+  ...
+# Subtest: missing report and locator errors cannot become technical pass or specified mismatch
+ok 2 - missing report and locator errors cannot become technical pass or specified mismatch
+  ---
+  duration_ms: 7.0233
+  type: 'test'
+  ...
+# Subtest: Playwright array text diff preserves the expected and actual row order at the failed step
+ok 3 - Playwright array text diff preserves the expected and actual row order at the failed step
+  ---
+  duration_ms: 10.6684
+  type: 'test'
+  ...
+# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
+ok 4 - versioned step title rule accepts only bare or explicitly separated leading markers
+  ---
+  duration_ms: 0.5335
+  type: 'test'
+  ...
+# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+ok 5 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+  ---
+  duration_ms: 0.7673
+  type: 'test'
+  ...
+# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+ok 6 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+  ---
+  duration_ms: 0.4874
+  type: 'test'
+  ...
+# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
+ok 7 - steps after the attributed failure remain not executed without hiding the specified mismatch
+  ---
+  duration_ms: 0.363
+  type: 'test'
+  ...
+# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
+ok 8 - parser preserves raw title hierarchy raw error and expected actual facts
+  ---
+  duration_ms: 9.372
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 9 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 14.6014
+  type: 'test'
+  ...
+# Subtest: string
+ok 10 - string
+  ---
+  duration_ms: 0.4581
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 11 - ansi
+  ---
+  duration_ms: 0.1277
+  type: 'test'
+  ...
+# Subtest: missing
+ok 12 - missing
+  ---
+  duration_ms: 0.1985
+  type: 'test'
+  ...
+# Subtest: strict
+ok 13 - strict
+  ---
+  duration_ms: 0.2614
+  type: 'test'
+  ...
+# Subtest: single side
+ok 14 - single side
+  ---
+  duration_ms: 0.0831
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 15 - timeout
+  ---
+  duration_ms: 0.2868
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 16 - truncated array
+  ---
+  duration_ms: 0.6494
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 17 - truncated diff
+  ---
+  duration_ms: 0.4086
+  type: 'test'
+  ...
+# Subtest: array
+ok 18 - array
+  ---
+  duration_ms: 0.4743
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 19 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.327
+  type: 'test'
+  ...
+# Subtest: complete passing report requires all registered steps and all media kinds
+ok 20 - complete passing report requires all registered steps and all media kinds
+  ---
+  duration_ms: 24.2787
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when all media are missing
+ok 21 - raw passing result is not an overall pass when all media are missing
+  ---
+  duration_ms: 7.8798
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when screenshot is missing
+ok 22 - raw passing result is not an overall pass when screenshot is missing
+  ---
+  duration_ms: 13.9302
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when video is missing
+ok 23 - raw passing result is not an overall pass when video is missing
+  ---
+  duration_ms: 10.7338
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when trace is missing
+ok 24 - raw passing result is not an overall pass when trace is missing
+  ---
+  duration_ms: 13.3997
+  type: 'test'
+  ...
+# Subtest: assertion mismatch remains a failed test and later steps are not executed
+ok 25 - assertion mismatch remains a failed test and later steps are not executed
+  ---
+  duration_ms: 19.4446
+  type: 'test'
+  ...
+# Subtest: missing, corrupt, skipped and zero-target reports fail closed
+ok 26 - missing, corrupt, skipped and zero-target reports fail closed
+  ---
+  duration_ms: 16.863
+  type: 'test'
+  ...
+# Subtest: exit code zero cannot override an incomplete step set
+ok 27 - exit code zero cannot override an incomplete step set
+  ---
+  duration_ms: 4.3139
+  type: 'test'
+  ...
+# Subtest: a passing Playwright report cannot override a non-normal execution terminal state
+ok 28 - a passing Playwright report cannot override a non-normal execution terminal state
+  ---
+  duration_ms: 58.319
+  type: 'test'
+  ...
+# Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+ok 29 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+  ---
+  duration_ms: 1.2049
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 471.7686

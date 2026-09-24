@@ -1,0 +1,2 @@
+# Original QA report is hashed evidence; retain its exact bytes on Windows.
+qa-tc005-report.json -text

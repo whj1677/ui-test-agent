@@ -1,0 +1,26 @@
+TAP version 13
+# QA_SCHEMA_PROBE {"actual_keys":["actions","assertions","complete","within_ms","reason"],"allowed":["obligations"],"required":["obligations"],"stack":"Error\\n    at keys (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/common.mjs:60:110)\\n    at validateInterpretation (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/expectation-contract.mjs:51:3)\\n    at result.browser.execute.onInterpret (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:2096:35)\\n    at async executeAdaptiveStep (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/adaptive-execution.mjs:174:16)\\n    at async BrowserSession.execute (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/browser.mjs:589:9)\\n    at async Controller.work (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:2079:26)\\n    at async Controller.runAdaptiveSelection (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:1191:5)\\n    at async Controller.runBatches (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:1086:34)"}
+# Subtest: display-number candidate repair with no business replay: repair
+not ok 1 - display-number candidate repair with no business replay: repair
+  ---
+  duration_ms: 5049.1173
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\tests\\display-number.test.mjs:136:3'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'error')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/tests/display-number.test.mjs:226:33)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5825.7748

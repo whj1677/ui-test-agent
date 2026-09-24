@@ -1,0 +1,1 @@
+DRY-RUN: no derived changes for REQ-0033-e2e-01-six-case-workbench; explicit implementation states retained, never inferred from verification.

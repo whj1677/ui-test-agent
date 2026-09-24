@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { buildAdapter, usageFromEvents } from './adapter.mjs';
 import { indexAttemptFiles } from './files.mjs';
+import { finalizeLifecycle } from './finalize-lifecycle.mjs';
 import { counterexampleDetected, parseCandidateReport, projectCaseStepCoverage } from './report.mjs';
 import { BUILD_TEMPLATE_ID, loadBuildTemplate, loadProjectCaseEnvironment, taskDocument } from './template.mjs';
 import { contentHash } from '../cases/excel.mjs';
@@ -663,7 +664,11 @@ export class BuildTaskManager {
       }
       this.active = { taskId: task.task_id, attemptId, controller, phase: 'GENERATING' };
       const completion = this.#execute({ task: next, kind, attemptId, attemptRoot, workspace, candidatePath, credentials, controller, revalidationId })
-        .finally(() => { if (this.active?.attemptId === attemptId) this.active = null; });
+        .finally(async () => {
+          if (this.active?.attemptId === attemptId) this.active.phase = 'FINALIZING';
+          try { await finalizeLifecycle(this.store, task.task_id, attemptId); }
+          finally { if (this.active?.attemptId === attemptId) this.active = null; }
+        });
       this.completions.set(task.task_id, completion);
       void completion.catch((error) => this.#tripStorageFault(error, 'background_completion'));
       return next;
@@ -955,11 +960,14 @@ export class BuildTaskManager {
   }
 
   async stop(taskIdValue) {
-    if (!this.active || this.active.taskId !== taskIdValue) throw new Error('BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED');
-    await this.#recordLifecycle(taskIdValue, this.active.attemptId, { type: 'cancel_requested', reason: 'user_cancelled', partial_observation: true })
+    if (!this.active || this.active.taskId !== taskIdValue || this.active.phase === 'FINALIZING') throw new Error('BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED');
+    const active = this.active;
+    const recorded = this.#recordLifecycle(taskIdValue, active.attemptId, { type: 'cancel_requested', reason: 'user_cancelled', partial_observation: true })
       .catch(() => {});
-    this.active.controller.abort('cancelled');
-    return this.store.updateTask(taskIdValue, (task) => ({ ...task, task_status: 'CANCELLING' }));
+    active.controller.abort('cancelled');
+    await recorded;
+    return this.store.updateTask(taskIdValue, (task) => task.active_attempt_id
+      ? { ...task, task_status: 'CANCELLING' } : task);
   }
 
   async wait(taskIdValue) {

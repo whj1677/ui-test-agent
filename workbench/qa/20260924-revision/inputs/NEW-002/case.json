@@ -1,0 +1,44 @@
+{
+  "external_id": "NEW-002",
+  "title": "遥测首次失败后重试成功并关闭",
+  "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=retry&variant=normal；刷新后内存状态重置。",
+  "test_data": {
+    "first_fail_ms": 400,
+    "retry_success_ms": 600,
+    "voltage": "750 V",
+    "sample_time": "2026-09-24 10:00:00"
+  },
+  "steps": [
+    {
+      "order": 1,
+      "action": "打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+      "expected": "仅显示遥测读取相关控件；按钮查看遥测可用"
+    },
+    {
+      "order": 2,
+      "action": "点击查看遥测",
+      "expected": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见"
+    },
+    {
+      "order": 3,
+      "action": "等待约450毫秒",
+      "expected": "状态变为暂时无法读取；重试按钮可见且可用"
+    },
+    {
+      "order": 4,
+      "action": "点击重试",
+      "expected": "立即显示读取中…；重试按钮禁用"
+    },
+    {
+      "order": 5,
+      "action": "再等待约650毫秒",
+      "expected": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00"
+    },
+    {
+      "order": 6,
+      "action": "点击关闭",
+      "expected": "遥测详情dialog不可见"
+    }
+  ],
+  "entry_url": "http://127.0.0.1:4345/?scene=retry&variant=normal"
+}

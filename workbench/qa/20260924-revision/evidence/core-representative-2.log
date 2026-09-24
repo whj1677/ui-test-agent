@@ -1,0 +1,41 @@
+TAP version 13
+# QA_SCHEMA_PROBE {"actual_keys":["actions","assertions","complete","within_ms","reason"],"allowed":["obligations"],"required":["obligations"],"stack":"Error\\n    at keys (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/common.mjs:60:110)\\n    at validateInterpretation (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/expectation-contract.mjs:51:3)\\n    at result.browser.execute.onInterpret (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:2096:35)\\n    at async executeAdaptiveStep (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/adaptive-execution.mjs:174:16)\\n    at async BrowserSession.execute (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/browser.mjs:589:9)\\n    at async Controller.work (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:2079:26)\\n    at async Controller.runAdaptiveSelection (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:1191:5)\\n    at async Controller.runBatches (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/src/controller.mjs:1086:34)"}
+# Subtest: measured coverage proposes completion but never approves itself: finish
+not ok 1 - measured coverage proposes completion but never approves itself: finish
+  ---
+  duration_ms: 5091.258
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\tests\\adaptive-completion.test.mjs:18:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    []
+    + actual - expected
+    
+    + 'TECHNICAL_FAILED'
+    - 'PASS_ASSERTIONS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS_ASSERTIONS'
+  actual: 'TECHNICAL_FAILED'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/tests/adaptive-completion.test.mjs:150:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: projection requires a sourced finite number, scoped definition and no explicit unit
+ok 2 - projection requires a sourced finite number, scoped definition and no explicit unit
+  ---
+  duration_ms: 5.2782
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5928.3742

@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { PROJECT_CASE_STEP_TITLE_RULE_VERSION } from './report.mjs';
+import { BROWSER_SEMANTICS_RULES } from './browser-semantics.mjs';
 
 export const PROJECT_CASE_ENVIRONMENT_ID = 'synthetic-probe-normal-v1';
 export const PROJECT_CASE_TEMPLATE_ID = 'project-case-input-v1';
@@ -68,6 +69,7 @@ export function projectCaseAgentInstructionTemplate() {
     'Read only task.md and input/case-snapshot.json as task inputs.',
     'Use the Playwright MCP browser tools to open exactly {{ENTRY_URL}}.',
     'Perform every ordered action from task.md and preserve each paired expected result exactly.',
+    BROWSER_SEMANTICS_RULES,
     'Wrap each ordered case step in test.step and place that step\'s action and checks inside it.',
     'The title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.',
     'Allowed separators are: one or more spaces or tabs; colon ":"; Chinese colon "："; or a spaced hyphen/dash " - ", " – ", " — ". Other fuzzy containment is invalid.',

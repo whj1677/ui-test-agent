@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+ok 1 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+  ---
+  duration_ms: 84.8122
+  type: 'test'
+  ...
+# Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+ok 2 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+  ---
+  duration_ms: 172.1547
+  type: 'test'
+  ...
+# Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+ok 3 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+  ---
+  duration_ms: 173.6275
+  type: 'test'
+  ...
+# Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+ok 4 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+  ---
+  duration_ms: 49.8886
+  type: 'test'
+  ...
+# Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+ok 5 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+  ---
+  duration_ms: 242.3447
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 6 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 13.4774
+  type: 'test'
+  ...
+# Subtest: string
+ok 7 - string
+  ---
+  duration_ms: 0.8199
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 8 - ansi
+  ---
+  duration_ms: 0.1769
+  type: 'test'
+  ...
+# Subtest: missing
+ok 9 - missing
+  ---
+  duration_ms: 0.3661
+  type: 'test'
+  ...
+# Subtest: strict
+ok 10 - strict
+  ---
+  duration_ms: 0.3669
+  type: 'test'
+  ...
+# Subtest: single side
+ok 11 - single side
+  ---
+  duration_ms: 1.0261
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 12 - timeout
+  ---
+  duration_ms: 0.365
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 13 - truncated array
+  ---
+  duration_ms: 0.3987
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 14 - truncated diff
+  ---
+  duration_ms: 0.391
+  type: 'test'
+  ...
+# Subtest: array
+ok 15 - array
+  ---
+  duration_ms: 0.4408
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 16 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.3067
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1802.2045

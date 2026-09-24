@@ -1,0 +1,1058 @@
+
+> ui-test-approved-workbench@0.1.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: state changes require exact local origin and JSON schema
+ok 1 - state changes require exact local origin and JSON schema
+  ---
+  duration_ms: 47.3971
+  type: 'test'
+  ...
+# Subtest: stop route accepts only an empty JSON object from local origin
+ok 2 - stop route accepts only an empty JSON object from local origin
+  ---
+  duration_ms: 5.7919
+  type: 'test'
+  ...
+# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+ok 3 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+  ---
+  duration_ms: 19935.0627
+  type: 'test'
+  ...
+# Subtest: build mutations require local origin and exact fixed schemas
+ok 4 - build mutations require local origin and exact fixed schemas
+  ---
+  duration_ms: 107.3036
+  type: 'test'
+  ...
+# Subtest: only registered web-visible unchanged task files are served
+ok 5 - only registered web-visible unchanged task files are served
+  ---
+  duration_ms: 22.2758
+  type: 'test'
+  ...
+# Subtest: only registered verification media are served with integrity and range checks
+ok 6 - only registered verification media are served with integrity and range checks
+  ---
+  duration_ms: 35.6934
+  type: 'test'
+  ...
+# Subtest: registers an idempotent derived assessment without rewriting the original task
+ok 7 - registers an idempotent derived assessment without rewriting the original task
+  ---
+  duration_ms: 103.2792
+  type: 'test'
+  ...
+# Subtest: rejects changed candidate or report identity and keeps a business gap out of human review
+ok 8 - rejects changed candidate or report identity and keeps a business gap out of human review
+  ---
+  duration_ms: 59.5008
+  type: 'test'
+  ...
+# Subtest: serves supplemental assessment beside the unchanged original failure
+ok 9 - serves supplemental assessment beside the unchanged original failure
+  ---
+  duration_ms: 115.5253
+  type: 'test'
+  ...
+# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
+ok 10 - Harness stderr diagnostic keeps error context and redacts credentials
+  ---
+  duration_ms: 3.9899
+  type: 'test'
+  ...
+# Subtest: stored DSH credential is redacted even without a sk prefix
+ok 11 - stored DSH credential is redacted even without a sk prefix
+  ---
+  duration_ms: 13.6662
+  type: 'test'
+  ...
+# Subtest: failed candidate enables exactly one explicit revision and preserves both versions
+ok 12 - failed candidate enables exactly one explicit revision and preserves both versions
+  ---
+  duration_ms: 2301.0557
+  type: 'test'
+  ...
+# Subtest: relative Harness patch resolves before task workspace changes
+ok 13 - relative Harness patch resolves before task workspace changes
+  ---
+  duration_ms: 2125.0427
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-24T15:04:13.244Z"}
+# Subtest: 生命周期存储持续失败会降级服务并拒绝继续接纳建例
+ok 14 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
+  ---
+  duration_ms: 403.0285
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-24T15:04:13.494Z"}
+# Subtest: 后台completion最终状态持续写失败会被观察并关闭新建例入口
+ok 15 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
+  ---
+  duration_ms: 214.1687
+  type: 'test'
+  ...
+# Subtest: duplicate start is rejected and cancel closes the owned attempt without restart
+ok 16 - duplicate start is rejected and cancel closes the owned attempt without restart
+  ---
+  duration_ms: 113.2156
+  type: 'test'
+  ...
+# Subtest: 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
+ok 17 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
+  ---
+  duration_ms: 295.0953
+  type: 'test'
+  ...
+# Subtest: 终态等待修复验证使用独立固定授权文件且不改旧授权
+ok 18 - 终态等待修复验证使用独立固定授权文件且不改旧授权
+  ---
+  duration_ms: 92.6478
+  type: 'test'
+  ...
+# Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
+ok 19 - candidate report parser keeps normal pass and concrete assertion mismatch separate
+  ---
+  duration_ms: 18.5561
+  type: 'test'
+  ...
+# Subtest: missing report and locator errors cannot become technical pass or specified mismatch
+ok 20 - missing report and locator errors cannot become technical pass or specified mismatch
+  ---
+  duration_ms: 7.8462
+  type: 'test'
+  ...
+# Subtest: Playwright array text diff preserves the expected and actual row order at the failed step
+ok 21 - Playwright array text diff preserves the expected and actual row order at the failed step
+  ---
+  duration_ms: 11.4409
+  type: 'test'
+  ...
+# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
+ok 22 - versioned step title rule accepts only bare or explicitly separated leading markers
+  ---
+  duration_ms: 0.4971
+  type: 'test'
+  ...
+# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+ok 23 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+  ---
+  duration_ms: 0.7686
+  type: 'test'
+  ...
+# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+ok 24 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+  ---
+  duration_ms: 0.7055
+  type: 'test'
+  ...
+# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
+ok 25 - steps after the attributed failure remain not executed without hiding the specified mismatch
+  ---
+  duration_ms: 0.4586
+  type: 'test'
+  ...
+# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
+ok 26 - parser preserves raw title hierarchy raw error and expected actual facts
+  ---
+  duration_ms: 9.1248
+  type: 'test'
+  ...
+# Subtest: associates exact task candidate and registers the same record idempotently
+ok 27 - associates exact task candidate and registers the same record idempotently
+  ---
+  duration_ms: 112.8653
+  type: 'test'
+  ...
+# Subtest: rejects candidate hash mismatch and does not associate media across tasks
+ok 28 - rejects candidate hash mismatch and does not associate media across tasks
+  ---
+  duration_ms: 65.1917
+  type: 'test'
+  ...
+# Subtest: serves only registered unchanged media with byte ranges
+ok 29 - serves only registered unchanged media with byte ranges
+  ---
+  duration_ms: 190.0341
+  type: 'test'
+  ...
+# Subtest: M2-C stage budget persists across task ids and store restarts
+ok 30 - M2-C stage budget persists across task ids and store restarts
+  ---
+  duration_ms: 31.904
+  type: 'test'
+  ...
+# Subtest: restart marks active build interrupted without replaying it
+ok 31 - restart marks active build interrupted without replaying it
+  ---
+  duration_ms: 37.4914
+  type: 'test'
+  ...
+# Subtest: task状态原子替换的短暂占用有限重试后成功
+ok 32 - task状态原子替换的短暂占用有限重试后成功
+  ---
+  duration_ms: 93.4986
+  type: 'test'
+  ...
+# Subtest: task状态持续写失败会显式返回错误而非静默成功
+ok 33 - task状态持续写失败会显式返回错误而非静默成功
+  ---
+  duration_ms: 779.735
+  type: 'test'
+  ...
+# Subtest: 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
+ok 34 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
+  ---
+  duration_ms: 2599.6616
+  type: 'test'
+  ...
+# Subtest: case library API requires local origin and serves only registered operations
+ok 35 - case library API requires local origin and serves only registered operations
+  ---
+  duration_ms: 365.6512
+  type: 'test'
+  ...
+# Subtest: real xlsx and native package round trip preserve fields, lineage and project isolation
+ok 36 - real xlsx and native package round trip preserve fields, lineage and project isolation
+  ---
+  duration_ms: 2117.1811
+  type: 'test'
+  ...
+# Subtest: formula cells and stale or cross-project confirmations fail closed
+ok 37 - formula cells and stale or cross-project confirmations fail closed
+  ---
+  duration_ms: 915.9151
+  type: 'test'
+  ...
+# Subtest: E2E-01 recovery adds one start while retaining all six original claims
+ok 38 - E2E-01 recovery adds one start while retaining all six original claims
+  ---
+  duration_ms: 75.8826
+  type: 'test'
+  ...
+# Subtest: static or visually repeated frames cannot be used as a unique video clock anchor
+ok 39 - static or visually repeated frames cannot be used as a unique video clock anchor
+  ---
+  duration_ms: 1.7135
+  type: 'test'
+  ...
+# Subtest: trace-derived timeline preserves source timing and unexecuted step
+ok 40 - trace-derived timeline preserves source timing and unexecuted step
+  ---
+  duration_ms: 65.8752
+  type: 'test'
+  ...
+# Subtest: missing or uncalibrated trace never invents a seek timeline
+ok 41 - missing or uncalibrated trace never invents a seek timeline
+  ---
+  duration_ms: 237.9276
+  type: 'test'
+  ...
+# Subtest: derived WebM duration is explicit and invalid media fails closed
+ok 42 - derived WebM duration is explicit and invalid media fails closed
+  ---
+  duration_ms: 9.9452
+  type: 'test'
+  ...
+# Subtest: versioned derived caption video is indexed as caption media without replacing v1
+ok 43 - versioned derived caption video is indexed as caption media without replacing v1
+  ---
+  duration_ms: 588.3885
+  type: 'test'
+  ...
+# Subtest: step replay, source screenshots and observer record are independently indexed
+ok 44 - step replay, source screenshots and observer record are independently indexed
+  ---
+  duration_ms: 530.0588
+  type: 'test'
+  ...
+# Subtest: E2E-01 reaches human review only after a passing normal run and the specified raw failure
+ok 45 - E2E-01 reaches human review only after a passing normal run and the specified raw failure
+  ---
+  duration_ms: 1.5014
+  type: 'test'
+  ...
+# Subtest: new trial readiness requires execution-time replay and four registered media for both lanes
+ok 46 - new trial readiness requires execution-time replay and four registered media for both lanes
+  ---
+  duration_ms: 0.5583
+  type: 'test'
+  ...
+# Subtest: real xlsx preserves numeric-looking text, physical rows and blank columns
+ok 47 - real xlsx preserves numeric-looking text, physical rows and blank columns
+  ---
+  duration_ms: 262.6981
+  type: 'test'
+  ...
+# Subtest: real xlsx keeps step and expected cell-line positions instead of compacting blanks
+ok 48 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
+  ---
+  duration_ms: 46.8115
+  type: 'test'
+  ...
+# Subtest: approved run uses fixed argument arrays and a reduced environment
+ok 49 - approved run uses fixed argument arrays and a reduced environment
+  ---
+  duration_ms: 1319.5307
+  type: 'test'
+  ...
+# Subtest: duplicate starts are rejected and stop targets only the owned process
+ok 50 - duplicate starts are rejected and stop targets only the owned process
+  ---
+  duration_ms: 654.6173
+  type: 'test'
+  ...
+# Subtest: unapproved, wrong-hash, traversal and illegal environment records are refused
+ok 51 - unapproved, wrong-hash, traversal and illegal environment records are refused
+  ---
+  duration_ms: 1440.5771
+  type: 'test'
+  ...
+# Subtest: runtime-copy integrity failure preserves the raw passing report but blocks overall pass
+ok 52 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
+  ---
+  duration_ms: 734.7303
+  type: 'test'
+  ...
+# Subtest: 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
+ok 53 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
+  ---
+  duration_ms: 1445.1104
+  type: 'test'
+  ...
+# Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+ok 54 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+  ---
+  duration_ms: 1115.839
+  type: 'test'
+  ...
+# Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+ok 55 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+  ---
+  duration_ms: 2397.3162
+  type: 'test'
+  ...
+# Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+not ok 56 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+  ---
+  duration_ms: 416.356
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\m4a-query-case.test.mjs:138:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input was expected to not match the regular expression /\/probe\/q2|HOLD-Q2|任务类型条件被忽略|返回全部西站6条|oracle/i. Input:
+    
+    '{\n' +
+      '  "schema": "workbench/project-case-build-input-v2",\n' +
+      '  "frozen_at": "2026-09-24T15:04:13.594Z",\n' +
+      '  "source": {\n' +
+      '    "kind": "project-case",\n' +
+      '    "project_id": "project-8032d0b0-ed61-4fda-80ef-f40392ffa527",\n' +
+      '    "project_name": "M4-A HOLD-Q1",\n' +
+      '    "case_id": "case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8",\n' +
+      '    "external_id": "HOLD-Q1",\n' +
+      '    "case_version": 1,\n' +
+      '    "content_sha256": "2DDBA239792E3CC58307918BD3DF32604CD510DC997CEBA87F8C5DB0CCD02ED2",\n' +
+      '    "root_source": {\n' +
+      '      "kind": "heldout-case-json",\n' +
+      '      "stable_id": "heldout-lab/cases.json#HOLD-Q1",\n' +
+      '      "source_sha256": "5A4D33D9211EBF145F2AE0228CAB62ABF7B91FEBDDC6E9941BC53593353DCFC9"\n' +
+      '    },\n' +
+      '    "lineage": [\n' +
+      '      {\n' +
+      '        "source": "heldout-lab/cases.json",\n' +
+      '        "case_id": "HOLD-Q1",\n' +
+      '        "source_sha256": "5A4D33D9211EBF145F2AE0228CAB62ABF7B91FEBDDC6E9941BC53593353DCFC9"\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "project_id": "project-8032d0b0-ed61-4fda-80ef-f40392ffa527",\n' +
+      '        "case_id": "case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8",\n' +
+      '        "version": 1,\n' +
+      '        "imported_from": "case-package",\n' +
+      '        "at": "2026-09-24T15:04:13.568Z"\n' +
+      '      }\n' +
+      '    ]\n' +
+      '  },\n' +
+      '  "content": {\n' +
+      '    "external_id": "HOLD-Q1",\n' +
+      '    "title": "工作区一列表查询核对",\n' +
+      '    "module": "无登录合成列表查询",\n' +
+      '    "preconditions": "[\\n  \\"仅允许访问 localhost:4198\\",\\n  \\"使用全新且相互独立的浏览器上下文\\",\\n  \\"合成环境，无需账号、凭证或登录\\",\\n  \\"只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。\\"\\n]",\n' +
+      '    "test_data": "{\\n  \\"source_side\\": \\"ui\\",\\n  \\"page_entry_url\\": \\"http://localhost:4198/probe/q1\\",\\n  \\"read_only_scope\\": true,\\n  \\"synthetic_login\\": \\"none_required\\",\\n  \\"data\\": {\\n    \\"power_assertion_style\\": \\"额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位\\",\\n    \\"query_input\\": {\\n      \\"station\\": \\"西站\\",\\n      \\"type\\": \\"检修\\"\\n    },\\n    \\"expected_records\\": [\\n      {\\n        \\"id\\": \\"H102\\",\\n        \\"name\\": \\"循环泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"120 kW\\"\\n      },\\n      {\\n        \\"id\\": \\"H106\\",\\n        \\"name\\": \\"循环泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"220 kW\\"\\n      },\\n      {\\n        \\"id\\": \\"H110\\",\\n        \\"name\\": \\"疏水泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"110 kW\\"\\n      }\\n    ]\\n  }\\n}",\n' +
+      '    "steps": [\n' +
+      '      {\n' +
+      '        "order": 1,\n' +
+      '        "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q1",\n' +
+      '        "expected": "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "order": 2,\n' +
+      '        "action": "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询",\n' +
+      '        "expected": "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "order": 3,\n' +
+      '        "action": "点击查询，并在本步骤内核对结果集",\n' +
+      '        "expected": "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"\n' +
+      '      }\n' +
+      '    ],\n' +
+      '    "status": "CONFIRMED"\n' +
+      '  },\n' +
+      '  "environment_ref": {\n' +
+      '    "environment_id": "heldout-query-q1-v1",\n' +
+      '    "template_id": "heldout-query-q1-v1",\n' +
+      '    "template_version": "1.0.0",\n' +
+      '    "allowed_entry": {\n' +
+      '      "kind": "managed-local-fixture",\n' +
+      '      "route": "/probe/q1",\n' +
+      '      "login_required": false\n' +
+      '    },\n' +
+      '    "candidate_contract": {\n' +
+      '      "url_environment_variable": "PROBE_URL",\n' +
+      '      "test_count": 1,\n' +
+      '      "retries": 0,\n' +
+      '      "workers": 1\n' +
+      '    }\n' +
+      '  },\n' +
+      '  "candidate_requirements": {\n' +
+      '    "schema": "workbench/project-case-candidate-requirements-v2",\n' +
+      '    "required_step_markers": [\n' +
+      '      {\n' +
+      '        "order": 1,\n' +
+      '        "marker": "CASE_STEP_1"\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "order": 2,\n' +
+      '        "marker": "CASE_STEP_2"\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "order": 3,\n' +
+      '        "marker": "CASE_STEP_3"\n' +
+      '      }\n' +
+      '    ],\n' +
+      '    "step_title_rule": {\n' +
+      '      "version": "project-case-step-title-v2",\n' +
+      '      "allowed_forms": [\n' +
+      '        "CASE_STEP_<order>",\n' +
+      '        "CASE_STEP_<order> <description>",\n' +
+      '        "CASE_STEP_<order>: <description>",\n' +
+      '        "CASE_STEP_<order>：<description>",\n' +
+      '        "CASE_STEP_<order> - <description>",\n' +
+      '        "CASE_STEP_<order> – <description>",\n' +
+      '        "CASE_STEP_<order> — <description>"\n' +
+      '      ]\n' +
+      '    },\n' +
+      '    "deliverable": {\n' +
+      '      "kind": "playwright-test-candidate",\n' +
+      '      "relative_path": "output/candidate.spec.mjs",\n' +
+      '      "test_count": 1\n' +
+      '    }\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '# Frozen project case candidate task\n' +
+      '\n' +
+      'Source project: project-8032d0b0-ed61-4fda-80ef-f40392ffa527\n' +
+      'Source internal case: case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8\n' +
+      'External case number: HOLD-Q1\n' +
+      'Case version: v1\n' +
+      'Content SHA-256: 2DDBA239792E3CC58307918BD3DF32604CD510DC997CEBA87F8C5DB0CCD02ED2\n' +
+      'Environment reference: heldout-query-q1-v1\n' +
+      '\n' +
+      '## Case content (verbatim JSON strings)\n' +
+      '\n' +
+      'Title: "工作区一列表查询核对"\n' +
+      'Module: "无登录合成列表查询"\n' +
+      'Preconditions: "[\\n  \\"仅允许访问 localhost:4198\\",\\n  \\"使用全新且相互独立的浏览器上下文\\",\\n  \\"合成环境，无需账号、凭证或登录\\",\\n  \\"只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。\\"\\n]"\n' +
+      'Test data: "{\\n  \\"source_side\\": \\"ui\\",\\n  \\"page_entry_url\\": \\"http://localhost:4198/probe/q1\\",\\n  \\"read_only_scope\\": true,\\n  \\"synthetic_login\\": \\"none_required\\",\\n  \\"data\\": {\\n    \\"power_assertion_style\\": \\"额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位\\",\\n    \\"query_input\\": {\\n      \\"station\\": \\"西站\\",\\n      \\"type\\": \\"检修\\"\\n    },\\n    \\"expected_records\\": [\\n      {\\n        \\"id\\": \\"H102\\",\\n        \\"name\\": \\"循环泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"120 kW\\"\\n      },\\n      {\\n        \\"id\\": \\"H106\\",\\n        \\"name\\": \\"循环泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"220 kW\\"\\n      },\\n      {\\n        \\"id\\": \\"H110\\",\\n        \\"name\\": \\"疏水泵\\",\\n        \\"station\\": \\"西站\\",\\n        \\"type\\": \\"检修\\",\\n        \\"power_display\\": \\"110 kW\\"\\n      }\\n    ]\\n  }\\n}"\n' +
+      '\n' +
+      '## Ordered steps and expected results\n' +
+      '\n' +
+      '### Step 1\n' +
+      'Marker: CASE_STEP_1\n' +
+      'Action: "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q1"\n' +
+      'Expected: "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"\n' +
+      '\n' +
+      '### Step 2\n' +
+      'Marker: CASE_STEP_2\n' +
+      'Action: "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询"\n' +
+      'Expected: "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"\n' +
+      '\n' +
+      '### Step 3\n' +
+      'Marker: CASE_STEP_3\n' +
+      'Action: "点击查询，并在本步骤内核对结果集"\n' +
+      'Expected: "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"\n' +
+      '\n' +
+      'Step title rule: project-case-step-title-v2\n' +
+      'Allowed step titles: CASE_STEP_<order> | CASE_STEP_<order> <description> | CASE_STEP_<order>: <description> | CASE_STEP_<order>：<description> | CASE_STEP_<order> - <description> | CASE_STEP_<order> – <description> | CASE_STEP_<order> — <description>\n' +
+      '\n' +
+      'Use every step and its paired expected result exactly as supplied.\n' +
+      'Do not summarize, merge, delete, reorder, infer, or rewrite business expectations.\n' +
+      '\n' +
+      'Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\n' +
+      'Read only task.md and input/case-snapshot.json as task inputs.\n' +
+      'Use the Playwright MCP browser tools to open exactly http://127.0.0.1:43000/probe/q1.\n' +
+      'Perform every ordered action from task.md and preserve each paired expected result exactly.\n' +
+      'Frozen case expectations are the oracle; browser observations only supply control and locator implementation facts, never replacement expectations.\n' +
+      'Distinguish user-visible option labels from HTML option values. Select by the required label when the case names visible text. Do not add internal encoding constraints absent from the case.\n' +
+      'Observe the current selected option after each change (for example live selectedOptions or option:checked). The initial [selected] attribute alone does not express current selection. Check every later required selected state as well.\n' +
+      'For visible/displayed control counts, restrict to visible controls within the region named by the case; hidden DOM nodes in other panels are not displayed controls. Match the assertion scope to the original requirement.\n' +
+      'toHaveValue and toHaveCount remain valid when the original requirement actually concerns those values or that complete collection. Choose the assertion by semantics, not by a blanket matcher ban.\n' +
+      "Wrap each ordered case step in test.step and place that step's action and checks inside it.\n" +
+      'The title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\n' +
+      'Allowed separators are: one or more spaces or tabs; colon ":"; Chinese colon "："; or a spaced hyphen/dash " - ", " – ", " — ". Other fuzzy containment is invalid.\n' +
+      'Write exactly one Playwright Test candidate to C:\\Users\\20240082\\AppData\\Local\\Temp\\m4a-query-case-Ie21ct\\build-tasks\\build-m4a-query-case-test0001\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\n' +
+      'The candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\n' +
+      'Do not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\n' +
+      'Do not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\n' +
+      'Do not create other files. Return completion only after the candidate file is present.\n' +
+      'Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\n' +
+      'Read only task.md and input/case-snapshot.json as task inputs.\n' +
+      'Use the Playwright MCP browser tools to open exactly http://127.0.0.1:43000/probe/q1.\n' +
+      'Perform every ordered action from task.md and preserve each paired expected result exactly.\n' +
+      'Frozen case expectations are the oracle; browser observations only supply control and locator implementation facts, never replacement expectations.\n' +
+      'Distinguish user-visible option labels from HTML option values. Select by the required label when the case names visible text. Do not add internal encoding constraints absent from the case.\n' +
+      'Observe the current selected option after each change (for example live selectedOptions or option:checked). The initial [selected] attribute alone does not express current selection. Ch'... 1531 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    {
+      "schema": "workbench/project-case-build-input-v2",
+      "frozen_at": "2026-09-24T15:04:13.594Z",
+      "source": {
+        "kind": "project-case",
+        "project_id": "project-8032d0b0-ed61-4fda-80ef-f40392ffa527",
+        "project_name": "M4-A HOLD-Q1",
+        "case_id": "case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8",
+        "external_id": "HOLD-Q1",
+        "case_version": 1,
+        "content_sha256": "2DDBA239792E3CC58307918BD3DF32604CD510DC997CEBA87F8C5DB0CCD02ED2",
+        "root_source": {
+          "kind": "heldout-case-json",
+          "stable_id": "heldout-lab/cases.json#HOLD-Q1",
+          "source_sha256": "5A4D33D9211EBF145F2AE0228CAB62ABF7B91FEBDDC6E9941BC53593353DCFC9"
+        },
+        "lineage": [
+          {
+            "source": "heldout-lab/cases.json",
+            "case_id": "HOLD-Q1",
+            "source_sha256": "5A4D33D9211EBF145F2AE0228CAB62ABF7B91FEBDDC6E9941BC53593353DCFC9"
+          },
+          {
+            "project_id": "project-8032d0b0-ed61-4fda-80ef-f40392ffa527",
+            "case_id": "case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-24T15:04:13.568Z"
+          }
+        ]
+      },
+      "content": {
+        "external_id": "HOLD-Q1",
+        "title": "工作区一列表查询核对",
+        "module": "无登录合成列表查询",
+        "preconditions": "[\n  \"仅允许访问 localhost:4198\",\n  \"使用全新且相互独立的浏览器上下文\",\n  \"合成环境，无需账号、凭证或登录\",\n  \"只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。\"\n]",
+        "test_data": "{\n  \"source_side\": \"ui\",\n  \"page_entry_url\": \"http://localhost:4198/probe/q1\",\n  \"read_only_scope\": true,\n  \"synthetic_login\": \"none_required\",\n  \"data\": {\n    \"power_assertion_style\": \"额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位\",\n    \"query_input\": {\n      \"station\": \"西站\",\n      \"type\": \"检修\"\n    },\n    \"expected_records\": [\n      {\n        \"id\": \"H102\",\n        \"name\": \"循环泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"120 kW\"\n      },\n      {\n        \"id\": \"H106\",\n        \"name\": \"循环泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"220 kW\"\n      },\n      {\n        \"id\": \"H110\",\n        \"name\": \"疏水泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"110 kW\"\n      }\n    ]\n  }\n}",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q1",
+            "expected": "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"
+          },
+          {
+            "order": 2,
+            "action": "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询",
+            "expected": "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"
+          },
+          {
+            "order": 3,
+            "action": "点击查询，并在本步骤内核对结果集",
+            "expected": "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"
+          }
+        ],
+        "status": "CONFIRMED"
+      },
+      "environment_ref": {
+        "environment_id": "heldout-query-q1-v1",
+        "template_id": "heldout-query-q1-v1",
+        "template_version": "1.0.0",
+        "allowed_entry": {
+          "kind": "managed-local-fixture",
+          "route": "/probe/q1",
+          "login_required": false
+        },
+        "candidate_contract": {
+          "url_environment_variable": "PROBE_URL",
+          "test_count": 1,
+          "retries": 0,
+          "workers": 1
+        }
+      },
+      "candidate_requirements": {
+        "schema": "workbench/project-case-candidate-requirements-v2",
+        "required_step_markers": [
+          {
+            "order": 1,
+            "marker": "CASE_STEP_1"
+          },
+          {
+            "order": 2,
+            "marker": "CASE_STEP_2"
+          },
+          {
+            "order": 3,
+            "marker": "CASE_STEP_3"
+          }
+        ],
+        "step_title_rule": {
+          "version": "project-case-step-title-v2",
+          "allowed_forms": [
+            "CASE_STEP_<order>",
+            "CASE_STEP_<order> <description>",
+            "CASE_STEP_<order>: <description>",
+            "CASE_STEP_<order>：<description>",
+            "CASE_STEP_<order> - <description>",
+            "CASE_STEP_<order> – <description>",
+            "CASE_STEP_<order> — <description>"
+          ]
+        },
+        "deliverable": {
+          "kind": "playwright-test-candidate",
+          "relative_path": "output/candidate.spec.mjs",
+          "test_count": 1
+        }
+      }
+    }
+    
+    # Frozen project case candidate task
+    
+    Source project: project-8032d0b0-ed61-4fda-80ef-f40392ffa527
+    Source internal case: case-4d3e37e3-6b51-42b8-9a16-c3fe6e286fe8
+    External case number: HOLD-Q1
+    Case version: v1
+    Content SHA-256: 2DDBA239792E3CC58307918BD3DF32604CD510DC997CEBA87F8C5DB0CCD02ED2
+    Environment reference: heldout-query-q1-v1
+    
+    ## Case content (verbatim JSON strings)
+    
+    Title: "工作区一列表查询核对"
+    Module: "无登录合成列表查询"
+    Preconditions: "[\n  \"仅允许访问 localhost:4198\",\n  \"使用全新且相互独立的浏览器上下文\",\n  \"合成环境，无需账号、凭证或登录\",\n  \"只读核对范围；查询、排序、分页和弹窗仅改变临时视图，不执行业务写入或持久化存储；页面不向外部网络发请求。\"\n]"
+    Test data: "{\n  \"source_side\": \"ui\",\n  \"page_entry_url\": \"http://localhost:4198/probe/q1\",\n  \"read_only_scope\": true,\n  \"synthetic_login\": \"none_required\",\n  \"data\": {\n    \"power_assertion_style\": \"额定功率统一按表格单元格完整显示文本断言，包含空格和 kW 单位\",\n    \"query_input\": {\n      \"station\": \"西站\",\n      \"type\": \"检修\"\n    },\n    \"expected_records\": [\n      {\n        \"id\": \"H102\",\n        \"name\": \"循环泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"120 kW\"\n      },\n      {\n        \"id\": \"H106\",\n        \"name\": \"循环泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"220 kW\"\n      },\n      {\n        \"id\": \"H110\",\n        \"name\": \"疏水泵\",\n        \"station\": \"西站\",\n        \"type\": \"检修\",\n        \"power_display\": \"110 kW\"\n      }\n    ]\n  }\n}"
+    
+    ## Ordered steps and expected results
+    
+    ### Step 1
+    Marker: CASE_STEP_1
+    Action: "在全新独立浏览器上下文直接打开 http://localhost:4198/probe/q1"
+    Expected: "列表标题为“巡检任务台账”；默认计数器显示“共12条 · 第1/4页”；关键词为空，所属站点为全部，任务类型为全部，排序为编号升序；表体恰好3条数据行。"
+    
+    ### Step 2
+    Marker: CASE_STEP_2
+    Action: "仅将所属站点选为西站、任务类型选为检修，保持关键词为空，不点击查询"
+    Expected: "只有控件值变为西站和检修；列表仍未应用条件，计数器保持“共12条 · 第1/4页”，表格内容与操作前完全一致，第一行H101、第二行H102、第三行H103。"
+    
+    ### Step 3
+    Marker: CASE_STEP_3
+    Action: "点击查询，并在本步骤内核对结果集"
+    Expected: "所有已选条件联合生效并回到第1页：计数器“共3条 · 第1/1页”；表体恰好3行且顺序为H102、H106、H110；三行所属站点均为西站、任务类型均为检修、额定功率依次为120 kW、220 kW、110 kW。"
+    
+    Step title rule: project-case-step-title-v2
+    Allowed step titles: CASE_STEP_<order> | CASE_STEP_<order> <description> | CASE_STEP_<order>: <description> | CASE_STEP_<order>：<description> | CASE_STEP_<order> - <description> | CASE_STEP_<order> – <description> | CASE_STEP_<order> — <description>
+    
+    Use every step and its paired expected result exactly as supplied.
+    Do not summarize, merge, delete, reorder, infer, or rewrite business expectations.
+    
+    Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.
+    Read only task.md and input/case-snapshot.json as task inputs.
+    Use the Playwright MCP browser tools to open exactly http://127.0.0.1:43000/probe/q1.
+    Perform every ordered action from task.md and preserve each paired expected result exactly.
+    Frozen case expectations are the oracle; browser observations only supply control and locator implementation facts, never replacement expectations.
+    Distinguish user-visible option labels from HTML option values. Select by the required label when the case names visible text. Do not add internal encoding constraints absent from the case.
+    Observe the current selected option after each change (for example live selectedOptions or option:checked). The initial [selected] attribute alone does not express current selection. Check every later required selected state as well.
+    For visible/displayed control counts, restrict to visible controls within the region named by the case; hidden DOM nodes in other panels are not displayed controls. Match the assertion scope to the original requirement.
+    toHaveValue and toHaveCount remain valid when the original requirement actually concerns those values or that complete collection. Choose the assertion by semantics, not by a blanket matcher ban.
+    Wrap each ordered case step in test.step and place that step's action and checks inside it.
+    The title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.
+    Allowed separators are: one or more spaces or tabs; colon ":"; Chinese colon "："; or a spaced hyphen/dash " - ", " – ", " — ". Other fuzzy containment is invalid.
+    Write exactly one Playwright Test candidate to C:\Users\20240082\AppData\Local\Temp\m4a-query-case-Ie21ct\build-tasks\build-m4a-query-case-test0001\attempts\attempt-01-initial\workspace\output\candidate.spec.mjs.
+    The candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.
+    Do not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.
+    Do not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.
+    Do not create other files. Return completion only after the candidate file is present.
+    Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.
+    Read only task.md and input/case-snapshot.json as task inputs.
+    Use the Playwright MCP browser tools to open exactly http://127.0.0.1:43000/probe/q1.
+    Perform every ordered action from task.md and preserve each paired expected result exactly.
+    Frozen case expectations are the oracle; browser observations only supply control and locator implementation facts, never replacement expectations.
+    Distinguish user-visible option labels from HTML option values. Select by the required label when the case names visible text. Do not add internal encoding constraints absent from the case.
+    Observe the current selected option after each change (for example live selectedOptions or option:checked). The initial [selected] attribute alone does not express current selection. Check every later required selected state as well.
+    For visible/displayed control counts, restrict to visible controls within the region named by the case; hidden DOM nodes in other panels are not displayed controls. Match the assertion scope to the original requirement.
+    toHaveValue and toHaveCount remain valid when the original requirement actually concerns those values or that complete collection. Choose the assertion by semantics, not by a blanket matcher ban.
+    Wrap each ordered case step in test.step and place that step's action and checks inside it.
+    The title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.
+    Allowed separators are: one or more spaces or tabs; colon ":"; Chinese colon "："; or a spaced hyphen/dash " - ", " – ", " — ". Other fuzzy containment is invalid.
+    Write exactly one Playwright Test candidate to C:\Users\20240082\AppData\Local\Temp\m4a-query-case-Ie21ct\build-tasks\build-m4a-query-case-test0001\attempts\attempt-01-initial\workspace\output\candidate.spec.mjs.
+    The candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.
+    Do not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.
+    Do not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.
+    Do not create other files. Return completion only after the candidate file is present.
+  operator: 'doesNotMatch'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/m4a-query-case.test.mjs:162:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+ok 57 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+  ---
+  duration_ms: 57.5767
+  type: 'test'
+  ...
+# Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+ok 58 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+  ---
+  duration_ms: 1041.7919
+  type: 'test'
+  ...
+# Subtest: only indexed media for the selected run can be read
+ok 59 - only indexed media for the selected run can be read
+  ---
+  duration_ms: 820.2702
+  type: 'test'
+  ...
+# Subtest: changed media bytes are not served as the registered attachment
+ok 60 - changed media bytes are not served as the registered attachment
+  ---
+  duration_ms: 100.537
+  type: 'test'
+  ...
+# Subtest: 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
+ok 61 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
+  ---
+  duration_ms: 1959.1615
+  type: 'test'
+  ...
+# Subtest: v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
+ok 62 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
+  ---
+  duration_ms: 1088.6732
+  type: 'test'
+  ...
+# Subtest: request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
+ok 63 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
+  ---
+  duration_ms: 196.6262
+  type: 'test'
+  ...
+# Subtest: request_id 正在处理时只复用相同身份，不同身份立即冲突
+ok 64 - request_id 正在处理时只复用相同身份，不同身份立即冲突
+  ---
+  duration_ms: 216.5099
+  type: 'test'
+  ...
+# Subtest: 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
+ok 65 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
+  ---
+  duration_ms: 468.8048
+  type: 'test'
+  ...
+# Subtest: M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
+ok 66 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
+  ---
+  duration_ms: 2783.0602
+  type: 'test'
+  ...
+# Subtest: 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
+ok 67 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
+  ---
+  duration_ms: 2.1929
+  type: 'test'
+  ...
+# Subtest: M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
+ok 68 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
+  ---
+  duration_ms: 258.4
+  type: 'test'
+  ...
+# Subtest: engineering counterexamples: labels, live selection, visibility and scope (zero model)
+ok 69 - engineering counterexamples: labels, live selection, visibility and scope (zero model)
+  ---
+  duration_ms: 5260.226
+  type: 'test'
+  ...
+# {"mode":"normal","registered_bytes":2367,"actual_bytes":2367,"registered_sha256":"A384BF11020EAEF94B0B407C9125CDB069EE1EB9132EC1FB22453B0CAE75952B","actual_sha256":"A384BF11020EAEF94B0B407C9125CDB069EE1EB9132EC1FB22453B0CAE75952B","last_event":"attempt_settled","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","phase","attempt_settled"]}
+# Subtest: production lifecycle final indexing: normal, delayed append and close
+ok 70 - production lifecycle final indexing: normal, delayed append and close
+  ---
+  duration_ms: 2212.2679
+  type: 'test'
+  ...
+# {"mode":"cancel","registered_bytes":2364,"actual_bytes":2364,"registered_sha256":"DEEE2BFAB3DE554EB7175C1867CE4F6104F7957C39DACB7AB6EED8EEC61ADA6C","actual_sha256":"DEEE2BFAB3DE554EB7175C1867CE4F6104F7957C39DACB7AB6EED8EEC61ADA6C","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","cancel_requested","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: cancel, delayed append and close
+ok 71 - production lifecycle final indexing: cancel, delayed append and close
+  ---
+  duration_ms: 338.5803
+  type: 'test'
+  ...
+# {"mode":"exception","registered_bytes":2053,"actual_bytes":2053,"registered_sha256":"6678C6D1E70748719F8839D01DE8884F13A17BD62B4B5F66900166BAFF9B3745","actual_sha256":"6678C6D1E70748719F8839D01DE8884F13A17BD62B4B5F66900166BAFF9B3745","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: exception, delayed append and close
+ok 72 - production lifecycle final indexing: exception, delayed append and close
+  ---
+  duration_ms: 761.1236
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 73 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 28.8492
+  type: 'test'
+  ...
+# Subtest: string
+ok 74 - string
+  ---
+  duration_ms: 0.76
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 75 - ansi
+  ---
+  duration_ms: 0.179
+  type: 'test'
+  ...
+# Subtest: missing
+ok 76 - missing
+  ---
+  duration_ms: 0.3108
+  type: 'test'
+  ...
+# Subtest: strict
+ok 77 - strict
+  ---
+  duration_ms: 0.4496
+  type: 'test'
+  ...
+# Subtest: single side
+ok 78 - single side
+  ---
+  duration_ms: 0.1504
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 79 - timeout
+  ---
+  duration_ms: 0.5639
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 80 - truncated array
+  ---
+  duration_ms: 0.645
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 81 - truncated diff
+  ---
+  duration_ms: 0.7586
+  type: 'test'
+  ...
+# Subtest: array
+ok 82 - array
+  ---
+  duration_ms: 0.9013
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 83 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.5881
+  type: 'test'
+  ...
+# Subtest: approved sorting asset is derived from the real frozen records
+ok 84 - approved sorting asset is derived from the real frozen records
+  ---
+  duration_ms: 26.439
+  type: 'test'
+  ...
+# Subtest: hash mismatch is rejected instead of becoming a new approval
+ok 85 - hash mismatch is rejected instead of becoming a new approval
+  ---
+  duration_ms: 18.7761
+  type: 'test'
+  ...
+# Subtest: complete passing report requires all registered steps and all media kinds
+ok 86 - complete passing report requires all registered steps and all media kinds
+  ---
+  duration_ms: 74.9181
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when all media are missing
+ok 87 - raw passing result is not an overall pass when all media are missing
+  ---
+  duration_ms: 10.5431
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when screenshot is missing
+ok 88 - raw passing result is not an overall pass when screenshot is missing
+  ---
+  duration_ms: 88.4434
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when video is missing
+ok 89 - raw passing result is not an overall pass when video is missing
+  ---
+  duration_ms: 93.5919
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when trace is missing
+ok 90 - raw passing result is not an overall pass when trace is missing
+  ---
+  duration_ms: 135.8596
+  type: 'test'
+  ...
+# Subtest: assertion mismatch remains a failed test and later steps are not executed
+ok 91 - assertion mismatch remains a failed test and later steps are not executed
+  ---
+  duration_ms: 319.7411
+  type: 'test'
+  ...
+# Subtest: missing, corrupt, skipped and zero-target reports fail closed
+ok 92 - missing, corrupt, skipped and zero-target reports fail closed
+  ---
+  duration_ms: 537.7658
+  type: 'test'
+  ...
+# Subtest: exit code zero cannot override an incomplete step set
+ok 93 - exit code zero cannot override an incomplete step set
+  ---
+  duration_ms: 156.7648
+  type: 'test'
+  ...
+# Subtest: a passing Playwright report cannot override a non-normal execution terminal state
+ok 94 - a passing Playwright report cannot override a non-normal execution terminal state
+  ---
+  duration_ms: 1276.6332
+  type: 'test'
+  ...
+# Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+ok 95 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+  ---
+  duration_ms: 1.5504
+  type: 'test'
+  ...
+# Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
+ok 96 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
+  ---
+  duration_ms: 3031.9893
+  type: 'test'
+  ...
+# Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+ok 97 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+  ---
+  duration_ms: 1616.2777
+  type: 'test'
+  ...
+# Subtest: 项目用例新版本不会自动继承旧版本的限定首审资产
+ok 98 - 项目用例新版本不会自动继承旧版本的限定首审资产
+  ---
+  duration_ms: 4332.6075
+  type: 'test'
+  ...
+# Subtest: 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+ok 99 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+  ---
+  duration_ms: 1066.4873
+  type: 'test'
+  ...
+# Subtest: 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+ok 100 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+  ---
+  duration_ms: 951.4057
+  type: 'test'
+  ...
+# Subtest: health endpoint reports the independent workbench
+ok 101 - health endpoint reports the independent workbench
+  ---
+  duration_ms: 102.5029
+  type: 'test'
+  ...
+# Subtest: unknown routes fail closed
+ok 102 - unknown routes fail closed
+  ---
+  duration_ms: 14.8158
+  type: 'test'
+  ...
+# Subtest: asset registration is persistent and idempotent
+ok 103 - asset registration is persistent and idempotent
+  ---
+  duration_ms: 103.3962
+  type: 'test'
+  ...
+# Subtest: runs remain readable and active records become interrupted after restart
+ok 104 - runs remain readable and active records become interrupted after restart
+  ---
+  duration_ms: 263.4128
+  type: 'test'
+  ...
+# Subtest: run ids cannot escape the data root
+ok 105 - run ids cannot escape the data root
+  ---
+  duration_ms: 104.7418
+  type: 'test'
+  ...
+# Subtest: workspace entry is a same-origin whitelist and old workbench remains available
+ok 106 - workspace entry is a same-origin whitelist and old workbench remains available
+  ---
+  duration_ms: 203.0912
+  type: 'test'
+  ...
+# Subtest: UI-D2A xlsx samples preserve exact source text and classifications through real parser
+ok 107 - UI-D2A xlsx samples preserve exact source text and classifications through real parser
+  ---
+  duration_ms: 557.9496
+  type: 'test'
+  ...
+# Subtest: committed native sample came from supported export schema and survives official import parser
+ok 108 - committed native sample came from supported export schema and survives official import parser
+  ---
+  duration_ms: 121.7526
+  type: 'test'
+  ...
+# Subtest: six-case xlsx uses the supported mapping and preserves paired business expectations
+ok 109 - six-case xlsx uses the supported mapping and preserves paired business expectations
+  ---
+  duration_ms: 491.1779
+  type: 'test'
+  ...
+# Subtest: committed six-case json is a formal backend package and reimports all six cases
+ok 110 - committed six-case json is a formal backend package and reimports all six cases
+  ---
+  duration_ms: 155.7055
+  type: 'test'
+  ...
+# Subtest: workbench候选使用同一Playwright运行根并真实执行正常与反例
+ok 111 - workbench候选使用同一Playwright运行根并真实执行正常与反例
+  ---
+  duration_ms: 15910.1218
+  type: 'test'
+  ...
+# Subtest: harness-probe默认运行根保持独立可执行
+ok 112 - harness-probe默认运行根保持独立可执行
+  ---
+  duration_ms: 3896.3966
+  type: 'test'
+  ...
+1..112
+# tests 112
+# suites 0
+# pass 111
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25586.543

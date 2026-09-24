@@ -1,0 +1,375 @@
+{
+  "run": {
+    "variant": "fault",
+    "status": "FAILED",
+    "complete_pass": false,
+    "coverage": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": false,
+      "order_valid": false,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5"
+      ],
+      "duplicates": [],
+      "missing": [
+        "CASE_STEP_6"
+      ],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 点击查看遥测",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 等待约450毫秒",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击重试",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_5",
+          "step_id": "CASE_STEP_5",
+          "order": 5,
+          "observed": true,
+          "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+          "report_path": [
+            4
+          ],
+          "error_attributed": true,
+          "execution_status": "FAILED",
+          "attributed_errors": [
+            {
+              "step_id": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+                "expected": "750 V",
+                "actual": "705 V",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "raw_error": {
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                "location": {
+                  "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                  "line": 82,
+                  "column": 51
+                },
+                "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+              }
+            }
+          ]
+        },
+        {
+          "marker": "CASE_STEP_6",
+          "step_id": "CASE_STEP_6",
+          "order": 6,
+          "observed": false,
+          "raw_title": null,
+          "report_path": null,
+          "error_attributed": false,
+          "execution_status": "NOT_EXECUTED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "same_candidate_hash": true,
+    "report_sha256": "627F8E39C51F53F05B131E7FC29E6F6BD330AFF05CB4CB91E3AD2ACAC85B14A0",
+    "error": {
+      "type": "ASSERTION_MISMATCH",
+      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+      "expected": "750 V",
+      "actual": "705 V",
+      "attribution": "PENDING_ANALYSIS"
+    },
+    "mapping": {
+      "rule_version": "project-case-step-title-v2",
+      "complete": false,
+      "order_valid": false,
+      "expected_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5",
+        "CASE_STEP_6"
+      ],
+      "observed_sequence": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3",
+        "CASE_STEP_4",
+        "CASE_STEP_5"
+      ],
+      "duplicates": [],
+      "missing": [
+        "CASE_STEP_6"
+      ],
+      "unexpected": [],
+      "malformed_titles": [],
+      "unattributed_errors": [],
+      "items": [
+        {
+          "marker": "CASE_STEP_1",
+          "step_id": "CASE_STEP_1",
+          "order": 1,
+          "observed": true,
+          "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+          "report_path": [
+            0
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_2",
+          "step_id": "CASE_STEP_2",
+          "order": 2,
+          "observed": true,
+          "raw_title": "CASE_STEP_2: 点击查看遥测",
+          "report_path": [
+            1
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_3",
+          "step_id": "CASE_STEP_3",
+          "order": 3,
+          "observed": true,
+          "raw_title": "CASE_STEP_3: 等待约450毫秒",
+          "report_path": [
+            2
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_4",
+          "step_id": "CASE_STEP_4",
+          "order": 4,
+          "observed": true,
+          "raw_title": "CASE_STEP_4: 点击重试",
+          "report_path": [
+            3
+          ],
+          "error_attributed": false,
+          "execution_status": "PASSED",
+          "attributed_errors": []
+        },
+        {
+          "marker": "CASE_STEP_5",
+          "step_id": "CASE_STEP_5",
+          "order": 5,
+          "observed": true,
+          "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+          "report_path": [
+            4
+          ],
+          "error_attributed": true,
+          "execution_status": "FAILED",
+          "attributed_errors": [
+            {
+              "step_id": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+                "expected": "750 V",
+                "actual": "705 V",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "raw_error": {
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                "location": {
+                  "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                  "line": 82,
+                  "column": 51
+                },
+                "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+              }
+            }
+          ]
+        },
+        {
+          "marker": "CASE_STEP_6",
+          "step_id": "CASE_STEP_6",
+          "order": 6,
+          "observed": false,
+          "raw_title": null,
+          "report_path": null,
+          "error_attributed": false,
+          "execution_status": "NOT_EXECUTED",
+          "attributed_errors": []
+        }
+      ]
+    },
+    "specified_defect_detected": true
+  },
+  "parsed": {
+    "report_status": "COMPLETE",
+    "test_status": "FAILED",
+    "test_count": 1,
+    "error": {
+      "type": "ASSERTION_MISMATCH",
+      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+      "expected": "750 V",
+      "actual": "705 V",
+      "attribution": "PENDING_ANALYSIS"
+    },
+    "complete_pass": false,
+    "stats": {
+      "startTime": "2026-09-24T15:07:10.552Z",
+      "duration": 9112.139000000001,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 1,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "category": null,
+        "duration": 205,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2: 点击查看遥测",
+        "raw_title": "CASE_STEP_2: 点击查看遥测",
+        "category": null,
+        "duration": 96,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3: 等待约450毫秒",
+        "raw_title": "CASE_STEP_3: 等待约450毫秒",
+        "category": null,
+        "duration": 484,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4: 点击重试",
+        "raw_title": "CASE_STEP_4: 点击重试",
+        "category": null,
+        "duration": 55,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_5: 再等待约650毫秒",
+        "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+        "category": null,
+        "duration": 5705,
+        "error": {
+          "type": "ASSERTION_MISMATCH",
+          "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+          "expected": "750 V",
+          "actual": "705 V",
+          "attribution": "PENDING_ANALYSIS"
+        },
+        "raw_error": {
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+          "location": {
+            "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+            "line": 82,
+            "column": 51
+          },
+          "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+        },
+        "steps": []
+      }
+    ]
+  },
+  "process": {
+    "exitCode": 1,
+    "signal": null,
+    "error": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] .local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭\n  1) .local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭 › CASE_STEP_5: 再等待约650毫秒 \n\n    Error: expect(locator).toHaveText(expected) failed\n\n    Locator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    Expected: \"750 V\"\n    Received: \"705 V\"\n    Timeout:  5000ms\n\n    Call log:\n      - Expect \"toHaveText\" with timeout 5000ms\n      - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n        14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n           - unexpected value \"705 V\"\n\n\n      80 |     // 期望：电压750 V\n      81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n    > 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n         |                                                   ^\n      83 |\n      84 |     // 期望：采样时间2026-09-24 10:00:00\n      85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();\n        at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:82:51\n        at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:72:3\n\n    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────\n    .local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\test-failed-1.png\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────\n    .local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\video.webm\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n    Error Context: .local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\error-context.md\n\n    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────\n    .local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip\n    Usage:\n\n        npx playwright show-trace .local\\qa-fix-20260924\\runs\\NEW-002\\fault\\artifacts\\candidate-v2-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip\n\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n\n  1 failed\n    .local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭 \n",
+    "stderr": "(node:9516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+    "termination": null,
+    "pid": 4332,
+    "parentPid": 11512,
+    "exitObserved": true,
+    "closeObserved": true,
+    "outputComplete": true,
+    "trailingStdoutLine": false,
+    "observerError": null
+  }
+}

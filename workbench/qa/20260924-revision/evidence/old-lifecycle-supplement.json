@@ -1,0 +1,41 @@
+[
+  {
+    "id": "TC-001",
+    "task_id": "build-20260924141606-b30df029",
+    "registered_bytes": 59218,
+    "actual_bytes": 59542,
+    "registered_sha256": "976E658CE3FA6E18EB20ACE32AF02EA329A7BB092DA288153D629F63C02F1E07",
+    "actual_sha256": "7C76A40C788CFFE3577D78B5706C9F7B4BA2711A5B2413463E6DEED7209BA6A7",
+    "registered_equals_prefix_hash": true,
+    "appended_event_types": [
+      "attempt_settled"
+    ],
+    "old_record_not_rewritten": true
+  },
+  {
+    "id": "TC-002",
+    "task_id": "build-20260924141725-0b65a070",
+    "registered_bytes": 60567,
+    "actual_bytes": 60891,
+    "registered_sha256": "CE4A93B33467BFD910B58A736F7E79839D9D3FD5928B230CD23DA72604FC8561",
+    "actual_sha256": "44DA2E8254B20FD782EC7825BD68F605C9C025B611E8C505D8A3F21A7F22AFA5",
+    "registered_equals_prefix_hash": true,
+    "appended_event_types": [
+      "attempt_settled"
+    ],
+    "old_record_not_rewritten": true
+  },
+  {
+    "id": "TC-003",
+    "task_id": "build-20260924141851-7a5e5553",
+    "registered_bytes": 58079,
+    "actual_bytes": 58403,
+    "registered_sha256": "6D2F8395640D4A7DEE896BB6E186CF79E42A1E63294A4BCC1E63936CB36840F5",
+    "actual_sha256": "AD370399A42AF2DCEC6784E6AC625FA1222156695885A3C9114F6161181672BD",
+    "registered_equals_prefix_hash": true,
+    "appended_event_types": [
+      "attempt_settled"
+    ],
+    "old_record_not_rewritten": true
+  }
+]

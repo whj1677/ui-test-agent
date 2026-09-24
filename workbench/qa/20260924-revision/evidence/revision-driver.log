@@ -1,0 +1,6 @@
+{"event":"HARNESS_REVISION_START","id":"NEW-001","start":1}
+{"event":"PRODUCT_RUN_DONE","id":"NEW-001","variant":"normal","status":"PASSED","coverage":true,"detected":null}
+{"event":"PRODUCT_RUN_DONE","id":"NEW-001","variant":"fault","status":"FAILED","coverage":false,"detected":true}
+{"event":"HARNESS_REVISION_START","id":"NEW-002","start":2}
+{"event":"PRODUCT_RUN_DONE","id":"NEW-002","variant":"normal","status":"PASSED","coverage":true,"detected":null}
+{"event":"PRODUCT_RUN_DONE","id":"NEW-002","variant":"fault","status":"FAILED","coverage":false,"detected":true}

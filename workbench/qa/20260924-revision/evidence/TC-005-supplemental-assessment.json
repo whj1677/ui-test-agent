@@ -1,0 +1,88 @@
+{
+  "kind": "APPENDED_OFFLINE_REASSESSMENT",
+  "original_qa_commit": "b651ed04a67cbdfc68700e0e7031e3d12416ea50",
+  "raw_report_sha256": "59D4FF03B21C64FC9884F1AFC65FF0818368128CBA8E15F7E2F6553F903F1FE6",
+  "parser_version": "playwright-error-facts-v2",
+  "original_task_sha256": "398B03F79E38092B3A109613E0C447F021E5E74FF012EC2756F6184605922FC7",
+  "original_classification": "LOCATOR_OR_TARGET",
+  "original_specified_defect_detected": false,
+  "original_task_unchanged": true,
+  "new_error": {
+    "type": "ASSERTION_MISMATCH",
+    "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+    "expected": "DEV-006",
+    "actual": "\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  ",
+    "attribution": "PENDING_ANALYSIS"
+  },
+  "test_status": "FAILED",
+  "specified_defect_detected": true,
+  "mapping": {
+    "rule_version": "project-case-step-title-v2",
+    "complete": true,
+    "order_valid": true,
+    "expected_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2"
+    ],
+    "observed_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2"
+    ],
+    "duplicates": [],
+    "missing": [],
+    "unexpected": [],
+    "malformed_titles": [],
+    "unattributed_errors": [],
+    "items": [
+      {
+        "marker": "CASE_STEP_1",
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "observed": true,
+        "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+        "report_path": [
+          0
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_2",
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "observed": true,
+        "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+        "report_path": [
+          1
+        ],
+        "error_attributed": true,
+        "execution_status": "FAILED",
+        "attributed_errors": [
+          {
+            "step_id": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+              "expected": "DEV-006",
+              "actual": "\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  ",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "raw_error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+              "location": {
+                "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                "line": 35,
+                "column": 43
+              },
+              "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

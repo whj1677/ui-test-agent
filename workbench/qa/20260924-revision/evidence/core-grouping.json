@@ -1,0 +1,795 @@
+{
+  "original_total": 1749,
+  "original_failures": 108,
+  "parsed_failures": 108,
+  "modules": {
+    "adaptive-binding-feedback.test.mjs": 3,
+    "adaptive-capabilities.execution.test.mjs": 3,
+    "adaptive-completion-evidence.execution.test.mjs": 4,
+    "adaptive-completion.test.mjs": 4,
+    "adaptive-execution.test.mjs": 17,
+    "adaptive-extra-constraints.execution.test.mjs": 3,
+    "adaptive-negative-review.execution.test.mjs": 5,
+    "adaptive-numeric-capability.test.mjs": 4,
+    "adaptive-page-target.test.mjs": 3,
+    "adaptive-semantic-boundary.test.mjs": 4,
+    "adaptive-source-recovery.test.mjs": 3,
+    "aria-selected.execution.test.mjs": 3,
+    "assertion-evidence.execution.test.mjs": 3,
+    "completion-feedback.execution.test.mjs": 6,
+    "display-number.test.mjs": 4,
+    "expectation-visibility.execution.test.mjs": 3,
+    "invariant-caption-window.execution.test.mjs": 2,
+    "order-evidence.execution.test.mjs": 3,
+    "page-index-evidence.execution.test.mjs": 4,
+    "partial-assertion-review.execution.test.mjs": 8,
+    "query-result-evidence.execution.test.mjs": 3,
+    "row-evidence.execution.test.mjs": 4,
+    "selection-timing.execution.test.mjs": 3,
+    "table-invariant-source.execution.test.mjs": 2,
+    "table-order.execution.test.mjs": 2,
+    "unique-row-evidence.execution.test.mjs": 5
+  },
+  "errors": {
+    "ERR_ASSERTION": 84,
+    "ERR_TEST_FAILURE": 24
+  },
+  "failures": [
+    {
+      "number": 12,
+      "name": "source binding feedback remains advisory through execution: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-binding-feedback.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 13,
+      "name": "source binding feedback remains advisory through execution: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-binding-feedback.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 14,
+      "name": "source binding feedback remains advisory through execution: business-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-binding-feedback.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 15,
+      "name": "all candidate issues arrive in one bounded correction: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-capabilities.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 16,
+      "name": "all candidate issues arrive in one bounded correction: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-capabilities.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 17,
+      "name": "all candidate issues arrive in one bounded correction: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-capabilities.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 24,
+      "name": "a new successful measurement can request completion, not approve it: new-evidence",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 25,
+      "name": "a new successful measurement can request completion, not approve it: final-reject",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 26,
+      "name": "a new successful measurement can request completion, not approve it: duplicate-only",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 27,
+      "name": "a new successful measurement can request completion, not approve it: actual-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 35,
+      "name": "measured coverage proposes completion but never approves itself: finish",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion.test.mjs:18:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 36,
+      "name": "measured coverage proposes completion but never approves itself: missing-obligation",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion.test.mjs:18:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 37,
+      "name": "measured coverage proposes completion but never approves itself: final-reject",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion.test.mjs:18:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 38,
+      "name": "measured coverage proposes completion but never approves itself: actual-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-completion.test.mjs:18:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 65,
+      "name": "measured assertion coverage requests final audit without repeated planning",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:188:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 66,
+      "name": "measured assertion coverage with a remaining gap still stops permanent repeats",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:188:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 67,
+      "name": "partial audit gaps survive success and a repeated measurement recovers without replaying actions",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:233:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 68,
+      "name": "contradictory audit returns candidate feedback without executing or erasing its negative finding",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:291:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 69,
+      "name": "focused gap repair refuses an extra navigation action before dispatch",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:336:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 70,
+      "name": "no remaining obligations feedback permits a no-action completion but never replays navigation",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:369:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 71,
+      "name": "real-response format error then mistaken blocked recovers without replaying menu clicks",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:390:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 72,
+      "name": "malformed audit response repairs only the audit while preserving executed actions",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:416:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 73,
+      "name": "repeated blocked is terminal after one evidence-based reconsideration",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:437:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 74,
+      "name": "current target/source refs execute through the real controller and browser kernel",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:454:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 75,
+      "name": "exhausted audit format repair is terminal without spending a fresh planning round",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:481:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 76,
+      "name": "direct test dynamically handles button navigation without upfront technical plan",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:495:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 77,
+      "name": "direct test dynamically handles link navigation without upfront technical plan",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:495:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 78,
+      "name": "actual business mismatch stops without changing oracle or replaying actions",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:511:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 79,
+      "name": "a pre-dispatch locator failure is locally replanned and the rejected attempt is retained",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:519:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 82,
+      "name": "ambiguous assertion can repair its scope without replaying completed actions",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:554:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 83,
+      "name": "assertion scope repair cannot change the predicate or expected result",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-execution.test.mjs:562:1",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 84,
+      "name": "original membership, not an invented closed sorted population: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-extra-constraints.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 85,
+      "name": "original membership, not an invented closed sorted population: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-extra-constraints.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 86,
+      "name": "original membership, not an invented closed sorted population: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-extra-constraints.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 95,
+      "name": "negative audit routes to bounded candidate repair: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-negative-review.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 96,
+      "name": "negative audit routes to bounded candidate repair: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-negative-review.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 97,
+      "name": "negative audit routes to bounded candidate repair: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-negative-review.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 98,
+      "name": "negative audit routes to bounded candidate repair: partial-repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-negative-review.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 99,
+      "name": "negative audit routes to bounded candidate repair: partial-repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-negative-review.execution.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 102,
+      "name": "numeric capability repair before dispatch: suffix",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-numeric-capability.test.mjs:46:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 103,
+      "name": "numeric capability repair before dispatch: pure-number",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-numeric-capability.test.mjs:46:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 104,
+      "name": "numeric capability repair before dispatch: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-numeric-capability.test.mjs:46:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 105,
+      "name": "numeric capability repair before dispatch: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-numeric-capability.test.mjs:46:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 106,
+      "name": "actual controller page-counter binding, injected model: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-page-target.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 107,
+      "name": "actual controller page-counter binding, injected model: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-page-target.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 108,
+      "name": "actual controller page-counter binding, injected model: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-page-target.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 353,
+      "name": "V03 partial-to-complete controller boundary: recover",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-semantic-boundary.test.mjs:57:3",
+      "code": "ERR_ASSERTION",
+      "error": "'[]'"
+    },
+    {
+      "number": 354,
+      "name": "V03 partial-to-complete controller boundary: persistent-invalid",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-semantic-boundary.test.mjs:57:3",
+      "code": "ERR_ASSERTION",
+      "error": "'[]'"
+    },
+    {
+      "number": 355,
+      "name": "V03 partial-to-complete controller boundary: page-mismatch",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-semantic-boundary.test.mjs:57:3",
+      "code": "ERR_ASSERTION",
+      "error": "'[]'"
+    },
+    {
+      "number": 356,
+      "name": "V03 partial-to-complete controller boundary: invalid-with-action",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-semantic-boundary.test.mjs:57:3",
+      "code": "ERR_ASSERTION",
+      "error": "'[]'"
+    },
+    {
+      "number": 357,
+      "name": "real V02 source-unit failure through execution loop: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-source-recovery.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 358,
+      "name": "real V02 source-unit failure through execution loop: still-ungrounded",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-source-recovery.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 359,
+      "name": "real V02 source-unit failure through execution loop: actual-mismatch",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\adaptive-source-recovery.test.mjs:16:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 360,
+      "name": "default tab typed recovery without replay: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\aria-selected.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 361,
+      "name": "default tab typed recovery without replay: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\aria-selected.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 362,
+      "name": "default tab typed recovery without replay: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\aria-selected.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 370,
+      "name": "evidence-source advisory does not grant execution or substitute note values: normal",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\assertion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 371,
+      "name": "evidence-source advisory does not grant execution or substitute note values: field-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\assertion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 372,
+      "name": "evidence-source advisory does not grant execution or substitute note values: negative-review",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\assertion-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 437,
+      "name": "parallel completion feedback through actual Controller: baseline/early-feedback",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 438,
+      "name": "parallel completion feedback through actual Controller: baseline/actual-page11",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 439,
+      "name": "parallel completion feedback through actual Controller: baseline/persistent-omission",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 440,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/early-feedback",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 441,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/actual-page11",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 442,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/persistent-omission",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\completion-feedback.execution.test.mjs:16:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 614,
+      "name": "display-number candidate repair with no business replay: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\display-number.test.mjs:136:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 615,
+      "name": "display-number candidate repair with no business replay: difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\display-number.test.mjs:136:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 616,
+      "name": "display-number candidate repair with no business replay: repeat",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\display-number.test.mjs:136:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 617,
+      "name": "display-number candidate repair with no business replay: scalar",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\display-number.test.mjs:136:3",
+      "code": "ERR_TEST_FAILURE",
+      "error": "\"Cannot read properties of undefined (reading 'error')\""
+    },
+    {
+      "number": 730,
+      "name": "closing requires same-dialog result without replay: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\expectation-visibility.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 731,
+      "name": "closing requires same-dialog result without replay: still-open",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\expectation-visibility.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 732,
+      "name": "closing requires same-dialog result without replay: persistent-missing",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\expectation-visibility.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 782,
+      "name": "caption holds must follow checkpoint sampling, difference=false",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\invariant-caption-window.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 783,
+      "name": "caption holds must follow checkpoint sampling, difference=true",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\invariant-caption-window.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 854,
+      "name": "actual order, not control state: correct",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\order-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 855,
+      "name": "actual order, not control state: wrong-table-order",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\order-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 856,
+      "name": "actual order, not control state: persistent-control-only",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\order-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 897,
+      "name": "current page is not inferred from IDs: correct",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\page-index-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 898,
+      "name": "current page is not inferred from IDs: wrong-page",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\page-index-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 899,
+      "name": "current page is not inferred from IDs: persistent-missing",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\page-index-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 900,
+      "name": "current page is not inferred from IDs: after-navigation",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\page-index-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 935,
+      "name": "partial semantic review with actual Controller and browser: inverted",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 936,
+      "name": "partial semantic review with actual Controller and browser: real-defect",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 937,
+      "name": "partial semantic review with actual Controller and browser: valid-part",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 938,
+      "name": "partial semantic review with actual Controller and browser: unresolved",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 939,
+      "name": "partial semantic review with actual Controller and browser: malformed",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 940,
+      "name": "partial semantic review with actual Controller and browser: persistent",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 941,
+      "name": "partial semantic review with actual Controller and browser: missing-parent",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 942,
+      "name": "partial semantic review with actual Controller and browser: hidden-parent",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\partial-assertion-review.execution.test.mjs:24:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1095,
+      "name": "AND result evidence without replay: correct",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\query-result-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1096,
+      "name": "AND result evidence without replay: wrong-result-name",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\query-result-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1097,
+      "name": "AND result evidence without replay: persistent-input-only",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\query-result-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1211,
+      "name": "row source boundary without normalizing fabricated oracle: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\row-evidence.execution.test.mjs:20:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1212,
+      "name": "row source boundary without normalizing fabricated oracle: actual-field-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\row-evidence.execution.test.mjs:20:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1213,
+      "name": "row source boundary without normalizing fabricated oracle: persistent-aggregate",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\row-evidence.execution.test.mjs:20:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1214,
+      "name": "row source boundary without normalizing fabricated oracle: explicit-literal-difference",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\row-evidence.execution.test.mjs:20:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1263,
+      "name": "tab postcondition timing without business retry: repair",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\selection-timing.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1264,
+      "name": "tab postcondition timing without business retry: difference-after-click",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\selection-timing.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1265,
+      "name": "tab postcondition timing without business retry: persistent-premature",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\selection-timing.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1434,
+      "name": "pre-action baseline for same-step equality prose, difference=false",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\table-invariant-source.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1435,
+      "name": "pre-action baseline for same-step equality prose, difference=true",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\table-invariant-source.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1523,
+      "name": "same-step original order source, actual difference=false",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\table-order.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1524,
+      "name": "same-step original order source, actual difference=true",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\table-order.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1576,
+      "name": "sole-record proof through actual Controller: joint",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\unique-row-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1577,
+      "name": "sole-record proof through actual Controller: extra",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\unique-row-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1578,
+      "name": "sole-record proof through actual Controller: closed",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\unique-row-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1579,
+      "name": "sole-record proof through actual Controller: closed-extra",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\unique-row-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    },
+    {
+      "number": 1580,
+      "name": "sole-record proof through actual Controller: persistent",
+      "location": "D:\\\\01_AI工程\\\\01_工程项目\\\\ui-test-agent\\\\tests\\\\unique-row-evidence.execution.test.mjs:15:3",
+      "code": "ERR_ASSERTION",
+      "error": "|-"
+    }
+  ]
+}

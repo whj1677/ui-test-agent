@@ -24,37 +24,70 @@ function walkSteps(steps, result = []) {
   return result;
 }
 
+export const ERROR_FACTS_VERSION = 'playwright-error-facts-v2';
+
+// Accept only complete, known Playwright representations. Call logs are not values.
+function assertionValues(message, matcher) {
+  const supported = /^(?:toHaveText|toContainText|toHaveValue|toHaveCount)$/;
+  const scalar = (v) => typeof v === 'string' || typeof v === 'number' ||
+    (Array.isArray(v) && v.every((item) => typeof item === 'string'));
+  const format = (v) => typeof v === 'string' ? v : JSON.stringify(v);
+  if (supported.test(matcher?.name) && scalar(matcher.expected) && scalar(matcher.actual)) {
+    return [format(matcher.expected), format(matcher.actual)];
+  }
+  const value = (label) => {
+    const match = message.match(new RegExp(`^${label}(?: string| substring)?:[ \\t]*("(?:\\\\.|[^"\\\\\\r\\n])*"|[0-9]+)[ \\t]*$`, 'm'));
+    if (!match) return null;
+    try { return format(JSON.parse(match[1])); } catch { return null; }
+  };
+  const direct = [value('Expected'), value('Received')];
+  if (direct.some((v) => v !== null)) return direct;
+  if (!/expect\(locator\)\.to(?:Have|Contain)Text\(expected\)/.test(message)) return [null, null];
+  const lines = message.split(/\r?\n/);
+  const arrayStart = lines.findIndex((line) => /^\s*Array \[$/.test(line));
+  if (arrayStart >= 0) {
+    const left = [], right = [];
+    let changed = false;
+    for (const line of lines.slice(arrayStart + 1)) {
+      if (/^\s*\]$/.test(line)) return changed && left.length && right.length
+        ? [JSON.stringify(left), JSON.stringify(right)] : [null, null];
+      const item = /^\s*([+-])?\s*("(?:\\.|[^"\\])*"),?\s*$/.exec(line);
+      if (!item) return [null, null];
+      try {
+        const v = JSON.parse(item[2]);
+        if (item[1] !== '+') left.push(v);
+        if (item[1] !== '-') right.push(v);
+        changed ||= Boolean(item[1]);
+      } catch { return [null, null]; }
+    }
+    return [null, null];
+  }
+  const start = lines.findIndex((line) => /^- Expected (?:substring|string)\s+- \d+$/.test(line));
+  if (start < 0 || !/^\+ Received string\s+\+ \d+$/.test(lines[start + 1] || '') || lines[start + 2] !== '') return [null, null];
+  const minus = Number(lines[start].match(/(\d+)$/)[1]);
+  const plus = Number(lines[start + 1].match(/(\d+)$/)[1]);
+  const left = [], right = [];
+  let removed = 0, added = 0;
+  let terminated = false;
+  for (const line of lines.slice(start + 3)) {
+    if (line === '') { terminated = true; break; }
+    if (!/^(?:[-+] |[-+]$|  )/.test(line)) return [null, null];
+    const v = line.length === 1 ? '' : line.slice(2);
+    if (line[0] !== '+') left.push(v);
+    if (line[0] !== '-') right.push(v);
+    if (line[0] === '-') removed++;
+    if (line[0] === '+') added++;
+  }
+  return terminated && removed === minus && added === plus && removed > 0 && added > 0
+    ? [left.join('\n'), right.join('\n')] : [null, null];
+}
+
 function errorFacts(error) {
   if (!error) return null;
   const message = stripAnsi(error.message || error.value || String(error)).slice(0, 20000);
-  let expected = message.match(/Expected(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
-  let actual = message.match(/Received(?: string)?:\s*["']([^"']*)["']/i)?.[1] ?? null;
-  if (expected === null && actual === null && /expect\(locator\)\.toHaveText\(expected\)/.test(message)) {
-    const lines = message.split(/\r?\n/);
-    const start = lines.findIndex((line) => /^\s*Array \[$/.test(line));
-    if (start >= 0) {
-      const left = [];
-      const right = [];
-      let changed = false;
-      for (const line of lines.slice(start + 1)) {
-        if (/^\s*\]$/.test(line)) break;
-        const value = /^\s*([+-])?\s*("(?:\\.|[^"\\])*"),?\s*$/.exec(line);
-        if (!value) continue;
-        try {
-          const item = JSON.parse(value[2]);
-          if (value[1] !== '+') left.push(item);
-          if (value[1] !== '-') right.push(item);
-          changed ||= Boolean(value[1]);
-        } catch { changed = false; break; }
-      }
-      if (changed && left.length && right.length && JSON.stringify(left) !== JSON.stringify(right)) {
-        expected = JSON.stringify(left);
-        actual = JSON.stringify(right);
-      }
-    }
-  }
+  const [expected, actual] = assertionValues(message, error.matcherResult);
   let type = 'TEST_ERROR';
-  const missingLocator = /locator resolved to 0 elements?/.test(message);
+  const missingLocator = /strict mode violation|element\(s\) not found|locator resolved to 0 elements?/i.test(message);
   if (expected !== null && actual !== null && !missingLocator) type = 'ASSERTION_MISMATCH';
   else if (/strict mode violation|element\(s\) not found|resolved to \d+ elements|waiting for (?:getBy|locator)|未找到表头列/i.test(message)) type = 'LOCATOR_OR_TARGET';
   else if (/Expected(?: string)?:|Received(?: string)?:|expect\(/i.test(message)) type = 'ASSERTION_UNRESOLVED';

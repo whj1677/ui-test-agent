@@ -1,0 +1,47 @@
+TAP version 13
+# {"mode":"normal","registered_bytes":2045,"actual_bytes":2367,"registered_sha256":"D25188B539DBE01A2F94E8336A9A665CE567B2636BB89C15FF3A760C854CC9BB","actual_sha256":"9E7F5A8255A1DDA7104DEE66F1E73CB597EE6E935C165B867B3E764B60A459D9","last_event":"attempt_settled","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","phase","attempt_settled"]}
+# Subtest: production lifecycle final indexing: normal, delayed append and close
+not ok 1 - production lifecycle final indexing: normal, delayed append and close
+  ---
+  duration_ms: 287.2678
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\qa-lifecycle.test.mjs:13:55'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    2045 !== 2367
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2367
+  actual: 2045
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/qa-lifecycle.test.mjs:65:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# {"mode":"cancel","registered_bytes":2364,"actual_bytes":2364,"registered_sha256":"112D2A209FCD9E8540FC282026FC3C38561C33698CFE45E559F24BD2233841A3","actual_sha256":"112D2A209FCD9E8540FC282026FC3C38561C33698CFE45E559F24BD2233841A3","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","cancel_requested","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: cancel, delayed append and close
+ok 2 - production lifecycle final indexing: cancel, delayed append and close
+  ---
+  duration_ms: 266.8563
+  type: 'test'
+  ...
+# {"mode":"exception","registered_bytes":2053,"actual_bytes":2053,"registered_sha256":"2834F5508C8795E40180A916C2D10248451BC73244532041C0A2468A45742A05","actual_sha256":"2834F5508C8795E40180A916C2D10248451BC73244532041C0A2468A45742A05","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: exception, delayed append and close
+ok 3 - production lifecycle final indexing: exception, delayed append and close
+  ---
+  duration_ms: 227.9749
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 2
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1824.9818

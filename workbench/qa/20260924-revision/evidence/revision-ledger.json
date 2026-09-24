@@ -1,0 +1,991 @@
+{
+  "schema": "qa-feedback-revision-budget-v1",
+  "max_harness_starts": 2,
+  "max_product_runs": 4,
+  "harness_claims": [
+    {
+      "id": "NEW-001",
+      "at": "2026-09-24T15:03:54.854Z"
+    },
+    {
+      "id": "NEW-002",
+      "at": "2026-09-24T15:05:01.426Z"
+    }
+  ],
+  "run_claims": [
+    {
+      "id": "NEW-001",
+      "variant": "normal",
+      "candidate_sha256": "556BA603DC690000B89A010E366C61D4A1B7C625195F522E30C595B24A29277F",
+      "at": "2026-09-24T15:04:47.489Z"
+    },
+    {
+      "id": "NEW-001",
+      "variant": "fault",
+      "candidate_sha256": "556BA603DC690000B89A010E366C61D4A1B7C625195F522E30C595B24A29277F",
+      "at": "2026-09-24T15:04:51.837Z"
+    },
+    {
+      "id": "NEW-002",
+      "variant": "normal",
+      "candidate_sha256": "A3ACDE2572F4D941920EB0AAB80DF1D4B9FDA056FD02E48C0BF0DB45D9BCB80B",
+      "at": "2026-09-24T15:07:04.023Z"
+    },
+    {
+      "id": "NEW-002",
+      "variant": "fault",
+      "candidate_sha256": "A3ACDE2572F4D941920EB0AAB80DF1D4B9FDA056FD02E48C0BF0DB45D9BCB80B",
+      "at": "2026-09-24T15:07:09.453Z"
+    }
+  ],
+  "groups": [
+    {
+      "id": "NEW-001",
+      "runs": [
+        {
+          "variant": "normal",
+          "status": "PASSED",
+          "complete_pass": true,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击上一页",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "same_candidate_hash": true,
+          "report_sha256": "05C597FC4065EEE1E36233510392358EF34E03864DD01D5ED7C9ACD36984295C",
+          "error": null,
+          "mapping": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击上一页",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "specified_defect_detected": null
+        },
+        {
+          "variant": "fault",
+          "status": "FAILED",
+          "complete_pass": false,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_4"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('table tbody tr').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+                      "expected": "P05",
+                      "actual": "P02",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table tbody tr').first().locator('td').first()\nExpected: \u001b[32m\"P0\u001b[7m5\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"P0\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').first().locator('td').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <td>P02</td>\u001b[22m\n\u001b[2m       - unexpected value \"P02\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-001\\output\\candidate-v2.spec.mjs",
+                        "line": 19,
+                        "column": 60
+                      },
+                      "snippet": "  17 |       await expect(dataRows).toHaveCount(ids.length);\n  18 |       for (let i = 0; i < ids.length; i += 1) {\n> 19 |         await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\n     |                                                            ^\n  20 |         await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\n  21 |       }\n  22 |     };"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "same_candidate_hash": true,
+          "report_sha256": "37313180F7C2229989DF57A299F4790D5DB874A64443483B297C1BDA03FFDF28",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('table tbody tr').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+            "expected": "P05",
+            "actual": "P02",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "mapping": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_4"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('table tbody tr').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+                      "expected": "P05",
+                      "actual": "P02",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table tbody tr').first().locator('td').first()\nExpected: \u001b[32m\"P0\u001b[7m5\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"P0\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').first().locator('td').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <td>P02</td>\u001b[22m\n\u001b[2m       - unexpected value \"P02\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-001\\output\\candidate-v2.spec.mjs",
+                        "line": 19,
+                        "column": 60
+                      },
+                      "snippet": "  17 |       await expect(dataRows).toHaveCount(ids.length);\n  18 |       for (let i = 0; i < ids.length; i += 1) {\n> 19 |         await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\n     |                                                            ^\n  20 |         await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\n  21 |       }\n  22 |     };"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "specified_defect_detected": true
+        }
+      ],
+      "old_sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "inputs": [
+        {
+          "file": "case.json",
+          "sha256": "AC3B9E0885563D11C7865BB30BF5183334508279452B74C686AC052E223005CE"
+        },
+        {
+          "file": "original.spec.mjs",
+          "sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137"
+        },
+        {
+          "file": "normal-feedback.json",
+          "sha256": "5228340B55D44AE008D587997C3924C37575BD2842C79A40F038F9ACEA0C3D2E"
+        },
+        {
+          "file": "task.md",
+          "sha256": "A72F61DA1DD14C3A1002F2DC1EEC528A0939638183031EBDB7F9CCC680DB7340"
+        }
+      ],
+      "assessment": {
+        "success": true,
+        "completed": true,
+        "candidateExists": true,
+        "browserToolCalls": 12,
+        "exitCode": 0,
+        "termination": null,
+        "error": null,
+        "finalPresent": true,
+        "turnEndReason": "completed",
+        "toolCalls": 19,
+        "maxToolCalls": 30,
+        "toolLimitReached": false
+      },
+      "tool_calls": 19,
+      "new_sha256": "556BA603DC690000B89A010E366C61D4A1B7C625195F522E30C595B24A29277F"
+    },
+    {
+      "id": "NEW-002",
+      "runs": [
+        {
+          "variant": "normal",
+          "status": "PASSED",
+          "complete_pass": true,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查看遥测",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 等待约450毫秒",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击重试",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": true,
+                "raw_title": "CASE_STEP_6: 点击关闭",
+                "report_path": [
+                  5
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "same_candidate_hash": true,
+          "report_sha256": "4E4ED4C592BEE0DE4E3144785E85BDF0FAA09591D96FAC1AEC1D2956391E512C",
+          "error": null,
+          "mapping": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查看遥测",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 等待约450毫秒",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击重试",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": true,
+                "raw_title": "CASE_STEP_6: 点击关闭",
+                "report_path": [
+                  5
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "specified_defect_detected": null
+        },
+        {
+          "variant": "fault",
+          "status": "FAILED",
+          "complete_pass": false,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_6"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查看遥测",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 等待约450毫秒",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击重试",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_5",
+                    "report_path": [
+                      4
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+                      "expected": "750 V",
+                      "actual": "705 V",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                        "line": 82,
+                        "column": 51
+                      },
+                      "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "same_candidate_hash": true,
+          "report_sha256": "627F8E39C51F53F05B131E7FC29E6F6BD330AFF05CB4CB91E3AD2ACAC85B14A0",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+            "expected": "750 V",
+            "actual": "705 V",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "mapping": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_6"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查看遥测",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 等待约450毫秒",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击重试",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5: 再等待约650毫秒",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_5",
+                    "report_path": [
+                      4
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \"750 V\"\nReceived: \"705 V\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\n    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\n       - unexpected value \"705 V\"\n",
+                      "expected": "750 V",
+                      "actual": "705 V",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\nExpected: \u001b[32m\"7\u001b[7m5\u001b[27m0 V\"\u001b[39m\nReceived: \u001b[31m\"70\u001b[7m5\u001b[27m V\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).locator('strong').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"tVolt\">705 V</strong>\u001b[22m\n\u001b[2m       - unexpected value \"705 V\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-fix-20260924\\attempts\\NEW-002\\output\\candidate-v2.spec.mjs",
+                        "line": 82,
+                        "column": 51
+                      },
+                      "snippet": "  80 |     // 期望：电压750 V\n  81 |     await expect(dialog.getByText('电压', { exact: true })).toBeVisible();\n> 82 |     await expect(dialog.locator('strong').nth(0)).toHaveText('750 V');\n     |                                                   ^\n  83 |\n  84 |     // 期望：采样时间2026-09-24 10:00:00\n  85 |     await expect(dialog.getByText('采样时间', { exact: true })).toBeVisible();"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "specified_defect_detected": true
+        }
+      ],
+      "old_sha256": "7EBF7783ABA1AB643D224B765B94C616C3B18CC045EAE2801D87A157C0241A3B",
+      "inputs": [
+        {
+          "file": "case.json",
+          "sha256": "B4DD777044D71F00AA44EF68A2A80CC79E2C19813C469091F98972B4AC336833"
+        },
+        {
+          "file": "original.spec.mjs",
+          "sha256": "7EBF7783ABA1AB643D224B765B94C616C3B18CC045EAE2801D87A157C0241A3B"
+        },
+        {
+          "file": "normal-feedback.json",
+          "sha256": "A1B52043C94B683834234466D9B4E98D79CB8D3098880450EE46400B2E22267C"
+        },
+        {
+          "file": "task.md",
+          "sha256": "4CBFA2BEF4DCF0353F120096CDAB1F6E5609AF56BCBE9CE31A515BF564439F20"
+        }
+      ],
+      "assessment": {
+        "success": true,
+        "completed": true,
+        "candidateExists": true,
+        "browserToolCalls": 20,
+        "exitCode": 0,
+        "termination": null,
+        "error": null,
+        "finalPresent": true,
+        "turnEndReason": "completed",
+        "toolCalls": 28,
+        "maxToolCalls": 30,
+        "toolLimitReached": false
+      },
+      "tool_calls": 28,
+      "new_sha256": "A3ACDE2572F4D941920EB0AAB80DF1D4B9FDA056FD02E48C0BF0DB45D9BCB80B"
+    }
+  ],
+  "rules_version": "browser-semantics-v1",
+  "started_at": "2026-09-24T15:03:54.819Z",
+  "isolation": "Dedicated input workspace and instruction scope only; not a strong sandbox.",
+  "finished_at": "2026-09-24T15:07:19.702Z"
+}
