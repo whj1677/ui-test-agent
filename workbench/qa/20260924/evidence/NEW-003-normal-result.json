@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "process": {
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] .local\\qa-20260924\\new-attempts\\NEW-003\\output\\candidate.spec.mjs:3:1 › NEW-003 两步维护申请校验、回退保留并生成预览\n  1 passed (2.5s)\n",
+    "stderr": "(node:41800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+    "termination": null,
+    "pid": 16480,
+    "parentPid": 39404,
+    "exitObserved": true,
+    "closeObserved": true,
+    "outputComplete": true,
+    "trailingStdoutLine": false,
+    "observerError": null
+  },
+  "report": {
+    "success": true,
+    "reason": "COMPLETE_PASS",
+    "testCount": 1,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "reportPath": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-003\\normal\\playwright-report.json",
+  "runtime": {
+    "runtime_root": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench",
+    "cli_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+    "config_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "cli_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "config_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "candidate_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "cli_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "config_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "candidate_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "consistent": true
+  }
+}

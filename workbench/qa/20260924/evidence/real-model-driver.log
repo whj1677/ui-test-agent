@@ -1,0 +1,7 @@
+TEST-SITE-01 http://127.0.0.1:4320/ui/a
+{"event":"REAL_MODEL_STARTED","case":"TC-001","task_id":"build-20260924141606-b30df029"}
+{"event":"CASE_GROUP_FINISHED","case":"TC-001","status":"WAITING_HUMAN_REVIEW","runs":[{"id":"TC-001","status":"PASSED","complete_pass":true},{"id":"TC-004","status":"FAILED","complete_pass":false}]}
+{"event":"REAL_MODEL_STARTED","case":"TC-002","task_id":"build-20260924141725-0b65a070"}
+{"event":"CASE_GROUP_FINISHED","case":"TC-002","status":"WAITING_E2E_TRIALS","runs":[{"id":"TC-002","status":"PASSED","complete_pass":true},{"id":"TC-005","status":"FAILED","complete_pass":false}]}
+{"event":"REAL_MODEL_STARTED","case":"TC-003","task_id":"build-20260924141851-7a5e5553"}
+{"event":"CASE_GROUP_FINISHED","case":"TC-003","status":"WAITING_HUMAN_REVIEW","runs":[{"id":"TC-003","status":"PASSED","complete_pass":true},{"id":"TC-006","status":"FAILED","complete_pass":false}]}

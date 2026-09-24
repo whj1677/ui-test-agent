@@ -1,0 +1,86 @@
+[
+  {
+    "scene": "paging",
+    "variant": "normal",
+    "checks": [
+      "initial records/total/page",
+      "filter records/total/page",
+      "next page exact rows and retained selection",
+      "previous page restoration"
+    ],
+    "expected": [
+      "P05",
+      "P07"
+    ],
+    "actual": [
+      "P05",
+      "P07"
+    ],
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "PASSED"
+  },
+  {
+    "scene": "paging",
+    "variant": "fault",
+    "checks": [
+      "initial records/total/page",
+      "filter records/total/page",
+      "next page exact rows and retained selection",
+      "previous page restoration"
+    ],
+    "expected": [
+      "P05",
+      "P07"
+    ],
+    "actual": [
+      "P02",
+      "P04"
+    ],
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "INTENDED_MISMATCH_CONFIRMED"
+  },
+  {
+    "scene": "retry",
+    "variant": "normal",
+    "checks": [
+      "dialog and loading",
+      "first async failure",
+      "retry disabled during request",
+      "voltage exact unit and timestamp",
+      "close"
+    ],
+    "expected": "750 V",
+    "actual": "750 V",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "PASSED"
+  },
+  {
+    "scene": "retry",
+    "variant": "fault",
+    "checks": [
+      "dialog and loading",
+      "first async failure",
+      "retry disabled during request",
+      "voltage exact unit and timestamp",
+      "close"
+    ],
+    "expected": "750 V",
+    "actual": "705 V",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "INTENDED_MISMATCH_CONFIRMED"
+  },
+  {
+    "scene": "wizard",
+    "variant": "normal",
+    "checks": [],
+    "reference_status": "FAILED",
+    "error": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#wErr')\nExpected: \"请填写申请人\"\nReceived: \"\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"to.have.text\" with timeout 5000ms\n  - waiting for locator('#wErr')\n    14 × locator resolved to <div id=\"wErr\" class=\"bad\" role=\"alert\" aria-live=\"assertive\"></div>\n       - unexpected value \"\"\n\n    at captureRawStack (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright-core\\lib\\coreBundle.js:9681:17)\n    at callMatcherAsStep (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\lib\\matchers\\expect.js:13310:57)\n    at Object.toHaveText (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\lib\\matchers\\expect.js:13300:23)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-reference.mjs:43:92"
+  },
+  {
+    "scene": "wizard",
+    "variant": "fault",
+    "checks": [],
+    "reference_status": "FAILED",
+    "error": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#wErr')\nExpected: \"请填写申请人\"\nReceived: \"\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"to.have.text\" with timeout 5000ms\n  - waiting for locator('#wErr')\n    14 × locator resolved to <div id=\"wErr\" class=\"bad\" role=\"alert\" aria-live=\"assertive\"></div>\n       - unexpected value \"\"\n\n    at captureRawStack (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright-core\\lib\\coreBundle.js:9681:17)\n    at callMatcherAsStep (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\lib\\matchers\\expect.js:13310:57)\n    at Object.toHaveText (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\lib\\matchers\\expect.js:13300:23)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-reference.mjs:43:92"
+  }
+]

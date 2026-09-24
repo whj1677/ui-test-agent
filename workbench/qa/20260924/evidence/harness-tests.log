@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: 真实通过且至少一个测试才完整
+ok 1 - 真实通过且至少一个测试才完整
+  ---
+  duration_ms: 1.0979
+  type: 'test'
+  ...
+# Subtest: 缺失或损坏报告不能成功
+ok 2 - 缺失或损坏报告不能成功
+  ---
+  duration_ms: 0.1385
+  type: 'test'
+  ...
+# Subtest: 零测试、跳过和失败不能成功
+ok 3 - 零测试、跳过和失败不能成功
+  ---
+  duration_ms: 0.1072
+  type: 'test'
+  ...
+# Subtest: 真实外部子进程的分段NDJSON等待close后完整结算
+ok 4 - 真实外部子进程的分段NDJSON等待close后完整结算
+  ---
+  duration_ms: 149.3971
+  type: 'test'
+  ...
+# Subtest: 真实外部子进程部分事件后异常退出保留原始进程事实
+ok 5 - 真实外部子进程部分事件后异常退出保留原始进程事实
+  ---
+  duration_ms: 96.8486
+  type: 'test'
+  ...
+# Subtest: 无换行NDJSON末行在流关闭时仍被解析
+ok 6 - 无换行NDJSON末行在流关闭时仍被解析
+  ---
+  duration_ms: 98.3927
+  type: 'test'
+  ...
+# Subtest: 输出尚未完成的NDJSON末行保留为无原文的损坏事件
+ok 7 - 输出尚未完成的NDJSON末行保留为无原文的损坏事件
+  ---
+  duration_ms: 97.8848
+  type: 'test'
+  ...
+# Subtest: 外层取消、到期和工具额度均停止真实拥有子进程
+ok 8 - 外层取消、到期和工具额度均停止真实拥有子进程
+  ---
+  duration_ms: 3033.3475
+  type: 'test'
+  ...
+# Subtest: 浏览器插件证据单独登记且不冒充候选输出
+ok 9 - 浏览器插件证据单独登记且不冒充候选输出
+  ---
+  duration_ms: 1.6953
+  type: 'test'
+  ...
+# Subtest: 任务目录内其他未登记文件仍被拒绝
+ok 10 - 任务目录内其他未登记文件仍被拒绝
+  ---
+  duration_ms: 0.305
+  type: 'test'
+  ...
+# Subtest: 完整终态、浏览器工具和文件同时存在才成功
+ok 11 - 完整终态、浏览器工具和文件同时存在才成功
+  ---
+  duration_ms: 1.1935
+  type: 'test'
+  ...
+# Subtest: 缺文件不能标记成功
+ok 12 - 缺文件不能标记成功
+  ---
+  duration_ms: 0.2311
+  type: 'test'
+  ...
+# Subtest: 缺浏览器工具事实不能标记成功
+ok 13 - 缺浏览器工具事实不能标记成功
+  ---
+  duration_ms: 0.2661
+  type: 'test'
+  ...
+# Subtest: 模型中断或不完整报告不能标记成功
+ok 14 - 模型中断或不完整报告不能标记成功
+  ---
+  duration_ms: 0.1948
+  type: 'test'
+  ...
+# Subtest: 取消和超时不能标记成功
+ok 15 - 取消和超时不能标记成功
+  ---
+  duration_ms: 0.1311
+  type: 'test'
+  ...
+# Subtest: 日志会遮蔽密钥、Bearer和敏感字段
+ok 16 - 日志会遮蔽密钥、Bearer和敏感字段
+  ---
+  duration_ms: 0.6202
+  type: 'test'
+  ...
+# Subtest: 工具调用达到上限时触发外层停止且不会超过上限
+ok 17 - 工具调用达到上限时触发外层停止且不会超过上限
+  ---
+  duration_ms: 0.6206
+  type: 'test'
+  ...
+# Subtest: 文件、网络和凭据禁止项都被阻断时才允许真实修订
+ok 18 - 文件、网络和凭据禁止项都被阻断时才允许真实修订
+  ---
+  duration_ms: 1.1503
+  type: 'test'
+  ...
+# Subtest: 工作区外读取或写入成功会关闭总门
+ok 19 - 工作区外读取或写入成功会关闭总门
+  ---
+  duration_ms: 0.1815
+  type: 'test'
+  ...
+# Subtest: 候选或浏览器可访问禁止端点会关闭总门
+ok 20 - 候选或浏览器可访问禁止端点会关闭总门
+  ---
+  duration_ms: 0.107
+  type: 'test'
+  ...
+# Subtest: 候选携带模型凭据会关闭总门
+ok 21 - 候选携带模型凭据会关闭总门
+  ---
+  duration_ms: 0.0773
+  type: 'test'
+  ...
+# Subtest: 启动失败会返回错误且不等待到期
+ok 22 - 启动失败会返回错误且不等待到期
+  ---
+  duration_ms: 7.8875
+  type: 'test'
+  ...
+# Subtest: 超时会终止本任务拥有的进程
+ok 23 - 超时会终止本任务拥有的进程
+  ---
+  duration_ms: 1252.7154
+  type: 'test'
+  ...
+# Subtest: 用户取消会终止本任务拥有的进程且不重启
+ok 24 - 用户取消会终止本任务拥有的进程且不重启
+  ---
+  duration_ms: 1114.4753
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3645.7233

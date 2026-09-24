@@ -1,0 +1,26 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: Document claims tests passed without exit-code-zero and test-count evidence.
+   Fix: Record exact command, working directory, exit code 0, test count/failure count/skipped count, and log path before writing `����ͨ��`.
+2. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: `check_ai_context.py` failure is recorded while completion-style wording is still present.
+   Fix: When the check fails, final status must be `δ���` / `����` / `���ʧ��`, not complete or deliverable.
+3. docs\requirements\REQ-0036-ui-ux-01-workbench-usability-review\04_verification.md
+   Problem: Verification state `�����` is not allowed.
+   Fix: Use one of: �˹���ȷ�ϡ�����̬��顢��Ԫ����ͨ�����޷����С�δ���С�����ͨ�������ɲ���ͨ��
+4. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: workbench/qa/20260924/evidence/governance-check.log
+5. docs\requirements\REQ-0033-e2e-01-six-case-workbench\02_design.md
+   Problem: Code/test/config changed but `02_design.md` was not updated and has no explicit no-design-change reason.
+   Fix: Update `02_design.md`, or add `����������Ʊ����ԭ��...` when the change truly does not affect design.
+6. docs\requirements\REQ-0033-e2e-01-six-case-workbench\04_verification.md
+   Problem: Code/test/config changed but `04_verification.md` was not updated and has no explicit no-verification-change reason.
+   Fix: Update verification status/evidence, or add `����������֤�����ԭ��...`.
+7. docs\modules
+   Problem: Code/test/config changed but no concrete module document was updated, and no explicit no-module-doc-change reason was recorded in the changed requirement design.
+   Fix: Create or update the affected `docs/modules/<module>.md` file. If the change truly has no module impact, add `��������ģ���ĵ������ԭ��...` to the changed requirement `02_design.md`.
+8. docs\requirements\REQ-0033-e2e-01-six-case-workbench\delivery_evidence.md
+   Problem: REQ pass evidence is not bound to a collector-executed verification log.
+   Fix: Run the collector with `--verify-command`; caller-supplied exit/count values and pre-existing logs are not trusted.

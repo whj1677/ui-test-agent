@@ -1,0 +1,102 @@
+[
+  {
+    "scene": "paging",
+    "variant": "normal",
+    "checks": [
+      "initial records/total/page",
+      "filter records/total/page",
+      "next page exact rows and retained selection",
+      "previous page restoration"
+    ],
+    "expected": [
+      "P05",
+      "P07"
+    ],
+    "actual": [
+      "P05",
+      "P07"
+    ],
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "PASSED"
+  },
+  {
+    "scene": "paging",
+    "variant": "fault",
+    "checks": [
+      "initial records/total/page",
+      "filter records/total/page",
+      "next page exact rows and retained selection",
+      "previous page restoration"
+    ],
+    "expected": [
+      "P05",
+      "P07"
+    ],
+    "actual": [
+      "P02",
+      "P04"
+    ],
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "INTENDED_MISMATCH_CONFIRMED"
+  },
+  {
+    "scene": "retry",
+    "variant": "normal",
+    "checks": [
+      "dialog and loading",
+      "first async failure",
+      "retry disabled during request",
+      "voltage exact unit and timestamp",
+      "close"
+    ],
+    "expected": "750 V",
+    "actual": "750 V",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "PASSED"
+  },
+  {
+    "scene": "retry",
+    "variant": "fault",
+    "checks": [
+      "dialog and loading",
+      "first async failure",
+      "retry disabled during request",
+      "voltage exact unit and timestamp",
+      "close"
+    ],
+    "expected": "750 V",
+    "actual": "705 V",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "INTENDED_MISMATCH_CONFIRMED"
+  },
+  {
+    "scene": "wizard",
+    "variant": "normal",
+    "checks": [
+      "empty required validation",
+      "quantity upper boundary refusal",
+      "valid transition",
+      "back navigation value retention",
+      "acknowledged preview exact quantity/no submission"
+    ],
+    "expected": "数量2",
+    "actual": "预览\n申请人\n测试员\n数量\n2\n状态\n仅预览，未提交",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "PASSED"
+  },
+  {
+    "scene": "wizard",
+    "variant": "fault",
+    "checks": [
+      "empty required validation",
+      "quantity upper boundary refusal",
+      "valid transition",
+      "back navigation value retention",
+      "acknowledged preview exact quantity/no submission"
+    ],
+    "expected": "数量2",
+    "actual": "预览\n申请人\n测试员\n数量\n3\n状态\n仅预览，未提交",
+    "reference_status": "FIXTURE_BEHAVIOR_VERIFIED",
+    "business_expectation": "INTENDED_MISMATCH_CONFIRMED"
+  }
+]

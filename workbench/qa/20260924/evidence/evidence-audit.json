@@ -1,0 +1,1900 @@
+{
+  "files": [
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-input-snapshot",
+      "kind": "task_input_snapshot",
+      "bytes": 4037,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-input-task-md",
+      "kind": "task_document",
+      "bytes": 1691,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-input-agent-instruction",
+      "kind": "agent_instruction",
+      "bytes": 1249,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-004",
+      "kind": "harness_report",
+      "bytes": 1288,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-005",
+      "kind": "lifecycle_log",
+      "bytes": 59542,
+      "hash_match": false,
+      "size_match": false
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-006",
+      "kind": "verification_metadata",
+      "bytes": 45,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "bytes": 40094,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "bytes": 203346,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "bytes": 32634,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-010",
+      "kind": "test_report",
+      "bytes": 5532,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-011",
+      "kind": "tool_log",
+      "bytes": 138,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-012",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-013",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-014",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-015",
+      "kind": "tool_snapshot",
+      "bytes": 2541,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-016",
+      "kind": "rendered_agent_instruction",
+      "bytes": 1423,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-017",
+      "kind": "attempt_input_snapshot",
+      "bytes": 4037,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-018",
+      "kind": "candidate",
+      "bytes": 2110,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-019",
+      "kind": "attempt_task_document",
+      "bytes": 1691,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-020",
+      "kind": "verification_metadata",
+      "bytes": 96,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-021",
+      "kind": "verification_diagnostic",
+      "bytes": 3420,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-022",
+      "kind": "counterexample_screenshot",
+      "bytes": 43699,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-023",
+      "kind": "counterexample_trace",
+      "bytes": 434600,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-024",
+      "kind": "counterexample_video",
+      "bytes": 179685,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "bytes": 46800,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "bytes": 4254,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "bytes": 46506,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-028",
+      "kind": "counterexample_screenshot",
+      "bytes": 46800,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-029",
+      "kind": "counterexample_screenshot",
+      "bytes": 46506,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-030",
+      "kind": "counterexample_screenshot",
+      "bytes": 43699,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-031",
+      "kind": "step_observations",
+      "bytes": 5026,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-032",
+      "kind": "counterexample_step_replay_video",
+      "bytes": 681095,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-033",
+      "kind": "step_observer_entry",
+      "bytes": 1065,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-034",
+      "kind": "test_report",
+      "bytes": 13949,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-input-snapshot",
+      "kind": "task_input_snapshot",
+      "bytes": 3859,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-input-task-md",
+      "kind": "task_document",
+      "bytes": 1606,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-input-agent-instruction",
+      "kind": "agent_instruction",
+      "bytes": 1249,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-004",
+      "kind": "harness_report",
+      "bytes": 1274,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-005",
+      "kind": "lifecycle_log",
+      "bytes": 60891,
+      "hash_match": false,
+      "size_match": false
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-006",
+      "kind": "verification_metadata",
+      "bytes": 45,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "bytes": 46597,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "bytes": 225032,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "bytes": 65039,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-010",
+      "kind": "test_report",
+      "bytes": 5332,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-011",
+      "kind": "tool_log",
+      "bytes": 138,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-012",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-013",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-014",
+      "kind": "tool_snapshot",
+      "bytes": 3819,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-015",
+      "kind": "rendered_agent_instruction",
+      "bytes": 1423,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-016",
+      "kind": "attempt_input_snapshot",
+      "bytes": 3859,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-017",
+      "kind": "candidate",
+      "bytes": 1907,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-018",
+      "kind": "attempt_task_document",
+      "bytes": 1606,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-019",
+      "kind": "verification_metadata",
+      "bytes": 96,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-020",
+      "kind": "verification_diagnostic",
+      "bytes": 3523,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-021",
+      "kind": "counterexample_screenshot",
+      "bytes": 46715,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-022",
+      "kind": "counterexample_trace",
+      "bytes": 380021,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-023",
+      "kind": "counterexample_video",
+      "bytes": 178539,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-024",
+      "kind": "counterexample_screenshot",
+      "bytes": 46975,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "bytes": 4254,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "bytes": 46975,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "bytes": 46715,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-028",
+      "kind": "step_observations",
+      "bytes": 4794,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-029",
+      "kind": "counterexample_step_replay_video",
+      "bytes": 533474,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-030",
+      "kind": "step_observer_entry",
+      "bytes": 1065,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-031",
+      "kind": "test_report",
+      "bytes": 15879,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-input-snapshot",
+      "kind": "task_input_snapshot",
+      "bytes": 3968,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-input-task-md",
+      "kind": "task_document",
+      "bytes": 1621,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-input-agent-instruction",
+      "kind": "agent_instruction",
+      "bytes": 1249,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-004",
+      "kind": "harness_report",
+      "bytes": 1279,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-005",
+      "kind": "lifecycle_log",
+      "bytes": 58403,
+      "hash_match": false,
+      "size_match": false
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-006",
+      "kind": "verification_metadata",
+      "bytes": 45,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "bytes": 43309,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "bytes": 224963,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "bytes": 68973,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-010",
+      "kind": "test_report",
+      "bytes": 6072,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-011",
+      "kind": "tool_log",
+      "bytes": 138,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-012",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-013",
+      "kind": "tool_snapshot",
+      "bytes": 4946,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-014",
+      "kind": "tool_snapshot",
+      "bytes": 3776,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-015",
+      "kind": "tool_snapshot",
+      "bytes": 4950,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-016",
+      "kind": "rendered_agent_instruction",
+      "bytes": 1423,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-017",
+      "kind": "attempt_input_snapshot",
+      "bytes": 3968,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-018",
+      "kind": "candidate",
+      "bytes": 2811,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-019",
+      "kind": "attempt_task_document",
+      "bytes": 1621,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-020",
+      "kind": "verification_metadata",
+      "bytes": 96,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-021",
+      "kind": "verification_diagnostic",
+      "bytes": 4331,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-022",
+      "kind": "counterexample_screenshot",
+      "bytes": 67323,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-023",
+      "kind": "counterexample_trace",
+      "bytes": 409315,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-024",
+      "kind": "counterexample_video",
+      "bytes": 174787,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "bytes": 67323,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "bytes": 46863,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "bytes": 67323,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-028",
+      "kind": "counterexample_screenshot",
+      "bytes": 67323,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-029",
+      "kind": "step_observations",
+      "bytes": 4223,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-030",
+      "kind": "counterexample_step_replay_video",
+      "bytes": 571514,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-031",
+      "kind": "step_observer_entry",
+      "bytes": 1065,
+      "hash_match": true,
+      "size_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-032",
+      "kind": "test_report",
+      "bytes": 15273,
+      "hash_match": true,
+      "size_match": true
+    }
+  ],
+  "media": [
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "status": 200,
+      "bytes": 40094,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "status": 200,
+      "bytes": 203346,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "status": 200,
+      "bytes": 32634,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-022",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 43699,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-023",
+      "kind": "counterexample_trace",
+      "status": 200,
+      "bytes": 434600,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-024",
+      "kind": "counterexample_video",
+      "status": 200,
+      "bytes": 179685,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46800,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 4254,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46506,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-028",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46800,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-029",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46506,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-030",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 43699,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141606-b30df029",
+      "file_id": "build-file-032",
+      "kind": "counterexample_step_replay_video",
+      "status": 200,
+      "bytes": 681095,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "status": 200,
+      "bytes": 46597,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "status": 200,
+      "bytes": 225032,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "status": 200,
+      "bytes": 65039,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-021",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46715,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-022",
+      "kind": "counterexample_trace",
+      "status": 200,
+      "bytes": 380021,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-023",
+      "kind": "counterexample_video",
+      "status": 200,
+      "bytes": 178539,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-024",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46975,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 4254,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46975,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46715,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141725-0b65a070",
+      "file_id": "build-file-029",
+      "kind": "counterexample_step_replay_video",
+      "status": 200,
+      "bytes": 533474,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-007",
+      "kind": "normal_screenshot",
+      "status": 200,
+      "bytes": 43309,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-008",
+      "kind": "normal_trace",
+      "status": 200,
+      "bytes": 224963,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-009",
+      "kind": "normal_video",
+      "status": 200,
+      "bytes": 68973,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-022",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 67323,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-023",
+      "kind": "counterexample_trace",
+      "status": 200,
+      "bytes": 409315,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-024",
+      "kind": "counterexample_video",
+      "status": 200,
+      "bytes": 174787,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-025",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 67323,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-026",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 46863,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-027",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 67323,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-028",
+      "kind": "counterexample_screenshot",
+      "status": 200,
+      "bytes": 67323,
+      "hash_match": true
+    },
+    {
+      "task_id": "build-20260924141851-7a5e5553",
+      "file_id": "build-file-030",
+      "kind": "counterexample_step_replay_video",
+      "status": 200,
+      "bytes": 571514,
+      "hash_match": true
+    }
+  ],
+  "runs": [
+    {
+      "id": "TC-001",
+      "run_id": "run-33d4182a-467e-4b2e-b6af-aa92748360e6",
+      "status": "PASSED",
+      "complete_pass": true,
+      "error": null,
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "TC-004",
+      "run_id": "run-887c11ae-da63-46e5-aaac-ec9982afd730",
+      "status": "FAILED",
+      "complete_pass": false,
+      "specified_defect_detected": true,
+      "same_candidate_hash": true,
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+        "expected": "共2条",
+        "actual": "共3条",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+            "report_path": [
+              2
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+                  "expected": "共2条",
+                  "actual": "共3条",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 45,
+                    "column": 31
+                  },
+                  "snippet": "  43 |     await queryButton.click();\n  44 |\n> 45 |     await expect(resultCount).toHaveText('共2条');\n     |                               ^\n  46 |     await expect(deviceRows).toHaveCount(2);\n  47 |     await expect(deviceRows.locator('td:first-child')).toHaveText([\n  48 |       'DEV-002',"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "step_replay": {
+        "schema": "workbench/step-evidence-replay-v1",
+        "status": "READY",
+        "run_id": "run-887c11ae-da63-46e5-aaac-ec9982afd730",
+        "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+        "executed_external_id": "TC-004",
+        "executed_case_version": 1,
+        "observer_version": "e2e01-step-observer-v1",
+        "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+        "original_video_precise_seek": false,
+        "evidence_complete": true,
+        "missing_captures": [],
+        "steps": [
+          {
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+            "action": "S01 打开指定入口，查看初始设备列表",
+            "expected": "显示“共6条”，按 DEV-001 至 DEV-006 升序展示",
+            "execution_status": "PASSED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": "2026-09-24T14:17:08.651Z",
+            "executed_end": "2026-09-24T14:17:08.768Z",
+            "observer_start": "2026-09-24T14:17:08.606Z",
+            "observer_end": "2026-09-24T14:17:08.809Z",
+            "screenshot_phase": "after",
+            "screenshot_file_name": "case_step_1-after.png",
+            "before_screenshot_file_name": "case_step_1-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 86.20780000000013
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+            "action": "S02 选择“西站”和“检修”，暂不点击查询",
+            "expected": "筛选控件显示西站、检修；列表仍为6条",
+            "execution_status": "PASSED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": "2026-09-24T14:17:08.864Z",
+            "executed_end": "2026-09-24T14:17:08.937Z",
+            "observer_start": "2026-09-24T14:17:08.810Z",
+            "observer_end": "2026-09-24T14:17:08.981Z",
+            "screenshot_phase": "after",
+            "screenshot_file_name": "case_step_2-after.png",
+            "before_screenshot_file_name": "case_step_2-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 98.86409999999978
+          },
+          {
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+            "action": "S03 点击“查询”，核对结果数量和设备行",
+            "expected": "显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004",
+            "execution_status": "FAILED",
+            "actual": "共3条",
+            "assertion_expected": "共2条",
+            "raw_error": {
+              "name": "Error",
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:45:31\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:42:3"
+            },
+            "executed_start": "2026-09-24T14:17:09.027Z",
+            "executed_end": "2026-09-24T14:17:14.083Z",
+            "observer_start": "2026-09-24T14:17:08.982Z",
+            "observer_end": "2026-09-24T14:17:14.121Z",
+            "screenshot_phase": "failure-after",
+            "screenshot_file_name": "case_step_3-failure-after.png",
+            "before_screenshot_file_name": "case_step_3-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 82.31209999999987
+          }
+        ],
+        "chapters": [
+          {
+            "step_id": "CASE_STEP_1",
+            "start_seconds": 0,
+            "result_start_seconds": 1.226,
+            "end_seconds": 3.029,
+            "screenshot_phase": "after"
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "start_seconds": 3.029100000023842,
+            "result_start_seconds": 4.237799999952316,
+            "end_seconds": 6.0505,
+            "screenshot_phase": "after"
+          },
+          {
+            "step_id": "CASE_STEP_3",
+            "start_seconds": 6.0505,
+            "result_start_seconds": 7.254700000047683,
+            "end_seconds": 9.057700000047683,
+            "screenshot_phase": "failure-after"
+          }
+        ],
+        "duration_seconds": 9.1777,
+        "output_file_name": "step-replay-v1.webm",
+        "reading_holds": "1200ms action / 1800ms result"
+      }
+    },
+    {
+      "id": "TC-002",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "status": "PASSED",
+      "complete_pass": true,
+      "error": null,
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "TC-005",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "status": "FAILED",
+      "complete_pass": false,
+      "specified_defect_detected": false,
+      "same_candidate_hash": true,
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+        "expected": null,
+        "actual": null,
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 35,
+                    "column": 43
+                  },
+                  "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "step_replay": {
+        "schema": "workbench/step-evidence-replay-v1",
+        "status": "READY",
+        "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+        "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+        "executed_external_id": "TC-005",
+        "executed_case_version": 1,
+        "observer_version": "e2e01-step-observer-v1",
+        "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+        "original_video_precise_seek": false,
+        "evidence_complete": true,
+        "missing_captures": [],
+        "steps": [
+          {
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+            "expected": "初始仍显示共6条，第一行为 DEV-001",
+            "execution_status": "PASSED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": "2026-09-24T14:18:37.031Z",
+            "executed_end": "2026-09-24T14:18:37.191Z",
+            "observer_start": "2026-09-24T14:18:36.982Z",
+            "observer_end": "2026-09-24T14:18:37.235Z",
+            "screenshot_phase": "after",
+            "screenshot_file_name": "case_step_1-after.png",
+            "before_screenshot_file_name": "case_step_1-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 93.36560000000009
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "action": "S02 点击“查询”，核对六条完整设备行顺序",
+            "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW",
+            "execution_status": "FAILED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": {
+              "name": "Error",
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:35:43\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:19:3"
+            },
+            "executed_start": "2026-09-24T14:18:37.280Z",
+            "executed_end": "2026-09-24T14:18:42.338Z",
+            "observer_start": "2026-09-24T14:18:37.238Z",
+            "observer_end": "2026-09-24T14:18:42.384Z",
+            "screenshot_phase": "failure-after",
+            "screenshot_file_name": "case_step_2-failure-after.png",
+            "before_screenshot_file_name": "case_step_2-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 87.61739999999918
+          }
+        ],
+        "chapters": [
+          {
+            "step_id": "CASE_STEP_1",
+            "start_seconds": 0,
+            "result_start_seconds": 1.2252000000476837,
+            "end_seconds": 3.028,
+            "screenshot_phase": "after"
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "start_seconds": 3.028100000023842,
+            "result_start_seconds": 4.231899999976158,
+            "end_seconds": 6.044100000023842,
+            "screenshot_phase": "failure-after"
+          }
+        ],
+        "duration_seconds": 6.1641,
+        "output_file_name": "step-replay-v1.webm",
+        "reading_holds": "1200ms action / 1800ms result"
+      }
+    },
+    {
+      "id": "TC-003",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "status": "PASSED",
+      "complete_pass": true,
+      "error": null,
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3：S03 点击“关闭”",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "TC-006",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "status": "FAILED",
+      "complete_pass": false,
+      "specified_defect_detected": true,
+      "same_candidate_hash": true,
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+        "expected": "220 kW",
+        "actual": "320 kW",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+                  "expected": "220 kW",
+                  "actual": "320 kW",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 45,
+                    "column": 42
+                  },
+                  "snippet": "  43 |\n  44 |       await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n> 45 |       await expect(detailValue('power')).toHaveText('220 kW');\n     |                                          ^\n  46 |     });\n  47 |\n  48 |     await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "step_replay": {
+        "schema": "workbench/step-evidence-replay-v1",
+        "status": "READY",
+        "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+        "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+        "executed_external_id": "TC-006",
+        "executed_case_version": 1,
+        "observer_version": "e2e01-step-observer-v1",
+        "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+        "original_video_precise_seek": false,
+        "evidence_complete": true,
+        "missing_captures": [],
+        "steps": [
+          {
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "action": "S01 在 DEV-005 行点击“详情”",
+            "expected": "打开标题为“设备详情 · DEV-005”的弹窗",
+            "execution_status": "PASSED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": "2026-09-24T14:20:13.359Z",
+            "executed_end": "2026-09-24T14:20:13.504Z",
+            "observer_start": "2026-09-24T14:20:13.300Z",
+            "observer_end": "2026-09-24T14:20:13.565Z",
+            "screenshot_phase": "after",
+            "screenshot_file_name": "case_step_1-after.png",
+            "before_screenshot_file_name": "case_step_1-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 119.5006999999996
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW",
+            "execution_status": "FAILED",
+            "actual": "320 kW",
+            "assertion_expected": "220 kW",
+            "raw_error": {
+              "name": "Error",
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:45:42\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:28:5"
+            },
+            "executed_start": "2026-09-24T14:20:13.629Z",
+            "executed_end": "2026-09-24T14:20:18.739Z",
+            "observer_start": "2026-09-24T14:20:13.566Z",
+            "observer_end": "2026-09-24T14:20:18.791Z",
+            "screenshot_phase": "failure-after",
+            "screenshot_file_name": "case_step_2-failure-after.png",
+            "before_screenshot_file_name": "case_step_2-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 114.60170000000016
+          },
+          {
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "raw_title": null,
+            "action": "S03 点击“关闭”",
+            "expected": "详情弹窗关闭并返回设备列表",
+            "execution_status": "NOT_EXECUTED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": null,
+            "executed_end": null,
+            "observer_start": null,
+            "observer_end": null,
+            "screenshot_phase": null,
+            "screenshot_file_name": null,
+            "before_screenshot_file_name": null,
+            "screenshot_error": null,
+            "capture_duration_ms": 0
+          }
+        ],
+        "chapters": [
+          {
+            "step_id": "CASE_STEP_1",
+            "start_seconds": 0,
+            "result_start_seconds": 1.2255,
+            "end_seconds": 3.0313999999761583,
+            "screenshot_phase": "after"
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "start_seconds": 3.0313999999761583,
+            "result_start_seconds": 4.251,
+            "end_seconds": 6.0556000000238415,
+            "screenshot_phase": "failure-after"
+          }
+        ],
+        "duration_seconds": 6.1756,
+        "output_file_name": "step-replay-v1.webm",
+        "reading_holds": "1200ms action / 1800ms result"
+      }
+    }
+  ],
+  "ui": [
+    {
+      "id": "TC-001",
+      "video_count": 1,
+      "playback": {
+        "duration": 1.16,
+        "current_time": 0.812232,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-001 · run-33d4182a-467e-4b2e-b6af-aa92748360e6\n\n候选来源 TC-001 v1 · 当前执行 TC-001 v1\n\n候选 v1 · SHA-256 25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F · build build-20260924141606-b30df029\n\n通过\n\n入口：/ui/a · 失败步骤：无 · 运行器：历史版本未记录\n\n原始录像\n\n此记录缺少已验证时间零点，无法精确定位；仍可查看录像和完整步骤说明。\n\n打开原始录像\n查看本次截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：尚未播放\n\n1. S01 打开指定入口，查看初始设备列表\n通过\n预期\n显示“共6条”，按 DEV-001 至 DEV-006 升序展示\n实际\n未单独采集实际值\n2. S02 选择“西站”和“检修”，暂不点击查询\n通过\n预期\n筛选控件显示西站、检修；列表仍为6条\n实际\n未单独采集实际值\n3. S03 点击“查询”，核对结果数量和设备行\n通过\n预期\n显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004\n实际\n未单独采集实际值"
+    },
+    {
+      "id": "TC-004",
+      "video_count": 2,
+      "playback": {
+        "duration": 9.1777,
+        "current_time": 0.808766,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-004 · run-887c11ae-da63-46e5-aaac-ec9982afd730\n\n来源候选 TC-001 v1 · SHA-256 25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F\n\n失败\n\n执行用例 v1 · 运行器 e2e01-step-evidence-replay-v1\n\n断言不符\n\n预期：共2条\n\n实际：共3条\n\n查看原始错误\n\n对照验证检出指定缺陷；原始业务状态仍为失败。\n\n步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。\n\n中文步骤证据回放（非原始连续录像）\n\n播放位置随回放章节更新；点击已执行步骤可定位。\n\n下载带中文字幕的步骤证据回放\n原始连续录像（不支持精确步骤定位）\n单独打开原始连续录像\n查看运行截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：步骤 1 · 动作\n\n1. S01 打开指定入口，查看初始设备列表\n通过\n预期\n显示“共6条”，按 DEV-001 至 DEV-006 升序展示\n实际\n未单独采集实际值\n采集\nafter · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图\n2. S02 选择“西站”和“检修”，暂不点击查询\n通过\n预期\n筛选控件显示西站、检修；列表仍为6条\n实际\n未单独采集实际值\n采集\nafter · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图\n3. S03 点击“查询”，核对结果数量和设备行\n失败\n预期\n显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004\n实际\n共3条\n原断言预期\n共2条\n采集\nfailure-after · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图"
+    },
+    {
+      "id": "TC-002",
+      "video_count": 1,
+      "playback": {
+        "duration": 1.44,
+        "current_time": 0.809744,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-002 · run-610af6e6-3c60-49bf-8196-da8491718fb3\n\n候选来源 TC-002 v1 · 当前执行 TC-002 v1\n\n候选 v1 · SHA-256 97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD · build build-20260924141725-0b65a070\n\n通过\n\n入口：/ui/c · 失败步骤：无 · 运行器：历史版本未记录\n\n原始录像\n\n此记录缺少已验证时间零点，无法精确定位；仍可查看录像和完整步骤说明。\n\n打开原始录像\n查看本次截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：尚未播放\n\n1. S01 打开指定入口，选择“额定功率降序”，暂不点击查询\n通过\n预期\n初始仍显示共6条，第一行为 DEV-001\n实际\n未单独采集实际值\n2. S02 点击“查询”，核对六条完整设备行顺序\n通过\n预期\n顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\n实际\n未单独采集实际值"
+    },
+    {
+      "id": "TC-005",
+      "video_count": 2,
+      "playback": {
+        "duration": 6.1641,
+        "current_time": 0.808158,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-005 · run-e32319e0-750e-4c67-926b-f9084360de99\n\n来源候选 TC-002 v1 · SHA-256 97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD\n\n失败\n\n执行用例 v1 · 运行器 e2e01-step-evidence-replay-v1\n\n未知状态（LOCATOR_OR_TARGET）\n\n本次执行未得到可核对的业务实际值。\n\n查看原始错误\n\n步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。\n\n中文步骤证据回放（非原始连续录像）\n\n播放位置随回放章节更新；点击已执行步骤可定位。\n\n下载带中文字幕的步骤证据回放\n原始连续录像（不支持精确步骤定位）\n单独打开原始连续录像\n查看运行截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：步骤 1 · 动作\n\n1. S01 打开指定入口，选择“额定功率降序”，暂不点击查询\n通过\n预期\n初始仍显示共6条，第一行为 DEV-001\n实际\n未单独采集实际值\n采集\nafter · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图\n2. S02 点击“查询”，核对六条完整设备行顺序\n失败\n预期\n顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\n实际\n未单独采集实际值\n原断言预期\n顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\n采集\nfailure-after · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图"
+    },
+    {
+      "id": "TC-003",
+      "video_count": 1,
+      "playback": {
+        "duration": 1.44,
+        "current_time": 0.810057,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-003 · run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\n\n候选来源 TC-003 v1 · 当前执行 TC-003 v1\n\n候选 v1 · SHA-256 032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C · build build-20260924141851-7a5e5553\n\n通过\n\n入口：/ui/e · 失败步骤：无 · 运行器：历史版本未记录\n\n原始录像\n\n此记录缺少已验证时间零点，无法精确定位；仍可查看录像和完整步骤说明。\n\n打开原始录像\n查看本次截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：尚未播放\n\n1. S01 在 DEV-005 行点击“详情”\n通过\n预期\n打开标题为“设备详情 · DEV-005”的弹窗\n实际\n未单独采集实际值\n2. S02 核对详情中的设备编号、名称、站点、状态和额定功率\n通过\n预期\n显示 DEV-005、冷却泵、西站、检修、220 kW\n实际\n未单独采集实际值\n3. S03 点击“关闭”\n通过\n预期\n详情弹窗关闭并返回设备列表\n实际\n未单独采集实际值"
+    },
+    {
+      "id": "TC-006",
+      "video_count": 2,
+      "playback": {
+        "duration": 6.1756,
+        "current_time": 0.791842,
+        "ready_state": 4,
+        "error": null
+      },
+      "body_excerpt": "CANDIDATE TRIAL RECORDS\n\n项目执行记录\n\n故障入口的原始结果保持失败；候选尚未批准。\n\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n运行索引\n6 条\n执行用例\t生成来源\t候选哈希\tRun ID\t原始结果\t失败步骤\t详情\nTC-001 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-33d4182a-467e-4b2e-b6af-aa92748360e6\t通过\t—\t查看详情 · 查看任务\nTC-004 v1\tTC-001 · v1\t25D481B15CF17C04…\trun-887c11ae-da63-46e5-aaac-ec9982afd730\t失败\tCASE_STEP_3\t查看详情 · 查看任务\nTC-002 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-610af6e6-3c60-49bf-8196-da8491718fb3\t通过\t—\t查看详情 · 查看任务\nTC-005 v1\tTC-002 · v1\t97A5D38FFF3C9ACD…\trun-e32319e0-750e-4c67-926b-f9084360de99\t失败\tCASE_STEP_2\t查看详情 · 查看任务\nTC-003 v1\tTC-003 · v1\t032F66D06307569E…\trun-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d\t通过\t—\t查看详情 · 查看任务\nTC-006 v1\tTC-003 · v1\t032F66D06307569E…\trun-aad0d788-a399-4251-a02e-3e5ff7476532\t失败\tCASE_STEP_2\t查看详情 · 查看任务\n步骤与媒体\nTC-006 · run-aad0d788-a399-4251-a02e-3e5ff7476532\n\n来源候选 TC-003 v1 · SHA-256 032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C\n\n失败\n\n执行用例 v1 · 运行器 e2e01-step-evidence-replay-v1\n\n断言不符\n\n预期：220 kW\n\n实际：320 kW\n\n查看原始错误\n\n对照验证检出指定缺陷；原始业务状态仍为失败。\n\n步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。\n\n中文步骤证据回放（非原始连续录像）\n\n播放位置随回放章节更新；点击已执行步骤可定位。\n\n下载带中文字幕的步骤证据回放\n原始连续录像（不支持精确步骤定位）\n单独打开原始连续录像\n查看运行截图\n下载本次 Trace\n本次运行步骤\n\n播放位置：步骤 1 · 动作\n\n1. S01 在 DEV-005 行点击“详情”\n通过\n预期\n打开标题为“设备详情 · DEV-005”的弹窗\n实际\n未单独采集实际值\n采集\nafter · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图\n2. S02 核对详情中的设备编号、名称、站点、状态和额定功率\n失败\n预期\n显示 DEV-005、冷却泵、西站、检修、220 kW\n实际\n320 kW\n原断言预期\n220 kW\n采集\nfailure-after · 步骤结束后截图，未录得连续动作片段\n打开本步骤原始截图\n3. S03 点击“关闭”\n未执行\n预期\n详情弹窗关闭并返回设备列表\n实际\n未单独采集实际值\n采集\n未采集 · 步骤结束后截图，未录得连续动作片段"
+    }
+  ],
+  "new_cases": {
+    "imported": 6,
+    "new_case_detail_url": "http://127.0.0.1:4342/workspace/#/projects/project-7a8ff60b-8ac4-4368-9892-19992f958946/cases/case-a5e9b3b9-0651-46f4-bbf1-cb99dacc3aa1",
+    "create_build_button_count": 0,
+    "text": "case-a5e9b3b9-0651-46f4-bbf1-cb99dacc3aa1\n\nNEW-001 · 分页筛选北站后翻页并返回\n\npaging · v1\n\n编辑当前版本\n用例库\n登录准备\n建例任务\n执行记录\n项目设置\n受控演示候选试跑 · 尚未批准\n用例正文\n内容已确认\n模块\npaging\n对外编号\nNEW-001\n前置条件\n仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。\n测试数据\n{\"records\":\"P01..P08，奇数北站，偶数南站\",\"page_size\":2,\"filter\":\"北站\"}\n入口=http://127.0.0.1:4343/?scene=paging&variant=normal\n步骤与逐步预期\n4 步\n1\n动作\n\n打开该用例绑定入口（scene=paging，variant以入口配置为准）\n\n对应预期\n\n表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部\n\n2\n动作\n\n站点筛选选择北站，点击筛选\n\n对应预期\n\n显示P01、P03；共4条，1/2页；当前筛选为北站\n\n3\n动作\n\n点击下一页\n\n对应预期\n\n显示P05、P07；共4条，2/2页；当前筛选仍为北站\n\n4\n动作\n\n点击上一页\n\n对应预期\n\n返回显示P01、P03；共4条，1/2页；当前筛选仍为北站\n\n来源与追溯\n根来源身份\nqa-kimi-20260924:NEW-001\n导入批次\npreview-1957eebd-4e01-4022-85fe-00e9eebc2c3c\n当前版本内容 SHA-256\nA3AA43CB818BE409E21C4D95FEA4C53FEE6CF194FD94820763A8C8FCBDBA5CF9\n版本来源\nIMPORT\n版本历史\nv1 · 内容已确认\n2026年9月24日 22:26 · A3AA43CB818B…"
+  },
+  "checks": [
+    {
+      "name": "unregistered media denied",
+      "status": 404
+    },
+    {
+      "name": "foreign-origin mutation denied",
+      "status": 403
+    }
+  ],
+  "audit_error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(output.files.every(x=>x.hash_match&&x.size_match))\n\n    at file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/.local/qa-20260924/audit.mjs:48:8"
+}

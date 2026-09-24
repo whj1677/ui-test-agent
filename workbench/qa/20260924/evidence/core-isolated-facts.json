@@ -1,0 +1,304 @@
+{
+  "schema_version": "ui-agent-facts/v2",
+  "id": "ea1d87bf-8eb8-4c65-8c3d-3b85d83c856f",
+  "case_id": "BIND",
+  "case_hash": "569df6b0caef3b8e61bd26af54c44d3c56170fc1a1358436759db44b35348923",
+  "plan_hash": "2258644c7a494fc6c8394153c44ebd8a41dc6a37e1132a24f8a98405e3576b10",
+  "approved_plan_hash": "2258644c7a494fc6c8394153c44ebd8a41dc6a37e1132a24f8a98405e3576b10",
+  "run_scope_id": "2e12a618-d443-459b-bf0e-dc4dc15fe8cc",
+  "executed_case": {
+    "case_id": "BIND",
+    "title": "联合来源",
+    "steps": [
+      {
+        "step_id": "1",
+        "action": "核对表格编号。",
+        "expected": "表格仅有1行；编号为D009；结果不含D001。",
+        "obligations": [
+          {
+            "id": "1-O1",
+            "text": "表格仅有1行"
+          },
+          {
+            "id": "1-O2",
+            "text": "编号为D009"
+          },
+          {
+            "id": "1-O3",
+            "text": "结果不含D001"
+          }
+        ]
+      }
+    ]
+  },
+  "executed_plan": {
+    "schema_version": "ui-agent-adaptive-plan/v1",
+    "case_id": "BIND",
+    "case_hash": "569df6b0caef3b8e61bd26af54c44d3c56170fc1a1358436759db44b35348923",
+    "entry_path": "/",
+    "data_effect": "read_only",
+    "preconditions": [],
+    "steps": [
+      {
+        "step_id": "1",
+        "source_action": "核对表格编号。",
+        "source_expected": "表格仅有1行；编号为D009；结果不含D001。",
+        "timeout_ms": 120000,
+        "checkpoints": []
+      }
+    ],
+    "cleanup": null,
+    "notes": "原用例与只读范围由主入口确认并自动冻结；仅按当前页面生成短段，不预编未来定位器。",
+    "execution_policy": {
+      "mode": "adaptive-readonly",
+      "max_segments_per_step": 8,
+      "max_replans_per_step": 2
+    }
+  },
+  "started_at": "2026-09-24T14:27:04.175Z",
+  "finished_at": "2026-09-24T14:27:07.060Z",
+  "status": "TECHNICAL_FAILED",
+  "business_status": "NOT_EXECUTED",
+  "cleanup_status": "NOT_REQUIRED",
+  "evidence_status": "COMPLETE",
+  "preconditions": [],
+  "actions": [],
+  "assertions": [],
+  "repairs": [],
+  "adaptive_segments": [],
+  "adaptive_steps": [],
+  "regression_ready": false,
+  "approved_contract": {
+    "schema_version": "ui-agent-adaptive-plan/v1",
+    "case_id": "BIND",
+    "case_hash": "569df6b0caef3b8e61bd26af54c44d3c56170fc1a1358436759db44b35348923",
+    "entry_path": "/",
+    "data_effect": "read_only",
+    "preconditions": [],
+    "steps": [
+      {
+        "step_id": "1",
+        "source_action": "核对表格编号。",
+        "source_expected": "表格仅有1行；编号为D009；结果不含D001。",
+        "timeout_ms": 120000,
+        "checkpoints": []
+      }
+    ],
+    "cleanup": null,
+    "notes": "原用例与只读范围由主入口确认并自动冻结；仅按当前页面生成短段，不预编未来定位器。",
+    "execution_policy": {
+      "mode": "adaptive-readonly",
+      "max_segments_per_step": 8,
+      "max_replans_per_step": 2
+    }
+  },
+  "checkpoints": [],
+  "cleanup_actions": [],
+  "media": [
+    {
+      "file": "failure.png",
+      "sha256": "fba04c935354aa1629196ae2723cb16789702e457b844d1257e3a384fe5b5471"
+    },
+    {
+      "file": "page@3fee98fe802fb7ad50d8cef74b16b567.webm",
+      "sha256": "065704e21d63037fcb722f2cfcf43d2515460089c97a0be48a6df670ef298687",
+      "type": "video"
+    }
+  ],
+  "baseline_sha256": "0651c4f836f87973b1b91cdfd190174440e9bc712ff160fcd8da946044ba7d58",
+  "fixture": false,
+  "recording": {
+    "schema_version": "ui-agent-recording/v1",
+    "hold_ms": 1800,
+    "visual_review": "PENDING",
+    "timeline": [
+      {
+        "kind": "caption",
+        "step_id": null,
+        "checkpoint_id": null,
+        "phase": "执行停止",
+        "from_ms": 61,
+        "to_ms": 1922,
+        "action": "执行前置检查",
+        "expected": "具备执行条件",
+        "actual": "错误：INVALID_SCHEMA；阶段：PREFLIGHT。未完成的预期尚未判断。",
+        "title": "联合来源",
+        "page": 1,
+        "pages": 1,
+        "visible": true,
+        "fits": true
+      }
+    ],
+    "issues": []
+  },
+  "expectation_states": [
+    {
+      "step_id": "1",
+      "state": "UNINTERPRETED",
+      "at": "2026-09-24T14:27:04.490Z",
+      "error": "INVALID_SCHEMA"
+    }
+  ],
+  "error": "INVALID_SCHEMA",
+  "error_phase": "PREFLIGHT",
+  "failure_snapshot": {
+    "url": "http://127.0.0.1:64048/",
+    "title": "",
+    "text": "资产\n编号\nD009",
+    "controls": [
+      {
+        "role": "heading",
+        "name": "资产",
+        "in_navigation": false,
+        "locator": {
+          "kind": "role",
+          "role": "heading",
+          "name": "资产",
+          "exact": true
+        }
+      },
+      {
+        "role": "table",
+        "name": "编号 D009",
+        "in_navigation": false,
+        "row_count": 1,
+        "headers": [
+          "编号"
+        ],
+        "locator": {
+          "kind": "role",
+          "role": "table",
+          "name": "",
+          "exact": true
+        }
+      },
+      {
+        "role": "row",
+        "name": "编号",
+        "in_navigation": false,
+        "row_context": "编号",
+        "locator": {
+          "kind": "role",
+          "role": "row",
+          "name": "编号",
+          "exact": true
+        }
+      },
+      {
+        "role": "columnheader",
+        "name": "编号",
+        "in_navigation": false,
+        "row_context": "编号",
+        "locator": {
+          "kind": "role",
+          "role": "columnheader",
+          "name": "编号",
+          "exact": true
+        }
+      },
+      {
+        "role": "row",
+        "name": "D009",
+        "in_navigation": false,
+        "row_context": "D009",
+        "locator": {
+          "kind": "row",
+          "table": {
+            "kind": "role",
+            "role": "table",
+            "name": "",
+            "exact": true
+          },
+          "key": {
+            "column": "编号",
+            "value": "D009"
+          }
+        }
+      },
+      {
+        "role": "cell",
+        "name": "D009",
+        "in_navigation": false,
+        "row_context": "D009",
+        "locator": {
+          "kind": "cell",
+          "table": {
+            "kind": "role",
+            "role": "table",
+            "name": "",
+            "exact": true
+          },
+          "key": {
+            "column": "编号",
+            "value": "D009"
+          },
+          "column": "编号"
+        }
+      }
+    ],
+    "wizard_context": null,
+    "adapter_hash": "0ea47f9c73b5f6e3267571d6fd7db41f1974b7fa1ede9b9adaee1ea5777d0d1f",
+    "adapter_gaps": [],
+    "observation_diagnostics": {
+      "raw_count": 6,
+      "mapped_count": 6,
+      "rejected": {
+        "total": 0,
+        "counts": {},
+        "samples": [],
+        "omitted_samples": 0
+      }
+    },
+    "coverage": {
+      "scope": "visible-light-dom",
+      "limit": 300,
+      "mode": "dom-order",
+      "eligible_count": 6,
+      "sampled_count": 6,
+      "omitted_count": 0,
+      "truncated": false,
+      "text_limit": 16000,
+      "text_truncated": false,
+      "regions": [
+        {
+          "id": "region-0",
+          "kind": "page",
+          "eligible_count": 1,
+          "sampled_count": 1,
+          "omitted_count": 0
+        },
+        {
+          "id": "region-1",
+          "kind": "table",
+          "eligible_count": 5,
+          "sampled_count": 5,
+          "omitted_count": 0
+        }
+      ],
+      "region_count": 2,
+      "omitted_region_count": 0,
+      "unlisted_eligible_count": 0,
+      "unlisted_sampled_count": 0,
+      "iframes": {
+        "count": 0,
+        "contents_captured": false
+      },
+      "shadow_dom": {
+        "open_hosts": 0,
+        "contents_captured": false,
+        "closed_roots": "unknown"
+      }
+    },
+    "login_page": false
+  },
+  "dirty": false,
+  "semantic_acceptance": "PENDING_REVIEW",
+  "evidence_schema_version": "ui-agent-fact/v2",
+  "execution_event_receipts": [
+    {
+      "seq": 1,
+      "sha256": "3a1815455b464960757e9687c76c77fe22de3fec16a70379d19caa15056c300c",
+      "file": "000001.json"
+    }
+  ]
+}

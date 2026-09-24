@@ -1,0 +1,9 @@
+{"event":"NEW_REAL_MODEL_STARTED","id":"NEW-001","scene":"paging"}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-001","variant":"normal","success":false,"exit":1}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-001","variant":"fault","success":false,"exit":1}
+{"event":"NEW_REAL_MODEL_STARTED","id":"NEW-002","scene":"retry"}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-002","variant":"normal","success":false,"exit":1}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-002","variant":"fault","success":false,"exit":1}
+{"event":"NEW_REAL_MODEL_STARTED","id":"NEW-003","scene":"wizard"}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-003","variant":"normal","success":true,"exit":0}
+{"event":"NEW_TRIAL_FINISHED","id":"NEW-003","variant":"fault","success":false,"exit":1}

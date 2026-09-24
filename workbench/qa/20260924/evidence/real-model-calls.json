@@ -1,0 +1,72 @@
+{
+  "generation_sessions": 6,
+  "tool_calls": 105,
+  "provider_request_count": null,
+  "usage": null,
+  "cost": null,
+  "sessions": [
+    {
+      "case": "TC-001",
+      "task_id": "build-20260924141606-b30df029",
+      "model": "deepseek-flash",
+      "tool_calls": 20,
+      "started_at": "2026-09-24T14:16:07.084Z",
+      "finished_at": "2026-09-24T14:17:06.492Z",
+      "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+      "provider_request_count": null,
+      "usage": null
+    },
+    {
+      "case": "TC-002",
+      "task_id": "build-20260924141725-0b65a070",
+      "model": "deepseek-flash",
+      "tool_calls": 19,
+      "started_at": "2026-09-24T14:17:25.617Z",
+      "finished_at": "2026-09-24T14:18:32.999Z",
+      "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+      "provider_request_count": null,
+      "usage": null
+    },
+    {
+      "case": "TC-003",
+      "task_id": "build-20260924141851-7a5e5553",
+      "model": "deepseek-flash",
+      "tool_calls": 18,
+      "started_at": "2026-09-24T14:18:51.887Z",
+      "finished_at": "2026-09-24T14:20:09.618Z",
+      "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+      "provider_request_count": null,
+      "usage": null
+    },
+    {
+      "case": "NEW-001",
+      "model": "deepseek-flash",
+      "tool_calls": 15,
+      "browser_tool_calls": 11,
+      "completed": true,
+      "candidate_sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "provider_request_count": null,
+      "usage": null
+    },
+    {
+      "case": "NEW-002",
+      "model": "deepseek-flash",
+      "tool_calls": 9,
+      "browser_tool_calls": 7,
+      "completed": true,
+      "candidate_sha256": "7EBF7783ABA1AB643D224B765B94C616C3B18CC045EAE2801D87A157C0241A3B",
+      "provider_request_count": null,
+      "usage": null
+    },
+    {
+      "case": "NEW-003",
+      "model": "deepseek-flash",
+      "tool_calls": 24,
+      "browser_tool_calls": 22,
+      "completed": true,
+      "candidate_sha256": "7568895247DCA2FA8656DD234FC43C3EABDD8BF7ECA4E8492DEFA6D3002D5EC7",
+      "provider_request_count": null,
+      "usage": null
+    }
+  ]
+}

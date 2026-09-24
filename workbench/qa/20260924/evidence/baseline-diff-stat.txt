@@ -1,0 +1,12 @@
+ workbench/scripts/start-workbench.ps1     |  16 +-
+ workbench/scripts/verify-start-config.ps1 |  23 +-
+ workbench/server/app.mjs                  |  16 +-
+ workbench/server/auth/session.mjs         |  47 +++-
+ workbench/server/build/files.mjs          |   8 +-
+ workbench/server/build/manager.mjs        | 384 +++++++++++++++++++++++++++++-
+ workbench/server/build/project-case.mjs   |   2 +
+ workbench/server/build/store.mjs          |  16 +-
+ workbench/server/build/template.mjs       |  37 +++
+ workbench/server/index.mjs                |   1 +
+ workbench/web-v2/app.js                   |  41 +++-
+ 11 files changed, 540 insertions(+), 51 deletions(-)

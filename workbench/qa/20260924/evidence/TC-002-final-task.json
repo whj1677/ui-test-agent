@@ -1,0 +1,1140 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260924141725-0b65a070",
+  "template": {
+    "template_id": "project-case-input-v1",
+    "version": "1.0.0",
+    "title": "TC-002 · 额定功率降序排列（入口 /ui/c）",
+    "summary": "项目“2026-09-24 测试工程师真实模型独立轮次”用例 v1 的冻结建例输入",
+    "candidate_contract": {
+      "url_environment_variable": "PROBE_URL",
+      "test_count": 1,
+      "retries": 0,
+      "workers": 1
+    },
+    "allowed_entry": {
+      "kind": "registered-local-read-only-trial-site",
+      "route": "/ui/c",
+      "origin": "http://127.0.0.1:4320",
+      "login_required": false,
+      "scope": "只读查看设备台账；不修改站点数据"
+    },
+    "input_sha256": "14D6D47D63891852A7F2376D4BCCFCE30E8989357A5502D1B0899A1B6AB6C257"
+  },
+  "source": {
+    "kind": "project-case",
+    "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+    "project_name": "2026-09-24 测试工程师真实模型独立轮次",
+    "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+    "external_id": "TC-002",
+    "case_version": 1,
+    "content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+    "root_source": {
+      "type": "xlsx",
+      "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:3",
+      "file_name": "UI_TRIAL_6_CASES.xlsx",
+      "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+      "sheet": "六条用例",
+      "row": 3
+    },
+    "lineage": [
+      {
+        "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+        "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+        "version": 1,
+        "imported_from": "xlsx",
+        "at": "2026-09-23T01:12:03.361Z"
+      },
+      {
+        "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+        "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+        "version": 1,
+        "exported_at": "2026-09-23T01:12:33.287Z"
+      },
+      {
+        "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+        "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+        "version": 1,
+        "imported_from": "case-package",
+        "at": "2026-09-24T14:16:06.645Z"
+      }
+    ],
+    "creation_request_id": "case-build-request-65d426eb-8017-4f6f-a1ec-13e5c576390c",
+    "creation_request_fingerprint": "A3A10106A1C9F8AE75CE32A2D2D7D43C5E619E278104C753E2E0ACCC035FCE2E"
+  },
+  "environment_ref": {
+    "environment_id": "test-site-01-sorting-v1",
+    "template_id": "test-site-01-sorting-v1",
+    "template_version": "1.0.0",
+    "allowed_entry": {
+      "kind": "registered-local-read-only-trial-site",
+      "route": "/ui/c",
+      "origin": "http://127.0.0.1:4320",
+      "login_required": false,
+      "scope": "只读查看设备台账；不修改站点数据"
+    },
+    "candidate_contract": {
+      "url_environment_variable": "PROBE_URL",
+      "test_count": 1,
+      "retries": 0,
+      "workers": 1
+    }
+  },
+  "input_bundle": {
+    "schema": "workbench/project-case-build-bundle-v2",
+    "snapshot": {
+      "schema": "workbench/project-case-build-input-v2",
+      "frozen_at": "2026-09-24T14:17:25.502Z",
+      "source": {
+        "kind": "project-case",
+        "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+        "project_name": "2026-09-24 测试工程师真实模型独立轮次",
+        "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+        "external_id": "TC-002",
+        "case_version": 1,
+        "content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+        "root_source": {
+          "type": "xlsx",
+          "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:3",
+          "file_name": "UI_TRIAL_6_CASES.xlsx",
+          "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+          "sheet": "六条用例",
+          "row": 3
+        },
+        "lineage": [
+          {
+            "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+            "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+            "version": 1,
+            "imported_from": "xlsx",
+            "at": "2026-09-23T01:12:03.361Z"
+          },
+          {
+            "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+            "case_id": "case-3e862889-5a13-46f8-b04a-de58a157dd15",
+            "version": 1,
+            "exported_at": "2026-09-23T01:12:33.287Z"
+          },
+          {
+            "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+            "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-24T14:16:06.645Z"
+          }
+        ]
+      },
+      "content": {
+        "external_id": "TC-002",
+        "title": "额定功率降序排列（入口 /ui/c）",
+        "module": "设备台账 / 功率排序",
+        "preconditions": "已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。",
+        "test_data": "站点=全部站点\n状态=全部状态\n排序=额定功率降序\n入口=http://127.0.0.1:4320/ui/c",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+            "expected": "初始仍显示共6条，第一行为 DEV-001"
+          },
+          {
+            "order": 2,
+            "action": "S02 点击“查询”，核对六条完整设备行顺序",
+            "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+          }
+        ],
+        "status": "CONFIRMED"
+      },
+      "environment_ref": {
+        "environment_id": "test-site-01-sorting-v1",
+        "template_id": "test-site-01-sorting-v1",
+        "template_version": "1.0.0",
+        "allowed_entry": {
+          "kind": "registered-local-read-only-trial-site",
+          "route": "/ui/c",
+          "origin": "http://127.0.0.1:4320",
+          "login_required": false,
+          "scope": "只读查看设备台账；不修改站点数据"
+        },
+        "candidate_contract": {
+          "url_environment_variable": "PROBE_URL",
+          "test_count": 1,
+          "retries": 0,
+          "workers": 1
+        }
+      },
+      "candidate_requirements": {
+        "schema": "workbench/project-case-candidate-requirements-v2",
+        "required_step_markers": [
+          {
+            "order": 1,
+            "marker": "CASE_STEP_1"
+          },
+          {
+            "order": 2,
+            "marker": "CASE_STEP_2"
+          }
+        ],
+        "step_title_rule": {
+          "version": "project-case-step-title-v2",
+          "allowed_forms": [
+            "CASE_STEP_<order>",
+            "CASE_STEP_<order> <description>",
+            "CASE_STEP_<order>: <description>",
+            "CASE_STEP_<order>：<description>",
+            "CASE_STEP_<order> - <description>",
+            "CASE_STEP_<order> – <description>",
+            "CASE_STEP_<order> — <description>"
+          ]
+        },
+        "deliverable": {
+          "kind": "playwright-test-candidate",
+          "relative_path": "output/candidate.spec.mjs",
+          "test_count": 1
+        }
+      }
+    },
+    "snapshot_sha256": "14D6D47D63891852A7F2376D4BCCFCE30E8989357A5502D1B0899A1B6AB6C257",
+    "task_markdown": "# Frozen project case candidate task\n\nSource project: project-7a8ff60b-8ac4-4368-9892-19992f958946\nSource internal case: case-e57c63fb-5871-462b-8ce4-2a61fdc6914d\nExternal case number: TC-002\nCase version: v1\nContent SHA-256: 3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408\nEnvironment reference: test-site-01-sorting-v1\n\n## Case content (verbatim JSON strings)\n\nTitle: \"额定功率降序排列（入口 /ui/c）\"\nModule: \"设备台账 / 功率排序\"\nPreconditions: \"已启动 TEST-SITE-01；设备固定数据为 DEV-001 至 DEV-006；当前入口可访问。\"\nTest data: \"站点=全部站点\\n状态=全部状态\\n排序=额定功率降序\\n入口=http://127.0.0.1:4320/ui/c\"\n\n## Ordered steps and expected results\n\n### Step 1\nMarker: CASE_STEP_1\nAction: \"S01 打开指定入口，选择“额定功率降序”，暂不点击查询\"\nExpected: \"初始仍显示共6条，第一行为 DEV-001\"\n\n### Step 2\nMarker: CASE_STEP_2\nAction: \"S02 点击“查询”，核对六条完整设备行顺序\"\nExpected: \"顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\"\n\nStep title rule: project-case-step-title-v2\nAllowed step titles: CASE_STEP_<order> | CASE_STEP_<order> <description> | CASE_STEP_<order>: <description> | CASE_STEP_<order>：<description> | CASE_STEP_<order> - <description> | CASE_STEP_<order> – <description> | CASE_STEP_<order> — <description>\n\nUse every step and its paired expected result exactly as supplied.\nDo not summarize, merge, delete, reorder, infer, or rewrite business expectations.\n",
+    "task_markdown_sha256": "076A09A9EBD7412E389B7BC7FA3C5040B3ED533BDF93CAF89442DA81350E6201",
+    "agent_instruction_template": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly {{ENTRY_URL}}.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to {{CANDIDATE_PATH}}.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present.",
+    "agent_instruction_sha256": "CD44184683B122DE6EE5835D69823F678EA792C7014AFC95F2A9FC72B740C3E1",
+    "verification_contract": {
+      "schema": "workbench/project-case-verification-contract-v2",
+      "detection": {
+        "kind": "assertion-mismatch-at-step",
+        "step_marker": "CASE_STEP_2"
+      },
+      "frozen_fault": {
+        "expected": "第 2 行 DEV-006，之后 DEV-002",
+        "actual": "第 2 行 DEV-002，之后 DEV-006"
+      },
+      "step_title_rule_version": "project-case-step-title-v2",
+      "required_step_markers": [
+        "CASE_STEP_1",
+        "CASE_STEP_2"
+      ]
+    }
+  },
+  "trial_binding": {
+    "schema": "workbench/e2e01-paired-case-binding-v1",
+    "pair_group": "test-site-01-sorting-v1",
+    "source": {
+      "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+      "external_id": "TC-002",
+      "case_version": 1,
+      "content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+      "entry_route": "/ui/c"
+    },
+    "paired": {
+      "case_id": "case-759af556-d4fd-48d4-8200-87f4683b0d33",
+      "external_id": "TC-005",
+      "case_version": 1,
+      "content_sha256": "5D251B65F37E39CAE7D842E242A4EAED30BA18F11F157845D52153E49D105688",
+      "entry_route": "/ui/d"
+    }
+  },
+  "execution_policy": {
+    "mode": "SINGLE_AUTHORIZED_INITIAL",
+    "launch_enabled": true,
+    "reason": "E2E_01_SCOPED_AUTHORIZATION"
+  },
+  "created_at": "2026-09-24T14:17:25.502Z",
+  "started_at": "2026-09-24T14:17:25.617Z",
+  "finished_at": "2026-09-24T14:18:51.515Z",
+  "task_status": "WAITING_E2E_TRIALS",
+  "generation_status": "GENERATED",
+  "verification_status": "INCOMPLETE",
+  "human_review_status": "NOT_READY",
+  "active_attempt_id": null,
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "started_at": "2026-09-24T14:17:25.617Z",
+      "finished_at": "2026-09-24T14:18:32.999Z",
+      "status": "COMPLETED",
+      "max_tool_calls": 30,
+      "timeout_ms": 600000,
+      "service_instance_id": "service-65da9a8d-e2a0-40a9-91c9-e36a482af49e",
+      "authorization_id": "e2e01-six-case-project-20260923",
+      "authorization_status": "CONSUMED_ON_PROCESS_SPAWN",
+      "observation": {
+        "complete": true,
+        "lifecycle_file": "attempts/attempt-01-initial/lifecycle.ndjson",
+        "summary": {
+          "event_count": 211,
+          "last_event": {
+            "sequence": 211,
+            "type": "phase",
+            "at": "2026-09-24T14:18:28.470Z"
+          },
+          "terminal_observed": true,
+          "output_complete": true
+        }
+      },
+      "harness": {
+        "model_configuration": {
+          "provider": "deepseek-official",
+          "model": "deepseek-flash",
+          "credential_source": "saved-dsh-home",
+          "dsh_version": "0.1.6-alpha.2"
+        },
+        "assessment": {
+          "success": true,
+          "completed": true,
+          "candidateExists": true,
+          "browserToolCalls": 7,
+          "exitCode": 0,
+          "termination": null,
+          "error": null,
+          "finalPresent": true,
+          "turnEndReason": "completed",
+          "toolCalls": 19,
+          "maxToolCalls": 30,
+          "toolLimitReached": false
+        },
+        "wall_ms": 62827,
+        "observable_agent_steps": 19,
+        "total_tool_calls": 19,
+        "browser_tool_calls": 7,
+        "provider_request_count": null,
+        "provider_usage": null,
+        "tool_names": [
+          "mcp__playwright-mcp__browser_click",
+          "mcp__playwright-mcp__browser_evaluate",
+          "mcp__playwright-mcp__browser_navigate",
+          "mcp__playwright-mcp__browser_run_code_unsafe",
+          "mcp__playwright-mcp__browser_select_option",
+          "mcp__playwright-mcp__browser_snapshot",
+          "pwsh",
+          "read",
+          "write"
+        ],
+        "process": {
+          "pid": 18856,
+          "parent_pid": 1168,
+          "exit_code": 0,
+          "signal": null,
+          "termination": null,
+          "exit_observed": true,
+          "close_observed": true,
+          "output_complete": true,
+          "observer_error": null,
+          "stderr_diagnostic": null
+        }
+      },
+      "error": null,
+      "auth": null,
+      "rendered_agent_instruction": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly http://127.0.0.1:4320/ui/c.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present."
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "created_at": "2026-09-24T14:18:28.466Z",
+      "sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+      "bytes": 1907,
+      "code": "import { test, expect } from '@playwright/test';\n\n// 用例：额定功率降序排列（入口 /ui/c）\n// 前置：设备固定数据为 DEV-001 至 DEV-006；站点=全部站点；状态=全部状态。\ntest('额定功率降序排列（入口 /ui/c）', async ({ page }) => {\n  const deviceRows = page.locator('table tbody tr');\n\n  await test.step('CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询', async () => {\n    await page.goto(process.env.PROBE_URL);\n\n    await page.getByRole('combobox', { name: '排序方式' }).selectOption('额定功率降序');\n\n    // 预期：初始仍显示共6条，第一行为 DEV-001\n    await expect(page.getByText('共6条', { exact: true })).toBeVisible();\n    await expect(deviceRows).toHaveCount(6);\n    await expect(deviceRows.first()).toContainText('DEV-001');\n  });\n\n  await test.step('CASE_STEP_2: 点击查询，核对六条完整设备行顺序', async () => {\n    await page.getByRole('button', { name: '查询' }).click();\n\n    // 预期：顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003\n    const expectedOrder = [\n      'DEV-005',\n      'DEV-006',\n      'DEV-002',\n      'DEV-004',\n      'DEV-001',\n      'DEV-003',\n    ];\n\n    await expect(deviceRows).toHaveCount(expectedOrder.length);\n\n    for (let index = 0; index < expectedOrder.length; index += 1) {\n      await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n    }\n\n    // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\n    const secondRowCells = deviceRows.nth(1).locator('td');\n    await expect(secondRowCells.nth(0)).toHaveText('DEV-006');\n    await expect(secondRowCells.nth(1)).toHaveText('排水泵');\n    await expect(secondRowCells.nth(2)).toHaveText('东站');\n    await expect(secondRowCells.nth(3)).toHaveText('运行');\n    await expect(secondRowCells.nth(4)).toHaveText('140 kW');\n  });\n});\n",
+      "diff_from_previous": {
+        "base": null,
+        "changed": false,
+        "lines": []
+      },
+      "generation_status": "GENERATED",
+      "verification_status": "PAIR_VALIDATION_FAILED",
+      "normal": {
+        "report_status": "COMPLETE",
+        "test_status": "PASSED",
+        "test_count": 1,
+        "error": null,
+        "complete_pass": true,
+        "stats": {
+          "startTime": "2026-09-24T14:18:29.121Z",
+          "duration": 3836.4710000000005,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 0,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "category": null,
+            "duration": 165,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "category": null,
+            "duration": 134,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          }
+        ]
+      },
+      "negative": {
+        "report_status": "COMPLETE",
+        "test_status": "FAILED",
+        "test_count": 1,
+        "error": {
+          "type": "LOCATOR_OR_TARGET",
+          "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+          "expected": null,
+          "actual": null,
+          "attribution": "PENDING_ANALYSIS"
+        },
+        "complete_pass": false,
+        "stats": {
+          "startTime": "2026-09-24T14:18:34.042Z",
+          "duration": 9069.985999999999,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 1,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+            "category": null,
+            "duration": 255,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+            "category": null,
+            "duration": 5147,
+            "error": {
+              "type": "LOCATOR_OR_TARGET",
+              "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+              "expected": null,
+              "actual": null,
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "raw_error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+              "location": {
+                "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                "line": 35,
+                "column": 43
+              },
+              "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+            },
+            "steps": []
+          }
+        ]
+      },
+      "error": null,
+      "approved": false,
+      "project_case_step_mapping": [
+        {
+          "order": 1,
+          "marker": "CASE_STEP_1",
+          "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+          "expected": "初始仍显示共6条，第一行为 DEV-001",
+          "observed": true
+        },
+        {
+          "order": 2,
+          "marker": "CASE_STEP_2",
+          "action": "S02 点击“查询”，核对六条完整设备行顺序",
+          "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW",
+          "observed": true
+        }
+      ],
+      "same_candidate_hash": true,
+      "counterexample_detected": false,
+      "trial_runs": [
+        {
+          "schema": "workbench/e2e01-case-run-v1",
+          "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+          "run_type": "normal",
+          "source_build_task_id": "build-20260924141725-0b65a070",
+          "source_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+          "source_external_id": "TC-002",
+          "source_case_version": 1,
+          "executed_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+          "executed_external_id": "TC-002",
+          "executed_case_version": 1,
+          "executed_content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+          "environment_id": "test-site-01-sorting-v1",
+          "entry_route": "/ui/c",
+          "candidate_version": 1,
+          "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+          "status": "PASSED",
+          "complete_pass": true,
+          "error": null,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media_file_ids": [
+            "build-file-007",
+            "build-file-008",
+            "build-file-009"
+          ],
+          "started_at": "2026-09-24T14:18:32.996Z",
+          "finished_at": "2026-09-24T14:18:32.996Z",
+          "origin": "WORKBENCH_CANDIDATE_TRIAL"
+        },
+        {
+          "schema": "workbench/e2e01-case-run-v1",
+          "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+          "run_type": "negative",
+          "source_build_task_id": "build-20260924141725-0b65a070",
+          "source_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+          "source_external_id": "TC-002",
+          "source_case_version": 1,
+          "executed_case_id": "case-759af556-d4fd-48d4-8200-87f4683b0d33",
+          "executed_external_id": "TC-005",
+          "executed_case_version": 1,
+          "executed_content_sha256": "5D251B65F37E39CAE7D842E242A4EAED30BA18F11F157845D52153E49D105688",
+          "environment_id": "test-site-01-sorting-v1",
+          "entry_route": "/ui/d",
+          "candidate_version": 1,
+          "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+          "status": "FAILED",
+          "complete_pass": false,
+          "failure_step": "CASE_STEP_2",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+                      "expected": null,
+                      "actual": null,
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                        "line": 35,
+                        "column": 43
+                      },
+                      "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "specified_defect_detected": false,
+          "same_candidate_hash": true,
+          "media_file_ids": [
+            "build-file-021",
+            "build-file-022",
+            "build-file-023",
+            "build-file-024",
+            "build-file-025",
+            "build-file-026",
+            "build-file-027",
+            "build-file-029"
+          ],
+          "step_replay": {
+            "schema": "workbench/step-evidence-replay-v1",
+            "status": "READY",
+            "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+            "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+            "executed_external_id": "TC-005",
+            "executed_case_version": 1,
+            "observer_version": "e2e01-step-observer-v1",
+            "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+            "original_video_precise_seek": false,
+            "evidence_complete": true,
+            "missing_captures": [],
+            "steps": [
+              {
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+                "expected": "初始仍显示共6条，第一行为 DEV-001",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-24T14:18:37.031Z",
+                "executed_end": "2026-09-24T14:18:37.191Z",
+                "observer_start": "2026-09-24T14:18:36.982Z",
+                "observer_end": "2026-09-24T14:18:37.235Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_1-after.png",
+                "before_screenshot_file_name": "case_step_1-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 93.36560000000009
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "action": "S02 点击“查询”，核对六条完整设备行顺序",
+                "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW",
+                "execution_status": "FAILED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": {
+                  "name": "Error",
+                  "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                  "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:35:43\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:19:3"
+                },
+                "executed_start": "2026-09-24T14:18:37.280Z",
+                "executed_end": "2026-09-24T14:18:42.338Z",
+                "observer_start": "2026-09-24T14:18:37.238Z",
+                "observer_end": "2026-09-24T14:18:42.384Z",
+                "screenshot_phase": "failure-after",
+                "screenshot_file_name": "case_step_2-failure-after.png",
+                "before_screenshot_file_name": "case_step_2-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 87.61739999999918
+              }
+            ],
+            "chapters": [
+              {
+                "step_id": "CASE_STEP_1",
+                "start_seconds": 0,
+                "result_start_seconds": 1.2252000000476837,
+                "end_seconds": 3.028,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "start_seconds": 3.028100000023842,
+                "result_start_seconds": 4.231899999976158,
+                "end_seconds": 6.044100000023842,
+                "screenshot_phase": "failure-after"
+              }
+            ],
+            "duration_seconds": 6.1641,
+            "output_file_name": "step-replay-v1.webm",
+            "reading_holds": "1200ms action / 1800ms result"
+          },
+          "caption_timeline": {
+            "schema": "workbench/trial-timeline-v1",
+            "status": "UNAVAILABLE",
+            "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+            "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+            "reason": "ORIGINAL_VIDEO_STEP_TIME_NOT_CALIBRATED"
+          },
+          "runner_version": "e2e01-step-evidence-replay-v1",
+          "started_at": "2026-09-24T14:18:33.154Z",
+          "finished_at": "2026-09-24T14:18:51.515Z",
+          "origin": "WORKBENCH_CANDIDATE_TRIAL",
+          "technical_error": null
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file_id": "build-input-snapshot",
+      "attempt_id": null,
+      "kind": "task_input_snapshot",
+      "web_visible": true,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "case-snapshot.json",
+      "relative_path": "input/case-snapshot.json",
+      "bytes": 3859,
+      "sha256": "14D6D47D63891852A7F2376D4BCCFCE30E8989357A5502D1B0899A1B6AB6C257"
+    },
+    {
+      "file_id": "build-input-task-md",
+      "attempt_id": null,
+      "kind": "task_document",
+      "web_visible": true,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "task.md",
+      "relative_path": "task.md",
+      "bytes": 1606,
+      "sha256": "076A09A9EBD7412E389B7BC7FA3C5040B3ED533BDF93CAF89442DA81350E6201"
+    },
+    {
+      "file_id": "build-input-agent-instruction",
+      "attempt_id": null,
+      "kind": "agent_instruction",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-instruction.txt",
+      "relative_path": "agent-instruction.txt",
+      "bytes": 1249,
+      "sha256": "CD44184683B122DE6EE5835D69823F678EA792C7014AFC95F2A9FC72B740C3E1"
+    },
+    {
+      "file_id": "build-file-004",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "harness_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "relative_path": "attempts/attempt-01-initial/harness-summary.json",
+      "bytes": 1274,
+      "sha256": "269587D6062BA760BB001E8901D6820476EBF5541F59112059647DCE1364FCE7"
+    },
+    {
+      "file_id": "build-file-005",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "lifecycle_log",
+      "web_visible": false,
+      "content_type": "application/x-ndjson; charset=utf-8",
+      "file_name": "lifecycle.ndjson",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "bytes": 60567,
+      "sha256": "CE4A93B33467BFD910B58A736F7E79839D9D3FD5928B230CD23DA72604FC8561"
+    },
+    {
+      "file_id": "build-file-006",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "verification_metadata",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": ".last-run.json",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+    },
+    {
+      "file_id": "build-file-007",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "normal_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-额定功率降序排列（入口-ui-c）/test-finished-1.png",
+      "bytes": 46597,
+      "sha256": "3C3B2A0DA8F3957095B711507CC56414BF626E90440404133443A0AB6F933962"
+    },
+    {
+      "file_id": "build-file-008",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "normal_trace",
+      "web_visible": false,
+      "content_type": "application/zip",
+      "file_name": "trace.zip",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-额定功率降序排列（入口-ui-c）/trace.zip",
+      "bytes": 225032,
+      "sha256": "0185F7A5EEEB8E4D2DEEB6319CD8DB11F0FED298AB0D803173FCCFC0CDDA3D9E"
+    },
+    {
+      "file_id": "build-file-009",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "normal_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "video.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-额定功率降序排列（入口-ui-c）/video.webm",
+      "bytes": 65039,
+      "sha256": "F3CF9E7EF574D35A1990FF18F3C08A48BA9982EF7B3B8B6829C402F2477E5690"
+    },
+    {
+      "file_id": "build-file-010",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "test_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/playwright-report.json",
+      "bytes": 5332,
+      "sha256": "2F588FFEA5FEAC1D1E111E415212CC0C2BB0F58C6EBF536FB625BBD7BCEC509D"
+    },
+    {
+      "file_id": "build-file-011",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "tool_log",
+      "web_visible": false,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-24T14-17-32-666Z.log",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/console-2026-09-24T14-17-32-666Z.log",
+      "bytes": 138,
+      "sha256": "E00B384D1B78615C818F4A8897967FF1618F02A1974E36E4A688A2C5A09C4FB0"
+    },
+    {
+      "file_id": "build-file-012",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-17-32-764Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-17-32-764Z.yml",
+      "bytes": 3776,
+      "sha256": "53BA3F56FE0461FFFFD76E50937B59672FDDF4E9944DCDAD323669AED42E383E"
+    },
+    {
+      "file_id": "build-file-013",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-17-34-661Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-17-34-661Z.yml",
+      "bytes": 3776,
+      "sha256": "3E71D80D79D37D04485ADB45890829FD00357F77C234C608D3871D2FE7AEC8D1"
+    },
+    {
+      "file_id": "build-file-014",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-17-38-090Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-17-38-090Z.yml",
+      "bytes": 3819,
+      "sha256": "D31F929971C2FB14E0A166DF178BE4715222FCC400AA72CB242C3F3A6358A87C"
+    },
+    {
+      "file_id": "build-file-015",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "rendered_agent_instruction",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-instruction.txt",
+      "relative_path": "attempts/attempt-01-initial/workspace/agent-instruction.txt",
+      "bytes": 1423,
+      "sha256": "72A28599E06C1D3C826C5DBEE92FD9799FC7C278B7B02D5D6BB35BE53CF1DF4D"
+    },
+    {
+      "file_id": "build-file-016",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "attempt_input_snapshot",
+      "web_visible": true,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "case-snapshot.json",
+      "relative_path": "attempts/attempt-01-initial/workspace/input/case-snapshot.json",
+      "bytes": 3859,
+      "sha256": "14D6D47D63891852A7F2376D4BCCFCE30E8989357A5502D1B0899A1B6AB6C257"
+    },
+    {
+      "file_id": "build-file-017",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "candidate",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "relative_path": "attempts/attempt-01-initial/workspace/output/candidate.spec.mjs",
+      "bytes": 1907,
+      "sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD"
+    },
+    {
+      "file_id": "build-file-018",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+      "kind": "attempt_task_document",
+      "web_visible": true,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "task.md",
+      "relative_path": "attempts/attempt-01-initial/workspace/task.md",
+      "bytes": 1606,
+      "sha256": "076A09A9EBD7412E389B7BC7FA3C5040B3ED533BDF93CAF89442DA81350E6201"
+    },
+    {
+      "file_id": "build-file-019",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "verification_metadata",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": ".last-run.json",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "B330D20F0C4AD867C92B188D01354021F049DB23C258ECB8746021C6DFCE63E6"
+    },
+    {
+      "file_id": "build-file-020",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "verification_diagnostic",
+      "web_visible": false,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "error-context.md",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/observed-额定功率降序排列（入口-ui-c）/error-context.md",
+      "bytes": 3523,
+      "sha256": "9239FE4C38B5DB541445D49E8477B639B2D2FC886DA6ED19027F69CDB22B5009"
+    },
+    {
+      "file_id": "build-file-021",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/observed-额定功率降序排列（入口-ui-c）/test-failed-1.png",
+      "bytes": 46715,
+      "sha256": "80FF53BB3AD259A1A99FF5FF2DF5D1938CC683185F2D8136785E108138FCD60B"
+    },
+    {
+      "file_id": "build-file-022",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_trace",
+      "web_visible": false,
+      "content_type": "application/zip",
+      "file_name": "trace.zip",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/observed-额定功率降序排列（入口-ui-c）/trace.zip",
+      "bytes": 380021,
+      "sha256": "9F1C801FDBDD6FE4C00737FD8FEF4CC5CA03ED455CD1433DF4B8B9B1E5196F8E"
+    },
+    {
+      "file_id": "build-file-023",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "video.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/observed-额定功率降序排列（入口-ui-c）/video.webm",
+      "bytes": 178539,
+      "sha256": "1FAAC1664584B79240562E94071E1BE65CAF5BFCFFD37E5DC502B19CEB84A797"
+    },
+    {
+      "file_id": "build-file-024",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_1-after.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 46975,
+      "sha256": "C83B2172540D6695C90F60F870D50787B3E05CDC8AC19A7817F738E4999029AC"
+    },
+    {
+      "file_id": "build-file-025",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_1-before.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 4254,
+      "sha256": "3878570F4A62A0D65F57CF1754E0269E56EC797F4E36E26B44C172EB6E800401"
+    },
+    {
+      "file_id": "build-file-026",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_2-before.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 46975,
+      "sha256": "C83B2172540D6695C90F60F870D50787B3E05CDC8AC19A7817F738E4999029AC"
+    },
+    {
+      "file_id": "build-file-027",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_2-failure-after.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-evidence/case_step_2-failure-after.png",
+      "bytes": 46715,
+      "sha256": "80FF53BB3AD259A1A99FF5FF2DF5D1938CC683185F2D8136785E108138FCD60B"
+    },
+    {
+      "file_id": "build-file-028",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "step_observations",
+      "web_visible": false,
+      "content_type": "application/x-ndjson; charset=utf-8",
+      "file_name": "step-observations.ndjson",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-evidence/step-observations.ndjson",
+      "bytes": 4794,
+      "sha256": "70807188BF2BC268713BEB2A7706EFBC91F97E68CFF6EA69087880037B3C4315"
+    },
+    {
+      "file_id": "build-file-029",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "counterexample_step_replay_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "step-replay-v1.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/artifacts/step-replay-v1.webm",
+      "bytes": 533474,
+      "sha256": "3F3F154C6C19F0DDB16A98CCE219145E07134CC76064E4F2DDA5FB268FE83804"
+    },
+    {
+      "file_id": "build-file-030",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "step_observer_entry",
+      "web_visible": false,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "observed.spec.mjs",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/observer-entry/observed.spec.mjs",
+      "bytes": 1065,
+      "sha256": "0E13C1BE423D3F5E3AF4392AACD9D1EF51A150CEFE010D974CF612C308FD5903"
+    },
+    {
+      "file_id": "build-file-031",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+      "kind": "test_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-e32319e0-750e-4c67-926b-f9084360de99/playwright-report.json",
+      "bytes": 15879,
+      "sha256": "59D4FF03B21C64FC9884F1AFC65FF0818368128CBA8E15F7E2F6553F903F1FE6"
+    }
+  ],
+  "revision_allowed": false,
+  "budget": {
+    "phase": "M2-C",
+    "max_starts": 2,
+    "used_starts": 0
+  },
+  "authorization": {
+    "authorization_id": "e2e01-six-case-project-20260923",
+    "kind": "initial-with-optional-revision",
+    "max_starts": 6,
+    "used_starts": 2,
+    "linked_stage": "E2E-01",
+    "scope": {
+      "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+      "case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+      "case_version": 1,
+      "content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+      "environment_id": "test-site-01-sorting-v1",
+      "external_id": "TC-002"
+    }
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "residual_risk_accepted": true
+  },
+  "error": null
+}

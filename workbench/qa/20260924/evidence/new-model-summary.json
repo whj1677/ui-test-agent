@@ -1,0 +1,172 @@
+{
+  "started_at": "2026-09-24T14:23:54.856Z",
+  "boundary": "Real Harness capability tests outside hardcoded workbench entry. No reference scripts supplied to model. Same candidate normal/fault.",
+  "groups": [
+    {
+      "external_id": "NEW-001",
+      "group": "paging",
+      "assessment": {
+        "success": true,
+        "completed": true,
+        "candidateExists": true,
+        "browserToolCalls": 11,
+        "exitCode": 0,
+        "termination": null,
+        "error": null,
+        "finalPresent": true,
+        "turnEndReason": "completed",
+        "toolCalls": 15,
+        "maxToolCalls": 30,
+        "toolLimitReached": false
+      },
+      "candidate": {
+        "path": "output/candidate.spec.mjs",
+        "bytes": 3580,
+        "sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137"
+      },
+      "runs": [
+        {
+          "variant": "normal",
+          "success": false,
+          "report": {
+            "success": false,
+            "reason": "TEST_RESULT_INCOMPLETE",
+            "testCount": 1,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 1
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-001\\normal\\playwright-report.json",
+          "exit_code": 1,
+          "same_candidate_hash": true
+        },
+        {
+          "variant": "fault",
+          "success": false,
+          "report": {
+            "success": false,
+            "reason": "TEST_RESULT_INCOMPLETE",
+            "testCount": 1,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 1
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-001\\fault\\playwright-report.json",
+          "exit_code": 1,
+          "same_candidate_hash": true
+        }
+      ]
+    },
+    {
+      "external_id": "NEW-002",
+      "group": "retry",
+      "assessment": {
+        "success": true,
+        "completed": true,
+        "candidateExists": true,
+        "browserToolCalls": 7,
+        "exitCode": 0,
+        "termination": null,
+        "error": null,
+        "finalPresent": true,
+        "turnEndReason": "completed",
+        "toolCalls": 9,
+        "maxToolCalls": 30,
+        "toolLimitReached": false
+      },
+      "candidate": {
+        "path": "output/candidate.spec.mjs",
+        "bytes": 3981,
+        "sha256": "7EBF7783ABA1AB643D224B765B94C616C3B18CC045EAE2801D87A157C0241A3B"
+      },
+      "runs": [
+        {
+          "variant": "normal",
+          "success": false,
+          "report": {
+            "success": false,
+            "reason": "TEST_RESULT_INCOMPLETE",
+            "testCount": 1,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 1
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-002\\normal\\playwright-report.json",
+          "exit_code": 1,
+          "same_candidate_hash": true
+        },
+        {
+          "variant": "fault",
+          "success": false,
+          "report": {
+            "success": false,
+            "reason": "TEST_RESULT_INCOMPLETE",
+            "testCount": 1,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 1
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-002\\fault\\playwright-report.json",
+          "exit_code": 1,
+          "same_candidate_hash": true
+        }
+      ]
+    },
+    {
+      "external_id": "NEW-003",
+      "group": "wizard",
+      "assessment": {
+        "success": true,
+        "completed": true,
+        "candidateExists": true,
+        "browserToolCalls": 22,
+        "exitCode": 0,
+        "termination": null,
+        "error": null,
+        "finalPresent": true,
+        "turnEndReason": "completed",
+        "toolCalls": 24,
+        "maxToolCalls": 30,
+        "toolLimitReached": false
+      },
+      "candidate": {
+        "path": "output/candidate.spec.mjs",
+        "bytes": 4066,
+        "sha256": "7568895247DCA2FA8656DD234FC43C3EABDD8BF7ECA4E8492DEFA6D3002D5EC7"
+      },
+      "runs": [
+        {
+          "variant": "normal",
+          "success": true,
+          "report": {
+            "success": true,
+            "reason": "COMPLETE_PASS",
+            "testCount": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-003\\normal\\playwright-report.json",
+          "exit_code": 0,
+          "same_candidate_hash": true
+        },
+        {
+          "variant": "fault",
+          "success": false,
+          "report": {
+            "success": false,
+            "reason": "TEST_RESULT_INCOMPLETE",
+            "testCount": 1,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 1
+          },
+          "report_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-003\\fault\\playwright-report.json",
+          "exit_code": 1,
+          "same_candidate_hash": true
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-24T14:26:56.340Z"
+}

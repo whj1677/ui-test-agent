@@ -1,0 +1,152 @@
+[
+  {
+    "tool": "read",
+    "args": {
+      "file_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-003\\case.json"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_navigate",
+    "args": {
+      "url": "http://127.0.0.1:4343/?scene=wizard&variant=normal"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "args": {
+      "depth": 18
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_find",
+    "args": {
+      "text": "步"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => document.body.innerText"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => { const r = document.querySelector('main'); return r ? r.outerHTML.slice(0, 4000) : 'no main'; }"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "下一步 button",
+      "target": "e16"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => { return { err: document.querySelector('#wErr').textContent, step1Hidden: document.querySelector('#wStep1').classList.contains('hidden'), step2Hidden: document.querySelector('#wStep2').classList.contains('hidden') }; }"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => { const n=document.querySelector('#wName'); const q=document.querySelector('#wQty'); n.value='测试员'; n.dispatchEvent(new Event('input',{bubbles:true})); q.value='6'; q.dispatchEvent(new Event('input',{bubbles:true})); return 'filled'; }"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "下一步 button",
+      "target": "#wNext1"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ err: document.querySelector('#wErr').textContent, step2Hidden: document.querySelector('#wStep2').classList.contains('hidden') })"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => { const q=document.querySelector('#wQty'); q.value='2'; q.dispatchEvent(new Event('input',{bubbles:true})); return q.value; }"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "下一步 button",
+      "target": "#wNext1"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ summary: document.querySelector('#wSummary').textContent, step1Hidden: document.querySelector('#wStep1').classList.contains('hidden'), step2Hidden: document.querySelector('#wStep2').classList.contains('hidden'), err2: document.querySelector('#wErr2').textContent })"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "上一步 button",
+      "target": "#wBack"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ name: document.querySelector('#wName').value, qty: document.querySelector('#wQty').value, step1Hidden: document.querySelector('#wStep1').classList.contains('hidden'), step2Hidden: document.querySelector('#wStep2').classList.contains('hidden') })"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "下一步 button",
+      "target": "#wNext1"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ summary: document.querySelector('#wSummary').textContent, step2Hidden: document.querySelector('#wStep2').classList.contains('hidden') })"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => { const a=document.querySelector('#wAgree'); a.checked=true; a.dispatchEvent(new Event('change',{bubbles:true})); return a.checked; }"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "生成预览 button",
+      "target": "#wPreviewBtn"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ preview: document.querySelector('#wPreview').textContent, hidden: document.querySelector('#wPreview').classList.contains('hidden'), err2: document.querySelector('#wErr2').textContent })"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => document.querySelector('#wPreview').outerHTML"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "args": {
+      "function": "() => ({ ls: Object.keys(localStorage).length, ss: Object.keys(sessionStorage).length, submitLike: Array.from(document.querySelectorAll('button')).filter(b=>/提交|保存|上传|持久/.test(b.textContent)).map(b=>b.textContent) })"
+    }
+  },
+  {
+    "tool": "write",
+    "args": {
+      "file_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-003\\output\\candidate.spec.mjs"
+    }
+  }
+]

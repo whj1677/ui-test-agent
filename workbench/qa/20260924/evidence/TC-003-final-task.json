@@ -1,0 +1,1228 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260924141851-7a5e5553",
+  "template": {
+    "template_id": "project-case-input-v1",
+    "version": "1.0.0",
+    "title": "TC-003 · 查看 DEV-005 设备详情（入口 /ui/e）",
+    "summary": "项目“2026-09-24 测试工程师真实模型独立轮次”用例 v1 的冻结建例输入",
+    "candidate_contract": {
+      "url_environment_variable": "PROBE_URL",
+      "test_count": 1,
+      "retries": 0,
+      "workers": 1
+    },
+    "allowed_entry": {
+      "kind": "registered-local-read-only-trial-site",
+      "route": "/ui/e",
+      "origin": "http://127.0.0.1:4320",
+      "login_required": false,
+      "scope": "只读查看设备台账；不修改站点数据"
+    },
+    "input_sha256": "B49B8BC168D70BB4C0A05050E6248751EA933F492D65EF318DCD95F93DEB7845"
+  },
+  "source": {
+    "kind": "project-case",
+    "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+    "project_name": "2026-09-24 测试工程师真实模型独立轮次",
+    "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+    "external_id": "TC-003",
+    "case_version": 1,
+    "content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+    "root_source": {
+      "type": "xlsx",
+      "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:4",
+      "file_name": "UI_TRIAL_6_CASES.xlsx",
+      "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+      "sheet": "六条用例",
+      "row": 4
+    },
+    "lineage": [
+      {
+        "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+        "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+        "version": 1,
+        "imported_from": "xlsx",
+        "at": "2026-09-23T01:12:03.361Z"
+      },
+      {
+        "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+        "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+        "version": 1,
+        "exported_at": "2026-09-23T01:12:33.287Z"
+      },
+      {
+        "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+        "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+        "version": 1,
+        "imported_from": "case-package",
+        "at": "2026-09-24T14:16:06.645Z"
+      }
+    ],
+    "creation_request_id": "case-build-request-f6f987d7-2c8c-49a4-90b8-b599335f477b",
+    "creation_request_fingerprint": "2565FA89713749B612A3CE78CAB946FE5CD4B1BC8ED6B519D5C3BAB6A1E341AD"
+  },
+  "environment_ref": {
+    "environment_id": "test-site-01-detail-v1",
+    "template_id": "test-site-01-detail-v1",
+    "template_version": "1.0.0",
+    "allowed_entry": {
+      "kind": "registered-local-read-only-trial-site",
+      "route": "/ui/e",
+      "origin": "http://127.0.0.1:4320",
+      "login_required": false,
+      "scope": "只读查看设备台账；不修改站点数据"
+    },
+    "candidate_contract": {
+      "url_environment_variable": "PROBE_URL",
+      "test_count": 1,
+      "retries": 0,
+      "workers": 1
+    }
+  },
+  "input_bundle": {
+    "schema": "workbench/project-case-build-bundle-v2",
+    "snapshot": {
+      "schema": "workbench/project-case-build-input-v2",
+      "frozen_at": "2026-09-24T14:18:51.769Z",
+      "source": {
+        "kind": "project-case",
+        "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+        "project_name": "2026-09-24 测试工程师真实模型独立轮次",
+        "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+        "external_id": "TC-003",
+        "case_version": 1,
+        "content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+        "root_source": {
+          "type": "xlsx",
+          "stable_id": "xlsx:62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818:六条用例:4",
+          "file_name": "UI_TRIAL_6_CASES.xlsx",
+          "file_sha256": "62E41E6B8E311A7042E642D043F83096087C2C3C57A9D9F8BBDF6748EEB73818",
+          "sheet": "六条用例",
+          "row": 4
+        },
+        "lineage": [
+          {
+            "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+            "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+            "version": 1,
+            "imported_from": "xlsx",
+            "at": "2026-09-23T01:12:03.361Z"
+          },
+          {
+            "project_id": "project-41d4309d-fe5f-4899-a978-bc2d7c586ba0",
+            "case_id": "case-05bb8d4e-8bef-48e6-a96b-62fc527f01f1",
+            "version": 1,
+            "exported_at": "2026-09-23T01:12:33.287Z"
+          },
+          {
+            "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+            "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-24T14:16:06.645Z"
+          }
+        ]
+      },
+      "content": {
+        "external_id": "TC-003",
+        "title": "查看 DEV-005 设备详情（入口 /ui/e）",
+        "module": "设备台账 / 设备详情",
+        "preconditions": "已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。",
+        "test_data": "目标设备=DEV-005\n设备名称=冷却泵\n额定功率=220 kW\n入口=http://127.0.0.1:4320/ui/e",
+        "steps": [
+          {
+            "order": 1,
+            "action": "S01 在 DEV-005 行点击“详情”",
+            "expected": "打开标题为“设备详情 · DEV-005”的弹窗"
+          },
+          {
+            "order": 2,
+            "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW"
+          },
+          {
+            "order": 3,
+            "action": "S03 点击“关闭”",
+            "expected": "详情弹窗关闭并返回设备列表"
+          }
+        ],
+        "status": "CONFIRMED"
+      },
+      "environment_ref": {
+        "environment_id": "test-site-01-detail-v1",
+        "template_id": "test-site-01-detail-v1",
+        "template_version": "1.0.0",
+        "allowed_entry": {
+          "kind": "registered-local-read-only-trial-site",
+          "route": "/ui/e",
+          "origin": "http://127.0.0.1:4320",
+          "login_required": false,
+          "scope": "只读查看设备台账；不修改站点数据"
+        },
+        "candidate_contract": {
+          "url_environment_variable": "PROBE_URL",
+          "test_count": 1,
+          "retries": 0,
+          "workers": 1
+        }
+      },
+      "candidate_requirements": {
+        "schema": "workbench/project-case-candidate-requirements-v2",
+        "required_step_markers": [
+          {
+            "order": 1,
+            "marker": "CASE_STEP_1"
+          },
+          {
+            "order": 2,
+            "marker": "CASE_STEP_2"
+          },
+          {
+            "order": 3,
+            "marker": "CASE_STEP_3"
+          }
+        ],
+        "step_title_rule": {
+          "version": "project-case-step-title-v2",
+          "allowed_forms": [
+            "CASE_STEP_<order>",
+            "CASE_STEP_<order> <description>",
+            "CASE_STEP_<order>: <description>",
+            "CASE_STEP_<order>：<description>",
+            "CASE_STEP_<order> - <description>",
+            "CASE_STEP_<order> – <description>",
+            "CASE_STEP_<order> — <description>"
+          ]
+        },
+        "deliverable": {
+          "kind": "playwright-test-candidate",
+          "relative_path": "output/candidate.spec.mjs",
+          "test_count": 1
+        }
+      }
+    },
+    "snapshot_sha256": "B49B8BC168D70BB4C0A05050E6248751EA933F492D65EF318DCD95F93DEB7845",
+    "task_markdown": "# Frozen project case candidate task\n\nSource project: project-7a8ff60b-8ac4-4368-9892-19992f958946\nSource internal case: case-b46789db-5bed-4bb6-8456-29030b9d5427\nExternal case number: TC-003\nCase version: v1\nContent SHA-256: 968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504\nEnvironment reference: test-site-01-detail-v1\n\n## Case content (verbatim JSON strings)\n\nTitle: \"查看 DEV-005 设备详情（入口 /ui/e）\"\nModule: \"设备台账 / 设备详情\"\nPreconditions: \"已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。\"\nTest data: \"目标设备=DEV-005\\n设备名称=冷却泵\\n额定功率=220 kW\\n入口=http://127.0.0.1:4320/ui/e\"\n\n## Ordered steps and expected results\n\n### Step 1\nMarker: CASE_STEP_1\nAction: \"S01 在 DEV-005 行点击“详情”\"\nExpected: \"打开标题为“设备详情 · DEV-005”的弹窗\"\n\n### Step 2\nMarker: CASE_STEP_2\nAction: \"S02 核对详情中的设备编号、名称、站点、状态和额定功率\"\nExpected: \"显示 DEV-005、冷却泵、西站、检修、220 kW\"\n\n### Step 3\nMarker: CASE_STEP_3\nAction: \"S03 点击“关闭”\"\nExpected: \"详情弹窗关闭并返回设备列表\"\n\nStep title rule: project-case-step-title-v2\nAllowed step titles: CASE_STEP_<order> | CASE_STEP_<order> <description> | CASE_STEP_<order>: <description> | CASE_STEP_<order>：<description> | CASE_STEP_<order> - <description> | CASE_STEP_<order> – <description> | CASE_STEP_<order> — <description>\n\nUse every step and its paired expected result exactly as supplied.\nDo not summarize, merge, delete, reorder, infer, or rewrite business expectations.\n",
+    "task_markdown_sha256": "8C59C9E1354C95FC39792BD33912FDF300C8F144B3FDA5F339F7DCC0C9C4BB49",
+    "agent_instruction_template": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly {{ENTRY_URL}}.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to {{CANDIDATE_PATH}}.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present.",
+    "agent_instruction_sha256": "CD44184683B122DE6EE5835D69823F678EA792C7014AFC95F2A9FC72B740C3E1",
+    "verification_contract": {
+      "schema": "workbench/project-case-verification-contract-v2",
+      "detection": {
+        "kind": "assertion-mismatch-at-step",
+        "step_marker": "CASE_STEP_2"
+      },
+      "frozen_fault": {
+        "expected": "220 kW",
+        "actual": "320 kW"
+      },
+      "step_title_rule_version": "project-case-step-title-v2",
+      "required_step_markers": [
+        "CASE_STEP_1",
+        "CASE_STEP_2",
+        "CASE_STEP_3"
+      ]
+    }
+  },
+  "trial_binding": {
+    "schema": "workbench/e2e01-paired-case-binding-v1",
+    "pair_group": "test-site-01-detail-v1",
+    "source": {
+      "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+      "external_id": "TC-003",
+      "case_version": 1,
+      "content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+      "entry_route": "/ui/e"
+    },
+    "paired": {
+      "case_id": "case-b4cf0648-2e59-4c8c-a086-2afd2c699733",
+      "external_id": "TC-006",
+      "case_version": 1,
+      "content_sha256": "BAAE12D610C924B152B1DCFB62798F7C61BF91C559F1CA5EF4DF00ACB84A1F68",
+      "entry_route": "/ui/f"
+    }
+  },
+  "execution_policy": {
+    "mode": "SINGLE_AUTHORIZED_INITIAL",
+    "launch_enabled": true,
+    "reason": "E2E_01_SCOPED_AUTHORIZATION"
+  },
+  "created_at": "2026-09-24T14:18:51.769Z",
+  "started_at": "2026-09-24T14:18:51.887Z",
+  "finished_at": "2026-09-24T14:20:28.511Z",
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "generation_status": "GENERATED",
+  "verification_status": "TECHNICAL_VALIDATION_PASSED",
+  "human_review_status": "WAITING_REVIEW",
+  "active_attempt_id": null,
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "started_at": "2026-09-24T14:18:51.887Z",
+      "finished_at": "2026-09-24T14:20:09.618Z",
+      "status": "COMPLETED",
+      "max_tool_calls": 30,
+      "timeout_ms": 600000,
+      "service_instance_id": "service-65da9a8d-e2a0-40a9-91c9-e36a482af49e",
+      "authorization_id": "e2e01-six-case-project-20260923",
+      "authorization_status": "CONSUMED_ON_PROCESS_SPAWN",
+      "observation": {
+        "complete": true,
+        "lifecycle_file": "attempts/attempt-01-initial/lifecycle.ndjson",
+        "summary": {
+          "event_count": 202,
+          "last_event": {
+            "sequence": 202,
+            "type": "phase",
+            "at": "2026-09-24T14:20:05.643Z"
+          },
+          "terminal_observed": true,
+          "output_complete": true
+        }
+      },
+      "harness": {
+        "model_configuration": {
+          "provider": "deepseek-official",
+          "model": "deepseek-flash",
+          "credential_source": "saved-dsh-home",
+          "dsh_version": "0.1.6-alpha.2"
+        },
+        "assessment": {
+          "success": true,
+          "completed": true,
+          "candidateExists": true,
+          "browserToolCalls": 10,
+          "exitCode": 0,
+          "termination": null,
+          "error": null,
+          "finalPresent": true,
+          "turnEndReason": "completed",
+          "toolCalls": 18,
+          "maxToolCalls": 30,
+          "toolLimitReached": false
+        },
+        "wall_ms": 73728,
+        "observable_agent_steps": 18,
+        "total_tool_calls": 18,
+        "browser_tool_calls": 10,
+        "provider_request_count": null,
+        "provider_usage": null,
+        "tool_names": [
+          "edit",
+          "mcp__playwright-mcp__browser_click",
+          "mcp__playwright-mcp__browser_close",
+          "mcp__playwright-mcp__browser_evaluate",
+          "mcp__playwright-mcp__browser_navigate",
+          "mcp__playwright-mcp__browser_run_code_unsafe",
+          "mcp__playwright-mcp__browser_snapshot",
+          "pwsh",
+          "read",
+          "write"
+        ],
+        "process": {
+          "pid": 2316,
+          "parent_pid": 1168,
+          "exit_code": 0,
+          "signal": null,
+          "termination": null,
+          "exit_observed": true,
+          "close_observed": true,
+          "output_complete": true,
+          "observer_error": null,
+          "stderr_diagnostic": null
+        }
+      },
+      "error": null,
+      "auth": null,
+      "rendered_agent_instruction": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly http://127.0.0.1:4320/ui/e.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present."
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "created_at": "2026-09-24T14:20:05.640Z",
+      "sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+      "bytes": 2811,
+      "code": "import { test, expect } from '@playwright/test';\n\n// TC-003 查看 DEV-005 设备详情（入口 /ui/e）\n// 模块：设备台账 / 设备详情\n// 前置条件：已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。\n// 测试数据：目标设备=DEV-005；设备名称=冷却泵；额定功率=220 kW；入口由环境变量 PROBE_URL 提供\ntest.describe('TC-003 查看 DEV-005 设备详情（入口 /ui/e）', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto(process.env.PROBE_URL);\n  });\n\n  test('查看 DEV-005 设备详情（入口 /ui/e）', async ({ page }) => {\n    const deviceRow = page.getByRole('row').filter({ hasText: 'DEV-005' });\n    const detailDialog = page.getByRole('dialog', { name: '设备详情 · DEV-005' });\n    const detailValue = (field) => detailDialog.locator(`dd[data-field=\"${field}\"]`);\n\n    await test.step('CASE_STEP_1：S01 在 DEV-005 行点击“详情”', async () => {\n      await expect(deviceRow).toBeVisible();\n      await deviceRow.getByRole('button', { name: '详情', exact: true }).click();\n\n      // 期望：打开标题为“设备详情 · DEV-005”的弹窗\n      await expect(detailDialog).toBeVisible();\n      await expect(\n        detailDialog.getByRole('heading', { name: '设备详情 · DEV-005', exact: true }),\n      ).toBeVisible();\n    });\n\n    await test.step('CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率', async () => {\n      await expect(detailDialog).toBeVisible();\n\n      // 期望：显示 DEV-005、冷却泵、西站、检修、220 kW\n      await expect(detailDialog.getByText('设备编号', { exact: true })).toBeVisible();\n      await expect(detailValue('id')).toHaveText('DEV-005');\n\n      await expect(detailDialog.getByText('设备名称', { exact: true })).toBeVisible();\n      await expect(detailValue('name')).toHaveText('冷却泵');\n\n      await expect(detailDialog.getByText('所属站点', { exact: true })).toBeVisible();\n      await expect(detailValue('station')).toHaveText('西站');\n\n      await expect(detailDialog.getByText('状态', { exact: true })).toBeVisible();\n      await expect(detailValue('status')).toHaveText('检修');\n\n      await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n      await expect(detailValue('power')).toHaveText('220 kW');\n    });\n\n    await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {\n      await detailDialog.getByRole('button', { name: '关闭', exact: true }).click();\n\n      // 期望：详情弹窗关闭并返回设备列表\n      await expect(detailDialog).toBeHidden();\n      await expect(page.getByRole('heading', { name: '设备列表', exact: true })).toBeVisible();\n      await expect(deviceRow).toBeVisible();\n    });\n  });\n});\n",
+      "diff_from_previous": {
+        "base": null,
+        "changed": false,
+        "lines": []
+      },
+      "generation_status": "GENERATED",
+      "verification_status": "TECHNICAL_VALIDATION_PASSED",
+      "normal": {
+        "report_status": "COMPLETE",
+        "test_status": "PASSED",
+        "test_count": 1,
+        "error": null,
+        "complete_pass": true,
+        "stats": {
+          "startTime": "2026-09-24T14:20:06.420Z",
+          "duration": 3153.563,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 0,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "category": null,
+            "duration": 115,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "category": null,
+            "duration": 91,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_3：S03 点击“关闭”",
+            "raw_title": "CASE_STEP_3：S03 点击“关闭”",
+            "category": null,
+            "duration": 65,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          }
+        ]
+      },
+      "negative": {
+        "report_status": "COMPLETE",
+        "test_status": "FAILED",
+        "test_count": 1,
+        "error": {
+          "type": "ASSERTION_MISMATCH",
+          "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+          "expected": "220 kW",
+          "actual": "320 kW",
+          "attribution": "PENDING_ANALYSIS"
+        },
+        "complete_pass": false,
+        "stats": {
+          "startTime": "2026-09-24T14:20:10.633Z",
+          "duration": 8878.719,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 1,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+            "category": null,
+            "duration": 266,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+            "category": null,
+            "duration": 5226,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+              "expected": "220 kW",
+              "actual": "320 kW",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "raw_error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+              "location": {
+                "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                "line": 45,
+                "column": 42
+              },
+              "snippet": "  43 |\n  44 |       await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n> 45 |       await expect(detailValue('power')).toHaveText('220 kW');\n     |                                          ^\n  46 |     });\n  47 |\n  48 |     await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {"
+            },
+            "steps": []
+          }
+        ]
+      },
+      "error": null,
+      "approved": false,
+      "project_case_step_mapping": [
+        {
+          "order": 1,
+          "marker": "CASE_STEP_1",
+          "action": "S01 在 DEV-005 行点击“详情”",
+          "expected": "打开标题为“设备详情 · DEV-005”的弹窗",
+          "observed": true
+        },
+        {
+          "order": 2,
+          "marker": "CASE_STEP_2",
+          "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+          "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW",
+          "observed": true
+        },
+        {
+          "order": 3,
+          "marker": "CASE_STEP_3",
+          "action": "S03 点击“关闭”",
+          "expected": "详情弹窗关闭并返回设备列表",
+          "observed": true
+        }
+      ],
+      "same_candidate_hash": true,
+      "counterexample_detected": true,
+      "trial_runs": [
+        {
+          "schema": "workbench/e2e01-case-run-v1",
+          "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+          "run_type": "normal",
+          "source_build_task_id": "build-20260924141851-7a5e5553",
+          "source_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+          "source_external_id": "TC-003",
+          "source_case_version": 1,
+          "executed_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+          "executed_external_id": "TC-003",
+          "executed_case_version": 1,
+          "executed_content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+          "environment_id": "test-site-01-detail-v1",
+          "entry_route": "/ui/e",
+          "candidate_version": 1,
+          "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+          "status": "PASSED",
+          "complete_pass": true,
+          "error": null,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3：S03 点击“关闭”",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media_file_ids": [
+            "build-file-007",
+            "build-file-008",
+            "build-file-009"
+          ],
+          "started_at": "2026-09-24T14:20:09.614Z",
+          "finished_at": "2026-09-24T14:20:09.614Z",
+          "origin": "WORKBENCH_CANDIDATE_TRIAL"
+        },
+        {
+          "schema": "workbench/e2e01-case-run-v1",
+          "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+          "run_type": "negative",
+          "source_build_task_id": "build-20260924141851-7a5e5553",
+          "source_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+          "source_external_id": "TC-003",
+          "source_case_version": 1,
+          "executed_case_id": "case-b4cf0648-2e59-4c8c-a086-2afd2c699733",
+          "executed_external_id": "TC-006",
+          "executed_case_version": 1,
+          "executed_content_sha256": "BAAE12D610C924B152B1DCFB62798F7C61BF91C559F1CA5EF4DF00ACB84A1F68",
+          "environment_id": "test-site-01-detail-v1",
+          "entry_route": "/ui/f",
+          "candidate_version": 1,
+          "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+          "status": "FAILED",
+          "complete_pass": false,
+          "failure_step": "CASE_STEP_2",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+            "expected": "220 kW",
+            "actual": "320 kW",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+                      "expected": "220 kW",
+                      "actual": "320 kW",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                        "line": 45,
+                        "column": 42
+                      },
+                      "snippet": "  43 |\n  44 |       await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n> 45 |       await expect(detailValue('power')).toHaveText('220 kW');\n     |                                          ^\n  46 |     });\n  47 |\n  48 |     await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "specified_defect_detected": true,
+          "same_candidate_hash": true,
+          "media_file_ids": [
+            "build-file-022",
+            "build-file-023",
+            "build-file-024",
+            "build-file-025",
+            "build-file-026",
+            "build-file-027",
+            "build-file-028",
+            "build-file-030"
+          ],
+          "step_replay": {
+            "schema": "workbench/step-evidence-replay-v1",
+            "status": "READY",
+            "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+            "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+            "executed_external_id": "TC-006",
+            "executed_case_version": 1,
+            "observer_version": "e2e01-step-observer-v1",
+            "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+            "original_video_precise_seek": false,
+            "evidence_complete": true,
+            "missing_captures": [],
+            "steps": [
+              {
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "action": "S01 在 DEV-005 行点击“详情”",
+                "expected": "打开标题为“设备详情 · DEV-005”的弹窗",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-24T14:20:13.359Z",
+                "executed_end": "2026-09-24T14:20:13.504Z",
+                "observer_start": "2026-09-24T14:20:13.300Z",
+                "observer_end": "2026-09-24T14:20:13.565Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_1-after.png",
+                "before_screenshot_file_name": "case_step_1-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 119.5006999999996
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW",
+                "execution_status": "FAILED",
+                "actual": "320 kW",
+                "assertion_expected": "220 kW",
+                "raw_error": {
+                  "name": "Error",
+                  "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                  "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:45:42\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:28:5"
+                },
+                "executed_start": "2026-09-24T14:20:13.629Z",
+                "executed_end": "2026-09-24T14:20:18.739Z",
+                "observer_start": "2026-09-24T14:20:13.566Z",
+                "observer_end": "2026-09-24T14:20:18.791Z",
+                "screenshot_phase": "failure-after",
+                "screenshot_file_name": "case_step_2-failure-after.png",
+                "before_screenshot_file_name": "case_step_2-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 114.60170000000016
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "raw_title": null,
+                "action": "S03 点击“关闭”",
+                "expected": "详情弹窗关闭并返回设备列表",
+                "execution_status": "NOT_EXECUTED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": null,
+                "executed_end": null,
+                "observer_start": null,
+                "observer_end": null,
+                "screenshot_phase": null,
+                "screenshot_file_name": null,
+                "before_screenshot_file_name": null,
+                "screenshot_error": null,
+                "capture_duration_ms": 0
+              }
+            ],
+            "chapters": [
+              {
+                "step_id": "CASE_STEP_1",
+                "start_seconds": 0,
+                "result_start_seconds": 1.2255,
+                "end_seconds": 3.0313999999761583,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "start_seconds": 3.0313999999761583,
+                "result_start_seconds": 4.251,
+                "end_seconds": 6.0556000000238415,
+                "screenshot_phase": "failure-after"
+              }
+            ],
+            "duration_seconds": 6.1756,
+            "output_file_name": "step-replay-v1.webm",
+            "reading_holds": "1200ms action / 1800ms result"
+          },
+          "caption_timeline": {
+            "schema": "workbench/trial-timeline-v1",
+            "status": "UNAVAILABLE",
+            "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+            "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+            "reason": "ORIGINAL_VIDEO_STEP_TIME_NOT_CALIBRATED"
+          },
+          "runner_version": "e2e01-step-evidence-replay-v1",
+          "started_at": "2026-09-24T14:20:09.774Z",
+          "finished_at": "2026-09-24T14:20:28.510Z",
+          "origin": "WORKBENCH_CANDIDATE_TRIAL",
+          "technical_error": null
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file_id": "build-input-snapshot",
+      "attempt_id": null,
+      "kind": "task_input_snapshot",
+      "web_visible": true,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "case-snapshot.json",
+      "relative_path": "input/case-snapshot.json",
+      "bytes": 3968,
+      "sha256": "B49B8BC168D70BB4C0A05050E6248751EA933F492D65EF318DCD95F93DEB7845"
+    },
+    {
+      "file_id": "build-input-task-md",
+      "attempt_id": null,
+      "kind": "task_document",
+      "web_visible": true,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "task.md",
+      "relative_path": "task.md",
+      "bytes": 1621,
+      "sha256": "8C59C9E1354C95FC39792BD33912FDF300C8F144B3FDA5F339F7DCC0C9C4BB49"
+    },
+    {
+      "file_id": "build-input-agent-instruction",
+      "attempt_id": null,
+      "kind": "agent_instruction",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-instruction.txt",
+      "relative_path": "agent-instruction.txt",
+      "bytes": 1249,
+      "sha256": "CD44184683B122DE6EE5835D69823F678EA792C7014AFC95F2A9FC72B740C3E1"
+    },
+    {
+      "file_id": "build-file-004",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "harness_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "relative_path": "attempts/attempt-01-initial/harness-summary.json",
+      "bytes": 1279,
+      "sha256": "D2BA43666E920FE14302AE4053EAA6843937754136B0B5EDBB32B7BC05135163"
+    },
+    {
+      "file_id": "build-file-005",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "lifecycle_log",
+      "web_visible": false,
+      "content_type": "application/x-ndjson; charset=utf-8",
+      "file_name": "lifecycle.ndjson",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "bytes": 58079,
+      "sha256": "6D2F8395640D4A7DEE896BB6E186CF79E42A1E63294A4BCC1E63936CB36840F5"
+    },
+    {
+      "file_id": "build-file-006",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "verification_metadata",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": ".last-run.json",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+    },
+    {
+      "file_id": "build-file-007",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "normal_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-TC-003-查看-DEV-00-32d1f-e）-查看-DEV-005-设备详情（入口-ui-e）/test-finished-1.png",
+      "bytes": 43309,
+      "sha256": "E66EA5A3CAC6FCFD33D0CAB972AD0C97334AE090653602E3C5C90D02FCCC7099"
+    },
+    {
+      "file_id": "build-file-008",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "normal_trace",
+      "web_visible": false,
+      "content_type": "application/zip",
+      "file_name": "trace.zip",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-TC-003-查看-DEV-00-32d1f-e）-查看-DEV-005-设备详情（入口-ui-e）/trace.zip",
+      "bytes": 224963,
+      "sha256": "71440CE565FED4ACC2686006EE0C06723B17AE4E4C81485C63649C80147C5984"
+    },
+    {
+      "file_id": "build-file-009",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "normal_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "video.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/artifacts/candidate-TC-003-查看-DEV-00-32d1f-e）-查看-DEV-005-设备详情（入口-ui-e）/video.webm",
+      "bytes": 68973,
+      "sha256": "25F9793C11DB02F4816BE9B9183D484BA99BEE3144ECE16900BBAF180B5F2E3B"
+    },
+    {
+      "file_id": "build-file-010",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "test_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "relative_path": "attempts/attempt-01-initial/verification/normal/playwright-report.json",
+      "bytes": 6072,
+      "sha256": "8F46DA013DB9DB5BA8C92AEFD0B0DFA59E10AA5F26BD74989430F26DDA2CDA43"
+    },
+    {
+      "file_id": "build-file-011",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "tool_log",
+      "web_visible": false,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-24T14-18-58-414Z.log",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/console-2026-09-24T14-18-58-414Z.log",
+      "bytes": 138,
+      "sha256": "C8076D4EEA3BE96763596FF7FB980DB4EAA772EC931455148B956FD16DE95AC1"
+    },
+    {
+      "file_id": "build-file-012",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-18-58-584Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-18-58-584Z.yml",
+      "bytes": 3776,
+      "sha256": "CA40D8888FF0818B7264ED5BD466CBB23E014AC8A34AB27CC3A2DC3448554173"
+    },
+    {
+      "file_id": "build-file-013",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-19-01-896Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-19-01-896Z.yml",
+      "bytes": 4946,
+      "sha256": "03D8DA3201625BCD7A87B1F6129A9FB49EBA66F4D782579B834357161570D77C"
+    },
+    {
+      "file_id": "build-file-014",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-19-09-588Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-19-09-588Z.yml",
+      "bytes": 3776,
+      "sha256": "CA40D8888FF0818B7264ED5BD466CBB23E014AC8A34AB27CC3A2DC3448554173"
+    },
+    {
+      "file_id": "build-file-015",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "tool_snapshot",
+      "web_visible": false,
+      "content_type": "text/yaml; charset=utf-8",
+      "file_name": "page-2026-09-24T14-19-32-844Z.yml",
+      "relative_path": "attempts/attempt-01-initial/workspace/.playwright-mcp/page-2026-09-24T14-19-32-844Z.yml",
+      "bytes": 4950,
+      "sha256": "B01A1FA963A7D5B1E244BC120D112DDEC9CE0B82FB3C505900933BE859D8BDB5"
+    },
+    {
+      "file_id": "build-file-016",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "rendered_agent_instruction",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-instruction.txt",
+      "relative_path": "attempts/attempt-01-initial/workspace/agent-instruction.txt",
+      "bytes": 1423,
+      "sha256": "C9A05F1B1851E52828EAB3B2333E724A1B1FB96E4F6112A2CD4B206DC8E1EED0"
+    },
+    {
+      "file_id": "build-file-017",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "attempt_input_snapshot",
+      "web_visible": true,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "case-snapshot.json",
+      "relative_path": "attempts/attempt-01-initial/workspace/input/case-snapshot.json",
+      "bytes": 3968,
+      "sha256": "B49B8BC168D70BB4C0A05050E6248751EA933F492D65EF318DCD95F93DEB7845"
+    },
+    {
+      "file_id": "build-file-018",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "candidate",
+      "web_visible": true,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "relative_path": "attempts/attempt-01-initial/workspace/output/candidate.spec.mjs",
+      "bytes": 2811,
+      "sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C"
+    },
+    {
+      "file_id": "build-file-019",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+      "kind": "attempt_task_document",
+      "web_visible": true,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "task.md",
+      "relative_path": "attempts/attempt-01-initial/workspace/task.md",
+      "bytes": 1621,
+      "sha256": "8C59C9E1354C95FC39792BD33912FDF300C8F144B3FDA5F339F7DCC0C9C4BB49"
+    },
+    {
+      "file_id": "build-file-020",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "verification_metadata",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": ".last-run.json",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "83B0361BD8BBBAEA1C8C811333796E5C7A7EC1DADF504E4D1FABB0EF02E61811"
+    },
+    {
+      "file_id": "build-file-021",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "verification_diagnostic",
+      "web_visible": false,
+      "content_type": "text/markdown; charset=utf-8",
+      "file_name": "error-context.md",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/observed-TC-003-查看-DEV-005-e41c7-e）-查看-DEV-005-设备详情（入口-ui-e）/error-context.md",
+      "bytes": 4331,
+      "sha256": "928E6AD125D07D6228E3DF85AB2CB15CDDB2655E441A6B51C04A42897896326B"
+    },
+    {
+      "file_id": "build-file-022",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/observed-TC-003-查看-DEV-005-e41c7-e）-查看-DEV-005-设备详情（入口-ui-e）/test-failed-1.png",
+      "bytes": 67323,
+      "sha256": "2BBE7D5E334D8BD3D74BCA1475D60A784041A7DFB4D7A384D24FD02F53BF424C"
+    },
+    {
+      "file_id": "build-file-023",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_trace",
+      "web_visible": false,
+      "content_type": "application/zip",
+      "file_name": "trace.zip",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/observed-TC-003-查看-DEV-005-e41c7-e）-查看-DEV-005-设备详情（入口-ui-e）/trace.zip",
+      "bytes": 409315,
+      "sha256": "B4AEC2758DE6308063D8AB655FD9A8749617831C65FBA0E524B24E48BCFCF9DB"
+    },
+    {
+      "file_id": "build-file-024",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "video.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/observed-TC-003-查看-DEV-005-e41c7-e）-查看-DEV-005-设备详情（入口-ui-e）/video.webm",
+      "bytes": 174787,
+      "sha256": "6485A47E368C01B3322E80DB644D3AFE31CB9026B5DD490F4C3C64B8AFB71D5B"
+    },
+    {
+      "file_id": "build-file-025",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_1-after.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 67323,
+      "sha256": "2BBE7D5E334D8BD3D74BCA1475D60A784041A7DFB4D7A384D24FD02F53BF424C"
+    },
+    {
+      "file_id": "build-file-026",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_1-before.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 46863,
+      "sha256": "7833D866D5E4BA28F48C6AFEB0D88697748665044D566C78926586B290B5C652"
+    },
+    {
+      "file_id": "build-file-027",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_2-before.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 67323,
+      "sha256": "2BBE7D5E334D8BD3D74BCA1475D60A784041A7DFB4D7A384D24FD02F53BF424C"
+    },
+    {
+      "file_id": "build-file-028",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_screenshot",
+      "web_visible": false,
+      "content_type": "image/png",
+      "file_name": "case_step_2-failure-after.png",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-evidence/case_step_2-failure-after.png",
+      "bytes": 67323,
+      "sha256": "2BBE7D5E334D8BD3D74BCA1475D60A784041A7DFB4D7A384D24FD02F53BF424C"
+    },
+    {
+      "file_id": "build-file-029",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "step_observations",
+      "web_visible": false,
+      "content_type": "application/x-ndjson; charset=utf-8",
+      "file_name": "step-observations.ndjson",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-evidence/step-observations.ndjson",
+      "bytes": 4223,
+      "sha256": "7B2268F75A381C8FF0D2ADA789E7D7F6A2C8E18078BDE033C71C99EF5A13817F"
+    },
+    {
+      "file_id": "build-file-030",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "counterexample_step_replay_video",
+      "web_visible": false,
+      "content_type": "video/webm",
+      "file_name": "step-replay-v1.webm",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/artifacts/step-replay-v1.webm",
+      "bytes": 571514,
+      "sha256": "2FE6ED9BEB1F172285614238D544A5BE00766DD63374D0E2E9B0CEAFBD6FFC0F"
+    },
+    {
+      "file_id": "build-file-031",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "step_observer_entry",
+      "web_visible": false,
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "observed.spec.mjs",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/observer-entry/observed.spec.mjs",
+      "bytes": 1065,
+      "sha256": "A7D3765F8C40F929A3E0FB43AED135C3366140D8A51B283FAD9C6B1031C44EAF"
+    },
+    {
+      "file_id": "build-file-032",
+      "attempt_id": "attempt-01-initial",
+      "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+      "kind": "test_report",
+      "web_visible": false,
+      "content_type": "application/json; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "relative_path": "attempts/attempt-01-initial/verification/negative/runs/run-aad0d788-a399-4251-a02e-3e5ff7476532/playwright-report.json",
+      "bytes": 15273,
+      "sha256": "6569A355B7D71A8F59938C1A9EF17FE4F97C1FBFD324C7D7E2E3F59EC87FF009"
+    }
+  ],
+  "revision_allowed": false,
+  "budget": {
+    "phase": "M2-C",
+    "max_starts": 2,
+    "used_starts": 0
+  },
+  "authorization": {
+    "authorization_id": "e2e01-six-case-project-20260923",
+    "kind": "initial-with-optional-revision",
+    "max_starts": 6,
+    "used_starts": 3,
+    "linked_stage": "E2E-01",
+    "scope": {
+      "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+      "case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+      "case_version": 1,
+      "content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+      "environment_id": "test-site-01-detail-v1",
+      "external_id": "TC-003"
+    }
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "residual_risk_accepted": true
+  },
+  "error": null
+}

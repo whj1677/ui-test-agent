@@ -1,0 +1,57 @@
+{
+  "success": false,
+  "process": {
+    "exitCode": 1,
+    "signal": null,
+    "error": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n\n\n[1/1] .local\\qa-20260924\\new-attempts\\NEW-002\\output\\candidate.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭\n  1) .local\\qa-20260924\\new-attempts\\NEW-002\\output\\candidate.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭 › CASE_STEP_1: 打开该用例绑定入口（scene=retry，variant以入口配置为准） \n\n    Error: expect(locator).toHaveCount(expected) failed\n\n    Locator:  locator('main button')\n    Expected: 1\n    Received: 9\n    Timeout:  5000ms\n\n    Call log:\n      - Expect \"toHaveCount\" with timeout 5000ms\n      - waiting for locator('main button')\n        14 × locator resolved to 9 elements\n           - unexpected value \"9\"\n\n\n      19 |     // 期望：仅显示遥测读取相关控件（初始不应有其它可交互控件或已打开的详情）\n      20 |     await expect(page.getByRole('dialog', { name: '遥测详情' })).toBeHidden();\n    > 21 |     await expect(page.locator('main button')).toHaveCount(1);\n         |                                               ^\n      22 |   });\n      23 |\n      24 |   await test.step('CASE_STEP_2: 点击查看遥测', async () => {\n        at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-002\\output\\candidate.spec.mjs:21:47\n        at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-002\\output\\candidate.spec.mjs:6:3\n\n    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────\n    .local\\qa-20260924\\new-runs\\NEW-002\\fault\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\test-failed-1.png\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────\n    .local\\qa-20260924\\new-runs\\NEW-002\\fault\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\video.webm\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n    Error Context: .local\\qa-20260924\\new-runs\\NEW-002\\fault\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\error-context.md\n\n    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────\n    .local\\qa-20260924\\new-runs\\NEW-002\\fault\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip\n    Usage:\n\n        npx playwright show-trace .local\\qa-20260924\\new-runs\\NEW-002\\fault\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip\n\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n\n  1 failed\n    .local\\qa-20260924\\new-attempts\\NEW-002\\output\\candidate.spec.mjs:3:1 › NEW-002 遥测首次失败后重试成功并关闭 ─\n",
+    "stderr": "(node:30688) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+    "termination": null,
+    "pid": 40468,
+    "parentPid": 39404,
+    "exitObserved": true,
+    "closeObserved": true,
+    "outputComplete": true,
+    "trailingStdoutLine": false,
+    "observerError": null
+  },
+  "report": {
+    "success": false,
+    "reason": "TEST_RESULT_INCOMPLETE",
+    "testCount": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "reportPath": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-runs\\NEW-002\\fault\\playwright-report.json",
+  "runtime": {
+    "runtime_root": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench",
+    "cli_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+    "config_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "cli_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "config_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "candidate_test": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\package.json",
+      "version": "1.62.1"
+    },
+    "cli_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "config_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "candidate_playwright": {
+      "package_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\playwright\\package.json",
+      "version": "1.62.1"
+    },
+    "consistent": true
+  }
+}

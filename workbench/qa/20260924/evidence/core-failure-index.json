@@ -1,0 +1,440 @@
+{
+  "failed_test_nodes": 108,
+  "authoritative_test_count": 1749,
+  "authoritative_failure_count": 108,
+  "note": "Nested failures can include parent containers; total uses TAP summary.",
+  "failures": [
+    {
+      "test_number": 12,
+      "name": "source binding feedback remains advisory through execution: repair"
+    },
+    {
+      "test_number": 13,
+      "name": "source binding feedback remains advisory through execution: repeat"
+    },
+    {
+      "test_number": 14,
+      "name": "source binding feedback remains advisory through execution: business-difference"
+    },
+    {
+      "test_number": 15,
+      "name": "all candidate issues arrive in one bounded correction: repair"
+    },
+    {
+      "test_number": 16,
+      "name": "all candidate issues arrive in one bounded correction: difference"
+    },
+    {
+      "test_number": 17,
+      "name": "all candidate issues arrive in one bounded correction: repeat"
+    },
+    {
+      "test_number": 24,
+      "name": "a new successful measurement can request completion, not approve it: new-evidence"
+    },
+    {
+      "test_number": 25,
+      "name": "a new successful measurement can request completion, not approve it: final-reject"
+    },
+    {
+      "test_number": 26,
+      "name": "a new successful measurement can request completion, not approve it: duplicate-only"
+    },
+    {
+      "test_number": 27,
+      "name": "a new successful measurement can request completion, not approve it: actual-difference"
+    },
+    {
+      "test_number": 35,
+      "name": "measured coverage proposes completion but never approves itself: finish"
+    },
+    {
+      "test_number": 36,
+      "name": "measured coverage proposes completion but never approves itself: missing-obligation"
+    },
+    {
+      "test_number": 37,
+      "name": "measured coverage proposes completion but never approves itself: final-reject"
+    },
+    {
+      "test_number": 38,
+      "name": "measured coverage proposes completion but never approves itself: actual-difference"
+    },
+    {
+      "test_number": 65,
+      "name": "measured assertion coverage requests final audit without repeated planning"
+    },
+    {
+      "test_number": 66,
+      "name": "measured assertion coverage with a remaining gap still stops permanent repeats"
+    },
+    {
+      "test_number": 67,
+      "name": "partial audit gaps survive success and a repeated measurement recovers without replaying actions"
+    },
+    {
+      "test_number": 68,
+      "name": "contradictory audit returns candidate feedback without executing or erasing its negative finding"
+    },
+    {
+      "test_number": 69,
+      "name": "focused gap repair refuses an extra navigation action before dispatch"
+    },
+    {
+      "test_number": 70,
+      "name": "no remaining obligations feedback permits a no-action completion but never replays navigation"
+    },
+    {
+      "test_number": 71,
+      "name": "real-response format error then mistaken blocked recovers without replaying menu clicks"
+    },
+    {
+      "test_number": 72,
+      "name": "malformed audit response repairs only the audit while preserving executed actions"
+    },
+    {
+      "test_number": 73,
+      "name": "repeated blocked is terminal after one evidence-based reconsideration"
+    },
+    {
+      "test_number": 74,
+      "name": "current target/source refs execute through the real controller and browser kernel"
+    },
+    {
+      "test_number": 75,
+      "name": "exhausted audit format repair is terminal without spending a fresh planning round"
+    },
+    {
+      "test_number": 76,
+      "name": "direct test dynamically handles button navigation without upfront technical plan"
+    },
+    {
+      "test_number": 77,
+      "name": "direct test dynamically handles link navigation without upfront technical plan"
+    },
+    {
+      "test_number": 78,
+      "name": "actual business mismatch stops without changing oracle or replaying actions"
+    },
+    {
+      "test_number": 79,
+      "name": "a pre-dispatch locator failure is locally replanned and the rejected attempt is retained"
+    },
+    {
+      "test_number": 82,
+      "name": "ambiguous assertion can repair its scope without replaying completed actions"
+    },
+    {
+      "test_number": 83,
+      "name": "assertion scope repair cannot change the predicate or expected result"
+    },
+    {
+      "test_number": 84,
+      "name": "original membership, not an invented closed sorted population: repair"
+    },
+    {
+      "test_number": 85,
+      "name": "original membership, not an invented closed sorted population: difference"
+    },
+    {
+      "test_number": 86,
+      "name": "original membership, not an invented closed sorted population: repeat"
+    },
+    {
+      "test_number": 95,
+      "name": "negative audit routes to bounded candidate repair: repair"
+    },
+    {
+      "test_number": 96,
+      "name": "negative audit routes to bounded candidate repair: difference"
+    },
+    {
+      "test_number": 97,
+      "name": "negative audit routes to bounded candidate repair: repeat"
+    },
+    {
+      "test_number": 98,
+      "name": "negative audit routes to bounded candidate repair: partial-repair"
+    },
+    {
+      "test_number": 99,
+      "name": "negative audit routes to bounded candidate repair: partial-repeat"
+    },
+    {
+      "test_number": 102,
+      "name": "numeric capability repair before dispatch: suffix"
+    },
+    {
+      "test_number": 103,
+      "name": "numeric capability repair before dispatch: pure-number"
+    },
+    {
+      "test_number": 104,
+      "name": "numeric capability repair before dispatch: difference"
+    },
+    {
+      "test_number": 105,
+      "name": "numeric capability repair before dispatch: repeat"
+    },
+    {
+      "test_number": 106,
+      "name": "actual controller page-counter binding, injected model: repair"
+    },
+    {
+      "test_number": 107,
+      "name": "actual controller page-counter binding, injected model: difference"
+    },
+    {
+      "test_number": 108,
+      "name": "actual controller page-counter binding, injected model: repeat"
+    },
+    {
+      "test_number": 353,
+      "name": "V03 partial-to-complete controller boundary: recover"
+    },
+    {
+      "test_number": 354,
+      "name": "V03 partial-to-complete controller boundary: persistent-invalid"
+    },
+    {
+      "test_number": 355,
+      "name": "V03 partial-to-complete controller boundary: page-mismatch"
+    },
+    {
+      "test_number": 356,
+      "name": "V03 partial-to-complete controller boundary: invalid-with-action"
+    },
+    {
+      "test_number": 357,
+      "name": "real V02 source-unit failure through execution loop: repair"
+    },
+    {
+      "test_number": 358,
+      "name": "real V02 source-unit failure through execution loop: still-ungrounded"
+    },
+    {
+      "test_number": 359,
+      "name": "real V02 source-unit failure through execution loop: actual-mismatch"
+    },
+    {
+      "test_number": 360,
+      "name": "default tab typed recovery without replay: repair"
+    },
+    {
+      "test_number": 361,
+      "name": "default tab typed recovery without replay: difference"
+    },
+    {
+      "test_number": 362,
+      "name": "default tab typed recovery without replay: repeat"
+    },
+    {
+      "test_number": 370,
+      "name": "evidence-source advisory does not grant execution or substitute note values: normal"
+    },
+    {
+      "test_number": 371,
+      "name": "evidence-source advisory does not grant execution or substitute note values: field-difference"
+    },
+    {
+      "test_number": 372,
+      "name": "evidence-source advisory does not grant execution or substitute note values: negative-review"
+    },
+    {
+      "test_number": 437,
+      "name": "parallel completion feedback through actual Controller: baseline/early-feedback"
+    },
+    {
+      "test_number": 438,
+      "name": "parallel completion feedback through actual Controller: baseline/actual-page11"
+    },
+    {
+      "test_number": 439,
+      "name": "parallel completion feedback through actual Controller: baseline/persistent-omission"
+    },
+    {
+      "test_number": 440,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/early-feedback"
+    },
+    {
+      "test_number": 441,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/actual-page11"
+    },
+    {
+      "test_number": 442,
+      "name": "parallel completion feedback through actual Controller: preflight-hints/persistent-omission"
+    },
+    {
+      "test_number": 614,
+      "name": "display-number candidate repair with no business replay: repair"
+    },
+    {
+      "test_number": 615,
+      "name": "display-number candidate repair with no business replay: difference"
+    },
+    {
+      "test_number": 616,
+      "name": "display-number candidate repair with no business replay: repeat"
+    },
+    {
+      "test_number": 617,
+      "name": "display-number candidate repair with no business replay: scalar"
+    },
+    {
+      "test_number": 730,
+      "name": "closing requires same-dialog result without replay: repair"
+    },
+    {
+      "test_number": 731,
+      "name": "closing requires same-dialog result without replay: still-open"
+    },
+    {
+      "test_number": 732,
+      "name": "closing requires same-dialog result without replay: persistent-missing"
+    },
+    {
+      "test_number": 782,
+      "name": "caption holds must follow checkpoint sampling, difference=false"
+    },
+    {
+      "test_number": 783,
+      "name": "caption holds must follow checkpoint sampling, difference=true"
+    },
+    {
+      "test_number": 854,
+      "name": "actual order, not control state: correct"
+    },
+    {
+      "test_number": 855,
+      "name": "actual order, not control state: wrong-table-order"
+    },
+    {
+      "test_number": 856,
+      "name": "actual order, not control state: persistent-control-only"
+    },
+    {
+      "test_number": 897,
+      "name": "current page is not inferred from IDs: correct"
+    },
+    {
+      "test_number": 898,
+      "name": "current page is not inferred from IDs: wrong-page"
+    },
+    {
+      "test_number": 899,
+      "name": "current page is not inferred from IDs: persistent-missing"
+    },
+    {
+      "test_number": 900,
+      "name": "current page is not inferred from IDs: after-navigation"
+    },
+    {
+      "test_number": 935,
+      "name": "partial semantic review with actual Controller and browser: inverted"
+    },
+    {
+      "test_number": 936,
+      "name": "partial semantic review with actual Controller and browser: real-defect"
+    },
+    {
+      "test_number": 937,
+      "name": "partial semantic review with actual Controller and browser: valid-part"
+    },
+    {
+      "test_number": 938,
+      "name": "partial semantic review with actual Controller and browser: unresolved"
+    },
+    {
+      "test_number": 939,
+      "name": "partial semantic review with actual Controller and browser: malformed"
+    },
+    {
+      "test_number": 940,
+      "name": "partial semantic review with actual Controller and browser: persistent"
+    },
+    {
+      "test_number": 941,
+      "name": "partial semantic review with actual Controller and browser: missing-parent"
+    },
+    {
+      "test_number": 942,
+      "name": "partial semantic review with actual Controller and browser: hidden-parent"
+    },
+    {
+      "test_number": 1095,
+      "name": "AND result evidence without replay: correct"
+    },
+    {
+      "test_number": 1096,
+      "name": "AND result evidence without replay: wrong-result-name"
+    },
+    {
+      "test_number": 1097,
+      "name": "AND result evidence without replay: persistent-input-only"
+    },
+    {
+      "test_number": 1211,
+      "name": "row source boundary without normalizing fabricated oracle: repair"
+    },
+    {
+      "test_number": 1212,
+      "name": "row source boundary without normalizing fabricated oracle: actual-field-difference"
+    },
+    {
+      "test_number": 1213,
+      "name": "row source boundary without normalizing fabricated oracle: persistent-aggregate"
+    },
+    {
+      "test_number": 1214,
+      "name": "row source boundary without normalizing fabricated oracle: explicit-literal-difference"
+    },
+    {
+      "test_number": 1263,
+      "name": "tab postcondition timing without business retry: repair"
+    },
+    {
+      "test_number": 1264,
+      "name": "tab postcondition timing without business retry: difference-after-click"
+    },
+    {
+      "test_number": 1265,
+      "name": "tab postcondition timing without business retry: persistent-premature"
+    },
+    {
+      "test_number": 1434,
+      "name": "pre-action baseline for same-step equality prose, difference=false"
+    },
+    {
+      "test_number": 1435,
+      "name": "pre-action baseline for same-step equality prose, difference=true"
+    },
+    {
+      "test_number": 1523,
+      "name": "same-step original order source, actual difference=false"
+    },
+    {
+      "test_number": 1524,
+      "name": "same-step original order source, actual difference=true"
+    },
+    {
+      "test_number": 1576,
+      "name": "sole-record proof through actual Controller: joint"
+    },
+    {
+      "test_number": 1577,
+      "name": "sole-record proof through actual Controller: extra"
+    },
+    {
+      "test_number": 1578,
+      "name": "sole-record proof through actual Controller: closed"
+    },
+    {
+      "test_number": 1579,
+      "name": "sole-record proof through actual Controller: closed-extra"
+    },
+    {
+      "test_number": 1580,
+      "name": "sole-record proof through actual Controller: persistent"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "tool": "read",
+    "args": {
+      "file_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-001\\case.json"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_navigate",
+    "args": {
+      "url": "http://127.0.0.1:4343/?scene=paging&variant=normal"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "args": {}
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "站点筛选 combobox",
+      "target": "e10"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_select_option",
+    "args": {
+      "element": "站点筛选 combobox",
+      "target": "e10",
+      "values": [
+        "北站"
+      ]
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "筛选 button",
+      "target": "e11"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "args": {}
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "下一页 button",
+      "target": "e27"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "args": {}
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_click",
+    "args": {
+      "element": "上一页 button",
+      "target": "e26"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "args": {}
+  },
+  {
+    "tool": "write",
+    "args": {
+      "file_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\new-attempts\\NEW-001\\output\\candidate.spec.mjs"
+    }
+  },
+  {
+    "tool": "pwsh",
+    "args": {
+      "command": "Get-ChildItem -Recurse -Force | Select-Object FullName",
+      "description": "List workspace files to check for artifacts"
+    }
+  },
+  {
+    "tool": "pwsh",
+    "args": {
+      "command": "Remove-Item -Recurse -Force '.playwright-mcp'; Get-ChildItem -Recurse -Force -File | Select-Object FullName",
+      "description": "Remove browser observation artifacts and list files"
+    }
+  },
+  {
+    "tool": "mcp__playwright-mcp__browser_close",
+    "args": {}
+  }
+]

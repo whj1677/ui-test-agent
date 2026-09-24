@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang='zh-CN'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>设备维护演练台</title>
+<style>
+:root{--blue:#2563eb;--blue2:#1d4ed8;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f6f8fb;--ok:#047857;--bad:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{padding:18px 16px 10px}h1{margin:0;font-size:24px}main{max-width:980px;margin:0 auto;padding:12px 14px 40px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 4px 18px rgba(15,23,42,.06)}.hidden{display:none!important}button{border:0;border-radius:9px;background:var(--blue);color:#fff;padding:9px 14px;font-size:15px;cursor:pointer}button:hover{background:var(--blue2)}button:disabled{background:#9ca3af;cursor:not-allowed}.ghost{background:#eef2ff;color:var(--blue2);border:1px solid #c7d2fe}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}.field{display:grid;gap:6px;margin:10px 0}label{font-weight:650}input,select{border:1px solid #cbd5e1;border-radius:8px;padding:9px 10px;font-size:15px;background:#fff;min-width:180px}input:focus,select:focus,button:focus{outline:2px solid #93c5fd;outline-offset:2px}table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff}th,td{border:1px solid var(--line);padding:9px;text-align:left}th{background:#f8fafc}.muted{color:var(--muted)}.ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}.dialog{position:fixed;inset:0;display:grid;place-items:center;background:rgba(15,23,42,.28);padding:16px}.panel{width:min(460px,100%);background:#fff;border-radius:14px;padding:18px;border:1px solid var(--line)}.kv{display:grid;grid-template-columns:110px 1fr;gap:8px;margin:10px 0}.tag{display:inline-block;border:1px solid #bfdbfe;background:#eff6ff;color:#1e40af;border-radius:999px;padding:2px 9px}@media(max-width:620px){main{padding:10px}.card{padding:13px}button,input,select{width:100%}.row{align-items:stretch}.kv{grid-template-columns:1fr}.dialog{align-items:end}}
+</style>
+</head>
+<body>
+<header><h1>设备维护演练台</h1><div class='muted'>纯本地演示，无账号、无网络、无真实数据。</div></header>
+<main>
+<section id='pagingView' class='card view' aria-labelledby='pagingTitle'>
+<h2 id='pagingTitle'>分页清单</h2>
+<div class='row'><label for='station'>站点筛选</label><select id='station'><option value='all'>全部</option><option value='north'>北站</option><option value='south'>南站</option></select><button id='filterBtn'>筛选</button><span id='filterState' class='tag'>当前筛选：全部</span></div>
+<table aria-describedby='pageMeta'><thead><tr><th>编号</th><th>站点</th></tr></thead><tbody id='rows'></tbody></table>
+<div class='row'><button id='prevBtn' class='ghost'>上一页</button><button id='nextBtn'>下一页</button><span id='pageMeta' aria-live='polite'>共8条，1/4页</span></div>
+</section>
+<section id='retryView' class='card view hidden' aria-labelledby='retryTitle'>
+<h2 id='retryTitle'>遥测读取</h2>
+<p class='muted'>打开详情后会先进行短暂的本地模拟读取。</p>
+<button id='openTelemetry'>查看遥测</button>
+<div id='dlg' class='dialog hidden' role='dialog' aria-modal='true' aria-label='遥测详情' aria-hidden='true'>
+<div class='panel'><h3>遥测详情</h3><div id='tStatus' class='ok' aria-live='polite'>待打开</div><div class='kv'><span>电压</span><strong id='tVolt'>-</strong><span>采样时间</span><strong id='tTime'>-</strong></div><div class='row'><button id='tRetry' disabled>重试</button><button id='tClose' class='ghost'>关闭</button></div></div>
+</div>
+</section>
+<section id='wizardView' class='card view hidden' aria-labelledby='wizardTitle'>
+<h2 id='wizardTitle'>维护申请预览</h2>
+<div id='wStep1'>
+<div class='field'><label for='wName'>申请人（必填）</label><input id='wName' autocomplete='off'></div>
+<div class='field'><label for='wQty'>数量（整数1至5）</label><input id='wQty' inputmode='numeric' autocomplete='off'></div>
+<div id='wErr' class='bad' role='alert' aria-live='assertive'></div>
+<div class='row'><button id='wNext1'>下一步</button></div>
+</div>
+<div id='wStep2' class='hidden'>
+<p id='wSummary' class='tag'></p>
+<div class='field'><label for='wAgree'><input id='wAgree' type='checkbox'> 我已核对</label></div>
+<div id='wErr2' class='bad' role='alert' aria-live='assertive'></div>
+<div class='row'><button id='wBack' class='ghost'>上一步</button><button id='wPreviewBtn'>生成预览</button></div>
+<div id='wPreview' class='card hidden' aria-live='polite'></div>
+</div>
+</section>
+</main>
+<script>
+(function(){
+var params=new URLSearchParams(location.search);
+var scene=params.get('scene')||'paging';
+var variant=params.get('variant')==='fault'?'fault':'normal';
+var views=document.querySelectorAll('.view');views.forEach(function(v){v.classList.add('hidden')});
+var map={paging:'pagingView',retry:'retryView',wizard:'wizardView'};var el=document.getElementById(map[scene]||'pagingView');el.classList.remove('hidden');
+var DATA=[['P01','北站'],['P02','南站'],['P03','北站'],['P04','南站'],['P05','北站'],['P06','南站'],['P07','北站'],['P08','南站']];
+var page=1,station='all',pageSize=2;
+var rows=document.getElementById('rows'),pageMeta=document.getElementById('pageMeta'),filterState=document.getElementById('filterState');
+var prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
+function label(s){return s==='north'?'北站':(s==='south'?'南站':'全部')}
+function filtered(){return DATA.filter(function(r){return station==='all'||r[1]===label(station)})}
+function renderPaging(){var list=filtered(),total=list.length,pages=Math.max(1,Math.ceil(total/pageSize));if(page>pages)page=pages;if(page<1)page=1;
+var start=(page-1)*pageSize,show=list.slice(start,start+pageSize);
+if(variant==='fault'&&station==='north'&&page===2){show=[['P02','南站'],['P04','南站']]}
+rows.innerHTML=show.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join('');
+pageMeta.textContent='共'+total+'条，'+page+'/'+pages+'页';filterState.textContent='当前筛选：'+label(station);
+prevBtn.disabled=page<=1;nextBtn.disabled=page>=pages;}
+if(scene==='paging'){document.getElementById('filterBtn').onclick=function(){station=document.getElementById('station').value;page=1;renderPaging()};
+prevBtn.onclick=function(){page--;renderPaging()};nextBtn.onclick=function(){page++;renderPaging()};renderPaging();}
+var dlg=document.getElementById('dlg'),tStatus=document.getElementById('tStatus'),tVolt=document.getElementById('tVolt'),tTime=document.getElementById('tTime'),tRetry=document.getElementById('tRetry'),tClose=document.getElementById('tClose');
+var timer=null;
+function setDlg(open){dlg.classList.toggle('hidden',!open);dlg.setAttribute('aria-hidden',open?'false':'true')}
+function clearTimer(){if(timer){clearTimeout(timer);timer=null}}
+function openDlg(){clearTimer();setDlg(true);tStatus.textContent='读取中…';tStatus.className='ok';tVolt.textContent='-';tTime.textContent='-';tRetry.disabled=true;tRetry.classList.add('hidden');timer=setTimeout(function(){tStatus.textContent='暂时无法读取';tStatus.className='bad';tRetry.classList.remove('hidden');tRetry.disabled=false},400)}
+function retryRead(){clearTimer();tStatus.textContent='读取中…';tStatus.className='ok';tRetry.disabled=true;timer=setTimeout(function(){tStatus.textContent='读取成功';tStatus.className='ok';tVolt.textContent=variant==='fault'?'705 V':'750 V';tTime.textContent='2026-09-24 10:00:00';tRetry.classList.add('hidden');tRetry.disabled=true},600)}
+if(scene==='retry'){document.getElementById('openTelemetry').onclick=openDlg;tRetry.onclick=retryRead;tClose.onclick=function(){clearTimer();setDlg(false)}}
+var wStep1=document.getElementById('wStep1'),wStep2=document.getElementById('wStep2'),wName=document.getElementById('wName'),wQty=document.getElementById('wQty'),wErr=document.getElementById('wErr'),wErr2=document.getElementById('wErr2'),wSummary=document.getElementById('wSummary'),wAgree=document.getElementById('wAgree'),wPreview=document.getElementById('wPreview');
+function qtyValid(){var raw=wQty.value.trim();var n=Number(raw);return raw!==''&&Number.isInteger(n)&&n>=1&&n<=5}
+function showStep(one){wStep1.classList.toggle('hidden',!one);wStep2.classList.toggle('hidden',one);if(!one){wErr2.textContent='';wSummary.textContent='申请人：'+wName.value.trim()+'；数量：'+wQty.value.trim()}else{wErr.textContent=''}}
+function nextFrom1(){var name=wName.value.trim();if(!name){showStep(true);wErr.textContent='请填写申请人';return false}if(!qtyValid()){showStep(true);wErr.textContent='数量须为1至5的整数';return false}wErr.textContent='';showStep(false);return true}
+if(scene==='wizard'){showStep(true);document.getElementById('wNext1').onclick=nextFrom1;document.getElementById('wBack').onclick=function(){showStep(true)};document.getElementById('wPreviewBtn').onclick=function(){if(!nextFrom1())return;if(!wAgree.checked){wErr2.textContent='请勾选我已核对';wPreview.classList.add('hidden');return}wErr2.textContent='';var n=variant==='fault'?3:Number(wQty.value.trim());wPreview.innerHTML='<strong>预览</strong><div class=kv><span>申请人</span><span>'+wName.value.trim()+'</span><span>数量</span><span>'+n+'</span><span>状态</span><span class=ok>仅预览，未提交</span></div>';wPreview.classList.remove('hidden')}}
+})();
+</script>
+</body>
+</html>

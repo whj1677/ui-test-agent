@@ -1,0 +1,274 @@
+[
+  {
+    "external_id": "NEW-001",
+    "group": "paging",
+    "variant": "normal",
+    "title": "分页筛选北站后翻页并返回",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。",
+    "test_data": {
+      "records": "P01..P08，奇数北站，偶数南站",
+      "page_size": 2,
+      "filter": "北站"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+        "expected": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部"
+      },
+      {
+        "order": 2,
+        "action": "站点筛选选择北站，点击筛选",
+        "expected": "显示P01、P03；共4条，1/2页；当前筛选为北站"
+      },
+      {
+        "order": 3,
+        "action": "点击下一页",
+        "expected": "显示P05、P07；共4条，2/2页；当前筛选仍为北站"
+      },
+      {
+        "order": 4,
+        "action": "点击上一页",
+        "expected": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站"
+      }
+    ],
+    "expected_outcome": "PASSED",
+    "fault_step": null,
+    "fault_expected": null,
+    "fault_actual": null
+  },
+  {
+    "external_id": "NEW-002",
+    "group": "retry",
+    "variant": "normal",
+    "title": "遥测首次失败后重试成功并关闭",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=retry&variant=normal；刷新后内存状态重置。",
+    "test_data": {
+      "first_fail_ms": 400,
+      "retry_success_ms": 600,
+      "voltage": "750 V",
+      "sample_time": "2026-09-24 10:00:00"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "expected": "仅显示遥测读取相关控件；按钮查看遥测可用"
+      },
+      {
+        "order": 2,
+        "action": "点击查看遥测",
+        "expected": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见"
+      },
+      {
+        "order": 3,
+        "action": "等待约450毫秒",
+        "expected": "状态变为暂时无法读取；重试按钮可见且可用"
+      },
+      {
+        "order": 4,
+        "action": "点击重试",
+        "expected": "立即显示读取中…；重试按钮禁用"
+      },
+      {
+        "order": 5,
+        "action": "再等待约650毫秒",
+        "expected": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00"
+      },
+      {
+        "order": 6,
+        "action": "点击关闭",
+        "expected": "遥测详情dialog不可见"
+      }
+    ],
+    "expected_outcome": "PASSED",
+    "fault_step": null,
+    "fault_expected": null,
+    "fault_actual": null
+  },
+  {
+    "external_id": "NEW-003",
+    "group": "wizard",
+    "variant": "normal",
+    "title": "两步维护申请校验、回退保留并生成预览",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=wizard&variant=normal；刷新后内存状态重置；不执行提交或持久化。",
+    "test_data": {
+      "applicant": "测试员",
+      "invalid_qty": 6,
+      "valid_qty": 2,
+      "confirm": "我已核对"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=wizard，variant以入口配置为准）",
+        "expected": "显示第1步；存在申请人必填和数量整数1至5输入项；按钮为下一步"
+      },
+      {
+        "order": 2,
+        "action": "申请人与数量均留空，点击下一步",
+        "expected": "显示请填写申请人；仍停留第1步"
+      },
+      {
+        "order": 3,
+        "action": "填写申请人为测试员、数量为6，点击下一步",
+        "expected": "显示数量须为1至5的整数；仍停留第1步"
+      },
+      {
+        "order": 4,
+        "action": "将数量改为2，点击下一步",
+        "expected": "进入第2步；显示申请人测试员、数量2"
+      },
+      {
+        "order": 5,
+        "action": "点击上一步确认申请人测试员和数量2仍保留，再次点击下一步",
+        "expected": "回到第2步；摘要仍为申请人测试员、数量2"
+      },
+      {
+        "order": 6,
+        "action": "勾选我已核对，点击生成预览",
+        "expected": "显示预览申请人测试员、数量2、状态仅预览，未提交；无提交或持久化表现"
+      }
+    ],
+    "expected_outcome": "PASSED",
+    "fault_step": null,
+    "fault_expected": null,
+    "fault_actual": null
+  },
+  {
+    "external_id": "NEW-004",
+    "group": "paging",
+    "variant": "fault",
+    "title": "分页筛选北站后翻页并返回",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=fault；刷新后内存状态重置。",
+    "test_data": {
+      "records": "P01..P08，奇数北站，偶数南站",
+      "page_size": 2,
+      "filter": "北站"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+        "expected": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部"
+      },
+      {
+        "order": 2,
+        "action": "站点筛选选择北站，点击筛选",
+        "expected": "显示P01、P03；共4条，1/2页；当前筛选为北站"
+      },
+      {
+        "order": 3,
+        "action": "点击下一页",
+        "expected": "显示P05、P07；共4条，2/2页；当前筛选仍为北站"
+      },
+      {
+        "order": 4,
+        "action": "点击上一页",
+        "expected": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站"
+      }
+    ],
+    "expected_outcome": "ASSERTION_MISMATCH",
+    "fault_step": 3,
+    "fault_expected": "第2页行内容为P05、P07",
+    "fault_actual": "第2页行内容为P02、P04；总数、2/2页和北站筛选文案仍相同"
+  },
+  {
+    "external_id": "NEW-005",
+    "group": "retry",
+    "variant": "fault",
+    "title": "遥测首次失败后重试成功并关闭",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=retry&variant=fault；刷新后内存状态重置。",
+    "test_data": {
+      "first_fail_ms": 400,
+      "retry_success_ms": 600,
+      "voltage": "750 V",
+      "sample_time": "2026-09-24 10:00:00"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+        "expected": "仅显示遥测读取相关控件；按钮查看遥测可用"
+      },
+      {
+        "order": 2,
+        "action": "点击查看遥测",
+        "expected": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见"
+      },
+      {
+        "order": 3,
+        "action": "等待约450毫秒",
+        "expected": "状态变为暂时无法读取；重试按钮可见且可用"
+      },
+      {
+        "order": 4,
+        "action": "点击重试",
+        "expected": "立即显示读取中…；重试按钮禁用"
+      },
+      {
+        "order": 5,
+        "action": "再等待约650毫秒",
+        "expected": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00"
+      },
+      {
+        "order": 6,
+        "action": "点击关闭",
+        "expected": "遥测详情dialog不可见"
+      }
+    ],
+    "expected_outcome": "ASSERTION_MISMATCH",
+    "fault_step": 5,
+    "fault_expected": "成功电压为750 V",
+    "fault_actual": "成功电压为705 V；状态、采样时间和其余行为相同"
+  },
+  {
+    "external_id": "NEW-006",
+    "group": "wizard",
+    "variant": "fault",
+    "title": "两步维护申请校验、回退保留并生成预览",
+    "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=wizard&variant=fault；刷新后内存状态重置；不执行提交或持久化。",
+    "test_data": {
+      "applicant": "测试员",
+      "invalid_qty": 6,
+      "valid_qty": 2,
+      "confirm": "我已核对"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开该用例绑定入口（scene=wizard，variant以入口配置为准）",
+        "expected": "显示第1步；存在申请人必填和数量整数1至5输入项；按钮为下一步"
+      },
+      {
+        "order": 2,
+        "action": "申请人与数量均留空，点击下一步",
+        "expected": "显示请填写申请人；仍停留第1步"
+      },
+      {
+        "order": 3,
+        "action": "填写申请人为测试员、数量为6，点击下一步",
+        "expected": "显示数量须为1至5的整数；仍停留第1步"
+      },
+      {
+        "order": 4,
+        "action": "将数量改为2，点击下一步",
+        "expected": "进入第2步；显示申请人测试员、数量2"
+      },
+      {
+        "order": 5,
+        "action": "点击上一步确认申请人测试员和数量2仍保留，再次点击下一步",
+        "expected": "回到第2步；摘要仍为申请人测试员、数量2"
+      },
+      {
+        "order": 6,
+        "action": "勾选我已核对，点击生成预览",
+        "expected": "显示预览申请人测试员、数量2、状态仅预览，未提交；无提交或持久化表现"
+      }
+    ],
+    "expected_outcome": "ASSERTION_MISMATCH",
+    "fault_step": 6,
+    "fault_expected": "最终预览数量为2",
+    "fault_actual": "最终预览数量为3；申请人、状态和前置行为相同"
+  }
+]

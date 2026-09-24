@@ -1,0 +1,1674 @@
+{
+  "started_at": "2026-09-24T14:16:05.115Z",
+  "scope": "Fresh real model QA: three initial generations, six paired trials; no candidate edits/revisions/approval",
+  "tasks": [
+    {
+      "external_id": "TC-001",
+      "task_id": "build-20260924141606-b30df029",
+      "start_http": 202,
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "attempts": [
+        {
+          "attempt_id": "attempt-01-initial",
+          "kind": "initial",
+          "started_at": "2026-09-24T14:16:07.084Z",
+          "finished_at": "2026-09-24T14:17:06.492Z",
+          "status": "COMPLETED",
+          "max_tool_calls": 30,
+          "timeout_ms": 600000,
+          "service_instance_id": "service-65da9a8d-e2a0-40a9-91c9-e36a482af49e",
+          "authorization_id": "e2e01-six-case-project-20260923",
+          "authorization_status": "CONSUMED_ON_PROCESS_SPAWN",
+          "observation": {
+            "complete": true,
+            "lifecycle_file": "attempts/attempt-01-initial/lifecycle.ndjson",
+            "summary": {
+              "event_count": 206,
+              "last_event": {
+                "sequence": 206,
+                "type": "phase",
+                "at": "2026-09-24T14:17:03.734Z"
+              },
+              "terminal_observed": true,
+              "output_complete": true
+            }
+          },
+          "harness": {
+            "model_configuration": {
+              "provider": "deepseek-official",
+              "model": "deepseek-flash",
+              "credential_source": "saved-dsh-home",
+              "dsh_version": "0.1.6-alpha.2"
+            },
+            "assessment": {
+              "success": true,
+              "completed": true,
+              "candidateExists": true,
+              "browserToolCalls": 10,
+              "exitCode": 0,
+              "termination": null,
+              "error": null,
+              "finalPresent": true,
+              "turnEndReason": "completed",
+              "toolCalls": 20,
+              "maxToolCalls": 30,
+              "toolLimitReached": false
+            },
+            "wall_ms": 56626,
+            "observable_agent_steps": 17,
+            "total_tool_calls": 20,
+            "browser_tool_calls": 10,
+            "provider_request_count": null,
+            "provider_usage": null,
+            "tool_names": [
+              "edit",
+              "mcp__playwright-mcp__browser_click",
+              "mcp__playwright-mcp__browser_evaluate",
+              "mcp__playwright-mcp__browser_navigate",
+              "mcp__playwright-mcp__browser_run_code_unsafe",
+              "mcp__playwright-mcp__browser_select_option",
+              "mcp__playwright-mcp__browser_snapshot",
+              "pwsh",
+              "read",
+              "write"
+            ],
+            "process": {
+              "pid": 33060,
+              "parent_pid": 1168,
+              "exit_code": 0,
+              "signal": null,
+              "termination": null,
+              "exit_observed": true,
+              "close_observed": true,
+              "output_complete": true,
+              "observer_error": null,
+              "stderr_diagnostic": null
+            }
+          },
+          "error": null,
+          "auth": null,
+          "rendered_agent_instruction": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly http://127.0.0.1:4320/ui/a.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present."
+        }
+      ],
+      "error": null,
+      "pair_http": 202,
+      "candidates": [
+        {
+          "version": 1,
+          "attempt_id": "attempt-01-initial",
+          "created_at": "2026-09-24T14:17:03.732Z",
+          "sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+          "bytes": 2110,
+          "code": "import { test, expect } from '@playwright/test';\n\nconst PROBE_URL = process.env.PROBE_URL;\n\ntest('西站检修设备组合查询（入口 /ui/a）', async ({ page }) => {\n  const stationFilter = page.locator('#station-filter');\n  const statusFilter = page.locator('#status-filter');\n  const sortFilter = page.locator('#sort-filter');\n  const queryButton = page.getByRole('button', { name: '查询', exact: true });\n  const resultCount = page.locator('#result-count');\n  const deviceRows = page.locator('#device-rows tr');\n\n  await test.step('CASE_STEP_1: S01 打开指定入口，查看初始设备列表', async () => {\n    await page.goto(PROBE_URL);\n\n    await expect(resultCount).toHaveText('共6条');\n    await expect(deviceRows).toHaveCount(6);\n    await expect(deviceRows.locator('td:first-child')).toHaveText([\n      'DEV-001',\n      'DEV-002',\n      'DEV-003',\n      'DEV-004',\n      'DEV-005',\n      'DEV-006',\n    ]);\n  });\n\n  await test.step('CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询', async () => {\n    await stationFilter.selectOption({ label: '西站' });\n    await statusFilter.selectOption({ label: '检修' });\n\n    await expect(stationFilter).toHaveValue('西站');\n    await expect(stationFilter.locator('option:checked')).toHaveText('西站');\n    await expect(statusFilter).toHaveValue('检修');\n    await expect(statusFilter.locator('option:checked')).toHaveText('检修');\n    await expect(sortFilter).toHaveValue('ID_ASC');\n\n    await expect(resultCount).toHaveText('共6条');\n    await expect(deviceRows).toHaveCount(6);\n  });\n\n  await test.step('CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行', async () => {\n    await queryButton.click();\n\n    await expect(resultCount).toHaveText('共2条');\n    await expect(deviceRows).toHaveCount(2);\n    await expect(deviceRows.locator('td:first-child')).toHaveText([\n      'DEV-002',\n      'DEV-005',\n    ]);\n    await expect(page.locator('#device-rows tr[data-device-id=\"DEV-004\"]')).toHaveCount(0);\n    await expect(deviceRows.filter({ hasText: 'DEV-004' })).toHaveCount(0);\n  });\n});\n",
+          "diff_from_previous": {
+            "base": null,
+            "changed": false,
+            "lines": []
+          },
+          "generation_status": "GENERATED",
+          "verification_status": "TECHNICAL_VALIDATION_PASSED",
+          "normal": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-24T14:17:04.338Z",
+              "duration": 2122.7580000000003,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                "category": null,
+                "duration": 116,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                "category": null,
+                "duration": 74,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                "category": null,
+                "duration": 60,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          },
+          "negative": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+              "expected": "共2条",
+              "actual": "共3条",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-24T14:17:07.218Z",
+              "duration": 7446.746,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                "category": null,
+                "duration": 205,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                "category": null,
+                "duration": 172,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                "category": null,
+                "duration": 5139,
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+                  "expected": "共2条",
+                  "actual": "共3条",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 45,
+                    "column": 31
+                  },
+                  "snippet": "  43 |     await queryButton.click();\n  44 |\n> 45 |     await expect(resultCount).toHaveText('共2条');\n     |                               ^\n  46 |     await expect(deviceRows).toHaveCount(2);\n  47 |     await expect(deviceRows.locator('td:first-child')).toHaveText([\n  48 |       'DEV-002',"
+                },
+                "steps": []
+              }
+            ]
+          },
+          "error": null,
+          "approved": false,
+          "project_case_step_mapping": [
+            {
+              "order": 1,
+              "marker": "CASE_STEP_1",
+              "action": "S01 打开指定入口，查看初始设备列表",
+              "expected": "显示“共6条”，按 DEV-001 至 DEV-006 升序展示",
+              "observed": true
+            },
+            {
+              "order": 2,
+              "marker": "CASE_STEP_2",
+              "action": "S02 选择“西站”和“检修”，暂不点击查询",
+              "expected": "筛选控件显示西站、检修；列表仍为6条",
+              "observed": true
+            },
+            {
+              "order": 3,
+              "marker": "CASE_STEP_3",
+              "action": "S03 点击“查询”，核对结果数量和设备行",
+              "expected": "显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004",
+              "observed": true
+            }
+          ],
+          "same_candidate_hash": true,
+          "counterexample_detected": true,
+          "trial_runs": [
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-33d4182a-467e-4b2e-b6af-aa92748360e6",
+              "run_type": "normal",
+              "source_build_task_id": "build-20260924141606-b30df029",
+              "source_case_id": "case-2f2151c7-e15f-4a5f-ac9c-8abe502ede39",
+              "source_external_id": "TC-001",
+              "source_case_version": 1,
+              "executed_case_id": "case-2f2151c7-e15f-4a5f-ac9c-8abe502ede39",
+              "executed_external_id": "TC-001",
+              "executed_case_version": 1,
+              "executed_content_sha256": "81CC81DB39F8F9FBC3F634984C2325305DEC96A251A30705613C0FFF5531C9C6",
+              "environment_id": "test-site-01-query-v1",
+              "entry_route": "/ui/a",
+              "candidate_version": 1,
+              "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+              "status": "PASSED",
+              "complete_pass": true,
+              "error": null,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "media_file_ids": [
+                "build-file-007",
+                "build-file-008",
+                "build-file-009"
+              ],
+              "started_at": "2026-09-24T14:17:06.489Z",
+              "finished_at": "2026-09-24T14:17:06.489Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL"
+            },
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-887c11ae-da63-46e5-aaac-ec9982afd730",
+              "run_type": "negative",
+              "source_build_task_id": "build-20260924141606-b30df029",
+              "source_case_id": "case-2f2151c7-e15f-4a5f-ac9c-8abe502ede39",
+              "source_external_id": "TC-001",
+              "source_case_version": 1,
+              "executed_case_id": "case-00fad215-a1c0-4d0d-b1f2-e5578d1f2d7b",
+              "executed_external_id": "TC-004",
+              "executed_case_version": 1,
+              "executed_content_sha256": "1F4412E4E1BC09FF930C6D5F4F7495ADA3C956EEDF974C638BFB327D8B406076",
+              "environment_id": "test-site-01-query-v1",
+              "entry_route": "/ui/b",
+              "candidate_version": 1,
+              "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+              "status": "FAILED",
+              "complete_pass": false,
+              "failure_step": "CASE_STEP_3",
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+                "expected": "共2条",
+                "actual": "共3条",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": true,
+                    "execution_status": "FAILED",
+                    "attributed_errors": [
+                      {
+                        "step_id": "CASE_STEP_3",
+                        "report_path": [
+                          2
+                        ],
+                        "error": {
+                          "type": "ASSERTION_MISMATCH",
+                          "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#result-count')\nExpected: \"共2条\"\nReceived: \"共3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#result-count')\n    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\n       - unexpected value \"共3条\"\n",
+                          "expected": "共2条",
+                          "actual": "共3条",
+                          "attribution": "PENDING_ANALYSIS"
+                        },
+                        "raw_error": {
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n",
+                          "location": {
+                            "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                            "line": 45,
+                            "column": 31
+                          },
+                          "snippet": "  43 |     await queryButton.click();\n  44 |\n> 45 |     await expect(resultCount).toHaveText('共2条');\n     |                               ^\n  46 |     await expect(deviceRows).toHaveCount(2);\n  47 |     await expect(deviceRows.locator('td:first-child')).toHaveText([\n  48 |       'DEV-002',"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "specified_defect_detected": true,
+              "same_candidate_hash": true,
+              "media_file_ids": [
+                "build-file-022",
+                "build-file-023",
+                "build-file-024",
+                "build-file-025",
+                "build-file-026",
+                "build-file-027",
+                "build-file-028",
+                "build-file-029",
+                "build-file-030",
+                "build-file-032"
+              ],
+              "step_replay": {
+                "schema": "workbench/step-evidence-replay-v1",
+                "status": "READY",
+                "run_id": "run-887c11ae-da63-46e5-aaac-ec9982afd730",
+                "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+                "executed_external_id": "TC-004",
+                "executed_case_version": 1,
+                "observer_version": "e2e01-step-observer-v1",
+                "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+                "original_video_precise_seek": false,
+                "evidence_complete": true,
+                "missing_captures": [],
+                "steps": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "raw_title": "CASE_STEP_1: S01 打开指定入口，查看初始设备列表",
+                    "action": "S01 打开指定入口，查看初始设备列表",
+                    "expected": "显示“共6条”，按 DEV-001 至 DEV-006 升序展示",
+                    "execution_status": "PASSED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": null,
+                    "executed_start": "2026-09-24T14:17:08.651Z",
+                    "executed_end": "2026-09-24T14:17:08.768Z",
+                    "observer_start": "2026-09-24T14:17:08.606Z",
+                    "observer_end": "2026-09-24T14:17:08.809Z",
+                    "screenshot_phase": "after",
+                    "screenshot_file_name": "case_step_1-after.png",
+                    "before_screenshot_file_name": "case_step_1-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 86.20780000000013
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "raw_title": "CASE_STEP_2: S02 选择“西站”和“检修”，暂不点击查询",
+                    "action": "S02 选择“西站”和“检修”，暂不点击查询",
+                    "expected": "筛选控件显示西站、检修；列表仍为6条",
+                    "execution_status": "PASSED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": null,
+                    "executed_start": "2026-09-24T14:17:08.864Z",
+                    "executed_end": "2026-09-24T14:17:08.937Z",
+                    "observer_start": "2026-09-24T14:17:08.810Z",
+                    "observer_end": "2026-09-24T14:17:08.981Z",
+                    "screenshot_phase": "after",
+                    "screenshot_file_name": "case_step_2-after.png",
+                    "before_screenshot_file_name": "case_step_2-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 98.86409999999978
+                  },
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "raw_title": "CASE_STEP_3: S03 点击“查询”，核对结果数量和设备行",
+                    "action": "S03 点击“查询”，核对结果数量和设备行",
+                    "expected": "显示“共2条”，仅有 DEV-002 和 DEV-005，且不包含 DEV-004",
+                    "execution_status": "FAILED",
+                    "actual": "共3条",
+                    "assertion_expected": "共2条",
+                    "raw_error": {
+                      "name": "Error",
+                      "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n",
+                      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#result-count')\nExpected: \u001b[32m\"共\u001b[7m2\u001b[27m条\"\u001b[39m\nReceived: \u001b[31m\"共\u001b[7m3\u001b[27m条\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#result-count')\u001b[22m\n\u001b[2m    14 × locator resolved to <strong id=\"result-count\">共3条</strong>\u001b[22m\n\u001b[2m       - unexpected value \"共3条\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:45:31\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141606-b30df029\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:42:3"
+                    },
+                    "executed_start": "2026-09-24T14:17:09.027Z",
+                    "executed_end": "2026-09-24T14:17:14.083Z",
+                    "observer_start": "2026-09-24T14:17:08.982Z",
+                    "observer_end": "2026-09-24T14:17:14.121Z",
+                    "screenshot_phase": "failure-after",
+                    "screenshot_file_name": "case_step_3-failure-after.png",
+                    "before_screenshot_file_name": "case_step_3-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 82.31209999999987
+                  }
+                ],
+                "chapters": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "start_seconds": 0,
+                    "result_start_seconds": 1.226,
+                    "end_seconds": 3.029,
+                    "screenshot_phase": "after"
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "start_seconds": 3.029100000023842,
+                    "result_start_seconds": 4.237799999952316,
+                    "end_seconds": 6.0505,
+                    "screenshot_phase": "after"
+                  },
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "start_seconds": 6.0505,
+                    "result_start_seconds": 7.254700000047683,
+                    "end_seconds": 9.057700000047683,
+                    "screenshot_phase": "failure-after"
+                  }
+                ],
+                "duration_seconds": 9.1777,
+                "output_file_name": "step-replay-v1.webm",
+                "reading_holds": "1200ms action / 1800ms result"
+              },
+              "caption_timeline": {
+                "schema": "workbench/trial-timeline-v1",
+                "status": "UNAVAILABLE",
+                "run_id": "run-887c11ae-da63-46e5-aaac-ec9982afd730",
+                "candidate_sha256": "25D481B15CF17C0422106F5A7D507F3BD8E0B510E767B3B7C37986D2FC4FEA4F",
+                "reason": "ORIGINAL_VIDEO_STEP_TIME_NOT_CALIBRATED"
+              },
+              "runner_version": "e2e01-step-evidence-replay-v1",
+              "started_at": "2026-09-24T14:17:06.625Z",
+              "finished_at": "2026-09-24T14:17:25.284Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL",
+              "technical_error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "external_id": "TC-002",
+      "task_id": "build-20260924141725-0b65a070",
+      "start_http": 202,
+      "task_status": "WAITING_E2E_TRIALS",
+      "attempts": [
+        {
+          "attempt_id": "attempt-01-initial",
+          "kind": "initial",
+          "started_at": "2026-09-24T14:17:25.617Z",
+          "finished_at": "2026-09-24T14:18:32.999Z",
+          "status": "COMPLETED",
+          "max_tool_calls": 30,
+          "timeout_ms": 600000,
+          "service_instance_id": "service-65da9a8d-e2a0-40a9-91c9-e36a482af49e",
+          "authorization_id": "e2e01-six-case-project-20260923",
+          "authorization_status": "CONSUMED_ON_PROCESS_SPAWN",
+          "observation": {
+            "complete": true,
+            "lifecycle_file": "attempts/attempt-01-initial/lifecycle.ndjson",
+            "summary": {
+              "event_count": 211,
+              "last_event": {
+                "sequence": 211,
+                "type": "phase",
+                "at": "2026-09-24T14:18:28.470Z"
+              },
+              "terminal_observed": true,
+              "output_complete": true
+            }
+          },
+          "harness": {
+            "model_configuration": {
+              "provider": "deepseek-official",
+              "model": "deepseek-flash",
+              "credential_source": "saved-dsh-home",
+              "dsh_version": "0.1.6-alpha.2"
+            },
+            "assessment": {
+              "success": true,
+              "completed": true,
+              "candidateExists": true,
+              "browserToolCalls": 7,
+              "exitCode": 0,
+              "termination": null,
+              "error": null,
+              "finalPresent": true,
+              "turnEndReason": "completed",
+              "toolCalls": 19,
+              "maxToolCalls": 30,
+              "toolLimitReached": false
+            },
+            "wall_ms": 62827,
+            "observable_agent_steps": 19,
+            "total_tool_calls": 19,
+            "browser_tool_calls": 7,
+            "provider_request_count": null,
+            "provider_usage": null,
+            "tool_names": [
+              "mcp__playwright-mcp__browser_click",
+              "mcp__playwright-mcp__browser_evaluate",
+              "mcp__playwright-mcp__browser_navigate",
+              "mcp__playwright-mcp__browser_run_code_unsafe",
+              "mcp__playwright-mcp__browser_select_option",
+              "mcp__playwright-mcp__browser_snapshot",
+              "pwsh",
+              "read",
+              "write"
+            ],
+            "process": {
+              "pid": 18856,
+              "parent_pid": 1168,
+              "exit_code": 0,
+              "signal": null,
+              "termination": null,
+              "exit_observed": true,
+              "close_observed": true,
+              "output_complete": true,
+              "observer_error": null,
+              "stderr_diagnostic": null
+            }
+          },
+          "error": null,
+          "auth": null,
+          "rendered_agent_instruction": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly http://127.0.0.1:4320/ui/c.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present."
+        }
+      ],
+      "error": null,
+      "pair_http": 202,
+      "candidates": [
+        {
+          "version": 1,
+          "attempt_id": "attempt-01-initial",
+          "created_at": "2026-09-24T14:18:28.466Z",
+          "sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+          "bytes": 1907,
+          "code": "import { test, expect } from '@playwright/test';\n\n// 用例：额定功率降序排列（入口 /ui/c）\n// 前置：设备固定数据为 DEV-001 至 DEV-006；站点=全部站点；状态=全部状态。\ntest('额定功率降序排列（入口 /ui/c）', async ({ page }) => {\n  const deviceRows = page.locator('table tbody tr');\n\n  await test.step('CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询', async () => {\n    await page.goto(process.env.PROBE_URL);\n\n    await page.getByRole('combobox', { name: '排序方式' }).selectOption('额定功率降序');\n\n    // 预期：初始仍显示共6条，第一行为 DEV-001\n    await expect(page.getByText('共6条', { exact: true })).toBeVisible();\n    await expect(deviceRows).toHaveCount(6);\n    await expect(deviceRows.first()).toContainText('DEV-001');\n  });\n\n  await test.step('CASE_STEP_2: 点击查询，核对六条完整设备行顺序', async () => {\n    await page.getByRole('button', { name: '查询' }).click();\n\n    // 预期：顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003\n    const expectedOrder = [\n      'DEV-005',\n      'DEV-006',\n      'DEV-002',\n      'DEV-004',\n      'DEV-001',\n      'DEV-003',\n    ];\n\n    await expect(deviceRows).toHaveCount(expectedOrder.length);\n\n    for (let index = 0; index < expectedOrder.length; index += 1) {\n      await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n    }\n\n    // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW\n    const secondRowCells = deviceRows.nth(1).locator('td');\n    await expect(secondRowCells.nth(0)).toHaveText('DEV-006');\n    await expect(secondRowCells.nth(1)).toHaveText('排水泵');\n    await expect(secondRowCells.nth(2)).toHaveText('东站');\n    await expect(secondRowCells.nth(3)).toHaveText('运行');\n    await expect(secondRowCells.nth(4)).toHaveText('140 kW');\n  });\n});\n",
+          "diff_from_previous": {
+            "base": null,
+            "changed": false,
+            "lines": []
+          },
+          "generation_status": "GENERATED",
+          "verification_status": "PAIR_VALIDATION_FAILED",
+          "normal": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-24T14:18:29.121Z",
+              "duration": 3836.4710000000005,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "category": null,
+                "duration": 165,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "category": null,
+                "duration": 134,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          },
+          "negative": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "LOCATOR_OR_TARGET",
+              "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+              "expected": null,
+              "actual": null,
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-24T14:18:34.042Z",
+              "duration": 9069.985999999999,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                "category": null,
+                "duration": 255,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                "category": null,
+                "duration": 5147,
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 35,
+                    "column": 43
+                  },
+                  "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+                },
+                "steps": []
+              }
+            ]
+          },
+          "error": null,
+          "approved": false,
+          "project_case_step_mapping": [
+            {
+              "order": 1,
+              "marker": "CASE_STEP_1",
+              "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+              "expected": "初始仍显示共6条，第一行为 DEV-001",
+              "observed": true
+            },
+            {
+              "order": 2,
+              "marker": "CASE_STEP_2",
+              "action": "S02 点击“查询”，核对六条完整设备行顺序",
+              "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW",
+              "observed": true
+            }
+          ],
+          "same_candidate_hash": true,
+          "counterexample_detected": false,
+          "trial_runs": [
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-610af6e6-3c60-49bf-8196-da8491718fb3",
+              "run_type": "normal",
+              "source_build_task_id": "build-20260924141725-0b65a070",
+              "source_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+              "source_external_id": "TC-002",
+              "source_case_version": 1,
+              "executed_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+              "executed_external_id": "TC-002",
+              "executed_case_version": 1,
+              "executed_content_sha256": "3E1E4408A8547FE534E7795C9D89F23463CBE2BA08DBF303D98197A6AD8B5408",
+              "environment_id": "test-site-01-sorting-v1",
+              "entry_route": "/ui/c",
+              "candidate_version": 1,
+              "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+              "status": "PASSED",
+              "complete_pass": true,
+              "error": null,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "media_file_ids": [
+                "build-file-007",
+                "build-file-008",
+                "build-file-009"
+              ],
+              "started_at": "2026-09-24T14:18:32.996Z",
+              "finished_at": "2026-09-24T14:18:32.996Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL"
+            },
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+              "run_type": "negative",
+              "source_build_task_id": "build-20260924141725-0b65a070",
+              "source_case_id": "case-e57c63fb-5871-462b-8ce4-2a61fdc6914d",
+              "source_external_id": "TC-002",
+              "source_case_version": 1,
+              "executed_case_id": "case-759af556-d4fd-48d4-8200-87f4683b0d33",
+              "executed_external_id": "TC-005",
+              "executed_case_version": 1,
+              "executed_content_sha256": "5D251B65F37E39CAE7D842E242A4EAED30BA18F11F157845D52153E49D105688",
+              "environment_id": "test-site-01-sorting-v1",
+              "entry_route": "/ui/d",
+              "candidate_version": 1,
+              "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+              "status": "FAILED",
+              "complete_pass": false,
+              "failure_step": "CASE_STEP_2",
+              "error": {
+                "type": "LOCATOR_OR_TARGET",
+                "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+                "expected": null,
+                "actual": null,
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": true,
+                    "execution_status": "FAILED",
+                    "attributed_errors": [
+                      {
+                        "step_id": "CASE_STEP_2",
+                        "report_path": [
+                          1
+                        ],
+                        "error": {
+                          "type": "LOCATOR_OR_TARGET",
+                          "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n- Expected substring  - 1\n+ Received string     + 5\n\n- DEV-006\n+\n+     DEV-002循环泵二号西站\n+     检修\n+     120 kW详情\n+   \n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('table tbody tr').nth(1)\n    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\n       - unexpected value \"\n    DEV-002循环泵二号西站\n    检修\n    120 kW详情\n  \"\n",
+                          "expected": null,
+                          "actual": null,
+                          "attribution": "PENDING_ANALYSIS"
+                        },
+                        "raw_error": {
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                          "location": {
+                            "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                            "line": 35,
+                            "column": 43
+                          },
+                          "snippet": "  33 |\n  34 |     for (let index = 0; index < expectedOrder.length; index += 1) {\n> 35 |       await expect(deviceRows.nth(index)).toContainText(expectedOrder[index]);\n     |                                           ^\n  36 |     }\n  37 |\n  38 |     // 预期：第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "specified_defect_detected": false,
+              "same_candidate_hash": true,
+              "media_file_ids": [
+                "build-file-021",
+                "build-file-022",
+                "build-file-023",
+                "build-file-024",
+                "build-file-025",
+                "build-file-026",
+                "build-file-027",
+                "build-file-029"
+              ],
+              "step_replay": {
+                "schema": "workbench/step-evidence-replay-v1",
+                "status": "READY",
+                "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+                "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+                "executed_external_id": "TC-005",
+                "executed_case_version": 1,
+                "observer_version": "e2e01-step-observer-v1",
+                "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+                "original_video_precise_seek": false,
+                "evidence_complete": true,
+                "missing_captures": [],
+                "steps": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "raw_title": "CASE_STEP_1: 打开指定入口并选择额定功率降序，暂不点击查询",
+                    "action": "S01 打开指定入口，选择“额定功率降序”，暂不点击查询",
+                    "expected": "初始仍显示共6条，第一行为 DEV-001",
+                    "execution_status": "PASSED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": null,
+                    "executed_start": "2026-09-24T14:18:37.031Z",
+                    "executed_end": "2026-09-24T14:18:37.191Z",
+                    "observer_start": "2026-09-24T14:18:36.982Z",
+                    "observer_end": "2026-09-24T14:18:37.235Z",
+                    "screenshot_phase": "after",
+                    "screenshot_file_name": "case_step_1-after.png",
+                    "before_screenshot_file_name": "case_step_1-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 93.36560000000009
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "raw_title": "CASE_STEP_2: 点击查询，核对六条完整设备行顺序",
+                    "action": "S02 点击“查询”，核对六条完整设备行顺序",
+                    "expected": "顺序为 DEV-005、DEV-006、DEV-002、DEV-004、DEV-001、DEV-003；第2行为 DEV-006 / 排水泵 / 东站 / 运行 / 140 kW",
+                    "execution_status": "FAILED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": {
+                      "name": "Error",
+                      "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n",
+                      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table tbody tr').nth(1)\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 5\u001b[39m\n\n\u001b[32m- DEV-00\u001b[7m6\u001b[27m\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27mDEV-00\u001b[7m2循环泵二号西站\u001b[27m\u001b[39m\n\u001b[31m+     检修\u001b[39m\n\u001b[31m+     120 kW详情\u001b[39m\n\u001b[31m+ \u001b[43m  \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table tbody tr').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <tr data-device-id=\"DEV-002\">…</tr>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m    DEV-002循环泵二号西站\u001b[22m\n\u001b[2m    检修\u001b[22m\n\u001b[2m    120 kW详情\u001b[22m\n\u001b[2m  \"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:35:43\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141725-0b65a070\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:19:3"
+                    },
+                    "executed_start": "2026-09-24T14:18:37.280Z",
+                    "executed_end": "2026-09-24T14:18:42.338Z",
+                    "observer_start": "2026-09-24T14:18:37.238Z",
+                    "observer_end": "2026-09-24T14:18:42.384Z",
+                    "screenshot_phase": "failure-after",
+                    "screenshot_file_name": "case_step_2-failure-after.png",
+                    "before_screenshot_file_name": "case_step_2-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 87.61739999999918
+                  }
+                ],
+                "chapters": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "start_seconds": 0,
+                    "result_start_seconds": 1.2252000000476837,
+                    "end_seconds": 3.028,
+                    "screenshot_phase": "after"
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "start_seconds": 3.028100000023842,
+                    "result_start_seconds": 4.231899999976158,
+                    "end_seconds": 6.044100000023842,
+                    "screenshot_phase": "failure-after"
+                  }
+                ],
+                "duration_seconds": 6.1641,
+                "output_file_name": "step-replay-v1.webm",
+                "reading_holds": "1200ms action / 1800ms result"
+              },
+              "caption_timeline": {
+                "schema": "workbench/trial-timeline-v1",
+                "status": "UNAVAILABLE",
+                "run_id": "run-e32319e0-750e-4c67-926b-f9084360de99",
+                "candidate_sha256": "97A5D38FFF3C9ACDB64D44D1FA60BFD9EC70096EB78848B3404C49269328D3BD",
+                "reason": "ORIGINAL_VIDEO_STEP_TIME_NOT_CALIBRATED"
+              },
+              "runner_version": "e2e01-step-evidence-replay-v1",
+              "started_at": "2026-09-24T14:18:33.154Z",
+              "finished_at": "2026-09-24T14:18:51.515Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL",
+              "technical_error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "external_id": "TC-003",
+      "task_id": "build-20260924141851-7a5e5553",
+      "start_http": 202,
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "attempts": [
+        {
+          "attempt_id": "attempt-01-initial",
+          "kind": "initial",
+          "started_at": "2026-09-24T14:18:51.887Z",
+          "finished_at": "2026-09-24T14:20:09.618Z",
+          "status": "COMPLETED",
+          "max_tool_calls": 30,
+          "timeout_ms": 600000,
+          "service_instance_id": "service-65da9a8d-e2a0-40a9-91c9-e36a482af49e",
+          "authorization_id": "e2e01-six-case-project-20260923",
+          "authorization_status": "CONSUMED_ON_PROCESS_SPAWN",
+          "observation": {
+            "complete": true,
+            "lifecycle_file": "attempts/attempt-01-initial/lifecycle.ndjson",
+            "summary": {
+              "event_count": 202,
+              "last_event": {
+                "sequence": 202,
+                "type": "phase",
+                "at": "2026-09-24T14:20:05.643Z"
+              },
+              "terminal_observed": true,
+              "output_complete": true
+            }
+          },
+          "harness": {
+            "model_configuration": {
+              "provider": "deepseek-official",
+              "model": "deepseek-flash",
+              "credential_source": "saved-dsh-home",
+              "dsh_version": "0.1.6-alpha.2"
+            },
+            "assessment": {
+              "success": true,
+              "completed": true,
+              "candidateExists": true,
+              "browserToolCalls": 10,
+              "exitCode": 0,
+              "termination": null,
+              "error": null,
+              "finalPresent": true,
+              "turnEndReason": "completed",
+              "toolCalls": 18,
+              "maxToolCalls": 30,
+              "toolLimitReached": false
+            },
+            "wall_ms": 73728,
+            "observable_agent_steps": 18,
+            "total_tool_calls": 18,
+            "browser_tool_calls": 10,
+            "provider_request_count": null,
+            "provider_usage": null,
+            "tool_names": [
+              "edit",
+              "mcp__playwright-mcp__browser_click",
+              "mcp__playwright-mcp__browser_close",
+              "mcp__playwright-mcp__browser_evaluate",
+              "mcp__playwright-mcp__browser_navigate",
+              "mcp__playwright-mcp__browser_run_code_unsafe",
+              "mcp__playwright-mcp__browser_snapshot",
+              "pwsh",
+              "read",
+              "write"
+            ],
+            "process": {
+              "pid": 2316,
+              "parent_pid": 1168,
+              "exit_code": 0,
+              "signal": null,
+              "termination": null,
+              "exit_observed": true,
+              "close_observed": true,
+              "output_complete": true,
+              "observer_error": null,
+              "stderr_diagnostic": null
+            }
+          },
+          "error": null,
+          "auth": null,
+          "rendered_agent_instruction": "Create one Playwright Test candidate from the frozen project case in this dedicated task workspace.\nRead only task.md and input/case-snapshot.json as task inputs.\nUse the Playwright MCP browser tools to open exactly http://127.0.0.1:4320/ui/e.\nPerform every ordered action from task.md and preserve each paired expected result exactly.\nWrap each ordered case step in test.step and place that step's action and checks inside it.\nThe title must be either the bare CASE_STEP_<order> marker or start with that marker followed by one allowed separator and a non-empty description.\nAllowed separators are: one or more spaces or tabs; colon \":\"; Chinese colon \"：\"; or a spaced hyphen/dash \" - \", \" – \", \" — \". Other fuzzy containment is invalid.\nWrite exactly one Playwright Test candidate to D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs.\nThe candidate must use process.env.PROBE_URL; do not hard-code or infer another URL.\nDo not derive expectations from page content, skip steps, swallow errors, remove assertions, or add unrelated actions.\nDo not inspect parent directories, other repository files, accounts, external sites, company systems, historical candidates, or counterexample implementations.\nDo not create other files. Return completion only after the candidate file is present."
+        }
+      ],
+      "error": null,
+      "pair_http": 202,
+      "candidates": [
+        {
+          "version": 1,
+          "attempt_id": "attempt-01-initial",
+          "created_at": "2026-09-24T14:20:05.640Z",
+          "sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+          "bytes": 2811,
+          "code": "import { test, expect } from '@playwright/test';\n\n// TC-003 查看 DEV-005 设备详情（入口 /ui/e）\n// 模块：设备台账 / 设备详情\n// 前置条件：已启动 TEST-SITE-01；初始列表包含 DEV-005；当前入口可访问。\n// 测试数据：目标设备=DEV-005；设备名称=冷却泵；额定功率=220 kW；入口由环境变量 PROBE_URL 提供\ntest.describe('TC-003 查看 DEV-005 设备详情（入口 /ui/e）', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto(process.env.PROBE_URL);\n  });\n\n  test('查看 DEV-005 设备详情（入口 /ui/e）', async ({ page }) => {\n    const deviceRow = page.getByRole('row').filter({ hasText: 'DEV-005' });\n    const detailDialog = page.getByRole('dialog', { name: '设备详情 · DEV-005' });\n    const detailValue = (field) => detailDialog.locator(`dd[data-field=\"${field}\"]`);\n\n    await test.step('CASE_STEP_1：S01 在 DEV-005 行点击“详情”', async () => {\n      await expect(deviceRow).toBeVisible();\n      await deviceRow.getByRole('button', { name: '详情', exact: true }).click();\n\n      // 期望：打开标题为“设备详情 · DEV-005”的弹窗\n      await expect(detailDialog).toBeVisible();\n      await expect(\n        detailDialog.getByRole('heading', { name: '设备详情 · DEV-005', exact: true }),\n      ).toBeVisible();\n    });\n\n    await test.step('CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率', async () => {\n      await expect(detailDialog).toBeVisible();\n\n      // 期望：显示 DEV-005、冷却泵、西站、检修、220 kW\n      await expect(detailDialog.getByText('设备编号', { exact: true })).toBeVisible();\n      await expect(detailValue('id')).toHaveText('DEV-005');\n\n      await expect(detailDialog.getByText('设备名称', { exact: true })).toBeVisible();\n      await expect(detailValue('name')).toHaveText('冷却泵');\n\n      await expect(detailDialog.getByText('所属站点', { exact: true })).toBeVisible();\n      await expect(detailValue('station')).toHaveText('西站');\n\n      await expect(detailDialog.getByText('状态', { exact: true })).toBeVisible();\n      await expect(detailValue('status')).toHaveText('检修');\n\n      await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n      await expect(detailValue('power')).toHaveText('220 kW');\n    });\n\n    await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {\n      await detailDialog.getByRole('button', { name: '关闭', exact: true }).click();\n\n      // 期望：详情弹窗关闭并返回设备列表\n      await expect(detailDialog).toBeHidden();\n      await expect(page.getByRole('heading', { name: '设备列表', exact: true })).toBeVisible();\n      await expect(deviceRow).toBeVisible();\n    });\n  });\n});\n",
+          "diff_from_previous": {
+            "base": null,
+            "changed": false,
+            "lines": []
+          },
+          "generation_status": "GENERATED",
+          "verification_status": "TECHNICAL_VALIDATION_PASSED",
+          "normal": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-24T14:20:06.420Z",
+              "duration": 3153.563,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "category": null,
+                "duration": 115,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "category": null,
+                "duration": 91,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3：S03 点击“关闭”",
+                "raw_title": "CASE_STEP_3：S03 点击“关闭”",
+                "category": null,
+                "duration": 65,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          },
+          "negative": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+              "expected": "220 kW",
+              "actual": "320 kW",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-24T14:20:10.633Z",
+              "duration": 8878.719,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                "category": null,
+                "duration": 266,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                "category": null,
+                "duration": 5226,
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+                  "expected": "220 kW",
+                  "actual": "320 kW",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                    "line": 45,
+                    "column": 42
+                  },
+                  "snippet": "  43 |\n  44 |       await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n> 45 |       await expect(detailValue('power')).toHaveText('220 kW');\n     |                                          ^\n  46 |     });\n  47 |\n  48 |     await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {"
+                },
+                "steps": []
+              }
+            ]
+          },
+          "error": null,
+          "approved": false,
+          "project_case_step_mapping": [
+            {
+              "order": 1,
+              "marker": "CASE_STEP_1",
+              "action": "S01 在 DEV-005 行点击“详情”",
+              "expected": "打开标题为“设备详情 · DEV-005”的弹窗",
+              "observed": true
+            },
+            {
+              "order": 2,
+              "marker": "CASE_STEP_2",
+              "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+              "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW",
+              "observed": true
+            },
+            {
+              "order": 3,
+              "marker": "CASE_STEP_3",
+              "action": "S03 点击“关闭”",
+              "expected": "详情弹窗关闭并返回设备列表",
+              "observed": true
+            }
+          ],
+          "same_candidate_hash": true,
+          "counterexample_detected": true,
+          "trial_runs": [
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-81594f49-8e5f-4ed9-bac9-0538ac9e3c2d",
+              "run_type": "normal",
+              "source_build_task_id": "build-20260924141851-7a5e5553",
+              "source_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+              "source_external_id": "TC-003",
+              "source_case_version": 1,
+              "executed_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+              "executed_external_id": "TC-003",
+              "executed_case_version": 1,
+              "executed_content_sha256": "968527FE34BDE8D0802FE76EA0668CE85004BC3F48FD1AFC4DF65FABCB6E6504",
+              "environment_id": "test-site-01-detail-v1",
+              "entry_route": "/ui/e",
+              "candidate_version": 1,
+              "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+              "status": "PASSED",
+              "complete_pass": true,
+              "error": null,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3：S03 点击“关闭”",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "media_file_ids": [
+                "build-file-007",
+                "build-file-008",
+                "build-file-009"
+              ],
+              "started_at": "2026-09-24T14:20:09.614Z",
+              "finished_at": "2026-09-24T14:20:09.614Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL"
+            },
+            {
+              "schema": "workbench/e2e01-case-run-v1",
+              "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+              "run_type": "negative",
+              "source_build_task_id": "build-20260924141851-7a5e5553",
+              "source_case_id": "case-b46789db-5bed-4bb6-8456-29030b9d5427",
+              "source_external_id": "TC-003",
+              "source_case_version": 1,
+              "executed_case_id": "case-b4cf0648-2e59-4c8c-a086-2afd2c699733",
+              "executed_external_id": "TC-006",
+              "executed_case_version": 1,
+              "executed_content_sha256": "BAAE12D610C924B152B1DCFB62798F7C61BF91C559F1CA5EF4DF00ACB84A1F68",
+              "environment_id": "test-site-01-detail-v1",
+              "entry_route": "/ui/f",
+              "candidate_version": 1,
+              "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+              "status": "FAILED",
+              "complete_pass": false,
+              "failure_step": "CASE_STEP_2",
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+                "expected": "220 kW",
+                "actual": "320 kW",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": false,
+                "order_valid": false,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2"
+                ],
+                "duplicates": [],
+                "missing": [
+                  "CASE_STEP_3"
+                ],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": true,
+                    "execution_status": "FAILED",
+                    "attributed_errors": [
+                      {
+                        "step_id": "CASE_STEP_2",
+                        "report_path": [
+                          1
+                        ],
+                        "error": {
+                          "type": "ASSERTION_MISMATCH",
+                          "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \"220 kW\"\nReceived: \"320 kW\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\n    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\n       - unexpected value \"320 kW\"\n",
+                          "expected": "220 kW",
+                          "actual": "320 kW",
+                          "attribution": "PENDING_ANALYSIS"
+                        },
+                        "raw_error": {
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                          "location": {
+                            "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs",
+                            "line": 45,
+                            "column": 42
+                          },
+                          "snippet": "  43 |\n  44 |       await expect(detailDialog.getByText('额定功率', { exact: true })).toBeVisible();\n> 45 |       await expect(detailValue('power')).toHaveText('220 kW');\n     |                                          ^\n  46 |     });\n  47 |\n  48 |     await test.step('CASE_STEP_3：S03 点击“关闭”', async () => {"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": false,
+                    "raw_title": null,
+                    "report_path": null,
+                    "error_attributed": false,
+                    "execution_status": "NOT_EXECUTED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "specified_defect_detected": true,
+              "same_candidate_hash": true,
+              "media_file_ids": [
+                "build-file-022",
+                "build-file-023",
+                "build-file-024",
+                "build-file-025",
+                "build-file-026",
+                "build-file-027",
+                "build-file-028",
+                "build-file-030"
+              ],
+              "step_replay": {
+                "schema": "workbench/step-evidence-replay-v1",
+                "status": "READY",
+                "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+                "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+                "executed_external_id": "TC-006",
+                "executed_case_version": 1,
+                "observer_version": "e2e01-step-observer-v1",
+                "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+                "original_video_precise_seek": false,
+                "evidence_complete": true,
+                "missing_captures": [],
+                "steps": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "raw_title": "CASE_STEP_1：S01 在 DEV-005 行点击“详情”",
+                    "action": "S01 在 DEV-005 行点击“详情”",
+                    "expected": "打开标题为“设备详情 · DEV-005”的弹窗",
+                    "execution_status": "PASSED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": null,
+                    "executed_start": "2026-09-24T14:20:13.359Z",
+                    "executed_end": "2026-09-24T14:20:13.504Z",
+                    "observer_start": "2026-09-24T14:20:13.300Z",
+                    "observer_end": "2026-09-24T14:20:13.565Z",
+                    "screenshot_phase": "after",
+                    "screenshot_file_name": "case_step_1-after.png",
+                    "before_screenshot_file_name": "case_step_1-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 119.5006999999996
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "raw_title": "CASE_STEP_2：S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                    "action": "S02 核对详情中的设备编号、名称、站点、状态和额定功率",
+                    "expected": "显示 DEV-005、冷却泵、西站、检修、220 kW",
+                    "execution_status": "FAILED",
+                    "actual": "320 kW",
+                    "assertion_expected": "220 kW",
+                    "raw_error": {
+                      "name": "Error",
+                      "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n",
+                      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\nExpected: \u001b[32m\"\u001b[7m2\u001b[27m20 kW\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m3\u001b[27m20 kW\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '设备详情 · DEV-005' }).locator('dd[data-field=\"power\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd data-field=\"power\">320 kW</dd>\u001b[22m\n\u001b[2m       - unexpected value \"320 kW\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:45:42\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:45:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\qa-20260924\\build-tasks\\build-20260924141851-7a5e5553\\attempts\\attempt-01-initial\\workspace\\output\\candidate.spec.mjs:28:5"
+                    },
+                    "executed_start": "2026-09-24T14:20:13.629Z",
+                    "executed_end": "2026-09-24T14:20:18.739Z",
+                    "observer_start": "2026-09-24T14:20:13.566Z",
+                    "observer_end": "2026-09-24T14:20:18.791Z",
+                    "screenshot_phase": "failure-after",
+                    "screenshot_file_name": "case_step_2-failure-after.png",
+                    "before_screenshot_file_name": "case_step_2-before.png",
+                    "screenshot_error": null,
+                    "capture_duration_ms": 114.60170000000016
+                  },
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "raw_title": null,
+                    "action": "S03 点击“关闭”",
+                    "expected": "详情弹窗关闭并返回设备列表",
+                    "execution_status": "NOT_EXECUTED",
+                    "actual": "未单独采集实际值",
+                    "assertion_expected": null,
+                    "raw_error": null,
+                    "executed_start": null,
+                    "executed_end": null,
+                    "observer_start": null,
+                    "observer_end": null,
+                    "screenshot_phase": null,
+                    "screenshot_file_name": null,
+                    "before_screenshot_file_name": null,
+                    "screenshot_error": null,
+                    "capture_duration_ms": 0
+                  }
+                ],
+                "chapters": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "start_seconds": 0,
+                    "result_start_seconds": 1.2255,
+                    "end_seconds": 3.0313999999761583,
+                    "screenshot_phase": "after"
+                  },
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "start_seconds": 3.0313999999761583,
+                    "result_start_seconds": 4.251,
+                    "end_seconds": 6.0556000000238415,
+                    "screenshot_phase": "failure-after"
+                  }
+                ],
+                "duration_seconds": 6.1756,
+                "output_file_name": "step-replay-v1.webm",
+                "reading_holds": "1200ms action / 1800ms result"
+              },
+              "caption_timeline": {
+                "schema": "workbench/trial-timeline-v1",
+                "status": "UNAVAILABLE",
+                "run_id": "run-aad0d788-a399-4251-a02e-3e5ff7476532",
+                "candidate_sha256": "032F66D06307569E84746C23AC978F9DDF466CC717C9D98175694D29D93D9D8C",
+                "reason": "ORIGINAL_VIDEO_STEP_TIME_NOT_CALIBRATED"
+              },
+              "runner_version": "e2e01-step-evidence-replay-v1",
+              "started_at": "2026-09-24T14:20:09.774Z",
+              "finished_at": "2026-09-24T14:20:28.510Z",
+              "origin": "WORKBENCH_CANDIDATE_TRIAL",
+              "technical_error": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "Real UI native package import",
+      "result": "6 cases imported"
+    },
+    {
+      "name": "Server reconstruction and persisted task readback",
+      "result": "passed"
+    }
+  ],
+  "errors": [],
+  "project_id": "project-7a8ff60b-8ac4-4368-9892-19992f958946",
+  "console_errors": [],
+  "finished_at": "2026-09-24T14:20:31.168Z"
+}

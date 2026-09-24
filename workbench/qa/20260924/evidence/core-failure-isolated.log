@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: source binding feedback remains advisory through execution: repair
+not ok 1 - source binding feedback remains advisory through execution: repair
+  ---
+  duration_ms: 3771.3029
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\tests\\adaptive-binding-feedback.test.mjs:16:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/tests/adaptive-binding-feedback.test.mjs:133:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4219.6094
