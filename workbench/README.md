@@ -159,6 +159,8 @@ M4-A 已把当前基线的完整 HOLD-Q1 经原生用例包从真实项目 Web �
 
 ## 已提交源码的零模型工程复验
 
-在主仓库运行 `python workbench/scripts/verify-committed-baseline.py --source <完整源码SHA> --output workbench/docs/evidence/baseline-20260924/<独立运行名>`。脚本只导出指定Git提交，不读取未提交源码或复制node_modules；三个锁文件通过npm ci安装，浏览器下载到临时缓存。结束清理自身验收副本，不操作日常4322服务。结果及逐项日志写到指定目录。首次需要联网下载依赖，Windows测试还需要本机Edge、PowerShell 7、Python及Node >=22。
+在主仓库运行 `python workbench/scripts/verify-committed-baseline.py --source <完整源码SHA> --output docs/evidence/baseline-20260924/<独立运行名>`。脚本只导出指定Git提交，不读取未提交源码或复制node_modules；三个锁文件通过npm ci安装，浏览器下载到临时缓存。结束清理自身验收副本，不操作日常4322服务。结果及逐项日志写到指定目录。首次需要联网下载依赖，Windows测试还需要本机Edge、PowerShell 7、Python及Node >=22。
 
 `pwsh -NoProfile -File workbench/scripts/verify-start-config.ps1`使用模板生成合成配置与临时数据，仅检查配置优先级、空授权和缺失运行时拒绝。不会读取本机启动配置、创建授权账本或启动模型。实际日常启动仍需按模板填写已有数据和私有DSH运行时路径；该依赖未随Git打包。AUTH代码已接入但完整产品闭环未验收，新增用例通用建例入口仍未接通。详见[基线收口记录](docs/BASELINE_CLOSE_20260924.md)。
+
+若浏览器下载不可达，可明确传入 `--browser-cache <已安装Playwright浏览器缓存绝对目录>`；工具记录缓存路径及可执行文件哈希，不复制该目录。此模式依赖已安装浏览器，不声明浏览器随源码打包。

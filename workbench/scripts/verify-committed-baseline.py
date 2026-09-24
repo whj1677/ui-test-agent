@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--browser-cache', help='Explicit preinstalled Playwright browser cache; retained external dependency, never copied')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[2]
     sha = subprocess.check_output(['git', 'rev-parse', args.source + '^{commit}'], cwd=repo).decode().strip()
@@ -46,7 +47,13 @@ def main():
         results.update(archive_sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), exported_files=len(actual), export_missing=missing)
         results['locks'] = {p: hashlib.sha256((clean / p).read_bytes()).hexdigest() for p in ['package-lock.json', 'workbench/package-lock.json', 'harness-probe/package-lock.json']}
         env['DSH_HOME'] = str(temp / 'no-model-runtime')
-        env['PLAYWRIGHT_BROWSERS_PATH'] = str(temp / 'browsers')
+        env['PLAYWRIGHT_BROWSERS_PATH'] = str(Path(args.browser_cache).resolve()) if args.browser_cache else str(temp / 'browsers')
+        if args.browser_cache:
+            cache = Path(args.browser_cache).resolve()
+            if not cache.is_dir():
+                raise ValueError('Explicit browser cache does not exist')
+            results['retained_browser_cache'] = str(cache)
+            results['browser_executables'] = {str(p.relative_to(cache)): hashlib.sha256(p.read_bytes()).hexdigest() for p in cache.glob('**/*.exe')}
         env['npm_config_userconfig'] = str(temp / 'empty.npmrc')
         env['npm_config_globalconfig'] = str(temp / 'empty-global.npmrc')
         (temp / 'empty.npmrc').write_text('')
@@ -64,7 +71,9 @@ def main():
             ('browser-auth', ['node', 'tests/auth-session-browser.integration.mjs'], 'workbench'),
             ('browser-ui-d2a', ['node', 'tests/ui-d2a-browser.integration.mjs'], 'workbench'),
         ]
-        results['external_dependencies'] = ['Windows, Node >=22, npm, Python, PowerShell 7, installed Microsoft Edge at test default path', 'npm registry and Playwright download access; Chromium installed into disposable cache', 'Real Harness requires separately retained private DSH runtime; not loaded, packaged or verified here']
+        if args.browser_cache:
+            commands = [entry for entry in commands if entry[0] != 'install-browser']
+        results['external_dependencies'] = ['Windows, Node >=22, npm, Python, PowerShell 7, installed Microsoft Edge at test default path', 'npm registry required; Chromium downloaded into disposable cache unless --browser-cache explicitly registers a retained installation', 'Real Harness requires separately retained private DSH runtime; not loaded, packaged or verified here']
         for name, command, cwd in commands:
             log = output / (name + '.log')
             print('RUN ' + name, flush=True)
