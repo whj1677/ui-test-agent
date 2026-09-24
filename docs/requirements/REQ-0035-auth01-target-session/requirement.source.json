@@ -1,0 +1,145 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0035",
+  "title": "AUTH-01 被测系统登录会话接入",
+  "metadata": {
+    "requirement_status": "实施中：合成站真实Harness及执行器验证完成，工作台任务绑定未完成",
+    "governance_level": "G2",
+    "version": 2,
+    "last_updated": "2026-09-24"
+  },
+  "original_input": "AUTH-01：先收尾步骤回放，再从最新代码建立独立分支。用户在工作台专用浏览器人工登录被测系统，工作台验证身份/角色，建例浏览器与脚本执行器受控复用；会话仅内存保留，登录阶段不采集模型观察或业务媒体。独立服务端会话样例覆盖角色、过期、清除和重启。随后用户追加明确授权：要用真实 Harness 来验证。完整用户原文保留在当前对话。",
+  "user_requirements": [
+    {
+      "id": "UN-0035-01",
+      "status": "已确认",
+      "goal": "登录是项目环境准备：人工登录专用受控浏览器后，以服务端保护页身份和角色证据绑定项目/环境/角色/版本；独立建例观察和候选试跑在受控范围复用，不将登录过程写进业务候选。",
+      "constraints": "不改原六条用例/TEST-SITE-01/历史资产；不自动绕过验证码或多因素认证；会话默认只驻内存，认证状态不进入提示词、候选、命令行、日志、任务快照或公共文件；真实Harness限定独立合成站并保留私有证据。",
+      "success_criteria": "独立本机服务端登录夹具与真实浏览器覆盖未登录、人工登录、同角色两次、新上下文、角色隔离、过期、清除、重启失效；真实Harness浏览器观察与独立工程执行器均使用认证身份。实际工作台任务绑定及执行中失效必须单独判定。"
+    }
+  ],
+  "confirmed_facts": [
+    "基线为codex/test-workbench-six-case-e2e的6066bbc4ba47d3f21b63ebb863721395b3475982；AUTH-01独立分支从该提交建立，两个工作区起始均干净。",
+    "旧src/browser.mjs有按旧任务绑定的BrowserSession及storageState；新workbench/server/index.mjs和build/manager.mjs并未调用它，不能把旧能力当新工作台接通。",
+    "锁定@deepseek-ai/dsh-experimental-browser-use-playwright-mcp@0.1.6-alpha.2及其@playwright/mcp@0.0.80支持mode:attach和CDP endpoint；现有workbench补丁为mode:launch，插件没有storageState载入配置。"
+  ],
+  "inferences_and_open_questions": [
+    "真实业务站点及角色没有提供，因此首轮用独立本机服务端会话夹具，不将演示角色推断成公司角色；真实Harness已在该合成站启动1次，不能冒称现有项目建例任务已绑定。",
+    "CDP attach可见现有浏览器身份，但锁定MCP默认选择第一个浏览器上下文；必须验证专用登录上下文确为该上下文，且附件独占性仅在插件实例内，不是操作系统隔离。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0035-01",
+      "status": "部分实现",
+      "requirement": "新工作台提供项目/环境/角色登录窗口、只读身份检查、有效/过期/权限不足状态与清除；将认证会话按绑定版本仅在内存保存，执行器用独立上下文受控复用，建例端经锁定插件attach专用浏览器。",
+      "acceptance_criteria": "保护端点返回明确账号与角色；执行前只读检查；过期和角色不符不能当业务断言失败；清除及重启失效；真实浏览器及工程候选验证。",
+      "constraints": "不写密码脚本、不保存会话、不读取日常浏览器配置；禁止跨项目/环境/角色静默复用或登录阶段媒体采集。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0035-01",
+      "dr_ids": [
+        "DR-0035-01"
+      ],
+      "status": "已确认",
+      "summary": "由工作台服务拥有独立非持久Playwright登录上下文和内存状态；本机保护端点作为明确身份来源。候选执行器从限时本机内存通道取得认证状态并创建新上下文；Harness以锁定插件attach接入专用浏览器。真实模型调用已获用户追加授权并仅在合成站验证。",
+      "rationale": "锁定插件没有storageState载入参数，不能用虚构配置；原始登录页和密码阶段不进入模型或业务媒体。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "项目环境/角色选择 -> 独立人工登录浏览器 -> 同源保护端点身份核对 -> 内存会话版本 -> Harness专用CDP attach / 候选执行器限时本机通道状态载入 -> 每次启动前只读复核。"
+  ],
+  "module_document_impact": [
+    "影响workbench/server、web-v2、harness-probe运行适配、独立auth-fixture及相应测试；旧src/browser.mjs仅作参考，不修改其任务链。"
+  ],
+  "risks_and_rollback": [
+    "若目标身份/角色不能被只读端点明确证明则拒绝发布有效状态；会话或浏览器失效时封闭后续启动，保留原记录。回滚为停用AUTH-01环境入口，不改旧六条记录。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0035-01",
+      "dr_ids": [
+        "DR-0035-01"
+      ],
+      "dd_ids": [
+        "DD-0035-01"
+      ],
+      "status": "部分实现",
+      "task": "实现内存会话管理和独立合成登录站、项目登录入口、候选执行器内存通道载入、锁定Harness插件attach适配；完成工程、真实浏览器和经用户追加授权的真实Harness合成站自测。",
+      "verification_ids": [
+        "VT-0035-01"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0035-01",
+      "dr_ids": [
+        "DR-0035-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "服务端会话保护、角色隔离/过期/清除/重启，独立候选上下文复用及工作台浏览器操作；真实Harness在登录后专用浏览器观察合成保护页并生成不含登录步骤的候选。",
+      "evidence_standard": "真实命令、退出码、测试统计和产物路径",
+      "current_evidence": {
+        "command": "node --test workbench/tests/auth-session.test.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "docs/requirements/REQ-0035-auth01-target-session/auth-session-integration.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "workbench/ 与 harness-probe/",
+    "commands": [
+      "node --test tests/auth-session.test.mjs",
+      "node tests/auth-session-browser.integration.mjs",
+      "npm test (workbench)",
+      "npm test (harness-probe)",
+      "AUTH01_ALLOW_REAL_HARNESS=1 node tests/auth-harness-real.integration.mjs (separately authorized)"
+    ],
+    "environment": [
+      "本机锁定Node及Playwright依赖；独立合成站只监听127.0.0.1，数据与凭据不落盘。"
+    ],
+    "conclusion": [
+      "合成站工程、工作台浏览器及真实 Harness/独立执行上下文验证已运行；现有项目建例任务绑定和执行中失效处理仍未完成。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0035-01",
+      "dr_id": "DR-0035-01",
+      "dd_id": "DD-0035-01",
+      "tk_id": "TK-0035-01",
+      "vt_id": "VT-0035-01",
+      "status": "实施中"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "真实公司站点的身份检查端点和角色语义以后由目标环境正式配置；本阶段不用真实公司文件，也不启动真实Harness模型。"
+  ],
+  "prohibited_implementation": [
+    "不得修改TEST-SITE-01、六条冻结用例、候选字节与历史运行；不得将合成夹具或接口接线冒称真实Harness认证复用；不得保存会话或凭据。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-24",
+      "version": 1,
+      "type": "新建",
+      "description": "从已完成步骤回放提交建立独立AUTH-01需求，冻结零模型会话接入、合成站验证与真实Harness未授权边界。",
+      "impact": "工作台项目环境登录、建例浏览器适配及候选执行器认证状态。",
+      "confirmed_by": "本轮用户任务"
+    }
+  ]
+}

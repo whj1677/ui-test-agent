@@ -2,6 +2,8 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import http from 'node:http';
+import { randomUUID } from 'node:crypto';
 import { runOwnedProcess } from './process-control.mjs';
 import { evaluatePlaywrightReport } from './candidate-verifier.mjs';
 import { allowedEnvironment } from './harness-runner.mjs';
@@ -49,7 +51,7 @@ export async function inspectPlaywrightRuntime({ candidatePath, runtimeRoot = ro
 
 export async function verifyCandidate({
   candidatePath, browserExecutable, fixtureUrl, runDirectory, signal,
-  stepObservation = null,
+  stepObservation = null, authStorageState = null,
   runtimeRoot = root, configPath = path.join(runtimeRoot, 'config', 'playwright.config.mjs'),
 }) {
   const reportPath = path.join(runDirectory, 'playwright-report.json');
@@ -69,21 +71,45 @@ export async function verifyCandidate({
   }
   const cli = runtime.cli_path;
   const config = runtime.config_path;
+  let authBridge = null;
+  let authBridgeUrl = null;
+  if (authStorageState) {
+    const token = randomUUID();
+    authBridge = http.createServer((request, response) => {
+      if (request.method !== 'GET' || request.url !== `/${token}` ||
+          !['127.0.0.1', '::ffff:127.0.0.1'].includes(request.socket.remoteAddress)) {
+        response.writeHead(404); response.end(); return;
+      }
+      response.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' });
+      response.end(JSON.stringify(authStorageState));
+    });
+    await new Promise((resolve, reject) => authBridge.once('error', reject).listen(0, '127.0.0.1', resolve));
+    authBridgeUrl = `http://127.0.0.1:${authBridge.address().port}/${token}`;
+  }
   const env = allowedEnvironment({
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
     PROBE_URL: fixtureUrl,
     PROBE_CANDIDATE_DIR: path.dirname(entryPath),
     PROBE_REPORT_PATH: reportPath,
     PROBE_OUTPUT_DIR: path.join(runDirectory, 'artifacts'),
+    ...(authBridgeUrl ? { PROBE_AUTH_STATE_CHANNEL: authBridgeUrl } : {}),
   });
   // Playwright treats positional file arguments as regular-expression filters
   // relative to testDir; an absolute Windows path is not a stable filter.
-  const processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(entryPath), '--config', config], {
-    // A run-specific observer directory can cross Windows MAX_PATH as a child
-    // process cwd (the paired "negative" path is longer than "normal").
-    // Playwright discovers the test via PROBE_CANDIDATE_DIR, not process cwd.
-    cwd: runtimeRoot, env, timeoutMs: 60_000, signal,
-  });
+  let processResult;
+  try {
+    processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(entryPath), '--config', config], {
+      // A run-specific observer directory can cross Windows MAX_PATH as a child
+      // process cwd (the paired "negative" path is longer than "normal").
+      // Playwright discovers the test via PROBE_CANDIDATE_DIR, not process cwd.
+      cwd: runtimeRoot, env, timeoutMs: 60_000, signal,
+    });
+  } finally {
+    if (authBridge) {
+      authBridge.closeAllConnections();
+      await new Promise((resolve) => authBridge.close(resolve));
+    }
+  }
   let report = null;
   try { report = JSON.parse(await readFile(reportPath, 'utf8')); } catch {}
   const reportAssessment = evaluatePlaywrightReport(report);

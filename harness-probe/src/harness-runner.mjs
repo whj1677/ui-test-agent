@@ -113,19 +113,20 @@ export async function runHarnessEventProcess({
   return { events, processResult, toolCalls: toolBudget.count(), maxToolCalls };
 }
 
-export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
+export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, browserAttachEndpoint = null, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
   const providerEnvironment = {};
   if (apiKey) providerEnvironment.DEEPSEEK_API_KEY = apiKey;
   if (baseUrl) providerEnvironment.DEEPSEEK_BASE_URL = baseUrl;
   const childEnv = allowedEnvironment({
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
+    ...(browserAttachEndpoint ? { WORKBENCH_AUTH_CDP_ENDPOINT: browserAttachEndpoint } : {}),
     ...providerEnvironment,
   });
   const execution = await runHarnessEventProcess({ command: process.execPath, args: [
     DSH_BIN,
     '--profile', 'headless',
-    '--patch', patchPath,
+    '--patch', browserAttachEndpoint ? path.join(ROOT, 'config', 'browser-auth-attach.cordis.yml') : patchPath,
     '--json',
     task,
   ],
@@ -142,7 +143,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
   assessment.toolCalls = execution.toolCalls;
   assessment.maxToolCalls = maxToolCalls;
   assessment.toolLimitReached = processResult.termination === 'tool_limit';
-  const secrets = [apiKey].filter(Boolean);
+  const secrets = [apiKey, browserAttachEndpoint].filter(Boolean);
   return {
     process: {
       ...processResult,

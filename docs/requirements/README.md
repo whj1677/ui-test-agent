@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0035-auth01-target-session](REQ-0035-auth01-target-session/current_state.md)：AUTH-01 被测系统人工登录与内存会话；独立合成站的真实 Harness 浏览器接入及新执行上下文复用已验证，现有工作台建例任务尚未绑定此登录环境。
+
 - [REQ-0034-e2e01-caption-step-sync](REQ-0034-e2e01-caption-step-sync/current_state.md)：E2E-01 六用例录像字幕、可信步骤时间轴、双向联动及开发者浏览器自测；步骤证据回放开发自测完成，待用户体验与候选人工批准。
 
 - [REQ-0032-test-site-six-cases](REQ-0032-test-site-six-cases/current_state.md)：独立设备台账站点的三组正常/故障入口、六条同预期配对用例、真实 Excel 与正式后端导出 JSON，以及 3 通过/3 指定业务失败的参考自检；不调用 Harness、模型或既有批准脚本。

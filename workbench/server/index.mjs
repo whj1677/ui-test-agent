@@ -8,6 +8,8 @@ import { BuildRevalidationStore } from './build/revalidations.mjs';
 import { BuildSupplementalAssessmentStore } from './build/assessments.mjs';
 import { CaseLibraryStore } from './cases/store.mjs';
 import { CaseLibraryManager } from './cases/manager.mjs';
+import { TargetAuthSessions } from './auth/session.mjs';
+import { localAuthEnvironments } from './auth/catalog.mjs';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
 
@@ -41,6 +43,10 @@ await buildAssessmentStore.init();
 const caseStore = new CaseLibraryStore(paths.caseLibraryRoot);
 await caseStore.init();
 const caseManager = new CaseLibraryManager(caseStore);
+const authSessions = new TargetAuthSessions({
+  environments: localAuthEnvironments(process.env.WORKBENCH_AUTH_FIXTURE_BASE_URL),
+  browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
+});
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
 const buildManager = new BuildTaskManager({
   store: buildStore,
@@ -55,7 +61,7 @@ const buildManager = new BuildTaskManager({
   modelConfiguration,
   otherActive: () => Boolean(manager.active),
 });
-const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager });
+const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);
@@ -75,6 +81,7 @@ async function shutdown(signal) {
     new Promise((resolve) => setTimeout(() => resolve(false), 5_000)),
   ]);
   if (!drained) console.error(JSON.stringify({ type: 'build_settlement_timeout', service_instance_id: serviceInstanceId }));
+  await authSessions.close();
   await new Promise((resolve) => server.close(resolve));
 }
 process.once('SIGINT', () => void shutdown('SIGINT'));

@@ -1,0 +1,25 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-24T10:17:05+08:00
+Command: node --test workbench/tests/auth-session.test.mjs
+Exit code: 0
+Parsed test count: 1
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+ok 1 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+  ---
+  duration_ms: 13059.5625
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13548.6533

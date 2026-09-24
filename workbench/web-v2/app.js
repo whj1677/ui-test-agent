@@ -25,6 +25,8 @@ const errorLabels = {
   E2E01_CASE_ENVIRONMENT_MISMATCH: '用例与预设演示入口不匹配。', E2E01_PAIRED_CASE_CONTENT_MISMATCH: '正常与故障用例正文并非同一业务预期，未创建建例任务。',
   E2E01_TRIAL_NOT_ALLOWED: '该任务不属于本次受控演示试跑。', E2E01_CANDIDATE_IDENTITY_MISMATCH: '候选版本已变化，请刷新任务详情。',
   E2E01_EXECUTION_CASE_NOT_ALLOWED: '执行目标超出此候选明确绑定的用例范围。', E2E01_TRIAL_AUTHORIZATION_INVALID: '演示试跑授权不匹配。',
+  AUTH_BROWSER_EXECUTABLE_REQUIRED: '尚未配置受控浏览器，请检查工作台启动配置。',
+  AUTH_ENVIRONMENT_ROLE_NOT_ALLOWED: '当前环境不允许这个账号角色。',
 };
 const mappingLabels = {
   external_id: '用例编号', title: '标题', module: '模块', preconditions: '前置条件', test_data: '测试数据',
@@ -51,9 +53,10 @@ function setSidebarNavigation(project, section = 'projects') {
   const disabled = (label, icon) => `<span class="side-link disabled" aria-disabled="true"><span class="nav-icon" aria-hidden="true">${icon}</span>${label}<small>请先选择项目</small></span>`;
   const id = project && encodeURIComponent(project.project_id);
   sideNav.innerHTML = link('项目', '◇', '#/projects', section === 'projects') +
-    (id ? link('建例任务', '○', `#/projects/${id}/build-tasks`, section === 'build-tasks') +
+    (id ? link('登录准备', '◇', `#/projects/${id}/auth`, section === 'auth') +
+      link('建例任务', '○', `#/projects/${id}/build-tasks`, section === 'build-tasks') +
       link('执行记录', '□', `#/projects/${id}/execution-records`, section === 'execution-records') :
-      disabled('建例任务', '○') + disabled('执行记录', '□'));
+      disabled('登录准备', '◇') + disabled('建例任务', '○') + disabled('执行记录', '□'));
 }
 function isDirty() { return Boolean(state.editing?.dirty); }
 function go(hash, force = false) {
@@ -85,6 +88,7 @@ function projectTabs(project, active) {
   const id = encodeURIComponent(project.project_id);
   return `<nav class="project-tabs" aria-label="项目导航">
     <a data-nav class="${active === 'cases' ? 'active' : ''}" href="#/projects/${id}/cases">用例库</a>
+    <a data-nav class="${active === 'auth' ? 'active' : ''}" href="#/projects/${id}/auth">登录准备</a>
     <a data-nav class="${active === 'build-tasks' ? 'active' : ''}" href="#/projects/${id}/build-tasks">建例任务</a>
     <a data-nav class="${active === 'execution-records' ? 'active' : ''}" href="#/projects/${id}/execution-records">执行记录</a>
     <a data-nav class="${active === 'settings' ? 'active' : ''}" href="#/projects/${id}/settings">项目设置</a>
@@ -517,6 +521,64 @@ function renderSettings(project) {
   document.querySelector('#settings-form').addEventListener('submit', async (event) => { event.preventDefault(); const button = event.currentTarget.querySelector('[type=submit]'); button.disabled = true; const data = new FormData(event.currentTarget); try { state.project = await mutate(`/api/case-library/projects/${encodeURIComponent(project.project_id)}`, jsonOptions({ revision:project.revision, name:String(data.get('name')), description:String(data.get('description')) }, 'PATCH')); toast('项目信息已由后端保存。'); renderSettings(state.project); } catch (error) { toast(messageFor(error), 'error'); button.disabled = false; } });
 }
 
+const authStatusLabels = {
+  NOT_LOGGED_IN: '未登录', AWAITING_LOGIN: '等待人工登录', VALID: '有效',
+  EXPIRED: '已过期', ROLE_MISMATCH: '角色不符', PERMISSION_DENIED: '权限不足',
+  CHECK_UNAVAILABLE: '身份检查暂不可用', IDENTITY_UNVERIFIED: '身份依据不足',
+  IDENTITY_CHANGED: '账号发生变化', BROWSER_CLOSED: '专用浏览器已关闭',
+};
+
+async function renderAuth(project) {
+  const id = encodeURIComponent(project.project_id);
+  const endpoint = `/api/case-library/projects/${id}/auth`;
+  const { environments } = await api(endpoint);
+  const environment = environments[0];
+  setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name, href:`#/projects/${id}/cases` }, { label:'登录准备' }]);
+  showPage(`<div class="page-heading"><div><p class="eyebrow">TARGET AUTHENTICATION</p><h1>被测系统登录准备</h1><p>登录发生在工作台打开的专用浏览器，不是工作台账号登录。</p></div></div>${projectTabs(project,'auth')}
+    <section class="panel settings-card"><div class="panel-header"><h2>环境与角色</h2></div><div class="panel-body">
+    ${environment ? `<div class="form-grid"><label class="field"><span>被测环境</span><select id="auth-environment">${environments.map(item=>`<option value="${esc(item.environment_id)}">${esc(item.name)}</option>`).join('')}</select></label>
+    <label class="field"><span>账号角色</span><select id="auth-role"></select></label></div>
+    <p id="auth-status" role="status" class="notice">正在检查登录状态…</p>
+    <div class="actions"><button class="button primary" id="auth-open">打开专用登录浏览器</button><button class="button" id="auth-check">检查登录</button><button class="button" id="auth-clear">清除会话</button></div>` : '<p class="notice">当前未登记可登录的被测环境。</p>'}
+    <p class="notice">本阶段只提供独立本机合成站。请在专用窗口自行输入账号和密码；验证码、扫码或多因素认证也由你完成。登录阶段不启动模型观察、不采集业务录像、截图或 Trace。合成站已完成真实 Harness 浏览器接入验证；当前项目建例任务尚未绑定此登录环境，不能因这里显示“有效”就认定现有任务会自动复用会话。</p>
+    </div></section>`);
+  if (!environment) return;
+  const envSelect = document.querySelector('#auth-environment');
+  const roleSelect = document.querySelector('#auth-role');
+  const statusNode = document.querySelector('#auth-status');
+  const currentScope = () => ({ environment_id:envSelect.value, role:roleSelect.value });
+  const fillRoles = () => {
+    const current = environments.find(item=>item.environment_id===envSelect.value);
+    roleSelect.innerHTML = current.roles.map(role=>`<option value="${esc(role)}">${esc(role)}</option>`).join('');
+  };
+  const showStatus = (value) => {
+    statusNode.textContent = `状态：${authStatusLabels[value.status] || value.status} · 角色：${value.role} · 账号：${value.account_id || '未确认'}${value.expires_at ? ` · 服务端有效期至 ${fmtDate(value.expires_at)}` : ''}${value.reason ? ` · 原因：${value.reason}` : ''}`;
+    statusNode.classList.toggle('danger', value.status !== 'VALID' && value.status !== 'AWAITING_LOGIN' && value.status !== 'NOT_LOGGED_IN');
+  };
+  const loadStatus = async () => {
+    const scope = currentScope();
+    const result = await api(`${endpoint}?environment_id=${encodeURIComponent(scope.environment_id)}&role=${encodeURIComponent(scope.role)}`);
+    showStatus(result.session);
+  };
+  const act = async (operation) => {
+    const buttons = [...document.querySelectorAll('#auth-open,#auth-check,#auth-clear')];
+    buttons.forEach(button=>button.disabled=true);
+    try {
+      const result = await mutate(`${endpoint}/${operation}`, jsonOptions(currentScope()));
+      showStatus(result);
+      if (operation==='open') toast('专用登录窗口已打开；完成登录后点击“检查登录”。');
+    } catch (error) { toast(messageFor(error),'error'); }
+    finally { buttons.forEach(button=>button.disabled=false); }
+  };
+  fillRoles();
+  envSelect.addEventListener('change', () => { fillRoles(); void loadStatus().catch(error=>toast(messageFor(error),'error')); });
+  roleSelect.addEventListener('change', () => void loadStatus().catch(error=>toast(messageFor(error),'error')));
+  document.querySelector('#auth-open').addEventListener('click', () => void act('open'));
+  document.querySelector('#auth-check').addEventListener('click', () => void act('check'));
+  document.querySelector('#auth-clear').addEventListener('click', () => void act('clear'));
+  await loadStatus();
+}
+
 async function render(force = false) {
   if (force) { loading.hidden = false; app.hidden = true; state.error = null; }
   try {
@@ -526,9 +588,10 @@ async function render(force = false) {
     if (!parts.length || parts[0] !== 'projects') return go('#/projects', true);
     if (parts.length === 1) return renderProjects();
     const projectId = parts[1]; if (!state.project || state.project.project_id !== projectId || force) await loadProject(projectId); const project = state.project;
-    setSidebarNavigation(project, parts[2] === 'build-tasks' ? 'build-tasks' : parts[2] === 'execution-records' ? 'execution-records' : 'projects');
+    setSidebarNavigation(project, parts[2] === 'auth' ? 'auth' : parts[2] === 'build-tasks' ? 'build-tasks' : parts[2] === 'execution-records' ? 'execution-records' : 'projects');
     if (parts[2] === 'import') return renderImport(project);
     if (parts[2] === 'settings') return renderSettings(project);
+    if (parts[2] === 'auth') return renderAuth(project);
     if (parts[2] === 'build-tasks') return renderBuildTasksRoute(project, parts[3] || null);
     if (parts[2] === 'execution-records') { await renderExecutionRecords(project); focusExecutionRecord(value.query.get('run_id')); return; }
     if (parts[2] === 'cases' && parts[3]) { const item = project.cases.find((entry) => entry.case_id === parts[3]); if (!item) throw new ApiError('CASE_NOT_FOUND', 404); return renderCaseDetail(project, item, value.query.get('version')); }

@@ -184,6 +184,9 @@ function errorStatus(error) {
   if (error.message === 'CASE_PROJECT_NOT_FOUND' || error.message === 'CASE_NOT_FOUND' || error.message === 'CASE_UPLOAD_NOT_FOUND' || error.message === 'CASE_PREVIEW_NOT_FOUND') return 404;
   if (error.message === 'CASE_PROJECT_REVISION_CONFLICT' || error.message === 'CASE_IMPORT_PREVIEW_STALE') return 409;
   if (error.message.startsWith('CASE_')) return 400;
+  if (error.message === 'AUTH_SESSION_NOT_VALID') return 409;
+  if (error.message === 'AUTH_BROWSER_EXECUTABLE_REQUIRED') return 503;
+  if (error.message.startsWith('AUTH_')) return 400;
   return 422;
 }
 
@@ -196,6 +199,7 @@ export function createWorkbenchServer(options = {}) {
   const buildAssessmentStore = options.buildAssessmentStore;
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
+  const authSessions = options.authSessions;
   const webRoot = options.webRoot || defaultWebRoot;
   const workspaceRoot = options.workspaceRoot || defaultWorkspaceRoot;
   return http.createServer(async (request, response) => {
@@ -220,6 +224,28 @@ export function createWorkbenchServer(options = {}) {
       if (caseStore && request.method === 'GET' && url.pathname === '/api/case-library/projects') {
         sendJson(response, 200, { projects: await caseStore.listProjects() });
         return;
+      }
+      const projectAuth = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/auth(?:\/(open|check|clear))?$/);
+      if (authSessions && caseStore && projectAuth) {
+        const projectId = decodeURIComponent(projectAuth[1]);
+        if (!await caseStore.getProject(projectId)) return sendJson(response, 404, { error: 'CASE_PROJECT_NOT_FOUND' });
+        if (request.method === 'GET' && !projectAuth[2]) {
+          const environmentId = url.searchParams.get('environment_id');
+          const role = url.searchParams.get('role');
+          return sendJson(response, 200, {
+            environments: authSessions.list(),
+            session: environmentId && role ? authSessions.status({ project_id: projectId, environment_id: environmentId, role }) : null,
+          });
+        }
+        if (request.method === 'POST' && projectAuth[2]) {
+          if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+          const body = await readJsonBody(request);
+          const scope = { project_id: projectId, environment_id: body.environment_id, role: body.role };
+          authSessions.environment(scope);
+          const result = projectAuth[2] === 'open' ? await authSessions.open(scope)
+            : projectAuth[2] === 'check' ? await authSessions.check(scope) : await authSessions.clear(scope);
+          return sendJson(response, 200, result);
+        }
       }
       if (caseManager && request.method === 'POST' && url.pathname === '/api/case-library/projects') {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
