@@ -2,18 +2,18 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-24T23:50:09+08:00`
-- Record: `REQ-0035-auth01-target-session`
+- Generated at: `2026-09-24T23:49:43+08:00`
+- Record: `REQ-0036-ui-ux-01-workbench-usability-review`
 - Change fingerprint: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
 - Verification source: `collector-executed-v1`
-- Verification state: `集成测试通过`
-- Command: `node --test workbench/tests/auth-session.test.mjs workbench/tests/start-config.test.mjs`
+- Verification state: `仅静态检查`
+- Command: `python scripts/requirement_source.py check --package REQ-0036-ui-ux-01-workbench-usability-review`
 - Exit code: `0`
-- Test count: `2`
+- Test count: `未解析`
 - Failure count: `0`
-- Skipped count: `0`
-- Log path: `docs/evidence/baseline-20260924/collector-auth-final.log`
-- Log SHA-256: `bb7a4199e73f8b6ba92749d8aa90eb5a8668b7036517c9efc26829ca8c0a9d86`
+- Skipped count: `未解析`
+- Log path: `docs/evidence/baseline-20260924/collector-ui-state.log`
+- Log SHA-256: `482f6760234c93008ef4cabe6364fa2ab16c105cab51c80e5804a37f602a6db3`
 
 ### Git Status
 
@@ -73,11 +73,10 @@ M  docs/requirements/REQ-0035-auth01-target-session/04_verification.md
 M  docs/requirements/REQ-0035-auth01-target-session/05_trace.md
 M  docs/requirements/REQ-0035-auth01-target-session/change_log.md
 M  docs/requirements/REQ-0035-auth01-target-session/current_state.md
-MM docs/requirements/REQ-0035-auth01-target-session/delivery_evidence.md
+M  docs/requirements/REQ-0035-auth01-target-session/delivery_evidence.md
 M  docs/requirements/REQ-0035-auth01-target-session/requirement.source.json
 M  workbench/docs/BASELINE_CLOSE_20260924.md
 ?? docs/evidence/baseline-20260924/.gitattributes
-?? docs/evidence/baseline-20260924/collector-auth-final.log
 ?? docs/evidence/baseline-20260924/collector-ui-state.log
 ?? docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
 ```
@@ -85,8 +84,7 @@ M  workbench/docs/BASELINE_CLOSE_20260924.md
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of 'docs/requirements/REQ-0035-auth01-target-session/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
- .../collector-auth-intermediate-gate.log           |  12 +
+.../collector-auth-intermediate-gate.log           |  12 +
  docs/evidence/baseline-20260924/collector-auth.log |  31 +
  docs/evidence/baseline-20260924/collector-qa.log   | 112 ++++
  .../baseline-20260924/dependency-scope.json        |  44 ++
@@ -141,17 +139,16 @@ warning: in the working copy of 'docs/requirements/REQ-0035-auth01-target-sessio
  .../REQ-0035-auth01-target-session/05_trace.md     |   2 +-
  .../REQ-0035-auth01-target-session/change_log.md   |   2 +-
  .../current_state.md                               |   6 +-
- .../delivery_evidence.md                           | 233 ++++---
+ .../delivery_evidence.md                           | 209 +++---
  .../requirement.source.json                        |  25 +-
  workbench/docs/BASELINE_CLOSE_20260924.md          |  36 +-
- 58 files changed, 3844 insertions(+), 685 deletions(-)
+ 58 files changed, 3819 insertions(+), 686 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
 docs/evidence/baseline-20260924/.gitattributes
-docs/evidence/baseline-20260924/collector-auth-final.log
 docs/evidence/baseline-20260924/collector-ui-state.log
 docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
 ```
@@ -160,42 +157,21 @@ docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-24T23:49:12+08:00
-Command: node --test workbench/tests/auth-session.test.mjs workbench/tests/start-config.test.mjs
+Started at: 2026-09-24T23:49:41+08:00
+Command: python scripts/requirement_source.py check --package REQ-0036-ui-ux-01-workbench-usability-review
 Exit code: 0
-Parsed test count: 2
+Parsed test count: unavailable
 Parsed failure count: 0
-Parsed skipped count: 0
+Parsed skipped count: unavailable
 
 --- command output ---
-TAP version 13
-# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
-ok 1 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
-  ---
-  duration_ms: 54053.4998
-  type: 'test'
-  ...
-# Subtest: startup template isolates inherited authorization and rejects missing runtime without private data
-ok 2 - startup template isolates inherited authorization and rejects missing runtime without private data
-  ---
-  duration_ms: 13058.5985
-  type: 'test'
-  ...
-1..2
-# tests 2
-# suites 0
-# pass 2
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 54641.7124
+REQ_SOURCE_IN_SYNC: REQ-0036-ui-ux-01-workbench-usability-review; generated_views=8
 ```
 
 ### Sync Record Status
 
 ```text
-DRY-RUN: no derived changes for REQ-0035-auth01-target-session; explicit implementation states retained, never inferred from verification.
+DRY-RUN: no derived changes for REQ-0036-ui-ux-01-workbench-usability-review; explicit implementation states retained, never inferred from verification.
 ```
 
 ### Check AI Context
@@ -208,4 +184,4 @@ PASS ai-engineering-context checks
 
 ### Notes
 
-AUTH基线源码35adcff1ade90a64eaae2a466530bd137e0910d8；11文件接收与源码哈希见docs/evidence/baseline-20260924/source-acceptance.json，干净副本全量与浏览器结果见run-04/result.json。完整源码先提交，当前仅文档证据差异；本条只登记AUTH会话与配置工程2项，不合并QA/旧核心，不宣称产品闭环。
+仅核对REQ-0036源文件与生成视图一致、合法验证状态；不执行或宣称UI重排实现。原走查成绩及日志不变。

@@ -19,6 +19,7 @@
 - 六条目标运行实际形成3 PASSED和3指定业务FAILED；故障原始complete_pass=false，三组同候选哈希；每条截图、录像、Trace可读取，服务重启后记录与状态读回。
 - 工程预检两条为临时接线脚本，不计产品结果；最终工作台全量工程测试89/89通过。
 - 2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。
+- 基线源码35adcff1ade90a64eaae2a466530bd137e0910d8在git archive干净副本复验：工作台113/113、Harness24/24，历史媒体浏览器只读、AUTH浏览器9检查和UI-D2A完整流程1/1均退出0；本批真实Harness/模型/产品运行均0。各层不累加。证据docs/evidence/baseline-20260924/run-04/result.json。
 
 ## 推断与待确认
 

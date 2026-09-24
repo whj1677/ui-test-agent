@@ -1,0 +1,12 @@
+
+
+- Exit code: `1`
+
+```text
+FAIL ai-engineering-context checks
+
+1. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: docs/evidence/baseline-20260924/run-04/browser-ui-media/03-version-detail-1920x1080.png
+```
+

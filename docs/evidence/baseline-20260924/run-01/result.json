@@ -1,0 +1,79 @@
+{
+  "source_commit": "84fd90537a511a95b9bbf38bda9c574e8f8a6025",
+  "real_harness_starts": 0,
+  "model_calls": 0,
+  "product_runs": 0,
+  "checks": [
+    {
+      "name": "install-root",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-01/install-root.log",
+      "log_sha256": "c276419b8da1d51dcbd7019a01c8e0d660b4450b521251121c9eca6ff607736c"
+    },
+    {
+      "name": "install-workbench",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "workbench",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-01/install-workbench.log",
+      "log_sha256": "d58856e5fa2f77a5cceb68e969c1111274c31b00e7cd5c721b2ea3bbf98c3ea2"
+    },
+    {
+      "name": "install-harness",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "harness-probe",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-01/install-harness.log",
+      "log_sha256": "ec6e74eaf3a6033bbfb316a986eead2c71a91acf7a97382ec4c2eac995bcb529"
+    },
+    {
+      "name": "install-browser",
+      "command": [
+        "node",
+        "node_modules/playwright/cli.js",
+        "install",
+        "chromium"
+      ],
+      "cwd": "workbench",
+      "exit_code": 4294967295,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-01/install-browser.log",
+      "log_sha256": "fb7f0fc526f084016dc040326d4ef4660cd62c90836eebebd2a895cff347267d"
+    }
+  ],
+  "archive_sha256": "d81e6fb0aa192ad5e87a9be32f0e2b27d13fc6db9317927d8d03ec9e327df769",
+  "exported_files": 1352,
+  "export_missing": [],
+  "locks": {
+    "package-lock.json": "b0bf999f4c1f80cd0d299782561b05cf6be028cbde8da9dc80a7ad9cb865a970",
+    "workbench/package-lock.json": "d1e00dc3d29f174465c4152a1cf831454bba0b34cc9299ed7dd02559ce973892",
+    "harness-probe/package-lock.json": "cdfe21323d9ad12c8932b5ffcfc3d481ae75cfc644252ea0f9e8dc69d97f8ca9"
+  },
+  "external_dependencies": [
+    "Windows, Node >=22, npm, Python, PowerShell 7, installed Microsoft Edge at test default path",
+    "npm registry and Playwright download access; Chromium installed into disposable cache",
+    "Real Harness requires separately retained private DSH runtime; not loaded, packaged or verified here"
+  ],
+  "evidence_relocated_from": "workbench/docs/evidence/baseline-20260924/run-01",
+  "disposable_export_removed": true
+}

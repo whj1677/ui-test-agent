@@ -1,0 +1,26 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'Failed to load resource: the server responded with a status of 404 (Not Found)',
++   'Failed to load resource: the server responded with a status of 404 (Not Found)'
++ ]
+- []
+
+    at file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/.local/clean-baseline-xjokl1kp/source/workbench/tests/browser.integration.mjs:125:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'Failed to load resource: the server responded with a status of 404 (Not Found)',
+    'Failed to load resource: the server responded with a status of 404 (Not Found)'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

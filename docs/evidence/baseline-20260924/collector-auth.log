@@ -1,0 +1,31 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-24T23:46:44+08:00
+Command: node --test workbench/tests/auth-session.test.mjs workbench/tests/start-config.test.mjs
+Exit code: 0
+Parsed test count: 2
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+ok 1 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+  ---
+  duration_ms: 16530.5228
+  type: 'test'
+  ...
+# Subtest: startup template isolates inherited authorization and rejects missing runtime without private data
+ok 2 - startup template isolates inherited authorization and rejects missing runtime without private data
+  ---
+  duration_ms: 18280.1079
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18480.4201

@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('heading', { name: 'UI-D2A 验收项目 A', exact: true }) to be visible[22m
+
+    at waitHeading (D:\01_AI工程\01_工程项目\ui-test-agent\workbench\.local\clean-baseline-ees53gcj\source\workbench\tests\ui-d2a-browser.integration.mjs:25:96)
+    at createProject (D:\01_AI工程\01_工程项目\ui-test-agent\workbench\.local\clean-baseline-ees53gcj\source\workbench\tests\ui-d2a-browser.integration.mjs:28:158)
+    at async file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/.local/clean-baseline-ees53gcj/source/workbench/tests/ui-d2a-browser.integration.mjs:45:3 {
+  log: [
+    "  - waiting for getByRole('heading', { name: 'UI-D2A 验收项目 A', exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,76 @@
+{
+  "source_commit": "35adcff1ade90a64eaae2a466530bd137e0910d8",
+  "existing_file_count": 11,
+  "files": [
+    {
+      "path": "workbench/scripts/start-workbench.ps1",
+      "received_disk_sha256": "7a5e3aea9eb6b9239d9bdb1d4576b99e410e438266fe3b0bd0dee4f331f0af65",
+      "committed_blob_sha256": "a5125281ba1fc8489975c67c0b466c58cf4a58edc9544efb10cdf290414e0600",
+      "disposition": "accepted with partial-capability wording / isolated engineering verification"
+    },
+    {
+      "path": "workbench/scripts/verify-start-config.ps1",
+      "received_disk_sha256": "da3938ed524254a97184236cd0122ecd5e5c97e146d41a4a4ccdba224ded590b",
+      "committed_blob_sha256": "3007d8e8fdf1d5a6d569445a47d0ac1c16029a02e1a70984992f83c802ef2270",
+      "disposition": "accepted with partial-capability wording / isolated engineering verification"
+    },
+    {
+      "path": "workbench/server/app.mjs",
+      "received_disk_sha256": "bf1780b858dfb7afd31e1ee370b38bd7dae4ef125e2d749f36de60f3f82b39fc",
+      "committed_blob_sha256": "c9e8415faf1b53aa92ef9029fdf8cca4388e8c94c59fb6dea6c08943fea221a9",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/auth/session.mjs",
+      "received_disk_sha256": "0b98fdda364fc63096c2372533e86841938e573692193177bfe03709721585cf",
+      "committed_blob_sha256": "03ed905b9f98ac85fdbabd8b6686e74ddc370adcfc711f0ecee5874974135a74",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/build/files.mjs",
+      "received_disk_sha256": "c0e0bb153b560386834c2e51a0d1695e6dd146320a719297f2880aa07c05cf0d",
+      "committed_blob_sha256": "463bd80f38250ad6507e152ceb3aa93f0851379132098cfab8aead6b30e1b8e2",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/build/manager.mjs",
+      "received_disk_sha256": "0e766c3c7472767c3ff88c1ed0590632f9600162692cae6e5492ba23170f5e14",
+      "committed_blob_sha256": "ed59bc1f7eb78bac52ea25f6939db026e165a6cde234d05ebb88bd5286598245",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/build/project-case.mjs",
+      "received_disk_sha256": "169ddb192512c7126dc9de39d08f08f0e90f4e69c97ddce38374b966799c43ac",
+      "committed_blob_sha256": "1ef998e4838561b454881224a6f09717c478eba79acf908ac68c93f9458a8e1e",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/build/store.mjs",
+      "received_disk_sha256": "d1ee66a59ffbc6519d48355d49e1b9eb987b413fcc07ec3bd246e5ef9010b029",
+      "committed_blob_sha256": "8ff08754e0f4d2f7c3cfad84123e89c5ed7c977e18bcdcb94cd2a002e0d1c62f",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/build/template.mjs",
+      "received_disk_sha256": "dd29411359c237d46ab1231990033ee9d6892db1a0e76074cc64aa2781057294",
+      "committed_blob_sha256": "3f46b3721c1318e43db995b6abfd9dc176cc1063e8ef7da265d07228bc67c869",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/server/index.mjs",
+      "received_disk_sha256": "a566f3943e788e9359a4da766fb713b93b4e61c729268bb7e31d0255621489a6",
+      "committed_blob_sha256": "43c6d83d0439914bc56ee60c4181792ec9b403f1c5ae77f8a798c215946a8e65",
+      "disposition": "accepted product code"
+    },
+    {
+      "path": "workbench/web-v2/app.js",
+      "received_disk_sha256": "35bc836cbb46682bd52f2b1837a5f0f76b603eb7db14074551723eb4295461d7",
+      "committed_blob_sha256": "1f131ceec5eabe694f5b625679b0f79268b33157e494518ddb3ccddbed42b00d",
+      "disposition": "accepted product code"
+    }
+  ],
+  "original_QA_revision_and_historical_UI_unchanged": true,
+  "real_harness_starts": 0,
+  "model_calls": 0,
+  "product_candidate_runs": 0
+}

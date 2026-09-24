@@ -34,14 +34,14 @@
 | TK | DR/DD | 状态 | 内容 |
 |---|---|---|---|
 | TK-0033-01 | DR-0033-01 / DD-0033-01 | 技术验证通过，等待人工核对 | 接通页面与受限候选试跑，修复Harness patch路径、数组差异解析和完成状态，保留旧失败；完成六条产品运行、媒体和重启读回。 |
-| TK-0033-02 | DR-0033-01 / DD-0033-02 | 实施中 | 集成当前源码并在干净导出中验证对应工程能力，收尾现有门禁。 |
+| TK-0033-02 | DR-0033-01 / DD-0033-02 | 工程验证完成 | 集成当前源码并在干净导出中验证对应工程能力，收尾现有门禁。 |
 
 ## 当前有效验证项
 
 | VT | DR | 状态 | 内容 | 当前证据 |
 |---|---|---|---|---|
 | VT-0033-01 | DR-0033-01 | 集成测试通过 | 工作台真实导入、候选Harness生成、六次试跑、媒体访问和重启读回完整闭环。 | 命令：cd workbench; npm test; node tests/e2e01-preflight.integration.mjs；退出码：0；测试数量：89；失败数量：0；跳过数量：0；证据：workbench/docs/E2E_01_ACCEPTANCE_REPORT.md；六条实际运行ID、失败步骤、媒体和7/7启动账本详见报告；工程预检不计产品结果 |
-| VT-0033-02 | DR-0033-01 | 未运行 | 已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。 | 待代码集成提交后执行，见workbench/docs/BASELINE_CLOSE_20260924.md。 |
+| VT-0033-02 | DR-0033-01 | 集成测试通过 | 已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。 | 命令：node --test workbench/tests/qa-parser-regression.test.mjs workbench/tests/qa-lifecycle.test.mjs workbench/tests/qa-browser-semantics.test.mjs；退出码：0；测试数量：15；失败数量：0；跳过数量：0；证据：docs/evidence/baseline-20260924/collector-qa.log；干净源码全量另见run-04/result.json，属于重叠回归，不相加 |
 
 ## 人工待确认项
 

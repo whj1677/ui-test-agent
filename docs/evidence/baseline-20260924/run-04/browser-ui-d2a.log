@@ -1,0 +1,7 @@
+{"status":"passed","data_root":"D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\clean-baseline-bpik9dfx\\source\\workbench\\.local\\ui-d2a-acceptance-fAZp0a","projects":2,"project_a_cases":3,"project_b_cases":5,"selected_export_cases":2,"all_export_cases":3,"requests":112,"forbidden_execution_requests":0,"screenshots":5}
+TAP version 13
+1..1
+# tests 1
+# pass 1
+# fail 0
+# skipped 0

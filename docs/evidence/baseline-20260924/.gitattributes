@@ -1,0 +1,3 @@
+# Preserve the exact bytes referenced by result and collector SHA-256 records.
+*.log -text
+*.json -text

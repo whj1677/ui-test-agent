@@ -1,0 +1,11 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0036-ui-ux-01-workbench-usability-review\04_verification.md
+   Problem: Verification state `已完成` is not allowed.
+   Fix: Use one of: 人工待确认、仅静态检查、单元测试通过、无法运行、未运行、编译通过、集成测试通过
+2. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: .auth01-run/expire-drive.mjs, .auth01-run/expire1.log, .auth01-run/fixture.err.log, .auth01-run/fixture.log, .auth01-run/login-drive.mjs, .auth01-run/login.log, .auth01-run/login2.log, .auth01-run/login3.log 等 32 个文件
+3. docs\requirements
+   Problem: Code/test/config changes exist without a changed governance record.
+   Fix: Create/update one real `docs/requirements/REQ-*` package, or use one eligible `docs/changes/FIX-*` record for a verified G1 Quick Fix. Changed files: workbench/scripts/start-workbench.ps1, workbench/scripts/verify-start-config.ps1, workbench/server/app.mjs, workbench/server/auth/session.mjs, workbench/server/index.mjs, workbench/web-v2/app.js, .auth01-run/expire-drive.mjs, .auth01-run/login-drive.mjs 等 17 个文件

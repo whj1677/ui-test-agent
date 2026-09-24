@@ -1,0 +1,10 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-24T23:49:41+08:00
+Command: python scripts/requirement_source.py check --package REQ-0036-ui-ux-01-workbench-usability-review
+Exit code: 0
+Parsed test count: unavailable
+Parsed failure count: 0
+Parsed skipped count: unavailable
+
+--- command output ---
+REQ_SOURCE_IN_SYNC: REQ-0036-ui-ux-01-workbench-usability-review; generated_views=8

@@ -1,0 +1,130 @@
+{
+  "source_commit": "58a88c01a4101a6a2378be7658bdfb9e2f7c205f",
+  "real_harness_starts": 0,
+  "model_calls": 0,
+  "product_runs": 0,
+  "checks": [
+    {
+      "name": "install-root",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-02/install-root.log",
+      "log_sha256": "b56ce165f3a0569fb322251c8418c162942d9f7829706abdb3f21d5f365d5393"
+    },
+    {
+      "name": "install-workbench",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "workbench",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-02/install-workbench.log",
+      "log_sha256": "d58856e5fa2f77a5cceb68e969c1111274c31b00e7cd5c721b2ea3bbf98c3ea2"
+    },
+    {
+      "name": "install-harness",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "harness-probe",
+      "exit_code": 0,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-02/install-harness.log",
+      "log_sha256": "ec6e74eaf3a6033bbfb316a986eead2c71a91acf7a97382ec4c2eac995bcb529"
+    },
+    {
+      "name": "workbench",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "test"
+      ],
+      "cwd": "workbench",
+      "exit_code": 0,
+      "counts": {
+        "tests": 113,
+        "pass": 113,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log": "docs/evidence/baseline-20260924/run-02/workbench.log",
+      "log_sha256": "35fa97d21783a2e0dc63e6a057b730015e3595b30d640350d626cc1566f0d4f3"
+    },
+    {
+      "name": "harness",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "test"
+      ],
+      "cwd": "harness-probe",
+      "exit_code": 0,
+      "counts": {
+        "tests": 24,
+        "pass": 24,
+        "fail": 0,
+        "skipped": 0
+      },
+      "log": "docs/evidence/baseline-20260924/run-02/harness.log",
+      "log_sha256": "ae32c8b9ad8ef5f669424010a56b2b565e5e093e65a970f1e41213840b19365b"
+    },
+    {
+      "name": "browser-history",
+      "command": [
+        "node",
+        "tests/browser.integration.mjs"
+      ],
+      "cwd": "workbench",
+      "exit_code": 1,
+      "counts": {},
+      "log": "docs/evidence/baseline-20260924/run-02/browser-history.log",
+      "log_sha256": "5f437335197903aaf5f1bc5c9c0efe1e27a483ac4381c7e4a1134f6a68ac3744"
+    }
+  ],
+  "archive_sha256": "f991514ce7edf37b31cde50cb4d0e951d6cf7ab2c4e4482b2e03a9b2b3596218",
+  "exported_files": 1352,
+  "export_missing": [],
+  "locks": {
+    "package-lock.json": "b0bf999f4c1f80cd0d299782561b05cf6be028cbde8da9dc80a7ad9cb865a970",
+    "workbench/package-lock.json": "d1e00dc3d29f174465c4152a1cf831454bba0b34cc9299ed7dd02559ce973892",
+    "harness-probe/package-lock.json": "cdfe21323d9ad12c8932b5ffcfc3d481ae75cfc644252ea0f9e8dc69d97f8ca9"
+  },
+  "retained_browser_cache": "C:\\Users\\20240082\\AppData\\Local\\ms-playwright",
+  "browser_executables": {
+    "chromium-1234\\chrome-win64\\chrome.exe": "409805a16d6416087e6b2f778df1cf8f7bbb267d6b99f6b5bb0a618eace234f2",
+    "chromium-1234\\chrome-win64\\chrome_proxy.exe": "9f624b4276e34088023acac15f367290630add95e4d5a2211e52d3e9dccb09a8",
+    "chromium-1234\\chrome-win64\\chrome_pwa_launcher.exe": "8915a5579e4a3afdd03380d774742cf062769e7a8d9194d05acbeaa9817e5100",
+    "chromium-1234\\chrome-win64\\elevated_tracing_service.exe": "be23007d6d73d3bc38671b5c4d2d5f6e2b23dc334cc0929c10d27384f563ab80",
+    "chromium-1234\\chrome-win64\\elevation_service.exe": "a1be55d0869ec6ee0ff4d31510d29ccb552e5013cf222899f3f72a1e89f1b871",
+    "chromium-1234\\chrome-win64\\notification_helper.exe": "f04e1849475c4434e9ffcc85744a5c5eed18ea05506fbabef76a1fc6496d4ab9",
+    "chromium-1234\\chrome-win64\\setup.exe": "f1c77a18fe1ee8f32058b3c858d8abd4a9a1ff9f12ea4be5dd075715065494ad",
+    "chromium-1243\\chrome-win64\\chrome.exe": "9b07943f834485b43c9d54caea2951c78715f9f07070a80ab6658465ebd3e711",
+    "chromium-1243\\chrome-win64\\chrome_proxy.exe": "ebd42fcdfdbf0190e5529b52007e8db63f90278be0fc9f50b90335816ad0658b",
+    "chromium-1243\\chrome-win64\\chrome_pwa_launcher.exe": "6cecc8211f28dbc4de35a273bfca52a7ad412369b3619742464a2affaa3a8b41",
+    "chromium-1243\\chrome-win64\\elevated_tracing_service.exe": "366c945c051d26aa7bf8bcf47e7e253150f3374c2c0242e46cd69d3574b7a8d2",
+    "chromium-1243\\chrome-win64\\elevation_service.exe": "c1578332b06ead38adc70199f9d60028d9e57b44b3007bea85c098e564e11ee6",
+    "chromium-1243\\chrome-win64\\notification_helper.exe": "082bbd227a9b58282b54a20c3ffa52a669d47b130dff7551c0ce1cd4953905c2",
+    "chromium-1243\\chrome-win64\\setup.exe": "1b18972e19dedd6a8adc33d1ddbf91fffcc202d27e273920305922e6f5321db9",
+    "chromium_headless_shell-1234\\chrome-headless-shell-win64\\chrome-headless-shell.exe": "ce4635cd0e5dc0e21494542a701f347e91c1f1d821970578d97ed8df4ced50ef",
+    "chromium_headless_shell-1243\\chrome-headless-shell-win64\\chrome-headless-shell.exe": "addfa79abb060e1e514e155ed745d4bf96140bca402735958bb4e223aea0b98c",
+    "ffmpeg-1011\\ffmpeg-win64.exe": "5b8f3f59ba61685828939ff3c833109748adbdea2fff4b4ae570c9fc0fc1ff4d",
+    "winldd-1007\\PrintDeps.exe": "020bac54c953c65a0940b314c8afadd2854de2d83125e7b1393054fafd21f330"
+  },
+  "external_dependencies": [
+    "Windows, Node >=22, npm, Python, PowerShell 7, installed Microsoft Edge at test default path",
+    "npm registry required; Chromium downloaded into disposable cache unless --browser-cache explicitly registers a retained installation",
+    "Real Harness requires separately retained private DSH runtime; not loaded, packaged or verified here"
+  ]
+}

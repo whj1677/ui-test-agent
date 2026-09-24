@@ -17,6 +17,7 @@
 - 旧src/browser.mjs有按旧任务绑定的BrowserSession及storageState；新workbench/server/index.mjs和build/manager.mjs并未调用它，不能把旧能力当新工作台接通。
 - 锁定@deepseek-ai/dsh-experimental-browser-use-playwright-mcp@0.1.6-alpha.2及其@playwright/mcp@0.0.80支持mode:attach和CDP endpoint；现有workbench补丁为mode:launch，插件没有storageState载入配置。
 - 2026-09-24 基线收口接收11个既有文件：启动配置隔离、会话失效通知、AUTH任务绑定/同候选复跑/步骤回放与媒体接线已纳入集成范围。本批零模型，不将代码接入视为AUTH完整闭环验收。
+- 基线源码35adcff1ade90a64eaae2a466530bd137e0910d8在git archive干净副本复验：工作台113/113、Harness24/24，历史媒体浏览器只读、AUTH浏览器9检查和UI-D2A完整流程1/1均退出0；本批真实Harness/模型/产品运行均0。各层不累加。证据docs/evidence/baseline-20260924/run-04/result.json。
 
 ## 推断与待确认
 

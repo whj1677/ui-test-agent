@@ -10,7 +10,7 @@
 | VT | DR | 确认状态 | 执行状态 | 验证项 | 证据标准 | 当前证据 | 命令 | 退出码 | 测试数量 | 失败数量 | 跳过数量 | 证据路径 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | VT-0033-01 | DR-0033-01 | 等待人工核对 | 集成测试通过 | 工作台真实导入、候选Harness生成、六次试跑、媒体访问和重启读回完整闭环。 | 区分真实Harness调用和产品运行与工程样例；保留命令、退出码、测试统计、产品运行ID、媒体及预算。 | 命令：cd workbench; npm test; node tests/e2e01-preflight.integration.mjs；退出码：0；测试数量：89；失败数量：0；跳过数量：0；证据：workbench/docs/E2E_01_ACCEPTANCE_REPORT.md；六条实际运行ID、失败步骤、媒体和7/7启动账本详见报告；工程预检不计产品结果 | cd workbench; npm test; node tests/e2e01-preflight.integration.mjs | 0 | 89 | 0 | 0 | workbench/docs/E2E_01_ACCEPTANCE_REPORT.md；六条实际运行ID、失败步骤、媒体和7/7启动账本详见报告；工程预检不计产品结果 |
-| VT-0033-02 | DR-0033-01 | 已确认 | 未运行 | 已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。 | 确定源码SHA、导出完整性、锁文件安装、当前命令退出码及测试数；零模型。 | 待代码集成提交后执行，见workbench/docs/BASELINE_CLOSE_20260924.md。 | - | - | - | - | - | - |
+| VT-0033-02 | DR-0033-01 | 已确认 | 集成测试通过 | 已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。 | 确定源码SHA、导出完整性、锁文件安装、当前命令退出码及测试数；零模型。 | 命令：node --test workbench/tests/qa-parser-regression.test.mjs workbench/tests/qa-lifecycle.test.mjs workbench/tests/qa-browser-semantics.test.mjs；退出码：0；测试数量：15；失败数量：0；跳过数量：0；证据：docs/evidence/baseline-20260924/collector-qa.log；干净源码全量另见run-04/result.json，属于重叠回归，不相加 | node --test workbench/tests/qa-parser-regression.test.mjs workbench/tests/qa-lifecycle.test.mjs workbench/tests/qa-browser-semantics.test.mjs | 0 | 15 | 0 | 0 | docs/evidence/baseline-20260924/collector-qa.log；干净源码全量另见run-04/result.json，属于重叠回归，不相加 |
 
 ## 本轮命令与环境
 
@@ -23,3 +23,4 @@
 ## 结论
 
 - 工程测试89/89通过；三份真实Harness候选及六条实际运行已形成3正常通过、3指定业务失败；媒体与重启读回完成，等待真人核对，不自动批准。
+- 2026-09-24提交基线35adcff1ade90a64eaae2a466530bd137e0910d8完成独立安装与零模型工程复验；旧核心108失败不在通过范围。详见workbench/docs/BASELINE_CLOSE_20260924.md。

@@ -3,7 +3,7 @@
   "req_id": "REQ-0035",
   "title": "AUTH-01 被测系统登录会话接入",
   "metadata": {
-    "requirement_status": "部分实现：AUTH任务绑定代码集成，干净源码工程复验待执行，产品闭环未验收",
+    "requirement_status": "部分实现：AUTH绑定代码已集成，干净源码工程复验通过，完整产品闭环未验收",
     "governance_level": "G2",
     "version": 3,
     "last_updated": "2026-09-24"
@@ -22,7 +22,8 @@
     "基线为codex/test-workbench-six-case-e2e的6066bbc4ba47d3f21b63ebb863721395b3475982；AUTH-01独立分支从该提交建立，两个工作区起始均干净。",
     "旧src/browser.mjs有按旧任务绑定的BrowserSession及storageState；新workbench/server/index.mjs和build/manager.mjs并未调用它，不能把旧能力当新工作台接通。",
     "锁定@deepseek-ai/dsh-experimental-browser-use-playwright-mcp@0.1.6-alpha.2及其@playwright/mcp@0.0.80支持mode:attach和CDP endpoint；现有workbench补丁为mode:launch，插件没有storageState载入配置。",
-    "2026-09-24 基线收口接收11个既有文件：启动配置隔离、会话失效通知、AUTH任务绑定/同候选复跑/步骤回放与媒体接线已纳入集成范围。本批零模型，不将代码接入视为AUTH完整闭环验收。"
+    "2026-09-24 基线收口接收11个既有文件：启动配置隔离、会话失效通知、AUTH任务绑定/同候选复跑/步骤回放与媒体接线已纳入集成范围。本批零模型，不将代码接入视为AUTH完整闭环验收。",
+    "基线源码35adcff1ade90a64eaae2a466530bd137e0910d8在git archive干净副本复验：工作台113/113、Harness24/24，历史媒体浏览器只读、AUTH浏览器9检查和UI-D2A完整流程1/1均退出0；本批真实Harness/模型/产品运行均0。各层不累加。证据docs/evidence/baseline-20260924/run-04/result.json。"
   ],
   "inferences_and_open_questions": [
     "真实业务站点及角色没有提供，因此首轮用独立本机服务端会话夹具，不将演示角色推断成公司角色；真实Harness已在该合成站启动1次，不能冒称现有项目建例任务已绑定。",
@@ -90,7 +91,7 @@
       "dd_ids": [
         "DD-0035-02"
       ],
-      "status": "实施中",
+      "status": "工程验证完成",
       "task": "集成当前源码并在干净导出中验证对应工程能力，收尾现有门禁。",
       "verification_ids": [
         "VT-0035-02"
@@ -122,10 +123,17 @@
         "DR-0035-01"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。",
       "evidence_standard": "确定源码SHA、导出完整性、锁文件安装、当前命令退出码及测试数；零模型。",
-      "current_evidence": "待代码集成提交后执行，见workbench/docs/BASELINE_CLOSE_20260924.md。"
+      "current_evidence": {
+        "command": "node --test workbench/tests/auth-session.test.mjs workbench/tests/start-config.test.mjs",
+        "exit_code": 0,
+        "test_count": 2,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "docs/evidence/baseline-20260924/collector-auth-final.log；干净源码AUTH浏览器9检查见run-04/browser-auth.log"
+      }
     }
   ],
   "verification_environment": {
@@ -141,7 +149,8 @@
       "本机锁定Node及Playwright依赖；独立合成站只监听127.0.0.1，数据与凭据不落盘。"
     ],
     "conclusion": [
-      "合成站工程、工作台浏览器及真实 Harness/独立执行上下文验证已运行；现有项目建例任务绑定和执行中失效处理仍未完成。"
+      "合成站工程、工作台浏览器及真实 Harness/独立执行上下文验证已运行；现有项目建例任务绑定和执行中失效处理仍未完成。",
+      "2026-09-24提交基线35adcff1ade90a64eaae2a466530bd137e0910d8完成独立安装与零模型工程复验；旧核心108失败不在通过范围。详见workbench/docs/BASELINE_CLOSE_20260924.md。"
     ]
   },
   "trace_current": [
@@ -159,7 +168,7 @@
       "dd_id": "DD-0035-02",
       "tk_id": "TK-0035-02",
       "vt_id": "VT-0035-02",
-      "status": "实施中：等待提交后干净复验"
+      "status": "工程复验通过；不代替产品闭环或人工批准"
     }
   ],
   "trace_history": [
@@ -189,7 +198,7 @@
       "date": "2026-09-24",
       "version": 3,
       "type": "既有源码集成与可复现基线",
-      "description": "2026-09-24 基线收口接收11个既有文件：启动配置隔离、会话失效通知、AUTH任务绑定/同候选复跑/步骤回放与媒体接线已纳入集成范围。本批零模型，不将代码接入视为AUTH完整闭环验收。",
+      "description": "2026-09-24 基线收口接收11个既有文件：启动配置隔离、会话失效通知、AUTH任务绑定/同候选复跑/步骤回放与媒体接线已纳入集成范围。本批零模型，不将代码接入视为AUTH完整闭环验收。 干净源码run-04及当前collector复验完成，原失败日志保留；正式门禁结果以最终check为准。",
       "impact": "对应AUTH或QA模块说明、设计和工程验证；不覆盖历史记录",
       "confirmed_by": "用户明确授权集成11个既有文件；最终以干净源码证据为准"
     }

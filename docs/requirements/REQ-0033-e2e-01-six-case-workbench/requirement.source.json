@@ -24,7 +24,8 @@
     "三次快速失败的根因为相对Harness patch路径在attempt子目录解析而ENOENT；路径修复后工作台真实生成TC-001/002/003三份候选，TC-001另由Harness按正常页定位反馈修订一次。",
     "六条目标运行实际形成3 PASSED和3指定业务FAILED；故障原始complete_pass=false，三组同候选哈希；每条截图、录像、Trace可读取，服务重启后记录与状态读回。",
     "工程预检两条为临时接线脚本，不计产品结果；最终工作台全量工程测试89/89通过。",
-    "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。"
+    "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。",
+    "基线源码35adcff1ade90a64eaae2a466530bd137e0910d8在git archive干净副本复验：工作台113/113、Harness24/24，历史媒体浏览器只读、AUTH浏览器9检查和UI-D2A完整流程1/1均退出0；本批真实Harness/模型/产品运行均0。各层不累加。证据docs/evidence/baseline-20260924/run-04/result.json。"
   ],
   "inferences_and_open_questions": [
     "供应商底层请求数、usage及费用未返回，仍为未知；模型会话之外的三次最小诊断不计产品候选。",
@@ -94,7 +95,7 @@
       "dd_ids": [
         "DD-0033-02"
       ],
-      "status": "实施中",
+      "status": "工程验证完成",
       "task": "集成当前源码并在干净导出中验证对应工程能力，收尾现有门禁。",
       "verification_ids": [
         "VT-0033-02"
@@ -126,10 +127,17 @@
         "DR-0033-01"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
+      "execution_status": "集成测试通过",
       "item": "已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。",
       "evidence_standard": "确定源码SHA、导出完整性、锁文件安装、当前命令退出码及测试数；零模型。",
-      "current_evidence": "待代码集成提交后执行，见workbench/docs/BASELINE_CLOSE_20260924.md。"
+      "current_evidence": {
+        "command": "node --test workbench/tests/qa-parser-regression.test.mjs workbench/tests/qa-lifecycle.test.mjs workbench/tests/qa-browser-semantics.test.mjs",
+        "exit_code": 0,
+        "test_count": 15,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "docs/evidence/baseline-20260924/collector-qa.log；干净源码全量另见run-04/result.json，属于重叠回归，不相加"
+      }
     }
   ],
   "verification_environment": {
@@ -143,7 +151,8 @@
       "Node锁定依赖；TEST-SITE-01本机端口4320；工作台独立数据目录workbench/.local/six-case-e2e；DeepSeek DSH 0.1.6-alpha.2与Browser Use 0.1.6-alpha.2。"
     ],
     "conclusion": [
-      "工程测试89/89通过；三份真实Harness候选及六条实际运行已形成3正常通过、3指定业务失败；媒体与重启读回完成，等待真人核对，不自动批准。"
+      "工程测试89/89通过；三份真实Harness候选及六条实际运行已形成3正常通过、3指定业务失败；媒体与重启读回完成，等待真人核对，不自动批准。",
+      "2026-09-24提交基线35adcff1ade90a64eaae2a466530bd137e0910d8完成独立安装与零模型工程复验；旧核心108失败不在通过范围。详见workbench/docs/BASELINE_CLOSE_20260924.md。"
     ]
   },
   "trace_current": [
@@ -161,7 +170,7 @@
       "dd_id": "DD-0033-02",
       "tk_id": "TK-0033-02",
       "vt_id": "VT-0033-02",
-      "status": "实施中：等待提交后干净复验"
+      "status": "工程复验通过；不代替产品闭环或人工批准"
     }
   ],
   "trace_history": [
@@ -205,7 +214,7 @@
       "date": "2026-09-24",
       "version": 4,
       "type": "既有源码集成与可复现基线",
-      "description": "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。",
+      "description": "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。 干净源码run-04及当前collector复验完成，原失败日志保留；正式门禁结果以最终check为准。",
       "impact": "对应AUTH或QA模块说明、设计和工程验证；不覆盖历史记录",
       "confirmed_by": "用户明确授权集成11个既有文件；最终以干净源码证据为准"
     }
