@@ -4,6 +4,22 @@
 
 第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。
 
+## 统一本地启动入口（当前唯一入口）
+
+归位后的主代码目录为 `D:\01_AI工程\01_工程项目\ui-test-agent`（分支 `codex/test-workbench-auth-session`）。日常工作台只通过唯一脚本启动，固定使用 4322，同一时刻只运行一个工作台实例，不自动启动 4320/4330/4331、不自动改端口：
+
+```powershell
+pwsh -NoProfile -File .\workbench\scripts\start-workbench.ps1            # e2e 数据配置（默认）
+pwsh -NoProfile -File .\workbench\scripts\start-workbench.ps1 -Data auth # auth 数据配置
+pwsh -NoProfile -File .\workbench\scripts\start-workbench.ps1 -CheckOnly # 只核对配置并输出安全摘要，不启动服务
+```
+
+- **数据配置含义**：`e2e` 与 `auth` 只选择数据目录（`workbench/.local/six-case-e2e` 与 `workbench/.local/auth01-user-trial`，两套数据不合并、不共写）。`auth` 不代表已支持登录建例：AUTH 任务绑定尚未接通，不绑定建例授权、不套用 e2e 授权。
+- **配置来源与优先级**：服务依赖的 `WORKBENCH_BUILD_AUTHORIZATION_ID`、`WORKBENCH_DSH_HOME`、`WORKBENCH_HARNESS_PATCH`、`WORKBENCH_USE_STORED_DSH_CREDENTIALS` 由 Git 忽略的本机配置文件 `workbench/scripts/start-workbench.local.json` 提供（模板见同目录 `.example`），配置文件优先于继承的终端变量；显式为 `null` 的键表示未绑定并清除同名残留，避免旧终端残留静默覆盖或套用旧试点授权。用户不需要每次手工拼环境变量。
+- **C 盘 DSH 暂存依赖**：`WORKBENCH_DSH_HOME` 继续引用保留的原 C 盘 DSH 私有运行时（`C:\Users\20240082\.codex\worktrees\workbench-m4a-query-case\...\build-runtime\dsh`），不自动迁移；patch 使用绝对路径，不随启动目录漂移。配置或账本缺失时明确报错并停在“历史查看可用、建例条件未就绪”，不静默退到其他模型、DSH 目录或旧试点授权。
+- **当前授权状态**：e2e 既有授权 `e2e01-six-case-project-20260923` 账本项目内可查（本机账本 7/7 已耗尽，只读引用、不新建额度）；auth 无授权账本。启动摘要只输出路径、模式与授权标识，不输出凭据、通道令牌或会话状态。
+- **隔离验证**：`pwsh -NoProfile -File .\workbench\scripts\verify-start-config.ps1` 在清除本项目继承变量的子进程中核对两套配置载入、残留覆盖、缺失 DSH/patch 报错、4322 占用识别及额度状态区分（退出码 0=满足启动条件，2=配置有效但端口占用，1=配置/数据问题）；不启动 Harness、不调用模型。
+
 ## 安装、登记与启动
 
 ```powershell

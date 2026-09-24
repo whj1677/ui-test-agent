@@ -1,0 +1,17 @@
+{
+  "_comment": "本机启动配置模板。复制为 start-workbench.local.json（已被 Git 忽略）后按本机实际填写；只保存必要的绝对路径、模式和既有授权标识，不复制 .env，不写入任何密钥正文。配置文件优先于继承的终端环境变量；显式为 null 的键表示未绑定，会清除同名残留变量。",
+  "profiles": {
+    "e2e": {
+      "WORKBENCH_BUILD_AUTHORIZATION_ID": "<既有授权标识，必须与数据目录内授权账本一致；没有既有授权时填 null>",
+      "WORKBENCH_DSH_HOME": "<绝对路径：保留的原 DSH 私有运行时目录；不自动迁移>",
+      "WORKBENCH_HARNESS_PATCH": "<绝对路径：harness patch 文件，例如 <仓库>/harness-probe/config/browser-flash.cordis.yml>",
+      "WORKBENCH_USE_STORED_DSH_CREDENTIALS": "1"
+    },
+    "auth": {
+      "WORKBENCH_BUILD_AUTHORIZATION_ID": null,
+      "WORKBENCH_DSH_HOME": "<绝对路径：保留的原 DSH 私有运行时目录；不自动迁移>",
+      "WORKBENCH_HARNESS_PATCH": "<绝对路径：harness patch 文件>",
+      "WORKBENCH_USE_STORED_DSH_CREDENTIALS": "1"
+    }
+  }
+}

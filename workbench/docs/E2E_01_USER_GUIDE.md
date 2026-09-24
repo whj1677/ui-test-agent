@@ -26,30 +26,20 @@
 
 ## 服务未运行时
 
-在第一个 PowerShell 窗口启动 4320：
+在第一个 PowerShell 窗口启动 4320（归位后的主目录，不再需要原 C 盘工作树）：
 
 ```powershell
-Set-Location 'C:\Users\20240082\.codex\worktrees\test-workbench-six-case-e2e\ui-test-agent\workbench'
+Set-Location 'D:\01_AI工程\01_工程项目\ui-test-agent\workbench'
 npm run start:trial-site
 ```
 
-仅在 4322 尚未运行时，在第二个 PowerShell 窗口启动工作台：
+仅在 4322 尚未运行时，在第二个 PowerShell 窗口通过统一入口启动工作台（端口固定 4322，数据配置 e2e，启动配置来自 Git 忽略的本机配置文件，不需要手工拼环境变量）：
 
 ```powershell
-$trialRepo = 'C:\Users\20240082\.codex\worktrees\test-workbench-six-case-e2e\ui-test-agent'
-Set-Location (Join-Path $trialRepo 'workbench')
-$env:WORKBENCH_PORT = '4322'
-$env:WORKBENCH_DATA_DIR = (Join-Path $PWD '.local\six-case-e2e')
-$env:WORKBENCH_TEST_SITE_BASE_URL = 'http://127.0.0.1:4320'
-$env:WORKBENCH_BUILD_AUTHORIZATION_ID = 'e2e01-six-case-project-20260923'
-$env:WORKBENCH_DSH_HOME = 'C:\Users\20240082\.codex\worktrees\workbench-m4a-query-case\ui-test-agent\workbench\.local\m4a-query-case-acceptance\build-runtime\dsh'
-$env:WORKBENCH_HARNESS_PATCH = (Join-Path $trialRepo 'harness-probe\config\browser-flash.cordis.yml')
-$env:WORKBENCH_USE_STORED_DSH_CREDENTIALS = '1'
-$env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-npm start
+pwsh -NoProfile -File 'D:\01_AI工程\01_工程项目\ui-test-agent\workbench\scripts\start-workbench.ps1'
 ```
 
-两个服务均为前台进程，窗口关闭即停止。已有正确服务时不要重复启动或关闭来源不明的进程。仅查看记录不会调用模型，也无须填写密钥。
+两个服务均为前台进程，窗口关闭即停止。已有正确服务时不要重复启动或关闭来源不明的进程。仅查看记录不会调用模型，也无须填写密钥。统一入口的数据配置含义、配置优先级与授权状态见 [工作台 README](../README.md)“统一本地启动入口”一节。
 
 ## 历史与限制
 
