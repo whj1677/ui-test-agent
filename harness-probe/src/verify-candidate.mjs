@@ -79,7 +79,10 @@ export async function verifyCandidate({
   // Playwright treats positional file arguments as regular-expression filters
   // relative to testDir; an absolute Windows path is not a stable filter.
   const processResult = await runOwnedProcess(process.execPath, [cli, 'test', path.basename(entryPath), '--config', config], {
-    cwd: path.dirname(entryPath), env, timeoutMs: 60_000, signal,
+    // A run-specific observer directory can cross Windows MAX_PATH as a child
+    // process cwd (the paired "negative" path is longer than "normal").
+    // Playwright discovers the test via PROBE_CANDIDATE_DIR, not process cwd.
+    cwd: runtimeRoot, env, timeoutMs: 60_000, signal,
   });
   let report = null;
   try { report = JSON.parse(await readFile(reportPath, 'utf8')); } catch {}

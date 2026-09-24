@@ -68,6 +68,21 @@ try {
   assert.notEqual(hashes[0], hashes[1], 'step 1 changes scene');
 } finally { await browser.close(); }
 
+// Regression: on Windows a run-specific "negative" observer cwd reached 259
+// characters and child-process spawn failed before Playwright wrote a report.
+const shortCandidate = path.join(workspace, 'ordered', 'candidate', 'candidate.spec.mjs');
+const longTail = path.join('negative', 'runs', 'run-engineering', 'observer-entry');
+const padding = Math.max(1, 260 - path.join(workspace, longTail).length - 1);
+const longRunDirectory = path.join(workspace, 'x'.repeat(padding), 'negative', 'runs', 'run-engineering');
+assert(path.join(longRunDirectory, 'observer-entry').length >= 260);
+const longRun = await verifyWorkbenchCandidate({ candidatePath: shortCandidate, browserExecutable: executable,
+  fixtureUrl: pathToFileURL(htmlPath).href, runDirectory: longRunDirectory,
+  stepObservation: { run_id: 'run-long-cwd', candidate_sha256: 'A'.repeat(64), executed_external_id: 'ENGINEERING', executed_case_version: 1 } });
+const longReport = await parseCandidateReport(longRun.reportPath, longRun.process);
+assert.equal(longRun.process.error, null, JSON.stringify(longRun.process));
+assert.equal(longReport.test_status, 'PASSED', JSON.stringify(longRun.process));
+assert((await fs.readFile(path.join(longRunDirectory, 'artifacts', 'step-evidence', 'step-observations.ndjson'), 'utf8')).includes('CASE_STEP_3'));
+
 const failure = await run('failure', `${importLine}
 test.beforeEach(async({page})=>page.goto(process.env.PROBE_URL));
 test.afterEach(async({page})=>page.close());
@@ -118,5 +133,5 @@ try {
   }, replay.replay.chapters[1].result_start_seconds + 0.3);
   await page.locator('video').screenshot({ path: path.join(workspace, 'replay-step-2-result.png') });
 } finally { await replayBrowser.close(); }
-console.log(JSON.stringify({ status: 'PASS', checks: 21, workspace, replay_video: replay.videoPath,
+console.log(JSON.stringify({ status: 'PASS', checks: 24, workspace, replay_video: replay.videoPath,
   decoded_frame: path.join(workspace, 'replay-step-2-result.png') }));

@@ -9,7 +9,7 @@
 
 | VT | DR | 确认状态 | 执行状态 | 验证项 | 证据标准 | 当前证据 | 命令 | 退出码 | 测试数量 | 失败数量 | 跳过数量 | 证据路径 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| VT-0034-02 | DR-0034-02 | 已确认 | 集成测试通过 | 观察适配器有序采集、六条产品运行及工作台/独立媒体真实浏览器检查。 | 命令、退出码、截图、视频解码画面、运行ID与哈希 | 命令：node tests/step-observer.integration.mjs && node tests/step-replay-browser.integration.mjs；退出码：0；测试数量：35；失败数量：0；跳过数量：0；证据：workbench/.local/step-observer-check-YO7U01/ and workbench/.local/step-replay-browser/ (engineering only) | node tests/step-observer.integration.mjs && node tests/step-replay-browser.integration.mjs | 0 | 35 | 0 | 0 | workbench/.local/step-observer-check-YO7U01/ and workbench/.local/step-replay-browser/ (engineering only) |
+| VT-0034-02 | DR-0034-02 | 已确认 | 集成测试通过 | 观察适配器有序采集、六条产品运行及工作台/独立媒体真实浏览器检查。 | 命令、退出码、截图、视频解码画面、运行ID与哈希 | 命令：npm test；退出码：0；测试数量：96；失败数量：0；跳过数量：0；证据：workbench/docs/E2E_01_CAPTION_SELF_TEST.md (2026-09-24 product and browser evidence); workbench/.local/six-case-e2e/ (private media) | npm test | 0 | 96 | 0 | 0 | workbench/docs/E2E_01_CAPTION_SELF_TEST.md (2026-09-24 product and browser evidence); workbench/.local/six-case-e2e/ (private media) |
 | VT-0034-01 | DR-0034-01 | 已确认 | 集成测试通过 | 工作台运行身份、独立编码校准、六条旧录像及详情组两条新产品运行核对；新运行可播放原视频并保留业务结果，但没有可验证的字幕与步骤定位。 | 真实命令、退出码、测试统计和产物路径 | 命令：node tests/e2e01-product-unavailable-browser.integration.mjs；退出码：0；测试数量：2；失败数量：0；跳过数量：0；证据：workbench/.local/e2e01-product-unavailable-browser/ | node tests/e2e01-product-unavailable-browser.integration.mjs | 0 | 2 | 0 | 0 | workbench/.local/e2e01-product-unavailable-browser/ |
 
 ## 本轮命令与环境
@@ -27,4 +27,4 @@
 
 ## 结论
 
-- 历史v2服务实际用于详情组2次产品运行并保留业务结果；当前新方案通过工程步骤采图和回放浏览器夹具，但4322仍加载v3，正常重启被执行策略拒绝。本批新版产品运行0次、六条回放未验证，整体开发自测未完成。
+- 2026-09-24 4322已加载e2e01-step-evidence-replay-v1。修复Windows长路径cwd后，最终六条产品运行由工作台产生并在真实浏览器解码回放、核对失败画面及独立下载；正常三条PASSED、故障三条指定差异FAILED。原录像精确时间定位和最终六条后的服务重启读回仍未验证，人工候选批准未发生。

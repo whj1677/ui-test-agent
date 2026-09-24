@@ -1,6 +1,6 @@
 # 需求索引
 
-- [REQ-0034-e2e01-caption-step-sync](REQ-0034-e2e01-caption-step-sync/current_state.md)：E2E-01 六用例录像字幕、可信步骤时间轴、双向联动及开发者浏览器自测；当前实施中。
+- [REQ-0034-e2e01-caption-step-sync](REQ-0034-e2e01-caption-step-sync/current_state.md)：E2E-01 六用例录像字幕、可信步骤时间轴、双向联动及开发者浏览器自测；步骤证据回放开发自测完成，待用户体验与候选人工批准。
 
 - [REQ-0032-test-site-six-cases](REQ-0032-test-site-six-cases/current_state.md)：独立设备台账站点的三组正常/故障入口、六条同预期配对用例、真实 Excel 与正式后端导出 JSON，以及 3 通过/3 指定业务失败的参考自检；不调用 Harness、模型或既有批准脚本。
 
