@@ -6,22 +6,23 @@ import { chromium } from '@playwright/test';
 import { createWorkbenchServer } from '../server/app.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { CaseLibraryManager } from '../server/cases/manager.mjs';
+import { BuildTaskStore } from '../server/build/store.mjs';
 
 const acceptanceParent = path.resolve('.local'); await fs.mkdir(acceptanceParent, { recursive:true });
 const localRoot = await fs.mkdtemp(path.join(acceptanceParent, 'ui-d2a-acceptance-'));
 const sampleA = fileURLToPath(new URL('../examples/ui-d2a/UI_D2A_CASES_A.xlsx', import.meta.url));
 const sampleB = fileURLToPath(new URL('../examples/ui-d2a/UI_D2A_CASES_B.xlsx', import.meta.url));
-const evidenceRoot = path.resolve('docs/evidence/ui-d2a'); await fs.mkdir(evidenceRoot, { recursive:true });
-let caseStore; let caseManager; let server; let baseUrl; const requests = [];
+const evidenceRoot = path.resolve(process.env.UI_D2A_EVIDENCE_DIR || path.join(localRoot, 'evidence')); await fs.mkdir(evidenceRoot, { recursive:true });
+let caseStore; let caseManager; let buildStore; let server; let baseUrl; const requests = [];
 
 function makeServer() {
-  const instance = createWorkbenchServer({ caseStore, caseManager });
+  const instance = createWorkbenchServer({ caseStore, caseManager, buildStore });
   instance.prependListener('request', (request) => requests.push({ method:request.method, url:request.url }));
   return instance;
 }
 async function listen() { server = makeServer(); await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); }); baseUrl = `http://127.0.0.1:${server.address().port}`; }
 async function closeServer() { if (server?.listening) await new Promise((resolve) => server.close(resolve)); }
-async function initStore() { caseStore = new CaseLibraryStore(path.join(localRoot, 'case-library')); await caseStore.init(); caseManager = new CaseLibraryManager(caseStore); }
+async function initStore() { caseStore = new CaseLibraryStore(path.join(localRoot, 'case-library')); await caseStore.init(); caseManager = new CaseLibraryManager(caseStore); buildStore = new BuildTaskStore(path.join(localRoot, 'build-tasks')); await buildStore.init(); }
 async function waitHeading(page, name) { await page.getByRole('heading', { name, exact:true }).waitFor({ state:'visible', timeout:10_000 }); }
 async function createProject(page, name, description) {
   await page.goto(`${baseUrl}/workspace/#/projects`); await waitHeading(page, '项目'); await page.getByRole('button', { name:'新建项目' }).click();

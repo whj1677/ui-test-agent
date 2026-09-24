@@ -47,6 +47,7 @@ def main():
         results.update(archive_sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), exported_files=len(actual), export_missing=missing)
         results['locks'] = {p: hashlib.sha256((clean / p).read_bytes()).hexdigest() for p in ['package-lock.json', 'workbench/package-lock.json', 'harness-probe/package-lock.json']}
         env['DSH_HOME'] = str(temp / 'no-model-runtime')
+        env['UI_D2A_EVIDENCE_DIR'] = str(output / 'browser-ui-media')
         env['PLAYWRIGHT_BROWSERS_PATH'] = str(Path(args.browser_cache).resolve()) if args.browser_cache else str(temp / 'browsers')
         if args.browser_cache:
             cache = Path(args.browser_cache).resolve()
