@@ -8,11 +8,14 @@ import { createPaths } from '../server/paths.mjs';
 import { buildApprovedAsset } from '../server/registry.mjs';
 import { WorkbenchStore } from '../server/store.mjs';
 import { sha256File } from '../server/integrity.mjs';
+import { CaseLibraryStore } from '../server/cases/store.mjs';
 
 const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'workbench-browser-'));
 const paths = createPaths({ localRoot });
 const store = new WorkbenchStore(paths.dataRoot);
 await store.init();
+const caseStore = new CaseLibraryStore(paths.caseLibraryRoot);
+await caseStore.init();
 const asset = await buildApprovedAsset(paths, { registeredAt: '2026-09-20T00:00:00.000Z' });
 await store.registerAsset(asset);
 
@@ -69,12 +72,14 @@ const buildManager = {
   },
 };
 
-const server = createWorkbenchServer({ store, manager, buildStore, buildManager });
+const server = createWorkbenchServer({ store, manager, buildStore, buildManager, caseStore });
 await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
 const baseUrl = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, locale: 'zh-CN' });
 const consoleErrors = [];
+const failedResponses = [];
+page.on('response', (response) => { if (response.status() >= 400) failedResponses.push({ status: response.status(), url: response.url() }); });
 page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
 
 try {
@@ -122,7 +127,7 @@ try {
   const screenshot = path.join(paths.workbenchRoot, 'test-results', 'workbench-browser-smoke.png');
   await fs.mkdir(path.dirname(screenshot), { recursive: true });
   await page.screenshot({ path: screenshot, fullPage: true });
-  assert.deepEqual(consoleErrors, []);
+  assert.deepEqual(consoleErrors, [], JSON.stringify(failedResponses));
   console.log(JSON.stringify({ browser_flow: 'passed', run_id: runId, screenshot, historical_media_readonly: true }));
 } finally {
   await browser.close();
