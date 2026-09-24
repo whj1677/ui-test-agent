@@ -13,6 +13,8 @@ export function bindProjectCaseVerification(content, environmentDefinition) {
     if (matches.length !== 1) return null;
   } else if (binding.kind === 'exact-content') {
     if (content.external_id !== binding.case_id) return null;
+  } else if (binding.kind === 'auth-session') {
+    // 登录态由任务级认证要求与运行时会话版本绑定，不在用例内容层校验。
   } else return null;
   return {
     ...structuredClone(environmentDefinition.internal.verification),

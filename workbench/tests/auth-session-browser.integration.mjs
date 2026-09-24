@@ -77,4 +77,5 @@ try {
   await authSessions.close();
   if (server.listening) await close(server);
   await fixture.close();
+  await fs.rm(local, { recursive: true, force: true });
 }

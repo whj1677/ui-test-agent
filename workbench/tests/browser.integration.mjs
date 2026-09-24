@@ -7,6 +7,7 @@ import { createWorkbenchServer } from '../server/app.mjs';
 import { createPaths } from '../server/paths.mjs';
 import { buildApprovedAsset } from '../server/registry.mjs';
 import { WorkbenchStore } from '../server/store.mjs';
+import { sha256File } from '../server/integrity.mjs';
 
 const localRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'workbench-browser-'));
 const paths = createPaths({ localRoot });
@@ -99,11 +100,30 @@ try {
   await page.waitForTimeout(1100);
   assert.equal(await page.getByTestId('environment-select').inputValue(), 'normal');
   assert.equal(await page.getByTestId('history').locator(`button[data-run-id="${runId}"]`).count(), 1);
+  // Synthetic historical media: no private project or original recording is needed.
+  const artifact = path.join(store.runDirectory(runId), 'artifacts', 'history.png');
+  await fs.mkdir(path.dirname(artifact), { recursive: true });
+  await page.screenshot({ path: artifact });
+  const digest = await sha256File(artifact);
+  const artifactBytes = (await fs.stat(artifact)).size;
+  await store.updateRun(runId, (run) => ({ ...run, media: [{
+    media_id: 'history-image', kind: 'screenshot', content_type: 'image/png',
+    file_name: 'history.png', relative_path: 'artifacts/history.png',
+    sha256: digest, bytes: artifactBytes,
+  }] }));
+  const beforeRead = await fs.readFile(path.join(store.runDirectory(runId), 'run.json'));
+  await page.reload();
+  await page.getByTestId('history').locator(`button[data-run-id="${runId}"]`).click();
+  const historicalImage = page.locator(`img[src="/api/runs/${runId}/media/history-image"]`);
+  await historicalImage.waitFor();
+  await historicalImage.evaluate((img) => img.decode());
+  assert.equal(await sha256File(artifact), digest);
+  assert.deepEqual(await fs.readFile(path.join(store.runDirectory(runId), 'run.json')), beforeRead);
   const screenshot = path.join(paths.workbenchRoot, 'test-results', 'workbench-browser-smoke.png');
   await fs.mkdir(path.dirname(screenshot), { recursive: true });
   await page.screenshot({ path: screenshot, fullPage: true });
   assert.deepEqual(consoleErrors, []);
-  console.log(JSON.stringify({ browser_flow: 'passed', run_id: runId, screenshot }));
+  console.log(JSON.stringify({ browser_flow: 'passed', run_id: runId, screenshot, historical_media_readonly: true }));
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

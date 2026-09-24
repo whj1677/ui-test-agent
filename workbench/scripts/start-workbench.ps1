@@ -156,9 +156,15 @@ if ($effective['WORKBENCH_BUILD_AUTHORIZATION_ID']) {
     $authorizationState = "已绑定 $authorizationId（账本 $($ledger.used_starts)/$($ledger.max_starts)）"
     $quotaState = if ($remaining -gt 0) { "剩余 $remaining/$($ledger.max_starts)" } else { "已耗尽（$($ledger.used_starts)/$($ledger.max_starts)）" }
   } else {
-    $authorizationState = "已绑定 $authorizationId，但数据目录内未找到对应账本文件"
-    $quotaState = '未知（账本缺失，不能视为有额度）'
-    $problems.Add("授权标识 $authorizationId 在 $buildTasksDir 中没有对应账本；只引用已有配置和账本，不创建新额度。") | Out-Null
+    if ($authorizationId -eq 'auth01-project-case-20260924') {
+      # AUTH-01 限定授权在首次建例任务创建时由服务端登记账本；登记前缺失是正常状态。
+      $authorizationState = "已绑定 $authorizationId（账本待首次任务登记）"
+      $quotaState = '登记前未知；首次建例任务创建时按 0/2 登记'
+    } else {
+      $authorizationState = "已绑定 $authorizationId，但数据目录内未找到对应账本文件"
+      $quotaState = '未知（账本缺失，不能视为有额度）'
+      $problems.Add("授权标识 $authorizationId 在 $buildTasksDir 中没有对应账本；只引用已有配置和账本，不创建新额度。") | Out-Null
+    }
   }
 } else {
   $authorizationState = '未绑定建例授权'
@@ -181,7 +187,7 @@ Write-Output "端口 ${port}：$portState"
 Write-Output "建例授权：$authorizationState"
 Write-Output "合法调用额度：$quotaState"
 if ($Data -eq 'auth') {
-  Write-Output '能力边界：auth 仅表示数据配置；AUTH 任务绑定尚未接通，不套用 e2e 授权，不支持登录建例。'
+  Write-Output '能力边界：AUTH-01 本机合成站任务绑定代码已接入；完整闭环仍待独立验收。仅在明确配置既有 AUTH 授权时允许建例，不套用 e2e 授权。'
 }
 
 if ($problems.Count -gt 0) {

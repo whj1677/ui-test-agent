@@ -39,8 +39,12 @@ function category(relative, candidateRelative) {
   if (/\/verification\/negative\/runs\/[^/]+\/artifacts\/step-replay-v\d+\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_step_replay_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'counterexample_video', web_visible: false, content_type: 'video/webm' };
   if (/\/verification\/negative\/(?:runs\/[^/]+\/)?artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'counterexample_trace', web_visible: false, content_type: 'application/zip' };
-  if (/\/verification\/(?:normal|negative)\/(?:runs\/[^/]+\/)?artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };
-  if (/\/verification\/(?:normal|negative)\/(?:runs\/[^/]+\/)?artifacts\/.*\/error-context\.md$/i.test(`/${relative}`)) return { kind: 'verification_diagnostic', web_visible: false, content_type: 'text/markdown; charset=utf-8' };
+  if (/\/verification\/auth\/runs\/[^/]+\/artifacts\/step-replay-v\d+\.webm$/i.test(`/${relative}`)) return { kind: 'auth_step_replay_video', web_visible: false, content_type: 'video/webm' };
+  if (/\/verification\/auth\/runs\/[^/]+\/artifacts\/.*\.png$/i.test(`/${relative}`)) return { kind: 'auth_screenshot', web_visible: false, content_type: 'image/png' };
+  if (/\/verification\/auth\/runs\/[^/]+\/artifacts\/.*\.webm$/i.test(`/${relative}`)) return { kind: 'auth_video', web_visible: false, content_type: 'video/webm' };
+  if (/\/verification\/auth\/runs\/[^/]+\/artifacts\/.*\.zip$/i.test(`/${relative}`)) return { kind: 'auth_trace', web_visible: false, content_type: 'application/zip' };
+  if (/\/verification\/(?:normal|negative|auth)\/(?:runs\/[^/]+\/)?artifacts\/\.last-run\.json$/i.test(`/${relative}`)) return { kind: 'verification_metadata', web_visible: false, content_type: 'application/json; charset=utf-8' };
+  if (/\/verification\/(?:normal|negative|auth)\/(?:runs\/[^/]+\/)?artifacts\/.*\/error-context\.md$/i.test(`/${relative}`)) return { kind: 'verification_diagnostic', web_visible: false, content_type: 'text/markdown; charset=utf-8' };
   if (/\/harness-summary\.json$/i.test(`/${relative}`)) return { kind: 'harness_report', web_visible: false, content_type: 'application/json; charset=utf-8' };
   if (/\/lifecycle\.ndjson$/i.test(`/${relative}`)) return { kind: 'lifecycle_log', integrity_state: 'PENDING_FINALIZATION', web_visible: false, content_type: 'application/x-ndjson; charset=utf-8' };
   return null;

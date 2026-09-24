@@ -57,3 +57,11 @@ AUTH-01 新增被测系统登录准备页，仅配置独立本机合成站。工
 安装、启动、登记、运行、停止、Trace 本地查看和测试命令见 `workbench/README.md`。第一阶段原始真实运行见 `workbench/docs/ACCEPTANCE_REPORT.md`；三项代码复审修复及新的真实组合见 `workbench/docs/REVIEW_FIX_REPORT.md`；整体通过与既定媒体证据的关联见 `workbench/docs/EVIDENCE_COMPLETENESS_REVISION.md`。
 
 本模块只证明从真实 Web 启动已批准或限定人工首审的精确脚本资产、保存并展示可信结果以及重启可追溯；不重新声明旧排序脚本首次业务验收，不覆盖旧正式回归，也不代表陌生页面泛化、自动建例、多人使用或产品发布完成。M3-C 的具体资产、run 与媒体证据见 `workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md`。
+
+## 2026-09-24 源码基线收口边界
+
+AUTH（REQ-0035）：接收启动配置、会话失效通知、项目角色/会话版本绑定、认证候选执行与媒体接线。只在合成登录站范围实现；真实任务完整闭环及执行中失效的全路径验收仍待完成，不推广为任意站点支持。原交接与既有11文件见 `workbench/docs/BASELINE_CLOSE_20260924.md`。
+
+QA（REQ-0033）：`report.mjs`的有限Playwright差异解析用于展示和步骤归属；生命周期等待尾事件及串行写入后登记最终文件字节数和哈希。通用建例规则区分显示文字/value、动态选中状态、可见元素/全部DOM；不重写冻结业务预期。历史QA成绩不变。
+
+干净验证从提交导出并按三个锁文件安装依赖，使用临时端口、合成数据及历史媒体；真实DSH运行时是本机保留依赖，未打包或加载密钥。旧核心108失败仍未完成，当前相对导入路径仍为workbench→harness-probe，不含旧核心controller/common。新增用例通用工作台建例入口仍未接通，不能用底层候选修订替代UI闭环。

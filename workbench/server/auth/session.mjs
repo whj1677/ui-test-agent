@@ -34,6 +34,22 @@ export class TargetAuthSessions {
     this.headless = headless;
     this.now = now;
     this.sessions = new Map();
+    this.invalidationListener = null;
+  }
+
+  // 单个订阅者（工作台建例协调器）；会话从 VALID 变为不可用、被清除或浏览器断开时推送。
+  // 只携带公开状态摘要，不暴露 Cookie、Token 或 CDP 地址。
+  setInvalidationListener(listener) {
+    this.invalidationListener = typeof listener === 'function' ? listener : null;
+  }
+
+  #notifyInvalid(item, trigger) {
+    if (!this.invalidationListener || !item) return;
+    try {
+      this.invalidationListener({ ...publicState(item), trigger });
+    } catch (error) {
+      console.error(JSON.stringify({ type: 'auth_invalidation_listener_error', code: error?.message || 'UNKNOWN' }));
+    }
   }
 
   environment(scope) {
@@ -76,7 +92,9 @@ export class TargetAuthSessions {
         status: 'AWAITING_LOGIN', identity: null, reason: null };
       browser.on('disconnected', () => {
         if (this.sessions.get(key) === item) {
+          const wasValid = item.status === 'VALID';
           item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
+          if (wasValid) this.#notifyInvalid(item, 'browser_disconnected');
         }
       });
       this.sessions.set(key, item);
@@ -92,9 +110,14 @@ export class TargetAuthSessions {
     const environment = this.environment(scope);
     const item = this.sessions.get(scopeKey(scope));
     if (!item) return this.status(scope);
+    const wasValid = item.status === 'VALID';
+    const finish = () => {
+      if (wasValid && item.status !== 'VALID') this.#notifyInvalid(item, 'identity_check');
+      return publicState(item);
+    };
     if (!item.browser.isConnected()) {
       item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
-      return publicState(item);
+      return finish();
     }
     let response;
     try {
@@ -103,41 +126,41 @@ export class TargetAuthSessions {
       response = await item.context.request.get(environment.identity_url, { timeout: 5000, failOnStatusCode: false });
     } catch {
       item.status = 'CHECK_UNAVAILABLE'; item.reason = 'IDENTITY_CHECK_UNAVAILABLE';
-      return publicState(item);
+      return finish();
     }
     if (response.status() === 401) {
       const waiting = item.status === 'AWAITING_LOGIN';
       item.status = waiting ? 'AWAITING_LOGIN' : 'EXPIRED'; item.identity = null;
       item.reason = waiting ? 'LOGIN_REQUIRED' : 'SESSION_EXPIRED';
-      return publicState(item);
+      return finish();
     }
     if (response.status() === 403) {
       item.status = 'PERMISSION_DENIED'; item.identity = null; item.reason = 'PERMISSION_DENIED';
-      return publicState(item);
+      return finish();
     }
     if (!response.ok()) {
       item.status = 'CHECK_UNAVAILABLE'; item.reason = 'IDENTITY_CHECK_UNAVAILABLE';
-      return publicState(item);
+      return finish();
     }
     let body;
     try { body = await response.json(); } catch {}
     if (body?.authenticated !== true || typeof body.account_id !== 'string' || !body.account_id ||
         typeof body.role !== 'string' || !body.role) {
       item.status = 'IDENTITY_UNVERIFIED'; item.identity = null; item.reason = 'IDENTITY_EVIDENCE_MISSING';
-      return publicState(item);
+      return finish();
     }
     if (body.role !== scope.role) {
       item.status = 'ROLE_MISMATCH'; item.identity = null; item.reason = 'ROLE_MISMATCH';
-      return publicState(item);
+      return finish();
     }
     if (item.identity && item.identity.account_id !== body.account_id) {
       item.status = 'IDENTITY_CHANGED'; item.identity = null; item.reason = 'IDENTITY_CHANGED';
-      return publicState(item);
+      return finish();
     }
     const expires = typeof body.expires_at === 'string' ? Date.parse(body.expires_at) : null;
     if (expires != null && (!Number.isFinite(expires) || expires <= this.now())) {
       item.status = 'EXPIRED'; item.identity = null; item.reason = 'SESSION_EXPIRED';
-      return publicState(item);
+      return finish();
     }
     const firstVerified = item.status !== 'VALID';
     if (['EXPIRED', 'ROLE_MISMATCH', 'PERMISSION_DENIED', 'IDENTITY_CHANGED'].includes(item.status)) item.version = randomUUID();
@@ -176,7 +199,13 @@ export class TargetAuthSessions {
     const item = this.sessions.get(scopeKey(scope));
     if (!item) return this.status(scope);
     this.sessions.delete(scopeKey(scope));
+    const wasValid = item.status === 'VALID';
     item.identity = null;
+    if (wasValid) {
+      // 显式分类后再推送，监听方拿到的是 SESSION_CLEARED 而不是上一刻的 VALID。
+      item.status = 'CLEARED'; item.reason = 'SESSION_CLEARED';
+      this.#notifyInvalid(item, 'cleared');
+    }
     await item.browser.close().catch(() => {});
     return this.status(scope);
   }

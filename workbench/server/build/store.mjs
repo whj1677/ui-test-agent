@@ -11,6 +11,7 @@ export const M3B2_PROJECT_CASE_AUTHORIZATION_ID = 'm3b2-project-case-run-2026092
 export const M4A_QUERY_CASE_AUTHORIZATION_ID = 'm4a-query-case-run-20260922';
 export const M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID = 'm4a-query-case-flash-retry-20260922';
 export const E2E01_PROJECT_CASE_AUTHORIZATION_ID = 'e2e01-six-case-project-20260923';
+export const AUTH01_PROJECT_CASE_AUTHORIZATION_ID = 'auth01-project-case-20260924';
 const AUTHORIZATION_FILES = new Map([
   [M2C_REVALIDATION_AUTHORIZATION_ID, 'revalidation-authorization.json'],
   [M2C_WAIT_FIX_VALIDATION_AUTHORIZATION_ID, 'wait-fix-validation-authorization.json'],
@@ -18,6 +19,7 @@ const AUTHORIZATION_FILES = new Map([
   [M4A_QUERY_CASE_AUTHORIZATION_ID, 'm4a-query-case-authorization.json'],
   [M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID, 'm4a-query-case-flash-retry-authorization.json'],
   [E2E01_PROJECT_CASE_AUTHORIZATION_ID, 'e2e01-project-case-authorization.json'],
+  [AUTH01_PROJECT_CASE_AUTHORIZATION_ID, 'auth01-project-case-authorization.json'],
 ]);
 
 function projectCaseScopeValid(scope) {
@@ -29,9 +31,10 @@ function projectCaseScopeValid(scope) {
 function authorizationValid(record, authorizationId) {
   const isM4 = authorizationId === M4A_QUERY_CASE_AUTHORIZATION_ID;
   const isE2E01 = authorizationId === E2E01_PROJECT_CASE_AUTHORIZATION_ID;
+  const isAuth01 = authorizationId === AUTH01_PROJECT_CASE_AUTHORIZATION_ID;
   const common = record?.authorization_id === authorizationId &&
-    record.kind === (isM4 || isE2E01 ? 'initial-with-optional-revision' : 'initial') &&
-    (isE2E01 ? [6, 7].includes(record.max_starts) : record.max_starts === (isM4 ? 2 : 1)) && Number.isInteger(record.used_starts) &&
+    record.kind === (isM4 || isE2E01 || isAuth01 ? 'initial-with-optional-revision' : 'initial') &&
+    (isE2E01 ? [6, 7].includes(record.max_starts) : record.max_starts === (isM4 || isAuth01 ? 2 : 1)) && Number.isInteger(record.used_starts) &&
     record.used_starts >= 0 && record.used_starts <= record.max_starts && Array.isArray(record.claims);
   if (!common) return false;
   if (authorizationId === M3B2_PROJECT_CASE_AUTHORIZATION_ID) {
@@ -66,6 +69,13 @@ function authorizationValid(record, authorizationId) {
         /^[A-F0-9]{64}$/.test(scope.content_sha256 || '') &&
         [['TC-001','test-site-01-query-v1'],['TC-002','test-site-01-sorting-v1'],['TC-003','test-site-01-detail-v1']]
           .some(([externalId, environmentId]) => scope.external_id === externalId && scope.environment_id === environmentId));
+  }
+  if (authorizationId === AUTH01_PROJECT_CASE_AUTHORIZATION_ID) {
+    return record.schema === 'workbench/auth01-build-authorization-v1' &&
+      record.linked_stage === 'AUTH-01' && projectCaseScopeValid(record.scope) &&
+      typeof record.scope.auth_role === 'string' && /^[\w-]+$/.test(record.scope.auth_role) &&
+      record.scope.environment_id === 'auth01-local-fixture-v1' &&
+      record.limits?.max_tool_calls === 30 && record.limits?.timeout_ms === 600_000;
   }
   return record.schema === 'workbench/build-revalidation-authorization-v1';
 }
@@ -249,7 +259,7 @@ export class BuildTaskStore {
         return structuredClone(record);
       });
     }
-    if (![M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID].includes(this.authorizationId) ||
+    if (![M3B2_PROJECT_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_AUTHORIZATION_ID, M4A_QUERY_CASE_FLASH_RETRY_AUTHORIZATION_ID, AUTH01_PROJECT_CASE_AUTHORIZATION_ID].includes(this.authorizationId) ||
         !authorizationValid(record, this.authorizationId) || record.used_starts !== 0) {
       throw new Error('BUILD_REVALIDATION_AUTHORIZATION_INVALID');
     }

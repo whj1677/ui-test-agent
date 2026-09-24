@@ -5,6 +5,7 @@ import { sha256File } from '../integrity.mjs';
 import { HOLD_Q1_CASE_ID, HOLD_Q1_ENVIRONMENT_ID, loadHoldQ1Source } from './heldout-query.mjs';
 
 export const BUILD_TEMPLATE_ID = 'synthetic-probe-v1';
+export const AUTH01_PROJECT_ENVIRONMENT_ID = 'auth01-local-fixture-v1';
 
 function digest(value) {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex').toUpperCase();
@@ -143,6 +144,42 @@ export async function loadProjectCaseEnvironment(paths, environmentId) {
           frozen_fault: { expected: e2eGroup.expected, actual: e2eGroup.actual },
         },
         e2e01: true,
+      },
+    };
+  }
+  if (environmentId === AUTH01_PROJECT_ENVIRONMENT_ID) {
+    const baseUrl = String(process.env.WORKBENCH_AUTH_FIXTURE_BASE_URL || 'http://127.0.0.1:4330').replace(/\/$/, '');
+    const base = new URL(baseUrl);
+    if (base.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(base.hostname)) {
+      throw new Error('AUTH01_SITE_ORIGIN_NOT_ALLOWED');
+    }
+    // 只读探测证明对面确实是 AUTH-01 合成站，而不是同名端口的未知服务。
+    const loginResponse = await fetch(new URL('/login', base));
+    const loginText = loginResponse.ok ? await loginResponse.text() : '';
+    if (!loginResponse.ok || !loginText.includes('AUTH-01')) throw new Error('AUTH01_SITE_IDENTITY_MISMATCH:/login');
+    const identityResponse = await fetch(new URL('/api/identity', base));
+    if (identityResponse.status !== 401) throw new Error('AUTH01_SITE_IDENTITY_MISMATCH:/api/identity');
+    const identityBody = await identityResponse.json().catch(() => null);
+    if (identityBody?.authenticated !== false) throw new Error('AUTH01_SITE_IDENTITY_MISMATCH:/api/identity');
+    const publicTemplate = {
+      template_id: environmentId, version: '1.0.0', title: 'AUTH-01 合成站受保护页',
+      summary: '操作者在专用浏览器完成登录后，候选只读核对受保护页设备与角色。',
+      candidate_contract: { url_environment_variable: 'PROBE_URL', test_count: 1, retries: 0, workers: 1 },
+      allowed_entry: { kind: 'registered-local-auth-fixture', route: '/protected', origin: base.origin, login_required: true, scope: '只读查看受保护设备页；不修改站点数据' },
+      source: { probed: ['/login', '/api/identity'] },
+    };
+    return {
+      environment_id: environmentId,
+      public: { ...publicTemplate, input_sha256: digest(publicTemplate) },
+      internal: {
+        auth01: true,
+        origin: base.origin,
+        normalUrl: new URL('/protected', base).href,
+        binding: { kind: 'auth-session' },
+        verification: {
+          schema: 'workbench/project-case-verification-contract-v2',
+          detection: { kind: 'auth-protected-observation' },
+        },
       },
     };
   }

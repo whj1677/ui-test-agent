@@ -27,3 +27,14 @@ workbench/playwright-report/
 harness-probe/.local/
 harness-probe/test-results/
 harness-probe/playwright-report/
+
+# AUTH one-off local drivers, sessions and raw console captures (privately retained).
+/.auth01-run/
+/.authbrowser_out.txt
+/.authtest_out.txt
+/.check_out.txt
+/.npmci_out.txt
+/.npmtest_out.txt
+/.t1.txt
+/.t2.txt
+/.verify_out.txt

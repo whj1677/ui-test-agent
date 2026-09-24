@@ -2,62 +2,212 @@
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0033",
   "title": "E2E-01 六用例工作台自动建例与执行闭环",
-  "metadata": { "requirement_status": "技术验证通过，等待人工核对", "governance_level": "G2 / G3（待确认）", "version": 3, "last_updated": "2026-09-23" },
+  "metadata": {
+    "requirement_status": "技术验证通过，等待人工核对",
+    "governance_level": "G2 / G3（待确认）",
+    "version": 4,
+    "last_updated": "2026-09-24"
+  },
   "original_input": "E2E-01_六用例工作台自动建例与执行闭环_Codex任务.md（用户提供的完整任务说明；仓库外原件保留）。",
-  "user_requirements": [{
-    "id": "UN-0033-01", "status": "已确认",
-    "goal": "在新墨白工作台对导入的六条用例完成真实Harness候选生成、同候选正常及故障入口试跑和证据回传，停止在等待人工核对。",
-    "constraints": "原计划每组最多一次初稿及一次修订、总计最多六次Harness启动；用户随后放宽额度限制，本轮因三次patch路径错误另记一次恢复授权，账本保留7/7；候选由Harness生成；故障判定保持原预期；不修改历史资产，不自动批准；调用来源只提供正常用例及正常入口。",
-    "success_criteria": "TC-001至003各有新真实候选及正常运行；TC-004至006使用配对同哈希候选形成独立运行并如实核对原缺陷；媒体/Trace回到项目页且重启可读；候选待人工核对。"
-  }],
+  "user_requirements": [
+    {
+      "id": "UN-0033-01",
+      "status": "已确认",
+      "goal": "在新墨白工作台对导入的六条用例完成真实Harness候选生成、同候选正常及故障入口试跑和证据回传，停止在等待人工核对。",
+      "constraints": "原计划每组最多一次初稿及一次修订、总计最多六次Harness启动；用户随后放宽额度限制，本轮因三次patch路径错误另记一次恢复授权，账本保留7/7；候选由Harness生成；故障判定保持原预期；不修改历史资产，不自动批准；调用来源只提供正常用例及正常入口。",
+      "success_criteria": "TC-001至003各有新真实候选及正常运行；TC-004至006使用配对同哈希候选形成独立运行并如实核对原缺陷；媒体/Trace回到项目页且重启可读；候选待人工核对。"
+    }
+  ],
   "confirmed_facts": [
     "参考基线为099e7c496ce24cc668a81b0e1762974b46f93221；开始时本地HEAD一致且工作区干净；在codex/test-workbench-six-case-e2e分支实施。",
     "新页面项目由UI创建，六条JSON包在UI预览并导入成功；原先两条启动失败任务保留，未覆盖原项目。",
     "三次快速失败的根因为相对Harness patch路径在attempt子目录解析而ENOENT；路径修复后工作台真实生成TC-001/002/003三份候选，TC-001另由Harness按正常页定位反馈修订一次。",
     "六条目标运行实际形成3 PASSED和3指定业务FAILED；故障原始complete_pass=false，三组同候选哈希；每条截图、录像、Trace可读取，服务重启后记录与状态读回。",
-    "工程预检两条为临时接线脚本，不计产品结果；最终工作台全量工程测试89/89通过。"
+    "工程预检两条为临时接线脚本，不计产品结果；最终工作台全量工程测试89/89通过。",
+    "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。"
   ],
   "inferences_and_open_questions": [
     "供应商底层请求数、usage及费用未返回，仍为未知；模型会话之外的三次最小诊断不计产品候选。",
     "三份候选技术验证已达到等待人工核对；人工首审和批准均未作出。",
     "Codex具体子型号和推理档位当前不可取得，记录未知。"
   ],
-  "development_requirements": [{
-    "id": "DR-0033-01", "status": "技术验证通过，等待人工核对",
-    "requirement": "接通受限的工作台Harness任务、正常/配对试跑、项目运行查询及媒体回传，并保留历史数据和预算。",
-    "acceptance_criteria": "工程接口与作用域通过相关测试；三份真实Harness候选和六条实际运行、媒体及重启读回已核对；剩余人工候选核对不由系统代判。",
-    "constraints": "不复制参考候选，不改业务预期，不用工程运行充当产品运行，不更改墨白视觉基线。"
-  }],
-  "design_decisions": [{
-    "id": "DD-0033-01", "dr_ids": ["DR-0033-01"], "status": "已采用",
-    "summary": "复用原项目用例、冻结任务、Harness、Playwright和媒体存储；本批绑定在独立目录及确定的项目/用例/环境上。",
-    "rationale": "避免新增Agent系统、影响原项目和将故障信息泄露给建例模型。本次无需模块文档变更，原因：现有模块职责和稳定架构事实未改变，本次仅在既有建例、执行与项目页面上增加受限接线。"
-  }],
-  "interfaces_and_data_flow": ["新墨白Web -> 项目冻结输入 -> 工作台受控Harness -> 原候选Playwright正常入口试跑 -> 相同候选配对入口独立试跑 -> 项目运行/媒体查询。故障绑定仅在执行侧保存。"],
-  "module_document_impact": ["修改workbench/server/build、server/app.mjs、server/index.mjs、web-v2以及新增E2E工程预检、用户指南和验收报告；不修改trial-site业务实现、参考脚本、六用例源文件或历史证据。", "本次无需模块文档变更，原因：现有模块职责和稳定架构事实未改变，本次仅在既有建例、执行与项目页面上增加受限接线。"],
-  "risks_and_rollback": ["最初相对patch路径导致三次启动失败，旧任务及账本保留；恢复授权只加一次，原六条claims不清零。用户应在真人核对候选后才决定是否批准，当前没有批准资产。"],
-  "tasks": [{
-    "id": "TK-0033-01", "dr_ids": ["DR-0033-01"], "dd_ids": ["DD-0033-01"],
-    "status": "技术验证通过，等待人工核对",
-    "task": "接通页面与受限候选试跑，修复Harness patch路径、数组差异解析和完成状态，保留旧失败；完成六条产品运行、媒体和重启读回。",
-    "verification_ids": ["VT-0033-01"]
-  }],
-  "verification_items": [{
-    "id": "VT-0033-01", "dr_ids": ["DR-0033-01"], "confirmation_status": "等待人工核对",
-    "execution_status": "集成测试通过",
-    "item": "工作台真实导入、候选Harness生成、六次试跑、媒体访问和重启读回完整闭环。",
-    "evidence_standard": "区分真实Harness调用和产品运行与工程样例；保留命令、退出码、测试统计、产品运行ID、媒体及预算。",
-    "current_evidence": { "command": "cd workbench; npm test; node tests/e2e01-preflight.integration.mjs", "exit_code": 0, "test_count": 89, "failure_count": 0, "skipped_count": 0, "log_path": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md；六条实际运行ID、失败步骤、媒体和7/7启动账本详见报告；工程预检不计产品结果" }
-  }],
+  "development_requirements": [
+    {
+      "id": "DR-0033-01",
+      "status": "技术验证通过，等待人工核对",
+      "requirement": "接通受限的工作台Harness任务、正常/配对试跑、项目运行查询及媒体回传，并保留历史数据和预算。",
+      "acceptance_criteria": "工程接口与作用域通过相关测试；三份真实Harness候选和六条实际运行、媒体及重启读回已核对；剩余人工候选核对不由系统代判。",
+      "constraints": "不复制参考候选，不改业务预期，不用工程运行充当产品运行，不更改墨白视觉基线。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0033-01",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "status": "已采用",
+      "summary": "复用原项目用例、冻结任务、Harness、Playwright和媒体存储；本批绑定在独立目录及确定的项目/用例/环境上。",
+      "rationale": "避免新增Agent系统、影响原项目和将故障信息泄露给建例模型。本次无需模块文档变更，原因：现有模块职责和稳定架构事实未改变，本次仅在既有建例、执行与项目页面上增加受限接线。"
+    },
+    {
+      "id": "DD-0033-02",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "status": "已确认",
+      "summary": "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。",
+      "rationale": "代码归属与历史成绩分开登记；从Git提交导出一次性副本，独立安装锁定依赖执行零模型工程回归。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "新墨白Web -> 项目冻结输入 -> 工作台受控Harness -> 原候选Playwright正常入口试跑 -> 相同候选配对入口独立试跑 -> 项目运行/媒体查询。故障绑定仅在执行侧保存。"
+  ],
+  "module_document_impact": [
+    "修改workbench/server/build、server/app.mjs、server/index.mjs、web-v2以及新增E2E工程预检、用户指南和验收报告；不修改trial-site业务实现、参考脚本、六用例源文件或历史证据。",
+    "本次无需模块文档变更，原因：现有模块职责和稳定架构事实未改变，本次仅在既有建例、执行与项目页面上增加受限接线。",
+    "2026-09-24 更新docs/modules/test-workbench.md的AUTH接入、QA解析与生命周期收尾边界。"
+  ],
+  "risks_and_rollback": [
+    "最初相对patch路径导致三次启动失败，旧任务及账本保留；恢复授权只加一次，原六条claims不清零。用户应在真人核对候选后才决定是否批准，当前没有批准资产。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0033-01",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "dd_ids": [
+        "DD-0033-01"
+      ],
+      "status": "技术验证通过，等待人工核对",
+      "task": "接通页面与受限候选试跑，修复Harness patch路径、数组差异解析和完成状态，保留旧失败；完成六条产品运行、媒体和重启读回。",
+      "verification_ids": [
+        "VT-0033-01"
+      ]
+    },
+    {
+      "id": "TK-0033-02",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "dd_ids": [
+        "DD-0033-02"
+      ],
+      "status": "实施中",
+      "task": "集成当前源码并在干净导出中验证对应工程能力，收尾现有门禁。",
+      "verification_ids": [
+        "VT-0033-02"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0033-01",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "confirmation_status": "等待人工核对",
+      "execution_status": "集成测试通过",
+      "item": "工作台真实导入、候选Harness生成、六次试跑、媒体访问和重启读回完整闭环。",
+      "evidence_standard": "区分真实Harness调用和产品运行与工程样例；保留命令、退出码、测试统计、产品运行ID、媒体及预算。",
+      "current_evidence": {
+        "command": "cd workbench; npm test; node tests/e2e01-preflight.integration.mjs",
+        "exit_code": 0,
+        "test_count": 89,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md；六条实际运行ID、失败步骤、媒体和7/7启动账本详见报告；工程预检不计产品结果"
+      }
+    },
+    {
+      "id": "VT-0033-02",
+      "dr_ids": [
+        "DR-0033-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "已提交源码的干净导出工程回归；AUTH及QA分别归属，不能替代产品或人工验收。",
+      "evidence_standard": "确定源码SHA、导出完整性、锁文件安装、当前命令退出码及测试数；零模型。",
+      "current_evidence": "待代码集成提交后执行，见workbench/docs/BASELINE_CLOSE_20260924.md。"
+    }
+  ],
   "verification_environment": {
     "working_directory": "workbench/",
-    "commands": ["npm test", "node tests/e2e01-preflight.integration.mjs", "node --test tests/project-case-build-input.test.mjs tests/project-case-build-run.test.mjs tests/m4a-query-case.test.mjs"],
-    "environment": ["Node锁定依赖；TEST-SITE-01本机端口4320；工作台独立数据目录workbench/.local/six-case-e2e；DeepSeek DSH 0.1.6-alpha.2与Browser Use 0.1.6-alpha.2。"],
-    "conclusion": ["工程测试89/89通过；三份真实Harness候选及六条实际运行已形成3正常通过、3指定业务失败；媒体与重启读回完成，等待真人核对，不自动批准。"]
+    "commands": [
+      "npm test",
+      "node tests/e2e01-preflight.integration.mjs",
+      "node --test tests/project-case-build-input.test.mjs tests/project-case-build-run.test.mjs tests/m4a-query-case.test.mjs"
+    ],
+    "environment": [
+      "Node锁定依赖；TEST-SITE-01本机端口4320；工作台独立数据目录workbench/.local/six-case-e2e；DeepSeek DSH 0.1.6-alpha.2与Browser Use 0.1.6-alpha.2。"
+    ],
+    "conclusion": [
+      "工程测试89/89通过；三份真实Harness候选及六条实际运行已形成3正常通过、3指定业务失败；媒体与重启读回完成，等待真人核对，不自动批准。"
+    ]
   },
-  "trace_current": [{ "un_id": "UN-0033-01", "dr_id": "DR-0033-01", "dd_id": "DD-0033-01", "tk_id": "TK-0033-01", "vt_id": "VT-0033-01", "status": "技术验证通过；人工核对待做" }],
-  "trace_history": [{ "version": 2, "link": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md", "status": "部分实现，产品验证受阻", "notes": "工程与实际Web导入完成；官方模型连通失败，未消耗建例初稿或修订启动额度。" }, { "version": 3, "link": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md", "status": "技术验证通过，等待人工核对", "notes": "三份候选由工作台Harness生成；六条目标运行3 PASSED/3指定FAILED，媒体及重启读回完成；原始旧失败和7/7授权记录保留。" }],
-  "open_questions": ["用户尚未人工核对三份候选，也未作批准决定；供应商请求数、usage和费用未知。"],
-  "prohibited_implementation": ["不得Codex代写或修补产品候选断言；不得提供故障实际值或预期失败说明给建例器；不得修改预期、页面或报告凑结果；不得自动批准；不得使用参考脚本作为产品结果。"],
-  "changes": [{ "date": "2026-09-23", "version": 2, "type": "实施及验证状态更新", "description": "工作台工程接线和工程验证完成；独立官方模型连通检查失败，产品生成与六条运行未执行。", "impact": "工作台项目建例、受控试跑与媒体读取", "confirmed_by": "用户任务授权；工程状态由命令与页面证据核对" }, { "date": "2026-09-23", "version": 3, "type": "运行修复与产品实测", "description": "修复相对Harness patch路径、Playwright数组差异解析及技术完成状态；三份候选和六条目标运行已核对，旧失败及授权claims保留。", "impact": "E2E-01独立项目的建例、受控试跑、项目记录及媒体读回", "confirmed_by": "真实工作台任务/运行ID、Playwright原报告、媒体HTTP读回、服务重启、89项工程测试；用户放宽额度" }]
+  "trace_current": [
+    {
+      "un_id": "UN-0033-01",
+      "dr_id": "DR-0033-01",
+      "dd_id": "DD-0033-01",
+      "tk_id": "TK-0033-01",
+      "vt_id": "VT-0033-01",
+      "status": "技术验证通过；人工核对待做"
+    },
+    {
+      "un_id": "UN-0033-01",
+      "dr_id": "DR-0033-01",
+      "dd_id": "DD-0033-02",
+      "tk_id": "TK-0033-02",
+      "vt_id": "VT-0033-02",
+      "status": "实施中：等待提交后干净复验"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 2,
+      "link": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md",
+      "status": "部分实现，产品验证受阻",
+      "notes": "工程与实际Web导入完成；官方模型连通失败，未消耗建例初稿或修订启动额度。"
+    },
+    {
+      "version": 3,
+      "link": "workbench/docs/E2E_01_ACCEPTANCE_REPORT.md",
+      "status": "技术验证通过，等待人工核对",
+      "notes": "三份候选由工作台Harness生成；六条目标运行3 PASSED/3指定FAILED，媒体及重启读回完成；原始旧失败和7/7授权记录保留。"
+    }
+  ],
+  "open_questions": [
+    "用户尚未人工核对三份候选，也未作批准决定；供应商请求数、usage和费用未知。"
+  ],
+  "prohibited_implementation": [
+    "不得Codex代写或修补产品候选断言；不得提供故障实际值或预期失败说明给建例器；不得修改预期、页面或报告凑结果；不得自动批准；不得使用参考脚本作为产品结果。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-23",
+      "version": 2,
+      "type": "实施及验证状态更新",
+      "description": "工作台工程接线和工程验证完成；独立官方模型连通检查失败，产品生成与六条运行未执行。",
+      "impact": "工作台项目建例、受控试跑与媒体读取",
+      "confirmed_by": "用户任务授权；工程状态由命令与页面证据核对"
+    },
+    {
+      "date": "2026-09-23",
+      "version": 3,
+      "type": "运行修复与产品实测",
+      "description": "修复相对Harness patch路径、Playwright数组差异解析及技术完成状态；三份候选和六条目标运行已核对，旧失败及授权claims保留。",
+      "impact": "E2E-01独立项目的建例、受控试跑、项目记录及媒体读回",
+      "confirmed_by": "真实工作台任务/运行ID、Playwright原报告、媒体HTTP读回、服务重启、89项工程测试；用户放宽额度"
+    },
+    {
+      "date": "2026-09-24",
+      "version": 4,
+      "type": "既有源码集成与可复现基线",
+      "description": "2026-09-24 QA修复802e687已保存原始FAILED及首次成绩：多行差异确定性解析、生命周期最终摘要、label/value和可见性通用规则；两条候选反馈恢复结果见workbench/qa/20260924-revision/REVISION.md。本批仅验证提交可复现性，不重跑产品。",
+      "impact": "对应AUTH或QA模块说明、设计和工程验证；不覆盖历史记录",
+      "confirmed_by": "用户明确授权集成11个既有文件；最终以干净源码证据为准"
+    }
+  ]
 }

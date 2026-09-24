@@ -185,6 +185,9 @@ function errorStatus(error) {
   if (error.message === 'CASE_PROJECT_REVISION_CONFLICT' || error.message === 'CASE_IMPORT_PREVIEW_STALE') return 409;
   if (error.message.startsWith('CASE_')) return 400;
   if (error.message === 'AUTH_SESSION_NOT_VALID') return 409;
+  if (error.message === 'AUTH_SESSION_REQUIRED') return 409;
+  if (error.message.startsWith('AUTH01_')) return 409;
+  if (error.message === 'AUTH_BUILD_UNAVAILABLE') return 503;
   if (error.message === 'AUTH_BROWSER_EXECUTABLE_REQUIRED') return 503;
   if (error.message.startsWith('AUTH_')) return 400;
   return 422;
@@ -377,7 +380,8 @@ export function createWorkbenchServer(options = {}) {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
         const body = await readJsonBody(request);
         const keys = Object.keys(body).sort().join(',');
-        if (keys !== 'case_id,case_version,content_sha256,environment_id,project_id,request_id') {
+        if (keys !== 'case_id,case_version,content_sha256,environment_id,project_id,request_id' &&
+            keys !== 'auth_role,case_id,case_version,content_sha256,environment_id,project_id,request_id') {
           return sendJson(response, 400, { error: 'INVALID_PROJECT_CASE_BUILD_REQUEST' });
         }
         sendJson(response, 201, await buildManager.submitProjectCase(body));
@@ -403,6 +407,16 @@ export function createWorkbenchServer(options = {}) {
           return sendJson(response, 400, { error: 'INVALID_E2E01_TRIAL_REQUEST' });
         }
         sendJson(response, 202, await buildManager.runProjectCaseTrial(decodeURIComponent(buildTrialRun[1]), body));
+        return;
+      }
+      const buildAuthTrialRun = url.pathname.match(/^\/api\/build\/tasks\/([^/]+)\/auth-trial-runs$/);
+      if (buildManager && request.method === 'POST' && buildAuthTrialRun) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        if (Object.keys(body).sort().join(',') !== 'candidate_sha256,candidate_version') {
+          return sendJson(response, 400, { error: 'INVALID_AUTH01_TRIAL_REQUEST' });
+        }
+        sendJson(response, 202, await buildManager.runAuthTrial(decodeURIComponent(buildAuthTrialRun[1]), body));
         return;
       }
       if (store && request.method === 'GET' && url.pathname === '/api/assets') {

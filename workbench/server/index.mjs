@@ -54,6 +54,7 @@ const buildManager = new BuildTaskManager({
   paths,
   serviceInstanceId,
   authorizationId: buildAuthorizationId,
+  authSessions,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   harnessDshHome,
   harnessPatchPath,

@@ -27,6 +27,14 @@ const errorLabels = {
   E2E01_EXECUTION_CASE_NOT_ALLOWED: '执行目标超出此候选明确绑定的用例范围。', E2E01_TRIAL_AUTHORIZATION_INVALID: '演示试跑授权不匹配。',
   AUTH_BROWSER_EXECUTABLE_REQUIRED: '尚未配置受控浏览器，请检查工作台启动配置。',
   AUTH_ENVIRONMENT_ROLE_NOT_ALLOWED: '当前环境不允许这个账号角色。',
+  AUTH_SESSION_REQUIRED: '需要先完成被测系统登录；请先在“登录准备”页登录后再启动或复跑。',
+  AUTH_SESSION_BLOCKED: '登录会话在活动期间失效，已停止关联操作；未执行的步骤不会补写，原始结果不被覆盖。',
+  AUTH_BUILD_UNAVAILABLE: '工作台当前配置未启用登录建例能力。',
+  AUTH01_TRIAL_NOT_ALLOWED: '该任务不属于 AUTH-01 登录建例闭环。',
+  AUTH01_CANDIDATE_IDENTITY_MISMATCH: '候选版本已变化，请刷新任务详情。',
+  AUTH01_CANDIDATE_FILE_CHANGED: '候选文件与登记哈希不一致，未执行。',
+  AUTH01_ENVIRONMENT_REQUIRED: 'AUTH-01 限定授权只适用于登录演示环境。',
+  AUTH01_AUTHORIZATION_REQUIRED: '登录演示环境的建例任务需要绑定 AUTH-01 限定授权。',
 };
 const mappingLabels = {
   external_id: '用例编号', title: '标题', module: '模块', preconditions: '前置条件', test_data: '测试数据',
@@ -293,6 +301,9 @@ function renderCaseVersionError(project, item, requestedVersion, result) {
 const E2E01_ENVIRONMENTS = {
   'TC-001':'test-site-01-query-v1', 'TC-002':'test-site-01-sorting-v1', 'TC-003':'test-site-01-detail-v1',
 };
+const AUTH01_ENVIRONMENTS = {
+  'AUTH-TC-001': { environment_id: 'auth01-local-fixture-v1', auth_role: 'inspector' },
+};
 async function createE2E01BuildTask(project, item, version) {
   const response = await mutate('/api/build/tasks/from-project-case', jsonOptions({
     request_id:`case-build-request-${crypto.randomUUID()}`, project_id:project.project_id,
@@ -302,6 +313,16 @@ async function createE2E01BuildTask(project, item, version) {
   toast(`已创建 ${version.content.external_id} 的冻结建例任务；尚未启动 Harness。`);
   go(`#/projects/${encodeURIComponent(project.project_id)}/build-tasks/${encodeURIComponent(response.task_id)}`, true);
 }
+async function createAuth01BuildTask(project, item, version) {
+  const target = AUTH01_ENVIRONMENTS[version.content.external_id];
+  const response = await mutate('/api/build/tasks/from-project-case', jsonOptions({
+    request_id:`case-build-request-${crypto.randomUUID()}`, project_id:project.project_id,
+    case_id:item.case_id, case_version:version.version, content_sha256:version.content_sha256,
+    environment_id:target.environment_id, auth_role:target.auth_role,
+  }));
+  toast(`已创建 ${version.content.external_id} 的登录建例任务；启动前请先在“登录准备”页完成登录。`);
+  go(`#/projects/${encodeURIComponent(project.project_id)}/build-tasks/${encodeURIComponent(response.task_id)}`, true);
+}
 function renderCaseDetail(project, item, requestedVersion) {
   const resolved = resolveCaseVersion(item, requestedVersion);
   if (!resolved.version) return renderCaseVersionError(project, item, requestedVersion, resolved);
@@ -309,15 +330,18 @@ function renderCaseDetail(project, item, requestedVersion) {
   setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name, href:`#/projects/${encodeURIComponent(project.project_id)}/cases` }, { label:item.external_id }]);
   const versions = [...item.versions].sort((a,b) => b.version - a.version).map((entry) => `<button data-version="${entry.version}" class="${entry.version === version.version ? 'active' : ''}"><strong>v${entry.version} · ${entry.content.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'}</strong><span>${esc(fmtDate(entry.created_at))} · ${esc(short(entry.content_sha256))}</span></button>`).join('');
   const steps = content.steps.map((step) => `<article class="step-pair"><div class="step-number">${step.order}</div><div><small>动作</small><p>${esc(step.action)}</p></div><div><small>对应预期</small><p>${esc(step.expected || '（缺失，内容待确认）')}</p></div></article>`).join('');
-  const buildAllowed = E2E01_ENVIRONMENTS[content.external_id] && content.status === 'CONFIRMED' && version.version === 1;
-  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(item.case_id)}</p><h1>${esc(content.external_id)} · ${esc(content.title)}</h1><p>${esc(content.module || '未填写模块')} · v${version.version}</p></div><div class="actions">${buildAllowed ? '<button class="button primary" id="create-build-task">创建演示建例任务</button>' : ''}${version.version === item.current_version ? '<button class="button" id="edit-case">编辑当前版本</button>' : '<span class="notice">历史版本只读；编辑请先选择最新版本</span>'}</div></div>
+  const e2eAllowed = E2E01_ENVIRONMENTS[content.external_id] && content.status === 'CONFIRMED' && version.version === 1;
+  const authAllowed = !e2eAllowed && AUTH01_ENVIRONMENTS[content.external_id] && content.status === 'CONFIRMED' && version.version === 1;
+  const buildButton = e2eAllowed ? '<button class="button primary" id="create-build-task">创建演示建例任务</button>'
+    : authAllowed ? '<button class="button primary" id="create-build-task">创建登录建例任务</button>' : '';
+  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(item.case_id)}</p><h1>${esc(content.external_id)} · ${esc(content.title)}</h1><p>${esc(content.module || '未填写模块')} · v${version.version}</p></div><div class="actions">${buildButton}${version.version === item.current_version ? '<button class="button" id="edit-case">编辑当前版本</button>' : '<span class="notice">历史版本只读；编辑请先选择最新版本</span>'}</div></div>
     ${projectTabs(project, 'cases')}<div class="detail-layout"><div class="detail-main">
       <section class="panel"><div class="panel-header"><h2>用例正文</h2><span class="badge ${content.status === 'CONFIRMED' ? 'success' : 'warning'}">${content.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'}</span></div><div class="panel-body"><dl class="definition-grid"><div><dt>模块</dt><dd>${esc(content.module || '—')}</dd></div><div><dt>对外编号</dt><dd>${esc(content.external_id)}</dd></div><div class="wide"><dt>前置条件</dt><dd>${esc(content.preconditions || '—')}</dd></div><div class="wide"><dt>测试数据</dt><dd>${esc(content.test_data || '—')}</dd></div></dl></div></section>
       <section class="panel"><div class="panel-header"><h2>步骤与逐步预期</h2><span class="muted">${content.steps.length} 步</span></div><div class="panel-body"><div class="step-list">${steps}</div></div></section>
       <section class="panel"><div class="panel-header"><h2>来源与追溯</h2></div><div class="panel-body source-box"><dl><dt>根来源身份</dt><dd class="mono">${esc(item.root_source?.stable_id || '未记录')}</dd><dt>导入批次</dt><dd class="mono">${esc(item.import_batch_id || '未记录')}</dd><dt>当前版本内容 SHA-256</dt><dd class="mono">${esc(version.content_sha256)}</dd><dt>版本来源</dt><dd>${esc(version.source || '未知')}</dd></dl></div></section>
     </div><aside class="panel"><div class="panel-header"><h2>版本历史</h2></div><div class="panel-body version-list">${versions}</div></aside></div>`);
   document.querySelectorAll('[data-version]').forEach((button) => button.addEventListener('click', () => { state.caseVersion = Number(button.dataset.version); go(`#/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}?version=${button.dataset.version}`, true); }));
-  document.querySelector('#create-build-task')?.addEventListener('click', async (event) => { const button=event.currentTarget; button.disabled=true; try { await createE2E01BuildTask(project,item,version); } catch(error) { toast(messageFor(error),'error'); button.disabled=false; } });
+  document.querySelector('#create-build-task')?.addEventListener('click', async (event) => { const button=event.currentTarget; button.disabled=true; try { if (authAllowed) { await createAuth01BuildTask(project,item,version); } else { await createE2E01BuildTask(project,item,version); } } catch(error) { toast(messageFor(error),'error'); button.disabled=false; } });
   document.querySelector('#edit-case')?.addEventListener('click', () => { state.editing = { projectRevision:project.revision, caseId:item.case_id, baseVersion:item.current_version, content:structuredClone(content), dirty:false }; renderCaseEditor(project, item); });
 }
 
@@ -368,6 +392,7 @@ function buildTaskActions(project, task) {
   const actions = [];
   if (task.task_status === 'SUBMITTED' && !task.attempts?.length) actions.push('<button class="button primary" id="start-generation">生成并试跑正常入口</button>');
   if (task.revision_allowed) actions.push('<button class="button" id="revise-candidate">基于正常页问题修订一次</button>');
+  if (latest && task.auth_requirement) actions.push('<button class="button small" id="rerun-auth">使用当前登录会话复跑候选（不调用模型）</button>');
   if (latest && task.trial_binding) {
     if (normalRuns.length) actions.push('<button class="button small" id="rerun-normal">重新试跑正常入口（不调用模型）</button>');
     if (!pairRuns.length) actions.push(`<button class="button primary" id="run-pair">运行 ${esc(pair.external_id)} 对照入口（不调用模型）</button>`);
@@ -380,12 +405,13 @@ function renderBuildTaskDetail(project, task) {
   setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'建例任务',href:`#/projects/${encodeURIComponent(project.project_id)}/build-tasks`},{label:task.source?.external_id || task.task_id}]);
   const content=task.input_bundle?.snapshot?.content; const latest=task.candidates?.at(-1);
   const steps=(content?.steps || []).map((step)=>`<article class="step-pair"><div class="step-number">${step.order}</div><div><small>动作</small><p>${esc(step.action)}</p></div><div><small>对应预期</small><p>${esc(step.expected)}</p></div></article>`).join('');
-  const runs=(latest?.trial_runs || []).map((run)=>`<article class="preview-item"><header><div><h3>${esc(run.executed_external_id)} · ${esc(run.run_id)}</h3><p>入口 ${esc(run.entry_route)} · 候选 v${run.candidate_version} · ${esc(short(run.candidate_sha256,20))}</p></div>${resultBadge(run.status)}</header><p>${run.failure_step ? `失败步骤：${esc(run.failure_step)}` : '失败步骤：无'}</p>${run.error ? `<p>错误：${esc(run.error.type || run.error.message)}${run.error.expected ? ` · 期望 ${esc(run.error.expected)} / 实际 ${esc(run.error.actual)}` : ''}</p>` : ''}<p>${run.specified_defect_detected ? '对照验证检出指定缺陷（原始业务结果仍为失败）' : run.run_type === 'negative' ? '未检出指定缺陷；保持原始运行状态' : ''}</p></article>`).join('');
+  const runs=(latest?.trial_runs || []).map((run)=>`<article class="preview-item"><header><div><h3>${esc(run.executed_external_id)} · ${esc(run.run_id)}</h3><p>入口 ${esc(run.entry_route)} · 候选 v${run.candidate_version} · ${esc(short(run.candidate_sha256,20))}${run.run_type ? ` · ${esc(run.run_type === 'auth-reexecution' ? '复跑（未调用模型）' : run.run_type === 'auth-initial' ? '建例执行' : run.run_type)}` : ''}</p></div>${resultBadge(run.status)}</header><p>${run.failure_step ? `失败步骤：${esc(run.failure_step)}` : '失败步骤：无'}</p>${run.auth ? `<p>登录身份：${esc(run.auth.account_id || '未确认')} · 角色 ${esc(run.auth.role)} · 会话版本 ${esc(short(run.auth.session_version,12))}</p>` : ''}${run.auth_block ? `<p class="notice danger">会话失效停止：${esc(run.auth_block.reason)}（${esc(run.auth_block.trigger)}）· ${esc(fmtDate(run.auth_block.detected_at))}；已执行步骤保留，未执行步骤不补写。</p>` : ''}${run.error ? `<p>错误：${esc(run.error.type || run.error.code || run.error.message)}${run.error.expected ? ` · 期望 ${esc(run.error.expected)} / 实际 ${esc(run.error.actual)}` : ''}</p>` : ''}<p>${run.specified_defect_detected ? '对照验证检出指定缺陷（原始业务结果仍为失败）' : run.run_type === 'negative' ? '未检出指定缺陷；保持原始运行状态' : ''}</p></article>`).join('');
   const harness=task.attempts?.map((attempt)=>`<li>${esc(attempt.attempt_id)} · ${esc(statusText(attempt.status))} · 工具调用 ${attempt.harness?.total_tool_calls ?? '未知'} · 模型 ${esc(attempt.harness?.model_configuration?.model || '未知')}</li>`).join('') || '尚未启动';
   const pairText=task.trial_binding ? `${task.trial_binding.source.external_id} → ${task.trial_binding.paired.external_id}；候选来源与本次执行用例分别记录。` : '';
+  const authText=task.auth_requirement ? `登录建例：环境 ${task.auth_requirement.environment_id} · 要求角色 ${task.auth_requirement.role}；启动与复跑前复核当前登录会话，会话失效或清除即停止关联运行。` : '';
   const media=(latest?.trial_runs || []).flatMap((run)=>run.media_file_ids.map((fileId)=>({run,file:task.files.find((item)=>item.file_id===fileId)}))).filter((item)=>item.file);
   const mediaHtml=(latest?.trial_runs||[]).map((run)=>`<a data-nav href="#/projects/${encodeURIComponent(project.project_id)}/execution-records?run_id=${encodeURIComponent(run.run_id)}">查看 ${esc(run.executed_external_id)} · ${esc(run.run_id)} 的步骤、录像与媒体</a>`).join('')+media.filter(({file})=>file.kind.endsWith('_screenshot')).map(({run,file})=>`<a href="${buildMediaUrl(task.task_id,file.file_id)}" target="_blank" rel="noreferrer">${esc(run.executed_external_id)} 截图 · ${esc(file.file_name)}</a>`).join('');
-  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(task.task_id)}</p><h1>${esc(task.source?.external_id || task.template?.title || '建例任务')} · v${esc(task.source?.case_version || '')}</h1><p>任务状态：${esc(statusText(task.task_status))} · 生成：${esc(statusText(task.generation_status))} · 验证：${esc(statusText(task.verification_status))} · 人工核对：${esc(statusText(task.human_review_status))}</p></div><div class="actions">${buildTaskActions(project,task)}</div></div>${projectTabs(project,'build-tasks')}<div class="detail-layout"><div class="detail-main"><section class="panel"><div class="panel-header"><h2>本次冻结输入</h2><span class="mono">${esc(short(task.source?.content_sha256,20))}</span></div><div class="panel-body"><dl class="definition-grid"><div><dt>标题</dt><dd>${esc(content?.title)}</dd></div><div><dt>前置条件</dt><dd>${esc(content?.preconditions)}</dd></div><div class="wide"><dt>测试数据</dt><dd>${esc(content?.test_data)}</dd></div></dl><div class="step-list">${steps}</div><p class="notice">${esc(pairText)} Harness 输入只包含当前正常用例、正常入口及页面观察；对照入口信息由工作台执行端保管。</p></div></section><section class="panel"><div class="panel-header"><h2>候选与运行</h2><span class="muted">${latest ? `v${latest.version} · ${esc(short(latest.sha256,20))}` : '候选尚未生成'}</span></div><div class="panel-body">${runs || '<p class="muted">目前没有候选运行记录。</p>'}${mediaHtml ? `<div class="source-box">${mediaHtml}</div>`:''}</div></section></div><aside class="panel"><div class="panel-header"><h2>建例来源</h2></div><div class="panel-body"><p>${esc(task.source?.external_id || '固定模板')}</p><p>任务状态：${esc(statusText(task.task_status))}</p><p>人工核对：${esc(statusText(task.human_review_status))}；尚未登记批准。</p><h3>Harness 启动记录</h3><ul>${harness}</ul><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/execution-records">查看项目执行记录</a></div></aside></div>`);
+  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(task.task_id)}</p><h1>${esc(task.source?.external_id || task.template?.title || '建例任务')} · v${esc(task.source?.case_version || '')}</h1><p>任务状态：${esc(statusText(task.task_status))} · 生成：${esc(statusText(task.generation_status))} · 验证：${esc(statusText(task.verification_status))} · 人工核对：${esc(statusText(task.human_review_status))}</p></div><div class="actions">${buildTaskActions(project,task)}</div></div>${projectTabs(project,'build-tasks')}<div class="detail-layout"><div class="detail-main"><section class="panel"><div class="panel-header"><h2>本次冻结输入</h2><span class="mono">${esc(short(task.source?.content_sha256,20))}</span></div><div class="panel-body"><dl class="definition-grid"><div><dt>标题</dt><dd>${esc(content?.title)}</dd></div><div><dt>前置条件</dt><dd>${esc(content?.preconditions)}</dd></div><div class="wide"><dt>测试数据</dt><dd>${esc(content?.test_data)}</dd></div></dl><div class="step-list">${steps}</div><p class="notice">${esc(pairText)}${esc(authText)} Harness 输入只包含当前正常用例、正常入口及页面观察；对照入口信息由工作台执行端保管。</p></div></section><section class="panel"><div class="panel-header"><h2>候选与运行</h2><span class="muted">${latest ? `v${latest.version} · ${esc(short(latest.sha256,20))}` : '候选尚未生成'}</span></div><div class="panel-body">${runs || '<p class="muted">目前没有候选运行记录。</p>'}${mediaHtml ? `<div class="source-box">${mediaHtml}</div>`:''}</div></section></div><aside class="panel"><div class="panel-header"><h2>建例来源</h2></div><div class="panel-body"><p>${esc(task.source?.external_id || '固定模板')}</p><p>任务状态：${esc(statusText(task.task_status))}</p><p>人工核对：${esc(statusText(task.human_review_status))}；尚未登记批准。</p><h3>Harness 启动记录</h3><ul>${harness}</ul><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/execution-records">查看项目执行记录</a></div></aside></div>`);
   const refresh=async()=>{if(BUILD_TERMINAL.has(task.task_status))return;try{const fresh=await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}`);if(!BUILD_TERMINAL.has(fresh.task_status)){setTimeout(refresh,1500);return;}renderBuildTaskDetail(project,fresh);}catch{}};
   if(!BUILD_TERMINAL.has(task.task_status)) setTimeout(refresh,1500);
   const invoke=async(button,operation)=>{button.disabled=true;try{await operation();const fresh=await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}`);renderBuildTaskDetail(project,fresh);}catch(error){toast(messageFor(error),'error');button.disabled=false;}};
@@ -396,6 +422,7 @@ function renderBuildTaskDetail(project, task) {
   document.querySelector('#run-pair')?.addEventListener('click',()=>void runCase(task.trial_binding.paired));
   document.querySelector('#rerun-pair')?.addEventListener('click',()=>void runCase(task.trial_binding.paired));
   document.querySelector('#rerun-normal')?.addEventListener('click',()=>void runCase(task.trial_binding.source));
+  document.querySelector('#rerun-auth')?.addEventListener('click',(event)=>{if(!confirm(`将使用同一候选 v${latest.version} 与当前登录会话复跑一次，不调用模型；会话失效会立即停止。继续？`))return;void invoke(event.currentTarget,()=>mutate(`/api/build/tasks/${encodeURIComponent(task.task_id)}/auth-trial-runs`,jsonOptions({candidate_version:latest.version,candidate_sha256:latest.sha256})));});
 }
 async function renderBuildTasksRoute(project, taskId = null) {
   if(!taskId){const {tasks}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/build-tasks`);return renderBuildTasks(project,tasks);}
@@ -534,13 +561,13 @@ async function renderAuth(project) {
   const { environments } = await api(endpoint);
   const environment = environments[0];
   setBreadcrumb([{ label:'项目', href:'#/projects' }, { label:project.name, href:`#/projects/${id}/cases` }, { label:'登录准备' }]);
-  showPage(`<div class="page-heading"><div><p class="eyebrow">TARGET AUTHENTICATION</p><h1>被测系统登录准备</h1><p>登录发生在工作台打开的专用浏览器，不是工作台账号登录。</p></div></div>${projectTabs(project,'auth')}
+  showPage(`<div class="page-heading"><div><p class="eyebrow">TARGET AUTHENTICATION</p><h1>被测系统登录准备</h1><p>登录发生在工作台打开的专用浏览器，不是工作台账号登录。登录完成后，可在 AUTH-TC-001 用例详情创建登录建例任务；会话失效或被清除时，关联的建例与复跑会立即停止。</p></div></div>${projectTabs(project,'auth')}
     <section class="panel settings-card"><div class="panel-header"><h2>环境与角色</h2></div><div class="panel-body">
     ${environment ? `<div class="form-grid"><label class="field"><span>被测环境</span><select id="auth-environment">${environments.map(item=>`<option value="${esc(item.environment_id)}">${esc(item.name)}</option>`).join('')}</select></label>
     <label class="field"><span>账号角色</span><select id="auth-role"></select></label></div>
     <p id="auth-status" role="status" class="notice">正在检查登录状态…</p>
     <div class="actions"><button class="button primary" id="auth-open">打开专用登录浏览器</button><button class="button" id="auth-check">检查登录</button><button class="button" id="auth-clear">清除会话</button></div>` : '<p class="notice">当前未登记可登录的被测环境。</p>'}
-    <p class="notice">本阶段只提供独立本机合成站。请在专用窗口自行输入账号和密码；验证码、扫码或多因素认证也由你完成。登录阶段不启动模型观察、不采集业务录像、截图或 Trace。合成站已完成真实 Harness 浏览器接入验证；当前项目建例任务尚未绑定此登录环境，不能因这里显示“有效”就认定现有任务会自动复用会话。</p>
+    <p class="notice">本阶段只提供独立本机合成站。请在专用窗口自行输入账号和密码；验证码、扫码或多因素认证也由你完成。登录阶段不启动模型观察、不采集业务录像、截图或 Trace。AUTH-TC-001 的登录建例任务已绑定此环境：显示“有效”后，启动建例与候选复跑会复核并绑定当前会话版本；会话失效或被清除时关联运行立即停止，需要重新登录后再复跑。</p>
     </div></section>`);
   if (!environment) return;
   const envSelect = document.querySelector('#auth-environment');

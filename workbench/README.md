@@ -6,7 +6,7 @@
 
 ## 统一本地启动入口（当前唯一入口）
 
-归位后的主代码目录为 `D:\01_AI工程\01_工程项目\ui-test-agent`（分支 `codex/test-workbench-auth-session`）。日常工作台只通过唯一脚本启动，固定使用 4322，同一时刻只运行一个工作台实例，不自动启动 4320/4330/4331、不自动改端口：
+归位后的主代码目录为 `D:\01_AI工程\01_工程项目\ui-test-agent`（当前集成分支 `codex/qa-real-model-20260924`）。日常工作台只通过唯一脚本启动，固定使用 4322，同一时刻只运行一个工作台实例，不自动启动 4320/4330/4331、不自动改端口：
 
 ```powershell
 pwsh -NoProfile -File .\workbench\scripts\start-workbench.ps1            # e2e 数据配置（默认）
@@ -156,3 +156,9 @@ M4-A 已把当前基线的完整 HOLD-Q1 经原生用例包从真实项目 Web �
 用户随后明确授权一次独立的 `deepseek-flash` 真实复验。Harness 完成浏览并生成候选，正常页 1 条通过、冻结反例页取得“期望3条/实际6条”的断言不符；但候选没有使用精确的 `CASE_STEP_<order>` 标题，结构化覆盖门因此保持失败，未进入人工首审。正常/反例两组截图、录像和 Trace 已在 Web 读回，详见 [M4-A flash 单次复验记录](docs/M4A_FLASH_RETRY_REPORT.md)。
 
 随后以零模型离线方式增加 `project-case-step-title-v2`：支持裸步骤标记及位于标题起始、由明确分隔符连接的说明标题，步骤覆盖和反例失败归属共用同一映射。原任务失败保持不变；补充评估确认三步和 S03 错误可映射，但发现 S03 未断言原测试数据中的任务名称列，因此状态仍为业务核查有缺项、尚不可进入人工首审。详见 [M4-A 步骤标记兼容与离线核对](docs/M4A_STEP_COMPAT_OFFLINE_REPORT.md)。
+
+## 已提交源码的零模型工程复验
+
+在主仓库运行 `python workbench/scripts/verify-committed-baseline.py --source <完整源码SHA> --output workbench/docs/evidence/baseline-20260924/<独立运行名>`。脚本只导出指定Git提交，不读取未提交源码或复制node_modules；三个锁文件通过npm ci安装，浏览器下载到临时缓存。结束清理自身验收副本，不操作日常4322服务。结果及逐项日志写到指定目录。首次需要联网下载依赖，Windows测试还需要本机Edge、PowerShell 7、Python及Node >=22。
+
+`pwsh -NoProfile -File workbench/scripts/verify-start-config.ps1`使用模板生成合成配置与临时数据，仅检查配置优先级、空授权和缺失运行时拒绝。不会读取本机启动配置、创建授权账本或启动模型。实际日常启动仍需按模板填写已有数据和私有DSH运行时路径；该依赖未随Git打包。AUTH代码已接入但完整产品闭环未验收，新增用例通用建例入口仍未接通。详见[基线收口记录](docs/BASELINE_CLOSE_20260924.md)。
