@@ -61,3 +61,5 @@ input,select,textarea{min-height:38px;padding:8px 10px;border:1px solid #d7ddd9;
 .execution-step .badge{margin:6px 0}.execution-step dl{display:grid;grid-template-columns:45px minmax(0,1fr);gap:5px 8px;margin:4px 0 0;font-size:12px}
 .execution-step dt{color:var(--muted)}.execution-step dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:1600px){.execution-evidence-layout{grid-template-columns:1fr}.execution-media video{max-height:none}}
+
+.modal[aria-label="已有脚本技术复跑"]{padding:22px}.modal[aria-label="已有脚本技术复跑"] label{display:block;margin:12px 0}#case-results video{max-width:100%}#case-results img{max-width:100%;cursor:zoom-in}

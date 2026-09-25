@@ -1,9 +1,10 @@
+import { openBatch, batchHtml, reviewHtml, batchReasons, stateLabel } from '/workspace/workflow.js';
 import { executionMediaUrl } from '/workspace/execution-media.js';
 import { ApiError, api, downloadPackage, uploadCaseFile } from '/workspace/api.js';
 
 const state = {
   projects: [], project: null, serviceReady: false, error: null,
-  query: '', module: '', status: '', page: 1, pageSize: 25,
+  query: '', module: '', status: '', page: 1, pageSize: 10,
   selected: new Map(), importDrafts: new Map(), caseVersion: null,
   editing: null, allowNavigation: false,
 };
@@ -97,6 +98,7 @@ function projectTabs(project, active) {
   const id = encodeURIComponent(project.project_id);
   return `<nav class="project-tabs" aria-label="项目导航">
     <a data-nav class="${active === 'cases' ? 'active' : ''}" href="#/projects/${id}/cases">用例库</a>
+    <a data-nav href="#/projects/${id}/batches">测试批次</a>
     <a data-nav class="${active === 'auth' ? 'active' : ''}" href="#/projects/${id}/auth">登录准备</a>
     <a data-nav class="${active === 'build-tasks' ? 'active' : ''}" href="#/projects/${id}/build-tasks">建例任务</a>
     <a data-nav class="${active === 'develop' ? 'active' : ''}" href="#/projects/${id}/develop">自主建例</a>
@@ -195,19 +197,21 @@ async function renderCases(project, activity = null) {
       <td><span class="badge ${content?.status === 'CONFIRMED' ? 'success' : 'warning'}">${content?.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'}</span></td>
       <td>v${item.current_version}</td><td>${esc(fmtDate(item.updated_at))}</td></tr>`;
   }).join('');
-  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(project.project_id)}</p><h1>${esc(project.name)}</h1><p>${esc(project.description || '暂无项目说明')}</p></div><div class="actions"><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/settings">项目设置</a><a class="button primary" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/import">导入用例</a></div></div>
+  showPage(`<div class="page-heading"><div><p class="eyebrow">项目用例</p><h1>${esc(project.name)}</h1><p>${esc(project.description || '暂无项目说明')}</p></div><div class="actions"><a class="button" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/settings">项目设置</a><a class="button primary" data-nav href="#/projects/${encodeURIComponent(project.project_id)}/import">导入用例</a></div></div>
     ${projectTabs(project, 'cases')}
     <section class="summary-strip"><div><span>全部用例</span><strong>${project.cases.length}</strong></div><div><span>内容已确认</span><strong>${confirmed}</strong></div><div><span>内容待确认</span><strong>${project.cases.length - confirmed}</strong></div><div><span>项目修订</span><strong>r${project.revision}</strong></div></section>
-    ${projectTestOverview(project, activity)}
-    <section class="panel"><div class="panel-header"><h2>项目用例</h2><span class="muted">默认每页 25 条</span></div><div class="panel-body">
+    <details><summary>项目历史概况（可能来自不同批次）</summary>${projectTestOverview(project, activity)}</details>
+    <section class="panel"><div class="panel-header"><h2>项目用例</h2><span class="muted">每页10条，选择跨页保留</span></div><div class="panel-body">
       <div class="table-toolbar"><div class="filters"><label class="search"><span class="sr-only">搜索用例</span><input id="case-search" value="${esc(state.query)}" placeholder="按编号或标题搜索"></label>
         <select id="module-filter" aria-label="模块筛选"><option value="">全部模块</option>${modules.map((value) => `<option ${value === state.module ? 'selected' : ''}>${esc(value)}</option>`).join('')}</select>
         <select id="status-filter" aria-label="内容状态筛选"><option value="">全部内容状态</option><option value="CONFIRMED" ${state.status === 'CONFIRMED' ? 'selected' : ''}>内容已确认</option><option value="PENDING_CONFIRMATION" ${state.status === 'PENDING_CONFIRMATION' ? 'selected' : ''}>内容待确认</option></select></div>
-        <div class="actions"><button class="button small" id="export-selected" ${selected.size ? '' : 'disabled'}>导出选中（${selected.size}）</button><button class="button small" id="export-all" ${project.cases.length ? '' : 'disabled'}>导出全部（${project.cases.length}）</button></div></div>
+        <div class="actions"><button class="button small" id="rerun-selected">复跑选中（${selected.size}）</button><button class="button small" id="rerun-project">复跑整个项目（${project.cases.length}）</button><button class="button small" id="export-selected" ${selected.size ? '' : 'disabled'}>导出选中（${selected.size}）</button><button class="button small" id="export-all" ${project.cases.length ? '' : 'disabled'}>导出全部（${project.cases.length}）</button></div></div>
       <p class="selection-note">已选择 ${selected.size} 条${selected.size && !pageItems.some((item) => selected.has(item.case_id)) ? '，当前筛选未显示已选用例' : ''}。</p>
       ${project.cases.length ? `<div class="table-wrap"><table><thead><tr><th><input id="page-select" class="checkbox" type="checkbox" aria-label="选择当前页"></th><th>编号 / 标题</th><th>模块</th><th>内容状态</th><th>版本</th><th>更新时间</th></tr></thead><tbody>${rows || '<tr><td colspan="6">当前筛选无结果</td></tr>'}</tbody></table></div>
       <div class="pagination"><span>第 ${state.page} / ${pageCount} 页，共 ${filtered.length} 条</span><div><button class="button small" id="prev-page" ${state.page <= 1 ? 'disabled' : ''}>上一页</button><button class="button small" id="next-page" ${state.page >= pageCount ? 'disabled' : ''}>下一页</button></div></div>` : '<div class="empty"><h2>暂无用例</h2><p>上传 Excel 或平台 JSON 包，预览确认后才会写入项目。</p></div>'}
     </div></section>`);
+  document.querySelector('#rerun-selected').onclick=()=>{if(!selected.size)return toast('请先选择用例');void launchBatch(project,'selected',[...selected]);};
+  document.querySelector('#rerun-project').onclick=()=>void launchBatch(project,'project',[]);
   const rerender = () => renderCases(project, activity);
   document.querySelector('#case-search')?.addEventListener('input', (event) => { state.query = event.target.value; state.page = 1; rerender(); });
   document.querySelector('#module-filter')?.addEventListener('change', (event) => { state.module = event.target.value; state.page = 1; rerender(); });
@@ -331,7 +335,7 @@ function automationSection(project, item, version, data) {
   const cards = data.candidates.map((c,i) => {
     const selected = c.applies_to_selected_version;
     const reason = !selected ? `对应历史版本v${c.selection.case_version}，不适用于当前所选v${version.version}` : c.reason ? (trialReasons[c.reason] || c.reason) : null;
-    return `<article class="preview-item"><h3>候选 v${c.selection.candidate_version} · 用例 v${c.selection.case_version}</h3><p>环境：${esc(c.selection.environment_id)} · ${esc(statusText(c.technical_status))} · 人工核对：${esc(statusText(c.human_review_status))}（未批准）</p>${reason?`<p class="notice warning">${esc(reason)}</p>`:''}<a data-nav href="${buildTaskUrl(project,{task_id:c.source_task_id})}">查看来源任务</a> · <a data-nav href="${records}">查看已有运行</a> · <a data-nav href="#/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}?version=${c.selection.case_version}">查看脚本对应的用例版本</a><details><summary>候选代码与文件清单</summary>${c.files.map(f=>`<p>${esc(f.path)} · ${f.bytes}字节 <code>${esc(f.sha256)}</code>${f.file_id?` <button class="button" data-candidate-code="${esc(c.source_task_id)}|${esc(f.file_id)}">查看代码</button>`:' · 文件登记缺失'}</p>`).join('')}<pre class="candidate-code" hidden></pre></details><button class="button primary" data-candidate-trial="${i}" ${reason?'disabled':''}>试跑当前文件包（不调用模型）</button>${route().query.get('validation')==='negative'?`<button class="button" data-candidate-trial="${i}" data-lane="negative" ${reason?'disabled':''}>受控故障验证（不调用模型）</button>`:''}<details><summary>技术身份</summary><pre>${esc(JSON.stringify(c.selection,null,2))}</pre></details></article>`;
+    return `<article class="preview-item"><h3>候选 v${c.selection.candidate_version} · 用例 v${c.selection.case_version}</h3><p>环境：${esc(c.selection.environment_id)} · ${esc(statusText(c.technical_status))} · 人工核对：${esc(statusText(c.human_review_status))}（未批准）</p>${reason?`<p class="notice warning">${esc(reason)}</p>`:''}${reviewHtml(c.requirement_review)}<p>脚本资格：${reason?'当前不可试跑':'限定技术试跑，未批准'}</p><a data-nav href="${buildTaskUrl(project,{task_id:c.source_task_id})}">查看来源任务</a> · <a data-nav href="${records}">查看已有运行</a> · <a data-nav href="#/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}?version=${c.selection.case_version}">查看脚本对应的用例版本</a><details><summary>候选代码与文件清单</summary>${c.files.map(f=>`<p>${esc(f.path)} · ${f.bytes}字节 <code>${esc(f.sha256)}</code>${f.file_id?` <button class="button" data-candidate-code="${esc(c.source_task_id)}|${esc(f.file_id)}">查看代码</button>`:' · 文件登记缺失'}</p>`).join('')}<pre class="candidate-code" hidden></pre></details><button class="button primary" data-candidate-trial="${i}" ${reason?'disabled':''}>试跑当前文件包（不调用模型）</button>${route().query.get('validation')==='negative'?`<button class="button" data-candidate-trial="${i}" data-lane="negative" ${reason?'disabled':''}>受控故障验证（不调用模型）</button>`:''}<details><summary>技术身份</summary><pre>${esc(JSON.stringify(c.selection,null,2))}</pre></details></article>`;
   }).join('');
   return `<section class="panel" data-testid="case-automation"><div class="panel-header"><h2>自动化脚本</h2></div><div class="panel-body"><p>运行已有脚本不调用模型，也不代表人工批准。旧版本结果不适用于新内容。</p>${cards||`<p class="notice">${esc(data.error||'此用例尚无已提交的自主建例文件包；不会自动重新生成。')}</p>`}<a data-nav href="#/projects/${encodeURIComponent(project.project_id)}/develop">生成新脚本（启动会调用模型，需另有建例授权）</a></div></section>`;
 }
@@ -345,8 +349,7 @@ function bindAutomation(project, data) {
     const requestId = `trial-request-${crypto.randomUUID()}`;
     button.addEventListener('click', async () => {
       if(button.disabled)return;button.disabled=true;
-      try { const run = await mutate('/api/candidate-trials',jsonOptions({...data.candidates[Number(button.dataset.candidateTrial)].selection,lane:button.dataset.lane||'normal',request_id:requestId}));
-        go(`#/projects/${encodeURIComponent(project.project_id)}/execution-records?run_id=${encodeURIComponent(run.run_id)}`,true);
+      try { const choice=data.candidates[Number(button.dataset.candidateTrial)].selection; if(button.dataset.lane==='negative'){const run=await mutate('/api/candidate-trials',jsonOptions({...choice,lane:'negative',request_id:requestId}));go(`#/projects/${project.project_id}/cases/${choice.case_id}?version=${choice.case_version}&run_id=${run.run_id}`,true);}else await launchBatch(project,'single',[choice.case_id],[choice],choice);
       } catch(error) { toast(trialReasons[error.code]||messageFor(error),'error');button.disabled=false; }
     });
   });
@@ -363,13 +366,14 @@ async function renderCaseDetail(project, item, requestedVersion) {
   const authAllowed = !e2eAllowed && AUTH01_ENVIRONMENTS[content.external_id] && content.status === 'CONFIRMED' && version.version === 1;
   const buildButton = e2eAllowed ? '<button class="button primary" id="create-build-task">创建演示建例任务</button>'
     : authAllowed ? '<button class="button primary" id="create-build-task">创建登录建例任务</button>' : '';
-  showPage(`<div class="page-heading"><div><p class="eyebrow">${esc(item.case_id)}</p><h1>${esc(content.external_id)} · ${esc(content.title)}</h1><p>${esc(content.module || '未填写模块')} · v${version.version}</p></div><div class="actions">${buildButton}${version.version === item.current_version ? '<button class="button" id="edit-case">编辑当前版本</button>' : '<span class="notice">历史版本只读；编辑请先选择最新版本</span>'}</div></div>
+  showPage(`<div class="page-heading"><div><p class="eyebrow">用例详情</p><h1>${esc(content.external_id)} · ${esc(content.title)}</h1><p>${esc(content.module || '未填写模块')} · v${version.version}</p></div><div class="actions">${buildButton}${version.version === item.current_version ? '<button class="button" id="edit-case">编辑当前版本</button>' : '<span class="notice">历史版本只读；编辑请先选择最新版本</span>'}</div></div>
     ${projectTabs(project, 'cases')}<div class="detail-layout"><div class="detail-main">
       <section class="panel"><div class="panel-header"><h2>用例正文</h2><span class="badge ${content.status === 'CONFIRMED' ? 'success' : 'warning'}">${content.status === 'CONFIRMED' ? '内容已确认' : '内容待确认'}</span></div><div class="panel-body"><dl class="definition-grid"><div><dt>模块</dt><dd>${esc(content.module || '—')}</dd></div><div><dt>对外编号</dt><dd>${esc(content.external_id)}</dd></div><div class="wide"><dt>前置条件</dt><dd>${esc(content.preconditions || '—')}</dd></div><div class="wide"><dt>测试数据</dt><dd>${esc(content.test_data || '—')}</dd></div></dl></div></section>
       <section class="panel"><div class="panel-header"><h2>步骤与逐步预期</h2><span class="muted">${content.steps.length} 步</span></div><div class="panel-body"><div class="step-list">${steps}</div></div></section>
-      ${automationSection(project, item, version, automation)}<section class="panel"><div class="panel-header"><h2>来源与追溯</h2></div><div class="panel-body source-box"><dl><dt>根来源身份</dt><dd class="mono">${esc(item.root_source?.stable_id || '未记录')}</dd><dt>导入批次</dt><dd class="mono">${esc(item.import_batch_id || '未记录')}</dd><dt>当前版本内容 SHA-256</dt><dd class="mono">${esc(version.content_sha256)}</dd><dt>版本来源</dt><dd>${esc(version.source || '未知')}</dd></dl></div></section>
+      <section id="case-results" class="panel"><div class="panel-body">读取本版本历史结果…</div></section>${automationSection(project, item, version, automation)}<section class="panel"><details><summary>技术详情：来源与追溯</summary><div class="panel-body source-box"><dl><dt>根来源身份</dt><dd class="mono">${esc(item.root_source?.stable_id || '未记录')}</dd><dt>导入批次</dt><dd class="mono">${esc(item.import_batch_id || '未记录')}</dd><dt>当前版本内容 SHA-256</dt><dd class="mono">${esc(version.content_sha256)}</dd><dt>版本来源</dt><dd>${esc(version.source || '未知')}</dd></dl></div></details></section>
     </div><aside class="panel"><div class="panel-header"><h2>版本历史</h2></div><div class="panel-body version-list">${versions}</div></aside></div>`);
   bindAutomation(project, automation);
+  await renderExecutionRecords(project,{item,version});
   document.querySelectorAll('[data-version]').forEach((button) => button.addEventListener('click', () => { state.caseVersion = Number(button.dataset.version); go(`#/projects/${encodeURIComponent(project.project_id)}/cases/${encodeURIComponent(item.case_id)}?version=${button.dataset.version}`, true); }));
   document.querySelector('#create-build-task')?.addEventListener('click', async (event) => { const button=event.currentTarget; button.disabled=true; try { if (authAllowed) { await createAuth01BuildTask(project,item,version); } else { await createE2E01BuildTask(project,item,version); } } catch(error) { toast(messageFor(error),'error'); button.disabled=false; } });
   document.querySelector('#edit-case')?.addEventListener('click', () => { state.editing = { projectRevision:project.revision, caseId:item.case_id, baseVersion:item.current_version, content:structuredClone(content), dirty:false }; renderCaseEditor(project, item); });
@@ -478,10 +482,14 @@ function failureSummary(run) {
   return `<div class="notice danger"><strong>${esc(statusText(run.error.type)||'执行失败')}</strong>${expected!=null?`<p>预期：${esc(expected)}</p><p>实际：${esc(actual??'未采集')}</p>`:'<p>本次执行未得到可核对的业务实际值。</p>'}<details><summary>查看原始错误</summary><pre>${esc(run.error.message||run.error.type)}</pre></details></div>`;
 }
 
-async function renderExecutionRecords(project) {
-  const {records}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/execution-records`);
-  setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'执行记录'}]);
-  const recordsUrl = `#/projects/${encodeURIComponent(project.project_id)}/execution-records`;
+async function renderExecutionRecords(project, context=null) {
+  let {records}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/execution-records`);
+  if(context)records=records.filter(r=>r.executed_case_id===context.item.case_id&&r.executed_case_version===context.version.version);
+  const availableBatches=context?(await api(`/api/case-library/projects/${project.project_id}/batches`)).batches.filter(b=>b.items.some(i=>i.case_id===context.item.case_id&&i.case_version===context.version.version)):[];
+  let batch=null;const batchId=route().query.get('batch_id');
+  if(context&&batchId){try{batch=await api(`/api/case-library/projects/${project.project_id}/batches/${encodeURIComponent(batchId)}`);if(!batch.items.some(i=>i.case_id===context.item.case_id&&i.case_version===context.version.version))throw Error('批次不包含此用例版本');records=records.filter(r=>r.batch_id===batchId);}catch(e){document.querySelector('#case-results').textContent='指定批次不可用：'+e.message;return;}}
+  if(!context)  setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'执行记录'}]);
+  const recordsUrl = context ? `#/projects/${project.project_id}/cases/${context.item.case_id}?version=${context.version.version}` : `#/projects/${encodeURIComponent(project.project_id)}/execution-records`;
   const query=route().query;
   const requestedRunId=query.has('run_id')?query.get('run_id'):null;
   const ordered=[...records].sort((left,right)=>String(left.started_at||'').localeCompare(String(right.started_at||'')));
@@ -489,7 +497,7 @@ async function renderExecutionRecords(project) {
   const invalidRunMessage=requestedRunId!==null
     ?`指定的运行记录“${esc(requestedRunId||'（空值）')}”不存在、编号无效或不属于当前项目。没有替换为其他运行记录。`
     :'';
-  const rows=records.map((run)=>`<tr${selected?.run_id===run.run_id?' class="selected-run"':''}><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td><details><summary>技术身份</summary><code>${esc(run.run_id)}<br>${esc(run.bundle_sha256||run.candidate_sha256)}</code></details></td><td>${resultBadge(run.status)}<small>${esc(run.origin==='EXPLICIT_CANDIDATE_TRIAL'?'本次显式试跑':run.origin==='DEVELOPMENT_SELF_TEST'?'开发自测':'首次独立验证')}</small></td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${recordsUrl}?run_id=${encodeURIComponent(run.run_id)}">查看详情</a> · <a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
+  const rows=records.map((run)=>`<tr${selected?.run_id===run.run_id?' class="selected-run"':''}><td><strong>${esc(run.executed_external_id)}</strong> v${run.executed_case_version}</td><td>${esc(run.source_external_id)} · v${run.source_case_version}</td><td><details><summary>技术身份</summary><code>${esc(run.run_id)}<br>${esc(run.bundle_sha256||run.candidate_sha256)}</code></details></td><td>${resultBadge(run.status)}<small>${esc(run.origin==='EXPLICIT_CANDIDATE_TRIAL'?'本次显式试跑':run.origin==='DEVELOPMENT_SELF_TEST'?'开发自测':'首次独立验证')}</small></td><td>${esc(run.failure_step || '—')}</td><td><a data-nav href="${recordsUrl}${context?'&':'?'}run_id=${encodeURIComponent(run.run_id)}">查看详情</a> · <a data-nav href="${buildTaskUrl(project,{task_id:run.source_build_task_id})}">查看任务</a></td></tr>`).join('');
   const steps=selected?executionSteps(selected):[];
   const derived=selected?.files.find((file)=>file.kind.endsWith('_caption_video'));
   const original=selected?.files.find((file)=>file.kind.endsWith('_video')&&!file.kind.endsWith('_caption_video')&&!file.kind.endsWith('_step_replay_video'));
@@ -520,14 +528,24 @@ async function renderExecutionRecords(project) {
     if (selected.evidence_status === 'LEGACY_STEP_CAPTURES_UNAVAILABLE') detail += '<p class="notice warning">旧运行没有现场步骤截图，无法提供步骤证据回放；不事后补拍。</p>';
     if (selected.technical_error || selected.evidence_status === 'INCOMPLETE') detail += `<p class="notice danger">证据或技术处理不完整：${esc(selected.technical_error?.code || selected.evidence_error || '未取得完整证据')}；请与业务结果分开核对。</p>`;
     if (screenshot) detail += `<img data-testid="run-screenshot" src="${executionMediaUrl(selected,screenshot.file_id)}" width="640" alt="本次运行截图">`;
-    if(active)setTimeout(()=>{if(route().query.get('run_id')===selected.run_id)void renderExecutionRecords(project);},1500);
+    if(active&&!context)setTimeout(()=>{if(route().parts[2]==='execution-records'&&route().query.get('run_id')===selected.run_id)void renderExecutionRecords(project);},1500);
   }
   if(selected?.step_replay?.evidence_complete===false)
     detail=detail.replace('<div class="execution-evidence-layout">',`<p class="notice danger">步骤截图采集不完整：${esc((selected.step_replay.missing_captures||[]).join('、'))}。回放可查看已取得素材，不能视为完整步骤证据。</p><div class="execution-evidence-layout">`);
+  if(context){
+    const target=document.querySelector('#case-results');if(!target)return;
+    const oldVideos=[...target.querySelectorAll('video')];
+    target.innerHTML=`<div class="panel-header"><h2>本版本结果与媒体</h2></div><div class="panel-body"><label>选择测试批次<select id="case-batch-choice"><option value="">全部历史（来源分别标识）</option>${availableBatches.map(b=>`<option value="${b.batch_id}" ${b.batch_id===batchId?'selected':''}>${esc(b.created_at)} · ${esc(b.software_version||'软件版本未提供')} · ${esc(stateLabel(b.state))}</option>`).join('')}</select></label>${batch?batchHtml(batch,`#/projects/${project.project_id}`):'<p>历史结果 / 来源未分批；开发自测与独立验证分别保留。</p>'}<label>选择本版本具体结果<select id="case-result-choice"><option value="">${batch?'本批最近结果':'本版本最近历史结果'}</option>${records.map(r=>`<option value="${esc(r.run_id)}" ${selected?.run_id===r.run_id?'selected':''}>${esc(r.started_at)} · ${esc(r.origin==='DEVELOPMENT_SELF_TEST'?'开发自测':r.batch_id?'批次技术试跑':'独立验证')} · ${esc(statusText(r.status))}</option>`).join('')}</select></label>${selected?`<p>执行状态：${esc(stateLabel(selected.execution_status)||'历史已执行')} · 软件版本：${esc(selected.software_version||'未提供')} · 脚本候选v${esc(selected.candidate_version||'未登记')} · 资格：未批准</p>${reviewHtml(selected.requirement_review)}`:''}${detail}${!records.length?'<p>当前版本/选定批次尚未执行，不借用其他版本或批次的结果。</p>':''}</div>`;
+    for(const old of oldVideos){const replacement=[...target.querySelectorAll('video')].find(v=>v.src===old.src);if(replacement)replacement.replaceWith(old);}
+    document.querySelector('#case-batch-choice').onchange=e=>go(recordsUrl+(e.target.value?'&batch_id='+e.target.value:''));
+    document.querySelector('#case-result-choice').onchange=e=>go(recordsUrl+(batch?'&batch_id='+batch.batch_id:'')+(e.target.value?'&run_id='+encodeURIComponent(e.target.value):''));
+    if(batch&&['QUEUED','RUNNING','STOPPING'].includes(batch.state)){const activeRoute=route().raw;setTimeout(()=>{if(route().raw===activeRoute)void renderExecutionRecords(project,context);},1500);}
+  }else
   showPage(`<div class="page-heading"><div><p class="eyebrow">CANDIDATE TRIAL RECORDS</p><h1>项目执行记录</h1><p>故障入口的原始结果保持失败；候选尚未批准。</p></div></div>${projectTabs(project,'execution-records')}${(selected||requestedRunId===null)?`<section class="panel"><div class="panel-header"><h2>运行索引</h2><span class="muted">${records.length} 条</span></div><div class="panel-body">${rows?`<div class="table-wrap"><table><thead><tr><th>执行用例</th><th>生成来源</th><th>技术详情</th><th>原始结果</th><th>失败步骤</th><th>详情</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty"><h2>暂无执行记录</h2><p>从用例创建任务并试跑后，记录会显示在这里。</p></div>'}</div></section>`:''}<section class="panel"><div class="panel-header"><h2>${requestedRunId!==null&&!selected?'运行记录未找到':'步骤与媒体'}</h2></div><div class="panel-body">${detail}</div></section>`);
   document.querySelector('#stop-candidate-trial')?.addEventListener('click',async()=>{await mutate(`/api/candidate-trials/${selected.run_id}/stop`,jsonOptions({}));});
   const video=document.querySelector('[data-testid="execution-video"]');
   if(!video)return;
+  if(video.dataset.boundRun===selected.run_id)return;video.dataset.boundRun=selected.run_id;
   const disableSeeking=()=>document.querySelectorAll('[data-step-seek]').forEach((button)=>{button.disabled=true;});
   video.addEventListener('error',()=>{document.querySelector('#execution-video-message').textContent='录像加载失败，请核对本次运行媒体；业务结果未改变。';disableSeeking();});
   const checkDuration=()=>{
@@ -687,6 +705,7 @@ async function render(force = false) {
     if (parts[2] === 'auth') return renderAuth(project);
     if (parts[2] === 'develop') return renderDevelopmentStart(project);
     if (parts[2] === 'build-tasks') return renderBuildTasksRoute(project, parts[3] || null);
+    if (parts[2] === 'batches') { await renderBatches(project); return; }
     if (parts[2] === 'execution-records') { await renderExecutionRecords(project); focusExecutionRecord(value.query.get('run_id')); return; }
     if (parts[2] === 'cases' && parts[3]) { const item = project.cases.find((entry) => entry.case_id === parts[3]); if (!item) throw new ApiError('CASE_NOT_FOUND', 404); return renderCaseDetail(project, item, value.query.get('version')); }
     return await renderCases(project);
@@ -695,3 +714,12 @@ async function render(force = false) {
 
 window.addEventListener('hashchange', () => { if (state.allowNavigation) { state.allowNavigation = false; void render(); return; } if (isDirty() && !confirm('当前修改尚未保存，离开后草稿会丢失。是否继续？')) { history.forward(); return; } state.editing = null; void render(); });
 await render(true);
+
+function launchBatch(project,scope,ids,selections=[],caseContext=null){return openBatch({project,scope,ids,selections,api,mutate,jsonOptions,go,toast,caseContext});}
+async function renderBatches(project){
+ const {batches}=await api(`/api/case-library/projects/${project.project_id}/batches`),id=route().query.get('batch_id');
+ const b=id?batches.find(b=>b.batch_id===id):null,base=`#/projects/${project.project_id}`;
+ showPage(`<h1>测试批次 · ${esc(project.name)}</h1>${projectTabs(project,'batches')}<section class="panel"><div class="panel-body">${id&&!b?'<p role="alert">指定批次不存在或不属于当前项目，未替换其他批次。</p>':b?batchHtml(b,base):batches.map(b=>`<p><a data-nav href="${base}/batches?batch_id=${b.batch_id}">${esc(b.created_at)} · ${esc(b.software_version||'软件版本未提供')} · ${esc(stateLabel(b.state))} · ${b.items.length}条</a></p>`).join('')||'尚无测试批次；历史结果保持来源未分批。'}${b&&['QUEUED','RUNNING'].includes(b.state)?'<button class="button" id="cancel-batch">取消本批，保留已执行结果</button>':''}</div></section>`);
+ document.querySelector('#cancel-batch')?.addEventListener('click',async e=>{e.target.disabled=true;await mutate(`/api/case-library/projects/${project.project_id}/batches/${b.batch_id}/stop`,jsonOptions({}));});
+ if(b&&['QUEUED','RUNNING','STOPPING'].includes(b.state)){const current=route().raw;setTimeout(()=>{if(route().raw===current)void renderBatches(project);},1500);}
+}
