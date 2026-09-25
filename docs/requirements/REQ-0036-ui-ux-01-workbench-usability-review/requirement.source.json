@@ -3,12 +3,12 @@
   "req_id": "REQ-0036",
   "title": "测试工作台 V2.1 统一产品流程",
   "metadata": {
-    "requirement_status": "V2.1代码已实现并完成授权内验收；真实模型与登录完整闭环等未验证项见交付报告",
+    "requirement_status": "V2.1及运行入口返修已实现，正式4322开发者验收完成；模型等未验证边界见原报告",
     "governance_level": "G2",
-    "version": 4,
+    "version": 5,
     "last_updated": "2026-09-25"
   },
-  "original_input": "用户反馈当前UI设计不顺。先核对真实页面，找出信息结构和操作路径问题，不要未经核对就重做全部UI或继续增加菜单。保留墨白极简配色。核对实际HEAD、工作区与浏览器加载版本，区分4322现有工作台与4331 AUTH独立工作台，截图注明实际地址与版本。不取消运行中任务、不强停服务、不覆盖AUTH任务未提交修改；不启动Harness、不新增模型调用、不重新执行业务候选。逐项核对A-F六类问题并区分已实现显示问题/后端未接通/合成验证特殊入口。输出项目用例库、用例详情及自动化准备、测试结果详情三页的结构调整方案与文字线框，标明哪些只改前端、哪些依赖AUTH接线，给出第一批修改范围。交付 workbench/docs/UI_UX_REVIEW.md（含脱敏截图），提交并推送当前分支，不推main、不强推。停止在问题定位和有限调整方案完成，未经确认不做整套UI重构。\n2026-09-25用户授权执行UI_WORKFLOW_PHASE1_CASE_DETAILS_AND_RERUN.md，接收既有登记；仅实施第一批，Harness与模型0，固定4322与fresh-b数据。\n2026-09-25 用户授权按 UI_WORKBENCH_CODEX_V2_1.zip 实施全部18页面及UX01-30，在fcafd249基础上串行小提交并推送当前分支。报告格式已明确选择离线HTML。",
+  "original_input": "用户反馈当前UI设计不顺。先核对真实页面，找出信息结构和操作路径问题，不要未经核对就重做全部UI或继续增加菜单。保留墨白极简配色。核对实际HEAD、工作区与浏览器加载版本，区分4322现有工作台与4331 AUTH独立工作台，截图注明实际地址与版本。不取消运行中任务、不强停服务、不覆盖AUTH任务未提交修改；不启动Harness、不新增模型调用、不重新执行业务候选。逐项核对A-F六类问题并区分已实现显示问题/后端未接通/合成验证特殊入口。输出项目用例库、用例详情及自动化准备、测试结果详情三页的结构调整方案与文字线框，标明哪些只改前端、哪些依赖AUTH接线，给出第一批修改范围。交付 workbench/docs/UI_UX_REVIEW.md（含脱敏截图），提交并推送当前分支，不推main、不强推。停止在问题定位和有限调整方案完成，未经确认不做整套UI重构。\n2026-09-25用户授权执行UI_WORKFLOW_PHASE1_CASE_DETAILS_AND_RERUN.md，接收既有登记；仅实施第一批，Harness与模型0，固定4322与fresh-b数据。\n2026-09-25 用户授权按 UI_WORKBENCH_CODEX_V2_1.zip 实施全部18页面及UX01-30，在fcafd249基础上串行小提交并推送当前分支。报告格式已明确选择离线HTML。\n2026-09-25 用户要求原V2.1交付返修：4322复现运行入口问题，修复关闭/取消/失败恢复、自动预检、正常与诊断分离、明确体验起点和设计一致性；不新增模型，原REPORT更新并推当前分支。",
   "user_requirements": [
     {
       "id": "UN-0036-01",
@@ -39,7 +39,8 @@
     "历史阶段事实（不代表V2.1当前配置）：6066bbc..8127e33 间 web-v2 仅新增登录准备导航与页面，用例库/建例/执行记录页面两版一致。",
     "历史阶段事实（不代表V2.1当前配置）：A-F 六类问题均经真实页面截图核对确认；登录会话与建例/执行绑定后端未接通（REQ-0035 事实），E2E-01 演示建例授权与正常/对照试跑为合成验证特殊入口。",
     "历史阶段事实（不代表V2.1当前配置）：2026-09-25基线b5e4141；登记窗口idle，未发现并行写入，接收5份登记/附件并私有备份。现有：单条执行器、文件包核验、媒体与用例版本；本批：批次与来源核查后端、详情内媒体接线、跨页/全项目范围。",
-    "V2.1当前：主目录唯一4322、fresh-b；开发分支codex/qa-real-model-20260924；报告主格式离线HTML；当前任务单写入，原24条只读，模型调用0。"
+    "V2.1当前：主目录唯一4322、fresh-b；开发分支codex/qa-real-model-20260924；报告主格式离线HTML；当前任务单写入，原24条只读，模型调用0。",
+    "V2.1返修基线0b12288，源码e25f55f；KC-11/KC-02已有包可正常零模型试跑，9条缺脚本、KC-22当前v2不适用。4次实际执行3通过1保留业务失败，原12/24资料与候选哈希不变。"
   ],
   "inferences_and_open_questions": [
     "V2.1当前有效范围已整合；原阶段停止条件仅为历史。真实模型调用0；离线文件打开及登录完整闭环未验证，详见UX矩阵。"
@@ -90,7 +91,7 @@
     {
       "id": "DD-0036-03",
       "status": "已确认",
-      "summary": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。",
+      "summary": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。 返修沿用V2.1：运行弹窗返回生命周期Promise，自动预检使用非持久化接口并按序号拒绝旧响应；确认后冻结清单，start及执行端分别复验；诊断高级入口，列表动态就绪及失败结论优先。",
       "dr_ids": [
         "DR-0036-03"
       ],
@@ -99,7 +100,8 @@
   ],
   "interfaces_and_data_flow": [
     "复用现有用例库、自主开发授权、完整候选包、BatchManager及媒体。新增script-operations预检/创建/取消/查询，reports固定快照/预览/离线HTML/取消；GET /api/script-environments返回可登记环境与禁用状态。",
-    "批次冻结范围/用例版本/候选包/软件标签；修订带旧包与问题反馈，从头开发不带旧稿。HTML及媒体校验结果持久化，不随后续复测更新。"
+    "批次冻结范围/用例版本/候选包/软件标签；修订带旧包与问题反馈，从头开发不带旧稿。HTML及媒体校验结果持久化，不随后续复测更新。",
+    "V2.1返修：POST /api/case-library/projects/:project/batches/preflight 返回batch_id=null且不写批次；显式确认仍调用原preview/start，保持同一receipt重试。关闭/取消释放UI入口，不更改已有批次或候选。"
   ],
   "module_document_impact": [
     "已更新docs/modules/test-workbench.md与workbench-case-library.md：脚本维护模式/授权/版本、固定报告接口与媒体边界、旧页面迁移和当前验证限制。"
@@ -143,7 +145,7 @@
     {
       "id": "TK-0036-03",
       "status": "已完成",
-      "task": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。",
+      "task": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。 V2.1返修：运行弹窗生命周期、自动非持久化预检、启动复验及恢复、可用起点和结果优先级。",
       "dr_ids": [
         "DR-0036-03"
       ],
@@ -187,7 +189,7 @@
       "execution_status": "人工待确认",
       "item": "UX01-30真实旅程；生成链路按无模型授权限制单列",
       "evidence_standard": "真实操作、文件哈希、逐项结果及截图",
-      "current_evidence": "workbench/qa/20260925-v21/REPORT.md及逐项UX证据；工程18项，实际11次旧包执行，模型/Harness0；原24条与1041文件不变。未完整验收项逐项标注。"
+      "current_evidence": "workbench/qa/20260925-v21/REPORT.md及UX历史与repair-*证据；返修工程20项退出0，4次既有脚本实际执行，模型/Harness0；原428份数据及1041份候选文件不变。原未验收项保留。"
     }
   ],
   "verification_environment": {
@@ -196,13 +198,14 @@
       "pwsh -NoProfile -File workbench/scripts/start-workbench.ps1 -Data fresh-b",
       "node --test workbench/tests/product-v21.test.mjs workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs workbench/tests/ui-d2a.test.mjs",
       "node workbench/qa/20260925-v21/verify-live.mjs",
-      "node workbench/qa/20260925-v21/verify-reports.mjs"
+      "node workbench/qa/20260925-v21/verify-reports.mjs",
+      "node workbench/qa/20260925-v21/verify-repair.mjs"
     ],
     "environment": [
       "唯一正式4322，既有workbench/.local/fresh25-b数据；测试目标站每run受控临时启动，不是第二个工作台；本机Edge/锁定Playwright"
     ],
     "conclusion": [
-      "V2.1受测代码交付；唯一正式4322；18工程检查、11次既有候选执行，模型/Harness0；不能宣称UX01-30全部通过。详见REPORT.md逐项范围。"
+      "V2.1原18项/11次历史保留；返修20工程检查、4次既有包执行（3通过1原业务失败）、3新批次，模型/Harness0；真实4322按钮恢复/预检/单条/跨页/媒体/返回已验证，非全部UX产品验收。"
     ]
   },
   "trace_current": [
@@ -237,6 +240,12 @@
       "link": "workbench/docs/UI_UX_REVIEW.md",
       "status": "走查与方案完成",
       "notes": "新建需求包并完成本轮走查交付"
+    },
+    {
+      "version": 5,
+      "link": "workbench/qa/20260925-v21/REPORT.md#v21-交付返修运行入口与设计一致性开发者验收完成",
+      "status": "原V2.1范围内返修开发者验收完成",
+      "notes": "继续UN/DR/DD/TK/VT-0036-03原链路；自动预检、启动复验和恢复、明确体验起点与同批证据，未新增产品阶段。"
     }
   ],
   "open_questions": [
@@ -277,6 +286,14 @@
       "description": "用户授权统一设计实施；离线HTML报告已确认；历史阶段停止条件保留为历史，不再限制本轮已授权范围。",
       "impact": "产品UI、版本操作、批次、媒体与报告",
       "confirmed_by": "当前用户任务及报告格式回复"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 5,
+      "type": "V2.1交付返修",
+      "description": "修复运行入口状态未恢复、自动预检缺失、就绪状态与设计偏差；原REQ和REPORT继续维护。",
+      "impact": "运行确认、批次预检和启动、列表/结果信息优先级及回归证据",
+      "confirmed_by": "用户V2.1交付返修请求"
     }
   ]
 }

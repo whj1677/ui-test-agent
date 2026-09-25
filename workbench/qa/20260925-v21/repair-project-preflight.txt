@@ -1,0 +1,383 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- strong: V2.1 产品验收 · 独立导入项目
+- generic: /
+- strong: 用例库
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "V2.1 产品验收 · 独立导入项目" [level=1]
+  - paragraph: 独立修改性验收项目。原24条资料只读；模型调用0。
+  - button "运行整个项目（12）" [active]
+  - link "导入用例":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/import"
+  - strong: 已有脚本可直接试跑 2 条
+  - text: ·
+  - link "从 KC-11 v1 开始":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=scripts"
+  - paragraph: 点击详情顶部“运行此用例”，自动检查后确认即可；不调用模型。其余 10 条请查看各行阻塞原因。
+  - generic: 全部用例
+  - strong: "12"
+  - generic: 内容已确认
+  - strong: "12"
+  - generic: 内容待确认
+  - strong: "0"
+  - generic: 项目修订
+  - strong: r7
+  - generic "项目历史概况（可能来自不同批次）"
+  - heading "项目用例" [level=2]
+  - generic: 每页10条，选择跨页保留
+  - text: ⌕
+  - generic: 搜索用例
+  - textbox "⌕ 搜索用例":
+    - /placeholder: 按编号或标题搜索
+  - combobox "模块筛选":
+    - option "全部模块" [selected]
+    - option "设备预约调度"
+  - combobox "内容状态筛选":
+    - option "全部内容状态" [selected]
+    - option "内容已确认"
+    - option "内容待确认"
+  - button "运行选中（0）" [disabled]
+  - generic "脚本操作"
+  - button "导出选中（0）" [disabled]
+  - button "导出全部（12）"
+  - paragraph:
+    - text: 已选 0 条 · 跨页保留，其中 0 条不在当前筛选中。
+    - button "清空选择"
+    - generic: 最近执行可能跨批次，不代表全项目回归结论。
+  - table:
+    - rowgroup:
+      - row "选择当前页 编号 / 标题 模块 内容状态 自动化脚本 最近执行 要求核对":
+        - columnheader "选择当前页":
+          - checkbox "选择当前页"
+        - columnheader "编号 / 标题"
+        - columnheader "模块"
+        - columnheader "内容状态"
+        - columnheader "自动化脚本"
+        - columnheader "最近执行"
+        - columnheader "要求核对"
+    - rowgroup:
+      - row "选择 KC-01 KC-01 初始数据与三页分页边界 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-01":
+          - checkbox "选择 KC-01"
+        - cell "KC-01 初始数据与三页分页边界":
+          - button "KC-01 初始数据与三页分页边界":
+            - strong: KC-01
+            - generic: 初始数据与三页分页边界
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-02 KC-02 编号模糊搜索不区分大小写 设备预约调度 内容已确认 可直接试跑（未批准） 用例 v1 失败 业务差异保留，待核对":
+        - cell "选择 KC-02":
+          - checkbox "选择 KC-02"
+        - cell "KC-02 编号模糊搜索不区分大小写":
+          - button "KC-02 编号模糊搜索不区分大小写":
+            - strong: KC-02
+            - generic: 编号模糊搜索不区分大小写
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "可直接试跑（未批准） 用例 v1":
+          - text: 可直接试跑（未批准）
+          - generic: 用例 v1
+        - cell "失败":
+          - generic: 失败
+        - cell "业务差异保留，待核对"
+      - row "选择 KC-03 KC-03 同名温循箱搜索 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-03":
+          - checkbox "选择 KC-03"
+        - cell "KC-03 同名温循箱搜索":
+          - button "KC-03 同名温循箱搜索":
+            - strong: KC-03
+            - generic: 同名温循箱搜索
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-04 KC-04 站点与状态AND组合筛选 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-04":
+          - checkbox "选择 KC-04"
+        - cell "KC-04 站点与状态AND组合筛选":
+          - button "KC-04 站点与状态AND组合筛选":
+            - strong: KC-04
+            - generic: 站点与状态AND组合筛选
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-05 KC-05 状态多选空闲或维护 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-05":
+          - checkbox "选择 KC-05"
+        - cell "KC-05 状态多选空闲或维护":
+          - button "KC-05 状态多选空闲或维护":
+            - strong: KC-05
+            - generic: 状态多选空闲或维护
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-06 KC-06 无结果与重置恢复 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-06":
+          - checkbox "选择 KC-06"
+        - cell "KC-06 无结果与重置恢复":
+          - button "KC-06 无结果与重置恢复":
+            - strong: KC-06
+            - generic: 无结果与重置恢复
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-07 KC-07 费用降序排序前三 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-07":
+          - checkbox "选择 KC-07"
+        - cell "KC-07 费用降序排序前三":
+          - button "KC-07 费用降序排序前三":
+            - strong: KC-07
+            - generic: 费用降序排序前三
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-08 KC-08 跨页选择保留 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-08":
+          - checkbox "选择 KC-08"
+        - cell "KC-08 跨页选择保留":
+          - button "KC-08 跨页选择保留":
+            - strong: KC-08
+            - generic: 跨页选择保留
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-09 KC-09 筛选变更清空选择并回第1页 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-09":
+          - checkbox "选择 KC-09"
+        - cell "KC-09 筛选变更清空选择并回第1页":
+          - button "KC-09 筛选变更清空选择并回第1页":
+            - strong: KC-09
+            - generic: 筛选变更清空选择并回第1页
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-10 KC-10 当前页全选只选可预约行 设备预约调度 内容已确认 缺少脚本 用例 v1 未执行 待核对":
+        - cell "选择 KC-10":
+          - checkbox "选择 KC-10"
+        - cell "KC-10 当前页全选只选可预约行":
+          - button "KC-10 当前页全选只选可预约行":
+            - strong: KC-10
+            - generic: 当前页全选只选可预约行
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "缺少脚本 用例 v1":
+          - text: 缺少脚本
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+  - generic: 第 1 / 2 页，共 12 条
+  - button "上一页" [disabled]
+  - button "下一页"
+- status
+- dialog "运行确认":
+  - heading "运行整个项目" [level=2]
+  - button "关闭运行确认": ×
+  - paragraph: 复用已有脚本，不调用 Coding Agent。确认运行后形成新测试批次，保留历史结果。
+  - paragraph: 本次范围：整个项目 12 条（不受筛选或分页影响）；脚本仍为限定技术试跑，未批准。
+  - text: 被测软件版本 / 构建标识
+  - textbox "被测软件版本 / 构建标识":
+    - /placeholder: 未提供（最多160字符）
+  - status:
+    - generic: 本次范围
+    - strong: "12"
+    - generic: 可运行
+    - strong: "2"
+    - generic: 阻塞
+    - strong: "10"
+    - paragraph: 软件版本：未提供 · 环境随所选脚本绑定
+    - table:
+      - rowgroup:
+        - row "用例 / 脚本版本 环境 准备状态 / 处理入口":
+          - columnheader "用例 / 脚本版本"
+          - columnheader "环境"
+          - columnheader "准备状态 / 处理入口"
+      - rowgroup:
+        - row "KC-01 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-01 · 用例 v1 无脚本":
+            - strong: KC-01
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-b62d8137-1a9e-44d7-8601-92928756f8f5?version=1&tab=scripts"
+        - row "KC-02 · 用例 v1 历史候选 v2 kimi-complex-20260925 可直接试跑（未批准）":
+          - cell "KC-02 · 用例 v1 历史候选 v2":
+            - strong: KC-02
+            - text: · 用例 v1
+            - generic: 历史候选 v2
+          - cell "kimi-complex-20260925"
+          - cell "可直接试跑（未批准）": 可直接试跑（未批准）
+        - row "KC-03 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-03 · 用例 v1 无脚本":
+            - strong: KC-03
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-60115c9f-0be9-4a94-bfed-37f7442ee1e8?version=1&tab=scripts"
+        - row "KC-04 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-04 · 用例 v1 无脚本":
+            - strong: KC-04
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-3806d5d4-51db-4575-b700-00b5a5d45cfc?version=1&tab=scripts"
+        - row "KC-05 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-05 · 用例 v1 无脚本":
+            - strong: KC-05
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-663fdd1d-e547-44fa-85d2-c274b4300749?version=1&tab=scripts"
+        - row "KC-06 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-06 · 用例 v1 无脚本":
+            - strong: KC-06
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-713a5628-f66d-4b65-8ab9-5045d45cc098?version=1&tab=scripts"
+        - row "KC-07 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-07 · 用例 v1 无脚本":
+            - strong: KC-07
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-de7db057-e9c7-4186-9ecd-df0051a7153f?version=1&tab=scripts"
+        - row "KC-08 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-08 · 用例 v1 无脚本":
+            - strong: KC-08
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-9d106f06-fcf0-4968-8875-91aee70ae872?version=1&tab=scripts"
+        - row "KC-09 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-09 · 用例 v1 无脚本":
+            - strong: KC-09
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-854bc14d-5051-47a1-a6aa-29dc0c6c2d6c?version=1&tab=scripts"
+        - row "KC-10 · 用例 v1 无脚本 未绑定适用脚本 缺少脚本 生成脚本（需模型授权）":
+          - cell "KC-10 · 用例 v1 无脚本":
+            - strong: KC-10
+            - text: · 用例 v1
+            - generic: 无脚本
+          - cell "未绑定适用脚本"
+          - cell "缺少脚本 生成脚本（需模型授权）":
+            - text: 缺少脚本
+            - link "生成脚本（需模型授权）":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-3ec85fd4-d9fd-4430-93f6-2ecd5f642b7c?version=1&tab=scripts"
+        - row "KC-11 · 用例 v1 历史候选 v2 kimi-complex-20260925 可直接试跑（未批准）":
+          - cell "KC-11 · 用例 v1 历史候选 v2":
+            - strong: KC-11
+            - text: · 用例 v1
+            - generic: 历史候选 v2
+          - cell "kimi-complex-20260925"
+          - cell "可直接试跑（未批准）": 可直接试跑（未批准）
+        - row "KC-22 · 用例 v2 仅有用例 v1 的脚本 未绑定适用脚本 脚本不适用于此用例版本 查看历史脚本 / 为当前版本生成":
+          - cell "KC-22 · 用例 v2 仅有用例 v1 的脚本":
+            - strong: KC-22
+            - text: · 用例 v2
+            - generic: 仅有用例 v1 的脚本
+          - cell "未绑定适用脚本"
+          - cell "脚本不适用于此用例版本 查看历史脚本 / 为当前版本生成":
+            - text: 脚本不适用于此用例版本
+            - link "查看历史脚本 / 为当前版本生成":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=2&tab=scripts"
+    - checkbox "仅运行可执行部分，保留全部阻塞项，不宣称全项目通过"
+    - text: 仅运行可执行部分，保留全部阻塞项，不宣称全项目通过
+  - generic "高级：诊断试跑"
+  - alert
+  - button "取消"
+  - button "重新检查"
+  - button "确认运行已有脚本" [disabled]

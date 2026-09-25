@@ -1,0 +1,368 @@
+{
+  "checked_at": "2026-09-25T09:09:09.123Z",
+  "checks": {
+    "actual_executions": 4,
+    "started_batches": 3,
+    "media_hashes_verified": 40,
+    "existing_data_files_unchanged": 428,
+    "original_candidate_files_unchanged": 1041,
+    "original_24_unchanged": true,
+    "preview_wrote_no_batch": true,
+    "replay_started_no_run": true,
+    "full_scope": 12,
+    "runnable": 2,
+    "missing": 9,
+    "version_mismatch": 1,
+    "model_calls": 0,
+    "harness_starts": 0
+  },
+  "runs": [
+    {
+      "run_id": "trial-c920c263a6b1117154600cae2d598face2b8fdab",
+      "case": "KC-11",
+      "case_version": 1,
+      "candidate_version": 2,
+      "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+      "batch_id": "batch-bdaabafe-49c5-439f-b62c-c7387450cd43",
+      "result": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-832424546de6ac29aeceb58f99eb011d0bb3a796",
+      "case": "KC-02",
+      "case_version": 1,
+      "candidate_version": 2,
+      "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+      "batch_id": "batch-ef7198a5-be82-4c5a-8630-430b124e427d",
+      "result": "FAILED",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 8\nReceived: 5",
+        "expected": "8",
+        "actual": "5",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-f1113bdd0d0ad45876f07058fe2cf45d59410a87",
+      "case": "KC-11",
+      "case_version": 1,
+      "candidate_version": 2,
+      "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+      "batch_id": "batch-ef7198a5-be82-4c5a-8630-430b124e427d",
+      "result": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a",
+      "case": "KC-11",
+      "case_version": 1,
+      "candidate_version": 2,
+      "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+      "batch_id": "batch-af20b0e5-aeb5-4288-9ea6-d14b65fecdf7",
+      "result": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    }
+  ],
+  "batches": [
+    {
+      "batch_id": "batch-bdaabafe-49c5-439f-b62c-c7387450cd43",
+      "scope": "single",
+      "software_version": "repair-20260925-card-return",
+      "state": "FINISHED",
+      "items": [
+        {
+          "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+          "external_id": "KC-11",
+          "title": "维护与使用中不可预约",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": null,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+            "finding": "原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。",
+            "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+            "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-c920c263a6b1117154600cae2d598face2b8fdab",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-ef7198a5-be82-4c5a-8630-430b124e427d",
+      "scope": "selected",
+      "software_version": "repair-20260925-crosspage",
+      "state": "FINISHED",
+      "items": [
+        {
+          "case_id": "case-d02071fb-364f-4728-a75d-506581048486",
+          "external_id": "KC-02",
+          "title": "编号模糊搜索不区分大小写",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-d02071fb-364f-4728-a75d-506581048486",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925033830-71eef5ec",
+            "candidate_version": 2,
+            "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": null,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-d02071fb-364f-4728-a75d-506581048486",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925033830-71eef5ec",
+            "candidate_version": 2,
+            "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+            "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+            "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+            "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-832424546de6ac29aeceb58f99eb011d0bb3a796",
+          "result": "FAILED",
+          "complete_pass": false
+        },
+        {
+          "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+          "external_id": "KC-11",
+          "title": "维护与使用中不可预约",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": null,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+            "finding": "原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。",
+            "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+            "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-f1113bdd0d0ad45876f07058fe2cf45d59410a87",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-af20b0e5-aeb5-4288-9ea6-d14b65fecdf7",
+      "scope": "single",
+      "software_version": "repair-20260925-single",
+      "state": "FINISHED",
+      "items": [
+        {
+          "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+          "external_id": "KC-11",
+          "title": "维护与使用中不可预约",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": null,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+            "finding": "原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。",
+            "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+            "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    }
+  ],
+  "health": {
+    "service": "approved-test-workbench",
+    "status": "ready",
+    "active_run_id": null,
+    "active_build_task_id": null,
+    "active_batch_id": null,
+    "active_script_operation_id": null,
+    "build_budget": {
+      "schema": "workbench/build-stage-budget-v1",
+      "phase": "M2-C",
+      "max_starts": 2,
+      "used_starts": 0,
+      "claims": []
+    },
+    "build_authorization": null,
+    "build_diagnostics": {
+      "service_instance_id": "service-1ed552f6-2fca-4ac4-bea3-bf03ae876c2a",
+      "storage_status": "READY",
+      "storage_error": null,
+      "authorization_id": null,
+      "trial_runner_version": "e2e01-step-evidence-replay-v1"
+    }
+  }
+}

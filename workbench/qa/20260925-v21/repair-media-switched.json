@@ -1,0 +1,14 @@
+{
+  "run": "trial-f1113bdd0d0ad45876f07058fe2cf45d59410a87",
+  "url": "http://127.0.0.1:4322/workspace/#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=results&batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d",
+  "videos": [
+    {
+      "src": "/api/runs/trial-f1113bdd0d0ad45876f07058fe2cf45d59410a87/media/media-10",
+      "time": 0
+    },
+    {
+      "src": "/api/runs/trial-f1113bdd0d0ad45876f07058fe2cf45d59410a87/media/media-3",
+      "time": 0
+    }
+  ]
+}

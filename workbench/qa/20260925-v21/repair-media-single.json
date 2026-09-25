@@ -1,0 +1,43 @@
+{
+  "playingState": {
+    "paused": false,
+    "time": 0.238419
+  },
+  "pausedState": {
+    "paused": true,
+    "time": 0.281355
+  },
+  "singleMedia": {
+    "media": [
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-10",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-3",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-3",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-1",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-1",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-1",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-4",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-4",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-5",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-5",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-6",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-6",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-7",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-7",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-8",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-8",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-9",
+      "http://127.0.0.1:4322/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-9",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-2",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-2",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-4",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-6",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-8"
+    ],
+    "previewOptions": 0,
+    "run": "trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a",
+    "videos": [
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-10",
+      "/api/runs/trial-4b3f2fd86ace9e1097e5ab81f14a7d6b6300c92a/media/media-3"
+    ]
+  }
+}

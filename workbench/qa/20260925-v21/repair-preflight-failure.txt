@@ -1,0 +1,98 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: KC-11
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+  - heading "KC-11 · 维护与使用中不可预约" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "历史候选 v2 · 2026-09-25T04:20:41." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=history"
+  - heading "自动化脚本" [level=2]
+  - paragraph: 运行已有脚本不调用模型，也不代表人工批准。旧版本结果不适用于新内容。
+  - article:
+    - heading "历史脚本 · 候选 v2 · 用例 v1" [level=3]
+    - paragraph: 环境：kimi-complex-20260925 · 技术验证通过 · 人工核对：等待人工核对（未批准）
+    - strong: 要求核查：本次核查完整（未批准）
+    - paragraph: 原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。
+    - generic "核查来源（不等于正式批准）"
+    - paragraph: 脚本资格：限定技术试跑，未批准
+    - link "查看来源任务":
+      - /url: "#/history?task_id=build-20260925042041-42ee6c62"
+    - text: ·
+    - link "查看已有运行":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=history"
+    - text: ·
+    - link "查看脚本对应的用例版本":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1"
+    - generic "候选代码与文件清单"
+    - button "试跑当前文件包（不调用模型）" [disabled]
+    - generic "技术身份"
+  - paragraph:
+    - text: 请使用顶部“生成自动化脚本 / 重新生成脚本”或“更多 → 基于问题修订”。
+    - link "查看生成记录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/generation"
+  - generic "历史受控任务与兼容能力"
+- status
+- dialog "运行确认":
+  - heading "运行此用例" [level=2]
+  - button "关闭运行确认": ×
+  - paragraph: 复用已有脚本，不调用 Coding Agent。确认运行后形成新测试批次，保留历史结果。
+  - paragraph: 本次范围：1 条；脚本仍为限定技术试跑，未批准。
+  - text: 被测软件版本 / 构建标识
+  - textbox "被测软件版本 / 构建标识" [active]:
+    - /placeholder: 未提供（最多160字符）
+    - text: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  - status: 准备检查未完成，修正条件后将自动重试。
+  - generic "高级：诊断试跑"
+  - alert: 准备检查失败：软件版本标识最多 160 个字符，请修正后重试。
+  - button "取消"
+  - button "重新检查"
+  - button "确认运行已有脚本" [disabled]

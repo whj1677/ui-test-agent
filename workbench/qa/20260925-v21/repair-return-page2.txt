@@ -1,0 +1,119 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- strong: V2.1 产品验收 · 独立导入项目
+- generic: /
+- strong: 用例库
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "V2.1 产品验收 · 独立导入项目" [level=1]
+  - paragraph: 独立修改性验收项目。原24条资料只读；模型调用0。
+  - button "运行整个项目（12）"
+  - link "导入用例":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/import"
+  - strong: 已有脚本可直接试跑 2 条
+  - text: ·
+  - link "从 KC-11 v1 开始":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&tab=scripts"
+  - paragraph: 点击详情顶部“运行此用例”，自动检查后确认即可；不调用模型。其余 10 条请查看各行阻塞原因。
+  - generic: 全部用例
+  - strong: "12"
+  - generic: 内容已确认
+  - strong: "12"
+  - generic: 内容待确认
+  - strong: "0"
+  - generic: 项目修订
+  - strong: r7
+  - generic "项目历史概况（可能来自不同批次）"
+  - heading "项目用例" [level=2]
+  - generic: 每页10条，选择跨页保留
+  - text: ⌕
+  - generic: 搜索用例
+  - textbox "⌕ 搜索用例":
+    - /placeholder: 按编号或标题搜索
+  - combobox "模块筛选":
+    - option "全部模块" [selected]
+    - option "设备预约调度"
+  - combobox "内容状态筛选":
+    - option "全部内容状态" [selected]
+    - option "内容已确认"
+    - option "内容待确认"
+  - button "运行选中（0）" [disabled]
+  - generic "脚本操作"
+  - button "导出选中（0）" [disabled]
+  - button "导出全部（12）"
+  - paragraph:
+    - text: 已选 0 条 · 跨页保留，其中 0 条不在当前筛选中。
+    - button "清空选择"
+    - generic: 最近执行可能跨批次，不代表全项目回归结论。
+  - table:
+    - rowgroup:
+      - row "选择当前页 编号 / 标题 模块 内容状态 自动化脚本 最近执行 要求核对":
+        - columnheader "选择当前页":
+          - checkbox "选择当前页"
+        - columnheader "编号 / 标题"
+        - columnheader "模块"
+        - columnheader "内容状态"
+        - columnheader "自动化脚本"
+        - columnheader "最近执行"
+        - columnheader "要求核对"
+    - rowgroup:
+      - row "选择 KC-11 KC-11 维护与使用中不可预约 设备预约调度 内容已确认 可直接试跑（未批准） 用例 v1 通过 本次核查完整（未批准）":
+        - cell "选择 KC-11":
+          - checkbox "选择 KC-11"
+        - cell "KC-11 维护与使用中不可预约":
+          - button "KC-11 维护与使用中不可预约":
+            - strong: KC-11
+            - generic: 维护与使用中不可预约
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "可直接试跑（未批准） 用例 v1":
+          - text: 可直接试跑（未批准）
+          - generic: 用例 v1
+        - cell "通过":
+          - generic: 通过
+        - cell "本次核查完整（未批准）"
+      - row "选择 KC-22 KC-22 紧接结束边界允许并刷新保持（V2.1独立版本验收） 设备预约调度 内容已确认 脚本不适用于此用例版本 用例 v2 未执行 待核对":
+        - cell "选择 KC-22":
+          - checkbox "选择 KC-22"
+        - cell "KC-22 紧接结束边界允许并刷新保持（V2.1独立版本验收）":
+          - button "KC-22 紧接结束边界允许并刷新保持（V2.1独立版本验收）":
+            - strong: KC-22
+            - generic: 紧接结束边界允许并刷新保持（V2.1独立版本验收）
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "脚本不适用于此用例版本 用例 v2":
+          - text: 脚本不适用于此用例版本
+          - generic: 用例 v2
+        - cell "未执行"
+        - cell "待核对"
+  - generic: 第 2 / 2 页，共 12 条
+  - button "上一页"
+  - button "下一页" [disabled]
+- status

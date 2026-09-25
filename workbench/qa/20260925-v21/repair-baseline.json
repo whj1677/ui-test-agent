@@ -1,0 +1,128 @@
+{
+  "checked_at": "2026-09-25T08:50:03.310Z",
+  "project": "V2.1 产品验收 · 独立导入项目",
+  "code_matches_disk": true,
+  "app_sha256": "56b23a8b6949eb71398818f69db28fc4ad82a1e340a0c2fcb2978ec5c2c1d06a",
+  "cases": [
+    {
+      "case_id": "case-b62d8137-1a9e-44d7-8601-92928756f8f5",
+      "external_id": "KC-01",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-d02071fb-364f-4728-a75d-506581048486",
+      "external_id": "KC-02",
+      "case_version": 1,
+      "candidates": [
+        {
+          "applies": true,
+          "reason": null,
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-d02071fb-364f-4728-a75d-506581048486",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925033830-71eef5ec",
+            "candidate_version": 2,
+            "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "review": "BUSINESS_DIFFERENCE_RETAINED"
+        }
+      ]
+    },
+    {
+      "case_id": "case-60115c9f-0be9-4a94-bfed-37f7442ee1e8",
+      "external_id": "KC-03",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-3806d5d4-51db-4575-b700-00b5a5d45cfc",
+      "external_id": "KC-04",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-663fdd1d-e547-44fa-85d2-c274b4300749",
+      "external_id": "KC-05",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-713a5628-f66d-4b65-8ab9-5045d45cc098",
+      "external_id": "KC-06",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-de7db057-e9c7-4186-9ecd-df0051a7153f",
+      "external_id": "KC-07",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-9d106f06-fcf0-4968-8875-91aee70ae872",
+      "external_id": "KC-08",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-854bc14d-5051-47a1-a6aa-29dc0c6c2d6c",
+      "external_id": "KC-09",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-3ec85fd4-d9fd-4430-93f6-2ecd5f642b7c",
+      "external_id": "KC-10",
+      "case_version": 1,
+      "candidates": []
+    },
+    {
+      "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+      "external_id": "KC-11",
+      "case_version": 1,
+      "candidates": [
+        {
+          "applies": true,
+          "reason": null,
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-65d71aa5-aef9-41c8-9416-bb060c8adc74",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925042041-42ee6c62",
+            "candidate_version": 2,
+            "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "review": "REVIEWED_COMPLETE_FOR_THIS_CASE"
+        }
+      ]
+    },
+    {
+      "case_id": "case-a989687b-4d4b-489c-b1ed-83be4455e663",
+      "external_id": "KC-22",
+      "case_version": 2,
+      "candidates": [
+        {
+          "applies": false,
+          "reason": null,
+          "selection": {
+            "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+            "case_id": "case-a989687b-4d4b-489c-b1ed-83be4455e663",
+            "case_version": 1,
+            "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+            "source_task_id": "build-20260925045006-0e847875",
+            "candidate_version": 2,
+            "bundle_sha256": "C00F7D8B65E4681CDF293D4B7425077547119B4DBB333D68826C58F125912766",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "review": "REVIEWED_COMPLETE_FOR_THIS_CASE"
+        }
+      ]
+    }
+  ]
+}

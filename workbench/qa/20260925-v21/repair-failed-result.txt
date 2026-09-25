@@ -1,0 +1,146 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: KC-02
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+  - heading "KC-02 · 编号模糊搜索不区分大小写" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "历史候选 v2 · 2026-09-25T03:38:30." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-d02071fb-364f-4728-a75d-506581048486?version=1&batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d&run_id=trial-832424546de6ac29aeceb58f99eb011d0bb3a796&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-d02071fb-364f-4728-a75d-506581048486?version=1&batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d&run_id=trial-832424546de6ac29aeceb58f99eb011d0bb3a796&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-d02071fb-364f-4728-a75d-506581048486?version=1&batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d&run_id=trial-832424546de6ac29aeceb58f99eb011d0bb3a796&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-d02071fb-364f-4728-a75d-506581048486?version=1&batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d&run_id=trial-832424546de6ac29aeceb58f99eb011d0bb3a796&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）"
+    - option "2026-09-25T09:01:52.140Z · repair-20260925-crosspage · 执行结束" [selected]
+    - option "2026-09-25T08:51:24.756Z · 软件版本未提供 · 准备检查"
+    - option "2026-09-25T08:51:08.796Z · 软件版本未提供 · 准备检查"
+    - option "2026-09-25T08:14:09.487Z · V21-media-polling-final · 执行结束"
+    - option "2026-09-25T08:11:57.590Z · V21-局部复测-标签V2 · 执行结束"
+    - option "2026-09-25T08:04:16.558Z · V21-取消队列 · 已取消"
+    - option "2026-09-25T08:02:02.401Z · V21-全项目-冻结版本 · 执行结束"
+    - option "2026-09-25T08:00:30.065Z · V21-跨页范围 · 执行结束"
+  - paragraph:
+    - link "返回本批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches?batch_id=batch-ef7198a5-be82-4c5a-8630-430b124e427d"
+    - text: · 执行结束 · 软件 repair-20260925-crosspage
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本批最近结果"
+    - option "2026-09-25T09:02:28.402Z · 批次技术试跑 · 失败" [selected]
+  - paragraph: 执行状态：执行结束 · 软件版本：repair-20260925-crosspage · 脚本候选v2 · 资格：未批准
+  - article:
+    - heading "KC-02 · 运行结果" [level=3]
+    - paragraph: 来源候选 KC-02 v2
+    - generic: 失败
+    - paragraph: 执行用例 v1 · 运行器 candidate-bundle-trial-v1
+    - strong: 断言不符
+    - paragraph: 预期：8
+    - paragraph: 实际：5
+    - generic "查看原始错误"
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - strong: 要求核查：业务差异保留，待核对
+    - paragraph: 第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。
+    - generic "核查来源（不等于正式批准）"
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/runs/trial-832424546de6ac29aeceb58f99eb011d0bb3a796/media/media-10
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/runs/trial-832424546de6ac29aeceb58f99eb011d0bb3a796/media/media-2
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 在搜索框输入小写eq-10"
+      - generic: 失败
+      - term: 预期
+      - definition: 立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页
+      - term: 实际
+      - definition: "5"
+      - term: 原断言预期
+      - definition: "8"
+      - term: 采集
+      - definition: failure-after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-832424546de6ac29aeceb58f99eb011d0bb3a796/media/media-5
+      - button "2. 清空后输入大写EQ-106"
+      - generic: 通过
+      - term: 预期
+      - definition: 仅显示EQ-106，共1条，第1/1页
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-832424546de6ac29aeceb58f99eb011d0bb3a796/media/media-6
+      - button "3. 输入eq-1并查看边界"
+      - generic: 失败
+      - term: 预期
+      - definition: 匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 原断言预期
+      - definition: 匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效
+      - term: 采集
+      - definition: failure-after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-832424546de6ac29aeceb58f99eb011d0bb3a796/media/media-9
+  - img "本次运行截图"
+- status
