@@ -1,0 +1,151 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: 第一批复跑验收 · 四条原用例副本
+    - generic: 项目空间 · 4 条用例
+    - link "用例库":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/batches"
+    - link "报告":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "第一批复跑验收 · 四条原用例副本":
+  - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases"
+- generic: /
+- strong: KC-22
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases"
+  - heading "KC-22 · 紧接结束边界允许并刷新保持" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "历史候选 v2 · 2026-09-25T04:50:06." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases/case-153043e4-6675-4596-bff1-bac3b8bc6c62?return=%23%2Fprojects%2Fproject-5fb015d9-a47d-4e14-9444-449a997692f7%2Fcases&version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases/case-153043e4-6675-4596-bff1-bac3b8bc6c62?return=%23%2Fprojects%2Fproject-5fb015d9-a47d-4e14-9444-449a997692f7%2Fcases&version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases/case-153043e4-6675-4596-bff1-bac3b8bc6c62?return=%23%2Fprojects%2Fproject-5fb015d9-a47d-4e14-9444-449a997692f7%2Fcases&version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7/cases/case-153043e4-6675-4596-bff1-bac3b8bc6c62?return=%23%2Fprojects%2Fproject-5fb015d9-a47d-4e14-9444-449a997692f7%2Fcases&version=1&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）" [selected]
+    - option "2026-09-25T06:07:33.514Z · 模拟构建-V1 · 已取消"
+    - option "2026-09-25T06:05:52.152Z · 模拟构建-V2 · 执行结束"
+    - option "2026-09-25T06:02:31.573Z · 模拟构建-V1 · 已取消"
+    - option "2026-09-25T06:01:30.540Z · 模拟构建-V2 · 执行结束"
+    - option "2026-09-25T06:00:11.357Z · 模拟构建-V1 · 执行结束"
+  - paragraph: 历史结果 / 来源未分批；开发自测与独立验证分别保留。
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本版本最近历史结果"
+    - option "2026-09-25T06:00:31.836Z · 批次技术试跑 · 通过"
+    - option "2026-09-25T06:01:30.642Z · 批次技术试跑 · 通过"
+    - option "2026-09-25T06:05:52.235Z · 批次技术试跑 · 通过" [selected]
+  - paragraph: 执行状态：执行结束 · 软件版本：模拟构建-V2 · 脚本候选v2 · 资格：未批准
+  - strong: 要求核查：本次核查完整（未批准）
+  - paragraph: 原钱七/边界回归验证/日期/12到14不变，确认20乘2等于40；仅新增R-002、关闭弹窗清空选择；刷新后R-001/R-002及2条80元均核对。
+  - generic "核查来源（不等于正式批准）"
+  - article:
+    - heading "KC-22 · 运行结果" [level=3]
+    - paragraph: 来源候选 KC-22 v2
+    - generic: 通过
+    - paragraph: 执行用例 v1 · 运行器 candidate-bundle-trial-v1
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/runs/trial-250da1571829a2bf9219fe5aa14b6d19788ab61b/media/media-10
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/runs/trial-250da1571829a2bf9219fe5aa14b6d19788ab61b/media/media-2
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 选择EQ-103，填申请人钱七、用途边界回归验证、2026-10-10 12:00到14:00进入确认"
+      - generic: 通过
+      - term: 预期
+      - definition: 与R-001在12:00紧接允许，第3步总价20乘2等于40元
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-250da1571829a2bf9219fe5aa14b6d19788ab61b/media/media-4
+      - button "2. 确认预约一次"
+      - generic: 通过
+      - term: 预期
+      - definition: 仅创建R-002，弹窗关闭，清空选择，跳转预约记录，状态已确认
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-250da1571829a2bf9219fe5aa14b6d19788ab61b/media/media-6
+      - button "3. 刷新浏览器"
+      - generic: 通过
+      - term: 预期
+      - definition: R-001与R-002均保留，统计已确认2条、收入80元
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-250da1571829a2bf9219fe5aa14b6d19788ab61b/media/media-8
+  - paragraph: 历史录制清晰度有限；未取得采集尺寸，不以放大代替清晰证据。
+  - img "本次运行截图"
+- status: 导入结果已由后端持久化。
+- dialog "已有脚本技术复跑":
+  - heading "已有脚本技术复跑 · 不调用模型" [level=2]
+  - paragraph: 范围：1 条。不修改脚本，不自动批准。
+  - text: 被测软件版本 / 构建标识
+  - textbox "被测软件版本 / 构建标识":
+    - /placeholder: 未提供
+    - text: V21-验收-原部署
+  - checkbox "明确诊断试跑（可包含核查不采纳的候选，不属于正式回归）"
+  - text: 明确诊断试跑（可包含核查不采纳的候选，不属于正式回归）
+  - paragraph: 请求 1 条，可运行 1 条，待处理 0 条。
+  - list:
+    - listitem: KC-22：限定技术试跑（未批准）；要求核查：本次核查完整（未批准）
+  - alert
+  - button "检查准备条件"
+  - button "确认运行已有脚本"
+  - button "关闭"

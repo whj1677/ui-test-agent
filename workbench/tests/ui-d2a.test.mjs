@@ -4,7 +4,6 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createWorkbenchServer } from '../server/app.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { CaseLibraryManager } from '../server/cases/manager.mjs';
 
@@ -20,10 +19,11 @@ async function setup(t) {
   return { store, manager:new CaseLibraryManager(store) };
 }
 
-test('workspace entry is a same-origin whitelist and old workbench remains available', async (t) => {
-  const { store, manager } = await setup(t); const server = createWorkbenchServer({ caseStore:store, caseManager:manager });
-  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve)); t.after(() => new Promise((resolve) => server.close(resolve)));
-  const base = `http://127.0.0.1:${server.address().port}`;
+test('formal 4322 workspace is the only UI and old entry redirects', async () => {
+  // Acceptance uses the existing formal service; never launch a second workbench.
+  const base = 'http://127.0.0.1:4322';
+  const old=await fetch(base+'/',{redirect:'manual'});assert.equal(old.status,308);assert.equal(old.headers.get('location'),'/workspace/');
+  for(const oldAsset of ['/app.js','/styles.css'])assert.equal((await fetch(base+oldAsset)).status,410);
   for (const [pathname, type] of [['/','text/html'], ['/workspace/','text/html'], ['/workspace/app.js','text/javascript'], ['/workspace/api.js','text/javascript'], ['/workspace/styles.css','text/css']]) {
     const response = await fetch(`${base}${pathname}`); assert.equal(response.status, 200); assert.match(response.headers.get('content-type'), new RegExp(type)); assert.match(response.headers.get('content-security-policy'), /connect-src 'self'/);
   }

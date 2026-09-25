@@ -574,8 +574,11 @@ async function renderExecutionRecords(project, context=null) {
     document.querySelectorAll('[data-step-seek]').forEach((button)=>button.addEventListener('click',()=>{
       const chapter=chapters.find((item)=>item.step_id===button.dataset.stepSeek);if(!chapter)return;
       document.querySelectorAll('.execution-step').forEach((item)=>item.classList.toggle('selected',item.dataset.stepId===button.dataset.stepSeek));
-      video.currentTime=steps.find((step)=>step.step_id===button.dataset.stepSeek)?.execution_status==='FAILED'
+      const phaseStart=steps.find((step)=>step.step_id===button.dataset.stepSeek)?.execution_status==='FAILED'
         ?chapter.result_start_seconds:chapter.start_seconds;
+      // Canvas recording timestamps precede the encoded frame by a few frames.
+      // Seek inside the selected phase so a paused player does not show the prior step.
+      video.currentTime=Math.min(phaseStart+0.15,chapter.end_seconds-0.02);
     }));
     return;
   }

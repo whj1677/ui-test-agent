@@ -1,0 +1,49 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: 登录准备
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "被测系统登录准备" [level=1]
+  - paragraph: 登录发生在工作台打开的专用浏览器，不是工作台账号登录。登录完成后，可在 AUTH-TC-001 用例详情创建登录建例任务；会话失效或被清除时，关联的建例与复跑会立即停止。
+  - heading "环境与角色" [level=2]
+  - generic: 被测环境
+  - combobox "被测环境":
+    - option "AUTH-01 独立合成登录样例" [selected]
+  - generic: 账号角色
+  - combobox "账号角色":
+    - option "inspector" [selected]
+    - option "supervisor"
+  - status: 状态：未登录 · 角色：inspector · 账号：未确认
+  - button "打开专用登录浏览器"
+  - button "检查登录"
+  - button "清除会话"
+  - paragraph: 本阶段只提供独立本机合成站。请在专用窗口自行输入账号和密码；验证码、扫码或多因素认证也由你完成。登录阶段不启动模型观察、不采集业务录像、截图或 Trace。AUTH-TC-001 的登录建例任务已绑定此环境：显示“有效”后，启动建例与候选复跑会复核并绑定当前会话版本；会话失效或被清除时关联运行立即停止，需要重新登录后再复跑。
+- status

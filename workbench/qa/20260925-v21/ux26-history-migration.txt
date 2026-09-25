@@ -1,0 +1,145 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "项目列表":
+      - /url: "#/projects"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- strong: 历史记录
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "历史记录与批准资产" [level=1]
+  - paragraph: 保留早期未绑定项目的记录与证据；项目内测试从用例库进入。
+  - link "返回项目":
+    - /url: "#/projects"
+  - heading "已批准资产" [level=2]
+  - paragraph: 当前数据配置没有批准资产。
+  - alert
+  - heading "历史运行" [level=2]
+  - paragraph:
+    - link "2026-09-25T07:53:29.644Z · KC-22 · 通过":
+      - /url: "#/history?run_id=trial-a147ffe268aca9ae8c3542f518610654dacee67e"
+  - paragraph:
+    - link "2026-09-25T06:13:54.034Z · KC-02 · 失败":
+      - /url: "#/history?run_id=trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03"
+  - paragraph:
+    - link "2026-09-25T06:07:33.632Z · KC-02 · 未执行":
+      - /url: "#/history?run_id=trial-9ba539af200501c0787ad7bc2e5c455b21323350"
+  - paragraph:
+    - link "2026-09-25T06:05:52.235Z · KC-22 · 通过":
+      - /url: "#/history?run_id=trial-250da1571829a2bf9219fe5aa14b6d19788ab61b"
+  - paragraph:
+    - link "2026-09-25T06:02:31.712Z · KC-02 · 未执行":
+      - /url: "#/history?run_id=trial-67b97ded44248c99dc438550a606f0515f601b17"
+  - paragraph:
+    - link "2026-09-25T06:01:30.642Z · KC-22 · 通过":
+      - /url: "#/history?run_id=trial-9b88081f837e72cf16b12139d1782aebd10cdb6c"
+  - paragraph:
+    - link "2026-09-25T06:00:31.836Z · KC-22 · 通过":
+      - /url: "#/history?run_id=trial-f2c4eefbd96331278d358bfad2be6695e82deb34"
+  - paragraph:
+    - link "2026-09-25T06:00:16.378Z · KC-11 · 通过":
+      - /url: "#/history?run_id=trial-5091327905155a91662fd5f2561c306c639ba5aa"
+  - paragraph:
+    - link "2026-09-25T06:00:11.469Z · KC-02 · 失败":
+      - /url: "#/history?run_id=trial-e189beaaed72748c7faa4a35661de7e43a751710"
+  - paragraph:
+    - link "2026-09-25T05:59:44.892Z · KC-11 · 通过":
+      - /url: "#/history?run_id=trial-ceb258ee214cff1fba5bc869780e09d8c795f03a"
+  - paragraph:
+    - link "2026-09-25T05:59:39.787Z · KC-02 · 失败":
+      - /url: "#/history?run_id=trial-26dceaf11a1daf3504b651f3640b1d5a598debdd"
+  - paragraph:
+    - link "2026-09-25T05:59:07.914Z · KC-22 · 通过":
+      - /url: "#/history?run_id=trial-8d804b4ab8b82178c99c9e0ac8189157861da0f5"
+  - paragraph:
+    - link "2026-09-25T02:36:42.201Z · FRESH-B · 失败":
+      - /url: "#/history?run_id=trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002"
+  - paragraph:
+    - link "2026-09-25T02:36:20.434Z · FRESH-B · 通过":
+      - /url: "#/history?run_id=trial-6220468896555a695ecae5e1e73260af133bd6f3"
+  - heading "历史开发记录" [level=2]
+  - paragraph:
+    - link "2026-09-25T05:09:00.126Z · KC-24 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925050900-73b87996"
+  - paragraph:
+    - link "2026-09-25T04:53:31.460Z · KC-23 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925045331-ce81611f"
+  - paragraph:
+    - link "2026-09-25T04:50:06.867Z · KC-22 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925045006-0e847875"
+  - paragraph:
+    - link "2026-09-25T04:45:22.469Z · KC-21 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925044522-e2ff40d5"
+  - paragraph:
+    - link "2026-09-25T04:42:43.423Z · KC-20 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925044243-75b3e593"
+  - paragraph:
+    - link "2026-09-25T04:41:13.289Z · KC-19 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925044113-e7b1019f"
+  - paragraph:
+    - link "2026-09-25T04:37:50.775Z · KC-18 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925043750-80802d76"
+  - paragraph:
+    - link "2026-09-25T04:35:52.158Z · KC-17 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925043552-fb3bce7f"
+  - paragraph:
+    - link "2026-09-25T04:34:07.759Z · KC-16 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925043407-4feecbae"
+  - paragraph:
+    - link "2026-09-25T04:31:04.493Z · KC-15 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925043104-eeae7bf4"
+  - paragraph:
+    - link "2026-09-25T04:29:09.096Z · KC-14 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925042909-b2b8630a"
+  - paragraph:
+    - link "2026-09-25T04:26:53.518Z · KC-13 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925042653-d11d10e5"
+  - paragraph:
+    - link "2026-09-25T04:23:29.865Z · KC-12 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925042329-faeefd2a"
+  - paragraph:
+    - link "2026-09-25T04:20:41.569Z · KC-11 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925042041-42ee6c62"
+  - paragraph:
+    - link "2026-09-25T04:17:41.337Z · KC-10 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925041741-dd0e9bfe"
+  - paragraph:
+    - link "2026-09-25T04:15:19.588Z · KC-09 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925041519-b2b6ee4e"
+  - paragraph:
+    - link "2026-09-25T04:14:07.605Z · KC-08 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925041407-0b067f6f"
+  - paragraph:
+    - link "2026-09-25T04:06:29.694Z · KC-07 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925040629-f5e7d833"
+  - paragraph:
+    - link "2026-09-25T04:00:11.832Z · KC-06 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925040011-a3e56831"
+  - paragraph:
+    - link "2026-09-25T03:58:24.365Z · KC-05 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925035824-a39f1836"
+  - paragraph:
+    - link "2026-09-25T03:52:09.421Z · KC-04 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925035209-9b4736a4"
+  - paragraph:
+    - link "2026-09-25T03:45:39.462Z · KC-03 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925034539-640747ed"
+  - paragraph:
+    - link "2026-09-25T03:38:30.150Z · KC-02 · CANDIDATE_VALIDATION_FAILED":
+      - /url: "#/history?task_id=build-20260925033830-71eef5ec"
+  - paragraph:
+    - link "2026-09-25T03:34:21.070Z · KC-01 · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925033421-adbef154"
+  - paragraph:
+    - link "2026-09-25T02:16:10.288Z · FRESH-B · WAITING_HUMAN_REVIEW":
+      - /url: "#/history?task_id=build-20260925021610-943fbf86"
+- status

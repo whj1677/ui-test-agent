@@ -1,0 +1,33 @@
+{
+  "report_id": "report-8a4de8735d87a09f1aaa7fcd5212b925d98ac746",
+  "counts": {
+    "requested": 1,
+    "executed": 1,
+    "passed": 0,
+    "failed": 1,
+    "not_run": 0
+  },
+  "run_id": "trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539",
+  "steps": [
+    {
+      "order": 1,
+      "status": "FAILED",
+      "actual": "5"
+    },
+    {
+      "order": 2,
+      "status": "PASSED",
+      "actual": "未单独采集实际值"
+    },
+    {
+      "order": 3,
+      "status": "FAILED",
+      "actual": "未单独采集实际值"
+    }
+  ],
+  "download_bytes": 920680,
+  "download_sha256": "4172435d78f81e64fb1d6e07a0c405f8232632e517075ceefcc0331bcfea0295",
+  "matches_preview_bytes": true,
+  "old_report_hash_unchanged": true,
+  "offline_browser_open": "UNVERIFIED_FILE_SCHEME_RESTRICTION"
+}

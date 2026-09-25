@@ -30,11 +30,8 @@ function securityHeaders(contentType) {
 }
 
 async function sendStatic(response, webRoot, workspaceRoot, pathname) {
-  const files = new Map([
-    ['/', ['index.html', 'text/html; charset=utf-8']],
-    ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
-    ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
-  ]);
+  if(['/', '/index.html'].includes(pathname)){response.writeHead(308,{location:'/workspace/','cache-control':'no-store'});response.end();return true;}
+  if(['/app.js','/styles.css'].includes(pathname)){sendJson(response,410,{error:'LEGACY_UI_REMOVED',entry:'/workspace/'});return true;}
   const workspaceFiles = new Map([
     ['/workspace', ['index.html', 'text/html; charset=utf-8']],
     ['/workspace/', ['index.html', 'text/html; charset=utf-8']],
@@ -45,10 +42,10 @@ async function sendStatic(response, webRoot, workspaceRoot, pathname) {
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
   for (const name of ['script-actions.js','reports.js','history.js','product.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
-  const selected = files.get(pathname) || workspaceFiles.get(pathname);
+  const selected = workspaceFiles.get(pathname);
   if (!selected) return false;
   response.writeHead(200, securityHeaders(selected[1]));
-  response.end(await fs.readFile(path.join(workspaceFiles.has(pathname) ? workspaceRoot : webRoot, selected[0])));
+  response.end(await fs.readFile(path.join(workspaceRoot, selected[0])));
   return true;
 }
 
@@ -328,6 +325,7 @@ export function createWorkbenchServer(options = {}) {
       const productRoute=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/(script-operations|reports)(?:\/([^/]+)(?:\/(start|stop|html))?)?$/);
       if(productRoute){
         const [,rawProject,kind,rawId,action]=productRoute,projectId=decodeURIComponent(rawProject),id=rawId&&decodeURIComponent(rawId);
+        if(!await caseStore?.getProject(projectId))return sendJson(response,404,{error:'CASE_PROJECT_NOT_FOUND'});
         if(kind==='reports'&&reportSnapshots){
           if(request.method==='GET'){
             if(!id)return sendJson(response,200,{reports:await reportSnapshots.list(projectId)});
@@ -339,6 +337,7 @@ export function createWorkbenchServer(options = {}) {
             return sendJson(response,200,snapshot);
           }
           if(request.method==='POST'&&!id){if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});return sendJson(response,201,await reportSnapshots.create(projectId,await readJsonBody(request)));}
+          if(request.method==='POST'&&id==='cancel'){if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});return sendJson(response,200,await reportSnapshots.cancel(projectId,await readJsonBody(request)));}
         }
         if(kind==='script-operations'&&scriptOperations){
           if(request.method==='GET')return sendJson(response,200,id?await scriptOperations.get(id,projectId):{operations:await scriptOperations.list(projectId)});

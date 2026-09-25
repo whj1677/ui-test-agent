@@ -1,0 +1,25 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "项目列表":
+      - /url: "#/projects"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: KC-02
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "无法读取真实数据" [level=2]
+  - paragraph: 用例不存在或不属于当前项目。
+  - button "重新连接"
+- status

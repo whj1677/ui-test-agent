@@ -16,7 +16,7 @@ export async function openScriptOperation({project,items,mode,go,onError}){
         const selected=document.querySelector(`[data-revision-source="${i}"]`).value;
         const candidate=selected===''?null:r.automation.candidates.filter(c=>c.applies_to_selected_version)[Number(selected)];
         if(candidate)Object.assign(input,{source_task_id:candidate.selection.source_task_id,candidate_version:candidate.selection.candidate_version,bundle_sha256:candidate.selection.bundle_sha256});
-        input.feedback=document.querySelector('#script-feedback').value;if(r.run_id)input.run_id=r.run_id;
+        input.feedback=document.querySelector('#script-feedback').value;if(r.run_id&&candidate)input.run_id=r.run_id;
       }return input;
     })});
     const check=async()=>{

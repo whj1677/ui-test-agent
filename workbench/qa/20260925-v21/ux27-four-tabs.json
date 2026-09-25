@@ -1,0 +1,26 @@
+[
+  {
+    "tab": "结果与证据",
+    "heading": true,
+    "blocked": true,
+    "preservesOld": true
+  },
+  {
+    "tab": "用例内容",
+    "heading": true,
+    "blocked": true,
+    "preservesOld": true
+  },
+  {
+    "tab": "自动化脚本",
+    "heading": true,
+    "blocked": true,
+    "preservesOld": true
+  },
+  {
+    "tab": "历史结果",
+    "heading": true,
+    "blocked": true,
+    "preservesOld": true
+  }
+]

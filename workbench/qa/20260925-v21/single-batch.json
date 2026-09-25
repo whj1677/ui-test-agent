@@ -1,0 +1,69 @@
+{
+  "schema": "workbench/test-batch-v1",
+  "batch_id": "batch-77e6ed65-cdf8-4469-b238-8acbddfc6f51",
+  "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+  "scope": "single",
+  "mode": "technical",
+  "software_version": "V21-验收-原部署",
+  "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+  "project_revision": 3,
+  "created_at": "2026-09-25T07:53:17.853Z",
+  "state": "FINISHED",
+  "items": [
+    {
+      "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+      "external_id": "KC-22",
+      "title": "紧接结束边界允许并刷新保持",
+      "case_version": 1,
+      "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+      "selection": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+        "case_version": 1,
+        "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+        "source_task_id": "build-20260925045006-0e847875",
+        "candidate_version": 2,
+        "bundle_sha256": "C00F7D8B65E4681CDF293D4B7425077547119B4DBB333D68826C58F125912766",
+        "environment_id": "kimi-complex-20260925"
+      },
+      "environment_identity": {
+        "id": "kimi-complex-20260925",
+        "kind": "registered-static-html",
+        "file": "qa/20260925-kimi-complex/index.html",
+        "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+      },
+      "requirement_review": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+        "case_version": 1,
+        "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+        "source_task_id": "build-20260925045006-0e847875",
+        "candidate_version": 2,
+        "bundle_sha256": "C00F7D8B65E4681CDF293D4B7425077547119B4DBB333D68826C58F125912766",
+        "environment_id": "kimi-complex-20260925",
+        "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+        "finding": "原钱七/边界回归验证/日期/12到14不变，确认20乘2等于40；仅新增R-002、关闭弹窗清空选择；刷新后R-001/R-002及2条80元均核对。",
+        "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+        "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+        "approval_status": "NOT_APPROVED",
+        "reuse_source": {
+          "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+          "case_id": "case-227cc211-bff9-4998-9952-1eae1946f1d5",
+          "case_version": 1
+        }
+      },
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "FINISHED",
+      "reason": null,
+      "run_id": "trial-a147ffe268aca9ae8c3542f518610654dacee67e",
+      "result": "PASSED",
+      "complete_pass": true
+    }
+  ],
+  "harness_starts": 0,
+  "model_calls": 0,
+  "request_id": "batch-request-1b76b8ea-1458-4415-9dde-0789a83f2b77",
+  "allow_partial": false,
+  "started_at": "2026-09-25T07:53:29.632Z",
+  "finished_at": "2026-09-25T07:53:44.429Z"
+}

@@ -1,0 +1,76 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- link "KC-22":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663"
+- generic: /
+- strong: 编辑当前版本
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "编辑 KC-22 · v1" [level=1]
+  - paragraph: 保存会形成新版本；历史版本和已有任务快照不改写。
+  - generic: 用例编号
+  - textbox "用例编号": KC-22
+  - generic: 标题
+  - textbox "标题": 紧接结束边界允许并刷新保持（V2.1独立版本验收）
+  - generic: 模块
+  - textbox "模块": 设备预约调度
+  - generic: 内容状态
+  - combobox "内容状态":
+    - option "内容已确认" [selected]
+    - option "内容待确认"
+  - generic: 前置条件
+  - textbox "前置条件": 独立重置演示数据
+  - generic: 测试数据
+  - textbox "测试数据": 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+  - heading "步骤与对应预期" [level=2]
+  - button "新增步骤"
+  - strong: "1"
+  - generic: 动作
+  - textbox "动作": 选择EQ-103，填申请人钱七、用途边界回归验证、2026-10-10 12:00到14:00进入确认
+  - generic: 对应预期
+  - textbox "对应预期": 与R-001在12:00紧接允许，第3步总价20乘2等于40元
+  - button "删除第 1 步": ×
+  - strong: "2"
+  - generic: 动作
+  - textbox "动作": 确认预约一次
+  - generic: 对应预期
+  - textbox "对应预期": 仅创建R-002，弹窗关闭，清空选择，跳转预约记录，状态已确认
+  - button "删除第 2 步": ×
+  - strong: "3"
+  - generic: 动作
+  - textbox "动作": 刷新浏览器
+  - generic: 对应预期
+  - textbox "对应预期": R-001与R-002均保留，统计已确认2条、收入80元
+  - button "删除第 3 步": ×
+  - generic: 加载时项目修订：r3。发生 409 时会保留当前草稿，不自动覆盖。
+  - button "取消"
+  - button "保存为新版本" [disabled]
+- status: 已形成新的用例版本。

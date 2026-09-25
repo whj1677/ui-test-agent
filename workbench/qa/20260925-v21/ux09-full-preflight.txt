@@ -1,0 +1,263 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- strong: V2.1 产品验收 · 独立导入项目
+- generic: /
+- strong: 用例库
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "V2.1 产品验收 · 独立导入项目" [level=1]
+  - paragraph: 独立修改性验收项目。原24条资料只读；模型调用0。
+  - button "运行整个项目（12）"
+  - link "导入用例":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/import"
+  - generic: 全部用例
+  - strong: "12"
+  - generic: 内容已确认
+  - strong: "12"
+  - generic: 内容待确认
+  - strong: "0"
+  - generic: 项目修订
+  - strong: r3
+  - generic "项目历史概况（可能来自不同批次）"
+  - heading "项目用例" [level=2]
+  - generic: 每页10条，选择跨页保留
+  - text: ⌕
+  - generic: 搜索用例
+  - textbox "⌕ 搜索用例":
+    - /placeholder: 按编号或标题搜索
+  - combobox "模块筛选":
+    - option "全部模块" [selected]
+    - option "设备预约调度"
+  - combobox "内容状态筛选":
+    - option "全部内容状态" [selected]
+    - option "内容已确认"
+    - option "内容待确认"
+  - button "运行选中（2）"
+  - generic "脚本操作"
+  - button "导出选中（2）"
+  - button "导出全部（12）"
+  - paragraph:
+    - text: 已选 2 条 · 跨页保留，其中 0 条不在当前筛选中。
+    - button "清空选择"
+    - generic: 最近执行可能跨批次，不代表全项目回归结论。
+  - table:
+    - rowgroup:
+      - row "选择当前页 编号 / 标题 模块 内容状态 自动化脚本 最近执行 要求核对":
+        - columnheader "选择当前页":
+          - checkbox "选择当前页"
+        - columnheader "编号 / 标题"
+        - columnheader "模块"
+        - columnheader "内容状态"
+        - columnheader "自动化脚本"
+        - columnheader "最近执行"
+        - columnheader "要求核对"
+    - rowgroup:
+      - row "选择 KC-01 KC-01 初始数据与三页分页边界 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-01":
+          - checkbox "选择 KC-01"
+        - cell "KC-01 初始数据与三页分页边界":
+          - button "KC-01 初始数据与三页分页边界":
+            - strong: KC-01
+            - generic: 初始数据与三页分页边界
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-02 KC-02 编号模糊搜索不区分大小写 设备预约调度 内容已确认 候选 1 版 · 待核对 用例 v1 失败 业务差异保留，待核对":
+        - cell "选择 KC-02":
+          - checkbox "选择 KC-02" [checked]
+        - cell "KC-02 编号模糊搜索不区分大小写":
+          - button "KC-02 编号模糊搜索不区分大小写":
+            - strong: KC-02
+            - generic: 编号模糊搜索不区分大小写
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "候选 1 版 · 待核对 用例 v1":
+          - text: 候选 1 版 · 待核对
+          - generic: 用例 v1
+        - cell "失败":
+          - generic: 失败
+        - cell "业务差异保留，待核对"
+      - row "选择 KC-03 KC-03 同名温循箱搜索 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-03":
+          - checkbox "选择 KC-03"
+        - cell "KC-03 同名温循箱搜索":
+          - button "KC-03 同名温循箱搜索":
+            - strong: KC-03
+            - generic: 同名温循箱搜索
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-04 KC-04 站点与状态AND组合筛选 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-04":
+          - checkbox "选择 KC-04"
+        - cell "KC-04 站点与状态AND组合筛选":
+          - button "KC-04 站点与状态AND组合筛选":
+            - strong: KC-04
+            - generic: 站点与状态AND组合筛选
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-05 KC-05 状态多选空闲或维护 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-05":
+          - checkbox "选择 KC-05"
+        - cell "KC-05 状态多选空闲或维护":
+          - button "KC-05 状态多选空闲或维护":
+            - strong: KC-05
+            - generic: 状态多选空闲或维护
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-06 KC-06 无结果与重置恢复 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-06":
+          - checkbox "选择 KC-06"
+        - cell "KC-06 无结果与重置恢复":
+          - button "KC-06 无结果与重置恢复":
+            - strong: KC-06
+            - generic: 无结果与重置恢复
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-07 KC-07 费用降序排序前三 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-07":
+          - checkbox "选择 KC-07"
+        - cell "KC-07 费用降序排序前三":
+          - button "KC-07 费用降序排序前三":
+            - strong: KC-07
+            - generic: 费用降序排序前三
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-08 KC-08 跨页选择保留 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-08":
+          - checkbox "选择 KC-08"
+        - cell "KC-08 跨页选择保留":
+          - button "KC-08 跨页选择保留":
+            - strong: KC-08
+            - generic: 跨页选择保留
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-09 KC-09 筛选变更清空选择并回第1页 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-09":
+          - checkbox "选择 KC-09"
+        - cell "KC-09 筛选变更清空选择并回第1页":
+          - button "KC-09 筛选变更清空选择并回第1页":
+            - strong: KC-09
+            - generic: 筛选变更清空选择并回第1页
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+      - row "选择 KC-10 KC-10 当前页全选只选可预约行 设备预约调度 内容已确认 未生成 用例 v1 未执行 待核对":
+        - cell "选择 KC-10":
+          - checkbox "选择 KC-10"
+        - cell "KC-10 当前页全选只选可预约行":
+          - button "KC-10 当前页全选只选可预约行":
+            - strong: KC-10
+            - generic: 当前页全选只选可预约行
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "未生成 用例 v1":
+          - text: 未生成
+          - generic: 用例 v1
+        - cell "未执行"
+        - cell "待核对"
+  - generic: 第 1 / 2 页，共 12 条
+  - button "上一页" [disabled]
+  - button "下一页"
+- status
+- dialog "已有脚本技术复跑":
+  - heading "已有脚本技术复跑 · 不调用模型" [level=2]
+  - paragraph: 范围：整个项目 12 条（不受筛选或分页影响）。不修改脚本，不自动批准。
+  - text: 被测软件版本 / 构建标识
+  - textbox "被测软件版本 / 构建标识":
+    - /placeholder: 未提供
+    - text: V21-全项目-冻结版本
+  - checkbox "明确诊断试跑（可包含核查不采纳的候选，不属于正式回归）"
+  - text: 明确诊断试跑（可包含核查不采纳的候选，不属于正式回归）
+  - paragraph: 请求 12 条，可运行 3 条，待处理 9 条。
+  - list:
+    - listitem: KC-01：缺少脚本；要求核查：待核对
+    - listitem: KC-02：限定技术试跑（未批准）；要求核查：业务差异保留，待核对
+    - listitem: KC-03：缺少脚本；要求核查：待核对
+    - listitem: KC-04：缺少脚本；要求核查：待核对
+    - listitem: KC-05：缺少脚本；要求核查：待核对
+    - listitem: KC-06：缺少脚本；要求核查：待核对
+    - listitem: KC-07：缺少脚本；要求核查：待核对
+    - listitem: KC-08：缺少脚本；要求核查：待核对
+    - listitem: KC-09：缺少脚本；要求核查：待核对
+    - listitem: KC-10：缺少脚本；要求核查：待核对
+    - listitem: KC-11：限定技术试跑（未批准）；要求核查：本次核查完整（未批准）
+    - listitem: KC-22：限定技术试跑（未批准）；要求核查：本次核查完整（未批准）
+  - checkbox "明确仅运行可执行部分，保留全部阻塞项"
+  - text: 明确仅运行可执行部分，保留全部阻塞项
+  - alert
+  - button "检查准备条件"
+  - button "确认运行已有脚本"
+  - button "关闭"

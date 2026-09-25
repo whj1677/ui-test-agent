@@ -1,0 +1,64 @@
+{
+  "schema": "workbench/case-package-v1",
+  "package_id": "case-package-5e90965e-a20e-48f7-bc47-d165212c2e59",
+  "exported_at": "2026-09-25T08:06:22.515Z",
+  "source_project": {
+    "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+    "name": "V2.1 产品验收 · 独立导入项目",
+    "revision": 4
+  },
+  "cases": [
+    {
+      "package_case_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c:case-b62d8137-1a9e-44d7-8601-92928756f8f5:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5D8DE9F25B32D1EA7A9AD8A6D759075FB783C6A8C3219D667989C13144BBDCB6:原用例保真副本:2",
+        "file_name": "phase1-cases.xlsx",
+        "file_sha256": "5D8DE9F25B32D1EA7A9AD8A6D759075FB783C6A8C3219D667989C13144BBDCB6",
+        "sheet": "原用例保真副本",
+        "row": 2
+      },
+      "lineage": [
+        {
+          "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+          "case_id": "case-b62d8137-1a9e-44d7-8601-92928756f8f5",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T07:46:44.707Z"
+        },
+        {
+          "project_id": "project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+          "case_id": "case-b62d8137-1a9e-44d7-8601-92928756f8f5",
+          "version": 1,
+          "exported_at": "2026-09-25T08:06:22.515Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-01",
+        "title": "初始数据与三页分页边界（同源冲突验收，不入库）",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开页面并确认已重置命名空间后查看设备资源",
+            "expected": "共8条，按编号EQ-101至EQ-108升序，第1页显示101/102/103，每页3条，总数8、第1/3页"
+          },
+          {
+            "order": 2,
+            "action": "点击下一页到第2页",
+            "expected": "显示EQ-104/105/106，第2/3页，上一页可用"
+          },
+          {
+            "order": 3,
+            "action": "点击下一页到第3页并尝试继续下一页",
+            "expected": "显示EQ-107/108，第3/3页，下一页禁用；返回第1页后上一页禁用"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  ]
+}

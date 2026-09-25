@@ -1,0 +1,45 @@
+{
+  "file": "report-0dc47b84bd9aa03744d0ff1f31a5ffc6ebdd8272.html",
+  "bytes": 6138230,
+  "sha256": "8391A50F564BB58FD30908C4864BF8A4E343CA330D992302D0E68CA03A7D2496",
+  "external_resource_urls": [],
+  "script_elements": 0,
+  "embedded": [
+    {
+      "type": "data:image/png;base64",
+      "bytes": 63868,
+      "sha256": "192608432BFEC482469EFF83D79C7B4E76BC2261B0058F7000E2E2F4C745B32E"
+    },
+    {
+      "type": "data:application/zip;base64",
+      "bytes": 1760315,
+      "sha256": "DFD24339F5AB5EE4C762382B37927997169CDC0A7D3CEF1AED0378074E5B03DF"
+    },
+    {
+      "type": "data:video/webm;base64",
+      "bytes": 823395,
+      "sha256": "92A2770E2AD141D9941611B49F7CCA4F7BE92972A1771185C8A8D77743B8D621"
+    },
+    {
+      "type": "data:image/png;base64",
+      "bytes": 40963,
+      "sha256": "29CAC9AEFC396F09CD4A528E84BFF6FA67D49E81EBF3AB07DFE1DB4C86DAE391"
+    },
+    {
+      "type": "data:image/png;base64",
+      "bytes": 54306,
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+    },
+    {
+      "type": "data:image/png;base64",
+      "bytes": 54390,
+      "sha256": "68BFDF56FAD83F378E54CD6F3F9175B18558E88E932E239A18BC415D97FDDCDD"
+    },
+    {
+      "type": "data:video/webm;base64",
+      "bytes": 222996,
+      "sha256": "5F63530A37070301EAC733FC1975E92AB2C704BFAED99284094F101DB721D1E7"
+    }
+  ],
+  "offline_browser_open": "NOT_VERIFIED_BROWSER_FILE_SCHEME_POLICY"
+}

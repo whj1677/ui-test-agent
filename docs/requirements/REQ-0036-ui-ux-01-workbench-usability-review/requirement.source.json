@@ -1,40 +1,48 @@
 {
   "schema": "ai-engineering-context/requirement-source-v1",
   "req_id": "REQ-0036",
-  "title": "UI-UX-01 真实工作台可用性走查与结构调整方案",
+  "title": "测试工作台 V2.1 统一产品流程",
   "metadata": {
-    "requirement_status": "第一批流程已实现并自测；候选未批准，后两批未实施",
+    "requirement_status": "V2.1代码已实现并完成授权内验收；真实模型与登录完整闭环等未验证项见交付报告",
     "governance_level": "G2",
-    "version": 3,
+    "version": 4,
     "last_updated": "2026-09-25"
   },
-  "original_input": "用户反馈当前UI设计不顺。先核对真实页面，找出信息结构和操作路径问题，不要未经核对就重做全部UI或继续增加菜单。保留墨白极简配色。核对实际HEAD、工作区与浏览器加载版本，区分4322现有工作台与4331 AUTH独立工作台，截图注明实际地址与版本。不取消运行中任务、不强停服务、不覆盖AUTH任务未提交修改；不启动Harness、不新增模型调用、不重新执行业务候选。逐项核对A-F六类问题并区分已实现显示问题/后端未接通/合成验证特殊入口。输出项目用例库、用例详情及自动化准备、测试结果详情三页的结构调整方案与文字线框，标明哪些只改前端、哪些依赖AUTH接线，给出第一批修改范围。交付 workbench/docs/UI_UX_REVIEW.md（含脱敏截图），提交并推送当前分支，不推main、不强推。停止在问题定位和有限调整方案完成，未经确认不做整套UI重构。\n2026-09-25用户授权执行UI_WORKFLOW_PHASE1_CASE_DETAILS_AND_RERUN.md，接收既有登记；仅实施第一批，Harness与模型0，固定4322与fresh-b数据。",
+  "original_input": "用户反馈当前UI设计不顺。先核对真实页面，找出信息结构和操作路径问题，不要未经核对就重做全部UI或继续增加菜单。保留墨白极简配色。核对实际HEAD、工作区与浏览器加载版本，区分4322现有工作台与4331 AUTH独立工作台，截图注明实际地址与版本。不取消运行中任务、不强停服务、不覆盖AUTH任务未提交修改；不启动Harness、不新增模型调用、不重新执行业务候选。逐项核对A-F六类问题并区分已实现显示问题/后端未接通/合成验证特殊入口。输出项目用例库、用例详情及自动化准备、测试结果详情三页的结构调整方案与文字线框，标明哪些只改前端、哪些依赖AUTH接线，给出第一批修改范围。交付 workbench/docs/UI_UX_REVIEW.md（含脱敏截图），提交并推送当前分支，不推main、不强推。停止在问题定位和有限调整方案完成，未经确认不做整套UI重构。\n2026-09-25用户授权执行UI_WORKFLOW_PHASE1_CASE_DETAILS_AND_RERUN.md，接收既有登记；仅实施第一批，Harness与模型0，固定4322与fresh-b数据。\n2026-09-25 用户授权按 UI_WORKBENCH_CODEX_V2_1.zip 实施全部18页面及UX01-30，在fcafd249基础上串行小提交并推送当前分支。报告格式已明确选择离线HTML。",
   "user_requirements": [
     {
       "id": "UN-0036-01",
       "status": "已确认",
       "goal": "基于真实页面走查定位工作台导航、页面职责、主操作与结果信息优先级问题，产出三个关键页面的有限结构调整方案",
-      "constraints": "保留墨白极简配色；不换主题、不开发后端能力；不停止运行中服务与任务；不改原项目数据；截图脱敏并注明地址与版本；不以旧页面评审新实现；不把未接通功能包装成纯UI问题；不删除导出包复用等原有需求",
+      "constraints": "历史阶段边界（该阶段已结束；当前实施遵循V2.1）：保留墨白极简配色；不换主题、不开发后端能力；不停止运行中服务与任务；不改原项目数据；截图脱敏并注明地址与版本；不以旧页面评审新实现；不把未接通功能包装成纯UI问题；不删除导出包复用等原有需求",
       "success_criteria": "workbench/docs/UI_UX_REVIEW.md 含实际截图、3~5个关键问题、当前/建议路径、三页文字线框、前端/AUTH依赖划分与第一批范围，并推送当前分支"
     },
     {
       "id": "UN-0036-02",
       "status": "已确认",
       "goal": "用例详情整合历史结果与媒体；已有包单条、选中及全项目零模型技术复跑，独立批次及三种版本绑定",
-      "constraints": "唯一4322，fresh-b现有数据；原候选、历史与批准状态不改；最多12次候选执行",
+      "constraints": "历史阶段边界（该阶段已结束；当前实施遵循V2.1）：唯一4322，fresh-b现有数据；原候选、历史与批准状态不改；最多12次候选执行",
       "success_criteria": "附件第一批真实浏览器旅程、取消/重启/幂等/版本隔离及媒体核对，完整受测代码提交推送"
+    },
+    {
+      "id": "UN-0036-03",
+      "status": "已确认",
+      "goal": "按V2.1统一规范实施18种页面及产品主流程，报告格式为离线HTML",
+      "constraints": "唯一4322、当前已交接分支串行写入，原24条只读，模型0",
+      "success_criteria": "UX01-30逐项实际验证；模型链路未实测单列；提交受测源码并推送当前分支"
     }
   ],
   "confirmed_facts": [
-    "当前工作区 HEAD 为 8127e33（codex/test-workbench-auth-session），与任务基线一致。",
-    "运行中的 4322 工作台实为 test-workbench-six-case-e2e worktree 的 6066bbc（不含 AUTH-01），数据为真实六用例项目；所供 app.js 与该提交逐字节一致。",
-    "4331 AUTH 独立工作台按 AUTH_01_USER_GUIDE 从本工作区 HEAD 8127e33 启动，独立数据目录 .local/auth01-user-trial；4330 为 AUTH-01 合成被测站。",
-    "6066bbc..8127e33 间 web-v2 仅新增登录准备导航与页面，用例库/建例/执行记录页面两版一致。",
-    "A-F 六类问题均经真实页面截图核对确认；登录会话与建例/执行绑定后端未接通（REQ-0035 事实），E2E-01 演示建例授权与正常/对照试跑为合成验证特殊入口。",
-    "2026-09-25基线b5e4141；登记窗口idle，未发现并行写入，接收5份登记/附件并私有备份。现有：单条执行器、文件包核验、媒体与用例版本；本批：批次与来源核查后端、详情内媒体接线、跨页/全项目范围。"
+    "历史阶段事实（不代表V2.1当前配置）：当前工作区 HEAD 为 8127e33（codex/test-workbench-auth-session），与任务基线一致。",
+    "历史阶段事实（不代表V2.1当前配置）：运行中的 4322 工作台实为 test-workbench-six-case-e2e worktree 的 6066bbc（不含 AUTH-01），数据为真实六用例项目；所供 app.js 与该提交逐字节一致。",
+    "历史阶段事实（不代表V2.1当前配置）：4331 AUTH 独立工作台按 AUTH_01_USER_GUIDE 从本工作区 HEAD 8127e33 启动，独立数据目录 .local/auth01-user-trial；4330 为 AUTH-01 合成被测站。",
+    "历史阶段事实（不代表V2.1当前配置）：6066bbc..8127e33 间 web-v2 仅新增登录准备导航与页面，用例库/建例/执行记录页面两版一致。",
+    "历史阶段事实（不代表V2.1当前配置）：A-F 六类问题均经真实页面截图核对确认；登录会话与建例/执行绑定后端未接通（REQ-0035 事实），E2E-01 演示建例授权与正常/对照试跑为合成验证特殊入口。",
+    "历史阶段事实（不代表V2.1当前配置）：2026-09-25基线b5e4141；登记窗口idle，未发现并行写入，接收5份登记/附件并私有备份。现有：单条执行器、文件包核验、媒体与用例版本；本批：批次与来源核查后端、详情内媒体接线、跨页/全项目范围。",
+    "V2.1当前：主目录唯一4322、fresh-b；开发分支codex/qa-real-model-20260924；报告主格式离线HTML；当前任务单写入，原24条只读，模型调用0。"
   ],
   "inferences_and_open_questions": [
-    "旧UI最终删除已确认，在第三批承接完成后执行；第二批脚本修订/重新生成、清晰中文字幕、离线报告仍未实现。"
+    "V2.1当前有效范围已整合；原阶段停止条件仅为历史。真实模型调用0；离线文件打开及登录完整闭环未验证，详见UX矩阵。"
   ],
   "development_requirements": [
     {
@@ -42,14 +50,21 @@
       "status": "已确认",
       "requirement": "完成真实页面走查并产出 workbench/docs/UI_UX_REVIEW.md：截图注明地址与版本、A-F 问题分类、3~5 个关键问题、当前/建议路径、三页文字线框、前端与 AUTH 依赖划分、第一批修改范围",
       "acceptance_criteria": "文档基于 4322@6066bbc 与 4331@8127e33 真实页面；问题区分已实现显示/后端未接通/合成特殊入口；不新增演示应用与模拟数据",
-      "constraints": "不改正式页面结构；不启动 Harness 与模型；不脱敏失败地包含私有媒体或凭据"
+      "constraints": "历史阶段边界（该阶段已结束；当前实施遵循V2.1）：不改正式页面结构；不启动 Harness 与模型；不脱敏失败地包含私有媒体或凭据"
     },
     {
       "id": "DR-0036-02",
       "status": "已实现",
       "requirement": "第一批用例详情、有限批次串行技术试跑、要求核查与执行资格分离",
       "acceptance_criteria": "附件第一批第2至6节；不伪造历史批次，不自动批准；未执行清单可查",
-      "constraints": "不换框架、不新增建例调用；后续两批不提前实施"
+      "constraints": "历史阶段边界（该阶段已结束；当前实施遵循V2.1）：不换框架、不新增建例调用；后续两批不提前实施"
+    },
+    {
+      "id": "DR-0036-03",
+      "status": "已实现",
+      "requirement": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。",
+      "acceptance_criteria": "UX01-30逐项记录实际结果，模型未实测单列，报告离线可读，旧入口迁移后历史可查",
+      "constraints": "唯一4322；不覆盖旧版本和批次；不新增模型额度"
     }
   ],
   "design_decisions": [
@@ -71,17 +86,28 @@
       "status": "已确认",
       "summary": "用例正文、具体批次/运行、媒体、脚本及版本历史同页；复用现有播放器。新增最小批次服务冻结请求，串行调用已有candidate-trials；要求核查以来源记录+用例版本+包哈希关联，绝不作为批准。",
       "rationale": "对应走查 3/5 与 D/F，信息优先级按测试人员任务排序；登录状态前置依赖 AUTH 接线，列为后续"
+    },
+    {
+      "id": "DD-0036-03",
+      "status": "已确认",
+      "summary": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。",
+      "dr_ids": [
+        "DR-0036-03"
+      ],
+      "rationale": "复用真实执行内核与持久化，按统一设计收敛界面"
     }
   ],
   "interfaces_and_data_flow": [
-    "复用automation、candidate-trials、runStore、媒体接口；新增批次预检/确认/取消/查询；持久化冻结清单及逐项结果。"
+    "复用现有用例库、自主开发授权、完整候选包、BatchManager及媒体。新增script-operations预检/创建/取消/查询，reports固定快照/预览/离线HTML/取消；GET /api/script-environments返回可登记环境与禁用状态。",
+    "批次冻结范围/用例版本/候选包/软件标签；修订带旧包与问题反馈，从头开发不带旧稿。HTML及媒体校验结果持久化，不随后续复测更新。"
   ],
   "module_document_impact": [
-    "本轮仅新增 workbench/docs/UI_UX_REVIEW.md 与 evidence/UI_UX_01_*.png；模块文档无事实变化，不更新。"
+    "已更新docs/modules/test-workbench.md与workbench-case-library.md：脚本维护模式/授权/版本、固定报告接口与媒体边界、旧页面迁移和当前验证限制。"
   ],
   "risks_and_rollback": [
-    "方案文档与截图均为新增文件，回滚即删除提交；未触碰运行中服务与原数据。",
-    "风险：4322 运行实例为旧代码 6066bbc，评审结论按版本分别标注，避免以旧页面结论覆盖 AUTH 新实现。"
+    "真实模型端到端未授权实测，fresh-b禁止模型。现有登录仍为AUTH限定合成环境，未宣称通用登录闭环。",
+    "不含数据迁移或清理；代码按小提交保留，可回滚代码但不可覆盖本地已形成的批次、报告及历史数据。",
+    "浏览器file协议限制导致离线文件打开未验证；HTTP预览、下载字节一致和内嵌媒体哈希已验证。"
   ],
   "tasks": [
     {
@@ -113,6 +139,20 @@
       "verification_ids": [
         "VT-0036-02"
       ]
+    },
+    {
+      "id": "TK-0036-03",
+      "status": "已完成",
+      "task": "V2.1统一导航与四页签；脚本维护真实模式、串行批次、清晰媒体、固定快照离线HTML报告、迁移旧入口。",
+      "dr_ids": [
+        "DR-0036-03"
+      ],
+      "dd_ids": [
+        "DD-0036-03"
+      ],
+      "verification_ids": [
+        "VT-0036-03"
+      ]
     }
   ],
   "verification_items": [
@@ -137,23 +177,32 @@
       "item": "第一批真实浏览器：24历史详情、Excel/JSON导入、单条/跨页/全项目、版本隔离、取消重启与媒体；11次已有候选执行请求、模型0；软断言观察修复后回放实际验证，原不完整运行保留",
       "evidence_standard": "真实命令、退出码、测试统计和产物路径",
       "current_evidence": "workbench/qa/20260925-workflow-phase1/REPORT.md、integrity.json、各批次与浏览器证据；工程纯单元8项退出0。正式门禁结论另记，候选未批准。"
+    },
+    {
+      "id": "VT-0036-03",
+      "dr_ids": [
+        "DR-0036-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "UX01-30真实旅程；生成链路按无模型授权限制单列",
+      "evidence_standard": "真实操作、文件哈希、逐项结果及截图",
+      "current_evidence": "workbench/qa/20260925-v21/REPORT.md及逐项UX证据；工程18项，实际11次旧包执行，模型/Harness0；原24条与1041文件不变。未完整验收项逐项标注。"
     }
   ],
   "verification_environment": {
     "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
-      "powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1 -Data fresh-b",
-      "node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs",
-      "node workbench/scripts/phase1-browser-run.mjs <模式>",
-      "node workbench/scripts/phase1-browser-media.mjs",
-      "node workbench/scripts/phase1-browser-version.mjs",
-      "node workbench/scripts/phase1-verify-integrity.mjs"
+      "pwsh -NoProfile -File workbench/scripts/start-workbench.ps1 -Data fresh-b",
+      "node --test workbench/tests/product-v21.test.mjs workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs workbench/tests/ui-d2a.test.mjs",
+      "node workbench/qa/20260925-v21/verify-live.mjs",
+      "node workbench/qa/20260925-v21/verify-reports.mjs"
     ],
     "environment": [
       "唯一正式4322，既有workbench/.local/fresh25-b数据；测试目标站每run受控临时启动，不是第二个工作台；本机Edge/锁定Playwright"
     ],
     "conclusion": [
-      "第一批限定流程可操作；原24任务与候选不改；11次候选执行请求含2次取消；8单元+5真实执行器工程场景分开统计；后两批未实施。"
+      "V2.1受测代码交付；唯一正式4322；18工程检查、11次既有候选执行，模型/Harness0；不能宣称UX01-30全部通过。详见REPORT.md逐项范围。"
     ]
   },
   "trace_current": [
@@ -172,6 +221,14 @@
       "tk_id": "TK-0036-02",
       "vt_id": "VT-0036-02",
       "status": "已完成"
+    },
+    {
+      "un_id": "UN-0036-03",
+      "dr_id": "DR-0036-03",
+      "dd_id": "DD-0036-03",
+      "tk_id": "TK-0036-03",
+      "vt_id": "VT-0036-03",
+      "status": "已完成"
     }
   ],
   "trace_history": [
@@ -183,10 +240,10 @@
     }
   ],
   "open_questions": [
-    "本批无阻塞业务待确认；第二、三批按用户后续指令实施。"
+    "无待确认业务决策；真实模型验证未授权，单列未验证。"
   ],
   "prohibited_implementation": [
-    "本批Harness与模型0；不修改候选及原历史；不自动批准；不实施第二三批。"
+    "不新增真实模型调用；不修改原24条资料；不换端口、分支、worktree或数据目录；不混入他人改动与私有数据。"
   ],
   "changes": [
     {
@@ -212,6 +269,14 @@
       "description": "接收已登记用户流程与第一批附件，完成详情、批次及零模型复跑；其余批次明确保留。",
       "impact": "批次API与持久化、候选复用授权、用例详情和媒体",
       "confirmed_by": "用户明确执行第一批附件"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 4,
+      "type": "V2.1实施",
+      "description": "用户授权统一设计实施；离线HTML报告已确认；历史阶段停止条件保留为历史，不再限制本轮已授权范围。",
+      "impact": "产品UI、版本操作、批次、媒体与报告",
+      "confirmed_by": "当前用户任务及报告格式回复"
     }
   ]
 }

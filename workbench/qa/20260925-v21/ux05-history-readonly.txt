@@ -1,0 +1,85 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: KC-22
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+  - heading "KC-22 · 紧接结束边界允许并刷新保持" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v2 · 当前"
+    - option "v1 · 历史只读" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "历史候选 v2 · 2026-09-25T04:50:06." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=1&tab=history"
+  - heading "原始用例正文" [level=2]
+  - generic: 历史正文只读
+  - paragraph: 内容状态：CONFIRMED
+  - heading "前置条件" [level=3]
+  - paragraph: 独立重置演示数据
+  - heading "测试数据" [level=3]
+  - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+  - article:
+    - strong: "1"
+    - generic: 动作
+    - paragraph: 选择EQ-103，填申请人钱七、用途边界回归验证、2026-10-10 12:00到14:00进入确认
+    - generic: 原预期
+    - paragraph: 与R-001在12:00紧接允许，第3步总价20乘2等于40元
+  - article:
+    - strong: "2"
+    - generic: 动作
+    - paragraph: 确认预约一次
+    - generic: 原预期
+    - paragraph: 仅创建R-002，弹窗关闭，清空选择，跳转预约记录，状态已确认
+  - article:
+    - strong: "3"
+    - generic: 动作
+    - paragraph: 刷新浏览器
+    - generic: 原预期
+    - paragraph: R-001与R-002均保留，统计已确认2条、收入80元
+  - generic "来源物理行列与版本身份"
+- status: 已形成新的用例版本。

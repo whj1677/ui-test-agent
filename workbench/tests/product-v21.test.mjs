@@ -22,10 +22,12 @@ async function fixture(t){
 }
 test('report snapshots freeze exact run, escape content, redact fields and embed verified media',async t=>{
   const f=await fixture(t),input={scope:'run',run_id:'run-unit',request_id:'unit-report-request'};
+  f.run.step_replay={steps:[{order:1,execution_status:'FAILED',actual:'200 kW'}],chapters:[{step_id:'CASE_STEP_1',start_seconds:0}]};
   const r=await f.reports.create(f.project.project_id,input);f.run.status='PASSED';
   const again=await f.reports.create(f.project.project_id,input);assert.equal(again.entries[0].result,'FAILED');assert.equal(r.entries[0].media[0].included,true);
   const html=renderReport(r);assert.ok(html.includes('data:image/png;base64,'));assert.ok(html.includes('&lt;script&gt;'));assert.ok(!html.includes('SECRET'));assert.ok(html.includes('200 kW'));
   assert.ok(!html.includes('http://127.0.0.1'));await assert.rejects(f.reports.get(r.report_id,'other-project'),/MISMATCH/);
+  assert.equal(r.entries[0].steps[0].actual,'200 kW');assert.equal(await f.reports.html(r.report_id,f.project.project_id),html);
   await assert.rejects(f.reports.create(f.project.project_id,{...input,run_id:'other'}),/CONFLICT/);
 });
 test('report missing/tampered media remains missing and blocked batch items stay in denominator',async t=>{
@@ -33,6 +35,16 @@ test('report missing/tampered media remains missing and blocked batch items stay
   const r=await f.reports.create(f.project.project_id,{scope:'batch',batch_id:'batch-unit',request_id:'unit-batch-report'});
   assert.deepEqual(r.counts,{requested:2,executed:1,passed:0,failed:1,not_run:1});assert.equal(r.entries[0].media[0].included,false);assert.match(r.entries[0].media[0].reason,/INTEGRITY/);
   await assert.rejects(f.reports.create(f.project.project_id,{scope:'run',run_id:'other',request_id:'invalid-run-report'}),/NOT_IN_PROJECT/);
+});
+test('report cancellation prevents snapshot commit and pending conflicting request is rejected',async t=>{
+  const f=await fixture(t);let release,entered=false;const gate=new Promise(r=>release=r);
+  f.reports.records=async()=>{entered=true;await gate;return[f.run];};
+  const input={scope:'run',run_id:'run-unit',request_id:'unit-report-cancel'};
+  const pending=f.reports.create(f.project.project_id,input);const rejection=assert.rejects(pending,/REPORT_CANCELLED/);
+  for(let n=0;n<100&&!entered;n++)await new Promise(r=>setTimeout(r,2));assert.ok(entered);
+  await assert.rejects(f.reports.create(f.project.project_id,{...input,include_video:true}),/REPORT_REQUEST_CONFLICT/);
+  assert.equal((await f.reports.cancel(f.project.project_id,input)).state,'CANCEL_REQUESTED');release();await rejection;
+  assert.equal((await f.reports.list(f.project.project_id)).length,0);
 });
 test('generation preflight has real authorization boundary, separates revision input, no task on rejection',async t=>{
   const f=await fixture(t);let starts=0;

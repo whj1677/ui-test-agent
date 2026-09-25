@@ -1,0 +1,52 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: 导入用例
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "导入用例" [level=1]
+  - paragraph: 项目：V2.1 产品验收 · 独立导入项目 · 确认前不会写入新用例
+  - link "退出导入":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+  - list:
+    - generic: "1"
+    - text: 选文件
+    - generic: "2"
+    - text: 映射与预览
+    - generic: "3"
+    - text: 确认导入
+    - generic: "4"
+    - text: 结果
+  - heading "导入确认已完成" [level=2]
+  - paragraph: 后端实际新增 0 条；重复跳过 0 条；冲突跳过 1 条；无法导入跳过 0 条。
+  - button "继续导入"
+  - link "返回用例库":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- status: 导入结果已由后端持久化。

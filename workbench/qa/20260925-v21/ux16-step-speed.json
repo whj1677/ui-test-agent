@@ -1,0 +1,18 @@
+[
+  {
+    "height": 900,
+    "paused": true,
+    "rate": 1.5,
+    "src": "/api/runs/trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539/media/media-10",
+    "time": 3.179,
+    "width": 1280
+  },
+  {
+    "height": 720,
+    "paused": true,
+    "rate": 1,
+    "src": "/api/runs/trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539/media/media-3",
+    "time": 0,
+    "width": 1280
+  }
+]

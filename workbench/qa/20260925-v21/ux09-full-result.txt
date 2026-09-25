@@ -1,0 +1,143 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 产品验收 · 独立导入项目
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/batches"
+    - link "报告":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 产品验收 · 独立导入项目":
+  - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases"
+- generic: /
+- strong: 测试批次
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试批次" [level=1]
+  - paragraph: 每次明确运行创建新批次；范围和三个版本分别记录。
+  - link "预览与导出本批报告":
+    - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/reports?batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+  - button "重跑本批未通过"
+  - text: 按本次状态筛选
+  - combobox "按本次状态筛选":
+    - option "全部请求项" [selected]
+    - option "通过"
+    - option "未通过"
+    - option "阻塞"
+    - option "取消 / 未执行"
+  - article:
+    - heading "测试批次 · 2026-09-25T08:02:02.401Z" [level=3]
+    - paragraph: 范围：整个项目（含阻塞项） · 软件版本：V21-全项目-冻结版本 · 状态：执行结束 · 限定技术试跑，未批准
+    - paragraph: 请求 12 条；已执行 3；阻塞 9；未执行 0。结果只属于本批。
+    - table:
+      - rowgroup:
+        - row "用例 版本 / 脚本 本次状态 原因":
+          - columnheader "用例"
+          - columnheader "版本 / 脚本"
+          - columnheader "本次状态"
+          - columnheader "原因"
+      - rowgroup:
+        - row "KC-01 · 初始数据与三页分页边界 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-01 · 初始数据与三页分页边界":
+            - link "KC-01 · 初始数据与三页分页边界":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-b62d8137-1a9e-44d7-8601-92928756f8f5?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-02 · 编号模糊搜索不区分大小写 用例v1 / 候选v2 执行结束 · 失败 —":
+          - cell "KC-02 · 编号模糊搜索不区分大小写":
+            - link "KC-02 · 编号模糊搜索不区分大小写":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-d02071fb-364f-4728-a75d-506581048486?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d&run_id=trial-decaa879c43f30938b49d35bb581403d4049995e"
+          - cell "用例v1 / 候选v2"
+          - cell "执行结束 · 失败"
+          - cell "—"
+        - row "KC-03 · 同名温循箱搜索 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-03 · 同名温循箱搜索":
+            - link "KC-03 · 同名温循箱搜索":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-60115c9f-0be9-4a94-bfed-37f7442ee1e8?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-04 · 站点与状态AND组合筛选 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-04 · 站点与状态AND组合筛选":
+            - link "KC-04 · 站点与状态AND组合筛选":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-3806d5d4-51db-4575-b700-00b5a5d45cfc?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-05 · 状态多选空闲或维护 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-05 · 状态多选空闲或维护":
+            - link "KC-05 · 状态多选空闲或维护":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-663fdd1d-e547-44fa-85d2-c274b4300749?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-06 · 无结果与重置恢复 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-06 · 无结果与重置恢复":
+            - link "KC-06 · 无结果与重置恢复":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-713a5628-f66d-4b65-8ab9-5045d45cc098?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-07 · 费用降序排序前三 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-07 · 费用降序排序前三":
+            - link "KC-07 · 费用降序排序前三":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-de7db057-e9c7-4186-9ecd-df0051a7153f?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-08 · 跨页选择保留 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-08 · 跨页选择保留":
+            - link "KC-08 · 跨页选择保留":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-9d106f06-fcf0-4968-8875-91aee70ae872?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-09 · 筛选变更清空选择并回第1页 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-09 · 筛选变更清空选择并回第1页":
+            - link "KC-09 · 筛选变更清空选择并回第1页":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-854bc14d-5051-47a1-a6aa-29dc0c6c2d6c?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-10 · 当前页全选只选可预约行 用例v1 / 无 阻塞 · 未执行 缺少脚本":
+          - cell "KC-10 · 当前页全选只选可预约行":
+            - link "KC-10 · 当前页全选只选可预约行":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-3ec85fd4-d9fd-4430-93f6-2ecd5f642b7c?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d"
+          - cell "用例v1 / 无"
+          - cell "阻塞 · 未执行"
+          - cell "缺少脚本"
+        - row "KC-11 · 维护与使用中不可预约 用例v1 / 候选v2 执行结束 · 通过 —":
+          - cell "KC-11 · 维护与使用中不可预约":
+            - link "KC-11 · 维护与使用中不可预约":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-65d71aa5-aef9-41c8-9416-bb060c8adc74?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d&run_id=trial-2a5abfc44b97d247ec4ab5e19103b9d173c97e44"
+          - cell "用例v1 / 候选v2"
+          - cell "执行结束 · 通过"
+          - cell "—"
+        - row "KC-22 · 紧接结束边界允许并刷新保持 用例v1 / 候选v2 执行结束 · 通过 —":
+          - cell "KC-22 · 紧接结束边界允许并刷新保持":
+            - link "KC-22 · 紧接结束边界允许并刷新保持":
+              - /url: "#/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c/cases/case-a989687b-4d4b-489c-b1ed-83be4455e663?version=1&batch_id=batch-25f153bf-f392-410a-8172-8fd685a2334d&run_id=trial-01edc034b930a66a48b8a43fb55a1aad2c30898d"
+          - cell "用例v1 / 候选v2"
+          - cell "执行结束 · 通过"
+          - cell "—"
+    - generic "技术详情：冻结清单及身份"
+- status

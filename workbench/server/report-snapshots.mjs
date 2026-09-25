@@ -11,13 +11,15 @@ const clean = value => {
 };
 
 export class ReportSnapshots {
-  constructor({root,caseStore,batchManager,records,store,buildStore}) {Object.assign(this,{root,caseStore,batchManager,records,store,buildStore});this.queue=Promise.resolve();}
+  constructor({root,caseStore,batchManager,records,store,buildStore}) {Object.assign(this,{root,caseStore,batchManager,records,store,buildStore});this.queue=Promise.resolve();this.pending=new Map();}
   file(id) {if(!/^report-[a-f0-9]{40}$/.test(id))throw Error('REPORT_ID_INVALID');return path.join(this.root,id+'.json');}
   async get(id,project){const r=JSON.parse(await fs.readFile(this.file(id),'utf8'));if(r.project.project_id!==project)throw Error('REPORT_PROJECT_MISMATCH');return r;}
   async html(id,project){const r=await this.get(id,project),file=this.file(id).replace(/\.json$/,'.html');try{return await fs.readFile(file,'utf8');}catch(e){if(e.code!=='ENOENT')throw e;}const html=renderReport(r);try{await fs.writeFile(file,html,{flag:'wx'});}catch(e){if(e.code!=='EEXIST')throw e;}return fs.readFile(file,'utf8');}
   async list(project){await fs.mkdir(this.root,{recursive:true});const rows=await Promise.all((await fs.readdir(this.root)).filter(f=>/^report-[a-f0-9]{40}\.json$/.test(f)).map(async f=>JSON.parse(await fs.readFile(path.join(this.root,f),'utf8'))));return rows.filter(r=>r.project.project_id===project).map(({entries,...r})=>({...r,entry_count:entries.length}));}
-  create(projectId,input){const next=this.queue.then(()=>this.createSnapshot(projectId,input));this.queue=next.catch(()=>{});return next;}
-  async createSnapshot(projectId,input){
+  create(projectId,input){const key=projectId+':'+input.request_id,fingerprint=digest(JSON.stringify(input)),prior=this.pending.get(key);if(prior)return prior.fingerprint===fingerprint?prior.promise:Promise.reject(Error('REPORT_REQUEST_CONFLICT'));const controller=new AbortController();const next=this.queue.then(()=>this.createSnapshot(projectId,input,controller.signal));const promise=next.finally(()=>this.pending.delete(key));this.pending.set(key,{controller,promise,fingerprint});this.queue=promise.catch(()=>{});return promise;}
+  async cancel(projectId,input){const pending=this.pending.get(projectId+':'+input.request_id);if(pending){pending.controller.abort();return {state:'CANCEL_REQUESTED'};}const id='report-'+digest(projectId+':'+input.request_id).slice(0,40);try{const r=await this.get(id,projectId);return{state:'FINISHED',report_id:r.report_id};}catch(e){if(e.code!=='ENOENT')throw e;return{state:'NOT_FOUND'};}}
+  async createSnapshot(projectId,input,signal){
+    const checkCancelled=()=>{if(signal?.aborted)throw Error('REPORT_CANCELLED');};checkCancelled();
     if(!['batch','run'].includes(input.scope)||!/^[-\w]{8,100}$/.test(input.request_id||'')||Object.keys(input).some(k=>!['scope','batch_id','run_id','request_id','include_video','include_trace'].includes(k)))throw Error('REPORT_SCOPE_INVALID');
     const reportId='report-'+digest(projectId+':'+input.request_id).slice(0,40),fingerprint=digest(JSON.stringify(input));
     try{const old=await this.get(reportId,projectId);if(old.fingerprint!==fingerprint)throw Error('REPORT_REQUEST_CONFLICT');return old;}catch(e){if(e.code!=='ENOENT')throw e;}
@@ -32,6 +34,7 @@ export class ReportSnapshots {
     }
     const entries=[];let total=0;
     for(const item of items){
+      checkCancelled();
       const run=item.run_id?records.find(r=>r.run_id===item.run_id&&r.executed_case_id===item.case_id&&r.executed_case_version===item.case_version):null;
       if(item.run_id&&!run)throw Error('REPORT_RUN_IDENTITY_MISMATCH');
       if(run&&['QUEUED','RUNNING','STOPPING'].includes(run.execution_status))throw Error('REPORT_RUN_NOT_FINISHED');
@@ -40,11 +43,12 @@ export class ReportSnapshots {
         run_id:run?.run_id||null,script_version:run?.script_version||null,candidate_version:run?.candidate_version||item.selection?.candidate_version||null,bundle_sha256:run?.bundle_sha256||item.selection?.bundle_sha256||null,
         software_version:batch?.software_version||run?.software_version||null,environment:clean(run?.environment_binding||item.environment_identity||null),
         state:item.state,result:run?.status||'NOT_RUN',qualification:run?.approval_status||item.qualification||'NOT_APPROVED',review:clean(run?.requirement_review||item.requirement_review||null),
-        reason:item.reason||null,error:clean(run?.error||run?.result?.error||run?.technical_error||null),content:clean(content),steps:clean(run?.step_replay?.chapters||run?.step_coverage?.items||[]),
+        reason:item.reason||null,error:clean(run?.error||run?.result?.error||run?.technical_error||null),content:clean(content),steps:clean(run?.step_replay?.steps||run?.step_coverage?.items||[]),
         evidence_status:run?.evidence_status||'NOT_COLLECTED',media:[]};
       if(run){
         const root=run.origin==='EXPLICIT_CANDIDATE_TRIAL'?this.store.runDirectory(run.run_id):this.buildStore.taskDirectory(run.source_build_task_id);
         for(const media of run.files||[]){
+          checkCancelled();
           const kind=/screenshot$/.test(media.kind)?'image':/video$/.test(media.kind)?'video':/trace$/.test(media.kind)?'trace':null;if(!kind)continue;
           const include=kind==='image'||kind==='video'&&input.include_video===true||kind==='trace'&&input.include_trace===true;
           const attachment={file_id:media.file_id,name:path.basename(media.relative_path),kind,sha256:media.sha256,bytes:media.bytes,included:false,reason:include?null:'未选择随报告携带'};
@@ -64,7 +68,7 @@ export class ReportSnapshots {
     }
     const snapshot={schema:'workbench/report-snapshot-v1',report_id:reportId,fingerprint,created_at:new Date().toISOString(),project:{project_id:projectId,name:clean(project.name)},scope:input.scope,batch_id:batch?.batch_id||null,run_id:input.scope==='run'?input.run_id:null,attachment_bytes:total,
       counts:{requested:entries.length,executed:entries.filter(e=>['PASSED','FAILED','TIMEDOUT'].includes(e.result)).length,passed:entries.filter(e=>e.result==='PASSED').length,failed:entries.filter(e=>['FAILED','TIMEDOUT'].includes(e.result)).length,not_run:entries.filter(e=>!['PASSED','FAILED','TIMEDOUT'].includes(e.result)).length},entries};
-    await fs.mkdir(this.root,{recursive:true});await fs.writeFile(this.file(reportId),JSON.stringify(snapshot),{flag:'wx'});await this.html(reportId,projectId);return snapshot;
+    await fs.mkdir(this.root,{recursive:true});checkCancelled();await fs.writeFile(this.file(reportId),JSON.stringify(snapshot),{flag:'wx'});await this.html(reportId,projectId);return snapshot;
   }
 }
 const label = value => ({PASSED:'通过',FAILED:'失败',TIMEDOUT:'超时',NOT_RUN:'未执行',COMPLETE:'完整',INCOMPLETE:'不完整',NOT_COLLECTED:'未采集',NOT_APPROVED:'未批准',LIMITED_TECHNICAL_TRIAL_NOT_APPROVED:'限定技术试跑，未批准',NO_APPLICABLE_SCRIPT:'没有适用脚本',REVIEWED_COMPLETE_FOR_THIS_CASE:'本次核查完整，未批准',BUSINESS_DIFFERENCE_RETAINED:'业务差异保留，待核对',NOT_ACCEPTED_ACTION_CHANGED:'动作或预期偏离，不采纳',BUSINESS_DIFFERENCE_WITH_COVERAGE_GAP:'覆盖不足，业务差异保留',FROZEN_CASE_INPUT_CONFLICT:'原用例输入矛盾，待澄清',REVIEW_REQUIRED_PRECONDITION_ADDED:'前置条件待确认'}[value] || value);

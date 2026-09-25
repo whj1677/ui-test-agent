@@ -1,0 +1,18 @@
+[
+  {
+    "run_id": "trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539",
+    "file_id": "media-3",
+    "file_name": "video.webm",
+    "bytes": 162894,
+    "sha256": "F77DAA82AF62A8E80BCE0AB247BD5D1821A6C323DE6916358E05B3849BBEF906",
+    "match": true
+  },
+  {
+    "run_id": "trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539",
+    "file_id": "media-1",
+    "file_name": "test-failed-1.png",
+    "bytes": 48932,
+    "sha256": "E72454341FAE46753593CA233B1BA611FDBAE31CB47B43A6E71D38859A466A63",
+    "match": true
+  }
+]

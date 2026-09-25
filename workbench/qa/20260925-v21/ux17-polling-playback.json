@@ -1,0 +1,16 @@
+{
+  "before": {
+    "at": 1790324073360,
+    "batch": "2026-09-25T08:14:09.487Z · V21-media-polling-final · 执行中",
+    "paused": false,
+    "run": "trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539",
+    "time": 0.236202
+  },
+  "after": {
+    "at": 1790324075865,
+    "batch": "2026-09-25T08:14:09.487Z · V21-media-polling-final · 执行中",
+    "paused": false,
+    "run": "trial-4620034a6b1f6dc65ef88d49c7c93f6ba49b1539",
+    "time": 2.741755
+  }
+}

@@ -1,0 +1,127 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T16:34:41+08:00
+Command: node --test workbench/tests/product-v21.test.mjs workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs workbench/tests/ui-d2a.test.mjs
+Exit code: 0
+Parsed test count: 18
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: batch concurrent replay, frozen versions, software label and no model
+ok 1 - batch concurrent replay, frozen versions, software label and no model
+  ---
+  duration_ms: 100.8779
+  type: 'test'
+  ...
+# Subtest: whole project retains missing scripts and requires partial consent
+ok 2 - whole project retains missing scripts and requires partial consent
+  ---
+  duration_ms: 73.7924
+  type: 'test'
+  ...
+# Subtest: requirements rejection is separate from PASSED, explicit diagnostic only
+ok 3 - requirements rejection is separate from PASSED, explicit diagnostic only
+  ---
+  duration_ms: 61.4953
+  type: 'test'
+  ...
+# Subtest: cancel stops owned run and remaining queue; restart never replays
+ok 4 - cancel stops owned run and remaining queue; restart never replays
+  ---
+  duration_ms: 74.0854
+  type: 'test'
+  ...
+# Subtest: changed helper blocks before executor even after preview
+ok 5 - changed helper blocks before executor even after preview
+  ---
+  duration_ms: 41.3903
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 6 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 1.6721
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 7 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.2934
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 8 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.3334
+  type: 'test'
+  ...
+# Subtest: report snapshots freeze exact run, escape content, redact fields and embed verified media
+ok 9 - report snapshots freeze exact run, escape content, redact fields and embed verified media
+  ---
+  duration_ms: 21.6882
+  type: 'test'
+  ...
+# Subtest: report missing/tampered media remains missing and blocked batch items stay in denominator
+ok 10 - report missing/tampered media remains missing and blocked batch items stay in denominator
+  ---
+  duration_ms: 10.0743
+  type: 'test'
+  ...
+# Subtest: report cancellation prevents snapshot commit and pending conflicting request is rejected
+ok 11 - report cancellation prevents snapshot commit and pending conflicting request is rejected
+  ---
+  duration_ms: 9.4386
+  type: 'test'
+  ...
+# Subtest: generation preflight has real authorization boundary, separates revision input, no task on rejection
+ok 12 - generation preflight has real authorization boundary, separates revision input, no task on rejection
+  ---
+  duration_ms: 6.2505
+  type: 'test'
+  ...
+# Subtest: invalid revision seed cannot consume an existing authorization
+ok 13 - invalid revision seed cannot consume an existing authorization
+  ---
+  duration_ms: 4.0968
+  type: 'test'
+  ...
+# Subtest: generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+ok 14 - generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+  ---
+  duration_ms: 21.2666
+  type: 'test'
+  ...
+# Subtest: revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+ok 15 - revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+  ---
+  duration_ms: 59.6536
+  type: 'test'
+  ...
+# Subtest: formal 4322 workspace is the only UI and old entry redirects
+ok 16 - formal 4322 workspace is the only UI and old entry redirects
+  ---
+  duration_ms: 68.2825
+  type: 'test'
+  ...
+# Subtest: UI-D2A xlsx samples preserve exact source text and classifications through real parser
+ok 17 - UI-D2A xlsx samples preserve exact source text and classifications through real parser
+  ---
+  duration_ms: 153.1626
+  type: 'test'
+  ...
+# Subtest: committed native sample came from supported export schema and survives official import parser
+ok 18 - committed native sample came from supported export schema and survives official import parser
+  ---
+  duration_ms: 27.7455
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6603.0975
