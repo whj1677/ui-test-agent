@@ -28,7 +28,19 @@ export async function openScriptOperation({project,items,mode,go,onError}){
     if(envs.environments.length===1)document.querySelector('#script-environment').value=envs.environments[0].id;
     root.querySelectorAll('#script-close,#script-cancel').forEach(el=>el.onclick=()=>{if(!sending)root.innerHTML='';});
     document.querySelector('#script-check').onclick=()=>check().catch(e=>document.querySelector('#script-error').textContent=e.message);
-    document.querySelector('#script-confirm').onclick=async e=>{if(sending||!plan)return;sending=true;e.target.disabled=true;try{const v=await api(`/api/case-library/projects/${project.project_id}/script-operations`,post({...payload(),request_id:requestId}));root.innerHTML='';go(`#/projects/${project.project_id}/generation/${v.operation_id}`,true);}catch(error){document.querySelector('#script-error').textContent=error.message;sending=false;}};
+    document.querySelector('#script-confirm').onclick=async e=>{
+      if(sending||!plan||plan.items.some(i=>i.reason))return;
+      sending=true;const controls=[...root.querySelectorAll('button,input,select,textarea')];
+      const disabled=controls.map(el=>el.disabled);controls.forEach(el=>{el.disabled=true;});
+      try{
+        const v=await api(`/api/case-library/projects/${project.project_id}/script-operations`,post({...payload(),request_id:requestId}));
+        root.innerHTML='';go(`#/projects/${project.project_id}/generation/${v.operation_id}`,true);
+      }catch(error){
+        document.querySelector('#script-error').textContent=error.message==='BUILD_TASK_ALREADY_ACTIVE'?'工作台正在执行其他任务，本次未启动。任务结束后可直接重试。':error.message;
+      }finally{
+        sending=false;controls.forEach((el,i)=>{if(el.isConnected)el.disabled=disabled[i];});
+      }
+    };
     await check();
   }catch(e){onError(e);}
 }

@@ -4,31 +4,53 @@ param(
   [string]$Data = 'e2e',
   # 本机启动配置文件（Git 忽略）。默认 scripts/start-workbench.local.json；模板见同目录 .example。
   [string]$ConfigPath,
+  # 显式加载 fresh-b 的真实模型配置；仍需逐用例既有授权，不创建或重置额度。
+  [switch]$EnableModel,
   # 只加载并核对配置、输出安全摘要，不启动服务。
   # 退出码：0=满足启动条件；2=配置有效但 4322 被占用；1=配置或数据问题。
   [switch]$CheckOnly
 )
 $ErrorActionPreference = 'Stop'
+if ($EnableModel -and $Data -ne 'fresh-b') { throw '-EnableModel 仅适用于 fresh-b；不会改变其他配置的授权语义。' }
 $workbenchRoot = Split-Path -Parent $PSScriptRoot
 $repoRoot = Split-Path -Parent $workbenchRoot
 $port = 4322
 $dataDirName = if ($Data -eq 'auth') { 'auth01-user-trial' } else { 'six-case-e2e' }
 $dataDir = Join-Path $workbenchRoot (Join-Path '.local' $dataDirName)
 
-# Existing autonomous sample data: explicit zero-model profile, same daily port.
+# Existing autonomous sample data: zero-model default, explicit opt-in, same daily port.
 if ($Data -eq 'fresh-b') {
   $dataDir = Join-Path $workbenchRoot '.local/fresh25-b'
   if (-not (Test-Path -LiteralPath (Join-Path $dataDir 'case-library/projects'))) { throw '原FRESH-B项目数据缺失；不会复制报告或生成替代项目。' }
+  $modelProfile = $null
+  if ($EnableModel) {
+    if (-not $ConfigPath) { $ConfigPath = Join-Path $PSScriptRoot 'start-workbench.local.json' }
+    $modelProfile = (Get-Content -LiteralPath $ConfigPath -Raw | ConvertFrom-Json).profiles.'fresh-b'
+    if (-not $modelProfile) { throw '显式模型模式需要 profiles.fresh-b 配置；不会套用其他数据的授权。' }
+    foreach ($key in @('WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_DEVELOPMENT_ENVIRONMENTS','WORKBENCH_CANDIDATE_TRIAL_CONFIG')) {
+      $value = $modelProfile.$key
+      if (-not $value -or -not [System.IO.Path]::IsPathRooted($value) -or -not (Test-Path -LiteralPath $value)) { throw "真实模型配置缺失或路径不可用：$key" }
+    }
+    if ($modelProfile.WORKBENCH_USE_STORED_DSH_CREDENTIALS -ne '1') { throw '该入口仅复用已保存DSH凭据，不接受密钥正文。' }
+    $trialProfile = Get-Content -LiteralPath $modelProfile.WORKBENCH_CANDIDATE_TRIAL_CONFIG -Raw | ConvertFrom-Json
+    if ($trialProfile.model_calls_allowed -ne $true) { throw '真实模型配置必须明确 model_calls_allowed=true。' }
+    Write-Output '已核对 fresh-b 显式模型配置；逐用例授权和现有预算仍由服务端校验。'
+  }
   $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
   if ($listener) { Write-Output '4322已占用；不结束未知进程、不换端口。'; exit 2 }
-  Write-Output "零模型试跑配置：$dataDir；4322空闲；合成站每次试跑按需启动，结束自动停止。"
+  Write-Output "数据配置：$dataDir；4322空闲；模型模式：$([bool]$EnableModel)。"
   if ($CheckOnly) { exit 0 }
   foreach ($key in @('WORKBENCH_BUILD_AUTHORIZATION_ID','M2C_BUILD_AUTHORIZATION_ID','WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS')) { Remove-Item -LiteralPath "Env:$key" -ErrorAction SilentlyContinue }
   $env:WORKBENCH_PORT = [string]$port
   $env:WORKBENCH_DATA_DIR = $dataDir
   $env:WORKBENCH_CANDIDATE_TRIAL_CONFIG = Join-Path $workbenchRoot 'config/fresh-b-trial.json'
+  if ($modelProfile) {
+    foreach ($key in @('WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS','WORKBENCH_CANDIDATE_TRIAL_CONFIG')) {
+      Set-Item -LiteralPath "Env:$key" -Value ([string]$modelProfile.$key)
+    }
+  }
   $env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-  Write-Output '入口：http://127.0.0.1:4322/workspace/；前台运行，Ctrl+C停止工作台；不调用模型。'
+  Write-Output '入口：http://127.0.0.1:4322/workspace/；前台运行，Ctrl+C停止工作台；已有脚本复跑不调用模型。'
   & node (Join-Path $workbenchRoot 'server/index.mjs')
   exit $LASTEXITCODE
 }
