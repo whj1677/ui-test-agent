@@ -5,9 +5,9 @@
 
 ## 元数据
 
-- 需求状态：开放能力后真实B受共用故障阻断并取消；最小修复仅零模型验证，无重启
+- 需求状态：真实工具链与B恢复技术验证完成，候选等待人工核对
 - 治理分级：G2
-- 当前版本：4
+- 当前版本：5
 - 最后更新：2026-09-25
 
 ## 当前有效用户需求
@@ -26,7 +26,7 @@
 
 | DD | DR | 状态 | 内容 |
 |---|---|---|---|
-| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 v4修复：浏览器管理的.playwright-mcp目录仅作只读观察证据，不进入执行文件清单且禁止模块导入；getElementById纳入既有只读DOM支持。 |
+| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 v4修复：浏览器管理的.playwright-mcp目录仅作只读观察证据，不进入执行文件清单且禁止模块导入；getElementById纳入既有只读DOM支持。 v5真实快照文件由锁定browser_snapshot的filename参数生成，仅允许受控单文件yml；恢复授权保留旧task_id/原稿哈希/运行器提交及实际正常页结果。 |
 
 ## 当前有效任务
 
@@ -41,13 +41,13 @@
 |---|---|---|---|---|
 | VT-0037-01 | DR-0037-01 | 集成测试通过 | 零模型协议、生产浏览器与Playwright、取消/预算/哈希、空草稿准入工程回归 | 命令：node --test workbench/tests/*.test.mjs；退出码：0；测试数量：120；失败数量：0；跳过数量：0；证据：workbench/qa/20260925-autonomous/collector-workbench.log |
 | VT-0037-02 | DR-0037-01 | 人工待确认 | 两项真实任务已执行：A恢复完成，B候选语义及指定差异证据失败；待人工核对，不是产品通过 | 命令：node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair；退出码：0；测试数量：2；失败数量：1；跳过数量：0；证据：workbench/qa/20260925-autonomous/manifest.json |
-| VT-0037-03 | DR-0037-01 | 集成测试通过 | 共用观察输出与文件包冲突的最小修复工程验证；真实B结果未完成 | 本轮真实B见b-open/manifest.json与tool-transcript.json；技术失败保留CANCELLED；零模型回归见b-open/repair-engineering.log、repair-preflight.log和当前collector日志。 |
+| VT-0037-03 | DR-0037-01 | 集成测试通过 | 真实工具链贯通、原稿单次工程执行和真实恢复独立验收 | b-recovery/manifest.json与engineering-tool-chain.json、original/report.json；真实3开发+3最终，额外原稿1次共7业务执行。工程工作台127/127、Harness24/24；候选等待人工核对。 |
 
 ## 人工待确认项
 
-- [ ] 开放能力后B尚无任何候选执行结果或最终文件包；不能评价首次通过、完整语义、字段差异或故障检出。
-- [ ] 修复后只做零模型工程验证，后续真实任务须另行明确授权；本批不自动重启。
-- [ ] 历史候选仍未人工批准；非系统强隔离。
+- [ ] 当前有限DOM读取仍拒绝forEach/push、JSON.stringify等合理表达式；站点脚本读取尝试也被拒，未扩展白名单。
+- [ ] 原稿已通过后Agent自行改稿引入失败，不能把所有修改称为必要修复；有限核查只是提示，不是语义证明。
+- [ ] 状态等待未单独验证严格450/650毫秒期限；本次不等于通用稳定性或候选人工批准。
 
 ## 本轮禁止实现内容
 

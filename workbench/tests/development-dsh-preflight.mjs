@@ -43,7 +43,8 @@ try{
  const snapshotPath=path.resolve(draft,match[1]);
  const read=await call('read',{file_path:snapshotPath});assert.ok(text(read).length>0);
  await call('mcp__playwright-mcp__browser_evaluate',{function:'() => document.body.textContent'});
- await call('read',{file_path:path.join(directory,'private-credential.json')},true);
+ await fs.writeFile(path.join(directory,'private-credential.json'),'engineering-canary-not-a-real-credential');
+ const deniedRead=await call('read',{file_path:path.join(directory,'private-credential.json')},true);assert.match(text(deniedRead),/TASK_TOOL_POLICY_DENIED/);assert.ok(!text(deniedRead).includes('engineering-canary-not-a-real-credential'));
  if(!original){
   const helper=path.join(draft,'helper.mjs');await call('read',{file_path:helper},true);await call('write',{file_path:helper,content:'export const expected="bad";'});
   await call('read',{file_path:session.draftPath},true);

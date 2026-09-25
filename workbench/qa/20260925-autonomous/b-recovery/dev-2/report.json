@@ -1,0 +1,183 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "NEW-002 遥测首次失败后重试成功并关闭",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6759,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: '重试' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '重试' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button class=\"\" id=\"tRetry\">重试</button>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: '重试' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '重试' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button class=\"\" id=\"tRetry\">重试</button>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at expectRetryDisabledOrHidden (<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:26:31)\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:64:5\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:55:3",
+                    "location": {
+                      "file": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs",
+                      "column": 31,
+                      "line": 26
+                    },
+                    "snippet": "  24 |     await expect(retryButton).toBeDisabled();\n  25 |   } else {\n> 26 |     await expect(retryButton).toBeHidden();\n     |                               ^\n  27 |   }\n  28 | }\n  29 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs",
+                        "column": 31,
+                        "line": 26
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: '重试' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '重试' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button class=\"\" id=\"tRetry\">重试</button>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n\n  24 |     await expect(retryButton).toBeDisabled();\n  25 |   } else {\n> 26 |     await expect(retryButton).toBeHidden();\n     |                               ^\n  27 |   }\n  28 | }\n  29 |\n    at expectRetryDisabledOrHidden (<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:26:31)\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:64:5\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:55:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 155
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 5902,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: '重试' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '重试' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button class=\"\" id=\"tRetry\">重试</button>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: '重试' })\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '重试' })\u001b[22m\n\u001b[2m    14 × locator resolved to <button class=\"\" id=\"tRetry\">重试</button>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at expectRetryDisabledOrHidden (<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:26:31)\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:64:5\n    at <REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs:55:3",
+                        "location": {
+                          "file": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs",
+                          "column": 31,
+                          "line": 26
+                        },
+                        "snippet": "  24 |     await expect(retryButton).toBeDisabled();\n  25 |   } else {\n> 26 |     await expect(retryButton).toBeHidden();\n     |                               ^\n  27 |   }\n  28 | }\n  29 |"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T01:58:08.952Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\evidence\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\evidence\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\evidence\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\evidence\\artifacts\\candidate-NEW-002-遥测首次失败后重试成功并关闭\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<REPO>\\workbench\\.local\\br25\\build-tasks\\build-20260925015614-6193f8f8\\development\\run-2\\candidate.spec.mjs",
+                    "column": 31,
+                    "line": 26
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-f0b713267e71cce74d29",
+          "file": "candidate.spec.mjs",
+          "line": 30,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T01:58:08.366Z",
+    "duration": 7875.590999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "schema": "autonomous-acceptance-evidence-v1",
+  "baseline": "66d3bde6faa6c4d81d57b6f69377660c5b620697",
+  "exported_at": "2026-09-25T02:02:41.882Z",
+  "redaction": "Repository/home paths replaced; no sessions, reasoning, credentials, videos or trace archives exported. Candidate bytes unchanged.",
+  "files": [
+    {
+      "file": "b-recovery/task.json",
+      "source": "workbench/.local/br25/b-recovery-20260925-result.json",
+      "source_sha256": "7B009ED12CB8885821C49C05ABEC34681CEC4BDC83BDA18559DA55DF35180E99",
+      "exported_sha256": "63D0E13E8221FCD669358AB7A3EE77C542E3B90C074FC5C57FB4936813CEE592",
+      "bytes": 106442,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/tool-transcript.json",
+      "source_sha256": "26CB3729C967E189BDC24733AE6C9B2B53254F24243EE86B78BAEA57B717464E",
+      "exported_sha256": "8EF441B7BAAEC0E0AC0F8D866E4CB4D1786318176103A7B14E09CBFE92B50018",
+      "transformed": true,
+      "omitted": [
+        "session",
+        "thinking",
+        "text",
+        "final"
+      ]
+    },
+    {
+      "file": "b-recovery/harness-summary.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/harness-summary.json",
+      "source_sha256": "27D481C821A1E835A551CBE3BFAD13F9D67022802F8CC672F65DD2DECA6FC7FA",
+      "exported_sha256": "B6621ADF45656FEDD17BB1AA82AF7E637E741EA8DDC06C220BD6A01356B51E44",
+      "bytes": 280,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/agent-input.txt",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/agent-input.txt",
+      "source_sha256": "23C35F8D5B5DF2C51882E3CADEBEDDD2AB52E8C31028482A1D3241D7763BD986",
+      "exported_sha256": "23C35F8D5B5DF2C51882E3CADEBEDDD2AB52E8C31028482A1D3241D7763BD986",
+      "bytes": 7842,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-1/candidate.spec.mjs",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-1/candidate.spec.mjs",
+      "source_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "exported_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "bytes": 4157,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-1/report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-1/evidence/playwright-report.json",
+      "source_sha256": "237D6D74E88EFC4B562A8A5E4016C89C3EDE27F1ACC90703BBED65C4FD9964B5",
+      "exported_sha256": "F1000600055DABA9B0F20F92D3D59778E2412B7A7796DCFD2C159D74AF60A4EF",
+      "bytes": 5141,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/dev-1/screenshot.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-2/candidate.spec.mjs",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2/candidate.spec.mjs",
+      "source_sha256": "4CEFDD6D75A35E6D985FA8AB195019C9EB16EB9FCE186CF078CA538A3C4945DE",
+      "exported_sha256": "4CEFDD6D75A35E6D985FA8AB195019C9EB16EB9FCE186CF078CA538A3C4945DE",
+      "bytes": 4700,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-2/report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2/evidence/playwright-report.json",
+      "source_sha256": "9A08722C6BA56ABA9165C859B05BF25925F3C2BCBE549851134D27922FD08DB4",
+      "exported_sha256": "00BD3C5DCBD8D5CB0B3D5FA0B2D717DD7B9C5B57A6FCC5BC2FB827971C4B2846",
+      "bytes": 11199,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/dev-2/screenshot.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-2/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "506093D9CC33832B59EC9DB155B1F08A9D65927E466505B4CCE4F4AED72056E5",
+      "exported_sha256": "506093D9CC33832B59EC9DB155B1F08A9D65927E466505B4CCE4F4AED72056E5",
+      "bytes": 32621,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-3/candidate.spec.mjs",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-3/candidate.spec.mjs",
+      "source_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "exported_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bytes": 5242,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/dev-3/report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-3/evidence/playwright-report.json",
+      "source_sha256": "C97246FD7AF22FBC7CF59B821C64B5FC23A637C5E93C285E21FADB3B7663D7C1",
+      "exported_sha256": "7F7EFCFAE15533A7BF8B9B6AD1D717F5FE640BED0297F7E39893FDCAE625CA61",
+      "bytes": 5141,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/dev-3/screenshot.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/run-3/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/final/candidate.spec.mjs",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/candidate.spec.mjs",
+      "source_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "exported_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bytes": 5242,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/final/normal-report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/normal/playwright-report.json",
+      "source_sha256": "1F432092149164C06366D0660570CC413BCA351ABABA821CCADBAC0A8C310AC4",
+      "exported_sha256": "B44264AC00DE2D4FD6AD59C01C89306473731C6BE58B2226DAE60AD292922857",
+      "bytes": 5130,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/final/normal.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/final/negative-report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/negative/playwright-report.json",
+      "source_sha256": "9C2A53C5D67F9A6A14E7E646368EBD358A2E7BFBF4BDF536C5564527270973CB",
+      "exported_sha256": "B9114EC59C2EFC5FF8083B4E59401A6C06EB4BF70F6666B56E0D2A545A765A1B",
+      "bytes": 13705,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/final/negative.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "exported_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "bytes": 32223,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/final/semantic-report.json",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/semantic/playwright-report.json",
+      "source_sha256": "06598CD47A8C90897429B8F92075B97ADEFFA4E280646294085239428603EC8F",
+      "exported_sha256": "2A61401A97EE7948E61EDB3D5B5E24E08F90E48ABACF2CA0FAE0075A14B0DDEE",
+      "bytes": 12345,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/final/semantic.png",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/final/semantic/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "exported_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "bytes": 32220,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/workbench.png",
+      "source": "workbench/.local/br25/b-recovery-20260925-workbench.png",
+      "source_sha256": "2F3E22DB6C783730FCA81D5C9C0D5DB255B1B9239D05C9D5C2BEDE36B554CB43",
+      "exported_sha256": "2F3E22DB6C783730FCA81D5C9C0D5DB255B1B9239D05C9D5C2BEDE36B554CB43",
+      "bytes": 323665,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/draft/candidate.spec.mjs",
+      "source": "workbench/.local/br25/build-tasks/build-20260925015614-6193f8f8/development/draft/candidate.spec.mjs",
+      "source_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "exported_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bytes": 5242,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/browser-acceptance.json",
+      "source": "workbench/.local/br25/browser-acceptance.json",
+      "source_sha256": "AE5B4B17707578B7208E468FFC541455F6442BA3F0B328C6B2721F5AF6486E1D",
+      "exported_sha256": "634202C454FE3689CBB37B5E66561D4D4527DE9348C6F8DDA43DE11AA3A227AC",
+      "bytes": 2122,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/browser-acceptance.png",
+      "source": "workbench/.local/br25/browser-acceptance.png",
+      "source_sha256": "2F3E22DB6C783730FCA81D5C9C0D5DB255B1B9239D05C9D5C2BEDE36B554CB43",
+      "exported_sha256": "2F3E22DB6C783730FCA81D5C9C0D5DB255B1B9239D05C9D5C2BEDE36B554CB43",
+      "bytes": 323665,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/edits/edit-1.spec.mjs",
+      "sha256": "6DC911304E8594AE7A21C70850FCB0868C0B9A13836FB30BA227387122B0FC48",
+      "bytes": 4706,
+      "call_id": "call_00_V5jRqapFT3FhOgfS8eJJ9883",
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/edits/edit-2.spec.mjs",
+      "sha256": "4CEFDD6D75A35E6D985FA8AB195019C9EB16EB9FCE186CF078CA538A3C4945DE",
+      "bytes": 4700,
+      "call_id": "call_00_zQtmV5pPMxEOsG1371NS5141",
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/edits/edit-3.spec.mjs",
+      "sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bytes": 5242,
+      "call_id": "call_00_AarpxgY5TK9I646lyX2p2185",
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/original/tool-chain.json",
+      "source": "workbench/.local/br25-original/tool-chain.json",
+      "source_sha256": "69C928FB1AF996051709BD78C1CF84AC592A0423AD956016F47CE39CF759D493",
+      "exported_sha256": "BDDC17CE27777984FBB6013D8C7B95BB291FCC9149FA2C55CF652CCF5BB5A5CA",
+      "bytes": 37073,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/original/state.json",
+      "source": "workbench/.local/br25-original/state.json",
+      "source_sha256": "51E23DAA4D8ABB5F8E9E65A2D35F08FD19AAE2DEC954287B300B09D27851618D",
+      "exported_sha256": "0EE6C1027793777217CDB655BD91E21099567D34C1D417EAF8531C89BD410D05",
+      "bytes": 9899,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/original/candidate.spec.mjs",
+      "source": "workbench/.local/br25-original/run-1/candidate.spec.mjs",
+      "source_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "exported_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "bytes": 4157,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/original/report.json",
+      "source": "workbench/.local/br25-original/run-1/evidence/playwright-report.json",
+      "source_sha256": "3E10C3FD574193B7F2F061CC88572701CE8F383FEA6F48754074615D8D159526",
+      "exported_sha256": "BF1370EAC80782FB5CDE7A0EF4F7CC68E1046870CDA2E5F8B9B1BBD82FFDB46F",
+      "bytes": 4824,
+      "transformed": true
+    },
+    {
+      "file": "b-recovery/original/screenshot.png",
+      "source": "workbench/.local/br25-original/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-recovery/engineering-tool-chain.json",
+      "source": "workbench/.local/dev-preflight-CSe5rT/tool-chain.json",
+      "source_sha256": "A3DC82C7BFA8CE7D4EC6AF1C776D5373C1A9B68CF5BCF5B082E8E6E80719A668",
+      "exported_sha256": "EBF4008D0F6A8F5345465C3CAEC02FAF91EF0867AB365224BA60A00409E21A47",
+      "bytes": 58971,
+      "transformed": true
+    }
+  ],
+  "tasks": [
+    {
+      "logical_id": "b-recovery-20260925",
+      "task_id": "build-20260925015614-6193f8f8",
+      "external_id": "NEW-002",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T01:56:14.018Z",
+      "finished_at": "2026-09-25T02:00:29.595Z",
+      "elapsed_ms": 255577,
+      "harness_starts": 1,
+      "tool_calls": 30,
+      "tool_errors": 4,
+      "model_steps": 28,
+      "developer_self_tests": 3,
+      "final_executions": 3,
+      "final_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5242,
+            "sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42"
+          }
+        ],
+        "sha256": "23E806CF05C1F8846EA4288EC4CF6C1385D28D992D8ED2C41621D481FCCE86DF"
+      },
+      "candidate_approved": false,
+      "last_working_draft_sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42"
+    }
+  ]
+}

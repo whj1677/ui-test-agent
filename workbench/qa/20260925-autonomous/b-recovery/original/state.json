@@ -1,0 +1,333 @@
+{
+  "started_at": 1790301307453,
+  "deadline_at": 1790302507453,
+  "draft_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+  "self_tests": [
+    {
+      "number": 1,
+      "bundle_sha256": "0568665212E0932907DDB41EED1DCAB588AE316F05E872EC8C3EFCD50AD84685",
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 4157,
+          "sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022"
+        },
+        {
+          "path": "engineering-snapshot.yml",
+          "bytes": 425,
+          "sha256": "9887A9D2DFD8618BAE10DC4D16BAB2007967FF1E3E8A81EEAAF0D96495CA3373"
+        }
+      ],
+      "sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "candidate_path": "run-1/candidate.spec.mjs",
+      "status": "EXECUTED",
+      "started_at": 1790301310899,
+      "result": {
+        "report_status": "COMPLETE",
+        "test_status": "PASSED",
+        "test_count": 1,
+        "error": null,
+        "complete_pass": true,
+        "stats": {
+          "startTime": "2026-09-25T01:55:11.520Z",
+          "duration": 3618.3100000000004,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 0,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1",
+            "raw_title": "CASE_STEP_1",
+            "category": null,
+            "duration": 166,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2",
+            "raw_title": "CASE_STEP_2",
+            "category": null,
+            "duration": 76,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_3",
+            "raw_title": "CASE_STEP_3",
+            "category": null,
+            "duration": 856,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_4",
+            "raw_title": "CASE_STEP_4",
+            "category": null,
+            "duration": 41,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_5",
+            "raw_title": "CASE_STEP_5",
+            "category": null,
+            "duration": 814,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_6",
+            "raw_title": "CASE_STEP_6",
+            "category": null,
+            "duration": 28,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          }
+        ]
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3",
+          "CASE_STEP_4",
+          "CASE_STEP_5",
+          "CASE_STEP_6"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3",
+          "CASE_STEP_4",
+          "CASE_STEP_5",
+          "CASE_STEP_6"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_4",
+            "step_id": "CASE_STEP_4",
+            "order": 4,
+            "observed": true,
+            "raw_title": "CASE_STEP_4",
+            "report_path": [
+              3
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_5",
+            "step_id": "CASE_STEP_5",
+            "order": 5,
+            "observed": true,
+            "raw_title": "CASE_STEP_5",
+            "report_path": [
+              4
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_6",
+            "step_id": "CASE_STEP_6",
+            "order": 6,
+            "observed": true,
+            "raw_title": "CASE_STEP_6",
+            "report_path": [
+              5
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "changed_after_execution": false,
+      "report_path": "run-1/evidence/playwright-report.json",
+      "media": [
+        {
+          "relative_path": "run-1/evidence/artifacts/.last-run.json",
+          "bytes": 45,
+          "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+        },
+        {
+          "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+          "bytes": 23818,
+          "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B"
+        },
+        {
+          "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+          "bytes": 192209,
+          "sha256": "F29AF150567A2C93193816F3A7F49D9D1C45F3339F49C524CFEEE6EC9843501C"
+        },
+        {
+          "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/video.webm",
+          "bytes": 64670,
+          "sha256": "40DA166B48F62555F01561F759EEC270EC5B5DACCD71BC1FBC227472C28CD824"
+        },
+        {
+          "relative_path": "run-1/evidence/playwright-report.json",
+          "bytes": 5224,
+          "sha256": "3E10C3FD574193B7F2F061CC88572701CE8F383FEA6F48754074615D8D159526"
+        }
+      ],
+      "trace_summary": {
+        "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+        "archives": [
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+            "bytes": 192209,
+            "sha256": "F29AF150567A2C93193816F3A7F49D9D1C45F3339F49C524CFEEE6EC9843501C"
+          }
+        ],
+        "observed_steps": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_4",
+            "step_id": "CASE_STEP_4",
+            "order": 4,
+            "observed": true,
+            "raw_title": "CASE_STEP_4",
+            "report_path": [
+              3
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_5",
+            "step_id": "CASE_STEP_5",
+            "order": 5,
+            "observed": true,
+            "raw_title": "CASE_STEP_5",
+            "report_path": [
+              4
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_6",
+            "step_id": "CASE_STEP_6",
+            "order": 6,
+            "observed": true,
+            "raw_title": "CASE_STEP_6",
+            "report_path": [
+              5
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "finished_at": 1790301315160
+    }
+  ],
+  "submission": null,
+  "tool_calls": 0,
+  "harness_starts": 0,
+  "recovery": true
+}

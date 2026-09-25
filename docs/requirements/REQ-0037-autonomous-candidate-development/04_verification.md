@@ -11,7 +11,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | VT-0037-01 | DR-0037-01 | 已确认 | 集成测试通过 | 零模型协议、生产浏览器与Playwright、取消/预算/哈希、空草稿准入工程回归 | 命令退出码、版本哈希、工具结果、调用计数及逐步状态 | 命令：node --test workbench/tests/*.test.mjs；退出码：0；测试数量：120；失败数量：0；跳过数量：0；证据：workbench/qa/20260925-autonomous/collector-workbench.log | node --test workbench/tests/*.test.mjs | 0 | 120 | 0 | 0 | workbench/qa/20260925-autonomous/collector-workbench.log |
 | VT-0037-02 | DR-0037-01 | 已确认 | 人工待确认 | 两项真实任务已执行：A恢复完成，B候选语义及指定差异证据失败；待人工核对，不是产品通过 | 真实工具记录、执行报告、覆盖核查与相同候选哈希；不得仅靠绿色或模型自报 | 命令：node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair；退出码：0；测试数量：2；失败数量：1；跳过数量：0；证据：workbench/qa/20260925-autonomous/manifest.json | node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair | 0 | 2 | 1 | 0 | workbench/qa/20260925-autonomous/manifest.json |
-| VT-0037-03 | DR-0037-01 | 已确认 | 集成测试通过 | 共用观察输出与文件包冲突的最小修复工程验证；真实B结果未完成 | 零模型真实工具协议和浏览器执行；哈希绑定与越界拒绝；业务语义仍人工核对 | 本轮真实B见b-open/manifest.json与tool-transcript.json；技术失败保留CANCELLED；零模型回归见b-open/repair-engineering.log、repair-preflight.log和当前collector日志。 | - | - | - | - | - | - |
+| VT-0037-03 | DR-0037-01 | 已确认 | 集成测试通过 | 真实工具链贯通、原稿单次工程执行和真实恢复独立验收 | 零模型真实工具协议和浏览器执行；哈希绑定与越界拒绝；业务语义仍人工核对 | b-recovery/manifest.json与engineering-tool-chain.json、original/report.json；真实3开发+3最终，额外原稿1次共7业务执行。工程工作台127/127、Harness24/24；候选等待人工核对。 | - | - | - | - | - | - |
 
 ## 本轮命令与环境
 

@@ -1,0 +1,42 @@
+{
+  "policy_denials": 3,
+  "bundle_admission": 0,
+  "browser_observation": 1,
+  "missing_file": 0,
+  "parameter_errors": 0,
+  "exact_repeated_failed_calls": 0,
+  "draft_writes": 3,
+  "self_test_requests": 3,
+  "actual_candidate_executions": 6,
+  "final_bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 5242,
+        "sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42"
+      }
+    ],
+    "sha256": "23E806CF05C1F8846EA4288EC4CF6C1385D28D992D8ED2C41621D481FCCE86DF"
+  },
+  "maintainer_cancelled": false,
+  "saved_versions": [
+    {
+      "file": "b-recovery/edits/edit-1.spec.mjs",
+      "sha256": "6DC911304E8594AE7A21C70850FCB0868C0B9A13836FB30BA227387122B0FC48",
+      "bytes": 4706,
+      "call_id": "call_00_V5jRqapFT3FhOgfS8eJJ9883"
+    },
+    {
+      "file": "b-recovery/edits/edit-2.spec.mjs",
+      "sha256": "4CEFDD6D75A35E6D985FA8AB195019C9EB16EB9FCE186CF078CA538A3C4945DE",
+      "bytes": 4700,
+      "call_id": "call_00_zQtmV5pPMxEOsG1371NS5141"
+    },
+    {
+      "file": "b-recovery/edits/edit-3.spec.mjs",
+      "sha256": "C73D7BCDA7E3DF0C68F2D8EC715FA297E3466BEBB12AE93F8EBD9CC79BE09D42",
+      "bytes": 5242,
+      "call_id": "call_00_AarpxgY5TK9I646lyX2p2185"
+    }
+  ]
+}

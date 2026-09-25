@@ -1,0 +1,52 @@
+{
+  "task_id": "build-20260925015614-6193f8f8",
+  "status": "WAITING_HUMAN_REVIEW · WAITING_REVIEW",
+  "rows": [
+    "开发自测 1 · EXECUTED",
+    "开发自测 2 · EXECUTED",
+    "开发自测 3 · EXECUTED",
+    "最终 normal · PASSED",
+    "最终 negative · FAILED",
+    "最终 semantic · FAILED"
+  ],
+  "media": [
+    {
+      "file_id": "build-file-12",
+      "path": "development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/final/semantic/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-38",
+      "path": "development/run-2/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "sha256": "506093D9CC33832B59EC9DB155B1F08A9D65927E466505B4CCE4F4AED72056E5",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-44",
+      "path": "development/run-3/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "http_status": 200
+    }
+  ],
+  "model_calls": 0,
+  "candidate_executions": 0
+}
