@@ -1,0 +1,38 @@
+{
+  "links": [
+    {
+      "href": "/api/build/tasks/build-20260925093432-f085c887/media/build-file-40",
+      "text": "打开原始录像"
+    },
+    {
+      "href": "/api/build/tasks/build-20260925093432-f085c887/media/build-file-38",
+      "text": "查看本次截图"
+    },
+    {
+      "href": "/api/build/tasks/build-20260925093432-f085c887/media/build-file-38",
+      "text": ""
+    },
+    {
+      "href": "http://127.0.0.1:4322/api/build/tasks/build-20260925093432-f085c887/media/build-file-38",
+      "text": "下载本次原图"
+    },
+    {
+      "href": "/api/build/tasks/build-20260925093432-f085c887/media/build-file-39",
+      "text": "下载本次 Trace"
+    },
+    {
+      "href": "/api/build/tasks/build-20260925093432-f085c887/media/build-file-39",
+      "text": "下载本次 Trace"
+    }
+  ],
+  "run": "build-20260925093432-f085c887-dev-1",
+  "videos": [
+    {
+      "height": 720,
+      "paused": true,
+      "src": "http://127.0.0.1:4322/api/build/tasks/build-20260925093432-f085c887/media/build-file-40",
+      "time": 0,
+      "width": 1280
+    }
+  ]
+}

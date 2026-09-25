@@ -1,10 +1,10 @@
 # 需求索引
 
-- **V2.1及运行入口返修已实施**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)统一流程及返修开发者验收已完成；唯一4322，模型0，实际边界见[原交付报告](../../workbench/qa/20260925-v21/REPORT.md)。
+- **V2.1及运行入口返修已实施**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)统一流程及返修已实现；唯一4322，本轮真实模型6任务/5零模型复跑已执行，授权接线与生成证据缺口仍在，实际边界见[原交付报告](../../workbench/qa/20260925-v21/REPORT.md)。
 
 - [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；工程优先，两个真实任务限定验证。
 
-- [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：V2.1与运行入口返修已实施；候选未批准，真实模型等未验证范围见原REPORT。
+- [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：V2.1与运行入口返修已实施；真实模型有界功能轮已执行，候选未批准及未完成项见原REPORT。
 \r
 - [REQ-0035-auth01-target-session](REQ-0035-auth01-target-session/current_state.md)：AUTH-01 被测系统人工登录与内存会话；独立合成站的真实 Harness 浏览器接入及新执行上下文复用已验证，现有工作台建例任务尚未绑定此登录环境。
 

@@ -1,0 +1,10 @@
+{
+  "case_ids": [
+    "KC-06",
+    "KC-12"
+  ],
+  "browser_download_file_present": true,
+  "bytes": 4338,
+  "sha256": "26c02cf327a8541988d537cadb0326268d7f3b04c076ce73cf35d1ce45ace4d5",
+  "contents_unchanged": true
+}

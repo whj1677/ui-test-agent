@@ -1,0 +1,17 @@
+{
+  "report_id": "report-9830c25dad4a6e110b321904da4cea44eca6a7c5",
+  "run_id": null,
+  "counts": {
+    "requested": 12,
+    "executed": 2,
+    "passed": 1,
+    "failed": 1,
+    "not_run": 10
+  },
+  "bytes": 11592504,
+  "sha256": "BD95AADCF942E8D5EAAD0D9772CD5DB9499B0BCE27C7D671A70CEE3F4BE5643D",
+  "attachments_checked": 18,
+  "no_external_media": true,
+  "browser_download": true,
+  "offline_file_open": "NOT_VERIFIED_BROWSER_FILE_PROTOCOL_RESTRICTED"
+}

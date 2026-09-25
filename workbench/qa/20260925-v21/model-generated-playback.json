@@ -1,0 +1,18 @@
+{
+  "playing": [
+    {
+      "duration": 2.56,
+      "height": 720,
+      "paused": false,
+      "src": "http://127.0.0.1:4322/api/build/tasks/build-20260925093432-f085c887/media/build-file-31",
+      "time": 0.228923,
+      "width": 1280
+    }
+  ],
+  "paused": [
+    {
+      "paused": true,
+      "time": 0.268694
+    }
+  ]
+}

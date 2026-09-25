@@ -1,0 +1,846 @@
+{
+  "checked_at": "2026-09-25T09:54:38.194Z",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "checks": {
+    "cases": 12,
+    "original_contents_equal": true,
+    "model_tasks": 6,
+    "harness_starts": 6,
+    "registered_grants": 6,
+    "unclaimed_grants": 0,
+    "runs": 5,
+    "run_model_calls": 0,
+    "media_hashes_verified": 46,
+    "old_files_checked": 1554,
+    "old_changed_files": [
+      "workbench/.local/fresh25-b/build-tasks/development-authorizations.json"
+    ]
+  },
+  "tasks": [
+    {
+      "task_id": "build-20260925094900-c6fcea6b",
+      "case": "KC-06",
+      "mode": "regenerate",
+      "status": "CANCELLED",
+      "script_version": 2,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 7,
+      "self_tests": [],
+      "final_runs": [],
+      "candidates": [],
+      "maintenance": {
+        "mode": "regenerate",
+        "operation_id": "generation-ee056b11-38ea-40bd-a471-6f19109ff370",
+        "feedback": null,
+        "run_id": null
+      },
+      "error": {
+        "code": "HARNESS_INCOMPLETE:cancelled",
+        "message": "HARNESS_INCOMPLETE:cancelled"
+      },
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "task_id": "build-20260925094511-3205dc1e",
+      "case": "KC-11",
+      "mode": "regenerate",
+      "status": "WAITING_HUMAN_REVIEW",
+      "script_version": 3,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 58,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "DAB0FC8B44B176C197A71B69CEF4B95F63DEFC520A71AF2E6C653D93EABEC2C8",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "final_runs": [
+        {
+          "run_id": "build-20260925094511-3205dc1e-normal",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "candidates": [
+        {
+          "version": 1,
+          "sha256": "D98FE31DB3FB996E8B3B81199F22548E1118E62E377E5F6C819A4B9E87CBA3E5",
+          "bundle_sha256": "DAB0FC8B44B176C197A71B69CEF4B95F63DEFC520A71AF2E6C653D93EABEC2C8",
+          "files": [
+            {
+              "path": "candidate.spec.mjs",
+              "bytes": 4206,
+              "sha256": "D98FE31DB3FB996E8B3B81199F22548E1118E62E377E5F6C819A4B9E87CBA3E5"
+            }
+          ]
+        }
+      ],
+      "maintenance": {
+        "mode": "regenerate",
+        "operation_id": "generation-fbe3b961-47a0-4835-927d-2b1ce82149ac",
+        "feedback": null,
+        "run_id": null
+      },
+      "error": null,
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "task_id": "build-20260925094203-7cc207d0",
+      "case": "KC-11",
+      "mode": "revise",
+      "status": "WAITING_HUMAN_REVIEW",
+      "script_version": 2,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 32,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "C42DAEC2ACA60B35BC235B857034D9DADA77DF7D4D1BF84743C57687B5C7D58F",
+          "status": "PASSED",
+          "error": null
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "3631EC155F3C0427D10225D75D9B1558E13505B24749C9F00FC06A8CD3C9B180",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "final_runs": [
+        {
+          "run_id": "build-20260925094203-7cc207d0-normal",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "candidates": [
+        {
+          "version": 2,
+          "sha256": "47378DD383180BA55AC4EB3BBF5177F8FF6B9BC6AAD13BB1997D7F888C1D08FC",
+          "bundle_sha256": "3631EC155F3C0427D10225D75D9B1558E13505B24749C9F00FC06A8CD3C9B180",
+          "files": [
+            {
+              "path": "candidate.spec.mjs",
+              "bytes": 7972,
+              "sha256": "47378DD383180BA55AC4EB3BBF5177F8FF6B9BC6AAD13BB1997D7F888C1D08FC"
+            }
+          ]
+        }
+      ],
+      "maintenance": {
+        "mode": "revise",
+        "operation_id": "generation-87a454bb-ecaa-4894-a4c1-b7ed0f54270e",
+        "feedback": "选定S1检查发现：断言失败缺少可读的中文业务上下文，且状态/编号依赖固定列序。请在保留原三步动作、预期及全部断言强度的前提下，补充中文断言说明并改进脆弱定位。先运行旧包建立基线，再自主修订与自测；不修改用例，不放宽禁用/未选中等预期。",
+        "run_id": null,
+        "source_selection": {
+          "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+          "case_version": 1,
+          "source_task_id": "build-20260925092449-58712ad1",
+          "candidate_version": 1,
+          "bundle_sha256": "C42DAEC2ACA60B35BC235B857034D9DADA77DF7D4D1BF84743C57687B5C7D58F"
+        }
+      },
+      "error": null,
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "task_id": "build-20260925093054-f61931c4",
+      "case": "KC-06",
+      "mode": "generate",
+      "status": "CANDIDATE_VALIDATION_FAILED",
+      "script_version": 1,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 44,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\nExpected: \"共 8 条，第 1/3 页，每页3条\"\nReceived: \"共 0 条，第 1/1 页，每页3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+            "expected": "共 8 条，第 1/3 页，每页3条",
+            "actual": "共 0 条，第 1/1 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          }
+        }
+      ],
+      "final_runs": [],
+      "candidates": [
+        {
+          "version": 1,
+          "sha256": "89F8F16896002462538F4CA62BB6C61FE7ED05A3610C58D46AEE2DACC0B023C8",
+          "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+          "files": [
+            {
+              "path": "candidate.spec.mjs",
+              "bytes": 2560,
+              "sha256": "89F8F16896002462538F4CA62BB6C61FE7ED05A3610C58D46AEE2DACC0B023C8"
+            }
+          ]
+        }
+      ],
+      "maintenance": {
+        "mode": "generate",
+        "operation_id": "generation-14a1f4e1-7782-4e5b-b9b7-560a366a5460",
+        "feedback": null,
+        "run_id": null
+      },
+      "error": null,
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "task_id": "build-20260925093432-f085c887",
+      "case": "KC-12",
+      "mode": "generate",
+      "status": "WAITING_HUMAN_REVIEW",
+      "script_version": 1,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 77,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "8780D8B50343420A6A0F8BBC22785BBB4ECD8E9A473BCE13F62376E81C3DDAC0",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('#siteList [role=\"option\"][aria-selected=\"true\"]')\nExpected: \"南站\"\nReceived: \"全部\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#siteList [role=\"option\"][aria-selected=\"true\"]')\n    14 × locator resolved to <li data-v=\"全部\" tabindex=\"0\" role=\"option\" aria-selected=\"true\">全部</li>\n       - unexpected value \"全部\"\n",
+            "expected": "南站",
+            "actual": "全部",
+            "attribution": "PENDING_ANALYSIS"
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "1AD3FF9A43EEFDA320E3CA49AD1F5E7720D39BAF559F4FF25FB4CA688719D471",
+          "status": "FAILED",
+          "error": {
+            "type": "TEST_ERROR",
+            "message": "Error: toHaveText can be only used with Locator object, was called with Promise Promise {\n  <pending>,\n  [Symbol(async_id_symbol)]: 29046,\n  [Symbol(trigger_async_id_symbol)]: 28689,\n  [Symbol(kResourceStore)]: _Zone {\n    _asyncLocalStorage: AsyncLocalStorage {\n      kResourceStore: Symbol(kResourceStore),\n      enabled: true\n    },\n    _data: Map(1) { 'stepZone' => [Object] }\n  }\n}",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          }
+        },
+        {
+          "number": 3,
+          "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "final_runs": [
+        {
+          "run_id": "build-20260925093432-f085c887-normal",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "candidates": [
+        {
+          "version": 3,
+          "sha256": "39131A2AA46AB40481D534557504DB84D325B0BE29E20E9A26872AEE704E8C9B",
+          "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+          "files": [
+            {
+              "path": "candidate.spec.mjs",
+              "bytes": 8635,
+              "sha256": "39131A2AA46AB40481D534557504DB84D325B0BE29E20E9A26872AEE704E8C9B"
+            }
+          ]
+        }
+      ],
+      "maintenance": {
+        "mode": "generate",
+        "operation_id": "generation-14a1f4e1-7782-4e5b-b9b7-560a366a5460",
+        "feedback": null,
+        "run_id": null
+      },
+      "error": null,
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "task_id": "build-20260925092449-58712ad1",
+      "case": "KC-11",
+      "mode": "generate",
+      "status": "WAITING_HUMAN_REVIEW",
+      "script_version": 1,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "harness_starts": 1,
+      "tool_calls": 25,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "C42DAEC2ACA60B35BC235B857034D9DADA77DF7D4D1BF84743C57687B5C7D58F",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "final_runs": [
+        {
+          "run_id": "build-20260925092449-58712ad1-normal",
+          "status": "PASSED",
+          "error": null
+        }
+      ],
+      "candidates": [
+        {
+          "version": 1,
+          "sha256": "71F86452A47D582201D7E41E137A5D55BB0567E56B3B799A3BA9A9F8A03882D3",
+          "bundle_sha256": "C42DAEC2ACA60B35BC235B857034D9DADA77DF7D4D1BF84743C57687B5C7D58F",
+          "files": [
+            {
+              "path": "candidate.spec.mjs",
+              "bytes": 4322,
+              "sha256": "71F86452A47D582201D7E41E137A5D55BB0567E56B3B799A3BA9A9F8A03882D3"
+            }
+          ]
+        }
+      ],
+      "maintenance": {
+        "mode": "generate",
+        "operation_id": "generation-e0aee918-88d9-4b2f-92e0-44e4808b7711",
+        "feedback": null,
+        "run_id": null
+      },
+      "error": null,
+      "human_review_status": "WAITING_REVIEW"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "trial-90e376d9194b32d1ebf8b78392d64d235ed6f64b",
+      "batch_id": "batch-a63f41b5-51ce-45fe-9109-73dea6943c46",
+      "case": "KC-06",
+      "case_version": 1,
+      "script_version": 1,
+      "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+      "status": "FAILED",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\nExpected: \"共 8 条，第 1/3 页，每页3条\"\nReceived: \"共 0 条，第 1/1 页，每页3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+        "expected": "共 8 条，第 1/3 页，每页3条",
+        "actual": "共 0 条，第 1/1 页，每页3条",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-127c8867aa7b06886db30e04c93935d3af5bd19a",
+      "batch_id": "batch-a63f41b5-51ce-45fe-9109-73dea6943c46",
+      "case": "KC-12",
+      "case_version": 1,
+      "script_version": 1,
+      "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+      "status": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-92879931230d8484bb3b3c1ffaa5a769c9d67419",
+      "batch_id": "batch-40a559c5-1fca-4249-a45a-1ae1fca894cc",
+      "case": "KC-06",
+      "case_version": 1,
+      "script_version": 1,
+      "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+      "status": "FAILED",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\nExpected: \"共 8 条，第 1/3 页，每页3条\"\nReceived: \"共 0 条，第 1/1 页，每页3条\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByText(/^共 \\d+ 条，第 \\d+\\/\\d+ 页，每页3条$/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+        "expected": "共 8 条，第 1/3 页，每页3条",
+        "actual": "共 0 条，第 1/1 页，每页3条",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-b175f1563594522b9340c5e105d184890602dece",
+      "batch_id": "batch-40a559c5-1fca-4249-a45a-1ae1fca894cc",
+      "case": "KC-12",
+      "case_version": 1,
+      "script_version": 1,
+      "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+      "status": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    },
+    {
+      "run_id": "trial-0fddb525b7a18d4b4befbf6d45d46164e3c414c5",
+      "batch_id": "batch-17507295-a02d-4b91-94ed-eb44afe119f4",
+      "case": "KC-11",
+      "case_version": 1,
+      "script_version": 2,
+      "bundle_sha256": "3631EC155F3C0427D10225D75D9B1558E13505B24749C9F00FC06A8CD3C9B180",
+      "status": "PASSED",
+      "error": null,
+      "model_calls": 0,
+      "harness_starts": 0,
+      "recording": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "video_size": {
+          "width": 1280,
+          "height": 720
+        },
+        "device_scale_factor": 1,
+        "codec": "Playwright WebM",
+        "encoding_parameters": "Playwright defaults; bitrate not overridden"
+      }
+    }
+  ],
+  "batches": [
+    {
+      "batch_id": "batch-a63f41b5-51ce-45fe-9109-73dea6943c46",
+      "scope": "project",
+      "state": "FINISHED",
+      "software_version": "model-round-20260925-project",
+      "items": [
+        {
+          "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+          "external_id": "KC-01",
+          "title": "初始数据与三页分页边界",
+          "case_version": 1,
+          "content_sha256": "706DC07BC2EE25F68FFE14709A39980590DC218AA7092EAD36AAAE332543346A",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+          "external_id": "KC-02",
+          "title": "编号模糊搜索不区分大小写",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+          "external_id": "KC-03",
+          "title": "同名温循箱搜索",
+          "case_version": 1,
+          "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+          "external_id": "KC-04",
+          "title": "站点与状态AND组合筛选",
+          "case_version": 1,
+          "content_sha256": "9C647E913DD993423A20179DB4CC5F4170AC483DE35A80A8DB0463E21FD7423D",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+          "external_id": "KC-05",
+          "title": "状态多选空闲或维护",
+          "case_version": 1,
+          "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+          "external_id": "KC-06",
+          "title": "无结果与重置恢复",
+          "case_version": 1,
+          "content_sha256": "8A1B8581530A082C0A891A949F52F2BD71164FF13975DAC3E4173F8C9FD2BADC",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+            "case_version": 1,
+            "content_sha256": "8A1B8581530A082C0A891A949F52F2BD71164FF13975DAC3E4173F8C9FD2BADC",
+            "source_task_id": "build-20260925093054-f61931c4",
+            "candidate_version": 1,
+            "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-90e376d9194b32d1ebf8b78392d64d235ed6f64b",
+          "result": "FAILED",
+          "complete_pass": false
+        },
+        {
+          "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+          "external_id": "KC-07",
+          "title": "费用降序排序前三",
+          "case_version": 1,
+          "content_sha256": "FE312970746332CC950D4AF49EBBB1260B2CEF47BAC071C01BD3274B030439E5",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+          "external_id": "KC-08",
+          "title": "跨页选择保留",
+          "case_version": 1,
+          "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+          "external_id": "KC-09",
+          "title": "筛选变更清空选择并回第1页",
+          "case_version": 1,
+          "content_sha256": "4D5B6D62EDA40296ADA8A6EAC3DB75A741AF124BF72F5CDF581B9382BF1F564C",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+          "external_id": "KC-10",
+          "title": "当前页全选只选可预约行",
+          "case_version": 1,
+          "content_sha256": "72D3D68252026E5C8691158D9CB0B33FDF6313F8B0BF026620BCF329029331DB",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_MISSING"
+        },
+        {
+          "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+          "external_id": "KC-11",
+          "title": "维护与使用中不可预约",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "selection": null,
+          "script_version": null,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": null,
+          "requirement_review": null,
+          "qualification": "NO_APPLICABLE_SCRIPT",
+          "state": "BLOCKED",
+          "reason": "SCRIPT_SELECTION_REQUIRED"
+        },
+        {
+          "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+          "external_id": "KC-12",
+          "title": "南站同名设备详情与返回状态保持",
+          "case_version": 1,
+          "content_sha256": "89A530C20A949B3D4CB4F9AA8E87475856C084989803F30F4AA7D2E793E8450E",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+            "case_version": 1,
+            "content_sha256": "89A530C20A949B3D4CB4F9AA8E87475856C084989803F30F4AA7D2E793E8450E",
+            "source_task_id": "build-20260925093432-f085c887",
+            "candidate_version": 3,
+            "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-127c8867aa7b06886db30e04c93935d3af5bd19a",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-40a559c5-1fca-4249-a45a-1ae1fca894cc",
+      "scope": "selected",
+      "state": "FINISHED",
+      "software_version": "model-round-20260925-selected",
+      "items": [
+        {
+          "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+          "external_id": "KC-06",
+          "title": "无结果与重置恢复",
+          "case_version": 1,
+          "content_sha256": "8A1B8581530A082C0A891A949F52F2BD71164FF13975DAC3E4173F8C9FD2BADC",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+            "case_version": 1,
+            "content_sha256": "8A1B8581530A082C0A891A949F52F2BD71164FF13975DAC3E4173F8C9FD2BADC",
+            "source_task_id": "build-20260925093054-f61931c4",
+            "candidate_version": 1,
+            "bundle_sha256": "700A5E6D8B57FD51E31BDB52AA9FCB53A46F2D6670F4047EB193AC8DF37EBA45",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-92879931230d8484bb3b3c1ffaa5a769c9d67419",
+          "result": "FAILED",
+          "complete_pass": false
+        },
+        {
+          "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+          "external_id": "KC-12",
+          "title": "南站同名设备详情与返回状态保持",
+          "case_version": 1,
+          "content_sha256": "89A530C20A949B3D4CB4F9AA8E87475856C084989803F30F4AA7D2E793E8450E",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+            "case_version": 1,
+            "content_sha256": "89A530C20A949B3D4CB4F9AA8E87475856C084989803F30F4AA7D2E793E8450E",
+            "source_task_id": "build-20260925093432-f085c887",
+            "candidate_version": 3,
+            "bundle_sha256": "25C27F014793008343E8005BABD3E846FC78E9246A0F406EC941F92B1DFFF338",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-b175f1563594522b9340c5e105d184890602dece",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    },
+    {
+      "batch_id": "batch-17507295-a02d-4b91-94ed-eb44afe119f4",
+      "scope": "single",
+      "state": "FINISHED",
+      "software_version": "model-round-20260925-single-S2",
+      "items": [
+        {
+          "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+          "external_id": "KC-11",
+          "title": "维护与使用中不可预约",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+            "case_version": 1,
+            "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+            "source_task_id": "build-20260925094203-7cc207d0",
+            "candidate_version": 2,
+            "bundle_sha256": "3631EC155F3C0427D10225D75D9B1558E13505B24749C9F00FC06A8CD3C9B180",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 2,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-0fddb525b7a18d4b4befbf6d45d46164e3c414c5",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ]
+    }
+  ]
+}

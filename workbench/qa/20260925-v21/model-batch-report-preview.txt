@@ -1,0 +1,566 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 报告
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试报告预览" [level=1]
+  - paragraph: 固定测试批次 · batch-a63f41b5-51ce-45fe-9109-73dea6943c46 · 2026-09-25T09:54:25.973Z
+  - link "下载离线 HTML 报告":
+    - /url: /api/case-library/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports/report-9830c25dad4a6e110b321904da4cea44eca6a7c5/html?download=1
+  - paragraph: 这是已保存快照；后续复测不更新此报告。请求 12 条，未执行 10 条；未携带的媒体会在报告中明确列出。
+  - link "返回报告列表":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+  - iframe:
+    - heading "V2.1 真实模型全流程 · 20260925 · 测试报告" [level=1]
+    - paragraph:
+      - text: 固定范围：指定测试批次 · batch-a63f41b5-51ce-45fe-9109-73dea6943c46
+      - text: 快照 report-9830c25dad4a6e110b321904da4cea44eca6a7c5 · 2026-09-25T09:54:25.973Z
+    - paragraph: 请求 12 · 已执行 2 · 原始通过 1 · 未通过 1 · 未执行 10
+    - paragraph: 执行通过、要求完整、脚本正式采用分别核对。本报告不拼接其他批次成绩；后续复测不改变此快照。所有已携带媒体离线可用，未携带项明确列出。
+    - heading "KC-01 · 初始数据与三页分页边界" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 打开页面并确认已重置命名空间后查看设备资源 共8条，按编号EQ-101至EQ-108升序，第1页显示101/102/103，每页3条，总数8、第1/3页 未取得 / 未取得":
+          - cell "1"
+          - cell "打开页面并确认已重置命名空间后查看设备资源"
+          - cell "共8条，按编号EQ-101至EQ-108升序，第1页显示101/102/103，每页3条，总数8、第1/3页"
+          - cell "未取得 / 未取得"
+        - row "2 点击下一页到第2页 显示EQ-104/105/106，第2/3页，上一页可用 未取得 / 未取得":
+          - cell "2"
+          - cell "点击下一页到第2页"
+          - cell "显示EQ-104/105/106，第2/3页，上一页可用"
+          - cell "未取得 / 未取得"
+        - row "3 点击下一页到第3页并尝试继续下一页 显示EQ-107/108，第3/3页，下一页禁用；返回第1页后上一页禁用 未取得 / 未取得":
+          - cell "3"
+          - cell "点击下一页到第3页并尝试继续下一页"
+          - cell "显示EQ-107/108，第3/3页，下一页禁用；返回第1页后上一页禁用"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-02 · 编号模糊搜索不区分大小写" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 在搜索框输入小写eq-10 立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页 未取得 / 未取得":
+          - cell "1"
+          - cell "在搜索框输入小写eq-10"
+          - cell "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          - cell "未取得 / 未取得"
+        - row "2 清空后输入大写EQ-106 仅显示EQ-106，共1条，第1/1页 未取得 / 未取得":
+          - cell "2"
+          - cell "清空后输入大写EQ-106"
+          - cell "仅显示EQ-106，共1条，第1/1页"
+          - cell "未取得 / 未取得"
+        - row "3 输入eq-1并查看边界 匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效 未取得 / 未取得":
+          - cell "3"
+          - cell "输入eq-1并查看边界"
+          - cell "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-03 · 同名温循箱搜索" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 搜索框输入温循箱 仅显示EQ-101北站温循箱和EQ-104南站温循箱，共2条 未取得 / 未取得":
+          - cell "1"
+          - cell "搜索框输入温循箱"
+          - cell "仅显示EQ-101北站温循箱和EQ-104南站温循箱，共2条"
+          - cell "未取得 / 未取得"
+        - row "2 按编号确认两行区分 两行编号分别为EQ-101与EQ-104，不因同名合并或串用 未取得 / 未取得":
+          - cell "2"
+          - cell "按编号确认两行区分"
+          - cell "两行编号分别为EQ-101与EQ-104，不因同名合并或串用"
+          - cell "未取得 / 未取得"
+        - row "3 清空搜索 恢复8条，筛选清空选择并回到第1页 未取得 / 未取得":
+          - cell "3"
+          - cell "清空搜索"
+          - cell "恢复8条，筛选清空选择并回到第1页"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-04 · 站点与状态AND组合筛选" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 站点自定义下拉选择北站 立即显示北站EQ-101/102/105，共3条，第1页 未取得 / 未取得":
+          - cell "1"
+          - cell "站点自定义下拉选择北站"
+          - cell "立即显示北站EQ-101/102/105，共3条，第1页"
+          - cell "未取得 / 未取得"
+        - row "2 状态仅勾选空闲 AND组合后仅EQ-101与EQ-105，共2条 未取得 / 未取得":
+          - cell "2"
+          - cell "状态仅勾选空闲"
+          - cell "AND组合后仅EQ-101与EQ-105，共2条"
+          - cell "未取得 / 未取得"
+        - row "3 再勾选维护 状态内部OR且与站点AND，显示EQ-101/102/105，共3条 未取得 / 未取得":
+          - cell "3"
+          - cell "再勾选维护"
+          - cell "状态内部OR且与站点AND，显示EQ-101/102/105，共3条"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-05 · 状态多选空闲或维护" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 状态勾选空闲和维护，取消使用中 显示空闲5条加维护2条，共7条，排除EQ-104使用中 未取得 / 未取得":
+          - cell "1"
+          - cell "状态勾选空闲和维护，取消使用中"
+          - cell "显示空闲5条加维护2条，共7条，排除EQ-104使用中"
+          - cell "未取得 / 未取得"
+        - row "2 翻页浏览结果 第1页101/102/103，第2页105/106/107，第3页108，共3页 未取得 / 未取得":
+          - cell "2"
+          - cell "翻页浏览结果"
+          - cell "第1页101/102/103，第2页105/106/107，第3页108，共3页"
+          - cell "未取得 / 未取得"
+        - row "3 取消维护仅留空闲 仅剩EQ-101/103/105/106/108共5条 未取得 / 未取得":
+          - cell "3"
+          - cell "取消维护仅留空闲"
+          - cell "仅剩EQ-101/103/105/106/108共5条"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-06 · 无结果与重置恢复" [level=2]
+    - paragraph: 用例 v1 · 脚本 1 / 候选 1 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：失败 · 要求核对：未核对 · 脚本资格：未批准 · 媒体：完整
+    - paragraph
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 搜索框输入不存在编号EQ-999 显示没有匹配设备，无数据行，总数0，第1/1页，分页按钮禁用 PASSED / 未单独采集实际值":
+          - cell "1"
+          - cell "搜索框输入不存在编号EQ-999"
+          - cell "显示没有匹配设备，无数据行，总数0，第1/1页，分页按钮禁用"
+          - cell "PASSED / 未单独采集实际值"
+        - row "2 点击重置 搜索/站点/状态清空，编号升序恢复，第1页显示101/102/103，共8条 FAILED / 共 0 条，第 1/1 页，每页3条":
+          - cell "2"
+          - cell "点击重置"
+          - cell "搜索/站点/状态清空，编号升序恢复，第1页显示101/102/103，共8条"
+          - cell "FAILED / 共 0 条，第 1/1 页，每页3条"
+        - row "3 确认选择状态 重置后已选0项，批量预约禁用 NOT_EXECUTED / 未单独采集实际值":
+          - cell "3"
+          - cell "确认选择状态"
+          - cell "重置后已选0项，批量预约禁用"
+          - cell "NOT_EXECUTED / 未单独采集实际值"
+    - heading "原始错误" [level=3]
+    - generic: "{ \"type\": \"ASSERTION_MISMATCH\", \"message\": \"Error: expect(locator).toHaveText(expected) failed\\n\\nLocator: getByText(/^共 \\\\d+ 条，第 \\\\d+\\\\/\\\\d+ 页，每页3条$/)\\nExpected: \\\"共 8 条，第 1/3 页，每页3条\\\"\\nReceived: \\\"共 0 条，第 1/1 页，每页3条\\\"\\nTimeout: 5000ms\\n\\nCall log:\\n - Expect \\\"toHaveText\\\" with timeout 5000ms\\n - waiting for getByText(/^共 \\\\d+ 条，第 \\\\d+\\\\/\\\\d+ 页，每页3条$/)\\n 14 × locator resolved to <span id=\\\"pageInfo\\\" aria-live=\\\"polite\\\">共 0 条，第 1/1 页，每页3条</span>\\n - unexpected value \\\"共 0 条，第 1/1 页，每页3条\\\"\\n\", \"expected\": \"共 8 条，第 1/3 页，每页3条\", \"actual\": \"共 0 条，第 1/1 页，每页3条\", \"attribution\": \"PENDING_ANALYSIS\" }"
+    - heading "同一次运行的证据" [level=3]
+    - article:
+      - paragraph: test-failed-1.png · image · 44225 字节 · SHA256 EE304A93DC0A3CB755E37821D14BD9D0A74CA991814EED92ED7FD27B68C5DC89
+      - img "KC-06 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: trace.zip · trace · 1121457 字节 · SHA256 975E316D6D3A7C6623794E5A07719766F82F1898C0A0B833CC0B289E04AFAC20
+      - link "下载 Trace":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: video.webm · video · 401308 字节 · SHA256 E76E402C248ADFF0C844E1B11DC0A611DC5BD3B7DF6016506C20C382A7E6E629
+      - paragraph: 原始连续录像；历史录制可能清晰度有限
+      - link "下载视频":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_1-after.png · image · 44984 字节 · SHA256 9698368D2FFC63433DC5A6201DD98F22B59A6F0C01F8754CF8F2A55EC088D78B
+      - img "KC-06 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_1-before.png · image · 54306 字节 · SHA256 17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B
+      - img "KC-06 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_2-before.png · image · 44984 字节 · SHA256 9698368D2FFC63433DC5A6201DD98F22B59A6F0C01F8754CF8F2A55EC088D78B
+      - img "KC-06 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_2-failure-after.png · image · 44225 字节 · SHA256 EE304A93DC0A3CB755E37821D14BD9D0A74CA991814EED92ED7FD27B68C5DC89
+      - img "KC-06 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: step-replay-v1.webm · video · 526028 字节 · SHA256 2A28AB90D06859727015B624346F41CB33C254F4FCFCBF91F8165204D8C87557
+      - paragraph: 中文步骤证据回放（非原始连续录像）
+      - link "下载视频":
+        - /url: data:[embedded-media]
+    - generic "固定身份"
+    - heading "KC-07 · 费用降序排序前三" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 排序选择费用降序 第1页前三为EQ-104(90)、EQ-101(80)、EQ-108(70) 未取得 / 未取得":
+          - cell "1"
+          - cell "排序选择费用降序"
+          - cell "第1页前三为EQ-104(90)、EQ-101(80)、EQ-108(70)"
+          - cell "未取得 / 未取得"
+        - row "2 翻到第2页 继续降序显示EQ-105(60)、EQ-102(50)、EQ-107(40) 未取得 / 未取得":
+          - cell "2"
+          - cell "翻到第2页"
+          - cell "继续降序显示EQ-105(60)、EQ-102(50)、EQ-107(40)"
+          - cell "未取得 / 未取得"
+        - row "3 切回编号升序 恢复EQ-101至EQ-108升序，当前页内容正确 未取得 / 未取得":
+          - cell "3"
+          - cell "切回编号升序"
+          - cell "恢复EQ-101至EQ-108升序，当前页内容正确"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-08 · 跨页选择保留" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 第1页勾选EQ-101 已选1项，批量预约可用 未取得 / 未取得":
+          - cell "1"
+          - cell "第1页勾选EQ-101"
+          - cell "已选1项，批量预约可用"
+          - cell "未取得 / 未取得"
+        - row "2 翻到第2页勾选EQ-106 翻页后EQ-101选择保留，已选2项 未取得 / 未取得":
+          - cell "2"
+          - cell "翻到第2页勾选EQ-106"
+          - cell "翻页后EQ-101选择保留，已选2项"
+          - cell "未取得 / 未取得"
+        - row "3 返回第1页和第2页核对 EQ-101与EQ-106均保持勾选，已选2项 未取得 / 未取得":
+          - cell "3"
+          - cell "返回第1页和第2页核对"
+          - cell "EQ-101与EQ-106均保持勾选，已选2项"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-09 · 筛选变更清空选择并回第1页" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 勾选EQ-101后翻到第2页 选择保留且当前为第2页 未取得 / 未取得":
+          - cell "1"
+          - cell "勾选EQ-101后翻到第2页"
+          - cell "选择保留且当前为第2页"
+          - cell "未取得 / 未取得"
+        - row "2 修改搜索为EQ-103 选择被清空，回到第1页，仅显示EQ-103，已选0项 未取得 / 未取得":
+          - cell "2"
+          - cell "修改搜索为EQ-103"
+          - cell "选择被清空，回到第1页，仅显示EQ-103，已选0项"
+          - cell "未取得 / 未取得"
+        - row "3 清空搜索再改站点为南站 再次清空选择并回到第1页，显示南站设备 未取得 / 未取得":
+          - cell "3"
+          - cell "清空搜索再改站点为南站"
+          - cell "再次清空选择并回到第1页，显示南站设备"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-10 · 当前页全选只选可预约行" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_MISSING
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 第1页点击当前页全选 只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项 未取得 / 未取得":
+          - cell "1"
+          - cell "第1页点击当前页全选"
+          - cell "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项"
+          - cell "未取得 / 未取得"
+        - row "2 取消全选再单选EQ-103 仅EQ-103选中，EQ-102复选框仍禁用 未取得 / 未取得":
+          - cell "2"
+          - cell "取消全选再单选EQ-103"
+          - cell "仅EQ-103选中，EQ-102复选框仍禁用"
+          - cell "未取得 / 未取得"
+        - row "3 确认批量预约状态 存在可预约选择时批量预约可用，清空后禁用 未取得 / 未取得":
+          - cell "3"
+          - cell "确认批量预约状态"
+          - cell "存在可预约选择时批量预约可用，清空后禁用"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-11 · 维护与使用中不可预约" [level=2]
+    - paragraph: 用例 v1 · 脚本 历史未编号 / 候选 无 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：未执行 · 要求核对：未核对 · 脚本资格：没有适用脚本 · 媒体：未采集
+    - paragraph: SCRIPT_SELECTION_REQUIRED
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 查看EQ-102维护行 选择复选框禁用且标注不可预约，不能加入批量预约 未取得 / 未取得":
+          - cell "1"
+          - cell "查看EQ-102维护行"
+          - cell "选择复选框禁用且标注不可预约，不能加入批量预约"
+          - cell "未取得 / 未取得"
+        - row "2 搜索温循箱查看EQ-104使用中行 EQ-104复选框禁用，EQ-101可勾选 未取得 / 未取得":
+          - cell "2"
+          - cell "搜索温循箱查看EQ-104使用中行"
+          - cell "EQ-104复选框禁用，EQ-101可勾选"
+          - cell "未取得 / 未取得"
+        - row "3 尝试全选含不可预约页 全选仅选择空闲可预约行，不可预约行保持未选 未取得 / 未取得":
+          - cell "3"
+          - cell "尝试全选含不可预约页"
+          - cell "全选仅选择空闲可预约行，不可预约行保持未选"
+          - cell "未取得 / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - paragraph: 无本次可用媒体，不使用其他记录素材。
+    - generic "固定身份"
+    - heading "KC-12 · 南站同名设备详情与返回状态保持" [level=2]
+    - paragraph: 用例 v1 · 脚本 1 / 候选 3 · 被测版本 model-round-20260925-project
+    - paragraph: 原始执行：通过 · 要求核对：未核对 · 脚本资格：未批准 · 媒体：完整
+    - paragraph
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 搜索温循箱并站点选南站，打开EQ-104详情 抽屉先显示加载中，随后编号EQ-104、名称温循箱、站点南站、状态使用中、费用90 PASSED / 未单独采集实际值":
+          - cell "1"
+          - cell "搜索温循箱并站点选南站，打开EQ-104详情"
+          - cell "抽屉先显示加载中，随后编号EQ-104、名称温循箱、站点南站、状态使用中、费用90"
+          - cell "PASSED / 未单独采集实际值"
+        - row "2 切换到预约历史页签 EQ-104显示无预约历史，不串用同名EQ-101数据 PASSED / 未单独采集实际值":
+          - cell "2"
+          - cell "切换到预约历史页签"
+          - cell "EQ-104显示无预约历史，不串用同名EQ-101数据"
+          - cell "PASSED / 未单独采集实际值"
+        - row "3 关闭详情 搜索温循箱、站点南站、页码与选择保持原样 PASSED / 未单独采集实际值":
+          - cell "3"
+          - cell "关闭详情"
+          - cell "搜索温循箱、站点南站、页码与选择保持原样"
+          - cell "PASSED / 未单独采集实际值"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - article:
+      - paragraph: test-finished-1.png · image · 44926 字节 · SHA256 99528322E1D136931C441E35F84B127DD47A6B594915CD0655A91FEF3036A71A
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: trace.zip · trace · 2527597 字节 · SHA256 4F5B8CE61EFD593E2A2BA21F5D92A28C9CAC380F79B7C160EFC545C23100C3CC
+      - link "下载 Trace":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: video.webm · video · 238286 字节 · SHA256 1E51B18CED22E53C43FA2F18F2F3D68D08870A2E6C433880E5EAE53B1049E43F
+      - paragraph: 原始连续录像；历史录制可能清晰度有限
+      - link "下载视频":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_1-after.png · image · 52552 字节 · SHA256 B08D062250D408D2B1FFE7044D88EFD5939A87F23D0F8A611606F48B51F16CB9
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_1-before.png · image · 54306 字节 · SHA256 17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_2-after.png · image · 53636 字节 · SHA256 A776A3E897818A7C64CA8AEED24C43ECC34BBAC2EA50F3892F44A4C830C7AA4C
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_2-before.png · image · 52552 字节 · SHA256 B08D062250D408D2B1FFE7044D88EFD5939A87F23D0F8A611606F48B51F16CB9
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_3-after.png · image · 44926 字节 · SHA256 99528322E1D136931C441E35F84B127DD47A6B594915CD0655A91FEF3036A71A
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: case_step_3-before.png · image · 53636 字节 · SHA256 A776A3E897818A7C64CA8AEED24C43ECC34BBAC2EA50F3892F44A4C830C7AA4C
+      - img "KC-12 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: step-replay-v1.webm · video · 757046 字节 · SHA256 5E9C3DF537D9B3CEF21D6B046B87F63EA789AC7FC1CFDE77DC6484083345B385
+      - paragraph: 中文步骤证据回放（非原始连续录像）
+      - link "下载视频":
+        - /url: data:[embedded-media]
+    - generic "固定身份"
+- status

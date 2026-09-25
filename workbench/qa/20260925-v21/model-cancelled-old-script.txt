@@ -1,0 +1,86 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-06
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-06 · 无结果与重置恢复" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例" [disabled]
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S1 · 2026-09-25T09:30:54." [selected]
+  - generic: 脚本资格：候选未批准
+  - text: 没有此版本的技术试跑授权 ·
+  - link "检查环境与授权":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1&tab=history"
+  - heading "自动化脚本" [level=2]
+  - paragraph: 运行已有脚本不调用模型，也不代表人工批准。旧版本结果不适用于新内容。
+  - article:
+    - heading "脚本 S1 · 候选 v1 · 用例 v1" [level=3]
+    - paragraph: 环境：kimi-complex-20260925 · 尚未完成 · 人工核对：尚不可核对（未批准）
+    - paragraph: 没有与此文件包匹配的试跑授权
+    - strong: 要求核查：待核对
+    - paragraph: 尚无绑定此用例版本和文件包的维护者核查；运行通过不代表要求完整。
+    - paragraph: 脚本资格：当前不可试跑
+    - link "查看来源任务":
+      - /url: "#/history?task_id=build-20260925093054-f61931c4"
+    - text: ·
+    - link "查看已有运行":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1&tab=history"
+    - text: ·
+    - link "查看脚本对应的用例版本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=1"
+    - generic "候选代码与文件清单"
+    - button "试跑当前文件包（不调用模型）" [disabled]
+    - generic "技术身份"
+  - paragraph:
+    - text: 请使用顶部“生成自动化脚本 / 重新生成脚本”或“更多 → 基于问题修订”。
+    - link "查看生成记录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/generation"
+  - generic "历史受控任务与兼容能力"
+- status: 已请求下载选中的 2 条用例；内容来自正式后端导出。

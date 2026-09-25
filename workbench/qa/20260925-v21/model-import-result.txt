@@ -1,0 +1,52 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 0 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 导入用例
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "导入用例" [level=1]
+  - paragraph: 项目：V2.1 真实模型全流程 · 20260925 · 确认前不会写入新用例
+  - link "退出导入":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - list:
+    - generic: "1"
+    - text: 选文件
+    - generic: "2"
+    - text: 映射与预览
+    - generic: "3"
+    - text: 确认导入
+    - generic: "4"
+    - text: 结果
+  - heading "导入确认已完成" [level=2]
+  - paragraph: 后端实际新增 12 条；重复跳过 0 条；冲突跳过 0 条；无法导入跳过 0 条。
+  - button "继续导入"
+  - link "返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- status: 导入结果已由后端持久化。

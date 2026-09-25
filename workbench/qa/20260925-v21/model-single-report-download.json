@@ -1,0 +1,17 @@
+{
+  "report_id": "report-38d1c690622e129af702786ae7b7e11addf1cd6d",
+  "run_id": "build-20260925092449-58712ad1-normal",
+  "counts": {
+    "requested": 1,
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "not_run": 0
+  },
+  "bytes": 1271790,
+  "sha256": "018DA58586220A5A3D81CD512FA053F027FEBFD6ED6F6A90C966F735679AAB2F",
+  "attachments_checked": 3,
+  "no_external_media": true,
+  "browser_download": true,
+  "offline_file_open": "NOT_VERIFIED_BROWSER_FILE_PROTOCOL_RESTRICTED"
+}

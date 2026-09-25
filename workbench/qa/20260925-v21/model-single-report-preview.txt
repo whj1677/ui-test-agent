@@ -1,0 +1,97 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 报告
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试报告预览" [level=1]
+  - paragraph: 固定用例运行 · build-20260925092449-58712ad1-normal · 2026-09-25T09:42:41.386Z
+  - link "下载离线 HTML 报告":
+    - /url: /api/case-library/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports/report-38d1c690622e129af702786ae7b7e11addf1cd6d/html?download=1
+  - paragraph: 这是已保存快照；后续复测不更新此报告。请求 1 条，未执行 0 条；未携带的媒体会在报告中明确列出。
+  - link "返回报告列表":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+  - iframe:
+    - heading "V2.1 真实模型全流程 · 20260925 · 测试报告" [level=1]
+    - paragraph:
+      - text: 固定范围：指定用例的指定运行 · build-20260925092449-58712ad1-normal
+      - text: 快照 report-38d1c690622e129af702786ae7b7e11addf1cd6d · 2026-09-25T09:42:41.386Z
+    - paragraph: 请求 1 · 已执行 1 · 原始通过 1 · 未通过 0 · 未执行 0
+    - paragraph: 执行通过、要求完整、脚本正式采用分别核对。本报告不拼接其他批次成绩；后续复测不改变此快照。所有已携带媒体离线可用，未携带项明确列出。
+    - heading "KC-11 · 维护与使用中不可预约" [level=2]
+    - paragraph: 用例 v1 · 脚本 1 / 候选 1 · 被测版本 未提供
+    - paragraph: 原始执行：通过 · 要求核对：未核对 · 脚本资格：未批准 · 媒体：LEGACY_STEP_CAPTURES_UNAVAILABLE
+    - paragraph
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 查看EQ-102维护行 选择复选框禁用且标注不可预约，不能加入批量预约 PASSED / 未取得":
+          - cell "1"
+          - cell "查看EQ-102维护行"
+          - cell "选择复选框禁用且标注不可预约，不能加入批量预约"
+          - cell "PASSED / 未取得"
+        - row "2 搜索温循箱查看EQ-104使用中行 EQ-104复选框禁用，EQ-101可勾选 PASSED / 未取得":
+          - cell "2"
+          - cell "搜索温循箱查看EQ-104使用中行"
+          - cell "EQ-104复选框禁用，EQ-101可勾选"
+          - cell "PASSED / 未取得"
+        - row "3 尝试全选含不可预约页 全选仅选择空闲可预约行，不可预约行保持未选 PASSED / 未取得":
+          - cell "3"
+          - cell "尝试全选含不可预约页"
+          - cell "全选仅选择空闲可预约行，不可预约行保持未选"
+          - cell "PASSED / 未取得"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - article:
+      - paragraph: test-finished-1.png · image · 54721 字节 · SHA256 3A4E5845B9DB29554FBF9EFAE73498C0EA4C66C0D4FAB2E803F3FAD1485F6324
+      - img "KC-11 本次截图"
+      - link "下载截图":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: trace.zip · trace · 676250 字节 · SHA256 7870DE7F48F154EE49250F0C0C5B9EDEB327243BF57D48D0EEA730361922C4F5
+      - link "下载 Trace":
+        - /url: data:[embedded-media]
+    - article:
+      - paragraph: video.webm · video · 82661 字节 · SHA256 CD4952E9607559F236DABB19CF828983D7A47BFC159106A6F172ECC7F8F7CA15
+      - paragraph: 原始连续录像；历史录制可能清晰度有限
+      - link "下载视频":
+        - /url: data:[embedded-media]
+    - generic "固定身份"
+- status

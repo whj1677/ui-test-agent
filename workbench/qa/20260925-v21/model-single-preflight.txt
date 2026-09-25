@@ -1,0 +1,121 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases?page=2"
+- generic: /
+- strong: KC-11
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases?page=2"
+  - heading "KC-11 · 维护与使用中不可预约" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例" [disabled]
+  - button "生成自动化脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "尚未生成" [selected]
+  - generic: 脚本资格：候选未批准
+  - text: 缺少脚本 ·
+  - link "生成脚本（需模型授权）":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-8da92707-600e-4f5b-8c61-d4cbfc0544f2?version=1&tab=scripts"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-8da92707-600e-4f5b-8c61-d4cbfc0544f2?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fpage%3D2&version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-8da92707-600e-4f5b-8c61-d4cbfc0544f2?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fpage%3D2&version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-8da92707-600e-4f5b-8c61-d4cbfc0544f2?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fpage%3D2&version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-8da92707-600e-4f5b-8c61-d4cbfc0544f2?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fpage%3D2&version=1&tab=history"
+  - heading "原始用例正文" [level=2]
+  - button "编辑当前版本"
+  - paragraph: 内容状态：CONFIRMED
+  - heading "前置条件" [level=3]
+  - paragraph: 独立重置演示数据
+  - heading "测试数据" [level=3]
+  - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+  - article:
+    - strong: "1"
+    - generic: 动作
+    - paragraph: 查看EQ-102维护行
+    - generic: 原预期
+    - paragraph: 选择复选框禁用且标注不可预约，不能加入批量预约
+  - article:
+    - strong: "2"
+    - generic: 动作
+    - paragraph: 搜索温循箱查看EQ-104使用中行
+    - generic: 原预期
+    - paragraph: EQ-104复选框禁用，EQ-101可勾选
+  - article:
+    - strong: "3"
+    - generic: 动作
+    - paragraph: 尝试全选含不可预约页
+    - generic: 原预期
+    - paragraph: 全选仅选择空闲可预约行，不可预约行保持未选
+  - generic "来源物理行列与版本身份"
+- status: 导入结果已由后端持久化。
+- dialog "生成自动化脚本":
+  - banner:
+    - heading "生成自动化脚本" [level=2]
+    - button "关闭": ×
+  - paragraph: 此操作调用 Coding Agent，与“重新运行已有脚本”不同。
+  - generic: 项目：V2.1 真实模型全流程 · 20260925 · 已选 1 条，跨页选择按完整清单处理。不会修改原动作与预期。
+  - table:
+    - rowgroup:
+      - row "用例 内容版本 旧脚本（始终保留）":
+        - columnheader "用例"
+        - columnheader "内容版本"
+        - columnheader "旧脚本（始终保留）"
+    - rowgroup:
+      - row "KC-11 v1 未生成":
+        - cell "KC-11"
+        - cell "v1"
+        - cell "未生成"
+  - paragraph:
+    - strong: 从当前确认用例与环境重新观察、编写、自测和修复；不把旧候选作为起稿输入。
+  - text: 被测环境
+  - combobox "被测环境":
+    - option "请选择环境"
+    - option "unfamiliar-b-20260925"
+    - option "kimi-complex-20260925" [selected]
+  - paragraph: 登录与环境准备、任务预算均由真实服务授权核对，不使用设计示例额度。
+  - paragraph: 请求 1 条 · 可开始 1 · 待处理 0
+  - list:
+    - text: KC-11 v1：准备就绪
+    - text: 预算上限：20 分钟 / 自测 3 / 工具 120
+  - paragraph: 生成失败、取消或超时均保留旧脚本、历史结果与媒体；新候选不自动批准、不替换正在执行的批次。
+  - alert
+  - contentinfo:
+    - button "取消"
+    - button "检查准备条件" [active]
+    - button "确认生成"

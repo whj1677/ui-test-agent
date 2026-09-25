@@ -1,0 +1,87 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-06
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-06 · 无结果与重置恢复（v2版本隔离验收）" [level=1]
+  - paragraph: 设备预约调度 · 用例 v2
+  - button "运行此用例" [disabled]
+  - button "生成自动化脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v2 · 当前" [selected]
+    - option "v1 · 历史只读"
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "尚未生成" [selected]
+  - generic: 脚本资格：候选未批准
+  - text: 脚本不适用于此用例版本 ·
+  - link "查看历史脚本 / 为当前版本生成":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=scripts"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=history"
+  - heading "原始用例正文" [level=2]
+  - button "编辑当前版本"
+  - paragraph: 内容状态：CONFIRMED
+  - heading "前置条件" [level=3]
+  - paragraph: 独立重置演示数据
+  - heading "测试数据" [level=3]
+  - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+  - article:
+    - strong: "1"
+    - generic: 动作
+    - paragraph: 搜索框输入不存在编号EQ-999
+    - generic: 原预期
+    - paragraph: 显示没有匹配设备，无数据行，总数0，第1/1页，分页按钮禁用
+  - article:
+    - strong: "2"
+    - generic: 动作
+    - paragraph: 点击重置
+    - generic: 原预期
+    - paragraph: 搜索/站点/状态清空，编号升序恢复，第1页显示101/102/103，共8条
+  - article:
+    - strong: "3"
+    - generic: 动作
+    - paragraph: 确认选择状态
+    - generic: 原预期
+    - paragraph: 重置后已选0项，批量预约禁用
+  - generic "来源物理行列与版本身份"
+- status: 已形成新的用例版本。
