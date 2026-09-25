@@ -3,9 +3,9 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "部分实现：任务内自主自测接通，A恢复验证完成，B候选语义及指定差异证据未通过",
+    "requirement_status": "B质量收尾实施中：工具反馈与有限断言保真，保留旧A成功和旧B失败",
     "governance_level": "G2",
-    "version": 1,
+    "version": 2,
     "last_updated": "2026-09-25"
   },
   "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
@@ -22,7 +22,9 @@
     "HEAD=38a5e1d5a73723d93deecf124db2d2e2a228ee83，原分支工作区干净；原AUTH任务未加载，未在写主目录。",
     "锁定DSH0.1.6-alpha.2的dsh-mcp-client支持streamable-http、serverName、url、toolCallTimeoutMs；tools/pre-execute支持deny守卫。使用已安装锁定源码核对，不猜插件参数。",
     "真实A：1次Harness、15工具、2开发自测、2最终运行；正常4步通过，故障步骤3期望P05实际P02。",
-    "真实B：1次Harness、42工具（23错误）、1开发自测、2最终运行；正常6步通过，故障步骤5只有缺元素，且第4步禁用义务被放宽。未批准候选，未追加模型调用。"
+    "真实B：1次Harness、42工具（23错误）、1开发自测、2最终运行；正常6步通过，故障步骤5只有缺元素，且第4步禁用义务被放宽。未批准候选，未追加模型调用。",
+    "本批基线2619f651bff8db4f01693f01ba91051f37aad44a，开始工作区干净；原A/B终态和授权账本不修改。",
+    "旧B的23次工具错误分为策略10、参数7、无草稿4、浏览器观察1、无执行证据1；其中实际Playwright失败0。"
   ],
   "inferences_and_open_questions": [
     "同会话MCP结果可反馈给Agent；先用零模型协议/控制器工程测试验证后才运行两个真实任务。当前不是操作系统强隔离，工具级约束不能冒称强沙箱。"
@@ -71,6 +73,20 @@
         "VT-0037-01",
         "VT-0037-02"
       ]
+    },
+    {
+      "id": "TK-0037-02",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "dd_ids": [
+        "DD-0037-01"
+      ],
+      "status": "实施中",
+      "task": "改善安全可操作反馈，展开helper/分支做有限禁用和字段值核查，工程先行后只运行一个新B任务；最多2启动、3开发执行、3独立验证、120工具和20分钟，不给反例答案。",
+      "verification_ids": [
+        "VT-0037-03"
+      ]
     }
   ],
   "verification_items": [
@@ -109,6 +125,17 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20260925-autonomous/manifest.json"
       }
+    },
+    {
+      "id": "VT-0037-03",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "本批B工具反馈、原B弱断言拦截、语义边界、唯一新B及三种独立验证",
+      "evidence_standard": "生产MCP实际反馈；离线旧报告成功仍阻止弱断言；真实禁用/隐藏/不存在边界；正常/故障/隔离语义反例同稿哈希",
+      "current_evidence": "工程125/125退出0已执行；新B正在运行，结果待记录。"
     }
   ],
   "verification_environment": {
@@ -142,6 +169,14 @@
       "tk_id": "TK-0037-01",
       "vt_id": "VT-0037-02",
       "status": "部分实现"
+    },
+    {
+      "un_id": "UN-0037-01",
+      "dr_id": "DR-0037-01",
+      "dd_id": "DD-0037-01",
+      "tk_id": "TK-0037-02",
+      "vt_id": "VT-0037-03",
+      "status": "实施中"
     }
   ],
   "trace_history": [
@@ -150,6 +185,12 @@
       "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
       "status": "工程闭环已实现，真实A完成，B未通过",
       "notes": "任务状态卡：目标为两个逻辑任务内自主观察/自测/修订；工程先行；原输入与故障隔离；达到预算或最终验证后停止。"
+    },
+    {
+      "version": 2,
+      "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
+      "status": "实施中",
+      "notes": "B质量收尾任务卡：保留架构和旧成绩，改善反馈/有限保真，只有1新逻辑任务；工程先行，独立验证结束或预算到限即停，无自动批准。"
     }
   ],
   "open_questions": [
@@ -167,6 +208,14 @@
       "description": "任务内自主自测与有界修订",
       "impact": "工作台建例开发闭环",
       "confirmed_by": "用户当前明确任务及预算授权"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 2,
+      "type": "修订",
+      "description": "B质量收尾：工具反馈、有限分支义务核对及字段断言证据",
+      "impact": "自主建例任务工具与提交前门禁",
+      "confirmed_by": "用户本批明确任务及限定预算"
     }
   ]
 }

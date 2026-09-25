@@ -11,6 +11,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | VT-0037-01 | DR-0037-01 | 已确认 | 集成测试通过 | 零模型协议、生产浏览器与Playwright、取消/预算/哈希、空草稿准入工程回归 | 命令退出码、版本哈希、工具结果、调用计数及逐步状态 | 命令：node --test workbench/tests/*.test.mjs；退出码：0；测试数量：120；失败数量：0；跳过数量：0；证据：workbench/qa/20260925-autonomous/collector-workbench.log | node --test workbench/tests/*.test.mjs | 0 | 120 | 0 | 0 | workbench/qa/20260925-autonomous/collector-workbench.log |
 | VT-0037-02 | DR-0037-01 | 已确认 | 人工待确认 | 两项真实任务已执行：A恢复完成，B候选语义及指定差异证据失败；待人工核对，不是产品通过 | 真实工具记录、执行报告、覆盖核查与相同候选哈希；不得仅靠绿色或模型自报 | 命令：node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair；退出码：0；测试数量：2；失败数量：1；跳过数量：0；证据：workbench/qa/20260925-autonomous/manifest.json | node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair | 0 | 2 | 1 | 0 | workbench/qa/20260925-autonomous/manifest.json |
+| VT-0037-03 | DR-0037-01 | 已确认 | 未运行 | 本批B工具反馈、原B弱断言拦截、语义边界、唯一新B及三种独立验证 | 生产MCP实际反馈；离线旧报告成功仍阻止弱断言；真实禁用/隐藏/不存在边界；正常/故障/隔离语义反例同稿哈希 | 工程125/125退出0已执行；新B正在运行，结果待记录。 | - | - | - | - | - | - |
 
 ## 本轮命令与环境
 

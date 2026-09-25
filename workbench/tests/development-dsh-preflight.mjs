@@ -7,6 +7,7 @@ import { runProfile } from '../../harness-probe/node_modules/@deepseek-ai/dsh/li
 import { loadLayeredEnv } from '../../harness-probe/node_modules/@deepseek-ai/dsh-app-boot/lib/index.js';
 import { developmentPatch } from '../server/build/development-patch.mjs';
 import { startDevelopmentMcp } from '../server/build/development-mcp.mjs';
+import { randomUUID } from 'node:crypto';
 
 const workbench = fileURLToPath(new URL('../', import.meta.url));
 const directory = await fs.mkdtemp(path.join(workbench, '.local/dev-preflight-'));
@@ -23,6 +24,12 @@ try {
   assert.equal(denied.kind, 'deny');
   const allowed = await boot.ctx.waterfall('tools/pre-execute', { name: 'mcp__workbench__read_draft', arguments: {} }, async () => ({ kind: 'allow' }));
   assert.equal(allowed.kind, 'allow');
+  const handle = await boot.ctx.agents.create({ sessionId: `session-${randomUUID()}`, meta: { cwd: directory } });
+  try {
+    const names = handle.agent.ctx.tools.schemas(handle.agent).map(tool => tool.name);
+    assert.ok(names.includes('mcp__workbench__self_test'));
+    assert.ok(!names.includes('write') && !names.includes('glob') && !names.includes('list_mcp_resources'));
+  } finally { await handle.dispose(); }
   console.log(JSON.stringify({ status: 'ENGINEERING_PREFLIGHT_PASSED', locked_dsh: '0.1.6-alpha.2', file_url_plugin_loaded: true, mcp_self_test_registered: true, actual_guard_denies_shell: true, model_calls: 0 }));
 } finally {
   await boot?.ctx.fiber.dispose(); await bridge.close(); await fs.rm(directory, { recursive: true, force: true });

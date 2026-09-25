@@ -17,6 +17,8 @@
 - 锁定DSH0.1.6-alpha.2的dsh-mcp-client支持streamable-http、serverName、url、toolCallTimeoutMs；tools/pre-execute支持deny守卫。使用已安装锁定源码核对，不猜插件参数。
 - 真实A：1次Harness、15工具、2开发自测、2最终运行；正常4步通过，故障步骤3期望P05实际P02。
 - 真实B：1次Harness、42工具（23错误）、1开发自测、2最终运行；正常6步通过，故障步骤5只有缺元素，且第4步禁用义务被放宽。未批准候选，未追加模型调用。
+- 本批基线2619f651bff8db4f01693f01ba91051f37aad44a，开始工作区干净；原A/B终态和授权账本不修改。
+- 旧B的23次工具错误分为策略10、参数7、无草稿4、浏览器观察1、无执行证据1；其中实际Playwright失败0。
 
 ## 推断与待确认
 

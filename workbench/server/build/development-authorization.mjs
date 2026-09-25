@@ -16,7 +16,9 @@ export async function registerDevelopmentAuthorization(store, entry) {
     if (entry.mode === 'recovery' && (!entry.seed_code || digest(entry.seed_code) !== entry.seed_sha256)) throw new Error('RECOVERY_SEED_REQUIRED');
     const current = await read(store);
     if (current.entries.some(item => item.logical_id === entry.logical_id)) throw new Error('DEVELOPMENT_AUTHORIZATION_ALREADY_EXISTS');
-    current.entries.push({ ...entry, limits: DEVELOPMENT_LIMITS, task_id: null, registered_at: new Date().toISOString() });
+    const limits = { ...DEVELOPMENT_LIMITS, ...entry.limits };
+    if (Object.entries(limits).some(([key, value]) => !(key in DEVELOPMENT_LIMITS) || !Number.isInteger(value) || value < 1 || value > DEVELOPMENT_LIMITS[key])) throw new Error('DEVELOPMENT_LIMITS_MAY_ONLY_REDUCE');
+    current.entries.push({ ...entry, limits, task_id: null, registered_at: new Date().toISOString() });
     await write(store, current);
   });
 }

@@ -3,6 +3,8 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { parseCandidateReport, projectCaseStepCoverage } from './report.mjs';
 import { checkDevelopmentCandidate } from './development-policy.mjs';
+import { developmentError, safeFeedback, DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
+import { checkFidelity } from './development-fidelity.mjs';
 
 export const DEVELOPMENT_LIMITS = Object.freeze({ self_tests: 3, revisions: 2, tool_calls: 120, harness_starts: 3, wall_ms: 20 * 60_000 });
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
@@ -28,19 +30,28 @@ export class DevelopmentSession {
     if (this.state.submission) throw new Error('CANDIDATE_ALREADY_FROZEN');
   }
   invoke(name, args = {}) {
-    const run = this.queue.then(() => this.call(name, args));
+    const run = this.queue.then(() => this.call(name, args)).catch(async error => {
+      error.detail = safeFeedback(error, this.state);
+      this.state.rejections ||= [];
+      this.state.rejections.push({ tool: name, at: this.now(), ...error.detail });
+      await this.save(); throw error;
+    });
     this.queue = run.catch(() => {}); return run;
   }
   async call(name, args) {
     this.check();
-    if (name === 'read_draft') return { frozen_case: this.frozenCase, normal_entry: this.normalUrl, code: this.state.draft_sha256 ? await fs.readFile(this.draftPath, 'utf8') : null, sha256: this.state.draft_sha256, executions_used: this.state.self_tests.length, limits: this.limits };
+    if (name === 'read_draft') return { runtime_contract: DEVELOPMENT_CONTRACT, frozen_case: this.frozenCase, normal_entry: this.normalUrl, code: this.state.draft_sha256 ? await fs.readFile(this.draftPath, 'utf8') : null, sha256: this.state.draft_sha256, executions_used: this.state.self_tests.length, limits: this.limits };
     if (name === 'write_draft') {
       if (this.state.recovery && this.state.self_tests.length === 0) throw new Error('EXECUTE_ORIGINAL_RECOVERY_DRAFT_FIRST');
       if (args.previous_sha256 !== this.state.draft_sha256) throw new Error('DRAFT_CHANGED_RELOAD_REQUIRED');
       checkDevelopmentCandidate(args.code);
       if (this.state.self_tests.length >= this.limits.self_tests) throw new Error('SELF_TEST_BUDGET_EXHAUSTED_NO_UNVERIFIABLE_EDIT');
       await fs.writeFile(this.draftPath, args.code); this.state.draft_sha256 = digest(args.code); await this.save();
-      return { sha256: this.state.draft_sha256, status: 'DRAFT_NOT_VALIDATED' };
+      return { sha256: this.state.draft_sha256, draft_saved: true, static_admission: 'ACCEPTED', runtime_verified: false, status: 'DRAFT_NOT_VALIDATED' };
+    }
+    if (name === 'check_fidelity') {
+      const code = (await this.readDraftBytes()).toString('utf8');
+      const review = checkFidelity(code, this.frozenCase); this.state.fidelity = review; await this.save(); return review;
     }
     if (name === 'self_test') return this.selfTest();
     if (name === 'read_evidence') {
@@ -55,7 +66,7 @@ export class DevelopmentSession {
       return { content: [{ type: 'text', text: JSON.stringify({ execution: args.execution, ...shot }) }, { type: 'image', mimeType: 'image/png', data: bytes.toString('base64') }] };
     }
     if (name === 'submit_candidate') {
-      const bytes = await fs.readFile(this.draftPath); const sha = digest(bytes);
+      const bytes = await this.readDraftBytes(); const sha = digest(bytes);
       const last = this.state.self_tests.at(-1);
       if (args.sha256 !== sha || last?.sha256 !== sha || !last.result) throw new Error('CURRENT_BYTES_REQUIRE_SELF_TEST');
       if (!['ready', 'business_difference', 'needs_analysis', 'environment_blocked', 'budget_exhausted'].includes(args.outcome)) throw new Error('SUBMISSION_OUTCOME_INVALID');
@@ -68,6 +79,9 @@ export class DevelopmentSession {
         if (args.outcome === 'ready' && (item.uncovered || !item.check_lines.some(line => /expect\s*\(/.test(lines[line - 1])))) throw new Error('READY_WITH_UNCOVERED_REQUIREMENT');
       }
       if (args.outcome === 'ready' && (!last.result.complete_pass || !last.coverage.complete || last.changed_after_execution)) throw new Error('READY_REQUIRES_CURRENT_COMPLETE_SELF_TEST');
+      const fidelity = checkFidelity(bytes.toString('utf8'), this.frozenCase);
+      this.state.fidelity = fidelity; await this.save();
+      if (args.outcome === 'ready' && fidelity.status === 'NEEDS_REVIEW') throw developmentError('ASSERTION_FIDELITY_REVIEW_REQUIRED', { rule: 'ORIGINAL_OBLIGATIONS', review: fidelity, draft_saved: true, message: 'Current self-test success does not resolve these obligation gaps. Revise only the draft, self-test changed bytes, and submit again; otherwise report needs_analysis.' });
       const finalPath = path.join(this.directory, 'final', 'candidate.spec.mjs'); await fs.mkdir(path.dirname(finalPath), { recursive: true });
       await fs.writeFile(finalPath, bytes, { flag: 'wx' });
       this.state.submission = { ...args, submitted_at: this.now(), file: 'final/candidate.spec.mjs', semantic_approval: false };
@@ -75,10 +89,14 @@ export class DevelopmentSession {
     }
     throw new Error('TOOL_NOT_ALLOWED');
   }
+  async readDraftBytes() {
+    if (!this.state.draft_sha256) throw developmentError('DRAFT_NOT_CREATED');
+    return fs.readFile(this.draftPath);
+  }
   async selfTest() {
     this.check();
     if (this.state.self_tests.length >= this.limits.self_tests) throw new Error('SELF_TEST_BUDGET_EXHAUSTED');
-    const bytes = await fs.readFile(this.draftPath); checkDevelopmentCandidate(bytes.toString('utf8'));
+    const bytes = await this.readDraftBytes(); checkDevelopmentCandidate(bytes.toString('utf8'));
     const number = this.state.self_tests.length + 1;
     const root = path.join(this.directory, `run-${number}`); await fs.mkdir(root, { recursive: true });
     const candidatePath = path.join(root, 'candidate.spec.mjs'); await fs.writeFile(candidatePath, bytes, { flag: 'wx' });

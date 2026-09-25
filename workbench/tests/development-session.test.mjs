@@ -34,7 +34,7 @@ test('pinned DSH MCP client receives fixture executor failure, continues repair 
   const context = [];
   try {
     await client.connect(new StreamableHTTPClientTransport(new URL(bridge.url)));
-    assert.equal((await client.listTools()).tools.length, 5);
+    assert.equal((await client.listTools()).tools.length, 6);
     async function call(name, args = {}) { const result = await client.callTool({ name, arguments: args }); context.push(result); return result; }
     const denied = await call('write_draft', { code: draft('good'), previous_sha256: digest(draft('bad')) });
     assert.equal(denied.isError, true);

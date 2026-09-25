@@ -8,10 +8,12 @@ import { startDevelopmentMcp } from './development-mcp.mjs';
 import { BROWSER_SEMANTICS_RULES } from './browser-semantics.mjs';
 import { parseCandidateReport, projectCaseStepCoverage, counterexampleDetected } from './report.mjs';
 import { contentHash } from '../cases/excel.mjs';
+import { DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
+import { allowedBrowserTools } from './development-tool-guard.mjs';
 
 function validateEnvironment(environment) {
   if (!environment || !environment.id || !environment.normal_url || !environment.fault_url || !environment.detection) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
-  for (const url of [environment.normal_url, environment.fault_url]) {
+  for (const url of [environment.normal_url, environment.fault_url, ...(environment.semantic_url ? [environment.semantic_url] : [])]) {
     const parsed = new URL(url); if (parsed.protocol !== 'http:' || parsed.hostname !== '127.0.0.1' || parsed.username || parsed.password) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_LOCAL');
   }
 }
@@ -62,16 +64,20 @@ async function executeDevelopment(manager, task, authorization, environment, con
     const patch = await fs.readFile(manager.harnessPatchPath, 'utf8');
     // Runtime preparation is a zero-model profile check; no start claim is charged until process_spawn.
     await manager.adapter.ensureHarnessRuntime(manager.harnessDshHome, directory);
-    bridge = await startDevelopmentMcp((name, args) => session.invoke(name, args));
+    bridge = await startDevelopmentMcp((name, args) => session.invoke(name, args), { getState: () => session.state });
     const patchPath = path.join(directory, 'development.cordis.yml');
     await fs.writeFile(patchPath, developmentPatch(patch, manager.paths.workbenchRoot));
     const instructions = [
       'Develop a Playwright test for the frozen normal case below using the workbench MCP tools in this SAME session.',
+      `Runtime contract: ${JSON.stringify(DEVELOPMENT_CONTRACT)}. Allowed browser tools: ${allowedBrowserTools.join(', ')}. Other visible scope-local browser tools are NOT authorized.`,
       'Only workbench tools can read/write this task draft or self-test. Browser tools may observe and interact only with the bound normal entry. No shell, filesystem, other tasks, source code, references or alternate URLs.',
       authorization.mode === 'recovery' ? 'This is a recovery task. FIRST call read_draft, then self_test the unchanged starting draft to receive the actual failure. Diagnose it yourself; inspect the normal page and repair your draft. No human diagnosis is supplied.' : 'This is a from-scratch task. Observe the normal page, write a draft, and self_test it. Never assume writing a file completes development.',
       'Read execution errors and evidence; re-observe the normal page when uncertain. Repair locators, scope, control semantics or justified waiting. Never change business expectations, omit steps, skip tests, swallow exceptions, derive expected values from observed values, or use test.fail.',
       'Use only @playwright/test. Navigate with await page.goto(process.env.PROBE_URL). Use one test and one await test.step("CASE_STEP_N", ...) per original step in order. Test every original requirement, including later selected state, retry, readings and close when required.',
       'Do not use evaluate/evaluateAll, browser scripting, network calls or filesystem access. Use locators and Playwright assertions. No fixed URL in code. Helper functions inside the draft are allowed.',
+      'Preserve each step obligation and its logical relationship exactly, including disabled versus disabled OR hidden. Helpers must satisfy the requirement in EVERY possible branch at their call site. Successful self_test does not skip check_fidelity or the submission check.',
+      'For a required field value, first identify the business object and the field label/relationship, then assert the corresponding value element. Do not use the expected answer as the identity of the element or just search a broad region for that answer. Bind each field separately. getByText is allowed for field labels and other suitable identities.',
+      'The finite check recognizes literal named button getByRole predicates and label-bound locator chains with toHaveText/toContainText comparisons, expanding direct helpers and if branches. Other syntax can require review; do not claim semantic proof. Call check_fidelity before testing/submitting to discover actionable gaps. Unresolved requirements must use needs_analysis.',
       'There are at most 3 development self-tests including the starting draft, 2 repair rounds, 120 total tool calls and 20 minutes. Failed tests are normal tool results: continue within budget without asking a human. Do not retry the same bytes without a reason.',
       'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
       BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
@@ -103,14 +109,14 @@ async function executeDevelopment(manager, task, authorization, environment, con
     if (session.state.submission.outcome !== 'ready') { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
     const finalPath = path.join(directory, session.state.submission.file);
     const contract = { ...session.contract, detection: environment.detection };
-    for (const lane of ['normal', 'negative']) {
+    for (const lane of ['normal', 'negative', ...(environment.semantic_url ? ['semantic'] : [])]) {
       if (controller.signal.aborted) throw new Error('DEVELOPMENT_CANCELLED');
       if (digest(await fs.readFile(finalPath)) !== candidate.sha256) throw new Error('FROZEN_CANDIDATE_CHANGED');
       session.state.final_executions ||= [];
       if (session.state.final_executions.some(run => run.lane === lane)) throw new Error('FINAL_EXECUTION_ALREADY_CONSUMED');
       const startedAt = new Date().toISOString();
       session.state.final_executions.push({ lane, started_at: startedAt, sha256: candidate.sha256, status: 'EXECUTING' }); await session.save();
-      const raw = await manager.adapter.verifyCandidate({ candidatePath: finalPath, fixtureUrl: lane === 'normal' ? environment.normal_url : environment.fault_url,
+      const raw = await manager.adapter.verifyCandidate({ candidatePath: finalPath, fixtureUrl: lane === 'normal' ? environment.normal_url : lane === 'negative' ? environment.fault_url : environment.semantic_url,
         runDirectory: path.join(directory, 'final', lane), signal: controller.signal, browserExecutable: manager.browserExecutable });
       const result = await parseCandidateReport(raw.reportPath, raw.process);
       const coverage = projectCaseStepCoverage(result, contract);
@@ -123,7 +129,9 @@ async function executeDevelopment(manager, task, authorization, environment, con
       candidate.trial_runs.push(run); await update(current => ({ ...current, candidates: [candidate] }));
       if (!sameHash || (lane === 'normal' && (!result.complete_pass || !coverage.complete))) { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
     }
-    finalStatus = candidate.trial_runs.at(-1).specified_defect_detected ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED';
+    const fault = candidate.trial_runs.find(run => run.run_type === 'negative');
+    const semantic = candidate.trial_runs.find(run => run.run_type === 'semantic');
+    finalStatus = fault?.specified_defect_detected && (!semantic || (semantic.status === 'FAILED' && semantic.step_coverage.items.find(step => step.marker === environment.semantic_step)?.execution_status === 'FAILED')) ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED';
   } catch (caught) { error = { code: caught.message, message: caught.message }; finalStatus = controller.signal.aborted ? 'CANCELLED' : 'FAILED'; }
   finally {
     clearTimeout(timer); if (bridge) await bridge.close(); await session.queue;
