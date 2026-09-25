@@ -1,5 +1,7 @@
 # 需求索引
 
+- **下一批产品主流程（仅登记，待当前任务结束并交接）**：[REQ-0036 补充登记](REQ-0036-ui-ux-01-workbench-usability-review/product-workflow-intake-20260925.md)。届时读取根目录附件并与既有 UI 走查合并为一份当前有效需求，基于最新代码盘点能力后安排有限串行批次；本次不实施、不增加模型额度、不重启服务，当前任务原范围、预算和停止条件保持。该登记先于旧的局部待实施建议，尚不代表完整需求合并完成。
+
 - [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；工程优先，两个真实任务限定验证。
 
 - [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：真实工作台可用性走查与三页结构调整方案；4322@6066bbc 与 4331@8127e33 已截图核对，A–F 问题已分类，停止在方案完成，前端第一批调整待用户确认。\r

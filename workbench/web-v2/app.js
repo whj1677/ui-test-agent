@@ -1,3 +1,4 @@
+import { executionMediaUrl } from '/workspace/execution-media.js';
 import { ApiError, api, downloadPackage, uploadCaseFile } from '/workspace/api.js';
 
 const state = {
@@ -349,9 +350,6 @@ function bindAutomation(project, data) {
       } catch(error) { toast(trialReasons[error.code]||messageFor(error),'error');button.disabled=false; }
     });
   });
-}
-function executionMediaUrl(run, fileId) {
-  return run.origin === 'EXPLICIT_CANDIDATE_TRIAL' ? `/api/runs/${encodeURIComponent(run.run_id)}/media/${encodeURIComponent(fileId)}` : buildMediaUrl(run.source_build_task_id,fileId);
 }
 async function renderCaseDetail(project, item, requestedVersion) {
   const resolved = resolveCaseVersion(item, requestedVersion);
