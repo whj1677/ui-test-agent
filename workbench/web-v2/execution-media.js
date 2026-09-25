@@ -1,3 +1,35 @@
+// Presentation only: preserve recorded outcomes and never infer a missing value.
+export function executionSteps(run) {
+  if (run.step_replay?.steps?.length) return run.step_replay.steps;
+  if (run.caption_timeline?.steps?.length) return run.caption_timeline.steps;
+  return (run.step_coverage?.items || []).map(item => {
+    const source = run.frozen_case_content?.steps?.find(step => step.order === item.order);
+    // Locator assertions also carry actual values; their coarse error category
+    // must not hide a value that was captured for this particular step.
+    const errors = (item.attributed_errors || []).map(entry => entry.error).filter(Boolean);
+    const evidence = errors.find(error => error.actual != null) || errors[0];
+    return { step_id: item.marker || item.step_id, order: item.order,
+      action: source?.action || '原步骤动作未取得', expected: source?.expected || '原步骤预期未取得',
+      execution_status: item.execution_status,
+      actual: evidence?.actual ?? '未单独采集实际值', assertion_expected: evidence?.expected ?? null };
+  });
+}
+
+export function stepResultLabel(step, run) {
+  if (step.execution_status === 'PASSED') return run.status === 'FAILED' ? '本步骤通过（整例仍失败）' : '本步骤通过';
+  if (step.execution_status === 'FAILED') return '本步骤失败';
+  if (step.execution_status === 'NOT_EXECUTED') return '未执行';
+  return null;
+}
+
+export function stepOutcomeNotice(run, steps) {
+  if (run.status !== 'FAILED') return '';
+  const failed = steps.filter(s => s.execution_status === 'FAILED').map(s => s.order);
+  const passed = steps.filter(s => s.execution_status === 'PASSED').length;
+  const notRun = steps.filter(s => s.execution_status === 'NOT_EXECUTED').length;
+  return `本用例执行失败。${failed.length ? `第 ${failed.join('、')} 步失败；` : ''}${passed} 个步骤单独通过，${notRun} 个步骤未执行。后续步骤通过不会抵消本用例的失败；未执行步骤不计通过。`;
+}
+
 export function executionMediaUrl(run, fileId) {
   return run.origin === 'EXPLICIT_CANDIDATE_TRIAL' ? `/api/runs/${encodeURIComponent(run.run_id)}/media/${encodeURIComponent(fileId)}` : `/api/build/tasks/${encodeURIComponent(run.source_build_task_id)}/media/${encodeURIComponent(fileId)}`;
 }
@@ -24,7 +56,7 @@ export function enhanceMedia(container, run) {
     const video=type==='replay'?(hasReplay?replay:null):original||(!hasReplay?replay:null);active=video;
     if(video){video.hidden=false;const link=views.filter(v=>v.tagName==='A'&&v.href===video.src);link.forEach(v=>v.hidden=false);}
     let note=area.querySelector('[data-view-note]');if(!note){note=document.createElement('p');note.dataset.viewNote='true';area.append(note);}
-    note.textContent=type==='images'?'截图只属于当前运行；点击可查看原图。':video?type==='replay'?'中文字幕步骤证据回放（非原始连续录像）':'原始连续录像；没有可靠时标时不提供精确步骤定位。'+(!run.recording?' 历史录制清晰度有限。':' 采集尺寸：1280×720。'):type==='replay'?'本次未采集可用步骤回放，不补造历史素材。':'本次原始录像缺失。';
+    note.textContent=type==='images'?'截图只属于当前运行；点击可查看原图。':video?type==='replay'?'中文字幕步骤证据回放（非原始连续录像）':(video===replay&&run.files.some(f=>f.kind.endsWith('_caption_video'))?'已有字幕录像；步骤时间轴未核验。':'原始连续录像（无中文步骤字幕）。步骤结果列在下方，未采集可靠时间轴，不能精确定位。')+(!run.recording?' 本记录未登记录制尺寸。':''):type==='replay'?'本次未采集可用步骤回放，不补造历史素材。':'本次原始录像缺失。';
     menu.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mediaView===type)));
     controls.querySelector('[data-player-toggle]').disabled=!video;
   };

@@ -1,0 +1,126 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-02
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-02 · 编号模糊搜索不区分大小写" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例" [disabled]
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S1 · 2026-09-25T10:42:23." [selected]
+  - generic: 脚本资格：候选未批准
+  - text: 没有此版本的技术试跑授权 ·
+  - link "检查环境与授权":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&tab=results&run_id=build-20260925104223-1281faca-dev-1"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&tab=content&run_id=build-20260925104223-1281faca-dev-1"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&tab=scripts&run_id=build-20260925104223-1281faca-dev-1"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&tab=history&run_id=build-20260925104223-1281faca-dev-1"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）" [selected]
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 执行结束"
+  - paragraph: 历史结果 / 来源未分批；开发自测与独立验证分别保留。
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本版本最近历史结果"
+    - option "2026-09-25T10:48:28.021Z · 开发自测 · 失败" [selected]
+    - option "2026-09-25T10:51:27.457Z · 开发自测 · 失败"
+  - paragraph: 执行状态：历史已执行 · 软件版本：未提供 · 脚本候选v未登记 · 资格：未批准
+  - article:
+    - heading "KC-02 · 运行结果" [level=3]
+    - paragraph: 候选来源 KC-02 v1 · 当前执行 KC-02 v1
+    - generic "候选技术身份"
+    - generic: 失败
+    - paragraph: 入口： · 失败步骤：CASE_STEP_1 · 运行器：历史版本未记录
+    - strong: 断言或页面定位失败
+    - paragraph: 失败断言实际：共 5 条，第 1/2 页，每页3条
+    - generic "查看原始错误"
+    - generic "技术详情：运行身份与原始记录"
+    - strong: 要求核查：待核对
+    - paragraph: 尚无绑定此用例版本和文件包的维护者核查；运行通过不代表要求完整。
+    - button "步骤回放"
+    - button "原始录像" [pressed]
+    - button "截图"
+    - link "打开原始录像":
+      - /url: /api/build/tasks/build-20260925104223-1281faca/media/build-file-30
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/build/tasks/build-20260925104223-1281faca/media/build-file-29
+    - paragraph: 原始连续录像（无中文步骤字幕）。步骤结果列在下方，未采集可靠时间轴，不能精确定位。 本记录未登记录制尺寸。
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 本用例执行失败。第 1 步失败；0 个步骤单独通过，2 个步骤未执行。后续步骤通过不会抵消本用例的失败；未执行步骤不计通过。
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "无法定位步骤 1" [disabled]: 1. 在搜索框输入小写eq-10
+      - generic: 本步骤失败
+      - term: 预期
+      - definition: 立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页
+      - term: 实际
+      - definition: 共 5 条，第 1/2 页，每页3条
+      - button "无法定位步骤 2" [disabled]: 2. 清空后输入大写EQ-106
+      - generic: 未执行
+      - term: 预期
+      - definition: 仅显示EQ-106，共1条，第1/1页
+      - term: 实际
+      - definition: 未单独采集实际值
+      - button "无法定位步骤 3" [disabled]: 3. 输入eq-1并查看边界
+      - generic: 未执行
+      - term: 预期
+      - definition: 匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效
+      - term: 实际
+      - definition: 未单独采集实际值
+  - paragraph: 本次记录未登记录制尺寸，清晰度未核验。
+  - paragraph: 本次运行未采集现场步骤截图，无法提供中文步骤证据回放；不事后补拍。
+  - img "本次运行截图"
+- status
