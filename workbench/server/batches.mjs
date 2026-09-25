@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { resolveTrialCandidate } from './build/candidate-trials.mjs';
 
 export const reviewFor = (manager, selection) => (manager.requirementReviews || []).find(r =>
   ['project_id','case_id','case_version','content_sha256','source_task_id','bundle_sha256'].every(k => r[k] === selection[k])) || null;
@@ -17,7 +18,7 @@ export class BatchManager {
   async get(id,project) { let b;try{b=JSON.parse(await fs.readFile(this.file(id),'utf8'));}catch(e){if(e.code==='ENOENT')throw Error('BATCH_NOT_FOUND');throw e;}if(project&&b.project_id!==project)throw Error('BATCH_PROJECT_MISMATCH');return b; }
   async list(project) { await fs.mkdir(this.root,{recursive:true});const all=await Promise.all((await fs.readdir(this.root)).filter(f=>/^batch-[a-f0-9-]{36}\.json$/.test(f)).map(f=>this.get(f.slice(0,-5))));return all.filter(b=>!project||b.project_id===project).sort((a,b)=>b.created_at.localeCompare(a.created_at)); }
   async init() { for(const b of await this.list())if(['QUEUED','RUNNING','STOPPING'].includes(b.state)){b.state='INTERRUPTED';b.finished_at=now();for(const i of b.items)if(['QUEUED','RUNNING'].includes(i.state)){const r=i.run_id&&await this.runStore.getRun(i.run_id);i.state=r?.execution_status==='FINISHED'?'FINISHED':'NOT_RUN';i.reason=r?.execution_status==='FINISHED'?(r.technical_error?.code||null):'SERVICE_INTERRUPTED_NO_REPLAY';if(r){i.result=r.status;i.complete_pass=r.complete_pass;}}await this.save(b);} }
-  async preview(request) {
+  async preview(request, {persist = true} = {}) {
     const {project_id,scope,case_ids,selections=[],software_version='',mode='technical'}=request;
     if(!['single','selected','project'].includes(scope)||!['technical','diagnostic'].includes(mode)||typeof software_version!=='string'||software_version.length>160||!Array.isArray(selections))throw Error('BATCH_REQUEST_INVALID');
     const project=await this.caseStore.getProject(project_id);if(!project)throw Error('CASE_PROJECT_NOT_FOUND');
@@ -35,9 +36,10 @@ export class BatchManager {
       const review=chosen?reviewFor(this.buildManager,chosen.selection):null;
       if(rejectedReview(review)&&mode!=='diagnostic')reason='REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY';
       const env=chosen&&this.buildManager.candidateTrialEnvironments.find(e=>e.id===chosen.selection.environment_id);
-      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,script_version:chosen?.script_version||null,environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED':'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
+      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,script_version:chosen?.script_version||null,available_versions:[...new Set(candidates.map(c=>c.selection.case_version))],environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED':'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
     }
-    return this.save({schema:'workbench/test-batch-v1',batch_id:'batch-'+randomUUID(),project_id,scope,mode,software_version:software_version.trim()||null,software_version_source:software_version.trim()?'USER_LABEL_NOT_DEPLOYMENT_PROOF':'NOT_PROVIDED',project_revision:project.revision,created_at:now(),state:'PREVIEW',items,harness_starts:0,model_calls:0});
+    const result={schema:'workbench/test-batch-v1',batch_id:persist?'batch-'+randomUUID():null,project_id,scope,mode,software_version:software_version.trim()||null,software_version_source:software_version.trim()?'USER_LABEL_NOT_DEPLOYMENT_PROOF':'NOT_PROVIDED',project_revision:project.revision,created_at:now(),state:'PREVIEW',items,harness_starts:0,model_calls:0};
+    return persist?this.save(result):result;
   }
   async start(id,project,request) { return this.serial(async()=>{
     const b=await this.get(id,project);
@@ -46,6 +48,13 @@ export class BatchManager {
     if(b.state!=='PREVIEW'||!/^[-\w]{8,100}$/.test(request.request_id||''))throw Error('BATCH_REQUEST_INVALID');
     if(b.items.some(i=>i.state==='BLOCKED')&&request.allow_partial!==true)throw Error('BATCH_PARTIAL_CONFIRMATION_REQUIRED');
     const m=this.buildManager;if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
+    if(!b.items.some(i=>i.state==='QUEUED'))throw Error('BATCH_NO_RUNNABLE_CASES');
+    // Revalidate the frozen selection before recording admission, as well as at execution.
+    for(const item of b.items.filter(i=>i.state==='QUEUED')){
+      const {environment}=await resolveTrialCandidate(m,{...item.selection,lane:'normal',diagnostic:b.mode==='diagnostic'});
+      if(JSON.stringify(environment?.configurationIdentity||null)!==JSON.stringify(item.environment_identity))throw Error('BATCH_ENVIRONMENT_CONFIGURATION_CHANGED');
+    }
+    if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
     b.request_id=request.request_id;b.allow_partial=request.allow_partial;b.state='QUEUED';b.started_at=now();await this.save(b);
     m.batchOwner=id;m.batchToken=randomUUID();this.active={id,token:m.batchToken,cancelled:false,batch:b};this.completion=this.execute(b).finally(()=>{m.batchOwner=null;m.batchToken=null;this.active=null;});return b;
   }); }

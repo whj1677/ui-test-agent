@@ -66,4 +66,25 @@ test('cancel stops owned run and remaining queue; restart never replays',async t
  const f=await batchFixture(t,true);const b=await f.batches.preview(input(f));await f.batches.start(b.batch_id,b.project_id,receipt);while(!f.counts().executes)await new Promise(r=>setTimeout(r,5));await f.batches.stop(b.batch_id,b.project_id);await f.batches.completion;assert.equal((await f.batches.get(b.batch_id)).state,'CANCELLED');assert.ok((await f.batches.get(b.batch_id)).cancel_requested_at);
  const pending=await f.batches.preview(input(f));pending.state='RUNNING';await f.batches.save(pending);await f.batches.init();assert.equal((await f.batches.get(pending.batch_id)).state,'INTERRUPTED');assert.equal(f.counts().executes,1);
 });
-test('changed helper blocks before executor even after preview',async t=>{const f=await batchFixture(t);const b=await f.batches.preview(input(f));await fs.writeFile(path.join(f.final,'helper.mjs'),'changed');await f.batches.start(b.batch_id,b.project_id,receipt);await f.batches.completion;assert.equal(f.counts().executes,0);assert.match((await f.batches.get(b.batch_id)).items[0].reason,/BUNDLE_CHANGED/);});
+test('changed helper rejects admission; restored bytes can retry same request',async t=>{
+ const f=await batchFixture(t);const b=await f.batches.preview(input(f));
+ await fs.writeFile(path.join(f.final,'helper.mjs'),'changed');
+ await assert.rejects(f.batches.start(b.batch_id,b.project_id,receipt),/BUNDLE_CHANGED/);
+ assert.equal(f.counts().executes,0);assert.equal((await f.batches.get(b.batch_id)).state,'PREVIEW');
+ await fs.writeFile(path.join(f.final,'helper.mjs'),'export const value = 1;\n');
+ await f.batches.start(b.batch_id,b.project_id,receipt);await f.batches.completion;assert.equal(f.counts().executes,1);
+});
+test('automatic preflight is read-only, invalid input and zero runnable cannot start',async t=>{
+ const f=await batchFixture(t);const preview=await f.batches.preview(input(f),{persist:false});
+ assert.equal(preview.batch_id,null);assert.equal(preview.items[0].state,'QUEUED');assert.equal((await f.batches.list()).length,0);
+ await assert.rejects(f.batches.preview({...input(f),software_version:'x'.repeat(161)},{persist:false}),/REQUEST_INVALID/);
+ f.manager.candidateTrialAuthorizations=[];const blocked=await f.batches.preview(input(f));
+ assert.equal(blocked.items[0].reason,'TRIAL_NOT_AUTHORIZED');await assert.rejects(f.batches.start(blocked.batch_id,blocked.project_id,receipt),/NO_RUNNABLE/);assert.equal(f.counts().executes,0);
+});
+test('changed authorization and environment are checked again before admission',async t=>{
+ const f=await batchFixture(t);const b=await f.batches.preview(input(f));const auth=f.manager.candidateTrialAuthorizations;
+ f.manager.candidateTrialAuthorizations=[];await assert.rejects(f.batches.start(b.batch_id,b.project_id,receipt),/NOT_AUTHORIZED/);
+ f.manager.candidateTrialAuthorizations=auth;const env=f.manager.candidateTrialEnvironments[0];env.configurationIdentity={revision:2};
+ await assert.rejects(f.batches.start(b.batch_id,b.project_id,receipt),/ENVIRONMENT_CONFIGURATION_CHANGED/);
+ delete env.configurationIdentity;await f.batches.start(b.batch_id,b.project_id,receipt);await f.batches.completion;assert.equal(f.counts().executes,1);
+});

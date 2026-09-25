@@ -359,7 +359,7 @@ export function createWorkbenchServer(options = {}) {
         if(request.method==='POST'){
           if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
           const body=await readJsonBody(request);
-          const value=!id?await batchManager.preview({...body,project_id:projectId}):action==='start'?await batchManager.start(id,projectId,body):action==='stop'?await batchManager.stop(id,projectId):null;
+          const value=id==='preflight'&&!action?await batchManager.preview({...body,project_id:projectId},{persist:false}):!id?await batchManager.preview({...body,project_id:projectId}):action==='start'?await batchManager.start(id,projectId,body):action==='stop'?await batchManager.stop(id,projectId):null;
           if(!value)throw Error('BATCH_REQUEST_INVALID');sendJson(response,200,value);return;
         }
       }
