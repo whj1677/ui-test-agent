@@ -14,6 +14,8 @@ test('engineering', async({page},info)=>{await page.goto(process.env.PROBE_URL);
 test('native file paths and read-only DOM operations are allowed; escapes and mutation remain denied', async()=>{
  const root=await fs.mkdtemp(path.resolve('workbench/.local/dev-boundary-'));
  try {
+ assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_snapshot',{filename:'observation.yml'},'',root),true);
+ assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_snapshot',{filename:'../outside.yml'},'',root),false);
  for(const tool of ['read','write','edit','read_image'])assert.equal(developmentToolAllowed(tool,{file_path:path.join(root,'helper.mjs')},'http://normal',root),true);
  assert.equal(developmentToolAllowed('read',{file_path:'.playwright-mcp/page.yml'},'',root),true);
  assert.equal(developmentToolAllowed('write',{file_path:'.playwright-mcp/page.yml'},'',root),false);

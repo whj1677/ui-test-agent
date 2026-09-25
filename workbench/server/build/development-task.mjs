@@ -40,7 +40,7 @@ export async function submitDevelopment(manager, request) {
       template: { title: frozenCase.title, template_id: 'registered-development-v1' },
       source: { project_id: project.project_id, project_name: project.name, case_id: item.case_id, case_version: version.version, external_id: item.external_id, content_sha256: version.content_sha256 },
       environment_ref: { environment_id: environment.id }, input_bundle: { snapshot: { content: frozenCase } },
-      authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits },
+      authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits, recovery_origin: authorization.recovery_origin || null },
       attempts: [{ attempt_id: 'attempt-01-initial', kind: 'initial', status: 'RUNNING', started_at: now }], candidates: [], files: [], error: null,
       runtime: { os_file_isolation: false, os_network_isolation: false, scope: 'tool-policy-and-executor-allowlist', model: manager.modelConfiguration },
     });
@@ -80,6 +80,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
       'For a required field value, first identify the business object and the field label/relationship, then assert the corresponding value element. Do not use the expected answer as the identity of the element or just search a broad region for that answer. Bind each field separately. getByText is allowed for field labels and other suitable identities.',
       'There are at most 3 development self-tests including the starting draft, 2 repair rounds, 120 total tool calls and 20 minutes. Failed tests are normal tool results: continue within budget without asking a human. Do not retry the same bytes without a reason.',
       'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
+      ...(authorization.recovery_origin ? [`Recovery provenance and prior normal execution (engineering-driven, not your self-test): ${JSON.stringify(authorization.recovery_origin)}`] : []),
       BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
     ].join('\n');
     await fs.writeFile(path.join(directory, 'agent-input.txt'), instructions);

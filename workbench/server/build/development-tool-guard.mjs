@@ -20,6 +20,7 @@ export function developmentToolAllowed(tool,args,normalUrl,root) {
   if (native.has(tool)) return taskFileAllowed(args?.file_path,root, ['read','read_image'].includes(tool));
   const prefix='mcp__playwright-mcp__';
   if(!tool.startsWith(prefix)||!browserNames.has(tool.slice(prefix.length)))return false;
+  if (tool === `${prefix}browser_snapshot` && args?.filename) return /^[a-zA-Z0-9_-]+\.yml$/.test(args.filename) && !args.path && !args.code && taskFileAllowed(path.join('.playwright-mcp',args.filename),root,true);
   if(args?.filename||args?.path||args?.code)return false;
   if(tool===`${prefix}browser_evaluate`) { try { return checkDomRead(args?.function); } catch { return false; } }
   if(args?.function)return false;
