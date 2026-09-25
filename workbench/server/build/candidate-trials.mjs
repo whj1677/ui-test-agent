@@ -166,7 +166,13 @@ export function developmentRecords(task) {
     bundle_sha256:r.bundle_sha256 || r.bundle?.sha256, origin: 'DEVELOPMENT_SELF_TEST', status: r.result?.test_status || 'NOT_RUN', step_coverage: r.coverage, candidate_sha256: r.sha256,
     prefix: `development/run-${r.number}/`, started_at: new Date(r.started_at).toISOString() })),
   ...(task.candidates || []).flatMap(c => (c.trial_runs || []).map(r => ({ ...r, bundle_sha256: c.bundle.sha256, candidate_version:c.version, origin: 'INITIAL_INDEPENDENT_VALIDATION', prefix: `development/final/${r.run_type}/` })))];
-  return records.map(r => ({ ...shared, ...r, error: r.error || r.result?.error, failure_step: r.step_coverage?.items.find(s => s.error_attributed)?.marker || null,
-    files: task.files.filter(f => f.relative_path.startsWith(r.prefix) && mediaType(f)).map(f => ({ ...f, ...mediaType(f), kind: `legacy_${mediaType(f).kind}` })),
-    evidence_status: 'LEGACY_STEP_CAPTURES_UNAVAILABLE' }));
+  return records.map(r => {
+    const files = task.files.filter(f => f.relative_path.startsWith(r.prefix) && mediaType(f)).map(f => ({ ...f, ...mediaType(f),
+      run_id: r.run_id, kind: r.step_replay?.status === 'READY' && path.basename(f.relative_path) === r.step_replay.output_file_name
+        ? 'development_step_replay_video' : `${r.step_replay ? 'development' : 'legacy'}_${mediaType(f).kind}` }));
+    const complete = r.step_replay?.status === 'READY' && r.step_replay.evidence_complete &&
+      files.some(f => f.kind === 'development_step_replay_video') && ['video', 'screenshot', 'trace'].every(kind => files.some(f => f.kind === `development_${kind}`));
+    return { ...shared, ...r, error: r.error || r.result?.error, failure_step: r.step_coverage?.items.find(s => s.error_attributed)?.marker || null,
+      files, evidence_status: r.step_replay ? complete ? 'COMPLETE' : 'INCOMPLETE' : 'LEGACY_STEP_CAPTURES_UNAVAILABLE' };
+  });
 }

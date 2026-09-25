@@ -7,7 +7,8 @@ import { DevelopmentSession, digest, evidenceFiles } from './development-session
 import { claimDevelopmentAuthorization } from './development-authorization.mjs';
 import { startDevelopmentMcp } from './development-mcp.mjs';
 import { BROWSER_SEMANTICS_RULES } from './browser-semantics.mjs';
-import { parseCandidateReport, projectCaseStepCoverage, counterexampleDetected } from './report.mjs';
+import { counterexampleDetected } from './report.mjs';
+import { verifyDevelopmentRun } from './development-evidence.mjs';
 import { contentHash } from '../cases/excel.mjs';
 import { DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
 import { allowedBrowserTools } from './development-tool-guard.mjs';
@@ -65,7 +66,11 @@ export async function submitDevelopment(manager, request) {
 
 async function executeDevelopment(manager, task, authorization, environment, controller, seedBundle) {
   const directory = path.join(manager.store.taskDirectory(task.task_id), 'development');
+  const evidenceIdentity = { task_id: task.task_id, executed_case_id: task.source.case_id,
+    executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
+    executed_content_sha256: task.source.content_sha256 };
   const session = new DevelopmentSession({ directory, frozenCase: task.input_bundle.snapshot.content, normalUrl: environment.normal_url,
+    evidenceIdentity, browserExecutable: manager.browserExecutable,
     verify: options => manager.adapter.verifyCandidate({ ...options, browserExecutable: manager.browserExecutable }),
     persist: development => manager.store.updateTask(task.task_id, current => ({ ...current, development })), signal: controller.signal, limits: authorization.limits });
   let bridge; let finalStatus = 'FAILED'; let error = null;
@@ -130,15 +135,16 @@ async function executeDevelopment(manager, task, authorization, environment, con
       if (session.state.final_executions.some(run => run.lane === lane)) throw new Error('FINAL_EXECUTION_ALREADY_CONSUMED');
       const startedAt = new Date().toISOString();
       session.state.final_executions.push({ lane, started_at: startedAt, sha256: candidate.sha256, status: 'EXECUTING' }); await session.save();
-      const raw = await manager.adapter.verifyCandidate({ candidatePath: finalPath, fixtureUrl: lane === 'normal' ? environment.normal_url : lane === 'negative' ? environment.fault_url : environment.semantic_url,
-        runDirectory: path.join(directory, 'final', lane), signal: controller.signal, browserExecutable: manager.browserExecutable });
-      const result = await parseCandidateReport(raw.reportPath, raw.process);
-      const coverage = projectCaseStepCoverage(result, contract);
+      const { result, coverage, evidence } = await verifyDevelopmentRun({ verify: options => manager.adapter.verifyCandidate(options),
+        options: { candidatePath: finalPath, fixtureUrl: lane === 'normal' ? environment.normal_url : lane === 'negative' ? environment.fault_url : environment.semantic_url,
+          runDirectory: path.join(directory, 'final', lane), signal: controller.signal, browserExecutable: manager.browserExecutable },
+        identity: { ...evidenceIdentity, run_id: `${task.task_id}-${lane}`, candidate_sha256: candidate.sha256 },
+        caseContent: task.input_bundle.snapshot.content, contract, browserExecutable: manager.browserExecutable });
       const sameHash = await verifyBundle(path.dirname(finalPath), session.state.submission.bundle);
       const run = { run_id: `${task.task_id}-${lane}`, run_type: lane, validation_scope: environment.validation_mode || 'paired', candidate_sha256: candidate.sha256, candidate_version: candidate.version,
         executed_case_id: task.source.case_id, executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
         started_at: startedAt, finished_at: new Date().toISOString(), status: result.test_status, complete_pass: result.complete_pass,
-        step_coverage: coverage, error: result.error, same_candidate_hash: sameHash, specified_defect_detected: lane === 'negative' && counterexampleDetected(result, contract), result };
+        step_coverage: coverage, error: result.error, same_candidate_hash: sameHash, specified_defect_detected: lane === 'negative' && counterexampleDetected(result, contract), result, ...evidence };
       session.state.final_executions.at(-1).status = result.test_status; await session.save();
       candidate.trial_runs.push(run); await update(current => ({ ...current, candidates: [candidate] }));
       if (!sameHash || (lane === 'normal' && (!result.complete_pass || !coverage.complete))) { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }

@@ -30,7 +30,8 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
     for (const item of coverage.items) {
       const source = caseContent?.steps?.find((step) => step.order === item.order);
       const observation = observations.find((entry) => entry.step_id === item.step_id);
-      const mismatch = item.attributed_errors?.find((entry) => entry.error?.type === 'ASSERTION_MISMATCH')?.error;
+      const errors = (item.attributed_errors || []).map(entry => entry.error).filter(Boolean);
+      const mismatch = errors.find(error => error.actual != null) || errors[0];
       const captures = observation?.captures || [];
       const selected = captures.at(-1);
       const before = captures[0];
@@ -65,6 +66,7 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, locale: 'zh-CN' });
     await page.setContent('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body><canvas width="1280" height="900"></canvas></body></html>');
     const rendered = await page.evaluate(async ({ steps, externalId }) => {
+      const caseFailed = steps.some(step => step.execution_status === 'FAILED');
       const canvas = document.querySelector('canvas'); const ctx = canvas.getContext('2d');
       async function decode(base64) {
         if (!base64) return null;
@@ -94,8 +96,8 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
         ctx.font = '22px Microsoft YaHei, sans-serif';
         const rows = phase === 'action'
           ? [['动作', step.action], ['预期', step.expected]]
-          : [['状态', step.execution_status === 'PASSED' ? '已执行，通过' : step.execution_status === 'FAILED' ? '执行失败' : '未执行'],
-            ['实际', step.actual], ...(step.execution_status === 'FAILED' ? [['原断言预期', step.assertion_expected || step.expected]] : [])];
+          : [['状态', step.execution_status === 'PASSED' ? (caseFailed ? '本步骤通过；整条用例仍失败' : '本步骤通过') : step.execution_status === 'FAILED' ? '本步骤失败；整条用例失败' : '未执行'],
+            ['实际', step.actual], ...(step.execution_status === 'FAILED' ? [['预期', step.assertion_expected || step.expected]] : [])];
         let y = 83;
         for (const [label, value] of rows) {
           ctx.fillStyle = '#9dd4e5'; ctx.fillText(`${label}：`, 30, y); ctx.fillStyle = '#fff';

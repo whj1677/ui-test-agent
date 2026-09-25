@@ -3,7 +3,7 @@ import { allowedEnvironment } from '../../../harness-probe/src/harness-runner.mj
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { parseCandidateReport, projectCaseStepCoverage } from './report.mjs';
+import { verifyDevelopmentRun } from './development-evidence.mjs';
 import { checkDevelopmentCandidate } from './development-policy.mjs';
 import { developmentError, safeFeedback, DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
 import { developmentBundle, saveBundle, verifyBundle } from './development-bundle.mjs';
@@ -13,8 +13,8 @@ export const DEVELOPMENT_LIMITS = Object.freeze({ self_tests: 3, revisions: 2, t
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 
 export class DevelopmentSession {
-  constructor({ directory, frozenCase, normalUrl, verify, persist, signal, limits = DEVELOPMENT_LIMITS, now = Date.now }) {
-    Object.assign(this, { directory, frozenCase, normalUrl, verify, persist, signal, limits, now });
+  constructor({ directory, frozenCase, normalUrl, verify, persist, signal, limits = DEVELOPMENT_LIMITS, now = Date.now, evidenceIdentity = null, browserExecutable }) {
+    Object.assign(this, { directory, frozenCase, normalUrl, verify, persist, signal, limits, now, evidenceIdentity, browserExecutable });
     this.draftPath = path.join(directory, 'draft', 'candidate.spec.mjs');
     this.contract = { required_step_markers: frozenCase.steps.map(step => `CASE_STEP_${step.order}`) };
     this.state = { started_at: now(), deadline_at: now() + limits.wall_ms, draft_sha256: null, self_tests: [], submission: null, tool_calls: 0, harness_starts: 0 };
@@ -115,9 +115,11 @@ export class DevelopmentSession {
     const run = { number, bundle_sha256: bundle.sha256, files: bundle.files, sha256: digest(bytes), candidate_path: `run-${number}/candidate.spec.mjs`, status: 'EXECUTING', started_at: this.now() };
     this.state.self_tests.push(run); await this.save();
     try {
-      const raw = await this.verify({ candidatePath, fixtureUrl: this.normalUrl, runDirectory: path.join(root, 'evidence'), signal: this.signal });
-      run.result = await parseCandidateReport(raw.reportPath, raw.process);
-      run.coverage = projectCaseStepCoverage(run.result, this.contract);
+      const identity = this.evidenceIdentity && { ...this.evidenceIdentity, run_id: `${this.evidenceIdentity.task_id}-dev-${number}`, candidate_sha256: run.sha256 };
+      const { raw, result, coverage, evidence } = await verifyDevelopmentRun({ verify: this.verify,
+        options: { candidatePath, fixtureUrl: this.normalUrl, runDirectory: path.join(root, 'evidence'), signal: this.signal },
+        identity, caseContent: this.frozenCase, contract: this.contract, browserExecutable: this.browserExecutable });
+      run.result = result; run.coverage = coverage; Object.assign(run, evidence);
       run.changed_after_execution = !(await verifyBundle(root, bundle));
       run.report_path = path.relative(this.directory, raw.reportPath).replaceAll('\\', '/');
       run.media = await evidenceFiles(path.join(root, 'evidence'), this.directory);
