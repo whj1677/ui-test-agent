@@ -4,6 +4,15 @@ import { randomUUID } from 'node:crypto';
 import { DEVELOPMENT_LIMITS, digest } from './development-session.mjs';
 
 const fileOf = store => path.join(store.root, 'development-authorizations.json');
+// Explicit opt-in for new exploratory work. Existing receipts and defaults remain unchanged.
+export const EXPLORATORY_LIMITS = Object.freeze({ self_tests: 10, revisions: 9, tool_calls: 360, harness_starts: 3, wall_ms: 30 * 60_000 });
+export function authorizationLimits(entry) {
+  if (entry.budget_profile && !['standard', 'exploratory'].includes(entry.budget_profile)) throw new Error('DEVELOPMENT_BUDGET_PROFILE_INVALID');
+  const ceiling = entry.budget_profile === 'exploratory' ? EXPLORATORY_LIMITS : DEVELOPMENT_LIMITS;
+  const limits = { ...ceiling, ...entry.limits };
+  if (Object.entries(limits).some(([key, value]) => !(key in ceiling) || !Number.isInteger(value) || value < 1 || value > ceiling[key])) throw new Error('DEVELOPMENT_LIMITS_MAY_ONLY_REDUCE');
+  return limits;
+}
 async function read(store) { try { return JSON.parse(await fs.readFile(fileOf(store), 'utf8')); } catch (error) { if (error.code === 'ENOENT') return { schema: 'workbench/development-authorizations-v1', entries: [] }; throw error; } }
 async function write(store, value) {
   const temporary = fileOf(store) + `.${randomUUID()}.tmp`;
@@ -16,8 +25,7 @@ export async function registerDevelopmentAuthorization(store, entry) {
     if (entry.mode === 'recovery' && (!entry.seed_code || digest(entry.seed_code) !== entry.seed_sha256)) throw new Error('RECOVERY_SEED_REQUIRED');
     const current = await read(store);
     if (current.entries.some(item => item.logical_id === entry.logical_id)) throw new Error('DEVELOPMENT_AUTHORIZATION_ALREADY_EXISTS');
-    const limits = { ...DEVELOPMENT_LIMITS, ...entry.limits };
-    if (Object.entries(limits).some(([key, value]) => !(key in DEVELOPMENT_LIMITS) || !Number.isInteger(value) || value < 1 || value > DEVELOPMENT_LIMITS[key])) throw new Error('DEVELOPMENT_LIMITS_MAY_ONLY_REDUCE');
+    const limits = authorizationLimits(entry);
     current.entries.push({ ...entry, limits, task_id: null, registered_at: new Date().toISOString() });
     await write(store, current);
   });

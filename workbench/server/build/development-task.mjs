@@ -12,11 +12,15 @@ import { contentHash } from '../cases/excel.mjs';
 import { DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
 import { allowedBrowserTools } from './development-tool-guard.mjs';
 
-function validateEnvironment(environment) {
-  if (!environment || !environment.id || !environment.normal_url || !environment.fault_url || !environment.detection) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
-  for (const url of [environment.normal_url, environment.fault_url, ...(environment.semantic_url ? [environment.semantic_url] : [])]) {
+export function developmentValidationLanes(environment) {
+  if (!environment || !environment.id || !environment.normal_url) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
+  const normalOnly = environment.validation_mode === 'normal-only';
+  if (environment.validation_mode && !['normal-only', 'paired'].includes(environment.validation_mode)) throw new Error('DEVELOPMENT_VALIDATION_MODE_INVALID');
+  if (normalOnly ? environment.fault_url || environment.semantic_url || environment.detection : !environment.fault_url || !environment.detection) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
+  for (const url of [environment.normal_url, ...(!normalOnly ? [environment.fault_url] : []), ...(environment.semantic_url ? [environment.semantic_url] : [])]) {
     const parsed = new URL(url); if (parsed.protocol !== 'http:' || parsed.hostname !== '127.0.0.1' || parsed.username || parsed.password) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_LOCAL');
   }
+  return normalOnly ? ['normal'] : ['normal', 'negative', ...(environment.semantic_url ? ['semantic'] : [])];
 }
 
 export async function submitDevelopment(manager, request) {
@@ -26,7 +30,7 @@ export async function submitDevelopment(manager, request) {
     const taskId = manager.idFactory();
     const authorization = await claimDevelopmentAuthorization(manager.store, request.logical_id, taskId);
     const environment = manager.developmentEnvironments.find(item => item.id === authorization.environment_id);
-    validateEnvironment(environment);
+    developmentValidationLanes(environment);
     const project = await manager.caseStore.getProject(authorization.project_id);
     const item = project?.cases.find(item => item.case_id === authorization.case_id);
     const version = item?.versions.find(item => item.version === authorization.case_version);
@@ -39,7 +43,7 @@ export async function submitDevelopment(manager, request) {
       active_attempt_id: 'attempt-01-initial', revision_allowed: false,
       template: { title: frozenCase.title, template_id: 'registered-development-v1' },
       source: { project_id: project.project_id, project_name: project.name, case_id: item.case_id, case_version: version.version, external_id: item.external_id, content_sha256: version.content_sha256 },
-      environment_ref: { environment_id: environment.id }, input_bundle: { snapshot: { content: frozenCase } },
+      environment_ref: { environment_id: environment.id, validation_mode: environment.validation_mode || 'paired' }, input_bundle: { snapshot: { content: frozenCase } },
       authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits, recovery_origin: authorization.recovery_origin || null },
       attempts: [{ attempt_id: 'attempt-01-initial', kind: 'initial', status: 'RUNNING', started_at: now }], candidates: [], files: [], error: null,
       runtime: { os_file_isolation: false, os_network_isolation: false, scope: 'tool-policy-and-executor-allowlist', model: manager.modelConfiguration },
@@ -78,7 +82,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
       'Read-only DOM evaluate/evaluateAll and screenshots without caller paths are supported. Catch for diagnosis and rethrow is allowed; swallowing a failure is not acceptable. Local relative ESM helpers are allowed and frozen with the entry. No page mutation, mocks, external network/filesystem imports or fixed URL.',
       'Preserve each step obligation and its logical relationship exactly, including disabled versus disabled OR hidden. Helpers must satisfy the requirement in EVERY possible branch at their call site. Successful self_test does not prove requirement fidelity; provide review materials and retain uncertainty.',
       'For a required field value, first identify the business object and the field label/relationship, then assert the corresponding value element. Do not use the expected answer as the identity of the element or just search a broad region for that answer. Bind each field separately. getByText is allowed for field labels and other suitable identities.',
-      'There are at most 3 development self-tests including the starting draft, 2 repair rounds, 120 total tool calls and 20 minutes. Failed tests are normal tool results: continue within budget without asking a human. Do not retry the same bytes without a reason.',
+      `You decide when enough observation, implementation and testing have been done to submit, or when there is a real business mismatch or blocker. Ordinary repairs do not need human permission. Task safety ceilings (not targets): ${authorization.limits.self_tests} self-tests, ${authorization.limits.tool_calls} tool calls, ${authorization.limits.wall_ms / 60_000} minutes. Failed tests are normal tool results. Do not repeat unchanged failing actions without new evidence, and do not weaken requirements to turn results green.`,
       'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
       ...(authorization.recovery_origin ? [`Recovery provenance and prior normal execution (engineering-driven, not your self-test): ${JSON.stringify(authorization.recovery_origin)}`] : []),
       BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
@@ -110,7 +114,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
     if (session.state.submission.outcome !== 'ready') { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
     const finalPath = path.join(directory, session.state.submission.file);
     const contract = { ...session.contract, detection: environment.detection };
-    for (const lane of ['normal', 'negative', ...(environment.semantic_url ? ['semantic'] : [])]) {
+    for (const lane of developmentValidationLanes(environment)) {
       if (controller.signal.aborted) throw new Error('DEVELOPMENT_CANCELLED');
       if (!(await verifyBundle(path.dirname(finalPath), session.state.submission.bundle))) throw new Error('FROZEN_CANDIDATE_CHANGED');
       session.state.final_executions ||= [];
@@ -122,7 +126,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
       const result = await parseCandidateReport(raw.reportPath, raw.process);
       const coverage = projectCaseStepCoverage(result, contract);
       const sameHash = await verifyBundle(path.dirname(finalPath), session.state.submission.bundle);
-      const run = { run_id: `${task.task_id}-${lane}`, run_type: lane, candidate_sha256: candidate.sha256, candidate_version: candidate.version,
+      const run = { run_id: `${task.task_id}-${lane}`, run_type: lane, validation_scope: environment.validation_mode || 'paired', candidate_sha256: candidate.sha256, candidate_version: candidate.version,
         executed_case_id: task.source.case_id, executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
         started_at: startedAt, finished_at: new Date().toISOString(), status: result.test_status, complete_pass: result.complete_pass,
         step_coverage: coverage, error: result.error, same_candidate_hash: sameHash, specified_defect_detected: lane === 'negative' && counterexampleDetected(result, contract), result };
@@ -132,7 +136,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
     }
     const fault = candidate.trial_runs.find(run => run.run_type === 'negative');
     const semantic = candidate.trial_runs.find(run => run.run_type === 'semantic');
-    finalStatus = fault?.specified_defect_detected && (!semantic || (semantic.status === 'FAILED' && semantic.step_coverage.items.find(step => step.marker === environment.semantic_step)?.execution_status === 'FAILED')) ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED';
+    finalStatus = environment.validation_mode === 'normal-only' || fault?.specified_defect_detected && (!semantic || (semantic.status === 'FAILED' && semantic.step_coverage.items.find(step => step.marker === environment.semantic_step)?.execution_status === 'FAILED')) ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED';
   } catch (caught) { error = { code: caught.message, message: caught.message }; finalStatus = controller.signal.aborted ? 'CANCELLED' : 'FAILED'; }
   finally {
     clearTimeout(timer); if (bridge) await bridge.close(); await session.queue;

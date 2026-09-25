@@ -25,3 +25,4 @@ workbench/qa/20260925-unfamiliar/** -text
 
 workbench/qa/20260925-candidate-trial/** -text
 workbench/qa/20260925-kimi-complex/** -text whitespace=cr-at-eol
+workbench/qa/20260925-kimi-workbench/** -text whitespace=cr-at-eol

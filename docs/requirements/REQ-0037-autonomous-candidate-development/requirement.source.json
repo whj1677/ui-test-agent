@@ -3,9 +3,9 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "已有自主候选用例页关联与零模型试跑完成；候选未批准",
+    "requirement_status": "24条Kimi用例已导入；宽松自主开发与正常入口验收工程预检完成，真实模型执行待开始",
     "governance_level": "G2",
-    "version": 7,
+    "version": 8,
     "last_updated": "2026-09-25"
   },
   "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
@@ -23,6 +23,13 @@
       "goal": "从用例详情查看已有自主候选并显式零模型试跑，新运行中文步骤与媒体可用。",
       "constraints": "仅原FRESH-B数据接线；不改候选/旧任务/工具政策/额度/批准状态；不扩大UI/AUTH/通用环境。",
       "success_criteria": "完整身份与包校验、幂等请求、独立快照、新run、正常/故障实际浏览器与媒体验证、重启读回。"
+    },
+    {
+      "id": "UN-0037-03",
+      "status": "已确认",
+      "goal": "将24条Kimi用例导入工作台，由真实Coding Agent逐条自主建例执行；前台展示任务完成情况，Harness自主决定交付时机。",
+      "constraints": "不改原用例/页面/旧账本；后台采用新任务显式探索档30分钟360工具10次执行，单次Harness；正常页独立验收，不伪造故障入口或自动批准。",
+      "success_criteria": "真实UI导入与逐条生产任务启动；保留失败/修订/完整包和实际证据，区分Agent自报与独立核查。"
     }
   ],
   "confirmed_facts": [
@@ -59,6 +66,13 @@
       "requirement": "用例版本关联自主候选；经精确范围授权复用执行器进行独立技术试跑，保留旧记录；复用中文步骤与受控媒体路由。",
       "acceptance_criteria": "跨项目/版本/哈希不符拒绝；完整helper快照、重复请求仅一次、取消；现场截图/原录像/步骤回放/Trace各run隔离；旧素材缺项明确。",
       "constraints": "不设置approved获得资格；仅已登记本机冻结站点按需新端口；0建例模型；不接受任意URL/命令。"
+    },
+    {
+      "id": "DR-0037-03",
+      "status": "已实现",
+      "requirement": "显式仅正常入口验收和探索额度；自主任务状态展示",
+      "acceptance_criteria": "原配对模式不变，normal-only显式注册不要求虚构故障；默认旧额度不变，新授权可选择探索档；计数与开发过程默认折叠；真实24条通过生产路径执行。",
+      "constraints": "不修改工具守卫或模型依赖，不写用例编号特判；候选和业务预期不由维护者代写。"
     }
   ],
   "design_decisions": [
@@ -79,6 +93,15 @@
       "status": "已确认",
       "summary": "BuildTaskManager新增候选试跑调度，复用WorkbenchStore新run与verifyWorkbenchCandidate/step observer/replay；任务本体只读。以project/case/version/content/task/candidate/bundle/environment及lane授权，run作为持久幂等请求回执；旧媒体以只读视图纠正类型与run归属。",
       "rationale": "无需重新建例或人工批准来试跑；业务结果与证据状态分开；沿用原用例详情和运行组件，不新建执行器。"
+    },
+    {
+      "id": "DD-0037-03",
+      "dr_ids": [
+        "DR-0037-03"
+      ],
+      "status": "已确认",
+      "summary": "normal-only环境只独立运行正常入口；exploratory注册独立预算，不修改旧receipt；同一4322服务和fresh-b数据内通过UI新建独立项目导入24例。",
+      "rationale": "去掉为正常页面虚构故障的要求，让Agent自行迭代但保留独立验收和终止边界。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -86,7 +109,8 @@
     "用例详情GET automation→已登记manifest与身份→POST candidate-trials（持久request_id）→完整包独立快照→现有verify与步骤现场采集→WorkbenchStore新run→项目执行记录/媒体GET；旧自主task不写回。"
   ],
   "module_document_impact": [
-    "更新docs/modules/test-workbench.md，build管理器/存储、工具桥、执行器复用、必要API与页面读回。"
+    "更新docs/modules/test-workbench.md，build管理器/存储、工具桥、执行器复用、必要API与页面读回。",
+    "v8：development-task支持显式normal-only，authorization新增exploratory新授权档；web-v2仅把自主状态与技术计数分层；运行入口和证据见workbench/qa/20260925-kimi-workbench/REPORT.md。"
   ],
   "risks_and_rollback": [
     "权限守卫和静态候选限制并非强OS沙箱；无法判清业务差异时报告待分析，不无限修绿。默认停在等待人工核对。"
@@ -134,6 +158,20 @@
       "task": "接入候选查看/显式试跑与媒体；原FRESH-B实际正常/故障、浏览器播放拖动下载、刷新重启核查及零模型配置指南。",
       "verification_ids": [
         "VT-0037-05"
+      ]
+    },
+    {
+      "id": "TK-0037-03",
+      "dr_ids": [
+        "DR-0037-03"
+      ],
+      "dd_ids": [
+        "DD-0037-03"
+      ],
+      "status": "部分实现",
+      "task": "工程接线与UI导入已完成，24条真实建例待执行",
+      "verification_ids": [
+        "VT-0037-03"
       ]
     }
   ],
@@ -220,6 +258,24 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20260925-candidate-trial/manifest.json"
       }
+    },
+    {
+      "id": "VT-0037-03",
+      "dr_ids": [
+        "DR-0037-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "工作台138项工程及真实DSH零模型工具链完成；24条真实Agent任务尚未启动",
+      "evidence_standard": "生产UI导入/启动记录，候选包/执行报告/截图来源一致，语义另行核对",
+      "current_evidence": {
+        "command": "node --test workbench/tests/*.test.mjs",
+        "exit_code": 0,
+        "test_count": 138,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-kimi-workbench/engineering.log"
+      }
     }
   ],
   "verification_environment": {
@@ -277,6 +333,14 @@
       "tk_id": "TK-0037-03",
       "vt_id": "VT-0037-05",
       "status": "已实现"
+    },
+    {
+      "un_id": "UN-0037-03",
+      "dr_id": "DR-0037-03",
+      "dd_id": "DD-0037-03",
+      "tk_id": "TK-0037-03",
+      "vt_id": "VT-0037-03",
+      "status": "部分实现"
     }
   ],
   "trace_history": [
@@ -387,6 +451,14 @@
       "description": "用例详情接入已有自主建例成果及完整包零模型试跑",
       "impact": "用例详情、生产任务管理、独立运行存储与媒体读回",
       "confirmed_by": "用户本批明确授权"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 8,
+      "type": "授权方向更新与实施",
+      "description": "用户明确选择工作台真实模型逐条建例，并要求Harness自主决定开发完成，不以3次自测限制前期探索；增加显式正常页模式和探索档，旧结果原样保留。",
+      "impact": "development-task/authorization、局部状态展示与生产驱动；工具政策及旧账本不变",
+      "confirmed_by": "当前用户明确回复可以继续"
     }
   ]
 }

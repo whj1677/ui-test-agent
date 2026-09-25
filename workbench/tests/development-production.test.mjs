@@ -21,7 +21,7 @@ const listen = server => new Promise((resolve, reject) => server.once('error', r
 const close = server => new Promise(resolve => server.close(resolve));
 const executable = process.env.DSH_PROBE_BROWSER_EXECUTABLE || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 
-test('production task API + pinned MCP + real Playwright: failed draft feedback, repair, independent final pair and browser readback', async () => {
+for (const normalOnly of [false, true]) test(`production task API + pinned MCP + real Playwright: repair and ${normalOnly ? 'normal-only' : 'paired'} final validation`, async () => {
   const parent = new URL('../.local/', import.meta.url); await fs.mkdir(parent, { recursive: true });
   const root = await fs.mkdtemp(fileURLToPath(new URL('../.local/dev-engineering-', import.meta.url)));
   const paths = createPaths({ localRoot: root });
@@ -38,7 +38,7 @@ test('production task API + pinned MCP + real Playwright: failed draft feedback,
   const observed = [];
   const manager = new BuildTaskManager({ store, caseStore, paths, browserExecutable: executable, useStoredDshCredentials: true,
     harnessPatchPath: path.join(paths.repoRoot, 'harness-probe/config/browser-flash.cordis.yml'),
-    developmentEnvironments: [{ id: 'engineering', normal_url: origin + '/normal', fault_url: origin + '/fault', detection: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_1' } }],
+    developmentEnvironments: [normalOnly ? { id: 'engineering', normal_url: origin + '/normal', validation_mode: 'normal-only' } : { id: 'engineering', normal_url: origin + '/normal', fault_url: origin + '/fault', detection: { kind: 'assertion-mismatch-at-step', step_marker: 'CASE_STEP_1' } }],
     adapter: { ensureHarnessRuntime: async () => {}, verifyCandidate: verifyWorkbenchCandidate,
       runHarnessTask: async ({ developmentEndpoint, onLifecycle }) => {
         const client = new Client({ name: 'engineering-agent-adapter', version: '1' }, { versionNegotiation: { mode: 'auto' } });
@@ -67,10 +67,12 @@ test('production task API + pinned MCP + real Playwright: failed draft feedback,
     const result = await manager.wait(taskId);
     assert.equal(result.task_status, 'WAITING_HUMAN_REVIEW', JSON.stringify(result.error));
     assert.equal(result.development.self_tests.length, 2);
-    assert.equal(result.development.final_executions.length, 2);
+    assert.equal(result.development.final_executions.length, normalOnly ? 1 : 2);
     assert.equal(result.candidates[0].trial_runs[0].complete_pass, true);
-    assert.equal(result.candidates[0].trial_runs[1].specified_defect_detected, true);
-    await page.reload(); await page.getByTestId('development-status').filter({ hasText: 'WAITING_HUMAN_REVIEW' }).waitFor();
+    if (!normalOnly) assert.equal(result.candidates[0].trial_runs[1].specified_defect_detected, true);
+    else { assert.equal(result.environment_ref.validation_mode, 'normal-only'); assert.equal(result.candidates[0].trial_runs[0].specified_defect_detected, false); assert.equal(result.candidates[0].approval_status, 'NOT_APPROVED'); }
+    await page.reload(); await page.getByTestId('development-status').filter({ hasText: '待核对' }).waitFor();
+    assert.equal(await page.getByTestId('development-counts').isVisible(),false); await page.getByText('技术详情：开发过程、资源与覆盖核查',{exact:true}).click(); assert.equal(await page.getByTestId('development-counts').isVisible(),true);
     await assert.rejects(manager.submitDevelopment({ logical_id: 'engineering-recovery' }), /ALREADY_CLAIMED/);
     const lifecycle = result.files.find(file => file.kind === 'lifecycle_log');
     assert.equal(lifecycle.sha256, digest(await fs.readFile(path.join(store.taskDirectory(taskId), lifecycle.relative_path))));
