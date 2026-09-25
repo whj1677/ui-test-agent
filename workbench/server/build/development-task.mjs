@@ -1,3 +1,4 @@
+import { verifyBundle } from './development-bundle.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { developmentPatch } from './development-patch.mjs';
@@ -70,14 +71,13 @@ async function executeDevelopment(manager, task, authorization, environment, con
     const instructions = [
       'Develop a Playwright test for the frozen normal case below using the workbench MCP tools in this SAME session.',
       `Runtime contract: ${JSON.stringify(DEVELOPMENT_CONTRACT)}. Allowed browser tools: ${allowedBrowserTools.join(', ')}. Other visible scope-local browser tools are NOT authorized.`,
-      'Only workbench tools can read/write this task draft or self-test. Browser tools may observe and interact only with the bound normal entry. No shell, filesystem, other tasks, source code, references or alternate URLs.',
+      `Use native read/read_image/write/edit within ${path.dirname(session.draftPath)} for draft, local ESM helpers and diagnostic files. Self_test snapshots the complete directory. No other-task reads, external dependencies, arbitrary shell or alternate URLs. Read reports/screenshots using read_evidence.`,
       authorization.mode === 'recovery' ? 'This is a recovery task. FIRST call read_draft, then self_test the unchanged starting draft to receive the actual failure. Diagnose it yourself; inspect the normal page and repair your draft. No human diagnosis is supplied.' : 'This is a from-scratch task. Observe the normal page, write a draft, and self_test it. Never assume writing a file completes development.',
       'Read execution errors and evidence; re-observe the normal page when uncertain. Repair locators, scope, control semantics or justified waiting. Never change business expectations, omit steps, skip tests, swallow exceptions, derive expected values from observed values, or use test.fail.',
       'Use only @playwright/test. Navigate with await page.goto(process.env.PROBE_URL). Use one test and one await test.step("CASE_STEP_N", ...) per original step in order. Test every original requirement, including later selected state, retry, readings and close when required.',
-      'Do not use evaluate/evaluateAll, browser scripting, network calls or filesystem access. Use locators and Playwright assertions. No fixed URL in code. Helper functions inside the draft are allowed.',
-      'Preserve each step obligation and its logical relationship exactly, including disabled versus disabled OR hidden. Helpers must satisfy the requirement in EVERY possible branch at their call site. Successful self_test does not skip check_fidelity or the submission check.',
+      'Read-only DOM evaluate/evaluateAll and screenshots without caller paths are supported. Catch for diagnosis and rethrow is allowed; swallowing a failure is not acceptable. Local relative ESM helpers are allowed and frozen with the entry. No page mutation, mocks, external network/filesystem imports or fixed URL.',
+      'Preserve each step obligation and its logical relationship exactly, including disabled versus disabled OR hidden. Helpers must satisfy the requirement in EVERY possible branch at their call site. Successful self_test does not prove requirement fidelity; provide review materials and retain uncertainty.',
       'For a required field value, first identify the business object and the field label/relationship, then assert the corresponding value element. Do not use the expected answer as the identity of the element or just search a broad region for that answer. Bind each field separately. getByText is allowed for field labels and other suitable identities.',
-      'The finite check recognizes literal named button getByRole predicates and label-bound locator chains with toHaveText/toContainText comparisons, expanding direct helpers and if branches. Other syntax can require review; do not claim semantic proof. Call check_fidelity before testing/submitting to discover actionable gaps. Unresolved requirements must use needs_analysis.',
       'There are at most 3 development self-tests including the starting draft, 2 repair rounds, 120 total tool calls and 20 minutes. Failed tests are normal tool results: continue within budget without asking a human. Do not retry the same bytes without a reason.',
       'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
       BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
@@ -85,7 +85,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
     await fs.writeFile(path.join(directory, 'agent-input.txt'), instructions);
     const credentials = manager.useStoredDshCredentials ? {} : manager.credentialProvider();
     if (!manager.useStoredDshCredentials && (!credentials.apiKey || !credentials.baseUrl)) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
-    const harness = await manager.adapter.runHarnessTask({ task: instructions, workspace: directory, dshHome: manager.harnessDshHome, patchPath,
+    const harness = await manager.adapter.runHarnessTask({ task: instructions, workspace: path.dirname(session.draftPath), dshHome: manager.harnessDshHome, patchPath,
       candidatePath: session.draftPath, browserExecutable: manager.browserExecutable, developmentEndpoint: bridge.url, developmentNormalUrl: environment.normal_url,
       ...credentials, signal: controller.signal, timeoutMs: Math.max(1, session.state.deadline_at - Date.now()), maxToolCalls: authorization.limits.tool_calls,
       onLifecycle: async event => {
@@ -104,14 +104,14 @@ async function executeDevelopment(manager, task, authorization, environment, con
     if (controller.signal.aborted || !harness.assessment.completed) throw new Error('HARNESS_INCOMPLETE:' + (harness.assessment.termination || controller.signal.reason || harness.assessment.turnEndReason));
     if (!harness.assessment.browserToolCalls) throw new Error('NORMAL_PAGE_OBSERVATION_REQUIRED');
     if (!session.state.submission) throw new Error('NO_TESTED_CANDIDATE_SUBMITTED');
-    const candidate = { version: session.state.self_tests.length, attempt_id: 'attempt-01-initial', sha256: session.state.submission.sha256, trial_runs: [], coverage_review: session.state.submission.coverage, approval_status: 'NOT_APPROVED' };
+    const candidate = { version: session.state.self_tests.length, attempt_id: 'attempt-01-initial', sha256: session.state.submission.sha256, trial_runs: [], coverage_review: session.state.submission.coverage, approval_status: 'NOT_APPROVED', bundle: session.state.submission.bundle };
     await update(current => ({ ...current, candidates: [candidate], task_status: 'VERIFYING', generation_status: 'GENERATED' }));
     if (session.state.submission.outcome !== 'ready') { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
     const finalPath = path.join(directory, session.state.submission.file);
     const contract = { ...session.contract, detection: environment.detection };
     for (const lane of ['normal', 'negative', ...(environment.semantic_url ? ['semantic'] : [])]) {
       if (controller.signal.aborted) throw new Error('DEVELOPMENT_CANCELLED');
-      if (digest(await fs.readFile(finalPath)) !== candidate.sha256) throw new Error('FROZEN_CANDIDATE_CHANGED');
+      if (!(await verifyBundle(path.dirname(finalPath), session.state.submission.bundle))) throw new Error('FROZEN_CANDIDATE_CHANGED');
       session.state.final_executions ||= [];
       if (session.state.final_executions.some(run => run.lane === lane)) throw new Error('FINAL_EXECUTION_ALREADY_CONSUMED');
       const startedAt = new Date().toISOString();
@@ -120,7 +120,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
         runDirectory: path.join(directory, 'final', lane), signal: controller.signal, browserExecutable: manager.browserExecutable });
       const result = await parseCandidateReport(raw.reportPath, raw.process);
       const coverage = projectCaseStepCoverage(result, contract);
-      const sameHash = digest(await fs.readFile(finalPath)) === candidate.sha256;
+      const sameHash = await verifyBundle(path.dirname(finalPath), session.state.submission.bundle);
       const run = { run_id: `${task.task_id}-${lane}`, run_type: lane, candidate_sha256: candidate.sha256, candidate_version: candidate.version,
         executed_case_id: task.source.case_id, executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
         started_at: startedAt, finished_at: new Date().toISOString(), status: result.test_status, complete_pass: result.complete_pass,

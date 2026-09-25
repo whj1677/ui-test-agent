@@ -5,7 +5,7 @@
 
 | DD | 关联 DR | 状态 | 方案摘要 | 设计理由 |
 |---|---|---|---|---|
-| DD-0037-01 | DR-0037-01 | 已确认 | 任务管理器持有有界开发会话，锁定DSH经本机MCP调用read_draft/write_draft/self_test/read_evidence/submit_candidate；草稿多次写入，每次执行先保存不可变快照与哈希。 | 控制器只管范围、预算、状态、证据与提交条件，不代替模型诊断或修断言；独立最终验证在Harness结束后进行。 |
+| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 | 任务控制器负责权限范围、预算与证据，停止扩建helper/分支语义门禁；原要求的语义交由独立核对。 |
 
 ## 接口与数据流
 

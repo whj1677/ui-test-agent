@@ -1,0 +1,195 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "遥测首次失败后重试成功并关闭",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2311,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\nExpected: \u001b[32m\"750 V\"\u001b[39m\nError: strict mode violation: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong') resolved to 2 elements:\n    1) <strong id=\"tVolt\">750 V</strong> aka getByText('V')\n    2) <strong id=\"tTime\">2026-09-24 10:00:00</strong> aka getByText('-09-24 10:00:00')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\nExpected: \u001b[32m\"750 V\"\u001b[39m\nError: strict mode violation: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong') resolved to 2 elements:\n    1) <strong id=\"tVolt\">750 V</strong> aka getByText('V')\n    2) <strong id=\"tTime\">2026-09-24 10:00:00</strong> aka getByText('-09-24 10:00:00')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\u001b[22m\n\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:56:7\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:51:3",
+                    "location": {
+                      "file": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs",
+                      "column": 7,
+                      "line": 56
+                    },
+                    "snippet": "  54 |     await expect(\n  55 |       detailDialog.getByText(\"电压\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n> 56 |     ).toHaveText(\"750 V\");\n     |       ^\n  57 |     await expect(\n  58 |       detailDialog.getByText(\"采样时间\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n  59 |     ).toHaveText(\"2026-09-24 10:00:00\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs",
+                        "column": 7,
+                        "line": 56
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\nExpected: \u001b[32m\"750 V\"\u001b[39m\nError: strict mode violation: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong') resolved to 2 elements:\n    1) <strong id=\"tVolt\">750 V</strong> aka getByText('V')\n    2) <strong id=\"tTime\">2026-09-24 10:00:00</strong> aka getByText('-09-24 10:00:00')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\u001b[22m\n\n\n  54 |     await expect(\n  55 |       detailDialog.getByText(\"电压\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n> 56 |     ).toHaveText(\"750 V\");\n     |       ^\n  57 |     await expect(\n  58 |       detailDialog.getByText(\"采样时间\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n  59 |     ).toHaveText(\"2026-09-24 10:00:00\");\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:56:7\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:51:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 63
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 73
+                    },
+                    {
+                      "title": "CASE_STEP_3",
+                      "duration": 480
+                    },
+                    {
+                      "title": "CASE_STEP_4",
+                      "duration": 26
+                    },
+                    {
+                      "title": "CASE_STEP_5",
+                      "duration": 681,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\nExpected: \u001b[32m\"750 V\"\u001b[39m\nError: strict mode violation: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong') resolved to 2 elements:\n    1) <strong id=\"tVolt\">750 V</strong> aka getByText('V')\n    2) <strong id=\"tTime\">2026-09-24 10:00:00</strong> aka getByText('-09-24 10:00:00')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\nExpected: \u001b[32m\"750 V\"\u001b[39m\nError: strict mode violation: getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong') resolved to 2 elements:\n    1) <strong id=\"tVolt\">750 V</strong> aka getByText('V')\n    2) <strong id=\"tTime\">2026-09-24 10:00:00</strong> aka getByText('-09-24 10:00:00')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('电压', { exact: true }).locator('xpath=./following-sibling::strong')\u001b[22m\n\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:56:7\n    at <REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs:51:3",
+                        "location": {
+                          "file": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs",
+                          "column": 7,
+                          "line": 56
+                        },
+                        "snippet": "  54 |     await expect(\n  55 |       detailDialog.getByText(\"电压\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n> 56 |     ).toHaveText(\"750 V\");\n     |       ^\n  57 |     await expect(\n  58 |       detailDialog.getByText(\"采样时间\", { exact: true }).locator(\"xpath=./following-sibling::strong\")\n  59 |     ).toHaveText(\"2026-09-24 10:00:00\");"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T01:16:57.529Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\evidence\\artifacts\\candidate-遥测首次失败后重试成功并关闭\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\evidence\\artifacts\\candidate-遥测首次失败后重试成功并关闭\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\evidence\\artifacts\\candidate-遥测首次失败后重试成功并关闭\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\evidence\\artifacts\\candidate-遥测首次失败后重试成功并关闭\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<REPO>\\workbench\\.local\\bq25\\build-tasks\\build-20260925011508-c8a273d8\\development\\run-1\\candidate.spec.mjs",
+                    "column": 7,
+                    "line": 56
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-cb62d6a14f6e12e339ec",
+          "file": "candidate.spec.mjs",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T01:16:56.950Z",
+    "duration": 3388.161,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

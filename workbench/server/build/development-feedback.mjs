@@ -13,8 +13,9 @@ export function safeFeedback(error, state = {}) {
 }
 export const DEVELOPMENT_CONTRACT = {
   module_format: 'ES module (.mjs); use import { test, expect } from "@playwright/test"; require is not supported.',
-  imports: ['@playwright/test'], navigation: 'await page.goto(process.env.PROBE_URL)',
-  tools: ['read_draft', 'write_draft', 'self_test', 'read_evidence', 'check_fidelity', 'submit_candidate'],
+  imports: ['@playwright/test', 'relative .mjs helpers within the development directory'], navigation: 'await page.goto(process.env.PROBE_URL)',
+  native_tools: ['read', 'read_image', 'write', 'edit'],
+  tools: ['run_diagnostic', 'read_draft', 'write_draft', 'self_test', 'read_evidence', 'check_fidelity', 'submit_candidate'],
   writing: 'write_draft performs static admission; rejected code is not saved. Saving is not execution or verification.',
-  submission: 'Current bytes must have a complete self-test and limited obligation checks. Unknown semantics remain for human review; no automatic approval.',
+  submission: 'Current complete file bundle must have a self-test. Coverage is review material, not semantic proof. Unknown semantics remain for human review; no automatic approval.',
 };

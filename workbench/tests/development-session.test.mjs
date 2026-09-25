@@ -34,7 +34,7 @@ test('pinned DSH MCP client receives fixture executor failure, continues repair 
   const context = [];
   try {
     await client.connect(new StreamableHTTPClientTransport(new URL(bridge.url)));
-    assert.equal((await client.listTools()).tools.length, 6);
+    assert.equal((await client.listTools()).tools.length, 7);
     async function call(name, args = {}) { const result = await client.callTool({ name, arguments: args }); context.push(result); return result; }
     const denied = await call('write_draft', { code: draft('good'), previous_sha256: digest(draft('bad')) });
     assert.equal(denied.isError, true);
@@ -95,5 +95,5 @@ test('task guard denies arbitrary commands, filesystem, code and alternate navig
   const normal = 'http://127.0.0.1:1234/normal';
   assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_navigate', { url: normal }, normal), true);
   for (const [name, args] of [['bash', {}], ['read_file', {}], ['run_code', {}], ['mcp__playwright-mcp__browser_run_code', {}], ['mcp__playwright-mcp__browser_navigate', { url: normal + '?fault=1' }], ['mcp__playwright-mcp__browser_take_screenshot', { filename: '../outside.png' }]]) assert.equal(developmentToolAllowed(name, args, normal), false);
-  for (const forbidden of ["test.fail();", "test.skip();", "try{}catch(e){}", "await fetch('http://other');", "process.env.DEEPSEEK_API_KEY;", "await page.evaluate(()=>true);", "await import('node:fs');"]) assert.throws(() => checkDevelopmentCandidate(draft('good') + forbidden));
+  for (const forbidden of ["test.fail();", "test.skip();", "await fetch('http://other');", "process.env.DEEPSEEK_API_KEY;", "await import('node:fs');"]) assert.throws(() => checkDevelopmentCandidate(draft('good') + forbidden));
 });

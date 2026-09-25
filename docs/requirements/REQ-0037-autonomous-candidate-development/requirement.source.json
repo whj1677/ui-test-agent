@@ -3,9 +3,9 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "B质量收尾实施中：工具反馈与有限断言保真，保留旧A成功和旧B失败",
+    "requirement_status": "开发能力调整工程验证完成；业务语义保留独立核对，无自动批准",
     "governance_level": "G2",
-    "version": 2,
+    "version": 3,
     "last_updated": "2026-09-25"
   },
   "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
@@ -24,7 +24,9 @@
     "真实A：1次Harness、15工具、2开发自测、2最终运行；正常4步通过，故障步骤3期望P05实际P02。",
     "真实B：1次Harness、42工具（23错误）、1开发自测、2最终运行；正常6步通过，故障步骤5只有缺元素，且第4步禁用义务被放宽。未批准候选，未追加模型调用。",
     "本批基线2619f651bff8db4f01693f01ba91051f37aad44a，开始工作区干净；原A/B终态和授权账本不修改。",
-    "旧B的23次工具错误分为策略10、参数7、无草稿4、浏览器观察1、无执行证据1；其中实际Playwright失败0。"
+    "旧B的23次工具错误分为策略10、参数7、无草稿4、浏览器观察1、无执行证据1；其中实际Playwright失败0。",
+    "方向修正前B已完成：源码d04dee0，1 Harness、22工具（2错误）、2开发自测+3独立验证、160181ms；正常6步，原故障750 V/705 V，隐藏启用反例第4步失败；未批准。",
+    "方向修正后不新增模型调用；复用锁定DSH原生文件工具；受控语法诊断和完整文件束快照；工作台127/127、Harness24/24，零模型DSH原生读写编辑路径已执行。"
   ],
   "inferences_and_open_questions": [
     "同会话MCP结果可反馈给Agent；先用零模型协议/控制器工程测试验证后才运行两个真实任务。当前不是操作系统强隔离，工具级约束不能冒称强沙箱。"
@@ -35,7 +37,7 @@
       "status": "部分实现",
       "requirement": "复用现有BuildTaskManager、BuildTaskStore和verifyWorkbenchCandidate，提供绑定任务的自测工具、预算与哈希证据；Agent自主分析错误。",
       "acceptance_criteria": "反馈入上下文、失败可继续、取消/预算停止、改字节必须复测；A恢复与B从零通过生产路径，最终正常和指定故障独立验证。",
-      "constraints": "工具不接受命令、URL或磁盘路径；执行器无模型密钥，故障答案不回传。"
+      "constraints": "冻结业务输入/预期/批准资产不变；原生文件工具限本任务开发目录；任意shell、外部依赖和越界入口关闭；执行器无模型密钥；非系统级强隔离。"
     }
   ],
   "design_decisions": [
@@ -45,8 +47,8 @@
         "DR-0037-01"
       ],
       "status": "已确认",
-      "summary": "任务管理器持有有界开发会话，锁定DSH经本机MCP调用read_draft/write_draft/self_test/read_evidence/submit_candidate；草稿多次写入，每次执行先保存不可变快照与哈希。",
-      "rationale": "控制器只管范围、预算、状态、证据与提交条件，不代替模型诊断或修断言；独立最终验证在Harness结束后进行。"
+      "summary": "复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。",
+      "rationale": "任务控制器负责权限范围、预算与证据，停止扩建helper/分支语义门禁；原要求的语义交由独立核对。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -82,8 +84,8 @@
       "dd_ids": [
         "DD-0037-01"
       ],
-      "status": "实施中",
-      "task": "改善安全可操作反馈，展开helper/分支做有限禁用和字段值核查，工程先行后只运行一个新B任务；最多2启动、3开发执行、3独立验证、120工具和20分钟，不给反例答案。",
+      "status": "部分实现",
+      "task": "保留B质量修订历史；按方向修正放开受控开发能力、绑定完整文件束并完成零模型工程验证。",
       "verification_ids": [
         "VT-0037-03"
       ]
@@ -132,10 +134,10 @@
         "DR-0037-01"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
-      "item": "本批B工具反馈、原B弱断言拦截、语义边界、唯一新B及三种独立验证",
-      "evidence_standard": "生产MCP实际反馈；离线旧报告成功仍阻止弱断言；真实禁用/隐藏/不存在边界；正常/故障/隔离语义反例同稿哈希",
-      "current_evidence": "工程125/125退出0已执行；新B正在运行，结果待记录。"
+      "execution_status": "集成测试通过",
+      "item": "受控开发能力、完整文件束及B历史证据核对",
+      "evidence_standard": "零模型真实工具协议和浏览器执行；哈希绑定与越界拒绝；业务语义仍人工核对",
+      "current_evidence": "capabilities-workbench.log 127/127，capabilities-harness.log 24/24，capabilities-preflight.log零模型原生文件读写编辑；B真实验证绑定d04dee0，非新能力模型成绩。"
     }
   ],
   "verification_environment": {
@@ -176,7 +178,7 @@
       "dd_id": "DD-0037-01",
       "tk_id": "TK-0037-02",
       "vt_id": "VT-0037-03",
-      "status": "实施中"
+      "status": "部分实现"
     }
   ],
   "trace_history": [
@@ -191,11 +193,18 @@
       "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
       "status": "实施中",
       "notes": "B质量收尾任务卡：保留架构和旧成绩，改善反馈/有限保真，只有1新逻辑任务；工程先行，独立验证结束或预算到限即停，无自动批准。"
+    },
+    {
+      "version": 3,
+      "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
+      "status": "工程验证完成，等待独立语义核对",
+      "notes": "任务卡：仅减少实现方法限制，保留范围/环境/预算/证据；无新增模型调用，不重开终态，不扩展UI/AUTH；提交推送后停止。"
     }
   ],
   "open_questions": [
-    "B第4步禁用义务弱化、步骤5无法提取实际读数；本批预算停止，不代写或重抽。",
-    "候选均未人工批准；工具反馈信息不足及语义覆盖仍需后续单独任务处理。"
+    "旧B语义缺陷保留历史；新B候选仅技术验证完成，未人工批准。",
+    "新开发能力只经零模型工程验证，未新增模型正确率证据。",
+    "任意命令/JS调试、系统强隔离、通用语义证明仍不提供。"
   ],
   "prohibited_implementation": [
     "不代写产品候选、不改预期、不读故障答案修正常脚本、不按新task_id重置预算、不自动批准。"
@@ -216,6 +225,14 @@
       "description": "B质量收尾：工具反馈、有限分支义务核对及字段断言证据",
       "impact": "自主建例任务工具与提交前门禁",
       "confirmed_by": "用户本批明确任务及限定预算"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 3,
+      "type": "修订",
+      "description": "按用户方向修正开放受控开发文件、DOM观察和完整文件束；停止扩展语法保真门禁",
+      "impact": "任务工具守卫、会话版本绑定、Harness工作目录",
+      "confirmed_by": "用户最新明确方向修正"
     }
   ]
 }

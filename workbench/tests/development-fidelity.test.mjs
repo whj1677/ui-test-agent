@@ -48,7 +48,7 @@ test('real browser predicate boundaries: hidden/enabled, hidden/disabled and mis
   } finally { await browser.close(); }
 });
 
-test('production MCP exposes actionable admission/absence/parameter feedback and blocks original B despite its recorded successful self-test', async () => {
+test('production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval', async () => {
   const original = JSON.parse(await fs.readFile(new URL('../qa/20260925-autonomous/b/task.json', import.meta.url)));
   const code = await fs.readFile(new URL('../qa/20260925-autonomous/b/final/candidate.spec.mjs', import.meta.url), 'utf8');
   const report = await fs.readFile(new URL('../qa/20260925-autonomous/b/dev-1/report.json', import.meta.url));
@@ -72,11 +72,12 @@ test('production MCP exposes actionable admission/absence/parameter feedback and
     // Supply only the actual public schema; extra metadata above must be rejected.
     assert.equal(blocked.value.code, 'TOOL_ARGUMENTS_INVALID');
     const { outcome, coverage } = original.development.submission;
+    const advisory = await call('check_fidelity');
+    assert.equal(advisory.value.obligations.find(o => o.step === 4).status, 'INSUFFICIENT');
     const check = await call('submit_candidate', { sha256: digest(code), outcome, coverage });
-    assert.equal(check.value.code, 'ASSERTION_FIDELITY_REVIEW_REQUIRED');
-    assert.equal(check.value.review.obligations.find(o => o.step === 4).status, 'INSUFFICIENT');
-    assert.equal(session.state.submission, null);
-    assert.equal(check.value.current_sha256, digest(code));
+    assert.equal(check.value.status, 'FROZEN_FOR_INDEPENDENT_VALIDATION');
+    assert.equal(session.state.submission.semantic_approval, false);
+    assert.equal(session.state.submission.requirements_review, 'PENDING_INDEPENDENT_REVIEW');
   } finally { await client.close(); await bridge.close(); await fs.rm(directory, { recursive: true, force: true }); }
 });
 

@@ -65,3 +65,31 @@ B有13次`write_draft`请求，其中12次拒绝、1次落盘；3次`self_test`�
 门禁过程保留：首次检查提示交付证据未登记/模块说明待更新；collector首次收集时因VT使用不支持的“未通过”枚举失败，改为合法“人工待确认”，同时在条目及本报告保留B实际失败；后续新增完整性审计文件导致证据指纹失效，再由collector重新执行工程验证并绑定最终文件集。未修改或屏蔽检查器。
 
 最终收口：collector对最终文件集执行工作台120/120、失败0、跳过0；`check_ai_context.py`退出0。正式交付门禁通过仅说明当前变更登记及工程证据满足门禁，B候选未通过的事实不变。全部本批受测产品源码、工程测试和脱敏证据与本报告同一提交交付；提交SHA及远端核对值由交付消息给出。没有将私有运行目录作为未提交产品源码依赖。
+
+## 2026-09-25 方向修正：受控开发能力（REQ-0037 v3）
+
+保留先前所有成绩与原始报告。目标仅为减少实现方法限制，停止扩建 helper/分支语义证明；冻结要求、环境、预算、独立验证继续生效。唯一开发位置与分支不变，无新 worktree。
+
+### 修正前已经启动的 B
+
+使用源码提交 `d04dee0`（该提交保留实际受测产品代码）。任务 `build-20260925011508-c8a273d8`，1 Harness、22工具调用（2错误）、2开发自测、3独立验证，160.181秒；无恢复或新ID重抽。候选由真实Agent生成，维护者未代写。脱敏证据：[manifest](../qa/20260925-autonomous/b-quality/manifest.json)、[完整工具反馈](../qa/20260925-autonomous/b-quality/tool-transcript.json)、[候选](../qa/20260925-autonomous/b-quality/final/candidate.spec.mjs)。请求数/usage/费用未知。
+
+- 开发第一次执行失败、第二次通过，初稿/修订均保存；新候选哈希 `36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB`。
+- 独立正常6步通过；原故障第5步取得电压期望750 V、实际705 V，第6步未执行。
+- 隔离隐藏但启用反例第4步失败，第5/6步未执行；不是原故障成绩。人工检查最终第4步直接禁用断言、电压/采样时间各自字段关系；第2步仍允许禁用或不可见。
+- 这是修正前的有限语法门禁版本，不能用于声称本次开放能力后的模型正确率提升。旧A成功、旧B失败与23次工具错误仍保留。旧23次分组：策略10、参数7、无草稿4、浏览器观察1、无执行证据1；实际Playwright失败不计为工具错误。
+
+### 本次开放及生效位置
+
+- `development-tool-guard.mjs` 复用锁定DSH原生 read/read_image/write/edit；限本任务 draft 目录，允许 helper、诊断与截图文件。阻止目录逃逸、符号链接、隐藏配置、node_modules和运行时包覆盖。原生工具的读后写/编辑契约继续保留。模型工具集合明确选择 native，未开放任意命令传输。
+- `development-policy.mjs` 不再禁止所有 catch、helper、evaluate/evaluateAll、screenshot。允许诊断后抛原错误；只读DOM表达式由 `development-dom-read.mjs` 检查，允许选择器、属性/文本/状态读取和数组映射。页面篡改、网络/文件系统导入、Mock路由、skip/fail等仍拒绝。无法可靠约束的任意JS调试不开放，拒绝后可用快照/定位器工具。
+- 截图使用浏览器管理输出，候选支持无路径 screenshot() 与 testInfo.attach；任意本机输出路径仍拒绝。导航仍限登记的正常入口，未把fault URL交给模型。
+- `run_diagnostic` 执行预置的 node --check（确定快照逐模块），不执行模块、不接受命令字符串；`self_test`复用真实执行器。两者子进程均使用环境白名单，不继承模型密钥。任意shell没有可靠隔离，仍不开放。
+- `development-bundle.mjs` 收集整个开发目录（最多100文件/2MiB），逐文件哈希并形成集合哈希；相对.mjs导入只允许束内文件与锁定Playwright。自测执行保存后的完整快照。helper/其它输入变化使旧自测失效；独立最终执行前后核对全部已冻结文件。输出证据位于受控执行目录，非开发输入目录。
+- `development-session.mjs` 移除提交时的helper/分支证明门禁及expect行出现判定。旧有限检查保留可选诊断与原B回归，不扩建、不自动semantic_pass。覆盖表只是核查材料；提交及最终运行不等于人工语义批准。
+
+### 实际工程验证与限制
+
+工作台127/127、Harness24/24，退出码均0；[工作台日志](../qa/20260925-autonomous/b-quality/capabilities-workbench.log)、[Harness日志](../qa/20260925-autonomous/b-quality/capabilities-harness.log)。锁定DSH零模型预检真实执行原生读取、创建、编辑，拒绝越界读取，并验证工具可见集合；[预检日志](../qa/20260925-autonomous/b-quality/capabilities-preflight.log)。真实浏览器工程用例执行helper、DOM读取、截图、catch诊断，验证helper改动必须复测、最终helper篡改被发现；取消/预算/错误反馈回归保留。
+
+本次能力调整新增模型调用0、业务候选执行0；工程测试不算模型成绩。目录/AST/工具守卫不是系统强隔离，也不是任意JavaScript安全性或业务断言语义证明。仍不提供任意shell、依赖安装、外部文件/站点、页面修改、强OS隔离或自动批准。旧核心108项未修复/未重跑；AUTH扩展、通用入口和UI重排未开展。

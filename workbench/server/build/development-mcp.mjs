@@ -13,6 +13,7 @@ function valid(value, schema) {
   return true;
 }
 export const DEVELOPMENT_TOOLS = [
+  { name: 'run_diagnostic', description: 'Run the prepared node --check command on snapshots of task JavaScript modules. No arbitrary command/path/URL or model credentials. Syntax diagnostics do not replace self_test.', inputSchema: object() },
   { name: 'read_draft', description: 'Read the frozen normal case, current editable draft and cumulative task budget.', inputSchema: object() },
   { name: 'write_draft', description: 'Statically check ES module syntax and permitted capabilities, then replace only this task draft. Rejected code is NOT saved. This does not execute or runtime-validate it. Supply the current SHA to prevent stale writes.', inputSchema: object({ code: { type: 'string' }, previous_sha256: { type: ['string', 'null'] } }, ['code', 'previous_sha256']) },
   { name: 'self_test', description: 'Execute an immutable snapshot of the current draft on the bound NORMAL environment. Returns actual Playwright error, steps, report and evidence. Max 3 executions per logical task; failed tests are feedback, not a tool failure.', inputSchema: object() },

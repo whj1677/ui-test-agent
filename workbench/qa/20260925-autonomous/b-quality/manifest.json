@@ -1,0 +1,175 @@
+{
+  "schema": "autonomous-acceptance-evidence-v1",
+  "baseline": "d04dee0",
+  "exported_at": "2026-09-25T01:25:44.041Z",
+  "redaction": "Repository/home paths replaced; no sessions, reasoning, credentials, videos or trace archives exported. Candidate bytes unchanged.",
+  "files": [
+    {
+      "file": "b-quality/task.json",
+      "source": "workbench/.local/bq25/b-quality-20260925-result.json",
+      "source_sha256": "D2DE84367B5936EFBB3D0DF69A4946D6997D345A4EAD5255B86C2CE3E07DDE86",
+      "exported_sha256": "0EB67352494E72AFDDABB903050732AF408719EEA5A417ABF7B4F7C4B5917025",
+      "bytes": 95931,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/tool-transcript.json",
+      "source_sha256": "C1DB4FB04DF1586E27B21CE1331DB72483C146BAFCBFDA07D0DC9D8FD00C0AE5",
+      "exported_sha256": "93C86204D52ADCF1E39CDB751E95C62B5656C8EB2D28929B897D4E494030214C",
+      "transformed": true,
+      "omitted": [
+        "session",
+        "thinking",
+        "text",
+        "final"
+      ]
+    },
+    {
+      "file": "b-quality/harness-summary.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/harness-summary.json",
+      "source_sha256": "61AFB4257D61CFEADBD834F2A7F34C88D9A991AB34AC24B15D0A7B1EC122D143",
+      "exported_sha256": "6A9EEEEF6B38447A1391DF6D9D9AFF56FC0551553A6E0DFCD3A1661CB58BDB87",
+      "bytes": 280,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/agent-input.txt",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/agent-input.txt",
+      "source_sha256": "9664984F18DDDEA601C6F26F746A0A1F81061A007926C6992EEC2212D83A2E2E",
+      "exported_sha256": "9664984F18DDDEA601C6F26F746A0A1F81061A007926C6992EEC2212D83A2E2E",
+      "bytes": 6169,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/dev-1/candidate.spec.mjs",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1/candidate.spec.mjs",
+      "source_sha256": "4C8BEE6F3C459595B3EAE96A8837D7E0D8A083A108FF90CE4B7BC4E7876767FF",
+      "exported_sha256": "4C8BEE6F3C459595B3EAE96A8837D7E0D8A083A108FF90CE4B7BC4E7876767FF",
+      "bytes": 2650,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/dev-1/report.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1/evidence/playwright-report.json",
+      "source_sha256": "FF0408EAFAA4E73B1C1690DDE4848E0614C942C9A4580768597ACD765B4BAE8B",
+      "exported_sha256": "588C7B02415A6080F8E2ACD810E870B709FDDBBF4B5433303860204589916AD2",
+      "bytes": 13472,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/dev-1/screenshot.png",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-1/evidence/artifacts/candidate-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "exported_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "bytes": 32220,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/dev-2/candidate.spec.mjs",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-2/candidate.spec.mjs",
+      "source_sha256": "36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB",
+      "exported_sha256": "36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB",
+      "bytes": 2656,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/dev-2/report.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-2/evidence/playwright-report.json",
+      "source_sha256": "08689318323DB6FB1BCD2D7B3A1CF94D36BBDB5A22273BB2666AFBB09E83DA6E",
+      "exported_sha256": "ADC5C8EC7ABB0A73D6FCEC58A61F03FCC72582E675F56A9993F687124043F930",
+      "bytes": 5107,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/dev-2/screenshot.png",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/run-2/evidence/artifacts/candidate-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/final/candidate.spec.mjs",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/candidate.spec.mjs",
+      "source_sha256": "36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB",
+      "exported_sha256": "36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB",
+      "bytes": 2656,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/final/normal-report.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/normal/playwright-report.json",
+      "source_sha256": "C04443A0720D1AE35E41F05E0D7B4EEF0D1D76E9B5A3F3736524311B914CBC49",
+      "exported_sha256": "5E208FA9D59170138781E0CDC77D6DF1B6B12191249AFB062E85ECD89BD299F1",
+      "bytes": 5097,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/final/normal.png",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/normal/artifacts/candidate-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/final/negative-report.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/negative/playwright-report.json",
+      "source_sha256": "122F06B3835632F50D1576586CAF5FCCDB67FA2F89D23331C36EE0237FDC87A5",
+      "exported_sha256": "0C2D5E7BFE7C22EC6D6FA6063DD34428EFB88C07FBA0724A73AD26C24D2697BA",
+      "bytes": 13035,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/final/negative.png",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/negative/artifacts/candidate-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "exported_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "bytes": 32223,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/final/semantic-report.json",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/semantic/playwright-report.json",
+      "source_sha256": "127CE2DA5E5960C21675BABB46B99CA7C4DFDC1C5B4A9AB84FC2049D288F0FB8",
+      "exported_sha256": "B507D3DDF487A56A6F29A7F6222A8532C904983D9C1EC21EB8CF5315B4206F84",
+      "bytes": 10970,
+      "transformed": true
+    },
+    {
+      "file": "b-quality/final/semantic.png",
+      "source": "workbench/.local/bq25/build-tasks/build-20260925011508-c8a273d8/development/final/semantic/artifacts/candidate-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "exported_sha256": "B9DC99370570E0C99712DF8686192A4A8F976B97941B1A53DDA82F701D4CCF65",
+      "bytes": 32220,
+      "transformed": false
+    },
+    {
+      "file": "b-quality/workbench.png",
+      "source": "workbench/.local/bq25/b-quality-20260925-workbench.png",
+      "source_sha256": "699D14D6108734F1F74D603AF842B83AD126B17E25466C085A17856826D0A66D",
+      "exported_sha256": "699D14D6108734F1F74D603AF842B83AD126B17E25466C085A17856826D0A66D",
+      "bytes": 305862,
+      "transformed": false
+    }
+  ],
+  "tasks": [
+    {
+      "logical_id": "b-quality-20260925",
+      "task_id": "build-20260925011508-c8a273d8",
+      "external_id": "NEW-002",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T01:15:08.392Z",
+      "finished_at": "2026-09-25T01:17:48.573Z",
+      "elapsed_ms": 160181,
+      "harness_starts": 1,
+      "tool_calls": 22,
+      "tool_errors": 2,
+      "model_steps": 19,
+      "developer_self_tests": 2,
+      "final_executions": 3,
+      "final_sha256": "36C19BF8BAA5B36E451A5877A0203A75A67226DB1D90EC3F339F73999D49CECB",
+      "candidate_approved": false
+    }
+  ]
+}

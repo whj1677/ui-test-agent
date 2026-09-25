@@ -121,7 +121,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
     ...(browserAttachEndpoint ? { WORKBENCH_AUTH_CDP_ENDPOINT: browserAttachEndpoint } : {}),
-    ...(developmentEndpoint ? { WORKBENCH_DEVELOPMENT_ENDPOINT: developmentEndpoint, WORKBENCH_DEVELOPMENT_NORMAL_URL: developmentNormalUrl } : {}),
+    ...(developmentEndpoint ? { WORKBENCH_DEVELOPMENT_ENDPOINT: developmentEndpoint, WORKBENCH_DEVELOPMENT_NORMAL_URL: developmentNormalUrl, WORKBENCH_DEVELOPMENT_DIRECTORY: workspace } : {}),
     ...providerEnvironment,
   });
   const execution = await runHarnessEventProcess({ command: process.execPath, args: [

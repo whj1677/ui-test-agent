@@ -75,3 +75,7 @@ QA（REQ-0033）：`report.mjs`的有限Playwright差异解析用于展示和步
 预算绑定持久化逻辑授权，最多3次开发自测、2次修订、120工具、20分钟、3次Harness启动/恢复；本版只启动一次会话，未实现自动恢复。已消费授权不能通过新task_id重抽。当前候选哈希必须匹配最近实际自测；提交要求逐原步骤覆盖材料，材料不能自动证明业务语义。Harness结束后冻结候选独立执行正常及故障入口，故障结果不回流给Agent。最终最多等待人工核对；正式批准资产及回归路径不自动修改。
 
 两项真实有界任务与工程测试见`workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md`。新入口接通的是已登记环境和授权下的开发闭环，不表示任意环境接入、AUTH完整闭环或旧核心108项失败已解决。
+
+### REQ-0037 2026-09-25 开发能力调整
+
+任务原生read/read_image/write/edit仅访问development/draft，允许本地ESM helper和诊断文件；self_test冻结完整文件束，run_diagnostic运行预置node --check。DOM只读evaluate、无路径截图、catch诊断不再笼统拒绝；高风险任意shell/JS、越界路径/入口和页面篡改仍拒绝。工具与AST限制不称系统沙箱。覆盖表及可选有限检查不是语义批准；独立最终执行绑定全部文件哈希。详见workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md追加记录；不改变日常4322或其它模块能力。
