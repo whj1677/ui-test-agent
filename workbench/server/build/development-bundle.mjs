@@ -9,6 +9,9 @@ export async function developmentBundle(root, { validate = true } = {}) {
     for (const item of (await fs.readdir(directory, { withFileTypes: true })).sort((a,b)=>a.name.localeCompare(b.name))) {
       const file = path.join(directory, item.name);
       if (item.isSymbolicLink() || !item.isDirectory() && !item.isFile()) throw new Error('BUNDLE_LINK_NOT_ALLOWED');
+      // Browser-managed observations are evidence, never executable inputs. Imports
+      // remain restricted to the collected manifest, so this folder cannot supply helpers.
+      if (directory === root && item.name === '.playwright-mcp' && item.isDirectory()) continue;
       if (item.isDirectory()) { await visit(file); continue; }
       const name = path.relative(root, file).replaceAll('\\', '/');
       if (name.split('/').some(p => p === 'node_modules' || p.startsWith('.')) || /(^|\/)package(-lock)?\.json$/.test(name)) throw new Error('BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED');

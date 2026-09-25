@@ -1,0 +1,97 @@
+{
+  "schema": "autonomous-acceptance-evidence-v1",
+  "baseline": "07c6e581a99fcab721abfa511a480069422754b4",
+  "exported_at": "2026-09-25T01:43:54.825Z",
+  "redaction": "Repository/home paths replaced; no sessions, reasoning, credentials, videos or trace archives exported. Candidate bytes unchanged.",
+  "files": [
+    {
+      "file": "b-open/task.json",
+      "source": "workbench/.local/bo25/b-open-20260925-result.json",
+      "source_sha256": "224B4F86056680A0AAC1EDE5EC393E89DD92C77D22136F4AC5B6099D1ADC7F88",
+      "exported_sha256": "645F61A25D93B69A55619B34786E247CD9CA95F1C496FF0466C220302127259B",
+      "bytes": 14611,
+      "transformed": true
+    },
+    {
+      "file": "b-open/tool-transcript.json",
+      "source_sha256": "AB57662BC519C66FEAF1832D7DD40AAA4E57723C992DE47AADC3F82883E1AA3C",
+      "exported_sha256": "419E33B6AD937F539DB7F467BD5621CB0519787B069E0B850041EF4F338AAECD",
+      "transformed": true,
+      "omitted": [
+        "session",
+        "thinking",
+        "text",
+        "final"
+      ]
+    },
+    {
+      "file": "b-open/harness-summary.json",
+      "source": "workbench/.local/bo25/build-tasks/build-20260925013650-fdf523cc/development/harness-summary.json",
+      "source_sha256": "08227637376B8F574D98BBCDE8613A014028BFA14834C0DDE131DFDCCEEEE030",
+      "exported_sha256": "2ECE4E7E7EA6EA4B79885A189BF63EC1095A5CE8D12E363A613D19EC9B26E509",
+      "bytes": 283,
+      "transformed": true
+    },
+    {
+      "file": "b-open/agent-input.txt",
+      "source": "workbench/.local/bo25/build-tasks/build-20260925013650-fdf523cc/development/agent-input.txt",
+      "source_sha256": "8A0759E73FE6EA9F4E5A1B043A3FE48E63F418A4FD9E5AD5437EF593A98A5798",
+      "exported_sha256": "8A0759E73FE6EA9F4E5A1B043A3FE48E63F418A4FD9E5AD5437EF593A98A5798",
+      "bytes": 6309,
+      "transformed": false
+    },
+    {
+      "file": "b-open/workbench.png",
+      "source": "workbench/.local/bo25/b-open-20260925-workbench.png",
+      "source_sha256": "DB53007FB91DC78FBE29E55E6AF0D99B397F092E713A05E936DDFFC08FA10554",
+      "exported_sha256": "DB53007FB91DC78FBE29E55E6AF0D99B397F092E713A05E936DDFFC08FA10554",
+      "bytes": 49933,
+      "transformed": false
+    },
+    {
+      "file": "b-open/draft/candidate.spec.mjs",
+      "source": "workbench/.local/bo25/build-tasks/build-20260925013650-fdf523cc/development/draft/candidate.spec.mjs",
+      "source_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "exported_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "bytes": 4157,
+      "transformed": false
+    },
+    {
+      "file": "b-open/browser-acceptance.json",
+      "source": "workbench/.local/bo25/browser-acceptance.json",
+      "source_sha256": "FE74C5BFFCC7AA3FBD61F6F8D97A034118680284347A8DC0FB292D55C3DF4A49",
+      "exported_sha256": "4B11C4CB8382572B68105C524C7938B7BA4E31425C6793CDCFA301B233070D4D",
+      "bytes": 165,
+      "transformed": true
+    },
+    {
+      "file": "b-open/browser-acceptance.png",
+      "source": "workbench/.local/bo25/browser-acceptance.png",
+      "source_sha256": "DB53007FB91DC78FBE29E55E6AF0D99B397F092E713A05E936DDFFC08FA10554",
+      "exported_sha256": "DB53007FB91DC78FBE29E55E6AF0D99B397F092E713A05E936DDFFC08FA10554",
+      "bytes": 49933,
+      "transformed": false
+    }
+  ],
+  "tasks": [
+    {
+      "logical_id": "b-open-20260925",
+      "task_id": "build-20260925013650-fdf523cc",
+      "external_id": "NEW-002",
+      "status": "CANCELLED",
+      "started_at": "2026-09-25T01:36:50.943Z",
+      "finished_at": "2026-09-25T01:40:27.137Z",
+      "elapsed_ms": 216194,
+      "harness_starts": 1,
+      "tool_calls": 35,
+      "tool_errors": 15,
+      "model_steps": 27,
+      "developer_self_tests": 0,
+      "final_executions": 0,
+      "final_sha256": null,
+      "bundle": null,
+      "candidate_approved": false,
+      "unexecuted_draft_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 
 | DD | 关联 DR | 状态 | 方案摘要 | 设计理由 |
 |---|---|---|---|---|
-| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 | 任务控制器负责权限范围、预算与证据，停止扩建helper/分支语义门禁；原要求的语义交由独立核对。 |
+| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 v4修复：浏览器管理的.playwright-mcp目录仅作只读观察证据，不进入执行文件清单且禁止模块导入；getElementById纳入既有只读DOM支持。 | 任务控制器负责权限范围、预算与证据，停止扩建helper/分支语义门禁；原要求的语义交由独立核对。 |
 
 ## 接口与数据流
 

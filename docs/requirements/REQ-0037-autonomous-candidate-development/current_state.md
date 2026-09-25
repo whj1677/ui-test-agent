@@ -5,9 +5,9 @@
 
 ## 元数据
 
-- 需求状态：开发能力调整工程验证完成；业务语义保留独立核对，无自动批准
+- 需求状态：开放能力后真实B受共用故障阻断并取消；最小修复仅零模型验证，无重启
 - 治理分级：G2
-- 当前版本：3
+- 当前版本：4
 - 最后更新：2026-09-25
 
 ## 当前有效用户需求
@@ -26,7 +26,7 @@
 
 | DD | DR | 状态 | 内容 |
 |---|---|---|---|
-| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 |
+| DD-0037-01 | DR-0037-01 | 已确认 | 复用原生read/read_image/write/edit，self_test与预置node --check由受控入口执行；DOM只读表达式、catch诊断、截图、本地ESM helper可用；提交冻结完整文件清单及哈希；语义诊断为可选，不自动证明或批准。 v4修复：浏览器管理的.playwright-mcp目录仅作只读观察证据，不进入执行文件清单且禁止模块导入；getElementById纳入既有只读DOM支持。 |
 
 ## 当前有效任务
 
@@ -41,13 +41,13 @@
 |---|---|---|---|---|
 | VT-0037-01 | DR-0037-01 | 集成测试通过 | 零模型协议、生产浏览器与Playwright、取消/预算/哈希、空草稿准入工程回归 | 命令：node --test workbench/tests/*.test.mjs；退出码：0；测试数量：120；失败数量：0；跳过数量：0；证据：workbench/qa/20260925-autonomous/collector-workbench.log |
 | VT-0037-02 | DR-0037-01 | 人工待确认 | 两项真实任务已执行：A恢复完成，B候选语义及指定差异证据失败；待人工核对，不是产品通过 | 命令：node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair；退出码：0；测试数量：2；失败数量：1；跳过数量：0；证据：workbench/qa/20260925-autonomous/manifest.json |
-| VT-0037-03 | DR-0037-01 | 集成测试通过 | 受控开发能力、完整文件束及B历史证据核对 | capabilities-workbench.log 127/127，capabilities-harness.log 24/24，capabilities-preflight.log零模型原生文件读写编辑；B真实验证绑定d04dee0，非新能力模型成绩。 |
+| VT-0037-03 | DR-0037-01 | 集成测试通过 | 共用观察输出与文件包冲突的最小修复工程验证；真实B结果未完成 | 本轮真实B见b-open/manifest.json与tool-transcript.json；技术失败保留CANCELLED；零模型回归见b-open/repair-engineering.log、repair-preflight.log和当前collector日志。 |
 
 ## 人工待确认项
 
-- [ ] 旧B语义缺陷保留历史；新B候选仅技术验证完成，未人工批准。
-- [ ] 新开发能力只经零模型工程验证，未新增模型正确率证据。
-- [ ] 任意命令/JS调试、系统强隔离、通用语义证明仍不提供。
+- [ ] 开放能力后B尚无任何候选执行结果或最终文件包；不能评价首次通过、完整语义、字段差异或故障检出。
+- [ ] 修复后只做零模型工程验证，后续真实任务须另行明确授权；本批不自动重启。
+- [ ] 历史候选仍未人工批准；非系统强隔离。
 
 ## 本轮禁止实现内容
 

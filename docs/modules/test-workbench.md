@@ -79,3 +79,5 @@ QA（REQ-0033）：`report.mjs`的有限Playwright差异解析用于展示和步
 ### REQ-0037 2026-09-25 开发能力调整
 
 任务原生read/read_image/write/edit仅访问development/draft，允许本地ESM helper和诊断文件；self_test冻结完整文件束，run_diagnostic运行预置node --check。DOM只读evaluate、无路径截图、catch诊断不再笼统拒绝；高风险任意shell/JS、越界路径/入口和页面篡改仍拒绝。工具与AST限制不称系统沙箱。覆盖表及可选有限检查不是语义批准；独立最终执行绑定全部文件哈希。详见workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md追加记录；不改变日常4322或其它模块能力。
+
+REQ-0037 v4真实验证发现浏览器.playwright-mcp自动观察输出与执行文件包冲突。最小修复将其保留为只读证据而非执行依赖，模块导入仍不能引用；补齐getElementById只读支持。真实B已取消且0候选执行，修复仅工程验证，未重启模型。

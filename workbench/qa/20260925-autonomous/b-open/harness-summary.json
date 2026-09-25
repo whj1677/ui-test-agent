@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "completed": false,
+  "candidateExists": true,
+  "browserToolCalls": 23,
+  "exitCode": 1,
+  "termination": "cancelled",
+  "error": null,
+  "finalPresent": false,
+  "turnEndReason": null,
+  "toolCalls": 35,
+  "maxToolCalls": 120,
+  "toolLimitReached": false
+}

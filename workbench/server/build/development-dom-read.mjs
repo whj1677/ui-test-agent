@@ -3,7 +3,7 @@ import { developmentError } from './development-feedback.mjs';
 // A finite read-only browser expression contract, NOT a general JavaScript sandbox.
 export function checkDomRead(source) {
   const ast = parse(`(${source})`, { ecmaVersion: 'latest', locations: true });
-  const calls = new Set(['querySelector','querySelectorAll','getAttribute','hasAttribute','getBoundingClientRect','getComputedStyle','isArray','from','map','filter','slice','includes','trim','toLowerCase','toUpperCase']);
+  const calls = new Set(['getElementById','querySelector','querySelectorAll','getAttribute','hasAttribute','getBoundingClientRect','getComputedStyle','isArray','from','map','filter','slice','includes','trim','toLowerCase','toUpperCase']);
   function visit(node) {
     if (!node || typeof node !== 'object') return;
     const property = node.type === 'MemberExpression' ? node.computed ? node.property.value : node.property.name : null;

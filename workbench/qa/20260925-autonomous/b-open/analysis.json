@@ -1,0 +1,13 @@
+{
+  "policy_denials": 9,
+  "bundle_admission": 3,
+  "browser_observation": 2,
+  "missing_file": 1,
+  "parameter_errors": 0,
+  "exact_repeated_failed_calls": 1,
+  "draft_writes": 1,
+  "self_test_requests": 2,
+  "actual_candidate_executions": 0,
+  "final_bundle": null,
+  "maintainer_cancelled": true
+}

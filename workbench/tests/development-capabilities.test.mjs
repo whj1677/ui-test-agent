@@ -15,6 +15,9 @@ test('native file paths and read-only DOM operations are allowed; escapes and mu
  const root=await fs.mkdtemp(path.resolve('workbench/.local/dev-boundary-'));
  try {
  for(const tool of ['read','write','edit','read_image'])assert.equal(developmentToolAllowed(tool,{file_path:path.join(root,'helper.mjs')},'http://normal',root),true);
+ assert.equal(developmentToolAllowed('read',{file_path:'.playwright-mcp/page.yml'},'',root),true);
+ assert.equal(developmentToolAllowed('write',{file_path:'.playwright-mcp/page.yml'},'',root),false);
+ assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_evaluate',{function:'() => document.getElementById("dlg").className'},'',root),true);
  for(const file of ['../private.json','node_modules/x.mjs','.env','package.json'])assert.equal(developmentToolAllowed('write',{file_path:file},'',root),false);
  assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_evaluate',{function:'() => document.querySelector("p").textContent'},'',root),true);
  assert.equal(developmentToolAllowed('mcp__playwright-mcp__browser_evaluate',{function:'() => document.querySelector("p").textContent="good"'},'',root),false);
@@ -29,6 +32,7 @@ test('real executor snapshots helpers, native edits invalidate old proof, and fr
  try {
  await session.init();await fs.mkdir(path.join(directory,'draft/helpers'));await fs.writeFile(session.draftPath,source);await fs.writeFile(path.join(directory,'draft/helpers/read.mjs'),'export const readLabel=page=>page.evaluate(()=>document.querySelector("p").textContent);');
  const diagnostic=await session.invoke('run_diagnostic');assert.equal(diagnostic.results.every(r=>r.exit_code===0),true);assert.equal(diagnostic.executes_candidate,false);
+ await fs.mkdir(path.join(directory,'draft/.playwright-mcp'));await fs.writeFile(path.join(directory,'draft/.playwright-mcp/page.yml'),'Browser managed snapshot');
  const first=await session.invoke('self_test');assert.equal(first.result?.complete_pass,true,JSON.stringify(first));assert.equal(first.files.length,2);
  const submit={sha256:first.sha256,outcome:'ready',coverage:[{order:1,requirement:'The label is good',check_lines:[3],execution:1,uncovered:''}]};
  await fs.appendFile(path.join(directory,'draft/helpers/read.mjs'),'\n// changed dependency');
@@ -37,6 +41,7 @@ test('real executor snapshots helpers, native edits invalidate old proof, and fr
  submit.coverage[0].execution=2;await session.invoke('submit_candidate',submit);
  assert.equal(await verifyBundle(path.join(directory,'final'),session.state.submission.bundle),true);
  await fs.appendFile(path.join(directory,'final/helpers/read.mjs'),'\n// tampering');assert.equal(await verifyBundle(path.join(directory,'final'),session.state.submission.bundle),false);
+ await fs.writeFile(path.join(directory,'draft/.playwright-mcp/hidden.mjs'),'export const hidden=1;');await fs.writeFile(path.join(directory,'draft/helpers/read.mjs'),'export {hidden} from "../.playwright-mcp/hidden.mjs";');await assert.rejects(developmentBundle(path.join(directory,'draft')),/IMPORT_ALLOWED/);
  await fs.writeFile(path.join(directory,'draft/helpers/read.mjs'),'export {readFile} from "node:fs";');await assert.rejects(developmentBundle(path.join(directory,'draft')),/IMPORT_ALLOWED/);
  }finally{server.closeAllConnections();await new Promise(r=>server.close(r));await fs.rm(directory,{recursive:true,force:true});}
 });

@@ -1,0 +1,398 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260925013650-fdf523cc",
+  "created_at": "2026-09-25T01:36:50.943Z",
+  "started_at": "2026-09-25T01:36:50.943Z",
+  "finished_at": "2026-09-25T01:40:27.137Z",
+  "task_status": "CANCELLED",
+  "generation_status": "RUNNING",
+  "verification_status": "INCOMPLETE",
+  "human_review_status": "NOT_READY",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "遥测首次失败后重试成功并关闭",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-e7e6faf1-be2e-485d-b3ea-e068749d489c",
+    "project_name": "20260925 开放能力后B真实验证",
+    "case_id": "case-f4721770-818e-4edb-a3ea-2168d1e52dc5",
+    "case_version": 1,
+    "external_id": "NEW-002",
+    "content_sha256": "474EB539170E64CAEED1D9557AE862E52947078E364F753129CAA70B9406E5F6"
+  },
+  "environment_ref": {
+    "environment_id": "qa-retry-20260925"
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "NEW-002",
+        "title": "遥测首次失败后重试成功并关闭",
+        "module": "retry",
+        "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=retry&variant=normal；刷新后内存状态重置。",
+        "test_data": "{\"first_fail_ms\":400,\"retry_success_ms\":600,\"voltage\":\"750 V\",\"sample_time\":\"2026-09-24 10:00:00\"}\n入口=http://127.0.0.1:4343/?scene=retry&variant=normal",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+            "expected": "仅显示遥测读取相关控件；按钮查看遥测可用"
+          },
+          {
+            "order": 2,
+            "action": "点击查看遥测",
+            "expected": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见"
+          },
+          {
+            "order": 3,
+            "action": "等待约450毫秒",
+            "expected": "状态变为暂时无法读取；重试按钮可见且可用"
+          },
+          {
+            "order": 4,
+            "action": "点击重试",
+            "expected": "立即显示读取中…；重试按钮禁用"
+          },
+          {
+            "order": 5,
+            "action": "再等待约650毫秒",
+            "expected": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00"
+          },
+          {
+            "order": 6,
+            "action": "点击关闭",
+            "expected": "遥测详情dialog不可见"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "authorization": {
+    "logical_id": "b-open-20260925",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    }
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "CANCELLED",
+      "started_at": "2026-09-25T01:36:50.943Z",
+      "finished_at": "2026-09-25T01:40:27.137Z"
+    }
+  ],
+  "candidates": [],
+  "files": [
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 6309,
+      "sha256": "8A0759E73FE6EA9F4E5A1B043A3FE48E63F418A4FD9E5AD5437EF593A98A5798",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/console-2026-09-25T01-36-54-957Z.log",
+      "bytes": 139,
+      "sha256": "6E38777BB4C51EA3581F408B9F8BE1C821220FBDD20E2BE25F6B4621CE05A03D",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-25T01-36-54-957Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T01-36-55-034Z.yml",
+      "bytes": 425,
+      "sha256": "9887A9D2DFD8618BAE10DC4D16BAB2007967FF1E3E8A81EEAAF0D96495CA3373",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T01-36-55-034Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T01-36-57-173Z.yml",
+      "bytes": 934,
+      "sha256": "309B42287C4EFBA102D1054F8BC650A85250A39878FF57B0005194501822CE28",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T01-36-57-173Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T01-38-01-250Z.yml",
+      "bytes": 922,
+      "sha256": "940E56117D30DA581DCBEA1A8DA9D262E1992209B05C8E07E773C685B62CA3F4",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T01-38-01-250Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T01-38-03-664Z.yml",
+      "bytes": 425,
+      "sha256": "9887A9D2DFD8618BAE10DC4D16BAB2007967FF1E3E8A81EEAAF0D96495CA3373",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T01-38-03-664Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 4157,
+      "sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 146155,
+      "sha256": "AB57662BC519C66FEAF1832D7DD40AAA4E57723C992DE47AADC3F82883E1AA3C",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 282,
+      "sha256": "08227637376B8F574D98BBCDE8613A014028BFA14834C0DDE131DFDCCEEEE030",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 26572,
+      "sha256": "1118D75E9EFFB93818D233CBF5A2E9E55A64476B63DE43C996A7B96D60682F32",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": {
+    "code": "HARNESS_INCOMPLETE:cancelled",
+    "message": "HARNESS_INCOMPLETE:cancelled"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": null
+  },
+  "development": {
+    "started_at": 1790300210946,
+    "deadline_at": 1790301410946,
+    "draft_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+    "self_tests": [],
+    "submission": null,
+    "tool_calls": 35,
+    "harness_starts": 1,
+    "recovery": false,
+    "rejections": [
+      {
+        "tool": "run_diagnostic",
+        "at": 1790300366125,
+        "code": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "rule": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "node": null,
+        "identifier": null,
+        "location": null,
+        "message": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "draft_saved": false,
+        "draft_exists": true,
+        "current_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+        "allowed_next_steps": [
+          "read_draft",
+          "correct the reported issue",
+          "write_draft",
+          "self_test"
+        ]
+      },
+      {
+        "tool": "self_test",
+        "at": 1790300367798,
+        "code": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "rule": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "node": null,
+        "identifier": null,
+        "location": null,
+        "message": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "draft_saved": false,
+        "draft_exists": true,
+        "current_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+        "allowed_next_steps": [
+          "read_draft",
+          "correct the reported issue",
+          "write_draft",
+          "self_test"
+        ]
+      },
+      {
+        "tool": "self_test",
+        "at": 1790300411118,
+        "code": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "rule": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "node": null,
+        "identifier": null,
+        "location": null,
+        "message": "BUNDLE_RUNTIME_OVERRIDE_NOT_ALLOWED",
+        "draft_saved": false,
+        "draft_exists": true,
+        "current_sha256": "E8B05F854163B65BC5CD703BA5F28CCCB858DF5E6AB1D983FAD4E0253AE94022",
+        "allowed_next_steps": [
+          "read_draft",
+          "correct the reported issue",
+          "write_draft",
+          "self_test"
+        ]
+      }
+    ],
+    "fidelity": {
+      "version": "finite-obligations-v1",
+      "semantic_pass": false,
+      "human_review_required": true,
+      "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+      "status": "NEEDS_REVIEW",
+      "obligations": [
+        {
+          "step": 2,
+          "requirement": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见",
+          "target": "重试",
+          "kind": "disabled",
+          "relation": "disabled OR hidden",
+          "value": "disabled",
+          "status": "NEEDS_REVIEW",
+          "paths": [
+            {
+              "satisfied": false,
+              "unknown_syntax": true,
+              "checks": []
+            },
+            {
+              "satisfied": false,
+              "unknown_syntax": true,
+              "checks": []
+            }
+          ],
+          "explanation": "Each possible helper/branch path must assert the named target predicate. Hidden is permitted only by an explicit OR; toBeDisabled also requires a resolved element."
+        },
+        {
+          "step": 4,
+          "requirement": "立即显示读取中…；重试按钮禁用",
+          "target": "重试",
+          "kind": "disabled",
+          "relation": "disabled",
+          "value": "disabled",
+          "status": "NEEDS_REVIEW",
+          "paths": [
+            {
+              "satisfied": false,
+              "unknown_syntax": true,
+              "checks": []
+            }
+          ],
+          "explanation": "Each possible helper/branch path must assert the named target predicate. Hidden is permitted only by an explicit OR; toBeDisabled also requires a resolved element."
+        },
+        {
+          "step": 5,
+          "requirement": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00",
+          "target": "电压",
+          "kind": "field",
+          "relation": "field equals frozen value",
+          "value": "750 V",
+          "status": "INSUFFICIENT",
+          "paths": [
+            {
+              "satisfied": false,
+              "unknown_syntax": false,
+              "checks": []
+            }
+          ],
+          "explanation": "Locate the field through its label/relationship independently of the expected value, then compare its text with the frozen value."
+        },
+        {
+          "step": 5,
+          "requirement": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00",
+          "target": "采样时间",
+          "kind": "field",
+          "relation": "field equals frozen value",
+          "value": "2026-09-24 10:00:00",
+          "status": "INSUFFICIENT",
+          "paths": [
+            {
+              "satisfied": false,
+              "unknown_syntax": false,
+              "checks": []
+            }
+          ],
+          "explanation": "Locate the field through its label/relationship independently of the expected value, then compare its text with the frozen value."
+        }
+      ],
+      "remaining_requirements": [
+        {
+          "step": 1,
+          "requirement": "仅显示遥测读取相关控件；按钮查看遥测可用",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 2,
+          "requirement": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 3,
+          "requirement": "状态变为暂时无法读取；重试按钮可见且可用",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 4,
+          "requirement": "立即显示读取中…；重试按钮禁用",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 5,
+          "requirement": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 6,
+          "requirement": "遥测详情dialog不可见",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        }
+      ]
+    }
+  }
+}

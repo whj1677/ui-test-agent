@@ -16,3 +16,4 @@
 | 1 | workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md | 工程闭环已实现，真实A完成，B未通过 | 任务状态卡：目标为两个逻辑任务内自主观察/自测/修订；工程先行；原输入与故障隔离；达到预算或最终验证后停止。 |
 | 2 | workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md | 实施中 | B质量收尾任务卡：保留架构和旧成绩，改善反馈/有限保真，只有1新逻辑任务；工程先行，独立验证结束或预算到限即停，无自动批准。 |
 | 3 | workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md | 工程验证完成，等待独立语义核对 | 任务卡：仅减少实现方法限制，保留范围/环境/预算/证据；无新增模型调用，不重开终态，不扩展UI/AUTH；提交推送后停止。 |
+| 4 | workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md | 真实验证阻断；工程修复已验证 | 任务卡：基线07c6e58，唯一新B b-open-20260925；1初始Harness，无恢复实现；120工具/20分钟/3开发执行/3最终执行；冻结输入，仅正常入口，结束或预算到限停止。 |
