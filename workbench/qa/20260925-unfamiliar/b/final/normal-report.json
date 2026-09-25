@@ -1,0 +1,156 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/final",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/final/normal/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/final",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\normal\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "同名工单目标选择、详情页签及返回保留筛选",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1094,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 159
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 139
+                    },
+                    {
+                      "title": "CASE_STEP_3",
+                      "duration": 87
+                    },
+                    {
+                      "title": "CASE_STEP_4",
+                      "duration": 72
+                    },
+                    {
+                      "title": "CASE_STEP_5",
+                      "duration": 83
+                    }
+                  ],
+                  "startTime": "2026-09-25T02:17:23.990Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\normal\\artifacts\\candidate-同名工单目标选择、详情页签及返回保留筛选\\test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\normal\\artifacts\\candidate-同名工单目标选择、详情页签及返回保留筛选\\video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\normal\\artifacts\\candidate-同名工单目标选择、详情页签及返回保留筛选\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-da0e67fda3455d2a637a",
+          "file": "candidate.spec.mjs",
+          "line": 34,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T02:17:23.396Z",
+    "duration": 2209.3309999999997,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,1332 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260925021311-a4ca71be",
+  "created_at": "2026-09-25T02:13:11.811Z",
+  "started_at": "2026-09-25T02:13:11.811Z",
+  "finished_at": "2026-09-25T02:14:25.042Z",
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "generation_status": "GENERATED",
+  "verification_status": "TECHNICAL_VALIDATION_PASSED",
+  "human_review_status": "WAITING_REVIEW",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "自定义区域筛选、空结果与重置",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-4e0ff127-e29c-46d5-8275-e56be279afc1",
+    "project_name": "20260925 陌生流程 A",
+    "case_id": "case-8869c45d-1424-4049-803e-2082bcaadb41",
+    "case_version": 1,
+    "external_id": "FRESH-A",
+    "content_sha256": "99B3529C40BB8FF7E0427C16933084E42EE9C211CB6E131C9B52273B173C572C"
+  },
+  "environment_ref": {
+    "environment_id": "unfamiliar-a-20260925"
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "FRESH-A",
+        "title": "自定义区域筛选、空结果与重置",
+        "module": "filter",
+        "preconditions": "本机合成站；无登录、网络写入、持久化或外部依赖；刷新重置内存状态。只使用绑定入口。",
+        "test_data": "以本用例步骤内明确的编号、字段和值为冻结业务预期。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开绑定正常入口",
+            "expected": "设备结果共3条，编号按顺序为P-101、P-102、P-203；区域为全部区域，状态为全部状态，设备关键字为空"
+          },
+          {
+            "order": 2,
+            "action": "打开区域自定义下拉，选择南区",
+            "expected": "区域显示南区；设备结果仅1条P-203，名称南站泵组、区域南区、状态启用"
+          },
+          {
+            "order": 3,
+            "action": "将状态改为停用",
+            "expected": "结果数量为0条记录；显示没有符合条件的设备；设备结果表无数据行"
+          },
+          {
+            "order": 4,
+            "action": "点击重置",
+            "expected": "区域恢复全部区域，状态恢复全部状态，关键字为空；空结果提示不可见；设备结果恢复3条，编号按顺序P-101、P-102、P-203"
+          },
+          {
+            "order": 5,
+            "action": "设备关键字输入P-102并点击查询",
+            "expected": "设备结果仅1条P-102；该行名称北站备用泵、区域北区、状态停用"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "authorization": {
+    "logical_id": "unfamiliar-20260925-a",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T02:13:11.811Z",
+      "finished_at": "2026-09-25T02:14:25.042Z"
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925021311-a4ca71be-normal",
+          "run_type": "normal",
+          "candidate_sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+          "candidate_version": 1,
+          "executed_case_id": "case-8869c45d-1424-4049-803e-2082bcaadb41",
+          "executed_external_id": "FRESH-A",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T02:14:14.207Z",
+          "finished_at": "2026-09-25T02:14:17.089Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-25T02:14:14.826Z",
+              "duration": 2243.598,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 113,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 202,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 32,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 85,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_5",
+                "raw_title": "CASE_STEP_5",
+                "category": null,
+                "duration": 146,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "build-20260925021311-a4ca71be-negative",
+          "run_type": "negative",
+          "candidate_sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+          "candidate_version": 1,
+          "executed_case_id": "case-8869c45d-1424-4049-803e-2082bcaadb41",
+          "executed_external_id": "FRESH-A",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T02:14:17.094Z",
+          "finished_at": "2026-09-25T02:14:25.026Z",
+          "status": "FAILED",
+          "complete_pass": false,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_5"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_4",
+                    "report_path": [
+                      3
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: 3\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+                      "expected": "3",
+                      "actual": "1",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\fresh25-a\\build-tasks\\build-20260925021311-a4ca71be\\development\\final\\candidate.spec.mjs",
+                        "line": 52,
+                        "column": 22
+                      },
+                      "snippet": "  50 | async function expectRowsInOrder(page, ids) {\n  51 |   const rows = dataRows(page);\n> 52 |   await expect(rows).toHaveCount(ids.length);\n     |                      ^\n  53 |   const codeColumn = await columnIndex(page, \"设备编号\");\n  54 |   for (let i = 0; i < ids.length; i += 1) {\n  55 |     await expect(rows.nth(i).locator(\"td\").nth(codeColumn)).toHaveText(ids[i]);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: 3\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+            "expected": "3",
+            "actual": "1",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "same_candidate_hash": true,
+          "specified_defect_detected": true,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: 3\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+              "expected": "3",
+              "actual": "1",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-25T02:14:17.716Z",
+              "duration": 7288.433,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 120,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 198,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 40,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 5083,
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: 3\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+                  "expected": "3",
+                  "actual": "1",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备筛选' }).getByRole('table', { name: '设备结果' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                  "location": {
+                    "file": "<REPO>\\workbench\\.local\\fresh25-a\\build-tasks\\build-20260925021311-a4ca71be\\development\\final\\candidate.spec.mjs",
+                    "line": 52,
+                    "column": 22
+                  },
+                  "snippet": "  50 | async function expectRowsInOrder(page, ids) {\n  51 |   const rows = dataRows(page);\n> 52 |   await expect(rows).toHaveCount(ids.length);\n     |                      ^\n  53 |   const codeColumn = await columnIndex(page, \"设备编号\");\n  54 |   for (let i = 0; i < ids.length; i += 1) {\n  55 |     await expect(rows.nth(i).locator(\"td\").nth(codeColumn)).toHaveText(ids[i]);"
+                },
+                "steps": []
+              }
+            ]
+          }
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "设备结果共3条，编号按顺序为P-101、P-102、P-203；区域为全部区域，状态为全部状态，设备关键字为空",
+          "check_lines": [
+            76,
+            77,
+            78,
+            79
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "区域显示南区；设备结果仅1条P-203，名称南站泵组、区域南区、状态启用",
+          "check_lines": [
+            83,
+            85,
+            86,
+            87
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "结果数量为0条记录；显示没有符合条件的设备；设备结果表无数据行",
+          "check_lines": [
+            96,
+            97,
+            98,
+            99,
+            100
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "区域恢复全部区域，状态恢复全部状态，关键字为空；空结果提示不可见；设备结果恢复3条，编号按顺序P-101、P-102、P-203",
+          "check_lines": [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "设备结果仅1条P-102；该行名称北站备用泵、区域北区、状态停用",
+          "check_lines": [
+            113,
+            115,
+            116,
+            117
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "approval_status": "NOT_APPROVED",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 4124,
+            "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E"
+          }
+        ],
+        "sha256": "66B69E0C6291E466F10AFC598B3C84D83773AED14623655140FE2024FAB56BCA"
+      }
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 6340,
+      "sha256": "307D97263118EC8E9F2754D31BA961244CA3B0C78FA32027CA0037030794F9E0",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/diagnostic-1790302436036/candidate.spec.mjs",
+      "bytes": 4124,
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/console-2026-09-25T02-13-16-315Z.log",
+      "bytes": 139,
+      "sha256": "55AA039DED903F55B99ACB0F4D10246F66BC8C3FADE2443888A8876D3CB69471",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-25T02-13-16-315Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-16-410Z.yml",
+      "bytes": 1462,
+      "sha256": "8D7B2F4E04EFBE07FC50BEF57F730C6857E0DCA385C220C5814038EEFD47BF9E",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-16-410Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-22-346Z.yml",
+      "bytes": 1638,
+      "sha256": "31E3D421431CA363888F5B1DC02CE83709CDBC2D2986F033B3AF93E69B291AA6",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-22-346Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-24-429Z.yml",
+      "bytes": 1105,
+      "sha256": "32C819DFD012FE0B3826B0245E2A0E676539CE27DA5321CBB3F4C5327A9EE8FA",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-24-429Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-26-045Z.yml",
+      "bytes": 975,
+      "sha256": "5E67540F79EF26888BBD645BEA73F383537371D00580897C2B89B07061195E47",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-26-045Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-28-464Z.yml",
+      "bytes": 1471,
+      "sha256": "39D2A876C9B838623EA7993A777F568A67211BF5B5D632C2B4D1B009395B3A4E",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-28-464Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-13-31-878Z.yml",
+      "bytes": 1130,
+      "sha256": "95F3C3A3DDBE22A63D27270CE8AEB021CAA2A5D27E3D53CD6A03023882D0EC82",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-13-31-878Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 4124,
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/candidate.spec.mjs",
+      "bytes": 4124,
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "file_id": "build-file-11",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "8DD2512D5F31074B09C9D8EB0E5D46761E4400C47CA124ABD064F19CF44E6D64",
+      "file_id": "build-file-12",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/error-context.md",
+      "bytes": 7256,
+      "sha256": "939CB69BED12EE084AC4B4637B7C882327D37C576A98F67282E047E2F9E3B8EA",
+      "file_id": "build-file-13",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "error-context.md",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-failed-1.png",
+      "bytes": 21524,
+      "sha256": "C1D1C01659F73CD7F620DE30E8DCD43A20DA7AEFB455D5660D06042E516B6D61",
+      "file_id": "build-file-14",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "bytes": 158935,
+      "sha256": "73CB3678F3C75183AD91A922F20188519DCA084BCC309A6AB42C53E9F16BCF51",
+      "file_id": "build-file-15",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/video.webm",
+      "bytes": 86547,
+      "sha256": "C7AA5DF2A3CE78029E760DF6801DE6BE4021A1FEF1D9AADAF9833039A7DFF601",
+      "file_id": "build-file-16",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/playwright-report.json",
+      "bytes": 13876,
+      "sha256": "9D305078FA467D14D7D9E06B16D801B8B92E9D6917884D6DDE8CB697B1FA8BCE",
+      "file_id": "build-file-17",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-18",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-finished-1.png",
+      "bytes": 22247,
+      "sha256": "25B1F08E7E894768E13A197446C982E47F0E0C43245726CFB745325D2B5A9E6F",
+      "file_id": "build-file-19",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "bytes": 184975,
+      "sha256": "680C200EBEC2CBD5030100D1C53EF03E5C3534FFC15848BACE789D75C67D1A4B",
+      "file_id": "build-file-20",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/video.webm",
+      "bytes": 44019,
+      "sha256": "A76D3AF912DE4ADC4F015D9BFF2E592F5AEAA0369033876B57B52A2969C29BB9",
+      "file_id": "build-file-21",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/playwright-report.json",
+      "bytes": 5438,
+      "sha256": "1792CDA4AE962A4DEF8A017C33CE94779070270DBFFAC6DCC269C6B4106D18C6",
+      "file_id": "build-file-22",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 82225,
+      "sha256": "9CD234FF391A3D67404110F1FD81DFB10878786E4C8F91D336D69D00F2B386D3",
+      "file_id": "build-file-23",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 279,
+      "sha256": "6F58119D64FB4A5DDD870294BD7E13CF149A789109BC777D82658B036FF493FE",
+      "file_id": "build-file-24",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/candidate.spec.mjs",
+      "bytes": 4124,
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "file_id": "build-file-25",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-26",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-finished-1.png",
+      "bytes": 22247,
+      "sha256": "25B1F08E7E894768E13A197446C982E47F0E0C43245726CFB745325D2B5A9E6F",
+      "file_id": "build-file-27",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "bytes": 186366,
+      "sha256": "9502DD214CD42CF6BE70D5EE669CA0E5BDABCD568BA5F0B9EA216E7E84A0141C",
+      "file_id": "build-file-28",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/video.webm",
+      "bytes": 25636,
+      "sha256": "EA002D4FB7C63DA94E50F7CF7011DC9295C23B876D90DF9FF78097740EF3ABBB",
+      "file_id": "build-file-29",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/playwright-report.json",
+      "bytes": 5458,
+      "sha256": "037B3D77D42E5ED7B8E5FEB02B6829A30D808D8762FF2C363B2C56E6673DBB07",
+      "file_id": "build-file-30",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-31",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 20242,
+      "sha256": "3696ED993422D6B30049106DBD60991583B5CEC9FD989E3C467EFEAEF06DFC6F",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": null,
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": null
+  },
+  "development": {
+    "started_at": 1790302391815,
+    "deadline_at": 1790303591815,
+    "draft_sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+    "self_tests": [
+      {
+        "number": 1,
+        "bundle_sha256": "66B69E0C6291E466F10AFC598B3C84D83773AED14623655140FE2024FAB56BCA",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 4124,
+            "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E"
+          }
+        ],
+        "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790302436945,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T02:13:57.559Z",
+            "duration": 2293.3340000000003,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 105,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 187,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 34,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_4",
+              "raw_title": "CASE_STEP_4",
+              "category": null,
+              "duration": 96,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_5",
+              "raw_title": "CASE_STEP_5",
+              "category": null,
+              "duration": 153,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-finished-1.png",
+            "bytes": 22247,
+            "sha256": "25B1F08E7E894768E13A197446C982E47F0E0C43245726CFB745325D2B5A9E6F"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+            "bytes": 186366,
+            "sha256": "9502DD214CD42CF6BE70D5EE669CA0E5BDABCD568BA5F0B9EA216E7E84A0141C"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/video.webm",
+            "bytes": 25636,
+            "sha256": "EA002D4FB7C63DA94E50F7CF7011DC9295C23B876D90DF9FF78097740EF3ABBB"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 5458,
+            "sha256": "037B3D77D42E5ED7B8E5FEB02B6829A30D808D8762FF2C363B2C56E6673DBB07"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+              "bytes": 186366,
+              "sha256": "9502DD214CD42CF6BE70D5EE669CA0E5BDABCD568BA5F0B9EA216E7E84A0141C"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790302439863
+      }
+    ],
+    "submission": {
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "设备结果共3条，编号按顺序为P-101、P-102、P-203；区域为全部区域，状态为全部状态，设备关键字为空",
+          "check_lines": [
+            76,
+            77,
+            78,
+            79
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "区域显示南区；设备结果仅1条P-203，名称南站泵组、区域南区、状态启用",
+          "check_lines": [
+            83,
+            85,
+            86,
+            87
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "结果数量为0条记录；显示没有符合条件的设备；设备结果表无数据行",
+          "check_lines": [
+            96,
+            97,
+            98,
+            99,
+            100
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "区域恢复全部区域，状态恢复全部状态，关键字为空；空结果提示不可见；设备结果恢复3条，编号按顺序P-101、P-102、P-203",
+          "check_lines": [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "设备结果仅1条P-102；该行名称北站备用泵、区域北区、状态停用",
+          "check_lines": [
+            113,
+            115,
+            116,
+            117
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "submitted_at": 1790302449636,
+      "file": "final/candidate.spec.mjs",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 4124,
+            "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E"
+          }
+        ],
+        "sha256": "66B69E0C6291E466F10AFC598B3C84D83773AED14623655140FE2024FAB56BCA"
+      },
+      "semantic_approval": false,
+      "requirements_review": "PENDING_INDEPENDENT_REVIEW"
+    },
+    "tool_calls": 24,
+    "harness_starts": 1,
+    "recovery": false,
+    "fidelity": {
+      "version": "finite-obligations-v1",
+      "semantic_pass": false,
+      "human_review_required": true,
+      "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+      "status": "NO_SUPPORTED_OBLIGATIONS",
+      "obligations": [],
+      "remaining_requirements": [
+        {
+          "step": 1,
+          "requirement": "设备结果共3条，编号按顺序为P-101、P-102、P-203；区域为全部区域，状态为全部状态，设备关键字为空",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 2,
+          "requirement": "区域显示南区；设备结果仅1条P-203，名称南站泵组、区域南区、状态启用",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 3,
+          "requirement": "结果数量为0条记录；显示没有符合条件的设备；设备结果表无数据行",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 4,
+          "requirement": "区域恢复全部区域，状态恢复全部状态，关键字为空；空结果提示不可见；设备结果恢复3条，编号按顺序P-101、P-102、P-203",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 5,
+          "requirement": "设备结果仅1条P-102；该行名称北站备用泵、区域北区、状态停用",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        }
+      ]
+    },
+    "final_executions": [
+      {
+        "lane": "normal",
+        "started_at": "2026-09-25T02:14:14.207Z",
+        "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+        "status": "PASSED"
+      },
+      {
+        "lane": "negative",
+        "started_at": "2026-09-25T02:14:17.094Z",
+        "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+        "status": "FAILED"
+      }
+    ]
+  }
+}

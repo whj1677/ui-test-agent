@@ -1,0 +1,35 @@
+{
+  "lane": "b",
+  "logical_id": "unfamiliar-20260925-b",
+  "task_id": "build-20260925021610-943fbf86",
+  "source_commit": "cfb63a0cf77b252a46f53e4cc8562a9325067fa1",
+  "status": "WAITING_HUMAN_REVIEW",
+  "harness_starts": 1,
+  "tool_calls": 24,
+  "tool_errors": 0,
+  "errors": [],
+  "exact_repeated_failed_calls": 0,
+  "developer_executions": 1,
+  "final_executions": 2,
+  "elapsed_ms": 83242,
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 5799,
+        "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6"
+      }
+    ],
+    "sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02"
+  },
+  "edits": [
+    {
+      "tool": "mcp__workbench__write_draft",
+      "call_id": "call_00_ERp5pNMhuYTt5ejMQSpL8831",
+      "status": "completed",
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "file": "b/edits/1.txt"
+    }
+  ],
+  "candidate_approved": false
+}

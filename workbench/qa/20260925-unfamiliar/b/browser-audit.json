@@ -1,0 +1,47 @@
+{
+  "task_id": "build-20260925021610-943fbf86",
+  "status": "WAITING_HUMAN_REVIEW · WAITING_REVIEW",
+  "rows": [
+    "开发自测 1 · EXECUTED",
+    "最终 normal · PASSED",
+    "最终 negative · FAILED"
+  ],
+  "media": [
+    {
+      "file_id": "build-file-15",
+      "path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-failed-1.png",
+      "sha256": "B1163570140AEDF11AD9E05E874F979D0E07D21BA90814A53DAF4C0ADCD59812",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "sha256": "3F379E9A31C9A69B77233360C4C9548E75B759FBA4BA54CD163004057F23F54A",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/final/normal/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/final/normal/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "sha256": "AF4DD2F2A7F763F1B3EE96E05F4191669D42ECD332A8E1C370ABFF7CAAE5A564",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "sha256": "58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8",
+      "http_status": 200
+    }
+  ]
+}

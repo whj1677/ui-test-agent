@@ -1,0 +1,45 @@
+{
+  "lane": "a",
+  "logical_id": "unfamiliar-20260925-a",
+  "task_id": "build-20260925021311-a4ca71be",
+  "source_commit": "cfb63a0cf77b252a46f53e4cc8562a9325067fa1",
+  "status": "WAITING_HUMAN_REVIEW",
+  "harness_starts": 1,
+  "tool_calls": 24,
+  "tool_errors": 1,
+  "errors": [
+    {
+      "type": "tool_call",
+      "callId": "call_00_SYWumwaw4XiBuqhrOYaU2644",
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "input": {
+        "function": "() => Array.from(document.scripts).map(s => s.textContent).join('\\n---\\n')"
+      },
+      "error": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}"
+    }
+  ],
+  "exact_repeated_failed_calls": 0,
+  "developer_executions": 1,
+  "final_executions": 2,
+  "elapsed_ms": 73231,
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 4124,
+        "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E"
+      }
+    ],
+    "sha256": "66B69E0C6291E466F10AFC598B3C84D83773AED14623655140FE2024FAB56BCA"
+  },
+  "edits": [
+    {
+      "tool": "mcp__workbench__write_draft",
+      "call_id": "call_00_CkIQzS2lDSFB30Pig5Qz7885",
+      "status": "completed",
+      "sha256": "5017B11712B79F7CD06E8A88082097029C3ADC454560EBF0F0D0140365A8779E",
+      "file": "a/edits/1.txt"
+    }
+  ],
+  "candidate_approved": false
+}

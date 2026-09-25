@@ -1,0 +1,895 @@
+[
+  {
+    "type": "status",
+    "phase": "turn_start",
+    "turn": 1
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 1
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_sPtZQs2LDusvNy5bc3dH0612",
+    "tool": "mcp__workbench__read_draft",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_sPtZQs2LDusvNy5bc3dH0612",
+    "status": "completed",
+    "result": "{\"runtime_contract\":{\"module_format\":\"ES module (.mjs); use import { test, expect } from \\\"@playwright/test\\\"; require is not supported.\",\"imports\":[\"@playwright/test\",\"relative .mjs helpers within the development directory\"],\"navigation\":\"await page.goto(process.env.PROBE_URL)\",\"native_tools\":[\"read\",\"read_image\",\"write\",\"edit\"],\"tools\":[\"run_diagnostic\",\"read_draft\",\"write_draft\",\"self_test\",\"read_evidence\",\"check_fidelity\",\"submit_candidate\"],\"writing\":\"write_draft performs static admission; rejected code is not saved. Saving is not execution or verification.\",\"submission\":\"Current complete file bundle must have a self-test. Coverage is review material, not semantic proof. Unknown semantics remain for human review; no automatic approval.\"},\"frozen_case\":{\"external_id\":\"FRESH-B\",\"title\":\"同名工单目标选择、详情页签及返回保留筛选\",\"module\":\"detail\",\"preconditions\":\"本机合成站；无登录、网络写入、持久化或外部依赖；刷新重置内存状态。只使用绑定入口。\",\"test_data\":\"以本用例步骤内明确的编号、字段和值为冻结业务预期。\",\"steps\":[{\"order\":1,\"action\":\"打开绑定正常入口\",\"expected\":\"工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203\"},{\"order\":2,\"action\":\"工单名称输入巡检任务，点击筛选\",\"expected\":\"列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示\"},{\"order\":3,\"action\":\"在编号WO-202且区域南区的行点击查看详情\",\"expected\":\"进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高\"},{\"order\":4,\"action\":\"切换到处理记录页签\",\"expected\":\"处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件\"},{\"order\":5,\"action\":\"点击返回列表\",\"expected\":\"回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工\"}],\"status\":\"CONFIRMED\"},\"normal_entry\":\"http://127.0.0.1:64131/index.html?flow=b&variant=normal\",\"code\":null,\"sha256\":null,\"executions_used\":0,\"limits\":{\"self_tests\":3,\"revisions\":2,\"tool_calls\":120,\"harness_starts\":1,\"wall_ms\":1200000}}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 1,
+    "usage": {
+      "inputTokens": 6340,
+      "outputTokens": 73,
+      "cacheReadTokens": 512,
+      "cacheWriteTokens": 0,
+      "totalTokens": 6925
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 2
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_AJYxAd3Xd3ziRbaqg3Do0199",
+    "tool": "mcp__playwright-mcp__browser_navigate",
+    "input": {
+      "url": "http://127.0.0.1:64131/index.html?flow=b&variant=normal"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_AJYxAd3Xd3ziRbaqg3Do0199",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:64131/index.html?flow=b&variant=normal');\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-15-487Z.yml)\n### Events\n- New console entries: .playwright-mcp\\console-2026-09-25T02-16-15-376Z.log#L1"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 2,
+    "usage": {
+      "inputTokens": 614,
+      "outputTokens": 96,
+      "cacheReadTokens": 6912,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7622
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 3
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_tQci1pEXvbMmWKlH7ntt7666",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_tQci1pEXvbMmWKlH7ntt7666",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- main [ref=e2]:\n  - heading \"工单台账\" [level=1] [ref=e3]\n  - region \"工单列表\" [ref=e4]:\n    - generic [ref=e5]:\n      - text: 工单名称\n      - textbox \"工单名称\" [ref=e6]\n    - button \"筛选\" [ref=e7]\n    - status \"工单数量\" [ref=e8]: 3条工单\n    - table \"工单结果\" [ref=e9]:\n      - rowgroup [ref=e10]:\n        - row [ref=e11]:\n          - columnheader \"编号\" [ref=e12]\n          - columnheader \"名称\" [ref=e13]\n          - columnheader \"区域\" [ref=e14]\n          - columnheader \"负责人\" [ref=e15]\n          - columnheader \"操作\" [ref=e16]\n      - rowgroup [ref=e17]:\n        - row [ref=e18]:\n          - cell \"WO-201\" [ref=e19]\n          - cell \"巡检任务\" [ref=e20]\n          - cell \"北区\" [ref=e21]\n          - cell \"林工\" [ref=e22]\n          - cell [ref=e23]:\n            - button \"查看详情\" [ref=e24]\n        - row [ref=e25]:\n          - cell \"WO-202\" [ref=e26]\n          - cell \"巡检任务\" [ref=e27]\n          - cell \"南区\" [ref=e28]\n          - cell \"林工\" [ref=e29]\n          - cell [ref=e30]:\n            - button \"查看详情\" [ref=e31]\n        - row [ref=e32]:\n          - cell \"WO-203\" [ref=e33]\n          - cell \"校验任务\" [ref=e34]\n          - cell \"北区\" [ref=e35]\n          - cell \"陈工\" [ref=e36]\n          - cell [ref=e37]:\n            - button \"查看详情\" [ref=e38]\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 3,
+    "usage": {
+      "inputTokens": 238,
+      "outputTokens": 33,
+      "cacheReadTokens": 7552,
+      "cacheWriteTokens": 0,
+      "totalTokens": 7823
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 4
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_3EDbSnqZMATumz01DZmE0903",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "WO-202 行的查看详情按钮",
+      "target": "e31"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_3EDbSnqZMATumz01DZmE0903",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByRole('row', { name: 'WO-202 巡检任务 南区 林工 查看详情' }).getByRole('button').click();\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-17-794Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 4,
+    "usage": {
+      "inputTokens": 515,
+      "outputTokens": 146,
+      "cacheReadTokens": 7808,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8469
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 5
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_M2HCl7cgoHiryHEJNiUy2974",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_M2HCl7cgoHiryHEJNiUy2974",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- main [ref=e2]:\n  - heading \"工单详情\" [level=1] [ref=e39]\n  - region \"工单详情\" [ref=e40]:\n    - button \"返回列表\" [ref=e41]\n    - tablist \"详情页签\" [ref=e42]:\n      - tab \"基本信息\" [selected] [ref=e43]\n      - tab \"处理记录\" [ref=e44]\n    - tabpanel \"基本信息\" [ref=e45]:\n      - generic [ref=e46]:\n        - term [ref=e47]: 工单编号\n        - definition [ref=e48]: WO-202\n        - term [ref=e49]: 名称\n        - definition [ref=e50]: 巡检任务\n        - term [ref=e51]: 区域\n        - definition [ref=e52]: 南区\n        - term [ref=e53]: 负责人\n        - definition [ref=e54]: 林工\n        - term [ref=e55]: 优先级\n        - definition [ref=e56]: 高\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 5,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 33,
+      "cacheReadTokens": 8448,
+      "cacheWriteTokens": 0,
+      "totalTokens": 8643
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 6
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_MiOfTTiCP2ZL2Aud7aQw7791",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => document.querySelector('main').outerHTML"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_MiOfTTiCP2ZL2Aud7aQw7791",
+    "status": "completed",
+    "result": "### Result\n\"<main id=\\\"app\\\"><h1>工单详情</h1><section aria-label=\\\"工单详情\\\"><button id=\\\"back\\\">返回列表</button><div role=\\\"tablist\\\" aria-label=\\\"详情页签\\\"><button role=\\\"tab\\\" aria-selected=\\\"true\\\">基本信息</button><button role=\\\"tab\\\" aria-selected=\\\"false\\\">处理记录</button></div><div role=\\\"tabpanel\\\" aria-label=\\\"基本信息\\\"><dl><dt>工单编号</dt><dd>WO-202</dd><dt>名称</dt><dd>巡检任务</dd><dt>区域</dt><dd>南区</dd><dt>负责人</dt><dd>林工</dd><dt>优先级</dt><dd>高</dd></dl></div></section></main>\"\n### Ran Playwright code\n```js\nawait page.evaluate('() => document.querySelector(\\'main\\').outerHTML');\n```"
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_01_TqMj32GfGB96f6U98nMV6838",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "处理记录页签",
+      "target": "e44"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_01_TqMj32GfGB96f6U98nMV6838",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByRole('tab', { name: '处理记录' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-20-823Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 6,
+    "usage": {
+      "inputTokens": 364,
+      "outputTokens": 184,
+      "cacheReadTokens": 8576,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9124
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 7
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_MoLVDoIA9Yv6xCFzFjXm4693",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => document.querySelector('main').outerHTML"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_MoLVDoIA9Yv6xCFzFjXm4693",
+    "status": "completed",
+    "result": "### Result\n\"<main id=\\\"app\\\"><h1>工单详情</h1><section aria-label=\\\"工单详情\\\"><button id=\\\"back\\\">返回列表</button><div role=\\\"tablist\\\" aria-label=\\\"详情页签\\\"><button role=\\\"tab\\\" aria-selected=\\\"false\\\">基本信息</button><button role=\\\"tab\\\" aria-selected=\\\"true\\\">处理记录</button></div><div role=\\\"tabpanel\\\" aria-label=\\\"处理记录\\\"><dl><dt>工单编号</dt><dd>WO-202</dd><dt>最近处理人</dt><dd>赵工</dd><dt>处理结果</dt><dd>等待备件</dd></dl></div></section></main>\"\n### Ran Playwright code\n```js\nawait page.evaluate('() => document.querySelector(\\'main\\').outerHTML');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 7,
+    "usage": {
+      "inputTokens": 373,
+      "outputTokens": 97,
+      "cacheReadTokens": 9088,
+      "cacheWriteTokens": 0,
+      "totalTokens": 9558
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 8
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_PMeCwYYrqc5MndYEiRFb9595",
+    "tool": "mcp__playwright-mcp__browser_navigate",
+    "input": {
+      "url": "http://127.0.0.1:64131/index.html?flow=b&variant=normal"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_PMeCwYYrqc5MndYEiRFb9595",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:64131/index.html?flow=b&variant=normal');\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-23-715Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 8,
+    "usage": {
+      "inputTokens": 285,
+      "outputTokens": 277,
+      "cacheReadTokens": 9472,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10034
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 9
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_z1MjFNaXQq7Pl9oW4de43523",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => document.querySelector('main').outerHTML"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_z1MjFNaXQq7Pl9oW4de43523",
+    "status": "completed",
+    "result": "### Result\n\"<main id=\\\"app\\\"><h1>工单台账</h1><section aria-label=\\\"工单列表\\\"><label>工单名称 <input id=\\\"q\\\" aria-label=\\\"工单名称\\\"></label><button id=\\\"search\\\">筛选</button><p role=\\\"status\\\" aria-label=\\\"工单数量\\\">3条工单</p><table aria-label=\\\"工单结果\\\"><thead><tr><th>编号</th><th>名称</th><th>区域</th><th>负责人</th><th>操作</th></tr></thead><tbody><tr><td>WO-201</td><td>巡检任务</td><td>北区</td><td>林工</td><td><button data-id=\\\"WO-201\\\">查看详情</button></td></tr><tr><td>WO-202</td><td>巡检任务</td><td>南区</td><td>林工</td><td><button data-id=\\\"WO-202\\\">查看详情</button></td></tr><tr><td>WO-203</td><td>校验任务</td><td>北区</td><td>陈工</td><td><button data-id=\\\"WO-203\\\">查看详情</button></td></tr></tbody></table></section></main>\"\n### Ran Playwright code\n```js\nawait page.evaluate('() => document.querySelector(\\'main\\').outerHTML');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 9,
+    "usage": {
+      "inputTokens": 171,
+      "outputTokens": 56,
+      "cacheReadTokens": 9984,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10211
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 10
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_JVtlXis5GdKL4Fo7aOVO4442",
+    "tool": "mcp__playwright-mcp__browser_fill_form",
+    "input": {
+      "fields": [
+        {
+          "target": "#q",
+          "name": "工单名称",
+          "type": "textbox",
+          "value": "巡检任务"
+        }
+      ]
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_JVtlXis5GdKL4Fo7aOVO4442",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.locator('#q').fill('巡检任务');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 10,
+    "usage": {
+      "inputTokens": 429,
+      "outputTokens": 155,
+      "cacheReadTokens": 10112,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10696
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 11
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_xgpgeF2m3CzHRvUka3zn2535",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "筛选按钮",
+      "target": "#search"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_xgpgeF2m3CzHRvUka3zn2535",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.locator('#search').click();\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-27-812Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 11,
+    "usage": {
+      "inputTokens": 234,
+      "outputTokens": 66,
+      "cacheReadTokens": 10496,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10796
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 12
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_5qbxMPPcL0l6MCMfoan86166",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => ({status: document.querySelector('[role=status]').textContent, rows: [...document.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.textContent.trim())), q: document.querySelector('#q').value})"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_5qbxMPPcL0l6MCMfoan86166",
+    "status": "completed",
+    "result": "### Result\n{\n  \"status\": \"2条工单\",\n  \"rows\": [\n    [\n      \"WO-201\",\n      \"巡检任务\",\n      \"北区\",\n      \"林工\",\n      \"查看详情\"\n    ],\n    [\n      \"WO-202\",\n      \"巡检任务\",\n      \"南区\",\n      \"林工\",\n      \"查看详情\"\n    ]\n  ],\n  \"q\": \"巡检任务\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({status: document.querySelector(\\'[role=status]\\').textContent, rows: [...document.querySelectorAll(\\'tbody tr\\')].map(r => [...r.cells].map(c => c.textContent.trim())), q: document.querySelector(\\'#q\\').value})');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 12,
+    "usage": {
+      "inputTokens": 147,
+      "outputTokens": 100,
+      "cacheReadTokens": 10752,
+      "cacheWriteTokens": 0,
+      "totalTokens": 10999
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 13
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_xVaHCDE91yborMWZ1I7U4105",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "WO-202 行的查看详情按钮",
+      "target": "tbody tr:has(td:text-is(\"WO-202\")) button"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_xVaHCDE91yborMWZ1I7U4105",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.locator('tbody tr:has(td:text-is(\"WO-202\")) button').click();\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-30-510Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 13,
+    "usage": {
+      "inputTokens": 296,
+      "outputTokens": 119,
+      "cacheReadTokens": 10880,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11295
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 14
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_eeeWaPe64ZJIDHdlXncv4236",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => document.querySelector('main').outerHTML"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_eeeWaPe64ZJIDHdlXncv4236",
+    "status": "completed",
+    "result": "### Result\n\"<main id=\\\"app\\\"><h1>工单详情</h1><section aria-label=\\\"工单详情\\\"><button id=\\\"back\\\">返回列表</button><div role=\\\"tablist\\\" aria-label=\\\"详情页签\\\"><button role=\\\"tab\\\" aria-selected=\\\"true\\\">基本信息</button><button role=\\\"tab\\\" aria-selected=\\\"false\\\">处理记录</button></div><div role=\\\"tabpanel\\\" aria-label=\\\"基本信息\\\"><dl><dt>工单编号</dt><dd>WO-202</dd><dt>名称</dt><dd>巡检任务</dd><dt>区域</dt><dd>南区</dd><dt>负责人</dt><dd>林工</dd><dt>优先级</dt><dd>高</dd></dl></div></section></main>\"\n### Ran Playwright code\n```js\nawait page.evaluate('() => document.querySelector(\\'main\\').outerHTML');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 14,
+    "usage": {
+      "inputTokens": 147,
+      "outputTokens": 56,
+      "cacheReadTokens": 11264,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11467
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 15
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_lg1iKLwcuuvHb5HfPUET6066",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "返回列表",
+      "target": "#back"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_lg1iKLwcuuvHb5HfPUET6066",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.locator('#back').click();\n```\n### Page\n- Page URL: http://127.0.0.1:64131/index.html?flow=b&variant=normal\n- Page Title: 本机流程实验站\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T02-16-33-525Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 15,
+    "usage": {
+      "inputTokens": 293,
+      "outputTokens": 79,
+      "cacheReadTokens": 11392,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11764
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 16
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_xwuDEhPgXnFd00ldf2WU1201",
+    "tool": "mcp__playwright-mcp__browser_evaluate",
+    "input": {
+      "function": "() => ({q: document.querySelector('#q').value, rows: [...document.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.textContent.trim()))})"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_xwuDEhPgXnFd00ldf2WU1201",
+    "status": "completed",
+    "result": "### Result\n{\n  \"q\": \"巡检任务\",\n  \"rows\": [\n    [\n      \"WO-201\",\n      \"巡检任务\",\n      \"北区\",\n      \"林工\",\n      \"查看详情\"\n    ],\n    [\n      \"WO-202\",\n      \"巡检任务\",\n      \"南区\",\n      \"林工\",\n      \"查看详情\"\n    ]\n  ]\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({q: document.querySelector(\\'#q\\').value, rows: [...document.querySelectorAll(\\'tbody tr\\')].map(r => [...r.cells].map(c => c.textContent.trim()))})');\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 16,
+    "usage": {
+      "inputTokens": 219,
+      "outputTokens": 87,
+      "cacheReadTokens": 11648,
+      "cacheWriteTokens": 0,
+      "totalTokens": 11954
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 17
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ERp5pNMhuYTt5ejMQSpL8831",
+    "tool": "mcp__workbench__write_draft",
+    "input": {
+      "previous_sha256": null,
+      "code": "import { test, expect } from \"@playwright/test\";\n\nconst LIST_TABLE = 'table[aria-label=\"工单结果\"]';\n\n// Resolve a column number from the table's header text so every cell\n// assertion is bound to its business field label, not to a position guess.\nasync function columnIndex(table, headerName) {\n  const headers = await table.locator(\"thead th\").allTextContents();\n  const idx = headers.findIndex((h) => h.trim() === headerName);\n  if (idx < 0) throw new Error(`列表中不存在列: ${headerName}`);\n  return idx + 1;\n}\n\nfunction columnCell(row, columnNumber) {\n  return row.locator(`td:nth-child(${columnNumber})`);\n}\n\n// Identify a list row by its labelled business fields (e.g. 编号 + 区域).\nasync function rowMatching(table, fields) {\n  let selector = \"tbody tr\";\n  for (const [header, value] of Object.entries(fields)) {\n    const idx = await columnIndex(table, header);\n    selector += `:has(td:nth-child(${idx}):text-is(${JSON.stringify(value)}))`;\n  }\n  return table.locator(selector);\n}\n\n// Bind a detail-panel value to its term (dt) so the value element is\n// identified by the field relationship, never by the expected answer.\nfunction fieldValue(panel, label) {\n  return panel.locator(`dt:text-is(${JSON.stringify(label)}) + dd`);\n}\n\ntest(\"同名工单目标选择、详情页签及返回保留筛选\", async ({ page }) => {\n  const table = page.locator(LIST_TABLE);\n  const rows = table.locator(\"tbody tr\");\n  const filterInput = page.getByRole(\"textbox\", { name: \"工单名称\" });\n  const searchButton = page.getByRole(\"button\", { name: \"筛选\" });\n\n  await test.step(\"CASE_STEP_1\", async () => {\n    await page.goto(process.env.PROBE_URL);\n\n    await expect(page.getByRole(\"heading\", { name: \"工单台账\" })).toBeVisible();\n    await expect(page.locator('section[aria-label=\"工单列表\"]')).toBeVisible();\n    await expect(filterInput).toHaveValue(\"\");\n    await expect(rows).toHaveCount(3);\n\n    const idCol = await columnIndex(table, \"编号\");\n    await expect(columnCell(rows.nth(0), idCol)).toHaveText(\"WO-201\");\n    await expect(columnCell(rows.nth(1), idCol)).toHaveText(\"WO-202\");\n    await expect(columnCell(rows.nth(2), idCol)).toHaveText(\"WO-203\");\n  });\n\n  await test.step(\"CASE_STEP_2\", async () => {\n    await filterInput.fill(\"巡检任务\");\n    await searchButton.click();\n\n    await expect(rows).toHaveCount(2);\n\n    const idCol = await columnIndex(table, \"编号\");\n    const nameCol = await columnIndex(table, \"名称\");\n    const areaCol = await columnIndex(table, \"区域\");\n    const ownerCol = await columnIndex(table, \"负责人\");\n\n    const first = rows.nth(0);\n    await expect(columnCell(first, idCol)).toHaveText(\"WO-201\");\n    await expect(columnCell(first, nameCol)).toHaveText(\"巡检任务\");\n    await expect(columnCell(first, areaCol)).toHaveText(\"北区\");\n    await expect(columnCell(first, ownerCol)).toHaveText(\"林工\");\n\n    const second = rows.nth(1);\n    await expect(columnCell(second, idCol)).toHaveText(\"WO-202\");\n    await expect(columnCell(second, nameCol)).toHaveText(\"巡检任务\");\n    await expect(columnCell(second, areaCol)).toHaveText(\"南区\");\n    await expect(columnCell(second, ownerCol)).toHaveText(\"林工\");\n  });\n\n  await test.step(\"CASE_STEP_3\", async () => {\n    const targetRow = await rowMatching(table, { 编号: \"WO-202\", 区域: \"南区\" });\n    await expect(targetRow).toHaveCount(1);\n    await targetRow.getByRole(\"button\", { name: \"查看详情\" }).click();\n\n    await expect(page.getByRole(\"heading\", { name: \"工单详情\" })).toBeVisible();\n\n    const basicTab = page.getByRole(\"tab\", { name: \"基本信息\" });\n    await expect(basicTab).toHaveAttribute(\"aria-selected\", \"true\");\n\n    const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n    await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n    await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n    await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n    await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");\n    await expect(fieldValue(basicPanel, \"优先级\")).toHaveText(\"高\");\n  });\n\n  await test.step(\"CASE_STEP_4\", async () => {\n    const basicTab = page.getByRole(\"tab\", { name: \"基本信息\" });\n    const recordTab = page.getByRole(\"tab\", { name: \"处理记录\" });\n\n    await recordTab.click();\n\n    await expect(recordTab).toHaveAttribute(\"aria-selected\", \"true\");\n    await expect(basicTab).toHaveAttribute(\"aria-selected\", \"false\");\n\n    const recordPanel = page.getByRole(\"tabpanel\", { name: \"处理记录\" });\n    await expect(fieldValue(recordPanel, \"工单编号\")).toHaveText(\"WO-202\");\n    await expect(fieldValue(recordPanel, \"最近处理人\")).toHaveText(\"赵工\");\n    await expect(fieldValue(recordPanel, \"处理结果\")).toHaveText(\"等待备件\");\n  });\n\n  await test.step(\"CASE_STEP_5\", async () => {\n    await page.getByRole(\"button\", { name: \"返回列表\" }).click();\n\n    await expect(page.getByRole(\"heading\", { name: \"工单台账\" })).toBeVisible();\n    await expect(filterInput).toHaveValue(\"巡检任务\");\n    await expect(rows).toHaveCount(2);\n\n    const idCol = await columnIndex(table, \"编号\");\n    const areaCol = await columnIndex(table, \"区域\");\n    const ownerCol = await columnIndex(table, \"负责人\");\n\n    const first = rows.nth(0);\n    await expect(columnCell(first, idCol)).toHaveText(\"WO-201\");\n    await expect(columnCell(first, areaCol)).toHaveText(\"北区\");\n    await expect(columnCell(first, ownerCol)).toHaveText(\"林工\");\n\n    const second = rows.nth(1);\n    await expect(columnCell(second, idCol)).toHaveText(\"WO-202\");\n    await expect(columnCell(second, areaCol)).toHaveText(\"南区\");\n    await expect(columnCell(second, ownerCol)).toHaveText(\"林工\");\n  });\n});\n"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ERp5pNMhuYTt5ejMQSpL8831",
+    "status": "completed",
+    "result": "{\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\",\"draft_saved\":true,\"static_admission\":\"ACCEPTED\",\"runtime_verified\":false,\"status\":\"DRAFT_NOT_VALIDATED\"}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 17,
+    "usage": {
+      "inputTokens": 202,
+      "outputTokens": 7317,
+      "cacheReadTokens": 11904,
+      "cacheWriteTokens": 0,
+      "totalTokens": 19423
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 18
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_RIutl0ThkeM35HKUdcVx5361",
+    "tool": "mcp__workbench__run_diagnostic",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_RIutl0ThkeM35HKUdcVx5361",
+    "status": "completed",
+    "result": "{\"command\":\"node --check (each task module snapshot)\",\"bundle_sha256\":\"B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02\",\"files\":[{\"path\":\"candidate.spec.mjs\",\"bytes\":5799,\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\"}],\"results\":[{\"file\":\"candidate.spec.mjs\",\"exit_code\":0,\"diagnostic\":\"\"}],\"executes_candidate\":false}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 18,
+    "usage": {
+      "inputTokens": 178,
+      "outputTokens": 53,
+      "cacheReadTokens": 19328,
+      "cacheWriteTokens": 0,
+      "totalTokens": 19559
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 19
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_AjWauzuqYR6L7kfuqHsR8088",
+    "tool": "mcp__workbench__self_test",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_AjWauzuqYR6L7kfuqHsR8088",
+    "status": "completed",
+    "result": "{\"number\":1,\"bundle_sha256\":\"B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02\",\"files\":[{\"path\":\"candidate.spec.mjs\",\"bytes\":5799,\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\"}],\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\",\"candidate_path\":\"run-1/candidate.spec.mjs\",\"status\":\"EXECUTED\",\"started_at\":1790302623848,\"result\":{\"report_status\":\"COMPLETE\",\"test_status\":\"PASSED\",\"test_count\":1,\"error\":null,\"complete_pass\":true,\"stats\":{\"startTime\":\"2026-09-25T02:17:04.441Z\",\"duration\":2244.832,\"expected\":1,\"skipped\":0,\"unexpected\":0,\"flaky\":0},\"process\":{\"exit_code\":0,\"termination\":null,\"error\":null},\"steps\":[{\"title\":\"CASE_STEP_1\",\"raw_title\":\"CASE_STEP_1\",\"category\":null,\"duration\":189,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_2\",\"raw_title\":\"CASE_STEP_2\",\"category\":null,\"duration\":146,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_3\",\"raw_title\":\"CASE_STEP_3\",\"category\":null,\"duration\":94,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_4\",\"raw_title\":\"CASE_STEP_4\",\"category\":null,\"duration\":71,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_5\",\"raw_title\":\"CASE_STEP_5\",\"category\":null,\"duration\":90,\"error\":null,\"raw_error\":null,\"steps\":[]}]},\"coverage\":{\"rule_version\":\"project-case-step-title-v2\",\"complete\":true,\"order_valid\":true,\"expected_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\",\"CASE_STEP_5\"],\"observed_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\",\"CASE_STEP_5\"],\"duplicates\":[],\"missing\":[],\"unexpected\":[],\"malformed_titles\":[],\"unattributed_errors\":[],\"items\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_5\",\"step_id\":\"CASE_STEP_5\",\"order\":5,\"observed\":true,\"raw_title\":\"CASE_STEP_5\",\"report_path\":[4],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"changed_after_execution\":false,\"report_path\":\"run-1/evidence/playwright-report.json\",\"media\":[{\"relative_path\":\"run-1/evidence/artifacts/.last-run.json\",\"bytes\":45,\"sha256\":\"91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png\",\"bytes\":21563,\"sha256\":\"1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip\",\"bytes\":167767,\"sha256\":\"58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm\",\"bytes\":34674,\"sha256\":\"4A7E4D8C8EF15EA392BA574B303F8513E243F2894E8BD4D1366B75A6E353ACD7\"},{\"relative_path\":\"run-1/evidence/playwright-report.json\",\"bytes\":5487,\"sha256\":\"C51FF2B4B9F39250840CB35FA11D29383DDD01DA6FFEEE576E89BD9340612905\"}],\"trace_summary\":{\"interpretation\":\"metadata and reporter steps; no synthetic trace verdict\",\"archives\":[{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip\",\"bytes\":167767,\"sha256\":\"58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8\"}],\"observed_steps\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_5\",\"step_id\":\"CASE_STEP_5\",\"order\":5,\"observed\":true,\"raw_title\":\"CASE_STEP_5\",\"report_path\":[4],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"finished_at\":1790302626709,\"executions_used\":1,\"executions_remaining\":2}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 19,
+    "usage": {
+      "inputTokens": 260,
+      "outputTokens": 42,
+      "cacheReadTokens": 19456,
+      "cacheWriteTokens": 0,
+      "totalTokens": 19758
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 20
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_HNcIWF4EnsWspq4sc0KD5838",
+    "tool": "mcp__workbench__check_fidelity",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_HNcIWF4EnsWspq4sc0KD5838",
+    "status": "completed",
+    "result": "{\"version\":\"finite-obligations-v1\",\"semantic_pass\":false,\"human_review_required\":true,\"scope\":\"Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.\",\"status\":\"NO_SUPPORTED_OBLIGATIONS\",\"obligations\":[],\"remaining_requirements\":[{\"step\":1,\"requirement\":\"工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203\",\"review\":\"Non-extracted clauses require human review; these checks do not approve a candidate.\"},{\"step\":2,\"requirement\":\"列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示\",\"review\":\"Non-extracted clauses require human review; these checks do not approve a candidate.\"},{\"step\":3,\"requirement\":\"进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高\",\"review\":\"Non-extracted clauses require human review; these checks do not approve a candidate.\"},{\"step\":4,\"requirement\":\"处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件\",\"review\":\"Non-extracted clauses require human review; these checks do not approve a candidate.\"},{\"step\":5,\"requirement\":\"回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工\",\"review\":\"Non-extracted clauses require human review; these checks do not approve a candidate.\"}]}"
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_01_VAKW3uDnYfXkQWqpwd4A7296",
+    "tool": "mcp__workbench__read_draft",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_01_VAKW3uDnYfXkQWqpwd4A7296",
+    "status": "completed",
+    "result": "{\"runtime_contract\":{\"module_format\":\"ES module (.mjs); use import { test, expect } from \\\"@playwright/test\\\"; require is not supported.\",\"imports\":[\"@playwright/test\",\"relative .mjs helpers within the development directory\"],\"navigation\":\"await page.goto(process.env.PROBE_URL)\",\"native_tools\":[\"read\",\"read_image\",\"write\",\"edit\"],\"tools\":[\"run_diagnostic\",\"read_draft\",\"write_draft\",\"self_test\",\"read_evidence\",\"check_fidelity\",\"submit_candidate\"],\"writing\":\"write_draft performs static admission; rejected code is not saved. Saving is not execution or verification.\",\"submission\":\"Current complete file bundle must have a self-test. Coverage is review material, not semantic proof. Unknown semantics remain for human review; no automatic approval.\"},\"frozen_case\":{\"external_id\":\"FRESH-B\",\"title\":\"同名工单目标选择、详情页签及返回保留筛选\",\"module\":\"detail\",\"preconditions\":\"本机合成站；无登录、网络写入、持久化或外部依赖；刷新重置内存状态。只使用绑定入口。\",\"test_data\":\"以本用例步骤内明确的编号、字段和值为冻结业务预期。\",\"steps\":[{\"order\":1,\"action\":\"打开绑定正常入口\",\"expected\":\"工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203\"},{\"order\":2,\"action\":\"工单名称输入巡检任务，点击筛选\",\"expected\":\"列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示\"},{\"order\":3,\"action\":\"在编号WO-202且区域南区的行点击查看详情\",\"expected\":\"进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高\"},{\"order\":4,\"action\":\"切换到处理记录页签\",\"expected\":\"处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件\"},{\"order\":5,\"action\":\"点击返回列表\",\"expected\":\"回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工\"}],\"status\":\"CONFIRMED\"},\"normal_entry\":\"http://127.0.0.1:64131/index.html?flow=b&variant=normal\",\"code\":\"import { test, expect } from \\\"@playwright/test\\\";\\n\\nconst LIST_TABLE = 'table[aria-label=\\\"工单结果\\\"]';\\n\\n// Resolve a column number from the table's header text so every cell\\n// assertion is bound to its business field label, not to a position guess.\\nasync function columnIndex(table, headerName) {\\n  const headers = await table.locator(\\\"thead th\\\").allTextContents();\\n  const idx = headers.findIndex((h) => h.trim() === headerName);\\n  if (idx < 0) throw new Error(`列表中不存在列: ${headerName}`);\\n  return idx + 1;\\n}\\n\\nfunction columnCell(row, columnNumber) {\\n  return row.locator(`td:nth-child(${columnNumber})`);\\n}\\n\\n// Identify a list row by its labelled business fields (e.g. 编号 + 区域).\\nasync function rowMatching(table, fields) {\\n  let selector = \\\"tbody tr\\\";\\n  for (const [header, value] of Object.entries(fields)) {\\n    const idx = await columnIndex(table, header);\\n    selector += `:has(td:nth-child(${idx}):text-is(${JSON.stringify(value)}))`;\\n  }\\n  return table.locator(selector);\\n}\\n\\n// Bind a detail-panel value to its term (dt) so the value element is\\n// identified by the field relationship, never by the expected answer.\\nfunction fieldValue(panel, label) {\\n  return panel.locator(`dt:text-is(${JSON.stringify(label)}) + dd`);\\n}\\n\\ntest(\\\"同名工单目标选择、详情页签及返回保留筛选\\\", async ({ page }) => {\\n  const table = page.locator(LIST_TABLE);\\n  const rows = table.locator(\\\"tbody tr\\\");\\n  const filterInput = page.getByRole(\\\"textbox\\\", { name: \\\"工单名称\\\" });\\n  const searchButton = page.getByRole(\\\"button\\\", { name: \\\"筛选\\\" });\\n\\n  await test.step(\\\"CASE_STEP_1\\\", async () => {\\n    await page.goto(process.env.PROBE_URL);\\n\\n    await expect(page.getByRole(\\\"heading\\\", { name: \\\"工单台账\\\" })).toBeVisible();\\n    await expect(page.locator('section[aria-label=\\\"工单列表\\\"]')).toBeVisible();\\n    await expect(filterInput).toHaveValue(\\\"\\\");\\n    await expect(rows).toHaveCount(3);\\n\\n    const idCol = await columnIndex(table, \\\"编号\\\");\\n    await expect(columnCell(rows.nth(0), idCol)).toHaveText(\\\"WO-201\\\");\\n    await expect(columnCell(rows.nth(1), idCol)).toHaveText(\\\"WO-202\\\");\\n    await expect(columnCell(rows.nth(2), idCol)).toHaveText(\\\"WO-203\\\");\\n  });\\n\\n  await test.step(\\\"CASE_STEP_2\\\", async () => {\\n    await filterInput.fill(\\\"巡检任务\\\");\\n    await searchButton.click();\\n\\n    await expect(rows).toHaveCount(2);\\n\\n    const idCol = await columnIndex(table, \\\"编号\\\");\\n    const nameCol = await columnIndex(table, \\\"名称\\\");\\n    const areaCol = await columnIndex(table, \\\"区域\\\");\\n    const ownerCol = await columnIndex(table, \\\"负责人\\\");\\n\\n    const first = rows.nth(0);\\n    await expect(columnCell(first, idCol)).toHaveText(\\\"WO-201\\\");\\n    await expect(columnCell(first, nameCol)).toHaveText(\\\"巡检任务\\\");\\n    await expect(columnCell(first, areaCol)).toHaveText(\\\"北区\\\");\\n    await expect(columnCell(first, ownerCol)).toHaveText(\\\"林工\\\");\\n\\n    const second = rows.nth(1);\\n    await expect(columnCell(second, idCol)).toHaveText(\\\"WO-202\\\");\\n    await expect(columnCell(second, nameCol)).toHaveText(\\\"巡检任务\\\");\\n    await expect(columnCell(second, areaCol)).toHaveText(\\\"南区\\\");\\n    await expect(columnCell(second, ownerCol)).toHaveText(\\\"林工\\\");\\n  });\\n\\n  await test.step(\\\"CASE_STEP_3\\\", async () => {\\n    const targetRow = await rowMatching(table, { 编号: \\\"WO-202\\\", 区域: \\\"南区\\\" });\\n    await expect(targetRow).toHaveCount(1);\\n    await targetRow.getByRole(\\\"button\\\", { name: \\\"查看详情\\\" }).click();\\n\\n    await expect(page.getByRole(\\\"heading\\\", { name: \\\"工单详情\\\" })).toBeVisible();\\n\\n    const basicTab = page.getByRole(\\\"tab\\\", { name: \\\"基本信息\\\" });\\n    await expect(basicTab).toHaveAttribute(\\\"aria-selected\\\", \\\"true\\\");\\n\\n    const basicPanel = page.getByRole(\\\"tabpanel\\\", { name: \\\"基本信息\\\" });\\n    await expect(fieldValue(basicPanel, \\\"工单编号\\\")).toHaveText(\\\"WO-202\\\");\\n    await expect(fieldValue(basicPanel, \\\"名称\\\")).toHaveText(\\\"巡检任务\\\");\\n    await expect(fieldValue(basicPanel, \\\"区域\\\")).toHaveText(\\\"南区\\\");\\n    await expect(fieldValue(basicPanel, \\\"负责人\\\")).toHaveText(\\\"林工\\\");\\n    await expect(fieldValue(basicPanel, \\\"优先级\\\")).toHaveText(\\\"高\\\");\\n  });\\n\\n  await test.step(\\\"CASE_STEP_4\\\", async () => {\\n    const basicTab = page.getByRole(\\\"tab\\\", { name: \\\"基本信息\\\" });\\n    const recordTab = page.getByRole(\\\"tab\\\", { name: \\\"处理记录\\\" });\\n\\n    await recordTab.click();\\n\\n    await expect(recordTab).toHaveAttribute(\\\"aria-selected\\\", \\\"true\\\");\\n    await expect(basicTab).toHaveAttribute(\\\"aria-selected\\\", \\\"false\\\");\\n\\n    const recordPanel = page.getByRole(\\\"tabpanel\\\", { name: \\\"处理记录\\\" });\\n    await expect(fieldValue(recordPanel, \\\"工单编号\\\")).toHaveText(\\\"WO-202\\\");\\n    await expect(fieldValue(recordPanel, \\\"最近处理人\\\")).toHaveText(\\\"赵工\\\");\\n    await expect(fieldValue(recordPanel, \\\"处理结果\\\")).toHaveText(\\\"等待备件\\\");\\n  });\\n\\n  await test.step(\\\"CASE_STEP_5\\\", async () => {\\n    await page.getByRole(\\\"button\\\", { name: \\\"返回列表\\\" }).click();\\n\\n    await expect(page.getByRole(\\\"heading\\\", { name: \\\"工单台账\\\" })).toBeVisible();\\n    await expect(filterInput).toHaveValue(\\\"巡检任务\\\");\\n    await expect(rows).toHaveCount(2);\\n\\n    const idCol = await columnIndex(table, \\\"编号\\\");\\n    const areaCol = await columnIndex(table, \\\"区域\\\");\\n    const ownerCol = await columnIndex(table, \\\"负责人\\\");\\n\\n    const first = rows.nth(0);\\n    await expect(columnCell(first, idCol)).toHaveText(\\\"WO-201\\\");\\n    await expect(columnCell(first, areaCol)).toHaveText(\\\"北区\\\");\\n    await expect(columnCell(first, ownerCol)).toHaveText(\\\"林工\\\");\\n\\n    const second = rows.nth(1);\\n    await expect(columnCell(second, idCol)).toHaveText(\\\"WO-202\\\");\\n    await expect(",
+    "truncated": true
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 20,
+    "usage": {
+      "inputTokens": 1841,
+      "outputTokens": 122,
+      "cacheReadTokens": 19712,
+      "cacheWriteTokens": 0,
+      "totalTokens": 21675
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 21
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_P2I50IWTfWCaKjNnPt805408",
+    "tool": "mcp__workbench__read_evidence",
+    "input": {
+      "execution": 1,
+      "kind": "report"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_P2I50IWTfWCaKjNnPt805408",
+    "status": "completed",
+    "result": "{\"execution\":1,\"number\":1,\"bundle_sha256\":\"B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02\",\"files\":[{\"path\":\"candidate.spec.mjs\",\"bytes\":5799,\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\"}],\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\",\"candidate_path\":\"run-1/candidate.spec.mjs\",\"status\":\"EXECUTED\",\"started_at\":1790302623848,\"result\":{\"report_status\":\"COMPLETE\",\"test_status\":\"PASSED\",\"test_count\":1,\"error\":null,\"complete_pass\":true,\"stats\":{\"startTime\":\"2026-09-25T02:17:04.441Z\",\"duration\":2244.832,\"expected\":1,\"skipped\":0,\"unexpected\":0,\"flaky\":0},\"process\":{\"exit_code\":0,\"termination\":null,\"error\":null},\"steps\":[{\"title\":\"CASE_STEP_1\",\"raw_title\":\"CASE_STEP_1\",\"category\":null,\"duration\":189,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_2\",\"raw_title\":\"CASE_STEP_2\",\"category\":null,\"duration\":146,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_3\",\"raw_title\":\"CASE_STEP_3\",\"category\":null,\"duration\":94,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_4\",\"raw_title\":\"CASE_STEP_4\",\"category\":null,\"duration\":71,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_5\",\"raw_title\":\"CASE_STEP_5\",\"category\":null,\"duration\":90,\"error\":null,\"raw_error\":null,\"steps\":[]}]},\"coverage\":{\"rule_version\":\"project-case-step-title-v2\",\"complete\":true,\"order_valid\":true,\"expected_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\",\"CASE_STEP_5\"],\"observed_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\",\"CASE_STEP_5\"],\"duplicates\":[],\"missing\":[],\"unexpected\":[],\"malformed_titles\":[],\"unattributed_errors\":[],\"items\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_5\",\"step_id\":\"CASE_STEP_5\",\"order\":5,\"observed\":true,\"raw_title\":\"CASE_STEP_5\",\"report_path\":[4],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"changed_after_execution\":false,\"report_path\":\"run-1/evidence/playwright-report.json\",\"media\":[{\"relative_path\":\"run-1/evidence/artifacts/.last-run.json\",\"bytes\":45,\"sha256\":\"91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png\",\"bytes\":21563,\"sha256\":\"1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip\",\"bytes\":167767,\"sha256\":\"58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm\",\"bytes\":34674,\"sha256\":\"4A7E4D8C8EF15EA392BA574B303F8513E243F2894E8BD4D1366B75A6E353ACD7\"},{\"relative_path\":\"run-1/evidence/playwright-report.json\",\"bytes\":5487,\"sha256\":\"C51FF2B4B9F39250840CB35FA11D29383DDD01DA6FFEEE576E89BD9340612905\"}],\"trace_summary\":{\"interpretation\":\"metadata and reporter steps; no synthetic trace verdict\",\"archives\":[{\"relative_path\":\"run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip\",\"bytes\":167767,\"sha256\":\"58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8\"}],\"observed_steps\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_5\",\"step_id\":\"CASE_STEP_5\",\"order\":5,\"observed\":true,\"raw_title\":\"CASE_STEP_5\",\"report_path\":[4],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"finished_at\":1790302626709,\"raw_report\":{\"config\":{\"argv\":[\"C:\\\\Program Files\\\\nodejs\\\\node.exe\",\"<REPO>\\\\workbench\\\\node_modules\\\\@playwright\\\\test\\\\cli.js\",\"test\",\"candidate.spec.mjs\",\"--config\",\"<REPO>\\\\workbench\\\\config\\\\candidate.playwright.config.mjs\"],\"configFile\":\"<REPO>\\\\workbench\\\\config\\\\candidate.playwright.config.mjs\",\"rootDir\":\"<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/run-1\",\"failOnFlakyTests\":false,\"forbidOnly\":false,\"fullyParallel\":false,\"globalSetup\":null,\"globalTeardown\":null,\"globalTimeout\":0,\"grep\":{},\"grepInvert\":null,\"maxFailures\":0,\"metadata\":{\"actualWorkers\":1},\"preserveOutput\":\"always\",\"projects\":[{\"outputDir\":\"<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/run-1/evidence/artifacts\",\"repeatEach\":1,\"retries\":0,\"metadata\":{\"actualWorkers\":1},\"id\":\"\",\"name\":\"\",\"testDir\":\"<REPO>/workbench/.local/fresh25-b/build-tasks/build-20260925021610-943fbf86/development/run-1\",\"testIgnore\":[],\"testMatch\":[\"**/*.@(spec|test).?(c|m)[jt]s?(x)\"],\"timeout\":30000}],\"quiet\":false,\"reporter\":[[\"json\",{\"outputFile\":\"<REPO>\\\\workbench\\\\.local\\\\fresh25-b\\\\build-tasks\\\\build-20260925021610-943fbf86\\\\development\\\\run-1\\\\evidence\\\\playwright-report.json\"}]],\"reportSlowTests\":{\"max\":5,\"threshold\":300000},\"shard\":null,\"tags\":[],\"updateSnapshots\":\"missing\",\"updateSourceMethod\":\"patch\",\"version\":\"1.62.1\",\"workers\":1,\"webServer\":null},\"suites\":[{\"title\":\"candidate.spec.mjs\",\"file\":\"candidate.spec.mjs\",\"column\":0,\"line\":0,\"specs\":[{\"title\":\"同名工单目标选择、详情页签及返回保留筛选\",\"ok\":true,\"tags\":[],\"tests\":[{\"timeout\":30000,\"annotations\":[],\"expectedStatus\":\"passed\",\"projectId\":\"\",\"projectName\":\"\",\"results\":[{\"workerIndex\":0,\"parallelIndex\":0,\"status\":\"passed\",\"duration\":1101,\"errors\":[],\"stdout\":[],\"stderr\":[],\"retry\":0,\"steps\":[{\"title\":\"CASE_STEP_1\",\"duration\":189},{\"title\":\"CASE_STEP_2\",\"duration\":146},{\"title\":\"CASE_STEP_3\",\"duration\":94},{\"title\":\"CASE_STEP_4\",\"duration\":71},{\"title\":\"CASE_STEP_5\",\"duration\":90}],\"startTime\":\"2026-09-25T02:17:05.003Z\",\"annotations\":[],\"attachments\":[{\"name\":\"screenshot\",\"contentType\":\"image/png\",\"path\":\"<REPO>\\\\workbench\\\\.local\\\\fresh25-b\\\\build-tasks\\\\build-20260925021610-943fbf86\\\\development\\\\run-1\\\\evidence\\\\artifacts\\\\candidate-同名工单目标选择、详情页签及返回保留筛选\\\\test-finished-1.png\"},{\"name\":\"video\",\"contentType\":\"video/webm\",\"path\":\"<REPO>\\\\workbench\\\\.local\\\\fresh25-b\\\\build-tasks\\\\build-20260925021610-943fbf86\\\\development\\\\run-1\\\\evidence\\\\artifacts\\\\candidate-同名工单目标选择、详情页签及返回保留筛选\\\\video.webm\"},{\"name\":\"trace\",\"contentType\":\"application/zip\",\"path\":\"<REPO>\\\\workbench\\\\.local\\\\fresh25-b\\\\build-tasks\\",
+    "truncated": true
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 21,
+    "usage": {
+      "inputTokens": 2962,
+      "outputTokens": 2165,
+      "cacheReadTokens": 21632,
+      "cacheWriteTokens": 0,
+      "totalTokens": 26759
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 22
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_5OqWRbgdY6QGuTD50zhm8325",
+    "tool": "mcp__workbench__submit_candidate",
+    "input": {
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203",
+          "check_lines": [
+            41,
+            43,
+            44,
+            45,
+            46,
+            48,
+            49,
+            50,
+            51
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示",
+          "check_lines": [
+            55,
+            56,
+            58,
+            60,
+            61,
+            62,
+            63,
+            65,
+            66,
+            67,
+            68,
+            69,
+            71,
+            72,
+            73,
+            74,
+            75
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高",
+          "check_lines": [
+            79,
+            80,
+            81,
+            83,
+            85,
+            86,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件",
+          "check_lines": [
+            97,
+            98,
+            100,
+            102,
+            103,
+            105,
+            106,
+            107,
+            108
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工",
+          "check_lines": [
+            112,
+            114,
+            115,
+            116,
+            118,
+            119,
+            120,
+            122,
+            123,
+            124,
+            125,
+            127,
+            128,
+            129,
+            130
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ]
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_5OqWRbgdY6QGuTD50zhm8325",
+    "status": "completed",
+    "result": "{\"status\":\"FROZEN_FOR_INDEPENDENT_VALIDATION\",\"sha256\":\"03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6\",\"approval\":\"NOT_APPROVED\"}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 22,
+    "usage": {
+      "inputTokens": 2916,
+      "outputTokens": 1139,
+      "cacheReadTokens": 26752,
+      "cacheWriteTokens": 0,
+      "totalTokens": 30807
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 23
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 23,
+    "usage": {
+      "inputTokens": 166,
+      "outputTokens": 575,
+      "cacheReadTokens": 30720,
+      "cacheWriteTokens": 0,
+      "totalTokens": 31461
+    }
+  },
+  {
+    "type": "status",
+    "phase": "turn_end",
+    "turn": 1,
+    "reason": {
+      "kind": "completed"
+    }
+  }
+]

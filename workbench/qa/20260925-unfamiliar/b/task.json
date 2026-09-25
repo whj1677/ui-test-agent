@@ -1,0 +1,1410 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260925021610-943fbf86",
+  "created_at": "2026-09-25T02:16:10.288Z",
+  "started_at": "2026-09-25T02:16:10.288Z",
+  "finished_at": "2026-09-25T02:17:33.530Z",
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "generation_status": "GENERATED",
+  "verification_status": "TECHNICAL_VALIDATION_PASSED",
+  "human_review_status": "WAITING_REVIEW",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "同名工单目标选择、详情页签及返回保留筛选",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+    "project_name": "20260925 陌生流程 B",
+    "case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+    "case_version": 1,
+    "external_id": "FRESH-B",
+    "content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6"
+  },
+  "environment_ref": {
+    "environment_id": "unfamiliar-b-20260925"
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "FRESH-B",
+        "title": "同名工单目标选择、详情页签及返回保留筛选",
+        "module": "detail",
+        "preconditions": "本机合成站；无登录、网络写入、持久化或外部依赖；刷新重置内存状态。只使用绑定入口。",
+        "test_data": "以本用例步骤内明确的编号、字段和值为冻结业务预期。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开绑定正常入口",
+            "expected": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203"
+          },
+          {
+            "order": 2,
+            "action": "工单名称输入巡检任务，点击筛选",
+            "expected": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示"
+          },
+          {
+            "order": 3,
+            "action": "在编号WO-202且区域南区的行点击查看详情",
+            "expected": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高"
+          },
+          {
+            "order": 4,
+            "action": "切换到处理记录页签",
+            "expected": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件"
+          },
+          {
+            "order": 5,
+            "action": "点击返回列表",
+            "expected": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "authorization": {
+    "logical_id": "unfamiliar-20260925-b",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T02:16:10.288Z",
+      "finished_at": "2026-09-25T02:17:33.530Z"
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925021610-943fbf86-normal",
+          "run_type": "normal",
+          "candidate_sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+          "candidate_version": 1,
+          "executed_case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+          "executed_external_id": "FRESH-B",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T02:17:22.824Z",
+          "finished_at": "2026-09-25T02:17:25.630Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-25T02:17:23.396Z",
+              "duration": 2209.3309999999997,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 159,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 139,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 87,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 72,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_5",
+                "raw_title": "CASE_STEP_5",
+                "category": null,
+                "duration": 83,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "build-20260925021610-943fbf86-negative",
+          "run_type": "negative",
+          "candidate_sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+          "candidate_version": 1,
+          "executed_case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+          "executed_external_id": "FRESH-B",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T02:17:25.635Z",
+          "finished_at": "2026-09-25T02:17:33.515Z",
+          "status": "FAILED",
+          "complete_pass": false,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\n    14 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n",
+                      "expected": "WO-202",
+                      "actual": "WO-201",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n",
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\candidate.spec.mjs",
+                        "line": 89,
+                        "column": 50
+                      },
+                      "snippet": "  87 |\n  88 |     const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n> 89 |     await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n     |                                                  ^\n  90 |     await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n  91 |     await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n  92 |     await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\n    14 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n",
+            "expected": "WO-202",
+            "actual": "WO-201",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "same_candidate_hash": true,
+          "specified_defect_detected": true,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\n    14 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n",
+              "expected": "WO-202",
+              "actual": "WO-201",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-25T02:17:26.240Z",
+              "duration": 7254.83,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 168,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 117,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 5073,
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\n    14 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n",
+                  "expected": "WO-202",
+                  "actual": "WO-201",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n",
+                  "location": {
+                    "file": "<REPO>\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925021610-943fbf86\\development\\final\\candidate.spec.mjs",
+                    "line": 89,
+                    "column": 50
+                  },
+                  "snippet": "  87 |\n  88 |     const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n> 89 |     await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n     |                                                  ^\n  90 |     await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n  91 |     await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n  92 |     await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");"
+                },
+                "steps": []
+              }
+            ]
+          }
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203",
+          "check_lines": [
+            41,
+            43,
+            44,
+            45,
+            46,
+            48,
+            49,
+            50,
+            51
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示",
+          "check_lines": [
+            55,
+            56,
+            58,
+            60,
+            61,
+            62,
+            63,
+            65,
+            66,
+            67,
+            68,
+            69,
+            71,
+            72,
+            73,
+            74,
+            75
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高",
+          "check_lines": [
+            79,
+            80,
+            81,
+            83,
+            85,
+            86,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件",
+          "check_lines": [
+            97,
+            98,
+            100,
+            102,
+            103,
+            105,
+            106,
+            107,
+            108
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工",
+          "check_lines": [
+            112,
+            114,
+            115,
+            116,
+            118,
+            119,
+            120,
+            122,
+            123,
+            124,
+            125,
+            127,
+            128,
+            129,
+            130
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "approval_status": "NOT_APPROVED",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5799,
+            "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6"
+          }
+        ],
+        "sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02"
+      }
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 6461,
+      "sha256": "95D473B7203570F9E81C00AA3E5613E8F01991D252EE967724A37E1E87EB06BC",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/diagnostic-1790302623047/candidate.spec.mjs",
+      "bytes": 5799,
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/console-2026-09-25T02-16-15-376Z.log",
+      "bytes": 139,
+      "sha256": "F9E3A7C7578C7487A22AAA63D39149D56C2B5070ECCE26BD17C77B1DF4549128",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-25T02-16-15-376Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-15-487Z.yml",
+      "bytes": 1357,
+      "sha256": "1F25C5F5FC3D5F714D9FD9FC6AA3A0BC565C23F7F4B51F5E966C074F69D52FD4",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-15-487Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-17-794Z.yml",
+      "bytes": 706,
+      "sha256": "70F91702F3B62193D6B8FB1E02C1BF3DBDF9FADE772EE83BAE84701B72E8A625",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-17-794Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-20-823Z.yml",
+      "bytes": 574,
+      "sha256": "BF5BDFC21F95FE7657357023C06E5267BA2E71284F88D59C3B3C6755357C242D",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-20-823Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-23-715Z.yml",
+      "bytes": 1431,
+      "sha256": "76C6F48753B1C7A80517996599F56A9D77ADC246E8DE54F937FDEB349FD384FD",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-23-715Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-27-812Z.yml",
+      "bytes": 1189,
+      "sha256": "99B5EF5C1EF403B2AAE1F5F348D5C63F591D95D56A55FFB927058FA32333F4A2",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-27-812Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-30-510Z.yml",
+      "bytes": 744,
+      "sha256": "5E83B600EEE203CE549EFE4E04A97FABF37056648A3AA3F9A6009829F6177D16",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-30-510Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-25T02-16-33-525Z.yml",
+      "bytes": 1204,
+      "sha256": "E72AFBE40DA570947BC2B612BB4629496F46C3787CA94865298A60484E832ED5",
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T02-16-33-525Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 5799,
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "file_id": "build-file-11",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/candidate.spec.mjs",
+      "bytes": 5799,
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "file_id": "build-file-12",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "1E819196BCE9616F14471CAD6BB1258DC30FEC96C0C100F9B7A814ACA7B42434",
+      "file_id": "build-file-13",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/error-context.md",
+      "bytes": 7898,
+      "sha256": "C3C74812914E9B027EEE30F8191A375C72FBC304128961B96DDBFA07B65AB009",
+      "file_id": "build-file-14",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "error-context.md",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-failed-1.png",
+      "bytes": 17663,
+      "sha256": "B1163570140AEDF11AD9E05E874F979D0E07D21BA90814A53DAF4C0ADCD59812",
+      "file_id": "build-file-15",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "bytes": 141682,
+      "sha256": "3F379E9A31C9A69B77233360C4C9548E75B759FBA4BA54CD163004057F23F54A",
+      "file_id": "build-file-16",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+      "bytes": 77350,
+      "sha256": "A599BB6CD89090761AD2E40C4691209F7159F27AEBE93354635D7F2179F12784",
+      "file_id": "build-file-17",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/playwright-report.json",
+      "bytes": 13705,
+      "sha256": "538AF1E0021FE190E0BC4CB84F3E22F4BC954ECE1B43EFA2D5C390B2F57EEEBE",
+      "file_id": "build-file-18",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-19",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "file_id": "build-file-20",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "bytes": 161496,
+      "sha256": "AF4DD2F2A7F763F1B3EE96E05F4191669D42ECD332A8E1C370ABFF7CAAE5A564",
+      "file_id": "build-file-21",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+      "bytes": 26619,
+      "sha256": "94B62A3BFEEF4358BE70304D00DD4DE4A3519F0AE4B0A1FAE84076A230F58593",
+      "file_id": "build-file-22",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/playwright-report.json",
+      "bytes": 5487,
+      "sha256": "B8975ABA31792528B0447487605A0FBF9A7D0B5C709BC85286947FE971824161",
+      "file_id": "build-file-23",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 90558,
+      "sha256": "4C2B7848B6D9CBA5C0EC54DE76388F307E0EFD6D9757A6D31C1672CE2ADAFC11",
+      "file_id": "build-file-24",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 279,
+      "sha256": "DC9D26C7D6A7DF96AAC576E3F107F7A9FD7BC1566E07C50ECA83B1ECC8197F4A",
+      "file_id": "build-file-25",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/candidate.spec.mjs",
+      "bytes": 5799,
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "file_id": "build-file-26",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-27",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "file_id": "build-file-28",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "bytes": 167767,
+      "sha256": "58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8",
+      "file_id": "build-file-29",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+      "bytes": 34674,
+      "sha256": "4A7E4D8C8EF15EA392BA574B303F8513E243F2894E8BD4D1366B75A6E353ACD7",
+      "file_id": "build-file-30",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/playwright-report.json",
+      "bytes": 5487,
+      "sha256": "C51FF2B4B9F39250840CB35FA11D29383DDD01DA6FFEEE576E89BD9340612905",
+      "file_id": "build-file-31",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-32",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 21109,
+      "sha256": "F60AD3F5E7D2F9DBC1A431A57C5EBDFFCA5D963CD03AC4E1AA8814FEB77378CB",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": null,
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": null
+  },
+  "development": {
+    "started_at": 1790302570293,
+    "deadline_at": 1790303770293,
+    "draft_sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+    "self_tests": [
+      {
+        "number": 1,
+        "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5799,
+            "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6"
+          }
+        ],
+        "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790302623848,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T02:17:04.441Z",
+            "duration": 2244.832,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 189,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 146,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 94,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_4",
+              "raw_title": "CASE_STEP_4",
+              "category": null,
+              "duration": 71,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_5",
+              "raw_title": "CASE_STEP_5",
+              "category": null,
+              "duration": 90,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+            "bytes": 21563,
+            "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+            "bytes": 167767,
+            "sha256": "58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+            "bytes": 34674,
+            "sha256": "4A7E4D8C8EF15EA392BA574B303F8513E243F2894E8BD4D1366B75A6E353ACD7"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 5487,
+            "sha256": "C51FF2B4B9F39250840CB35FA11D29383DDD01DA6FFEEE576E89BD9340612905"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/candidate-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+              "bytes": 167767,
+              "sha256": "58F12939BA21E34C9C01305899480598FA193857B670C20528C55E1E8E0A47A8"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790302626709
+      }
+    ],
+    "submission": {
+      "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203",
+          "check_lines": [
+            41,
+            43,
+            44,
+            45,
+            46,
+            48,
+            49,
+            50,
+            51
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示",
+          "check_lines": [
+            55,
+            56,
+            58,
+            60,
+            61,
+            62,
+            63,
+            65,
+            66,
+            67,
+            68,
+            69,
+            71,
+            72,
+            73,
+            74,
+            75
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高",
+          "check_lines": [
+            79,
+            80,
+            81,
+            83,
+            85,
+            86,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件",
+          "check_lines": [
+            97,
+            98,
+            100,
+            102,
+            103,
+            105,
+            106,
+            107,
+            108
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工",
+          "check_lines": [
+            112,
+            114,
+            115,
+            116,
+            118,
+            119,
+            120,
+            122,
+            123,
+            124,
+            125,
+            127,
+            128,
+            129,
+            130
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "submitted_at": 1790302638326,
+      "file": "final/candidate.spec.mjs",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5799,
+            "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6"
+          }
+        ],
+        "sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02"
+      },
+      "semantic_approval": false,
+      "requirements_review": "PENDING_INDEPENDENT_REVIEW"
+    },
+    "tool_calls": 24,
+    "harness_starts": 1,
+    "recovery": false,
+    "fidelity": {
+      "version": "finite-obligations-v1",
+      "semantic_pass": false,
+      "human_review_required": true,
+      "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+      "status": "NO_SUPPORTED_OBLIGATIONS",
+      "obligations": [],
+      "remaining_requirements": [
+        {
+          "step": 1,
+          "requirement": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 2,
+          "requirement": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 3,
+          "requirement": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 4,
+          "requirement": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 5,
+          "requirement": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        }
+      ]
+    },
+    "final_executions": [
+      {
+        "lane": "normal",
+        "started_at": "2026-09-25T02:17:22.824Z",
+        "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+        "status": "PASSED"
+      },
+      {
+        "lane": "negative",
+        "started_at": "2026-09-25T02:17:25.635Z",
+        "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+        "status": "FAILED"
+      }
+    ]
+  }
+}

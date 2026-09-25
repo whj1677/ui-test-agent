@@ -1,0 +1,47 @@
+{
+  "task_id": "build-20260925021311-a4ca71be",
+  "status": "WAITING_HUMAN_REVIEW · WAITING_REVIEW",
+  "rows": [
+    "开发自测 1 · EXECUTED",
+    "最终 normal · PASSED",
+    "最终 negative · FAILED"
+  ],
+  "media": [
+    {
+      "file_id": "build-file-14",
+      "path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-failed-1.png",
+      "sha256": "C1D1C01659F73CD7F620DE30E8DCD43A20DA7AEFB455D5660D06042E516B6D61",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/final/negative/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "sha256": "73CB3678F3C75183AD91A922F20188519DCA084BCC309A6AB42C53E9F16BCF51",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/final/normal/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-finished-1.png",
+      "sha256": "25B1F08E7E894768E13A197446C982E47F0E0C43245726CFB745325D2B5A9E6F",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/final/normal/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "sha256": "680C200EBEC2CBD5030100D1C53EF03E5C3534FFC15848BACE789D75C67D1A4B",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/test-finished-1.png",
+      "sha256": "25B1F08E7E894768E13A197446C982E47F0E0C43245726CFB745325D2B5A9E6F",
+      "http_status": 200
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/run-1/evidence/artifacts/candidate-FRESH-A-自定义区域筛选、空结果与重置/trace.zip",
+      "sha256": "9502DD214CD42CF6BE70D5EE669CA0E5BDABCD568BA5F0B9EA216E7E84A0141C",
+      "http_status": 200
+    }
+  ]
+}
