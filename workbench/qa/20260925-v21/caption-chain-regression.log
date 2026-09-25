@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: finite path proof expands neutral helper calls, branches and early returns
+ok 1 - finite path proof expands neutral helper calls, branches and early returns
+  ---
+  duration_ms: 11.6947
+  type: 'test'
+  ...
+# Subtest: field identity is label-bound and independent of expected answer; unknown code never semantic_pass
+ok 2 - field identity is label-bound and independent of expected answer; unknown code never semantic_pass
+  ---
+  duration_ms: 2.9727
+  type: 'test'
+  ...
+# Subtest: real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
+ok 3 - real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
+  ---
+  duration_ms: 1639.6478
+  type: 'test'
+  ...
+# Subtest: production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
+ok 4 - production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
+  ---
+  duration_ms: 188.3329
+  type: 'test'
+  ...
+# Subtest: isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
+ok 5 - isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
+  ---
+  duration_ms: 3272.3524
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 6 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 3.6637
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 7 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.3189
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 8 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.5064
+  type: 'test'
+  ...
+# Subtest: pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+ok 9 - pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+  ---
+  duration_ms: 214.4655
+  type: 'test'
+  ...
+# Subtest: self-test limit is cumulative and further edits cannot create an unverified final version
+ok 10 - self-test limit is cumulative and further edits cannot create an unverified final version
+  ---
+  duration_ms: 92.1853
+  type: 'test'
+  ...
+# Subtest: cancellation reaches an active execution and later tools stop
+ok 11 - cancellation reaches an active execution and later tools stop
+  ---
+  duration_ms: 26.9135
+  type: 'test'
+  ...
+# Subtest: wall budget terminates before another tool or executor admission
+ok 12 - wall budget terminates before another tool or executor admission
+  ---
+  duration_ms: 10.2335
+  type: 'test'
+  ...
+# Subtest: from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+ok 13 - from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+  ---
+  duration_ms: 63.9855
+  type: 'test'
+  ...
+# Subtest: task guard denies arbitrary commands, filesystem, code and alternate navigation
+ok 14 - task guard denies arbitrary commands, filesystem, code and alternate navigation
+  ---
+  duration_ms: 4.6509
+  type: 'test'
+  ...
+# Subtest: real KC-02 self-tests retain failure, continued steps and captured locator actual
+ok 15 - real KC-02 self-tests retain failure, continued steps and captured locator actual
+  ---
+  duration_ms: 7.9876
+  type: 'test'
+  ...
+# Subtest: only attributed evidence is displayed; zero and false are not missing
+ok 16 - only attributed evidence is displayed; zero and false are not missing
+  ---
+  duration_ms: 0.6324
+  type: 'test'
+  ...
+# Subtest: recorded replay steps remain authoritative and successful run has no failure notice
+ok 17 - recorded replay steps remain authoritative and successful run has no failure notice
+  ---
+  duration_ms: 0.3772
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5789.2113

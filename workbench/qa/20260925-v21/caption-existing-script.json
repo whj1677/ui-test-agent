@@ -1,0 +1,119 @@
+{
+  "checked_at": "2026-09-25T11:59:49.474Z",
+  "scope": "ENGINEERING_EXISTING_SCRIPT_CAPTURE_NOT_PRODUCT_BATCH",
+  "model_calls": 0,
+  "harness_starts": 0,
+  "source_task_id": "build-20260925104223-1281faca",
+  "source_candidate_version": 2,
+  "candidate_sha256": "5C9CD2F4F1BB50E393883FAF6DC2338EEC9EF5CFE76959ED4D60AADDFD85D88C",
+  "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+  "root": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH",
+  "replay_path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\evidence\\artifacts\\step-replay-v1.webm",
+  "result": "FAILED",
+  "step_replay": {
+    "schema": "workbench/step-evidence-replay-v1",
+    "status": "READY",
+    "run_id": "engineering-kc02-capture-dev-1",
+    "candidate_sha256": "5C9CD2F4F1BB50E393883FAF6DC2338EEC9EF5CFE76959ED4D60AADDFD85D88C",
+    "executed_external_id": "KC-02",
+    "executed_case_version": 1,
+    "observer_version": "e2e01-step-observer-v2",
+    "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+    "original_video_precise_seek": false,
+    "evidence_complete": true,
+    "missing_captures": [],
+    "steps": [
+      {
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "raw_title": "CASE_STEP_1",
+        "action": "在搜索框输入小写eq-10",
+        "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页",
+        "execution_status": "FAILED",
+        "actual": "共 5 条，第 1/2 页，每页3条",
+        "assertion_expected": null,
+        "raw_error": {
+          "name": "PlaywrightSoftAssertion",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:93:32\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:85:3\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:96:34\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:85:3\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:97:42\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\caption-kc02-l5erUH\\run-1\\candidate.spec.mjs:85:3"
+        },
+        "executed_start": "2026-09-25T11:59:32.644Z",
+        "executed_end": "2026-09-25T11:59:37.944Z",
+        "observer_start": "2026-09-25T11:59:32.551Z",
+        "observer_end": "2026-09-25T11:59:37.981Z",
+        "screenshot_phase": "failure-after",
+        "screenshot_file_name": "case_step_1-failure-after.png",
+        "before_screenshot_file_name": "case_step_1-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 129.4794000000004
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "raw_title": "CASE_STEP_2",
+        "action": "清空后输入大写EQ-106",
+        "expected": "仅显示EQ-106，共1条，第1/1页",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T11:59:38.044Z",
+        "executed_end": "2026-09-25T11:59:38.114Z",
+        "observer_start": "2026-09-25T11:59:37.982Z",
+        "observer_end": "2026-09-25T11:59:38.168Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_2-after.png",
+        "before_screenshot_file_name": "case_step_2-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 115.8819999999996
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "raw_title": "CASE_STEP_3",
+        "action": "输入eq-1并查看边界",
+        "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T11:59:38.220Z",
+        "executed_end": "2026-09-25T11:59:38.404Z",
+        "observer_start": "2026-09-25T11:59:38.170Z",
+        "observer_end": "2026-09-25T11:59:38.443Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_3-after.png",
+        "before_screenshot_file_name": "case_step_3-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 88.35180000000037
+      }
+    ],
+    "chapters": [
+      {
+        "step_id": "CASE_STEP_1",
+        "start_seconds": 0,
+        "result_start_seconds": 1.2255,
+        "end_seconds": 3.032600000023842,
+        "screenshot_phase": "failure-after"
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "start_seconds": 3.032600000023842,
+        "result_start_seconds": 4.2395,
+        "end_seconds": 6.050200000047684,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "start_seconds": 6.050200000047684,
+        "result_start_seconds": 7.255899999976158,
+        "end_seconds": 9.065899999976159,
+        "screenshot_phase": "after"
+      }
+    ],
+    "duration_seconds": 9.185899,
+    "output_file_name": "step-replay-v1.webm",
+    "reading_holds": "1200ms action / 1800ms result"
+  },
+  "original_files_unchanged": true
+}

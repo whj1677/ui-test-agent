@@ -2,25 +2,27 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-25T19:35:10+08:00`
+- Generated at: `2026-09-25T20:06:04+08:00`
 - Record: `REQ-0036-ui-ux-01-workbench-usability-review`
-- Change fingerprint: `f3a7aa65e229ea0fb17ec89c9e5786e7be0ca4e0f1368b2069a374c5226906e9`
+- Change fingerprint: `8b1f4771139fa494eb6500bf17892a9c64f4f2e84154c7b4ebf316bee1f4c9fa`
 - Verification source: `collector-executed-v1`
-- Verification state: `已执行`
-- Command: `node workbench/qa/20260925-v21/verify-engineer-round.mjs`
+- Verification state: `正式加载阻塞；媒体/报告核验命令退出0；整体检查失败`
+- Command: `node workbench/qa/20260925-v21/prepare-user-trial.mjs`
 - Exit code: `0`
 - Test count: `未解析`
 - Failure count: `0`
 - Skipped count: `未解析`
-- Log path: `workbench/qa/20260925-v21/engineer-delivery-verification.log`
-- Log SHA-256: `69984c823c175f0ef7d4e2adfbd965ef91feb084dae51b44136208d162d35488`
+- Log path: `workbench/qa/20260925-v21/caption-delivery-check.log`
+- Log SHA-256: `d1559fa563a88a01cca277b72bf0b7000a1a19569eaf77292b5e5e82870f76d8`
 
 ### Git Status
 
 ```text
+ M docs/modules/test-workbench.md
+ M docs/requirements/README.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md
@@ -28,8 +30,10 @@
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/requirement.source.json
  M workbench/qa/20260925-v21/REPORT.md
- M workbench/tests/batches.test.mjs
- M workbench/web-v2/workflow.js
+ M workbench/server/build/candidate-trials.mjs
+ M workbench/server/build/development-session.mjs
+ M workbench/server/build/development-task.mjs
+ M workbench/server/build/step-replay.mjs
 ?? docs/需求/02-case-library.png
 ?? docs/需求/04-case-evidence.png
 ?? docs/需求/ALL_SCREENS.png
@@ -44,103 +48,70 @@
 ?? workbench/docs/ui-workflow-proposal/05-script-panel.png
 ?? workbench/docs/ui-workflow-proposal/README.md
 ?? workbench/docs/ui-workflow-proposal/index.html
-?? workbench/qa/20260925-v21/build-engineer-report.mjs
-?? workbench/qa/20260925-v21/engineer-active-cancel.txt
+?? workbench/qa/20260925-v21/USER_TRIAL.md
+?? workbench/qa/20260925-v21/caption-chain-integration.log
+?? workbench/qa/20260925-v21/caption-chain-regression.log
+?? workbench/qa/20260925-v21/caption-delivery-check.log
+?? workbench/qa/20260925-v21/caption-existing-script.json
+?? workbench/qa/20260925-v21/caption-existing-script.log
+?? workbench/qa/20260925-v21/caption-history-verification.json
+?? workbench/qa/20260925-v21/caption-history-verification.log
+?? workbench/qa/20260925-v21/caption-kc02-continued-frame.png
+?? workbench/qa/20260925-v21/caption-kc02-failure-frame.png
+?? workbench/qa/20260925-v21/caption-live-result.txt
+?? workbench/qa/20260925-v21/caption-live-step2.png
+?? workbench/qa/20260925-v21/caption-user-trial-verification.json
 ?? workbench/qa/20260925-v21/engineer-batch-evidence.html
-?? workbench/qa/20260925-v21/engineer-batch-tests.log
-?? workbench/qa/20260925-v21/engineer-cancel-record-media.txt
-?? workbench/qa/20260925-v21/engineer-cancel-reopen.txt
-?? workbench/qa/20260925-v21/engineer-card-restored.txt
-?? workbench/qa/20260925-v21/engineer-cross-selection.txt
-?? workbench/qa/20260925-v21/engineer-delivery-tests.log
-?? workbench/qa/20260925-v21/engineer-delivery-verification.log
-?? workbench/qa/20260925-v21/engineer-final-preflight.txt
-?? workbench/qa/20260925-v21/engineer-full-preflight-before.txt
-?? workbench/qa/20260925-v21/engineer-generation-preflight.txt
-?? workbench/qa/20260925-v21/engineer-generation-ready.txt
-?? workbench/qa/20260925-v21/engineer-generation-started.txt
-?? workbench/qa/20260925-v21/engineer-generation.json
-?? workbench/qa/20260925-v21/engineer-invalid-preflight.txt
-?? workbench/qa/20260925-v21/engineer-main-started.txt
-?? workbench/qa/20260925-v21/engineer-manual-cross-page1.txt
-?? workbench/qa/20260925-v21/engineer-manual-cross-page2.txt
-?? workbench/qa/20260925-v21/engineer-manual-cross-return2.txt
-?? workbench/qa/20260925-v21/engineer-manual-detail-before.txt
-?? workbench/qa/20260925-v21/engineer-manual-detail-history.txt
-?? workbench/qa/20260925-v21/engineer-manual-detail-loaded.txt
-?? workbench/qa/20260925-v21/engineer-manual-detail-open.txt
-?? workbench/qa/20260925-v21/engineer-manual-detail-return.txt
-?? workbench/qa/20260925-v21/engineer-manual-disabled-inuse.txt
-?? workbench/qa/20260925-v21/engineer-manual-disabled-maintenance.txt
-?? workbench/qa/20260925-v21/engineer-manual-disabled-selectall.txt
-?? workbench/qa/20260925-v21/engineer-manual-empty.txt
-?? workbench/qa/20260925-v21/engineer-manual-filter-clear.txt
-?? workbench/qa/20260925-v21/engineer-manual-filter-south-corrected.txt
-?? workbench/qa/20260925-v21/engineer-manual-filter-south-settled.txt
-?? workbench/qa/20260925-v21/engineer-manual-filter-south.txt
-?? workbench/qa/20260925-v21/engineer-manual-filter-step2-repeat.txt
-?? workbench/qa/20260925-v21/engineer-manual-initial.png
-?? workbench/qa/20260925-v21/engineer-manual-initial.txt
-?? workbench/qa/20260925-v21/engineer-manual-north-or.txt
-?? workbench/qa/20260925-v21/engineer-manual-north.txt
-?? workbench/qa/20260925-v21/engineer-manual-reset.txt
-?? workbench/qa/20260925-v21/engineer-manual-same-name.txt
-?? workbench/qa/20260925-v21/engineer-manual-search.txt
-?? workbench/qa/20260925-v21/engineer-manual-select-one.txt
-?? workbench/qa/20260925-v21/engineer-manual-selectall.txt
-?? workbench/qa/20260925-v21/engineer-manual-sort.txt
-?? workbench/qa/20260925-v21/engineer-manual-status-idle.txt
-?? workbench/qa/20260925-v21/engineer-manual-status-page1.txt
-?? workbench/qa/20260925-v21/engineer-manual-status-page2.txt
-?? workbench/qa/20260925-v21/engineer-manual-status-page3.txt
-?? workbench/qa/20260925-v21/engineer-media-step.txt
-?? workbench/qa/20260925-v21/engineer-original-play.txt
-?? workbench/qa/20260925-v21/engineer-preflight-recovered.txt
-?? workbench/qa/20260925-v21/engineer-project-delivery.txt
-?? workbench/qa/20260925-v21/engineer-report-download.json
-?? workbench/qa/20260925-v21/engineer-report-preview.txt
-?? workbench/qa/20260925-v21/engineer-report-summary.json
-?? workbench/qa/20260925-v21/engineer-report.html
-?? workbench/qa/20260925-v21/engineer-reviews.json
-?? workbench/qa/20260925-v21/engineer-scope.json
-?? workbench/qa/20260925-v21/engineer-selected-retry-finished.txt
-?? workbench/qa/20260925-v21/engineer-selected-retry-start.txt
-?? workbench/qa/20260925-v21/engineer-selections.json
-?? workbench/qa/20260925-v21/engineer-single-start.txt
-?? workbench/qa/20260925-v21/engineer-start-busy-recovered.txt
-?? workbench/qa/20260925-v21/engineer-verification.json
-?? workbench/qa/20260925-v21/engineer-version-selection-fixed.txt
-?? workbench/qa/20260925-v21/read-engineer-round.mjs
-?? workbench/qa/20260925-v21/verify-engineer-report.mjs
-?? workbench/qa/20260925-v21/verify-engineer-round.mjs
+?? workbench/qa/20260925-v21/engineer-report-package.zip
+?? workbench/qa/20260925-v21/prepare-user-trial.mjs
+?? workbench/qa/20260925-v21/user-trial-kit/12条原用例-导入练习.xlsx
+?? workbench/qa/20260925-v21/user-trial-kit/KC-02-后续步骤画面.png
+?? workbench/qa/20260925-v21/user-trial-kit/KC-02-失败画面.png
+?? workbench/qa/20260925-v21/user-trial-kit/KC-02-新采集链路工程复验.webm
+?? workbench/qa/20260925-v21/user-trial-kit/KC-11-本次批次报告.html
+?? workbench/qa/20260925-v21/user-trial-kit/manifest.json
+?? workbench/qa/20260925-v21/user-trial-kit/开始使用.md
+?? workbench/qa/20260925-v21/user-trial-kit/当前12条用例包.json
+?? workbench/qa/20260925-v21/verify-caption-existing-script.mjs
+?? workbench/qa/20260925-v21/自己体验工作台-20260925.zip
+?? workbench/server/build/development-evidence.mjs
+?? workbench/tests/development-evidence.integration.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
+warning: in the working copy of 'docs/modules/test-workbench.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/batches.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/web-v2/workflow.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/qa/20260925-v21/REPORT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/candidate-trials.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/development-session.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/development-task.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/build/step-replay.mjs', LF will be replaced by CRLF the next time Git touches it
+ docs/modules/test-workbench.md                     |   7 +
+ docs/requirements/README.md                        |   2 +-
  .../00_user_requirement.md                         |   4 +-
- .../01_development_requirement.md                  |   2 +-
- .../02_design.md                                   |   6 +-
- .../04_verification.md                             |   5 +-
+ .../02_design.md                                   |   4 +-
+ .../03_tasks.md                                    |   1 +
+ .../04_verification.md                             |   1 +
  .../05_trace.md                                    |   1 +
  .../change_log.md                                  |   1 +
- .../current_state.md                               |  12 +-
- .../delivery_evidence.md                           | 422 ++++++++-------------
- .../requirement.source.json                        |  54 ++-
- workbench/qa/20260925-v21/REPORT.md                |  65 ++++
- workbench/tests/batches.test.mjs                   |  19 +
- workbench/web-v2/workflow.js                       |  24 +-
- 12 files changed, 327 insertions(+), 288 deletions(-)
+ .../current_state.md                               |   6 +-
+ .../delivery_evidence.md                           | 272 ++++++++-------------
+ .../requirement.source.json                        |  63 ++++-
+ workbench/qa/20260925-v21/REPORT.md                |  36 +++
+ workbench/server/build/candidate-trials.mjs        |  12 +-
+ workbench/server/build/development-session.mjs     |  14 +-
+ workbench/server/build/development-task.mjs        |  18 +-
+ workbench/server/build/step-replay.mjs             |   8 +-
+ 16 files changed, 243 insertions(+), 207 deletions(-)
 ```
 
 ### Untracked Files
@@ -160,90 +131,49 @@ workbench/docs/ui-workflow-proposal/04-batch-results.png
 workbench/docs/ui-workflow-proposal/05-script-panel.png
 workbench/docs/ui-workflow-proposal/README.md
 workbench/docs/ui-workflow-proposal/index.html
-workbench/qa/20260925-v21/build-engineer-report.mjs
-workbench/qa/20260925-v21/engineer-active-cancel.txt
+workbench/qa/20260925-v21/USER_TRIAL.md
+workbench/qa/20260925-v21/caption-chain-integration.log
+workbench/qa/20260925-v21/caption-chain-regression.log
+workbench/qa/20260925-v21/caption-delivery-check.log
+workbench/qa/20260925-v21/caption-existing-script.json
+workbench/qa/20260925-v21/caption-existing-script.log
+workbench/qa/20260925-v21/caption-history-verification.json
+workbench/qa/20260925-v21/caption-history-verification.log
+workbench/qa/20260925-v21/caption-kc02-continued-frame.png
+workbench/qa/20260925-v21/caption-kc02-failure-frame.png
+workbench/qa/20260925-v21/caption-live-result.txt
+workbench/qa/20260925-v21/caption-live-step2.png
+workbench/qa/20260925-v21/caption-user-trial-verification.json
 workbench/qa/20260925-v21/engineer-batch-evidence.html
-workbench/qa/20260925-v21/engineer-batch-tests.log
-workbench/qa/20260925-v21/engineer-cancel-record-media.txt
-workbench/qa/20260925-v21/engineer-cancel-reopen.txt
-workbench/qa/20260925-v21/engineer-card-restored.txt
-workbench/qa/20260925-v21/engineer-cross-selection.txt
-workbench/qa/20260925-v21/engineer-delivery-tests.log
-workbench/qa/20260925-v21/engineer-delivery-verification.log
-workbench/qa/20260925-v21/engineer-final-preflight.txt
-workbench/qa/20260925-v21/engineer-full-preflight-before.txt
-workbench/qa/20260925-v21/engineer-generation-preflight.txt
-workbench/qa/20260925-v21/engineer-generation-ready.txt
-workbench/qa/20260925-v21/engineer-generation-started.txt
-workbench/qa/20260925-v21/engineer-generation.json
-workbench/qa/20260925-v21/engineer-invalid-preflight.txt
-workbench/qa/20260925-v21/engineer-main-started.txt
-workbench/qa/20260925-v21/engineer-manual-cross-page1.txt
-workbench/qa/20260925-v21/engineer-manual-cross-page2.txt
-workbench/qa/20260925-v21/engineer-manual-cross-return2.txt
-workbench/qa/20260925-v21/engineer-manual-detail-before.txt
-workbench/qa/20260925-v21/engineer-manual-detail-history.txt
-workbench/qa/20260925-v21/engineer-manual-detail-loaded.txt
-workbench/qa/20260925-v21/engineer-manual-detail-open.txt
-workbench/qa/20260925-v21/engineer-manual-detail-return.txt
-workbench/qa/20260925-v21/engineer-manual-disabled-inuse.txt
-workbench/qa/20260925-v21/engineer-manual-disabled-maintenance.txt
-workbench/qa/20260925-v21/engineer-manual-disabled-selectall.txt
-workbench/qa/20260925-v21/engineer-manual-empty.txt
-workbench/qa/20260925-v21/engineer-manual-filter-clear.txt
-workbench/qa/20260925-v21/engineer-manual-filter-south-corrected.txt
-workbench/qa/20260925-v21/engineer-manual-filter-south-settled.txt
-workbench/qa/20260925-v21/engineer-manual-filter-south.txt
-workbench/qa/20260925-v21/engineer-manual-filter-step2-repeat.txt
-workbench/qa/20260925-v21/engineer-manual-initial.png
-workbench/qa/20260925-v21/engineer-manual-initial.txt
-workbench/qa/20260925-v21/engineer-manual-north-or.txt
-workbench/qa/20260925-v21/engineer-manual-north.txt
-workbench/qa/20260925-v21/engineer-manual-reset.txt
-workbench/qa/20260925-v21/engineer-manual-same-name.txt
-workbench/qa/20260925-v21/engineer-manual-search.txt
-workbench/qa/20260925-v21/engineer-manual-select-one.txt
-workbench/qa/20260925-v21/engineer-manual-selectall.txt
-workbench/qa/20260925-v21/engineer-manual-sort.txt
-workbench/qa/20260925-v21/engineer-manual-status-idle.txt
-workbench/qa/20260925-v21/engineer-manual-status-page1.txt
-workbench/qa/20260925-v21/engineer-manual-status-page2.txt
-workbench/qa/20260925-v21/engineer-manual-status-page3.txt
-workbench/qa/20260925-v21/engineer-media-step.txt
-workbench/qa/20260925-v21/engineer-original-play.txt
-workbench/qa/20260925-v21/engineer-preflight-recovered.txt
-workbench/qa/20260925-v21/engineer-project-delivery.txt
-workbench/qa/20260925-v21/engineer-report-download.json
-workbench/qa/20260925-v21/engineer-report-preview.txt
-workbench/qa/20260925-v21/engineer-report-summary.json
-workbench/qa/20260925-v21/engineer-report.html
-workbench/qa/20260925-v21/engineer-reviews.json
-workbench/qa/20260925-v21/engineer-scope.json
-workbench/qa/20260925-v21/engineer-selected-retry-finished.txt
-workbench/qa/20260925-v21/engineer-selected-retry-start.txt
-workbench/qa/20260925-v21/engineer-selections.json
-workbench/qa/20260925-v21/engineer-single-start.txt
-workbench/qa/20260925-v21/engineer-start-busy-recovered.txt
-workbench/qa/20260925-v21/engineer-verification.json
-workbench/qa/20260925-v21/engineer-version-selection-fixed.txt
-workbench/qa/20260925-v21/read-engineer-round.mjs
-workbench/qa/20260925-v21/verify-engineer-report.mjs
-workbench/qa/20260925-v21/verify-engineer-round.mjs
+workbench/qa/20260925-v21/engineer-report-package.zip
+workbench/qa/20260925-v21/prepare-user-trial.mjs
+workbench/qa/20260925-v21/user-trial-kit/12条原用例-导入练习.xlsx
+workbench/qa/20260925-v21/user-trial-kit/KC-02-后续步骤画面.png
+workbench/qa/20260925-v21/user-trial-kit/KC-02-失败画面.png
+workbench/qa/20260925-v21/user-trial-kit/KC-02-新采集链路工程复验.webm
+workbench/qa/20260925-v21/user-trial-kit/KC-11-本次批次报告.html
+workbench/qa/20260925-v21/user-trial-kit/manifest.json
+workbench/qa/20260925-v21/user-trial-kit/开始使用.md
+workbench/qa/20260925-v21/user-trial-kit/当前12条用例包.json
+workbench/qa/20260925-v21/verify-caption-existing-script.mjs
+workbench/qa/20260925-v21/自己体验工作台-20260925.zip
+workbench/server/build/development-evidence.mjs
+workbench/tests/development-evidence.integration.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-25T19:35:07+08:00
-Command: node workbench/qa/20260925-v21/verify-engineer-round.mjs
+Started at: 2026-09-25T20:06:02+08:00
+Command: node workbench/qa/20260925-v21/prepare-user-trial.mjs
 Exit code: 0
 Parsed test count: unavailable
 Parsed failure count: 0
 Parsed skipped count: unavailable
 
 --- command output ---
-{"harness_starts":10,"tool_calls":538,"self_tests":18,"new_batches":4,"zero_model_runs":5,"verified_media":50}
+{"media_verified":10,"attachments":10,"kit":"workbench/qa/20260925-v21/user-trial-kit","files":7,"model_calls":0}
 ```
 
 ### Sync Record Status
@@ -269,4 +199,6 @@ FAIL ai-engineering-context checks
 
 ### Notes
 
-Read-only evidence verification; not full 12-case pass. Batch unit regressions 8 passed in engineer-delivery-tests.log; original REPORT records blocking.
+Read-only formal4322 media/report integrity and local user kit. New development capture code not loaded: automatic approval rejected idle service update. No model calls. Separate engineering logs contain17 regression tests and8 real executor cases.
+
+Additional check log: `workbench/qa/20260925-v21/caption-context-check.log`. Final delivery state: blocked; new backend not loaded.

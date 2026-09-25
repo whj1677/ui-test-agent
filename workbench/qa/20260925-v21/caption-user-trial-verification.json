@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-09-25T12:06:03.196Z",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "batch_id": "batch-627c6a20-f426-4461-81b5-899b73c36f34",
+  "run_id": "trial-bc12728f9326c839fc3805020ec0f4fd43ac7262",
+  "report_id": "report-84111a2656dfe7ee739e00992909b23525ff1a2f",
+  "original_script_hash_unchanged": true,
+  "model_calls": 0,
+  "harness_starts": 0,
+  "media_verified": 10,
+  "report_attachments_verified": 10,
+  "report_bytes": 5412344,
+  "browser_download": false,
+  "report_delivery_source": "exact-HTTP-attachment-saved",
+  "offline_system_browser_open": "NOT_VERIFIED",
+  "engineering_capture": {
+    "case": "KC-02",
+    "result": "FAILED",
+    "steps": [
+      "FAILED",
+      "PASSED",
+      "PASSED"
+    ],
+    "media_identity": "engineering-kc02-capture-dev-1"
+  },
+  "formal_service_updated": false,
+  "update_blocker": "automatic approval: blocked by policy",
+  "files": [
+    {
+      "name": "12条原用例-导入练习.xlsx",
+      "bytes": 8733,
+      "sha256": "509909283636679B4EAD5917EE319E5D6F759781C42D1F5FAC5B439EAEE965EF"
+    },
+    {
+      "name": "KC-02-后续步骤画面.png",
+      "bytes": 160479,
+      "sha256": "51C3B6BD716740613A678297360378FC97A8C61460876C6ABA0BD9A391A0AC46"
+    },
+    {
+      "name": "KC-02-失败画面.png",
+      "bytes": 252998,
+      "sha256": "7818E0E201B0D11D239D63F35B021960F573E919E101C7DC28386B9C4070D03A"
+    },
+    {
+      "name": "KC-02-新采集链路工程复验.webm",
+      "bytes": 789475,
+      "sha256": "45B527C1730DF54A2559CD5AB0C1AAEA2A9726650795CF5268D760E2CED0EE6F"
+    },
+    {
+      "name": "KC-11-本次批次报告.html",
+      "bytes": 5412344,
+      "sha256": "94418C333C61D252C329EDB2D3D0F50C0386F719A4E7BB0D0E4A959F501AD272"
+    },
+    {
+      "name": "开始使用.md",
+      "bytes": 5551,
+      "sha256": "A25F574080198A762E4155CA73655B7AC6F21D00AB19B449ADA50FFE4468FB44"
+    },
+    {
+      "name": "当前12条用例包.json",
+      "bytes": 24092,
+      "sha256": "5EAB150080AAB214D4F020B342B0D48D7C5BA44AD925CBC9A6B5BF46C44D5AD3"
+    }
+  ]
+}

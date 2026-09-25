@@ -1,6 +1,6 @@
 # 需求索引
 
-- **V2.1及运行入口返修已实施**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)统一流程及返修已实现；唯一4322，本轮真实模型6任务/5零模型复跑已执行，授权接线与生成证据缺口仍在，实际边界见[原交付报告](../../workbench/qa/20260925-v21/REPORT.md)。
+- **V2.1字幕链路返修**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)已补自主开发证据接线并完成工程验证，正式4322重载受自动审批阻塞；用户体验材料已准备，实际范围见[原交付报告](../../workbench/qa/20260925-v21/REPORT.md)。
 
 - [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；工程优先，两个真实任务限定验证。
 

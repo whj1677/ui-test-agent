@@ -1,0 +1,15 @@
+{
+  "status": "ENGINEERING_REGRESSION_PASSED",
+  "checks": [
+    "soft-failure",
+    "hard-stop",
+    "passed-execution",
+    "independent-run",
+    "media-ownership",
+    "missing-media",
+    "historical-fallback",
+    "renderer-failure-isolation"
+  ],
+  "model_calls": 0,
+  "root": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\development-evidence-1fcYUD"
+}
