@@ -88,3 +88,22 @@ test('changed authorization and environment are checked again before admission',
  await assert.rejects(f.batches.start(b.batch_id,b.project_id,receipt),/ENVIRONMENT_CONFIGURATION_CHANGED/);
  delete env.configurationIdentity;await f.batches.start(b.batch_id,b.project_id,receipt);await f.batches.completion;assert.equal(f.counts().executes,1);
 });
+
+test('whole-project explicit script choice resolves ambiguity and freezes that version',async t=>{
+ const f=await batchFixture(t);
+ await f.store.updateTask(f.request.source_task_id,task=>({...task,candidates:[...task.candidates,{...structuredClone(task.candidates[0]),version:2}]}));
+ f.manager.candidateTrialAuthorizations.push({...f.manager.candidateTrialAuthorizations[0],candidate_version:2});
+ const request={...input(f),scope:'project'};
+ const ambiguous=await f.batches.preview(request,{persist:false});
+ assert.equal(ambiguous.items[0].reason,'SCRIPT_SELECTION_REQUIRED');
+ const automation=await f.manager.caseAutomation(f.project.project_id,f.request.case_id,1);
+ const chosen=automation.candidates.find(c=>c.selection.candidate_version===2).selection;
+ const b=await f.batches.preview({...request,selections:[chosen]});
+ assert.equal(b.items[0].reason,null);assert.deepEqual(b.items[0].selection,chosen);
+ const invalid=await f.batches.preview({...request,selections:[{...chosen,bundle_sha256:'A'.repeat(64)}]},{persist:false});
+ assert.equal(invalid.items[0].state,'BLOCKED');
+ await f.batches.start(b.batch_id,b.project_id,{...receipt,allow_partial:false});await f.batches.completion;
+ const done=await f.batches.get(b.batch_id),run=await f.runStore.getRun(done.items[0].run_id);
+ assert.equal(run.candidate_version,2);assert.equal(run.bundle_sha256,chosen.bundle_sha256);
+ assert.equal(run.model_calls,0);assert.equal(f.counts().executes,1);
+});
