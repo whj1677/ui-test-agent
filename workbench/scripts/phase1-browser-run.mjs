@@ -16,12 +16,12 @@ try{
  const start=p.waitForResponse(r=>r.url().endsWith('/start')&&r.request().method()==='POST');await p.locator('#batch-start').dblclick();const response=await start;assert.equal(response.status(),200);const started=await response.json();
  let done;
  for(let n=0;n<240;n++){done=await get(`/api/case-library/projects/${project.project_id}/batches/${started.batch_id}`);if(['FINISHED','CANCELLED','INTERRUPTED'].includes(done.state))break;
- if(mode==='cancel'&&done.items.some(i=>i.state==='RUNNING')){await p.locator('#cancel-batch').click();}
+ if(mode.startsWith('cancel')&&done.items.some(i=>i.state==='RUNNING')){await p.locator('#cancel-batch').click();}
  await new Promise(r=>setTimeout(r,1000));}
  assert.ok(['FINISHED','CANCELLED'].includes(done.state),JSON.stringify(done));
- if(mode!=='cancel')for(const i of done.items.filter(i=>i.selection&&i.state!=='BLOCKED'))assert.equal(i.state,'FINISHED',i.reason);
+ if(!mode.startsWith('cancel'))for(const i of done.items.filter(i=>i.selection&&i.state!=='BLOCKED'))assert.equal(i.state,'FINISHED',i.reason);
  await p.reload();await p.waitForTimeout(1000);await p.screenshot({path:dir+'/'+mode+'.png',fullPage:true});
  const repeats=await p.evaluate(async({url,body})=>{const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});return {status:r.status,body:await r.json()};},{url:`/api/case-library/projects/${project.project_id}/batches/${done.batch_id}/start`,body:{request_id:done.request_id,allow_partial:done.allow_partial}});assert.equal(repeats.status,200);assert.equal(repeats.body.batch_id,done.batch_id);
- const runs=[];for(const item of done.items){if(!item.run_id)continue;const records=await get(`/api/case-library/projects/${project.project_id}/execution-records`);const run=records.records.find(r=>r.run_id===item.run_id);assert.equal(run.model_calls,0);assert.equal(run.harness_starts,0);assert.equal(run.bundle_sha256,item.selection.bundle_sha256);assert.equal(run.same_candidate_hash,mode==='cancel'?run.same_candidate_hash:true);runs.push(run);}
+ const runs=[];for(const item of done.items){if(!item.run_id)continue;const records=await get(`/api/case-library/projects/${project.project_id}/execution-records`);const run=records.records.find(r=>r.run_id===item.run_id);assert.equal(run.model_calls,0);assert.equal(run.harness_starts,0);assert.equal(run.bundle_sha256,item.selection.bundle_sha256);assert.equal(run.same_candidate_hash,mode.startsWith('cancel')?run.same_candidate_hash:true);runs.push(run);}
  assert.deepEqual(errors,[]);await fs.writeFile(dir+'/'+mode+'-result.json',JSON.stringify({batch:done,runs,duplicate_request_same_batch:true,page_errors:errors},null,2));console.log(JSON.stringify({mode,batch:done.batch_id,items:done.items.map(i=>({case:i.external_id,state:i.state,result:i.result,reason:i.reason})),runs:runs.length}));
 }finally{await b.close();}
