@@ -1,3 +1,5 @@
+import { BatchManager } from './batches.mjs';
+import path from 'node:path';
 import { frozenTrialEnvironment } from './build/trial-environment.mjs';
 import { createWorkbenchServer } from './app.mjs';
 import { createPaths } from './paths.mjs';
@@ -75,7 +77,10 @@ const buildManager = new BuildTaskManager({
   modelConfiguration,
   otherActive: () => Boolean(manager.active),
 });
-const server = createWorkbenchServer({ store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
+buildManager.requirementReviews = trialConfig.requirement_reviews || [];
+const batchManager=new BatchManager({root:path.join(paths.dataRoot,'batches'),buildManager,caseStore,runStore:store});
+await batchManager.init();
+const server = createWorkbenchServer({ batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);
@@ -87,6 +92,7 @@ async function shutdown(signal) {
   if (shutdownStarted) return;
   shutdownStarted = true;
   console.log(JSON.stringify({ type: 'service_shutdown_requested', service_instance_id: serviceInstanceId, signal }));
+  if (batchManager.active) { await batchManager.stop(batchManager.active.id); await batchManager.completion; }
   if (buildManager.active) await buildManager.stop(buildManager.active.taskId).catch((error) => {
     console.error(JSON.stringify({ type: 'build_stop_failed', code: error?.code || error?.message || 'UNKNOWN' }));
   });

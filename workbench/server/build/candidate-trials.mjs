@@ -1,3 +1,4 @@
+import { reviewFor, rejectedReview } from '../batches.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { digest, evidenceFiles } from './development-session.mjs';
@@ -38,7 +39,9 @@ export function mediaType(file) {
 export async function resolveTrialCandidate(manager, request, checkEnvironment = true) {
   const task = await manager.store.getTask(request.source_task_id);
   const candidate = task?.candidates?.find(c => c.version === request.candidate_version);
-  if (!task?.development?.submission || task.active_attempt_id || !candidate || !same(request, {
+  const authorization = manager.candidateTrialAuthorizations.find(a => same(a, request));
+  const mapped = authorization?.source_binding;
+  if (!task?.development?.submission || task.active_attempt_id || !candidate || !same(mapped ? {...request,...mapped} : request, {
     ...task.source, source_task_id: task.task_id, candidate_version: candidate.version,
     bundle_sha256: candidate.bundle?.sha256, environment_id: task.environment_ref?.environment_id,
   })) throw new Error('TRIAL_IDENTITY_MISMATCH');
@@ -48,7 +51,9 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
   if (!version || version.content_sha256 !== request.content_sha256 || contentHash(version.content) !== request.content_sha256) throw new Error('TRIAL_CASE_VERSION_MISMATCH');
   const bundle = await loadCandidateBundle(path.join(manager.store.taskDirectory(task.task_id), 'development/final'), candidate.bundle);
   if (bundle.files.find(f => f.path === 'candidate.spec.mjs').sha256 !== candidate.sha256 || bundle.sha256 !== task.development.submission.bundle.sha256) throw new Error('TRIAL_BUNDLE_CHANGED');
-  const authorization = manager.candidateTrialAuthorizations.find(a => same(a, request));
+  if (mapped && task.source.content_sha256 !== request.content_sha256) throw new Error('TRIAL_REUSE_CONTENT_MISMATCH');
+  const review = reviewFor(manager, request);
+  if (checkEnvironment && rejectedReview(review) && request.diagnostic !== true) throw new Error('REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY');
   const environment = manager.candidateTrialEnvironments.find(e => e.id === request.environment_id);
   if (checkEnvironment) {
     if (!authorization || !authorization.lanes?.includes(request.lane)) throw new Error('TRIAL_NOT_AUTHORIZED');
@@ -59,22 +64,25 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
 }
 
 export async function caseAutomation(manager, projectId, caseId, versionNumber) {
-  const tasks = (await manager.store.listTasks()).filter(t => t.source?.project_id === projectId && t.source?.case_id === caseId && t.development);
+  const mappings=manager.candidateTrialAuthorizations.filter(a=>a.project_id===projectId&&a.case_id===caseId&&a.source_binding);
+  const tasks = (await manager.store.listTasks()).filter(t => t.development && ((t.source?.project_id === projectId && t.source?.case_id === caseId)||mappings.some(a=>a.source_task_id===t.task_id)));
   const output = [];
   for (const task of tasks) for (const candidate of task.candidates || []) {
-    const selection = identity({ ...task.source, source_task_id: task.task_id, candidate_version: candidate.version, bundle_sha256: candidate.bundle?.sha256, environment_id: task.environment_ref?.environment_id });
+    const mapped=mappings.find(a=>a.source_task_id===task.task_id&&a.candidate_version===candidate.version);
+    const selection = mapped ? identity(mapped) : identity({ ...task.source, source_task_id: task.task_id, candidate_version: candidate.version, bundle_sha256: candidate.bundle?.sha256, environment_id: task.environment_ref?.environment_id });
     let reason = null;
-    try { await resolveTrialCandidate(manager, { ...selection, lane: 'normal' }); } catch (error) { reason = error.code === 'ENOENT' ? 'TRIAL_BUNDLE_MISSING' : error.message; }
-    output.push({ selection, applies_to_selected_version: task.source.case_version === versionNumber,
+    try { await resolveTrialCandidate(manager, { ...selection, lane: 'normal', diagnostic: true }); } catch (error) { reason = error.code === 'ENOENT' ? 'TRIAL_BUNDLE_MISSING' : error.message; }
+    output.push({ selection, applies_to_selected_version: selection.case_version === versionNumber,
       files: (candidate.bundle?.files || []).map(f => ({ ...f, file_id: task.files.find(item => item.relative_path === `development/final/${f.path}`)?.file_id })), human_review_status: task.human_review_status,
-      technical_status: task.verification_status, reason, source_task_id: task.task_id });
+      technical_status: task.verification_status, requirement_review: reviewFor(manager,selection), reason, source_task_id: task.task_id });
   }
   return { candidates: output };
 }
 
 export async function submitCandidateTrial(manager, request) {
-  if (!manager.runStore || !request || !/^[\w-]{8,100}$/.test(request.request_id || '') || !['normal','negative'].includes(request.lane) || Object.keys(request).some(k => ![...identityKeys,'request_id','lane'].includes(k))) throw new Error('TRIAL_REQUEST_INVALID');
-  const fingerprint = digest(JSON.stringify({ ...identity(request), lane: request.lane }));
+  if (manager.batchOwner && (request?.batch_id !== manager.batchOwner || request?.batch_token !== manager.batchToken)) throw new Error('BATCH_EXECUTOR_BUSY');
+  if (!manager.runStore || !request || !/^[\w-]{8,100}$/.test(request.request_id || '') || !['normal','negative'].includes(request.lane) || Object.keys(request).some(k => ![...identityKeys,'request_id','lane','batch_id','batch_token','diagnostic'].includes(k))) throw new Error('TRIAL_REQUEST_INVALID');
+  const fingerprint = digest(JSON.stringify({ ...identity(request), lane: request.lane, batch_id: request.batch_id || null, diagnostic: request.diagnostic === true }));
   const runId = `trial-${digest(request.project_id + ':' + request.request_id).slice(0, 40).toLowerCase()}`;
   // The request receipt is the durable run itself; replay works after restart.
   const previous = await manager.runStore.getRun(runId);
@@ -85,11 +93,12 @@ export async function submitCandidateTrial(manager, request) {
     const { task, candidate, version, bundle, environment } = await resolveTrialCandidate(manager, request);
     const controller = new AbortController();
     const run = await manager.runStore.createRun({ schema: 'workbench/candidate-trial-v1', run_id: runId,
+      batch_id: request.batch_id || null, requirement_review: reviewFor(manager,request), diagnostic: request.diagnostic === true,
       request_id: request.request_id, request_fingerprint: fingerprint, selection: identity(request),
       ...identity(request), source_build_task_id: task.task_id, source_case_id: task.source.case_id,
       source_external_id: task.source.external_id, source_case_version: task.source.case_version,
-      executed_case_id: task.source.case_id, executed_case_version: task.source.case_version,
-      executed_external_id: task.source.external_id, executed_content_sha256: task.source.content_sha256,
+      executed_case_id: request.case_id, executed_case_version: request.case_version,
+      executed_external_id: version.content.external_id, executed_content_sha256: request.content_sha256,
       frozen_case_content: version.content, candidate_sha256: candidate.sha256, bundle: { files: bundle.files, sha256: bundle.sha256 },
       run_type: request.lane, origin: 'EXPLICIT_CANDIDATE_TRIAL', created_at: manager.now().toISOString(), started_at: manager.now().toISOString(),
       execution_status: 'QUEUED', status: 'NOT_RUN', complete_pass: false, approval_status: 'NOT_APPROVED',
@@ -152,9 +161,9 @@ export function developmentRecords(task) {
     source_case_version: task.source.case_version, executed_case_id: task.source.case_id, executed_case_version: task.source.case_version,
     executed_external_id: task.source.external_id, frozen_case_content: task.input_bundle.snapshot.content };
   const records = [...task.development.self_tests.map(r => ({ ...r, run_id: `${task.task_id}-dev-${r.number}`, run_type: 'development',
-    origin: 'DEVELOPMENT_SELF_TEST', status: r.result?.test_status || 'NOT_RUN', step_coverage: r.coverage, candidate_sha256: r.sha256,
+    bundle_sha256:r.bundle_sha256 || r.bundle?.sha256, origin: 'DEVELOPMENT_SELF_TEST', status: r.result?.test_status || 'NOT_RUN', step_coverage: r.coverage, candidate_sha256: r.sha256,
     prefix: `development/run-${r.number}/`, started_at: new Date(r.started_at).toISOString() })),
-  ...(task.candidates || []).flatMap(c => (c.trial_runs || []).map(r => ({ ...r, bundle_sha256: c.bundle.sha256, origin: 'INITIAL_INDEPENDENT_VALIDATION', prefix: `development/final/${r.run_type}/` })))];
+  ...(task.candidates || []).flatMap(c => (c.trial_runs || []).map(r => ({ ...r, bundle_sha256: c.bundle.sha256, candidate_version:c.version, origin: 'INITIAL_INDEPENDENT_VALIDATION', prefix: `development/final/${r.run_type}/` })))];
   return records.map(r => ({ ...shared, ...r, error: r.error || r.result?.error, failure_step: r.step_coverage?.items.find(s => s.error_attributed)?.marker || null,
     files: task.files.filter(f => f.relative_path.startsWith(r.prefix) && mediaType(f)).map(f => ({ ...f, ...mediaType(f), kind: `legacy_${mediaType(f).kind}` })),
     evidence_status: 'LEGACY_STEP_CAPTURES_UNAVAILABLE' }));

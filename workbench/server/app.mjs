@@ -1,3 +1,4 @@
+import { reviewFor } from './batches.mjs';
 import { developmentRecords, mediaType } from './build/candidate-trials.mjs';
 import http from 'node:http';
 import fs from 'node:fs/promises';
@@ -38,6 +39,8 @@ async function sendStatic(response, webRoot, workspaceRoot, pathname) {
     ['/workspace', ['index.html', 'text/html; charset=utf-8']],
     ['/workspace/', ['index.html', 'text/html; charset=utf-8']],
     ['/workspace/app.js', ['app.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/workflow.js', ['workflow.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/execution-media.js', ['execution-media.js', 'text/javascript; charset=utf-8']],
     ['/workspace/api.js', ['api.js', 'text/javascript; charset=utf-8']],
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
@@ -197,6 +200,7 @@ function errorStatus(error) {
 }
 
 export function createWorkbenchServer(options = {}) {
+  const batchManager=options.batchManager;
   const store = options.store;
   const manager = options.manager;
   const buildStore = options.buildStore;
@@ -211,6 +215,7 @@ export function createWorkbenchServer(options = {}) {
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
+      if(batchManager?.active&&request.method==='POST'&&(url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'BATCH_EXECUTOR_BUSY'});
       if (buildManager?.generationDisabled && request.method === 'POST' && (url.pathname === '/api/build/tasks' || /\/api\/build\/tasks\/(develop|[^/]+\/(start|revise|revision))$/.test(url.pathname))) return sendJson(response, 403, { error: 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE' });
       if (request.method === 'GET' && url.pathname === '/api/health') {
         const buildDiagnostics = buildManager?.diagnostics?.() || null;
@@ -314,13 +319,25 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 200, { tasks });
         return;
       }
+      const batches=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/batches(?:\/([^/]+)(?:\/(start|stop))?)?$/);
+      if(batchManager&&batches){
+        const [projectId,id,action]=batches.slice(1).map(v=>v&&decodeURIComponent(v));
+        if(request.method==='GET'){sendJson(response,200,id?await batchManager.get(id,projectId):{batches:await batchManager.list(projectId)});return;}
+        if(request.method==='POST'){
+          if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          const body=await readJsonBody(request);
+          const value=!id?await batchManager.preview({...body,project_id:projectId}):action==='start'?await batchManager.start(id,projectId,body):action==='stop'?await batchManager.stop(id,projectId):null;
+          if(!value)throw Error('BATCH_REQUEST_INVALID');sendJson(response,200,value);return;
+        }
+      }
       const automation = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/([^/]+)\/automation$/);
       if (buildManager && request.method === 'GET' && automation) {
         sendJson(response, 200, await buildManager.caseAutomation(decodeURIComponent(automation[1]), decodeURIComponent(automation[2]), Number(url.searchParams.get('version')))); return;
       }
       if (buildManager && request.method === 'POST' && url.pathname === '/api/candidate-trials') {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
-        sendJson(response, 202, await buildManager.startCandidateTrial(await readJsonBody(request))); return;
+        const body=await readJsonBody(request);if(body.batch_id||body.batch_token)throw Error('BATCH_INTERNAL_FIELDS_FORBIDDEN');
+        sendJson(response, 202, await buildManager.startCandidateTrial(body)); return;
       }
       const trialStop = url.pathname.match(/^\/api\/candidate-trials\/([^/]+)\/stop$/);
       if (buildManager && request.method === 'POST' && trialStop) {
@@ -340,6 +357,7 @@ export function createWorkbenchServer(options = {}) {
           files: (task.files || []).filter((file) => run.media_file_ids?.includes(file.file_id)),
         }))));
         records.push(...tasks.flatMap(developmentRecords));
+        for(const r of records){const task=tasks.find(t=>t.task_id===r.source_build_task_id);if(task)r.requirement_review=reviewFor(buildManager,{...task.source,source_task_id:task.task_id,bundle_sha256:r.bundle_sha256});}
         if (store) records.push(...(await store.listRuns()).filter(r => r.schema === 'workbench/candidate-trial-v1' && r.project_id === projectId));
         sendJson(response, 200, { records: records.sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))) });
         return;
