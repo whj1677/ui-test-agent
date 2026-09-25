@@ -1,0 +1,67 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T19:34:15+08:00
+Command: node --test workbench/tests/batches.test.mjs
+Exit code: 0
+Parsed test count: 8
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: batch concurrent replay, frozen versions, software label and no model
+ok 1 - batch concurrent replay, frozen versions, software label and no model
+  ---
+  duration_ms: 96.0497
+  type: 'test'
+  ...
+# Subtest: whole project retains missing scripts and requires partial consent
+ok 2 - whole project retains missing scripts and requires partial consent
+  ---
+  duration_ms: 61.7327
+  type: 'test'
+  ...
+# Subtest: requirements rejection is separate from PASSED, explicit diagnostic only
+ok 3 - requirements rejection is separate from PASSED, explicit diagnostic only
+  ---
+  duration_ms: 74.526
+  type: 'test'
+  ...
+# Subtest: cancel stops owned run and remaining queue; restart never replays
+ok 4 - cancel stops owned run and remaining queue; restart never replays
+  ---
+  duration_ms: 156.4377
+  type: 'test'
+  ...
+# Subtest: changed helper rejects admission; restored bytes can retry same request
+ok 5 - changed helper rejects admission; restored bytes can retry same request
+  ---
+  duration_ms: 253.8508
+  type: 'test'
+  ...
+# Subtest: automatic preflight is read-only, invalid input and zero runnable cannot start
+ok 6 - automatic preflight is read-only, invalid input and zero runnable cannot start
+  ---
+  duration_ms: 147.7628
+  type: 'test'
+  ...
+# Subtest: changed authorization and environment are checked again before admission
+ok 7 - changed authorization and environment are checked again before admission
+  ---
+  duration_ms: 207.2393
+  type: 'test'
+  ...
+# Subtest: whole-project explicit script choice resolves ambiguity and freezes that version
+ok 8 - whole-project explicit script choice resolves ambiguity and freezes that version
+  ---
+  duration_ms: 137.2938
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1798.0954

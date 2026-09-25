@@ -1,0 +1,100 @@
+{
+  "started_at": "2026-09-25T10:31:06.512Z",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "software_sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0",
+  "scope": [
+    {
+      "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+      "external_id": "KC-01",
+      "case_version": 1,
+      "content_sha256": "706DC07BC2EE25F68FFE14709A39980590DC218AA7092EAD36AAAE332543346A",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+      "external_id": "KC-02",
+      "case_version": 1,
+      "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+      "external_id": "KC-03",
+      "case_version": 1,
+      "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+      "external_id": "KC-04",
+      "case_version": 1,
+      "content_sha256": "9C647E913DD993423A20179DB4CC5F4170AC483DE35A80A8DB0463E21FD7423D",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+      "external_id": "KC-05",
+      "case_version": 1,
+      "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+      "external_id": "KC-06",
+      "case_version": 2,
+      "content_sha256": "16F2D54AC01F9510E28507DE494EFF66E1A513FACAC88BC96E7D16801E88E12E",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+      "external_id": "KC-07",
+      "case_version": 1,
+      "content_sha256": "FE312970746332CC950D4AF49EBBB1260B2CEF47BAC071C01BD3274B030439E5",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+      "external_id": "KC-08",
+      "case_version": 1,
+      "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+      "external_id": "KC-09",
+      "case_version": 1,
+      "content_sha256": "4D5B6D62EDA40296ADA8A6EAC3DB75A741AF124BF72F5CDF581B9382BF1F564C",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+      "external_id": "KC-10",
+      "case_version": 1,
+      "content_sha256": "72D3D68252026E5C8691158D9CB0B33FDF6313F8B0BF026620BCF329029331DB",
+      "action": "generate current-version script"
+    },
+    {
+      "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+      "external_id": "KC-11",
+      "case_version": 1,
+      "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+      "action": "reuse existing selected script"
+    },
+    {
+      "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+      "external_id": "KC-12",
+      "case_version": 1,
+      "content_sha256": "89A530C20A949B3D4CB4F9AA8E87475856C084989803F30F4AA7D2E793E8450E",
+      "action": "reuse existing selected script"
+    }
+  ],
+  "generation_tasks": 10,
+  "limits_per_task": {
+    "harness_starts": 1,
+    "self_tests": 3,
+    "revisions": 2,
+    "tool_calls": 120,
+    "wall_ms": 1200000
+  },
+  "stop": "All 12 cases accounted for in a new frozen batch and report; failures and unexecuted steps retained. No unlimited generation retries."
+}

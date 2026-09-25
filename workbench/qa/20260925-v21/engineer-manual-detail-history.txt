@@ -1,0 +1,78 @@
+- complementary:
+  - generic: 实验设备调度台
+  - navigation "主导航":
+    - button "设备资源"
+    - button "预约记录"
+    - button "重置演示数据"
+- main:
+  - region "统计":
+    - text: 设备总数
+    - generic: "8"
+    - text: 可预约设备
+    - generic: "5"
+    - text: 已确认预约
+    - generic: "1"
+    - text: 已确认收入
+    - generic: "40"
+  - region "设备资源":
+    - heading "设备资源" [level=1]
+    - generic: 搜索编号或名称
+    - searchbox "搜索编号或名称": 温循箱
+    - generic: 站点
+    - button "站点 南站": 南站
+    - generic: 状态多选
+    - group "状态多选":
+      - checkbox "空闲" [checked]
+      - text: 空闲
+      - checkbox "使用中" [checked]
+      - text: 使用中
+      - checkbox "维护" [checked]
+      - text: 维护
+    - generic: 排序
+    - combobox "排序":
+      - option "编号升序" [selected]
+      - option "费用降序"
+      - option "费用升序"
+    - button "重置"
+    - button "批量预约" [disabled]
+    - generic: 已选 0 项；跨页选择会保留，筛选变化会清空并回到第1页。
+    - table "设备列表":
+      - rowgroup:
+        - row "当前页全选可预约行 编号 名称 站点 状态 费用(元/小时) 操作":
+          - columnheader "当前页全选可预约行":
+            - checkbox "当前页全选可预约行" [disabled]
+          - columnheader "编号"
+          - columnheader "名称"
+          - columnheader "站点"
+          - columnheader "状态"
+          - columnheader "费用(元/小时)"
+          - columnheader "操作"
+      - rowgroup:
+        - row "EQ-104不可预约 EQ-104 温循箱 南站 使用中 90 详情":
+          - cell "EQ-104不可预约":
+            - checkbox "EQ-104不可预约" [disabled]
+          - cell "EQ-104"
+          - cell "温循箱"
+          - cell "南站"
+          - cell "使用中":
+            - generic: 使用中
+          - cell "90"
+          - cell "详情":
+            - button "详情"
+    - generic: 共 1 条，第 1/1 页，每页3条
+    - button "上一页" [disabled]
+    - button "下一页" [disabled]
+- dialog "设备详情 EQ-104":
+  - heading "设备详情 EQ-104" [level=2]
+  - button "关闭详情": 关闭
+  - paragraph: 编号：EQ-104
+  - paragraph: 名称：温循箱
+  - paragraph: 站点：南站
+  - paragraph:
+    - text: 状态：
+    - generic: 使用中
+  - paragraph: 费用：90元/小时
+  - tablist "详情页签":
+    - tab "基本信息"
+    - tab "预约历史" [active] [selected]
+  - paragraph: 无预约历史

@@ -1,0 +1,90 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 脚本生成
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "生成自动化脚本 · RUNNING" [level=1]
+  - paragraph: 每条独立冻结，按顺序开发；新候选保留原要求，尚需独立核对。
+  - button "取消后续生成"
+  - article:
+    - heading "KC-01 · v1" [level=2]
+    - paragraph: RUNNING
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-83f61409-1da9-4c90-a4a0-94e0676e6c8f?version=1&tab=scripts"
+    - text: ·
+    - link "查看实际开发过程与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/build-tasks/build-20260925103207-84ef5447"
+  - article:
+    - heading "KC-02 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&tab=scripts"
+  - article:
+    - heading "KC-03 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-5e437e3c-1ff5-445b-895c-24adc6353f6a?version=1&tab=scripts"
+  - article:
+    - heading "KC-04 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-2fc028e1-4ed9-4f53-9616-fad8909cb398?version=1&tab=scripts"
+  - article:
+    - heading "KC-05 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?version=1&tab=scripts"
+  - article:
+    - heading "KC-06 · v2" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-b86c33dc-5001-4052-abf5-efda22cb6eff?version=2&tab=scripts"
+  - article:
+    - heading "KC-07 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e8a78bb2-b13b-4a7e-9788-fccf468307a6?version=1&tab=scripts"
+  - article:
+    - heading "KC-08 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&tab=scripts"
+  - article:
+    - heading "KC-09 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-58d5959c-4d7a-4d12-ac75-02a7d9255950?version=1&tab=scripts"
+  - article:
+    - heading "KC-10 · v1" [level=2]
+    - paragraph: QUEUED
+    - link "返回用例":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-c5b5e60a-bde6-42d3-89b2-35e98399624d?version=1&tab=scripts"
+- status

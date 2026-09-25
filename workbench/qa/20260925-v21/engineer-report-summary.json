@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "requested": 12,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "blocked": 10
+  },
+  "conforming": [
+    "KC-11"
+  ],
+  "main_batch_id": "batch-88258ad2-1b77-4a2d-849e-8d15f1fecda8",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e"
+}

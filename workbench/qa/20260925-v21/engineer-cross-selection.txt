@@ -1,0 +1,120 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- strong: V2.1 真实模型全流程 · 20260925
+- generic: /
+- strong: 用例库
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "V2.1 真实模型全流程 · 20260925" [level=1]
+  - paragraph: 正在进行12条完整复测：按原用例准备、生成缺失的当前版本脚本、核查断言，再执行新整轮批次和导出报告。KC-11/KC-12复用已有脚本；KC-01至KC-10逐条真实生成。旧6任务属于上一轮流程抽样，本轮不复用旧测试结果。所有脚本仍未批准，业务失败如实保留。
+  - button "运行整个项目（12）"
+  - link "导入用例":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/import"
+  - strong: 已有脚本可直接试跑 1 条
+  - text: ·
+  - link "从 KC-12 v1 开始":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-35175118-48c2-4471-8d52-e3eef51bc406?version=1&tab=scripts"
+  - paragraph: 点击详情顶部“运行此用例”，自动检查后确认即可；不调用模型。其余 11 条请查看各行阻塞原因。
+  - generic: 全部用例
+  - strong: "12"
+  - generic: 内容已确认
+  - strong: "12"
+  - generic: 内容待确认
+  - strong: "0"
+  - generic: 项目修订
+  - strong: r6
+  - generic "项目历史概况（可能来自不同批次）"
+  - heading "项目用例" [level=2]
+  - generic: 每页10条，选择跨页保留
+  - text: ⌕
+  - generic: 搜索用例
+  - textbox "⌕ 搜索用例":
+    - /placeholder: 按编号或标题搜索
+  - combobox "模块筛选":
+    - option "全部模块" [selected]
+    - option "设备预约调度"
+  - combobox "内容状态筛选":
+    - option "全部内容状态" [selected]
+    - option "内容已确认"
+    - option "内容待确认"
+  - button "运行选中（1）"
+  - generic "脚本操作"
+  - button "导出选中（1）"
+  - button "导出全部（12）"
+  - paragraph:
+    - text: 已选 1 条 · 跨页保留，其中 0 条不在当前筛选中。
+    - button "清空选择"
+    - generic: 最近执行可能跨批次，不代表全项目回归结论。
+  - table:
+    - rowgroup:
+      - row "选择当前页 编号 / 标题 模块 内容状态 自动化脚本 最近执行 要求核对":
+        - columnheader "选择当前页":
+          - checkbox "选择当前页"
+        - columnheader "编号 / 标题"
+        - columnheader "模块"
+        - columnheader "内容状态"
+        - columnheader "自动化脚本"
+        - columnheader "最近执行"
+        - columnheader "要求核对"
+    - rowgroup:
+      - row "选择 KC-11 KC-11 维护与使用中不可预约 设备预约调度 内容已确认 存在多个脚本，请明确选择版本 用例 v1 通过 待核对":
+        - cell "选择 KC-11":
+          - checkbox "选择 KC-11"
+        - cell "KC-11 维护与使用中不可预约":
+          - button "KC-11 维护与使用中不可预约":
+            - strong: KC-11
+            - generic: 维护与使用中不可预约
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "存在多个脚本，请明确选择版本 用例 v1":
+          - text: 存在多个脚本，请明确选择版本
+          - generic: 用例 v1
+        - cell "通过":
+          - generic: 通过
+        - cell "待核对"
+      - row "选择 KC-12 KC-12 南站同名设备详情与返回状态保持 设备预约调度 内容已确认 可直接试跑（未批准） 用例 v1 通过 待核对":
+        - cell "选择 KC-12":
+          - checkbox "选择 KC-12" [checked] [active]
+        - cell "KC-12 南站同名设备详情与返回状态保持":
+          - button "KC-12 南站同名设备详情与返回状态保持":
+            - strong: KC-12
+            - generic: 南站同名设备详情与返回状态保持
+        - cell "设备预约调度"
+        - cell "内容已确认":
+          - generic: 内容已确认
+        - cell "可直接试跑（未批准） 用例 v1":
+          - text: 可直接试跑（未批准）
+          - generic: 用例 v1
+        - cell "通过":
+          - generic: 通过
+        - cell "待核对"
+  - generic: 第 2 / 2 页，共 12 条
+  - button "上一页"
+  - button "下一页" [disabled]
+- status

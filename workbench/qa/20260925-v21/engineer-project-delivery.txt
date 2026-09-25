@@ -1,0 +1,44 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 项目设置
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "项目设置" [level=1]
+  - paragraph: 仅修改名称和说明；本阶段不提供删除、成员或权限管理。
+  - heading "基本信息" [level=2]
+  - generic: project-80875248-3e14-4055-b077-b890dead1a9e
+  - generic: 项目名称
+  - textbox "项目名称": V2.1 真实模型全流程 · 20260925
+  - generic: 项目说明
+  - textbox "项目说明": 本轮12条均有当前版本脚本；KC-01至KC-10已真实生成并自测，KC-11/12复用。统一新批次实际2执行/10授权阻塞，未宣称全项目通过。正常体验：打开KC-11，选择S2，运行此用例。KC-12技术可跑但额外筛选前置待确认；KC-01/07/10原动作偏离不采纳。新包精确授权及核查已准备，4322重载被自动审批阻止，当前服务尚未加载；详情中的生成自测可查看真实失败。原用例、历史与批准状态不变。报告见本轮11:25批次及离线工程师报告。
+  - generic: 当前项目修订 r7。若其他标签页先保存，当前请求会被后端拒绝而不会静默覆盖。
+  - button "保存项目信息"
+- status: 项目信息已由后端保存。

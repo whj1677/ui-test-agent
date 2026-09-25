@@ -1,0 +1,2762 @@
+{
+  "checked_at": "2026-09-25T11:24:11.849Z",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "operation_id": "generation-ad99c803-96d9-4702-94eb-3f9628f76303",
+  "state": "FINISHED",
+  "tasks": [
+    {
+      "case": "KC-01",
+      "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+      "case_version": 1,
+      "task_id": "build-20260925103207-84ef5447",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 79,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "960CC3AF05CA8DA40C8EBFA1F07C5937C95CBCF70BB728F63B3C8DA6DCBABB00",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: /共\\s*8\\s*条/\nReceived string:  \"共 5 条，第 1/2 页，每页3条上一页下一页\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '上一页' }).locator('..')\n    14 × locator resolved to <div class=\"pager\">…</div>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\n",
+            "expected": null,
+            "actual": "共 5 条，第 1/2 页，每页3条上一页下一页",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: /共\\s*8\\s*条/\nReceived string:  \"共 5 条，第 1/2 页，每页3条上一页下一页\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '上一页' }).locator('..')\n    14 × locator resolved to <div class=\"pager\">…</div>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\n",
+                      "expected": null,
+                      "actual": "共 5 条，第 1/2 页，每页3条上一页下一页",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: \u001b[32m/共\\s*8\\s*条/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条上一页下一页\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '上一页' }).locator('..')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"pager\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925103207-84ef5447\\development\\run-1\\candidate.spec.mjs",
+                        "line": 43,
+                        "column": 25
+                      },
+                      "snippet": "  41 |\n  42 |     // 设备资源共 8 条、每页 3 条、第 1/3 页\n> 43 |     await expect(pager).toContainText(/共\\s*8\\s*条/);\n     |                         ^\n  44 |     await expect(pager).toContainText(/每页\\s*3\\s*条/);\n  45 |     await expect(pager).toContainText(/第\\s*1\\/3\\s*页/);\n  46 |     // 第 1 页显示 EQ-101 / EQ-102 / EQ-103（编号升序）"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "388EBA647785D43438601E54BE588CCFFBEEC3150CC72BE2E02C6E09F97ED24E",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: /共\\s*8\\s*条/\nReceived string:  \"共 5 条，第 1/2 页，每页3条上一页下一页\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '上一页' }).locator('..')\n    14 × locator resolved to <div class=\"pager\">…</div>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\n",
+            "expected": null,
+            "actual": "共 5 条，第 1/2 页，每页3条上一页下一页",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: /共\\s*8\\s*条/\nReceived string:  \"共 5 条，第 1/2 页，每页3条上一页下一页\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '上一页' }).locator('..')\n    14 × locator resolved to <div class=\"pager\">…</div>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\n",
+                      "expected": null,
+                      "actual": "共 5 条，第 1/2 页，每页3条上一页下一页",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: '上一页' }).locator('..')\nExpected pattern: \u001b[32m/共\\s*8\\s*条/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条上一页下一页\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '上一页' }).locator('..')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"pager\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条上一页下一页\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925103207-84ef5447\\development\\run-2\\candidate.spec.mjs",
+                        "line": 35,
+                        "column": 25
+                      },
+                      "snippet": "  33 |     console.log(\"DIAG afterReload pager=\" + (await pager.innerText()) + \" stats=\" + (await stats.innerText()));\n  34 |\n> 35 |     await expect(pager).toContainText(/共\\s*8\\s*条/);\n     |                         ^\n  36 |     await expect(pager).toContainText(/每页\\s*3\\s*条/);\n  37 |     await expect(pager).toContainText(/第\\s*1\\/3\\s*页/);\n  38 |     await expect(idCells).toHaveText([\"EQ-101\", \"EQ-102\", \"EQ-103\"]);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 3,
+          "bundle_sha256": "430CF3A90F1CC16B1D73D71C604543763FF8EFFDEC18DB3836351998DF807A34",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 3,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 4011,
+                "sha256": "3EF38B3DFBC58DD47757637EA494517E44DFA0BAA0DA39C40E35DDE5F1959C0C"
+              }
+            ],
+            "sha256": "430CF3A90F1CC16B1D73D71C604543763FF8EFFDEC18DB3836351998DF807A34"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925103207-84ef5447-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "3EF38B3DFBC58DD47757637EA494517E44DFA0BAA0DA39C40E35DDE5F1959C0C",
+              "candidate_version": 3,
+              "executed_case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+              "executed_external_id": "KC-01",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T10:42:19.205Z",
+              "finished_at": "2026-09-25T10:42:23.639Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T10:42:20.127Z",
+                  "duration": 3482.929,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 423,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 66,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 249,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+        "case_version": 1,
+        "external_id": "KC-01",
+        "content_sha256": "706DC07BC2EE25F68FFE14709A39980590DC218AA7092EAD36AAAE332543346A"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "case": "KC-02",
+      "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+      "case_version": 1,
+      "task_id": "build-20260925104223-1281faca",
+      "state": "CANDIDATE_VALIDATION_FAILED",
+      "task_status": "CANDIDATE_VALIDATION_FAILED",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 79,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "9C981B1820A2943EC44F3A00112887206ACA6B99E5FB76E18FD131DB4B6B8295",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 5 条，第 1/2 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 5 条，第 1/2 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925104223-1281faca\\development\\run-1\\candidate.spec.mjs",
+                        "line": 90,
+                        "column": 27
+                      },
+                      "snippet": "  88 |     // 输入小写 eq-10：立即筛选（无需提交），匹配 EQ-101 至 EQ-108 全部 8 条，回到第 1 页\n  89 |     await searchBox.fill(\"eq-10\");\n> 90 |     await expect(summary).toHaveText(/共 8 条，第 1\\/\\d+ 页/);\n     |                           ^\n  91 |     const rows = await collectRowsAcrossAllPages(page);\n  92 |     step1Ids = rows.map((row) => row.id);\n  93 |     expect(step1Ids.length).toBe(8);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 5 条，第 1/2 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 5 条，第 1/2 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925104223-1281faca\\development\\run-2\\candidate.spec.mjs",
+                        "line": 93,
+                        "column": 32
+                      },
+                      "snippet": "  91 |     // 输入小写 eq-10：立即筛选（无需提交），匹配 EQ-101 至 EQ-108 全部 8 条，回到第 1 页\n  92 |     await searchBox.fill(\"eq-10\");\n> 93 |     await expect.soft(summary).toHaveText(/共 8 条，第 1\\/\\d+ 页/);\n     |                                ^\n  94 |     const rows = await collectRowsAcrossAllPages(page);\n  95 |     step1Ids = rows.map((row) => row.id);\n  96 |     expect.soft(step1Ids.length).toBe(8);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 2,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 4889,
+                "sha256": "5C9CD2F4F1BB50E393883FAF6DC2338EEC9EF5CFE76959ED4D60AADDFD85D88C"
+              }
+            ],
+            "sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F"
+          },
+          "trial_runs": []
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+        "case_version": 1,
+        "external_id": "KC-02",
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058"
+      },
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "case": "KC-03",
+      "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+      "case_version": 1,
+      "task_id": "build-20260925105201-7798322c",
+      "state": "CANDIDATE_VALIDATION_FAILED",
+      "task_status": "CANDIDATE_VALIDATION_FAILED",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 38,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "176C7C7C89F99FD622F19E8FCE88567FD6FD34DC97AC04D3C4B82BA6F03F9F9E",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+            "expected": "2",
+            "actual": "1",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+                      "expected": "2",
+                      "actual": "1",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925105201-7798322c\\development\\run-1\\candidate.spec.mjs",
+                        "line": 25,
+                        "column": 30
+                      },
+                      "snippet": "  23 |     await searchBox.fill(\"温循箱\");\n  24 |\n> 25 |     await expect(deviceRows).toHaveCount(2);\n     |                              ^\n  26 |     await expect(pageInfo).toHaveText(/共\\s*2\\s*条/);\n  27 |\n  28 |     await expect(idCell(0)).toHaveText(\"EQ-101\");"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 1,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 2962,
+                "sha256": "CBB0FCAB3AB79966B8CAB4857AE80D3C527492A5140E337720D5D29E73E64E7B"
+              }
+            ],
+            "sha256": "176C7C7C89F99FD622F19E8FCE88567FD6FD34DC97AC04D3C4B82BA6F03F9F9E"
+          },
+          "trial_runs": []
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+        "case_version": 1,
+        "external_id": "KC-03",
+        "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6"
+      },
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "case": "KC-04",
+      "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+      "case_version": 1,
+      "task_id": "build-20260925105542-23f9882a",
+      "state": "CANDIDATE_VALIDATION_FAILED",
+      "task_status": "CANDIDATE_VALIDATION_FAILED",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 47,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "52E9792B2B9464B0A585491F0EF2CCFDE4775E160AA6152C5FA1BB84B1455B7F",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: 3\nReceived: 2\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\n    14 × locator resolved to 2 elements\n       - unexpected value \"2\"\n",
+            "expected": "3",
+            "actual": "2",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: 3\nReceived: 2\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\n    14 × locator resolved to 2 elements\n       - unexpected value \"2\"\n",
+                      "expected": "3",
+                      "actual": "2",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925105542-23f9882a\\development\\run-1\\candidate.spec.mjs",
+                        "line": 54,
+                        "column": 57
+                      },
+                      "snippet": "  52 |     await selectStation(page, \"北站\");\n  53 |     // 立即显示北站 EQ-101/102/105，共3条，第1页\n> 54 |     await expect(deviceTable(page).locator(\"tbody tr\")).toHaveCount(3);\n     |                                                         ^\n  55 |     await expect(deviceIds(page)).toHaveText([\"EQ-101\", \"EQ-102\", \"EQ-105\"]);\n  56 |     await expect(deviceStations(page)).toHaveText([\"北站\", \"北站\", \"北站\"]);\n  57 |     await expect(pager(page)).toContainText(/共\\s*3\\s*条/);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "BBC7D1B6DACE369440996A9A3195ECDFD8E36D7ADB39F9E9AF785E317433E04A",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: 3\nReceived: 2\nTimeout:  5000ms\n\nCall log:\n  - Expect \"soft toHaveCount\" with timeout 5000ms\n  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\n    14 × locator resolved to 2 elements\n       - unexpected value \"2\"\n",
+            "expected": "3",
+            "actual": "2",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: 3\nReceived: 2\nTimeout:  5000ms\n\nCall log:\n  - Expect \"soft toHaveCount\" with timeout 5000ms\n  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\n    14 × locator resolved to 2 elements\n       - unexpected value \"2\"\n",
+                      "expected": "3",
+                      "actual": "2",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925105542-23f9882a\\development\\run-2\\candidate.spec.mjs",
+                        "line": 57,
+                        "column": 62
+                      },
+                      "snippet": "  55 |     await selectStation(page, \"北站\");\n  56 |     // 立即显示北站 EQ-101/102/105，共3条，第1页\n> 57 |     await expect.soft(deviceTable(page).locator(\"tbody tr\")).toHaveCount(3);\n     |                                                              ^\n  58 |     await expect.soft(deviceIds(page)).toHaveText([\"EQ-101\", \"EQ-102\", \"EQ-105\"]);\n  59 |     await expect.soft(deviceStations(page)).toHaveText([\"北站\", \"北站\", \"北站\"]);\n  60 |     await expect.soft(pager(page)).toContainText(/共\\s*3\\s*条/);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 2,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 4158,
+                "sha256": "3450C777466927EDE352A2D9517D954DBB602C3A90F1A21AB11EAB0709AE6A1B"
+              }
+            ],
+            "sha256": "BBC7D1B6DACE369440996A9A3195ECDFD8E36D7ADB39F9E9AF785E317433E04A"
+          },
+          "trial_runs": []
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+        "case_version": 1,
+        "external_id": "KC-04",
+        "content_sha256": "9C647E913DD993423A20179DB4CC5F4170AC483DE35A80A8DB0463E21FD7423D"
+      },
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "case": "KC-05",
+      "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+      "case_version": 1,
+      "task_id": "build-20260925110121-85ecf48b",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 33,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "4494AACF739A22234270933F654BF850441AE5B6BD7B56772A40ADA555272CA4",
+          "status": "FAILED",
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '下一页' }).locator('..')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条上一页下一页\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '下一页' }).locator('..')\n    14 × locator resolved to 1 element\n",
+            "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+            "actual": "[\"共 7 条，第 1/3 页，每页3条上一页下一页\"]",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('button', { name: '下一页' }).locator('..')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条上一页下一页\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('button', { name: '下一页' }).locator('..')\n    14 × locator resolved to 1 element\n",
+                      "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+                      "actual": "[\"共 7 条，第 1/3 页，每页3条上一页下一页\"]",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: '下一页' }).locator('..')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条上一页下一页\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: '下一页' }).locator('..')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925110121-85ecf48b\\development\\run-1\\candidate.spec.mjs",
+                        "line": 108,
+                        "column": 37
+                      },
+                      "snippet": "  106 |     const table = deviceTable(page);\n  107 |     await expect(table).toBeVisible();\n> 108 |     await expect(pagerRegion(page)).toContainText(['共 7 条', '第 1/3 页']);\n      |                                     ^\n  109 |\n  110 |     const all = await readAllRows(page, table);\n  111 |     const ids = all.map((row) => row.id);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "4470F0881BB43CFBD242B8996B340893B33D7073608F632ACD17D74F1D320A9A",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 2,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 6661,
+                "sha256": "D63025A5B570717E61E82EA8D128A35655D46BD1CC441BD11BB50661321062CA"
+              }
+            ],
+            "sha256": "4470F0881BB43CFBD242B8996B340893B33D7073608F632ACD17D74F1D320A9A"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925110121-85ecf48b-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "D63025A5B570717E61E82EA8D128A35655D46BD1CC441BD11BB50661321062CA",
+              "candidate_version": 2,
+              "executed_case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+              "executed_external_id": "KC-05",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T11:04:12.980Z",
+              "finished_at": "2026-09-25T11:04:16.686Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T11:04:13.565Z",
+                  "duration": 3091.8379999999997,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 636,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 358,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 300,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+        "case_version": 1,
+        "external_id": "KC-05",
+        "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "case": "KC-06",
+      "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+      "case_version": 2,
+      "task_id": "build-20260925110416-6318a182",
+      "state": "CANDIDATE_VALIDATION_FAILED",
+      "task_status": "CANDIDATE_VALIDATION_FAILED",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 75,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "48C24098E6B5C4834F251534F5A0B6EE26E000E5545C7E43F0B666848BE33194",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 0 条，第 1/1 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 0 条，第 1/1 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#pageInfo')\nExpected pattern: \u001b[32m/^共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 0 条，第 1/1 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#pageInfo')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925110416-6318a182\\development\\run-1\\candidate.spec.mjs",
+                        "line": 55,
+                        "column": 28
+                      },
+                      "snippet": "  53 |\n  54 |     // 第 1 页显示 101/102/103，共 8 条\n> 55 |     await expect(pageInfo).toHaveText(/^共 8 条，第 1\\/\\d+ 页/);\n     |                            ^\n  56 |     await expect(deviceRows).toHaveCount(3);\n  57 |     await expect(deviceRows.nth(0).locator(\"td\").nth(1)).toHaveText(\"EQ-101\");\n  58 |     await expect(deviceRows.nth(1).locator(\"td\").nth(1)).toHaveText(\"EQ-102\");"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "087ECEB2D179A4F1E1B7AC1D1D4036B0AA118BDAF10355002BC2FA7484E0207D",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 0 条，第 1/1 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 0 条，第 1/1 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#pageInfo')\nExpected pattern: \u001b[32m/^共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 0 条，第 1/1 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#pageInfo')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925110416-6318a182\\development\\run-2\\candidate.spec.mjs",
+                        "line": 59,
+                        "column": 30
+                      },
+                      "snippet": "  57 |\n  58 |       // 第 1 页显示 101/102/103，共 8 条\n> 59 |       await expect(pageInfo).toHaveText(/^共 8 条，第 1\\/\\d+ 页/);\n     |                              ^\n  60 |       await expect(deviceRows).toHaveCount(3);\n  61 |       await expect(deviceRows.nth(0).locator(\"td\").nth(1)).toHaveText(\"EQ-101\");\n  62 |       await expect(deviceRows.nth(1).locator(\"td\").nth(1)).toHaveText(\"EQ-102\");"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 3,
+          "bundle_sha256": "EDE0A3466351098A6F505AF4A01B2A876146C437191C991AFE6ED5A0AAC3A952",
+          "status": "FAILED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#devView').locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#devView').locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 0 条，第 1/1 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: locator('#devView').locator('#pageInfo')\nExpected pattern: /^共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 0 条，第 1/1 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('#devView').locator('#pageInfo')\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\n       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 0 条，第 1/1 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#devView').locator('#pageInfo')\nExpected pattern: \u001b[32m/^共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 0 条，第 1/1 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#devView').locator('#pageInfo')\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 0 条，第 1/1 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 0 条，第 1/1 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925110416-6318a182\\development\\run-3\\candidate.spec.mjs",
+                        "line": 60,
+                        "column": 30
+                      },
+                      "snippet": "  58 |\n  59 |       // 第 1 页显示 101/102/103，共 8 条\n> 60 |       await expect(pageInfo).toHaveText(/^共 8 条，第 1\\/\\d+ 页/);\n     |                              ^\n  61 |       await expect(deviceRows).toHaveCount(3);\n  62 |       await expect(deviceRows.nth(0).locator(\"td\").nth(1)).toHaveText(\"EQ-101\");\n  63 |       await expect(deviceRows.nth(1).locator(\"td\").nth(1)).toHaveText(\"EQ-102\");"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 3,
+      "candidates": [
+        {
+          "version": 3,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 3661,
+                "sha256": "7C5285877C6CB75943AED33070C2679FD82BDE1C8DDFD98E68D387DDF5A27E9D"
+              }
+            ],
+            "sha256": "EDE0A3466351098A6F505AF4A01B2A876146C437191C991AFE6ED5A0AAC3A952"
+          },
+          "trial_runs": []
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+        "case_version": 2,
+        "external_id": "KC-06",
+        "content_sha256": "16F2D54AC01F9510E28507DE494EFF66E1A513FACAC88BC96E7D16801E88E12E"
+      },
+      "human_review_status": "NOT_READY"
+    },
+    {
+      "case": "KC-07",
+      "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+      "case_version": 1,
+      "task_id": "build-20260925111009-068925fc",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 44,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "214F52A47762334E37F6CA9F83C3FE5DA3E1BC3E76AC63B0EDDF89833783DC41",
+          "status": "FAILED",
+          "error": {
+            "type": "TEST_ERROR",
+            "message": "Error: RECON::{\"statuses\":{\"空闲\":true,\"使用中\":false,\"维护\":false},\"sortSel\":\"编号升序\",\"pager\":\"共|5|条，第|2/2|页，每页3条\",\"stats\":\"设备总数|8|可预约设备|5|已确认预约|1|已确认收入|40\",\"pages\":[[\"|EQ-101|温循箱|北站|空闲|80|详情\",\"|EQ-103|示波器|南站|空闲|20|详情\",\"|EQ-105|电源柜|北站|空闲|60|详情\"],[\"|EQ-106|示波器|南站|空闲|30|详情\",\"|EQ-108|电源柜|西站|空闲|70|详情\"]]}",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              }
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "bundle_sha256": "5DEDB6E82E94EC8E47FDC1BBF96F90408719C9FD7AF89F32929AF4C0EACD894F",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 2,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 3821,
+                "sha256": "400DB8FF6F676EFAEE2F0516C4141A6EEEC8C647CD7DC75ECC17CD0C1A6D8FF4"
+              }
+            ],
+            "sha256": "5DEDB6E82E94EC8E47FDC1BBF96F90408719C9FD7AF89F32929AF4C0EACD894F"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925111009-068925fc-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "400DB8FF6F676EFAEE2F0516C4141A6EEEC8C647CD7DC75ECC17CD0C1A6D8FF4",
+              "candidate_version": 2,
+              "executed_case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+              "executed_external_id": "KC-07",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T11:14:53.434Z",
+              "finished_at": "2026-09-25T11:14:56.247Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T11:14:54.045Z",
+                  "duration": 2183.117,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 78,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 82,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 65,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+        "case_version": 1,
+        "external_id": "KC-07",
+        "content_sha256": "FE312970746332CC950D4AF49EBBB1260B2CEF47BAC071C01BD3274B030439E5"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "case": "KC-08",
+      "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+      "case_version": 1,
+      "task_id": "build-20260925111456-1a5a2b10",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 44,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 1,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 3525,
+                "sha256": "6AC2F2C8F7B61A16A2C9A9EC4FF64F97B5935EC9147418A922005BF6F87FBDFA"
+              }
+            ],
+            "sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925111456-1a5a2b10-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "6AC2F2C8F7B61A16A2C9A9EC4FF64F97B5935EC9147418A922005BF6F87FBDFA",
+              "candidate_version": 1,
+              "executed_case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+              "executed_external_id": "KC-08",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T11:17:31.853Z",
+              "finished_at": "2026-09-25T11:17:34.773Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T11:17:32.446Z",
+                  "duration": 2306.746,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 172,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 132,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 130,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+        "case_version": 1,
+        "external_id": "KC-08",
+        "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "case": "KC-09",
+      "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+      "case_version": 1,
+      "task_id": "build-20260925111734-46362f0b",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 47,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "133BE6ABF7FFE17A92F75CD750D579FC5D4FE2502C0E6C5B025E7AAA8915E9BC",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 1,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 4068,
+                "sha256": "89143152F6BC0C7A53E50286B953762B5928BF5FBA83605CED77D7C49ACDA227"
+              }
+            ],
+            "sha256": "133BE6ABF7FFE17A92F75CD750D579FC5D4FE2502C0E6C5B025E7AAA8915E9BC"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925111734-46362f0b-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "89143152F6BC0C7A53E50286B953762B5928BF5FBA83605CED77D7C49ACDA227",
+              "candidate_version": 1,
+              "executed_case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+              "executed_external_id": "KC-09",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T11:20:31.952Z",
+              "finished_at": "2026-09-25T11:20:34.917Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T11:20:32.590Z",
+                  "duration": 2305.3430000000003,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 163,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 70,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 190,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+        "case_version": 1,
+        "external_id": "KC-09",
+        "content_sha256": "4D5B6D62EDA40296ADA8A6EAC3DB75A741AF124BF72F5CDF581B9382BF1F564C"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    },
+    {
+      "case": "KC-10",
+      "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+      "case_version": 1,
+      "task_id": "build-20260925112034-eed511e6",
+      "state": "WAITING_HUMAN_REVIEW",
+      "task_status": "WAITING_HUMAN_REVIEW",
+      "reason": null,
+      "error": null,
+      "model": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash",
+        "profile": "headless",
+        "protocol": "official",
+        "credential_source": "saved-dsh-home",
+        "dsh_version": "0.1.6-alpha.2"
+      },
+      "tool_calls": 52,
+      "harness_starts": 1,
+      "self_tests": [
+        {
+          "number": 1,
+          "bundle_sha256": "67B4A31A3735A496BDB14033545693A169FE0FEB52DE536EF861B0C6D1470827",
+          "status": "PASSED",
+          "error": null,
+          "coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "script_version": 1,
+      "candidates": [
+        {
+          "version": 1,
+          "bundle": {
+            "files": [
+              {
+                "path": "candidate.spec.mjs",
+                "bytes": 3075,
+                "sha256": "AF0619EC79FE42A5FA4C5E65FE51602EB08A23D2C68164A1E081BDE0AC2778AE"
+              }
+            ],
+            "sha256": "67B4A31A3735A496BDB14033545693A169FE0FEB52DE536EF861B0C6D1470827"
+          },
+          "trial_runs": [
+            {
+              "run_id": "build-20260925112034-eed511e6-normal",
+              "run_type": "normal",
+              "validation_scope": "normal-only",
+              "candidate_sha256": "AF0619EC79FE42A5FA4C5E65FE51602EB08A23D2C68164A1E081BDE0AC2778AE",
+              "candidate_version": 1,
+              "executed_case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+              "executed_external_id": "KC-10",
+              "executed_case_version": 1,
+              "started_at": "2026-09-25T11:23:56.988Z",
+              "finished_at": "2026-09-25T11:23:59.943Z",
+              "status": "PASSED",
+              "complete_pass": true,
+              "step_coverage": {
+                "rule_version": "project-case-step-title-v2",
+                "complete": true,
+                "order_valid": true,
+                "expected_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "observed_sequence": [
+                  "CASE_STEP_1",
+                  "CASE_STEP_2",
+                  "CASE_STEP_3"
+                ],
+                "duplicates": [],
+                "missing": [],
+                "unexpected": [],
+                "malformed_titles": [],
+                "unattributed_errors": [],
+                "items": [
+                  {
+                    "marker": "CASE_STEP_1",
+                    "step_id": "CASE_STEP_1",
+                    "order": 1,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_2",
+                    "step_id": "CASE_STEP_2",
+                    "order": 2,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_2",
+                    "report_path": [
+                      1
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  },
+                  {
+                    "marker": "CASE_STEP_3",
+                    "step_id": "CASE_STEP_3",
+                    "order": 3,
+                    "observed": true,
+                    "raw_title": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error_attributed": false,
+                    "execution_status": "PASSED",
+                    "attributed_errors": []
+                  }
+                ]
+              },
+              "error": null,
+              "same_candidate_hash": true,
+              "specified_defect_detected": false,
+              "result": {
+                "report_status": "COMPLETE",
+                "test_status": "PASSED",
+                "test_count": 1,
+                "error": null,
+                "complete_pass": true,
+                "stats": {
+                  "startTime": "2026-09-25T11:23:57.577Z",
+                  "duration": 2341.917,
+                  "expected": 1,
+                  "skipped": 0,
+                  "unexpected": 0,
+                  "flaky": 0
+                },
+                "process": {
+                  "exit_code": 0,
+                  "termination": null,
+                  "error": null
+                },
+                "steps": [
+                  {
+                    "title": "CASE_STEP_1",
+                    "raw_title": "CASE_STEP_1",
+                    "category": null,
+                    "duration": 54,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_2",
+                    "raw_title": "CASE_STEP_2",
+                    "category": null,
+                    "duration": 138,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  },
+                  {
+                    "title": "CASE_STEP_3",
+                    "raw_title": "CASE_STEP_3",
+                    "category": null,
+                    "duration": 74,
+                    "error": null,
+                    "raw_error": null,
+                    "steps": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+        "case_version": 1,
+        "external_id": "KC-10",
+        "content_sha256": "72D3D68252026E5C8691158D9CB0B33FDF6313F8B0BF026620BCF329029331DB"
+      },
+      "human_review_status": "WAITING_REVIEW"
+    }
+  ]
+}

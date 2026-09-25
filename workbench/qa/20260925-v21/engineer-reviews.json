@@ -1,0 +1,115 @@
+{
+  "reviewer": "Codex maintainer independent source and evidence review; not human approval",
+  "reviews": {
+    "KC-01": {
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED",
+      "finding": "原第1步要求重置后初始列表为8条；真实自测1/2均为5条并失败。最终候选在断言前新增勾选全部状态，掩盖初始筛选差异，技术绿色不采纳。原失败证据保留；第2/3步原路径未到达。",
+      "manual_evidence": [
+        "engineer-manual-initial.txt",
+        "engineer-manual-initial.png"
+      ],
+      "test_verdict": "FAILED_REQUIREMENT_AND_SCRIPT_DEVIATION"
+    },
+    "KC-02": {
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。",
+      "manual_evidence": [
+        "engineer-manual-search.txt"
+      ],
+      "test_verdict": "BUSINESS_DIFFERENCE_RETAINED"
+    },
+    "KC-03": {
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "脚本原样搜索温循箱并要求2行、101北站与104南站按各自行字段区分，清空后仍断言8条和选择清空。未补状态筛选。实际仅1行，首步toHaveCount(2)失败，后两步未执行；失败归因与人工页面复核一致。最终文件与已逐行检查草稿哈希相同。",
+      "manual_evidence": [
+        "engineer-manual-same-name.txt"
+      ],
+      "test_verdict": "BUSINESS_DIFFERENCE_RETAINED"
+    },
+    "KC-04": {
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "最终脚本没有在第1步之前补选状态，保留北站101/102/105共3条的原预期；实际仅101/105两条，软断言记失败。后续仅空闲与空闲或维护的AND/OR组合，按编号、站点、状态及总数逐项验证，自测2第2/3步通过，整例仍失败。",
+      "manual_evidence": [
+        "engineer-manual-north.txt",
+        "engineer-manual-north-or.txt"
+      ],
+      "test_verdict": "BUSINESS_DIFFERENCE_RETAINED"
+    },
+    "KC-05": {
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "逐项核查原状态操作、完整7行集合（空闲5/维护2/排除104）、三页顺序101/102/103→105/106/107→108，以及取消维护后完整5行集合。字段通过表头绑定，不以全页文本混代行值。自测1为toContainText数组写法错误，自测2及独立验证通过；业务动作与预期未修改。最终文件与受审草稿同哈希，未批准资产。",
+      "manual_evidence": [
+        "engineer-manual-status-page1.txt",
+        "engineer-manual-status-page2.txt",
+        "engineer-manual-status-page3.txt",
+        "engineer-manual-status-idle.txt"
+      ],
+      "test_verdict": "PENDING_ROUND_EXECUTION"
+    },
+    "KC-11": {
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "选择已有S2。原要求为查看维护/使用中对象并核对禁用、不可预约标注及全选排除，并未要求默认呈现这些行；通过筛选定位目标后逐行断言，实际验证可预约EQ-101勾选，禁止行未选。人工页面复核符合，最终本轮执行结果仍独立记录。未批准资产。",
+      "manual_evidence": [
+        "engineer-manual-disabled-maintenance.txt",
+        "engineer-manual-disabled-inuse.txt",
+        "engineer-manual-disabled-selectall.txt"
+      ],
+      "test_verdict": "PENDING_ROUND_EXECUTION"
+    },
+    "KC-12": {
+      "requirements_status": "REVIEW_REQUIRED_PRECONDITION_ADDED",
+      "finding": "已有S1逐字段绑定EQ-104详情、无预约历史、关闭前后筛选/页码/选择；但在原搜索与站点操作之外补选使用中，使默认隐藏的目标出现。详情核心断言保留，新增筛选前置需确认，本轮技术复跑绿色也不算原路径完整通过。",
+      "manual_evidence": [
+        "engineer-manual-detail-before.txt",
+        "engineer-manual-detail-loaded.txt",
+        "engineer-manual-detail-history.txt",
+        "engineer-manual-detail-return.txt"
+      ],
+      "test_verdict": "PRECONDITION_PENDING_CONFIRMATION"
+    },
+    "KC-06": {
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "test_verdict": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "新v2脚本保留重置后8条及101/102/103的原预期，实际重置后0条；未补选状态。无结果首步通过，第二步原断言失败，finally内检查选择清空与预约禁用，原错误继续抛出。三次真实自测均失败，最终完整源码已核查。",
+      "manual_evidence": [
+        "engineer-manual-empty.txt",
+        "engineer-manual-reset.txt"
+      ]
+    },
+    "KC-07": {
+      "test_verdict": "FAILED_REQUIREMENT_AND_SCRIPT_DEVIATION",
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED",
+      "finding": "最终脚本明确在原步骤前补选全部状态，使费用排序范围从默认5条扩大为8条；三步排序值虽技术通过，但改变了原起始路径。人工按原动作费用降序实际101/108/105，原预期104/101/108。技术绿色不采纳为原用例通过，保留观察与原脚本。",
+      "manual_evidence": [
+        "engineer-manual-sort.txt"
+      ]
+    },
+    "KC-08": {
+      "manual_evidence": [
+        "engineer-manual-cross-page1.txt",
+        "engineer-manual-cross-page2.txt",
+        "engineer-manual-cross-return2.txt"
+      ],
+      "test_verdict": "PENDING_ROUND_EXECUTION",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "逐行核查101首选、翻页106新增后计数2、往返两页两行保持勾选，且103/108未误选；真实操作与计数/行复选框绑定，无额外状态条件，无修改原预期。自测及最终独立验证通过，最终文件与受审草稿同哈希；本轮结果仍由新批次决定。"
+    },
+    "KC-09": {
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "manual_evidence": [
+        "engineer-manual-filter-clear.txt",
+        "engineer-manual-filter-south-corrected.txt"
+      ],
+      "finding": "最终源码核对了101勾选后翻页保留、搜索103后只一行/已选0/第1页、清空搜索再选南站后逐行站点为南站且选择0/第1页；无额外状态筛选。真实自测及独立验证通过，人工原路径复核一致。脚本附带当前第2页下一页禁用检查，不计为新增需求。",
+      "test_verdict": "PENDING_ROUND_EXECUTION"
+    },
+    "KC-10": {
+      "finding": "最终候选在原第1页全选操作前补勾维护，把默认101/103/105改成101/102/103，然后才断言只选101/103共2项。人工原动作实际选中3项，附加前置掩盖了原预期差异；即使独立技术验证通过也不采纳为原路径通过。",
+      "manual_evidence": [
+        "engineer-manual-selectall.txt"
+      ],
+      "test_verdict": "FAILED_REQUIREMENT_AND_SCRIPT_DEVIATION",
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED"
+    }
+  }
+}

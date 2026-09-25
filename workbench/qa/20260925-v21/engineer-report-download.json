@@ -1,0 +1,20 @@
+{
+  "report_id": "report-baf16d385450467d072af738a6649331d18a9562",
+  "batch_id": "batch-88258ad2-1b77-4a2d-849e-8d15f1fecda8",
+  "counts": {
+    "requested": 12,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "not_run": 10
+  },
+  "bytes": 12207077,
+  "sha256": "2120DC01020C3FBC4B24CDA970365093AE656CC15635F2C99D6E392317A0E8F0",
+  "attachments_checked": 20,
+  "no_external_media": true,
+  "browser_download": false,
+  "browser_button_clicked": true,
+  "delivery_source": "exact-HTTP-attachment-saved",
+  "offline_file_open": "NOT_VERIFIED",
+  "local_file_name": "engineer-batch-evidence.html"
+}
