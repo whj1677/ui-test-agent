@@ -74,6 +74,7 @@ export async function caseAutomation(manager, projectId, caseId, versionNumber) 
     try { await resolveTrialCandidate(manager, { ...selection, lane: 'normal', diagnostic: true }); } catch (error) { reason = error.code === 'ENOENT' ? 'TRIAL_BUNDLE_MISSING' : error.message; }
     output.push({ selection, applies_to_selected_version: selection.case_version === versionNumber,
       files: (candidate.bundle?.files || []).map(f => ({ ...f, file_id: task.files.find(item => item.relative_path === `development/final/${f.path}`)?.file_id })), human_review_status: task.human_review_status,
+      script_version: task.script_version || null, created_at: task.created_at, maintenance_mode: task.maintenance?.mode || null,
       technical_status: task.verification_status, requirement_review: reviewFor(manager,selection), reason, source_task_id: task.task_id });
   }
   return { candidates: output };
@@ -99,7 +100,8 @@ export async function submitCandidateTrial(manager, request) {
       source_external_id: task.source.external_id, source_case_version: task.source.case_version,
       executed_case_id: request.case_id, executed_case_version: request.case_version,
       executed_external_id: version.content.external_id, executed_content_sha256: request.content_sha256,
-      frozen_case_content: version.content, candidate_sha256: candidate.sha256, bundle: { files: bundle.files, sha256: bundle.sha256 },
+      frozen_case_content: version.content, script_version: task.script_version || null, candidate_sha256: candidate.sha256, bundle: { files: bundle.files, sha256: bundle.sha256 },
+      recording: { viewport: {width:1280,height:720}, video_size: {width:1280,height:720}, device_scale_factor: 1, codec: 'Playwright WebM', encoding_parameters: 'Playwright defaults; bitrate not overridden' },
       run_type: request.lane, origin: 'EXPLICIT_CANDIDATE_TRIAL', created_at: manager.now().toISOString(), started_at: manager.now().toISOString(),
       execution_status: 'QUEUED', status: 'NOT_RUN', complete_pass: false, approval_status: 'NOT_APPROVED',
       harness_starts: 0, model_calls: 0, media: [], files: [], evidence_status: 'PENDING', runner_version: 'candidate-bundle-trial-v1' });

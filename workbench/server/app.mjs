@@ -1,5 +1,5 @@
-import { reviewFor } from './batches.mjs';
-import { developmentRecords, mediaType } from './build/candidate-trials.mjs';
+import { projectRecords } from './execution-records.mjs';
+import { mediaType } from './build/candidate-trials.mjs';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -25,7 +25,7 @@ function securityHeaders(contentType) {
     'cache-control': 'no-store',
     'x-content-type-options': 'nosniff',
     'referrer-policy': 'no-referrer',
-    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; frame-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
   };
 }
 
@@ -44,6 +44,7 @@ async function sendStatic(response, webRoot, workspaceRoot, pathname) {
     ['/workspace/api.js', ['api.js', 'text/javascript; charset=utf-8']],
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
+  for (const name of ['script-actions.js','reports.js','history.js','product.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
   const selected = files.get(pathname) || workspaceFiles.get(pathname);
   if (!selected) return false;
   response.writeHead(200, securityHeaders(selected[1]));
@@ -201,6 +202,7 @@ function errorStatus(error) {
 
 export function createWorkbenchServer(options = {}) {
   const batchManager=options.batchManager;
+  const {scriptOperations, reportSnapshots} = options;
   const store = options.store;
   const manager = options.manager;
   const buildStore = options.buildStore;
@@ -215,14 +217,17 @@ export function createWorkbenchServer(options = {}) {
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
+      if(buildManager?.generationOwner && request.method==='POST' && (url.pathname==='/api/candidate-trials'||url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'GENERATION_EXECUTOR_BUSY'});
       if(batchManager?.active&&request.method==='POST'&&(url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'BATCH_EXECUTOR_BUSY'});
       if (buildManager?.generationDisabled && request.method === 'POST' && (url.pathname === '/api/build/tasks' || /\/api\/build\/tasks\/(develop|[^/]+\/(start|revise|revision))$/.test(url.pathname))) return sendJson(response, 403, { error: 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE' });
       if (request.method === 'GET' && url.pathname === '/api/health') {
         const buildDiagnostics = buildManager?.diagnostics?.() || null;
         sendJson(response, 200, {
           service: 'approved-test-workbench', status: buildDiagnostics?.storage_status === 'FAILED' ? 'degraded' : 'ready',
-          active_run_id: manager?.active?.runId || null,
+          active_run_id: manager?.active?.runId || buildManager?.active?.runId || null,
           active_build_task_id: buildManager?.active?.taskId || null,
+          active_batch_id: batchManager?.active?.id || null,
+          active_script_operation_id: scriptOperations?.active?.operation.operation_id || null,
           build_budget: buildStore ? await buildStore.getBudget() : null,
           build_authorization: buildStore?.getRevalidationAuthorization ? await buildStore.getRevalidationAuthorization() : null,
           build_diagnostics: buildDiagnostics,
@@ -319,6 +324,35 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 200, { tasks });
         return;
       }
+
+      const productRoute=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/(script-operations|reports)(?:\/([^/]+)(?:\/(start|stop|html))?)?$/);
+      if(productRoute){
+        const [,rawProject,kind,rawId,action]=productRoute,projectId=decodeURIComponent(rawProject),id=rawId&&decodeURIComponent(rawId);
+        if(kind==='reports'&&reportSnapshots){
+          if(request.method==='GET'){
+            if(!id)return sendJson(response,200,{reports:await reportSnapshots.list(projectId)});
+            const snapshot=await reportSnapshots.get(id,projectId);
+            if(action==='html'){
+              response.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-disposition':url.searchParams.has('download')?`attachment; filename="${snapshot.report_id}.html"`:'inline'});
+              return response.end(await reportSnapshots.html(snapshot.report_id,projectId));
+            }
+            return sendJson(response,200,snapshot);
+          }
+          if(request.method==='POST'&&!id){if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});return sendJson(response,201,await reportSnapshots.create(projectId,await readJsonBody(request)));}
+        }
+        if(kind==='script-operations'&&scriptOperations){
+          if(request.method==='GET')return sendJson(response,200,id?await scriptOperations.get(id,projectId):{operations:await scriptOperations.list(projectId)});
+          if(request.method==='POST'){
+            if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+            const body=await readJsonBody(request,256*1024);
+            if(id==='preflight')return sendJson(response,200,await scriptOperations.preflight(projectId,body));
+            if(!id)return sendJson(response,202,await scriptOperations.start(projectId,body));
+            if(action==='stop')return sendJson(response,200,await scriptOperations.stop(id,projectId));
+          }
+        }
+        return sendJson(response,404,{error:'PRODUCT_OPERATION_NOT_FOUND'});
+      }
+      if(request.method==='GET'&&url.pathname==='/api/script-environments')return sendJson(response,200,{generation_disabled:buildManager.generationDisabled,environments:[...new Map([...buildManager.candidateTrialEnvironments,...buildManager.developmentEnvironments].map(e=>[e.id,{id:e.id,validation_mode:e.validation_mode||'paired'}])).values()]});
       const batches=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/batches(?:\/([^/]+)(?:\/(start|stop))?)?$/);
       if(batchManager&&batches){
         const [projectId,id,action]=batches.slice(1).map(v=>v&&decodeURIComponent(v));
@@ -346,20 +380,7 @@ export function createWorkbenchServer(options = {}) {
       }
       const projectExecutionRecords = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/execution-records$/);
       if (buildStore && request.method === 'GET' && projectExecutionRecords) {
-        const projectId = decodeURIComponent(projectExecutionRecords[1]);
-        const tasks = (await buildStore.listTasks()).filter((task) => task.source?.project_id === projectId);
-        const project = caseStore ? await caseStore.getProject(projectId) : null;
-        const records = tasks.filter(task => !task.development).flatMap((task) => (task.candidates || []).flatMap((candidate) => (candidate.trial_runs || []).map((run) => ({
-          ...run, project_id: projectId, project_name: task.source.project_name, source_build_task_id: task.task_id,
-          candidate_version: candidate.version, candidate_sha256: candidate.sha256,
-          frozen_case_content: project?.cases.find((item) => item.case_id === run.executed_case_id)
-            ?.versions.find((version) => version.version === run.executed_case_version)?.content || null,
-          files: (task.files || []).filter((file) => run.media_file_ids?.includes(file.file_id)),
-        }))));
-        records.push(...tasks.flatMap(developmentRecords));
-        for(const r of records){const task=tasks.find(t=>t.task_id===r.source_build_task_id);if(task)r.requirement_review=reviewFor(buildManager,{...task.source,source_task_id:task.task_id,bundle_sha256:r.bundle_sha256});}
-        if (store) records.push(...(await store.listRuns()).filter(r => r.schema === 'workbench/candidate-trial-v1' && r.project_id === projectId));
-        sendJson(response, 200, { records: records.sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))) });
+        sendJson(response, 200, { records: await projectRecords({buildStore,caseStore,store,buildManager}, decodeURIComponent(projectExecutionRecords[1])) });
         return;
       }
       if (caseManager && request.method === 'PATCH' && projectDetail) {

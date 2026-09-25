@@ -30,11 +30,12 @@ export async function registerDevelopmentAuthorization(store, entry) {
     await write(store, current);
   });
 }
-export async function claimDevelopmentAuthorization(store, logicalId, taskId) {
+export async function claimDevelopmentAuthorization(store, logicalId, taskId, validate = null) {
   return store.serial(async () => {
     const current = await read(store); const entry = current.entries.find(item => item.logical_id === logicalId);
     if (!entry) throw new Error('DEVELOPMENT_NOT_AUTHORIZED');
     if (entry.task_id) throw new Error('DEVELOPMENT_LOGICAL_TASK_ALREADY_CLAIMED:' + entry.task_id);
+    if (validate) await validate(structuredClone(entry));
     entry.task_id = taskId; entry.claimed_at = new Date().toISOString(); await write(store, current);
     return structuredClone(entry);
   });

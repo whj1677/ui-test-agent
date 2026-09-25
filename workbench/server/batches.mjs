@@ -35,7 +35,7 @@ export class BatchManager {
       const review=chosen?reviewFor(this.buildManager,chosen.selection):null;
       if(rejectedReview(review)&&mode!=='diagnostic')reason='REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY';
       const env=chosen&&this.buildManager.candidateTrialEnvironments.find(e=>e.id===chosen.selection.environment_id);
-      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED':'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
+      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,script_version:chosen?.script_version||null,environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED':'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
     }
     return this.save({schema:'workbench/test-batch-v1',batch_id:'batch-'+randomUUID(),project_id,scope,mode,software_version:software_version.trim()||null,software_version_source:software_version.trim()?'USER_LABEL_NOT_DEPLOYMENT_PROOF':'NOT_PROVIDED',project_revision:project.revision,created_at:now(),state:'PREVIEW',items,harness_starts:0,model_calls:0});
   }
@@ -45,7 +45,7 @@ export class BatchManager {
     if((await this.list(project)).some(other=>other.batch_id!==id&&other.request_id===request.request_id))throw Error('BATCH_REQUEST_CONFLICT');
     if(b.state!=='PREVIEW'||!/^[-\w]{8,100}$/.test(request.request_id||''))throw Error('BATCH_REQUEST_INVALID');
     if(b.items.some(i=>i.state==='BLOCKED')&&request.allow_partial!==true)throw Error('BATCH_PARTIAL_CONFIRMATION_REQUIRED');
-    const m=this.buildManager;if(this.active||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
+    const m=this.buildManager;if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
     b.request_id=request.request_id;b.allow_partial=request.allow_partial;b.state='QUEUED';b.started_at=now();await this.save(b);
     m.batchOwner=id;m.batchToken=randomUUID();this.active={id,token:m.batchToken,cancelled:false,batch:b};this.completion=this.execute(b).finally(()=>{m.batchOwner=null;m.batchToken=null;this.active=null;});return b;
   }); }

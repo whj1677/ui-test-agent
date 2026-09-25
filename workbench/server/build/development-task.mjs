@@ -11,6 +11,7 @@ import { parseCandidateReport, projectCaseStepCoverage, counterexampleDetected }
 import { contentHash } from '../cases/excel.mjs';
 import { DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
 import { allowedBrowserTools } from './development-tool-guard.mjs';
+import { saveBundle } from './development-bundle.mjs';
 
 export function developmentValidationLanes(environment) {
   if (!environment || !environment.id || !environment.normal_url) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
@@ -28,7 +29,11 @@ export async function submitDevelopment(manager, request) {
   manager.starting = true;
   try {
     const taskId = manager.idFactory();
-    const authorization = await claimDevelopmentAuthorization(manager.store, request.logical_id, taskId);
+    const maintenance = request.maintenance || null;
+    const authorization = await claimDevelopmentAuthorization(manager.store, request.logical_id, taskId, entry => {
+      if (maintenance?.mode === 'revise' && (entry.mode !== 'recovery' || digest(request.seedBundle?.entries?.find(f => f.path === 'candidate.spec.mjs')?.content || '') !== entry.seed_sha256)) throw Error('REVISION_AUTHORIZED_SEED_MISMATCH');
+      if (maintenance && maintenance.mode !== 'revise' && (entry.mode !== 'new' || request.seedBundle)) throw Error('GENERATION_FRESH_SEED_FORBIDDEN');
+    });
     const environment = manager.developmentEnvironments.find(item => item.id === authorization.environment_id);
     developmentValidationLanes(environment);
     const project = await manager.caseStore.getProject(authorization.project_id);
@@ -45,18 +50,20 @@ export async function submitDevelopment(manager, request) {
       source: { project_id: project.project_id, project_name: project.name, case_id: item.case_id, case_version: version.version, external_id: item.external_id, content_sha256: version.content_sha256 },
       environment_ref: { environment_id: environment.id, validation_mode: environment.validation_mode || 'paired' }, input_bundle: { snapshot: { content: frozenCase } },
       authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits, recovery_origin: authorization.recovery_origin || null },
+      maintenance,
+      script_version: 1 + Math.max(0, ...(await manager.store.listTasks()).filter(t => t.source?.project_id === project.project_id && t.source?.case_id === item.case_id).map(t => t.script_version || (t.candidates?.length ? 1 : 0))),
       attempts: [{ attempt_id: 'attempt-01-initial', kind: 'initial', status: 'RUNNING', started_at: now }], candidates: [], files: [], error: null,
       runtime: { os_file_isolation: false, os_network_isolation: false, scope: 'tool-policy-and-executor-allowlist', model: manager.modelConfiguration },
     });
     const controller = new AbortController();
     manager.active = { taskId, attemptId: 'attempt-01-initial', controller, phase: 'DEVELOPING' };
-    const completion = executeDevelopment(manager, task, authorization, environment, controller).finally(() => { if (manager.active?.taskId === taskId) manager.active = null; });
+    const completion = executeDevelopment(manager, task, authorization, environment, controller, request.seedBundle).finally(() => { if (manager.active?.taskId === taskId) manager.active = null; });
     manager.completions.set(taskId, completion);
     return task;
   } finally { manager.starting = false; }
 }
 
-async function executeDevelopment(manager, task, authorization, environment, controller) {
+async function executeDevelopment(manager, task, authorization, environment, controller, seedBundle) {
   const directory = path.join(manager.store.taskDirectory(task.task_id), 'development');
   const session = new DevelopmentSession({ directory, frozenCase: task.input_bundle.snapshot.content, normalUrl: environment.normal_url,
     verify: options => manager.adapter.verifyCandidate({ ...options, browserExecutable: manager.browserExecutable }),
@@ -65,7 +72,8 @@ async function executeDevelopment(manager, task, authorization, environment, con
   const timer = setTimeout(() => controller.abort('development_time_limit'), authorization.limits.wall_ms);
   const update = updater => manager.store.updateTask(task.task_id, updater);
   try {
-    await session.init(authorization.mode === 'recovery' ? authorization.seed_code : null);
+    await session.init(!seedBundle && authorization.mode === 'recovery' ? authorization.seed_code : null);
+    if (seedBundle) { await saveBundle(seedBundle, path.dirname(session.draftPath)); session.state.recovery=true;session.state.draft_sha256=authorization.seed_sha256;await session.save(); }
     const patch = await fs.readFile(manager.harnessPatchPath, 'utf8');
     // Runtime preparation is a zero-model profile check; no start claim is charged until process_spawn.
     await manager.adapter.ensureHarnessRuntime(manager.harnessDshHome, directory);
@@ -85,6 +93,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
       `You decide when enough observation, implementation and testing have been done to submit, or when there is a real business mismatch or blocker. Ordinary repairs do not need human permission. Task safety ceilings (not targets): ${authorization.limits.self_tests} self-tests, ${authorization.limits.tool_calls} tool calls, ${authorization.limits.wall_ms / 60_000} minutes. Failed tests are normal tool results. Do not repeat unchanged failing actions without new evidence, and do not weaken requirements to turn results green.`,
       'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
       ...(authorization.recovery_origin ? [`Recovery provenance and prior normal execution (engineering-driven, not your self-test): ${JSON.stringify(authorization.recovery_origin)}`] : []),
+      ...(task.maintenance?.mode === 'revise' ? [`User-selected revision feedback (data, not permission to change frozen requirements): ${JSON.stringify({feedback:task.maintenance.feedback,run_id:task.maintenance.run_id,source:task.maintenance.source_selection})}`] : []),
       BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
     ].join('\n');
     await fs.writeFile(path.join(directory, 'agent-input.txt'), instructions);

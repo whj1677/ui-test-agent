@@ -1,3 +1,6 @@
+import { ScriptOperations } from './script-operations.mjs';
+import { ReportSnapshots } from './report-snapshots.mjs';
+import { projectRecords } from './execution-records.mjs';
 import { BatchManager } from './batches.mjs';
 import path from 'node:path';
 import { frozenTrialEnvironment } from './build/trial-environment.mjs';
@@ -80,7 +83,11 @@ const buildManager = new BuildTaskManager({
 buildManager.requirementReviews = trialConfig.requirement_reviews || [];
 const batchManager=new BatchManager({root:path.join(paths.dataRoot,'batches'),buildManager,caseStore,runStore:store});
 await batchManager.init();
-const server = createWorkbenchServer({ batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
+const records = id => projectRecords({buildStore,caseStore,store,buildManager},id);
+const scriptOperations = new ScriptOperations({root:path.join(paths.dataRoot,'script-operations'),buildManager,caseStore,records});
+await scriptOperations.init();
+const reportSnapshots = new ReportSnapshots({root:path.join(paths.dataRoot,'report-snapshots'),caseStore,batchManager,records,store,buildStore});
+const server = createWorkbenchServer({ scriptOperations, reportSnapshots, batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);
@@ -92,6 +99,7 @@ async function shutdown(signal) {
   if (shutdownStarted) return;
   shutdownStarted = true;
   console.log(JSON.stringify({ type: 'service_shutdown_requested', service_instance_id: serviceInstanceId, signal }));
+  if (scriptOperations.active) { await scriptOperations.stop(scriptOperations.active.operation.operation_id,scriptOperations.active.operation.project_id); await scriptOperations.completion; }
   if (batchManager.active) { await batchManager.stop(batchManager.active.id); await batchManager.completion; }
   if (buildManager.active) await buildManager.stop(buildManager.active.taskId).catch((error) => {
     console.error(JSON.stringify({ type: 'build_stop_failed', code: error?.code || error?.message || 'UNKNOWN' }));
