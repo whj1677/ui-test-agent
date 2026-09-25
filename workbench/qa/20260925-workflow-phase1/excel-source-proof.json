@@ -1,0 +1,16 @@
+[
+  {
+    "upload_id": "upload-36e5a33c-a79e-4cb7-af6d-7946be6c15c5",
+    "created_at": "2026-09-25T05:56:19.267Z",
+    "sha256": "29611C3C1327A6E873FD62BB356E03560F64CCEDDCC4FAAE21797435F95BD416",
+    "bytes": 8822,
+    "file": "uploaded-1.xlsx"
+  },
+  {
+    "upload_id": "upload-1da74b5d-116b-43bd-bc3f-40a048a0ccd1",
+    "created_at": "2026-09-25T05:56:36.333Z",
+    "sha256": "EAD6BFCE2ECFB126BC71FD19B7325ECFE4D595EAA1947C4E13855224FEBA0B21",
+    "bytes": 8822,
+    "file": "uploaded-2.xlsx"
+  }
+]

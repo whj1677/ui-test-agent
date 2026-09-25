@@ -1,0 +1,20 @@
+{
+  "software_versions": [
+    "模拟构建-V1",
+    "模拟构建-V2"
+  ],
+  "scope": "same frozen deployment, labels simulate product release; not real deployment validation",
+  "normal_restart_readback": true,
+  "excel_import_cases_readback": 24,
+  "version2_no_inheritance": true,
+  "version1_history_available": true,
+  "cross_project_run_rejected": true,
+  "cross_project_batch_rejected": true,
+  "refresh_back_forward_no_execution": true,
+  "run_counts": {
+    "before": 8,
+    "after": 8
+  },
+  "harness_starts": 0,
+  "model_calls": 0
+}

@@ -1,0 +1,732 @@
+{
+  "batch": {
+    "schema": "workbench/test-batch-v1",
+    "batch_id": "batch-3df5375e-9d47-49a4-af31-12770fcd6b6f",
+    "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+    "scope": "single",
+    "mode": "technical",
+    "software_version": "模拟构建-V1",
+    "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+    "project_revision": 3,
+    "created_at": "2026-09-25T06:13:53.929Z",
+    "state": "FINISHED",
+    "items": [
+      {
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "selection": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "source_task_id": "build-20260925033830-71eef5ec",
+          "candidate_version": 2,
+          "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+          "environment_id": "kimi-complex-20260925"
+        },
+        "environment_identity": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "requirement_review": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "source_task_id": "build-20260925033830-71eef5ec",
+          "candidate_version": 2,
+          "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+          "environment_id": "kimi-complex-20260925",
+          "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+          "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+          "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+          "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+          "approval_status": "NOT_APPROVED",
+          "reuse_source": {
+            "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+            "case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+            "case_version": 1
+          }
+        },
+        "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+        "state": "FINISHED",
+        "reason": null,
+        "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+        "result": "FAILED",
+        "complete_pass": false
+      }
+    ],
+    "harness_starts": 0,
+    "model_calls": 0,
+    "request_id": "batch-request-1f1f7f0b-65a8-4b78-acef-a789d2b1f1ef",
+    "allow_partial": false,
+    "started_at": "2026-09-25T06:13:54.015Z",
+    "finished_at": "2026-09-25T06:14:09.305Z"
+  },
+  "runs": [
+    {
+      "schema": "workbench/candidate-trial-v1",
+      "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+      "batch_id": "batch-3df5375e-9d47-49a4-af31-12770fcd6b6f",
+      "requirement_review": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925033830-71eef5ec",
+        "candidate_version": 2,
+        "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+        "environment_id": "kimi-complex-20260925",
+        "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+        "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+        "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+        "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+        "approval_status": "NOT_APPROVED",
+        "reuse_source": {
+          "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+          "case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+          "case_version": 1
+        }
+      },
+      "diagnostic": false,
+      "request_id": "batch-3df5375e-9d47-49a4-af31-12770fcd6b6f-0",
+      "request_fingerprint": "C24C665704B2A99133F1705AF84CEE856AF0D12A680530829797137535BEC648",
+      "selection": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925033830-71eef5ec",
+        "candidate_version": 2,
+        "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+        "environment_id": "kimi-complex-20260925"
+      },
+      "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+      "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+      "case_version": 1,
+      "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "source_task_id": "build-20260925033830-71eef5ec",
+      "candidate_version": 2,
+      "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+      "environment_id": "kimi-complex-20260925",
+      "source_build_task_id": "build-20260925033830-71eef5ec",
+      "source_case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+      "source_external_id": "KC-02",
+      "source_case_version": 1,
+      "executed_case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+      "executed_case_version": 1,
+      "executed_external_id": "KC-02",
+      "executed_content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "frozen_case_content": {
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在搜索框输入小写eq-10",
+            "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          },
+          {
+            "order": 2,
+            "action": "清空后输入大写EQ-106",
+            "expected": "仅显示EQ-106，共1条，第1/1页"
+          },
+          {
+            "order": 3,
+            "action": "输入eq-1并查看边界",
+            "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          }
+        ],
+        "status": "CONFIRMED"
+      },
+      "candidate_sha256": "2269EF6A4175937E487807B0B631315B34410312D8AC519964547FB13F195CA8",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 3898,
+            "sha256": "2269EF6A4175937E487807B0B631315B34410312D8AC519964547FB13F195CA8"
+          }
+        ],
+        "sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE"
+      },
+      "run_type": "normal",
+      "origin": "EXPLICIT_CANDIDATE_TRIAL",
+      "created_at": "2026-09-25T06:13:54.034Z",
+      "started_at": "2026-09-25T06:13:54.034Z",
+      "execution_status": "FINISHED",
+      "status": "FAILED",
+      "complete_pass": false,
+      "approval_status": "NOT_APPROVED",
+      "harness_starts": 0,
+      "model_calls": 0,
+      "media": [
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/test-failed-1.png",
+          "bytes": 48932,
+          "sha256": "E72454341FAE46753593CA233B1BA611FDBAE31CB47B43A6E71D38859A466A63",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-1",
+          "file_id": "media-1",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "test-failed-1.png"
+        },
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/trace.zip",
+          "bytes": 745706,
+          "sha256": "780C896950BAAB00107E714B44E2F6FB53C10A135A8211E4D030B622A2F9D13C",
+          "kind": "trace",
+          "content_type": "application/zip",
+          "media_id": "media-2",
+          "file_id": "media-2",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "trace.zip"
+        },
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/video.webm",
+          "bytes": 50430,
+          "sha256": "DC76BA32709EED9CBEC63BADCEBF487A31C108EB1B7CCD5A54BC10DBAFC46342",
+          "kind": "video",
+          "content_type": "video/webm",
+          "media_id": "media-3",
+          "file_id": "media-3",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "video.webm"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+          "bytes": 54306,
+          "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-4",
+          "file_id": "media-4",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_1-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_1-failure-after.png",
+          "bytes": 49107,
+          "sha256": "E037BEFC831C0F8CB7D7DD7A5E3B415418DFE2657B565552E6CD74A204958E5C",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-5",
+          "file_id": "media-5",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_1-failure-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+          "bytes": 46152,
+          "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-6",
+          "file_id": "media-6",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_2-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+          "bytes": 49107,
+          "sha256": "E037BEFC831C0F8CB7D7DD7A5E3B415418DFE2657B565552E6CD74A204958E5C",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-7",
+          "file_id": "media-7",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_2-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+          "bytes": 46152,
+          "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-8",
+          "file_id": "media-8",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_3-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_3-failure-after.png",
+          "bytes": 48932,
+          "sha256": "E72454341FAE46753593CA233B1BA611FDBAE31CB47B43A6E71D38859A466A63",
+          "kind": "screenshot",
+          "content_type": "image/png",
+          "media_id": "media-9",
+          "file_id": "media-9",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_3-failure-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-replay-v1.webm",
+          "bytes": 744884,
+          "sha256": "C8D1EE04513C8E8DD946BAC148642C0601CEDE4DB9189DB3A636B3B9FF7AF57A",
+          "kind": "video",
+          "content_type": "video/webm",
+          "media_id": "media-10",
+          "file_id": "media-10",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "step-replay-v1.webm"
+        }
+      ],
+      "files": [
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/test-failed-1.png",
+          "bytes": 48932,
+          "sha256": "E72454341FAE46753593CA233B1BA611FDBAE31CB47B43A6E71D38859A466A63",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-1",
+          "file_id": "media-1",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "test-failed-1.png"
+        },
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/trace.zip",
+          "bytes": 745706,
+          "sha256": "780C896950BAAB00107E714B44E2F6FB53C10A135A8211E4D030B622A2F9D13C",
+          "kind": "trial_trace",
+          "content_type": "application/zip",
+          "media_id": "media-2",
+          "file_id": "media-2",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "trace.zip"
+        },
+        {
+          "relative_path": "execution/artifacts/observed-KC-02-编号模糊搜索不区分大小写/video.webm",
+          "bytes": 50430,
+          "sha256": "DC76BA32709EED9CBEC63BADCEBF487A31C108EB1B7CCD5A54BC10DBAFC46342",
+          "kind": "trial_video",
+          "content_type": "video/webm",
+          "media_id": "media-3",
+          "file_id": "media-3",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "video.webm"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+          "bytes": 54306,
+          "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-4",
+          "file_id": "media-4",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_1-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_1-failure-after.png",
+          "bytes": 49107,
+          "sha256": "E037BEFC831C0F8CB7D7DD7A5E3B415418DFE2657B565552E6CD74A204958E5C",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-5",
+          "file_id": "media-5",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_1-failure-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+          "bytes": 46152,
+          "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-6",
+          "file_id": "media-6",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_2-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+          "bytes": 49107,
+          "sha256": "E037BEFC831C0F8CB7D7DD7A5E3B415418DFE2657B565552E6CD74A204958E5C",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-7",
+          "file_id": "media-7",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_2-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+          "bytes": 46152,
+          "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-8",
+          "file_id": "media-8",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_3-before.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-evidence/case_step_3-failure-after.png",
+          "bytes": 48932,
+          "sha256": "E72454341FAE46753593CA233B1BA611FDBAE31CB47B43A6E71D38859A466A63",
+          "kind": "trial_screenshot",
+          "content_type": "image/png",
+          "media_id": "media-9",
+          "file_id": "media-9",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "case_step_3-failure-after.png"
+        },
+        {
+          "relative_path": "execution/artifacts/step-replay-v1.webm",
+          "bytes": 744884,
+          "sha256": "C8D1EE04513C8E8DD946BAC148642C0601CEDE4DB9189DB3A636B3B9FF7AF57A",
+          "kind": "trial_step_replay_video",
+          "content_type": "video/webm",
+          "media_id": "media-10",
+          "file_id": "media-10",
+          "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+          "file_name": "step-replay-v1.webm"
+        }
+      ],
+      "evidence_status": "COMPLETE",
+      "runner_version": "candidate-bundle-trial-v1",
+      "software_version": "模拟构建-V1",
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "environment_binding": {
+        "environment_id": "kimi-complex-20260925",
+        "url": "http://127.0.0.1:56576/",
+        "site_sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0",
+        "configuration": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "ownership": "THIS_RUN_TARGET_SITE"
+      },
+      "entry_route": "http://127.0.0.1:56576/",
+      "result": {
+        "report_status": "COMPLETE",
+        "test_status": "FAILED",
+        "test_count": 1,
+        "error": {
+          "type": "ASSERTION_MISMATCH",
+          "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 8\nReceived: 5",
+          "expected": "8",
+          "actual": "5",
+          "attribution": "PENDING_ANALYSIS"
+        },
+        "complete_pass": false,
+        "stats": {
+          "startTime": "2026-09-25T06:13:55.041Z",
+          "duration": 3678.318,
+          "expected": 0,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 1,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1",
+            "raw_title": "CASE_STEP_1",
+            "category": null,
+            "duration": 391,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 8\nReceived: 5",
+              "expected": "8",
+              "actual": "5",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "raw_error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m",
+              "location": {
+                "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs",
+                "line": 85,
+                "column": 30
+              },
+              "snippet": "  83 |\n  84 |     const state = await readPager(page);\n> 85 |     expect.soft(state.total).toBe(8);\n     |                              ^\n  86 |     expect.soft(state.page).toBe(1);\n  87 |\n  88 |     const rows = await collectVisibleRows(page);"
+            },
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2",
+            "raw_title": "CASE_STEP_2",
+            "category": null,
+            "duration": 176,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_3",
+            "raw_title": "CASE_STEP_3",
+            "category": null,
+            "duration": 442,
+            "error": {
+              "type": "ASSERTION_UNRESOLVED",
+              "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 3\n+ Received  + 0\n\n  Array [\n    \"EQ-101\",\n-   \"EQ-102\",\n    \"EQ-103\",\n-   \"EQ-104\",\n    \"EQ-105\",\n    \"EQ-106\",\n-   \"EQ-107\",\n    \"EQ-108\",\n  ]",
+              "expected": null,
+              "actual": null,
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "raw_error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m",
+              "location": {
+                "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs",
+                "line": 116,
+                "column": 26
+              },
+              "snippet": "  114 |     const rows = await collectVisibleRows(page);\n  115 |     const numbers = rows.map((row) => row.number);\n> 116 |     expect.soft(numbers).toEqual(ALL_DEVICE_NUMBERS);\n      |                          ^\n  117 |\n  118 |     for (const number of numbers) {\n  119 |       expect.soft(number.toLowerCase()).toContain(\"eq-1\");"
+            },
+            "steps": []
+          }
+        ]
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 8\nReceived: 5",
+                  "expected": "8",
+                  "actual": "5",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs",
+                    "line": 85,
+                    "column": 30
+                  },
+                  "snippet": "  83 |\n  84 |     const state = await readPager(page);\n> 85 |     expect.soft(state.total).toBe(8);\n     |                              ^\n  86 |     expect.soft(state.page).toBe(1);\n  87 |\n  88 |     const rows = await collectVisibleRows(page);"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error": {
+                  "type": "ASSERTION_UNRESOLVED",
+                  "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 3\n+ Received  + 0\n\n  Array [\n    \"EQ-101\",\n-   \"EQ-102\",\n    \"EQ-103\",\n-   \"EQ-104\",\n    \"EQ-105\",\n    \"EQ-106\",\n-   \"EQ-107\",\n    \"EQ-108\",\n  ]",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs",
+                    "line": 116,
+                    "column": 26
+                  },
+                  "snippet": "  114 |     const rows = await collectVisibleRows(page);\n  115 |     const numbers = rows.map((row) => row.number);\n> 116 |     expect.soft(numbers).toEqual(ALL_DEVICE_NUMBERS);\n      |                          ^\n  117 |\n  118 |     for (const number of numbers) {\n  119 |       expect.soft(number.toLowerCase()).toContain(\"eq-1\");"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "failure_step": "CASE_STEP_1",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 8\nReceived: 5",
+        "expected": "8",
+        "actual": "5",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "same_candidate_hash": true,
+      "specified_defect_detected": false,
+      "process": {
+        "exit_code": 1,
+        "termination": null,
+        "error": null
+      },
+      "step_replay": {
+        "schema": "workbench/step-evidence-replay-v1",
+        "status": "READY",
+        "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+        "candidate_sha256": "2269EF6A4175937E487807B0B631315B34410312D8AC519964547FB13F195CA8",
+        "executed_external_id": "KC-02",
+        "executed_case_version": 1,
+        "observer_version": "e2e01-step-observer-v2",
+        "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+        "original_video_precise_seek": false,
+        "evidence_complete": true,
+        "missing_captures": [],
+        "steps": [
+          {
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "raw_title": "CASE_STEP_1",
+            "action": "在搜索框输入小写eq-10",
+            "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页",
+            "execution_status": "FAILED",
+            "actual": "5",
+            "assertion_expected": "8",
+            "raw_error": {
+              "name": "PlaywrightSoftAssertion",
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m8\u001b[39m\nReceived: \u001b[31m5\u001b[39m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:85:30\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:79:3\nError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:89:48\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:79:3"
+            },
+            "executed_start": "2026-09-25T06:13:57.094Z",
+            "executed_end": "2026-09-25T06:13:57.350Z",
+            "observer_start": "2026-09-25T06:13:57.007Z",
+            "observer_end": "2026-09-25T06:13:57.396Z",
+            "screenshot_phase": "failure-after",
+            "screenshot_file_name": "case_step_1-failure-after.png",
+            "before_screenshot_file_name": "case_step_1-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 133.23199999999997
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "raw_title": "CASE_STEP_2",
+            "action": "清空后输入大写EQ-106",
+            "expected": "仅显示EQ-106，共1条，第1/1页",
+            "execution_status": "PASSED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": null,
+            "executed_start": "2026-09-25T06:13:57.442Z",
+            "executed_end": "2026-09-25T06:13:57.521Z",
+            "observer_start": "2026-09-25T06:13:57.398Z",
+            "observer_end": "2026-09-25T06:13:57.573Z",
+            "screenshot_phase": "after",
+            "screenshot_file_name": "case_step_2-after.png",
+            "before_screenshot_file_name": "case_step_2-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 95.17600000000039
+          },
+          {
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "raw_title": "CASE_STEP_3",
+            "action": "输入eq-1并查看边界",
+            "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效",
+            "execution_status": "FAILED",
+            "actual": "未单独采集实际值",
+            "assertion_expected": null,
+            "raw_error": {
+              "name": "PlaywrightSoftAssertion",
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"EQ-101\",\u001b[22m\n\u001b[32m-   \"EQ-102\",\u001b[39m\n\u001b[2m    \"EQ-103\",\u001b[22m\n\u001b[32m-   \"EQ-104\",\u001b[39m\n\u001b[2m    \"EQ-105\",\u001b[22m\n\u001b[2m    \"EQ-106\",\u001b[22m\n\u001b[32m-   \"EQ-107\",\u001b[39m\n\u001b[2m    \"EQ-108\",\u001b[22m\n\u001b[2m  ]\u001b[22m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:116:26\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03\\bundle\\candidate.spec.mjs:109:3"
+            },
+            "executed_start": "2026-09-25T06:13:57.650Z",
+            "executed_end": "2026-09-25T06:13:57.955Z",
+            "observer_start": "2026-09-25T06:13:57.574Z",
+            "observer_end": "2026-09-25T06:13:58.015Z",
+            "screenshot_phase": "failure-after",
+            "screenshot_file_name": "case_step_3-failure-after.png",
+            "before_screenshot_file_name": "case_step_3-before.png",
+            "screenshot_error": null,
+            "capture_duration_ms": 135.55229999999983
+          }
+        ],
+        "chapters": [
+          {
+            "step_id": "CASE_STEP_1",
+            "start_seconds": 0,
+            "result_start_seconds": 1.2263999999761581,
+            "end_seconds": 3.036299999952316,
+            "screenshot_phase": "failure-after"
+          },
+          {
+            "step_id": "CASE_STEP_2",
+            "start_seconds": 3.036299999952316,
+            "result_start_seconds": 4.253299999952317,
+            "end_seconds": 6.062100000023841,
+            "screenshot_phase": "after"
+          },
+          {
+            "step_id": "CASE_STEP_3",
+            "start_seconds": 6.062100000023841,
+            "result_start_seconds": 7.282600000023842,
+            "end_seconds": 9.083799999952316,
+            "screenshot_phase": "failure-after"
+          }
+        ],
+        "duration_seconds": 9.203799,
+        "output_file_name": "step-replay-v1.webm",
+        "reading_holds": "1200ms action / 1800ms result"
+      },
+      "evidence_error": null,
+      "finished_at": "2026-09-25T06:14:09.298Z"
+    }
+  ],
+  "duplicate_request_same_batch": true,
+  "page_errors": []
+}

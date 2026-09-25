@@ -1,0 +1,383 @@
+{
+  "batch": {
+    "schema": "workbench/test-batch-v1",
+    "batch_id": "batch-3be58d36-3351-4511-ad49-cad68cea7603",
+    "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+    "scope": "project",
+    "mode": "technical",
+    "software_version": "模拟构建-V1",
+    "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+    "project_revision": 2,
+    "created_at": "2026-09-25T06:02:31.573Z",
+    "state": "CANCELLED",
+    "items": [
+      {
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "selection": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "source_task_id": "build-20260925033830-71eef5ec",
+          "candidate_version": 2,
+          "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+          "environment_id": "kimi-complex-20260925"
+        },
+        "environment_identity": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "requirement_review": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "source_task_id": "build-20260925033830-71eef5ec",
+          "candidate_version": 2,
+          "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+          "environment_id": "kimi-complex-20260925",
+          "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+          "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+          "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+          "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+          "approval_status": "NOT_APPROVED",
+          "reuse_source": {
+            "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+            "case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+            "case_version": 1
+          }
+        },
+        "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+        "state": "CANCELLED",
+        "reason": null,
+        "run_id": "trial-67b97ded44248c99dc438550a606f0515f601b17",
+        "result": "NOT_RUN",
+        "complete_pass": false
+      },
+      {
+        "case_id": "case-9490203e-377f-408e-98a0-32a35d6139e0",
+        "external_id": "KC-05",
+        "title": "状态多选空闲或维护",
+        "case_version": 1,
+        "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD",
+        "selection": null,
+        "environment_identity": null,
+        "requirement_review": null,
+        "qualification": "NO_APPLICABLE_SCRIPT",
+        "state": "BLOCKED",
+        "reason": "SCRIPT_MISSING"
+      },
+      {
+        "case_id": "case-75ddfe3a-58d9-4fe3-854c-5191e9a262be",
+        "external_id": "KC-11",
+        "title": "维护与使用中不可预约",
+        "case_version": 1,
+        "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+        "selection": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-75ddfe3a-58d9-4fe3-854c-5191e9a262be",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "source_task_id": "build-20260925042041-42ee6c62",
+          "candidate_version": 2,
+          "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+          "environment_id": "kimi-complex-20260925"
+        },
+        "environment_identity": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "requirement_review": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-75ddfe3a-58d9-4fe3-854c-5191e9a262be",
+          "case_version": 1,
+          "content_sha256": "74D7152C602CDF5716D4D1BF949218F4ADC93FB6CFDE6D408F3931E09C984369",
+          "source_task_id": "build-20260925042041-42ee6c62",
+          "candidate_version": 2,
+          "bundle_sha256": "F843F40358207350B0391788F768C227E30A9CD3DABFA1A6E476AB4A351AECD3",
+          "environment_id": "kimi-complex-20260925",
+          "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+          "finding": "原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。",
+          "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+          "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+          "approval_status": "NOT_APPROVED",
+          "reuse_source": {
+            "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+            "case_id": "case-7ce6b4de-a7f6-4333-8a6c-25c3d3a4a9cd",
+            "case_version": 1
+          }
+        },
+        "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+        "state": "NOT_RUN",
+        "reason": "BATCH_CANCELLED"
+      },
+      {
+        "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+        "external_id": "KC-22",
+        "title": "紧接结束边界允许并刷新保持",
+        "case_version": 1,
+        "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+        "selection": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+          "case_version": 1,
+          "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+          "source_task_id": "build-20260925045006-0e847875",
+          "candidate_version": 2,
+          "bundle_sha256": "C00F7D8B65E4681CDF293D4B7425077547119B4DBB333D68826C58F125912766",
+          "environment_id": "kimi-complex-20260925"
+        },
+        "environment_identity": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "requirement_review": {
+          "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+          "case_id": "case-153043e4-6675-4596-bff1-bac3b8bc6c62",
+          "case_version": 1,
+          "content_sha256": "251B0DB32196CF83A4E49C2C12EDBC00893092CA248BC0EBFDA4E56CDA7656ED",
+          "source_task_id": "build-20260925045006-0e847875",
+          "candidate_version": 2,
+          "bundle_sha256": "C00F7D8B65E4681CDF293D4B7425077547119B4DBB333D68826C58F125912766",
+          "environment_id": "kimi-complex-20260925",
+          "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+          "finding": "原钱七/边界回归验证/日期/12到14不变，确认20乘2等于40；仅新增R-002、关闭弹窗清空选择；刷新后R-001/R-002及2条80元均核对。",
+          "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+          "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+          "approval_status": "NOT_APPROVED",
+          "reuse_source": {
+            "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+            "case_id": "case-227cc211-bff9-4998-9952-1eae1946f1d5",
+            "case_version": 1
+          }
+        },
+        "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+        "state": "NOT_RUN",
+        "reason": "BATCH_CANCELLED"
+      }
+    ],
+    "harness_starts": 0,
+    "model_calls": 0,
+    "request_id": "batch-request-ba326a07-cdb0-40a6-8f01-105e8c3c0357",
+    "allow_partial": true,
+    "started_at": "2026-09-25T06:02:31.694Z",
+    "finished_at": "2026-09-25T06:02:33.297Z"
+  },
+  "runs": [
+    {
+      "schema": "workbench/candidate-trial-v1",
+      "run_id": "trial-67b97ded44248c99dc438550a606f0515f601b17",
+      "batch_id": "batch-3be58d36-3351-4511-ad49-cad68cea7603",
+      "requirement_review": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925033830-71eef5ec",
+        "candidate_version": 2,
+        "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+        "environment_id": "kimi-complex-20260925",
+        "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+        "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+        "source_record": "workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json",
+        "source_sha256": "AFE38F7284E8ED00125A3FFF3BBD315C22799C704CB56AE133E4D8F3255373C7",
+        "approval_status": "NOT_APPROVED",
+        "reuse_source": {
+          "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+          "case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+          "case_version": 1
+        }
+      },
+      "diagnostic": false,
+      "request_id": "batch-3be58d36-3351-4511-ad49-cad68cea7603-0",
+      "request_fingerprint": "2A3C2A59988C9042CCD4B075B29D29AEC065076D60076A47EEE661C3C3A5590A",
+      "selection": {
+        "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+        "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925033830-71eef5ec",
+        "candidate_version": 2,
+        "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+        "environment_id": "kimi-complex-20260925"
+      },
+      "project_id": "project-5fb015d9-a47d-4e14-9444-449a997692f7",
+      "case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+      "case_version": 1,
+      "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "source_task_id": "build-20260925033830-71eef5ec",
+      "candidate_version": 2,
+      "bundle_sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE",
+      "environment_id": "kimi-complex-20260925",
+      "source_build_task_id": "build-20260925033830-71eef5ec",
+      "source_case_id": "case-7c63ece4-c0d2-4811-8990-4fefd20d7efa",
+      "source_external_id": "KC-02",
+      "source_case_version": 1,
+      "executed_case_id": "case-31c31a36-58a6-4468-9393-cf49e6e5d112",
+      "executed_case_version": 1,
+      "executed_external_id": "KC-02",
+      "executed_content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "frozen_case_content": {
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在搜索框输入小写eq-10",
+            "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          },
+          {
+            "order": 2,
+            "action": "清空后输入大写EQ-106",
+            "expected": "仅显示EQ-106，共1条，第1/1页"
+          },
+          {
+            "order": 3,
+            "action": "输入eq-1并查看边界",
+            "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          }
+        ],
+        "status": "CONFIRMED"
+      },
+      "candidate_sha256": "2269EF6A4175937E487807B0B631315B34410312D8AC519964547FB13F195CA8",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 3898,
+            "sha256": "2269EF6A4175937E487807B0B631315B34410312D8AC519964547FB13F195CA8"
+          }
+        ],
+        "sha256": "F23853C5FB53E38B40DB14CD48D96EF4BC58A7C5F2A769DEA896D4E8736B0DAE"
+      },
+      "run_type": "normal",
+      "origin": "EXPLICIT_CANDIDATE_TRIAL",
+      "created_at": "2026-09-25T06:02:31.712Z",
+      "started_at": "2026-09-25T06:02:31.712Z",
+      "execution_status": "CANCELLED",
+      "status": "NOT_RUN",
+      "complete_pass": false,
+      "approval_status": "NOT_APPROVED",
+      "harness_starts": 0,
+      "model_calls": 0,
+      "media": [],
+      "files": [],
+      "evidence_status": "INCOMPLETE",
+      "runner_version": "candidate-bundle-trial-v1",
+      "software_version": "模拟构建-V1",
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "environment_binding": {
+        "environment_id": "kimi-complex-20260925",
+        "url": "http://127.0.0.1:51041/",
+        "site_sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0",
+        "configuration": {
+          "id": "kimi-complex-20260925",
+          "kind": "registered-static-html",
+          "file": "qa/20260925-kimi-complex/index.html",
+          "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+        },
+        "ownership": "THIS_RUN_TARGET_SITE"
+      },
+      "entry_route": "http://127.0.0.1:51041/",
+      "result": {
+        "report_status": "MISSING",
+        "test_status": "NOT_RUN",
+        "test_count": 0,
+        "error": {
+          "type": "REPORT_MISSING",
+          "message": "结构化报告缺失。",
+          "expected": null,
+          "actual": null,
+          "attribution": "PENDING_ANALYSIS"
+        },
+        "complete_pass": false
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "failure_step": null,
+      "error": {
+        "type": "REPORT_MISSING",
+        "message": "结构化报告缺失。",
+        "expected": null,
+        "actual": null,
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "same_candidate_hash": true,
+      "specified_defect_detected": false,
+      "step_replay": {
+        "status": "UNAVAILABLE",
+        "reason": "CANCELLED"
+      },
+      "evidence_error": "CANCELLED",
+      "finished_at": "2026-09-25T06:02:33.281Z"
+    }
+  ],
+  "duplicate_request_same_batch": true,
+  "page_errors": []
+}

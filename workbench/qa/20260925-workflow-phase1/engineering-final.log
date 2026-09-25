@@ -1,0 +1,67 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T14:19:23+08:00
+Command: node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs
+Exit code: 0
+Parsed test count: 8
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: batch concurrent replay, frozen versions, software label and no model
+ok 1 - batch concurrent replay, frozen versions, software label and no model
+  ---
+  duration_ms: 271.7076
+  type: 'test'
+  ...
+# Subtest: whole project retains missing scripts and requires partial consent
+ok 2 - whole project retains missing scripts and requires partial consent
+  ---
+  duration_ms: 115.0146
+  type: 'test'
+  ...
+# Subtest: requirements rejection is separate from PASSED, explicit diagnostic only
+ok 3 - requirements rejection is separate from PASSED, explicit diagnostic only
+  ---
+  duration_ms: 106.4812
+  type: 'test'
+  ...
+# Subtest: cancel stops owned run and remaining queue; restart never replays
+ok 4 - cancel stops owned run and remaining queue; restart never replays
+  ---
+  duration_ms: 126.2105
+  type: 'test'
+  ...
+# Subtest: changed helper blocks before executor even after preview
+ok 5 - changed helper blocks before executor even after preview
+  ---
+  duration_ms: 102.0739
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 6 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 1.6558
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 7 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.2439
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 8 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.3415
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1738.3576

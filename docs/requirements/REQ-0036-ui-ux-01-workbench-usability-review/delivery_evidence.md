@@ -2,170 +2,216 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-24T23:49:43+08:00`
+- Generated at: `2026-09-25T14:19:29+08:00`
 - Record: `REQ-0036-ui-ux-01-workbench-usability-review`
-- Change fingerprint: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+- Change fingerprint: `99fa8079a98b3f10d5c4ed88f5d15f8bc98fc8f31c0b6c398d840929154078d3`
 - Verification source: `collector-executed-v1`
-- Verification state: `仅静态检查`
-- Command: `python scripts/requirement_source.py check --package REQ-0036-ui-ux-01-workbench-usability-review`
+- Verification state: `单元测试通过`
+- Command: `node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs`
 - Exit code: `0`
-- Test count: `未解析`
+- Test count: `8`
 - Failure count: `0`
-- Skipped count: `未解析`
-- Log path: `docs/evidence/baseline-20260924/collector-ui-state.log`
-- Log SHA-256: `482f6760234c93008ef4cabe6364fa2ab16c105cab51c80e5804a37f602a6db3`
+- Skipped count: `0`
+- Log path: `workbench/qa/20260925-workflow-phase1/engineering-final.log`
+- Log SHA-256: `bbd1408e2a4ab1c44656ca70517134a79243d375ce3249775b1b36521b4c8c3d`
 
 ### Git Status
 
 ```text
-A  docs/evidence/baseline-20260924/collector-auth-intermediate-gate.log
-A  docs/evidence/baseline-20260924/collector-auth.log
-A  docs/evidence/baseline-20260924/collector-qa.log
-A  docs/evidence/baseline-20260924/dependency-scope.json
-A  docs/evidence/baseline-20260924/gate-before.log
-A  docs/evidence/baseline-20260924/run-01/install-browser.log
-A  docs/evidence/baseline-20260924/run-01/install-harness.log
-A  docs/evidence/baseline-20260924/run-01/install-root.log
-A  docs/evidence/baseline-20260924/run-01/install-workbench.log
-A  docs/evidence/baseline-20260924/run-01/result.json
-A  docs/evidence/baseline-20260924/run-02/browser-history.log
-A  docs/evidence/baseline-20260924/run-02/harness.log
-A  docs/evidence/baseline-20260924/run-02/install-harness.log
-A  docs/evidence/baseline-20260924/run-02/install-root.log
-A  docs/evidence/baseline-20260924/run-02/install-workbench.log
-A  docs/evidence/baseline-20260924/run-02/result.json
-A  docs/evidence/baseline-20260924/run-02/workbench.log
-A  docs/evidence/baseline-20260924/run-03/browser-auth.log
-A  docs/evidence/baseline-20260924/run-03/browser-history.log
-A  docs/evidence/baseline-20260924/run-03/browser-ui-d2a.log
-A  docs/evidence/baseline-20260924/run-03/harness.log
-A  docs/evidence/baseline-20260924/run-03/install-harness.log
-A  docs/evidence/baseline-20260924/run-03/install-root.log
-A  docs/evidence/baseline-20260924/run-03/install-workbench.log
-A  docs/evidence/baseline-20260924/run-03/result.json
-A  docs/evidence/baseline-20260924/run-03/workbench.log
-A  docs/evidence/baseline-20260924/run-04/browser-auth.log
-A  docs/evidence/baseline-20260924/run-04/browser-history.log
-A  docs/evidence/baseline-20260924/run-04/browser-ui-d2a.log
-A  docs/evidence/baseline-20260924/run-04/browser-ui-media/01-real-import-preview-1440x900.png
-A  docs/evidence/baseline-20260924/run-04/browser-ui-media/02-cross-project-library-1440x900.png
-A  docs/evidence/baseline-20260924/run-04/browser-ui-media/03-version-detail-1920x1080.png
-A  docs/evidence/baseline-20260924/run-04/browser-ui-media/04-projects-1280x800.png
-A  docs/evidence/baseline-20260924/run-04/browser-ui-media/05-restart-readback-1920x1080.png
-A  docs/evidence/baseline-20260924/run-04/harness.log
-A  docs/evidence/baseline-20260924/run-04/install-harness.log
-A  docs/evidence/baseline-20260924/run-04/install-root.log
-A  docs/evidence/baseline-20260924/run-04/install-workbench.log
-A  docs/evidence/baseline-20260924/run-04/result.json
-A  docs/evidence/baseline-20260924/run-04/workbench.log
-A  docs/evidence/baseline-20260924/source-acceptance.json
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/00_user_requirement.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/03_tasks.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/04_verification.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/05_trace.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/change_log.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/current_state.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/delivery_evidence.md
-M  docs/requirements/REQ-0033-e2e-01-six-case-workbench/requirement.source.json
-M  docs/requirements/REQ-0035-auth01-target-session/00_user_requirement.md
-M  docs/requirements/REQ-0035-auth01-target-session/03_tasks.md
-M  docs/requirements/REQ-0035-auth01-target-session/04_verification.md
-M  docs/requirements/REQ-0035-auth01-target-session/05_trace.md
-M  docs/requirements/REQ-0035-auth01-target-session/change_log.md
-M  docs/requirements/REQ-0035-auth01-target-session/current_state.md
-M  docs/requirements/REQ-0035-auth01-target-session/delivery_evidence.md
-M  docs/requirements/REQ-0035-auth01-target-session/requirement.source.json
-M  workbench/docs/BASELINE_CLOSE_20260924.md
-?? docs/evidence/baseline-20260924/.gitattributes
-?? docs/evidence/baseline-20260924/collector-ui-state.log
-?? docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
+ M docs/modules/test-workbench.md
+ M docs/requirements/README.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
+ M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/requirement.source.json
+ M workbench/README.md
+?? workbench/qa/20260925-workflow-phase1/FAILED-media.png
+?? workbench/qa/20260925-workflow-phase1/FAILED-revised-media.png
+?? workbench/qa/20260925-workflow-phase1/KC-01-detail.png
+?? workbench/qa/20260925-workflow-phase1/KC-12-detail.png
+?? workbench/qa/20260925-workflow-phase1/KC-21-detail.png
+?? workbench/qa/20260925-workflow-phase1/KC-22-detail.png
+?? workbench/qa/20260925-workflow-phase1/PASSED-media.png
+?? workbench/qa/20260925-workflow-phase1/REPORT.md
+?? workbench/qa/20260925-workflow-phase1/cancel-final-result.json
+?? workbench/qa/20260925-workflow-phase1/cancel-result.json
+?? workbench/qa/20260925-workflow-phase1/cancel.png
+?? workbench/qa/20260925-workflow-phase1/case-v2-no-inheritance.png
+?? workbench/qa/20260925-workflow-phase1/cross-result.json
+?? workbench/qa/20260925-workflow-phase1/cross.png
+?? workbench/qa/20260925-workflow-phase1/engineering-final.log
+?? workbench/qa/20260925-workflow-phase1/excel-preview.png
+?? workbench/qa/20260925-workflow-phase1/excel-source-proof.json
+?? workbench/qa/20260925-workflow-phase1/full-result.json
+?? workbench/qa/20260925-workflow-phase1/full.png
+?? workbench/qa/20260925-workflow-phase1/import-history.json
+?? workbench/qa/20260925-workflow-phase1/integrity.json
+?? workbench/qa/20260925-workflow-phase1/label-final-result.json
+?? workbench/qa/20260925-workflow-phase1/label-final.png
+?? workbench/qa/20260925-workflow-phase1/label-result.json
+?? workbench/qa/20260925-workflow-phase1/label.png
+?? workbench/qa/20260925-workflow-phase1/media-validation.json
+?? workbench/qa/20260925-workflow-phase1/observer-engineering.log
+?? workbench/qa/20260925-workflow-phase1/original24-preflight.png
+?? workbench/qa/20260925-workflow-phase1/phase1-cases.xlsx
+?? workbench/qa/20260925-workflow-phase1/replay-limitation.json
+?? workbench/qa/20260925-workflow-phase1/restart-version-validation.json
+?? workbench/qa/20260925-workflow-phase1/single-result.json
+?? workbench/qa/20260925-workflow-phase1/single.png
+?? workbench/qa/20260925-workflow-phase1/small-project.json
+?? workbench/qa/20260925-workflow-phase1/soft-fix-result.json
+?? workbench/qa/20260925-workflow-phase1/soft-fix.png
+?? workbench/qa/20260925-workflow-phase1/uploaded-1.xlsx
+?? workbench/qa/20260925-workflow-phase1/uploaded-2.xlsx
 ```
 
 ### Git Diff Stat
 
 ```text
-.../collector-auth-intermediate-gate.log           |  12 +
- docs/evidence/baseline-20260924/collector-auth.log |  31 +
- docs/evidence/baseline-20260924/collector-qa.log   | 112 ++++
- .../baseline-20260924/dependency-scope.json        |  44 ++
- docs/evidence/baseline-20260924/gate-before.log    |  11 +
- .../baseline-20260924/run-01/install-browser.log   |   2 +
- .../baseline-20260924/run-01/install-harness.log   |   3 +
- .../baseline-20260924/run-01/install-root.log      |   2 +
- .../baseline-20260924/run-01/install-workbench.log |   7 +
- docs/evidence/baseline-20260924/run-01/result.json |  79 +++
- .../baseline-20260924/run-02/browser-history.log   |  26 +
- docs/evidence/baseline-20260924/run-02/harness.log | 158 +++++
- .../baseline-20260924/run-02/install-harness.log   |   3 +
- .../baseline-20260924/run-02/install-root.log      |   2 +
- .../baseline-20260924/run-02/install-workbench.log |   7 +
- docs/evidence/baseline-20260924/run-02/result.json | 130 ++++
- .../baseline-20260924/run-02/workbench.log         | 697 ++++++++++++++++++++
- .../baseline-20260924/run-03/browser-auth.log      |   1 +
- .../baseline-20260924/run-03/browser-history.log   |   1 +
- .../baseline-20260924/run-03/browser-ui-d2a.log    |  18 +
- docs/evidence/baseline-20260924/run-03/harness.log | 158 +++++
- .../baseline-20260924/run-03/install-harness.log   |   3 +
- .../baseline-20260924/run-03/install-root.log      |   2 +
- .../baseline-20260924/run-03/install-workbench.log |   7 +
- docs/evidence/baseline-20260924/run-03/result.json | 154 +++++
- .../baseline-20260924/run-03/workbench.log         | 697 ++++++++++++++++++++
- .../baseline-20260924/run-04/browser-auth.log      |   1 +
- .../baseline-20260924/run-04/browser-history.log   |   1 +
- .../baseline-20260924/run-04/browser-ui-d2a.log    |   7 +
- .../01-real-import-preview-1440x900.png            | Bin 0 -> 102823 bytes
- .../02-cross-project-library-1440x900.png          | Bin 0 -> 94924 bytes
- .../03-version-detail-1920x1080.png                | Bin 0 -> 93352 bytes
- .../browser-ui-media/04-projects-1280x800.png      | Bin 0 -> 47451 bytes
- .../05-restart-readback-1920x1080.png              | Bin 0 -> 93352 bytes
- docs/evidence/baseline-20260924/run-04/harness.log | 158 +++++
- .../baseline-20260924/run-04/install-harness.log   |   3 +
- .../baseline-20260924/run-04/install-root.log      |   2 +
- .../baseline-20260924/run-04/install-workbench.log |   7 +
- docs/evidence/baseline-20260924/run-04/result.json | 160 +++++
- .../baseline-20260924/run-04/workbench.log         | 697 ++++++++++++++++++++
- .../baseline-20260924/source-acceptance.json       |  76 +++
- .../00_user_requirement.md                         |   1 +
- .../REQ-0033-e2e-01-six-case-workbench/03_tasks.md |   2 +-
- .../04_verification.md                             |   3 +-
- .../REQ-0033-e2e-01-six-case-workbench/05_trace.md |   2 +-
- .../change_log.md                                  |   2 +-
- .../current_state.md                               |   4 +-
- .../delivery_evidence.md                           | 703 ++++-----------------
- .../requirement.source.json                        |  23 +-
- .../00_user_requirement.md                         |   1 +
- .../REQ-0035-auth01-target-session/03_tasks.md     |   2 +-
- .../04_verification.md                             |   3 +-
- .../REQ-0035-auth01-target-session/05_trace.md     |   2 +-
- .../REQ-0035-auth01-target-session/change_log.md   |   2 +-
- .../current_state.md                               |   6 +-
- .../delivery_evidence.md                           | 209 +++---
- .../requirement.source.json                        |  25 +-
- workbench/docs/BASELINE_CLOSE_20260924.md          |  36 +-
- 58 files changed, 3819 insertions(+), 686 deletions(-)
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+ docs/modules/test-workbench.md                     |   3 +
+ docs/requirements/README.md                        |   4 +-
+ .../00_user_requirement.md                         |   6 +-
+ .../01_development_requirement.md                  |   2 +-
+ .../02_design.md                                   |   5 +-
+ .../03_tasks.md                                    |   2 +-
+ .../04_verification.md                             |  18 +-
+ .../05_trace.md                                    |   2 +-
+ .../change_log.md                                  |   1 +
+ .../current_state.md                               |  22 +-
+ .../delivery_evidence.md                           | 322 ++++++++++++---------
+ .../requirement.source.json                        |  44 ++-
+ workbench/README.md                                |  18 +-
+ 13 files changed, 263 insertions(+), 186 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/evidence/baseline-20260924/.gitattributes
-docs/evidence/baseline-20260924/collector-ui-state.log
-docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
+workbench/qa/20260925-workflow-phase1/FAILED-media.png
+workbench/qa/20260925-workflow-phase1/FAILED-revised-media.png
+workbench/qa/20260925-workflow-phase1/KC-01-detail.png
+workbench/qa/20260925-workflow-phase1/KC-12-detail.png
+workbench/qa/20260925-workflow-phase1/KC-21-detail.png
+workbench/qa/20260925-workflow-phase1/KC-22-detail.png
+workbench/qa/20260925-workflow-phase1/PASSED-media.png
+workbench/qa/20260925-workflow-phase1/REPORT.md
+workbench/qa/20260925-workflow-phase1/cancel-final-result.json
+workbench/qa/20260925-workflow-phase1/cancel-result.json
+workbench/qa/20260925-workflow-phase1/cancel.png
+workbench/qa/20260925-workflow-phase1/case-v2-no-inheritance.png
+workbench/qa/20260925-workflow-phase1/cross-result.json
+workbench/qa/20260925-workflow-phase1/cross.png
+workbench/qa/20260925-workflow-phase1/engineering-final.log
+workbench/qa/20260925-workflow-phase1/excel-preview.png
+workbench/qa/20260925-workflow-phase1/excel-source-proof.json
+workbench/qa/20260925-workflow-phase1/full-result.json
+workbench/qa/20260925-workflow-phase1/full.png
+workbench/qa/20260925-workflow-phase1/import-history.json
+workbench/qa/20260925-workflow-phase1/integrity.json
+workbench/qa/20260925-workflow-phase1/label-final-result.json
+workbench/qa/20260925-workflow-phase1/label-final.png
+workbench/qa/20260925-workflow-phase1/label-result.json
+workbench/qa/20260925-workflow-phase1/label.png
+workbench/qa/20260925-workflow-phase1/media-validation.json
+workbench/qa/20260925-workflow-phase1/observer-engineering.log
+workbench/qa/20260925-workflow-phase1/original24-preflight.png
+workbench/qa/20260925-workflow-phase1/phase1-cases.xlsx
+workbench/qa/20260925-workflow-phase1/replay-limitation.json
+workbench/qa/20260925-workflow-phase1/restart-version-validation.json
+workbench/qa/20260925-workflow-phase1/single-result.json
+workbench/qa/20260925-workflow-phase1/single.png
+workbench/qa/20260925-workflow-phase1/small-project.json
+workbench/qa/20260925-workflow-phase1/soft-fix-result.json
+workbench/qa/20260925-workflow-phase1/soft-fix.png
+workbench/qa/20260925-workflow-phase1/uploaded-1.xlsx
+workbench/qa/20260925-workflow-phase1/uploaded-2.xlsx
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-24T23:49:41+08:00
-Command: python scripts/requirement_source.py check --package REQ-0036-ui-ux-01-workbench-usability-review
+Started at: 2026-09-25T14:19:23+08:00
+Command: node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs
 Exit code: 0
-Parsed test count: unavailable
+Parsed test count: 8
 Parsed failure count: 0
-Parsed skipped count: unavailable
+Parsed skipped count: 0
 
 --- command output ---
-REQ_SOURCE_IN_SYNC: REQ-0036-ui-ux-01-workbench-usability-review; generated_views=8
+TAP version 13
+# Subtest: batch concurrent replay, frozen versions, software label and no model
+ok 1 - batch concurrent replay, frozen versions, software label and no model
+  ---
+  duration_ms: 271.7076
+  type: 'test'
+  ...
+# Subtest: whole project retains missing scripts and requires partial consent
+ok 2 - whole project retains missing scripts and requires partial consent
+  ---
+  duration_ms: 115.0146
+  type: 'test'
+  ...
+# Subtest: requirements rejection is separate from PASSED, explicit diagnostic only
+ok 3 - requirements rejection is separate from PASSED, explicit diagnostic only
+  ---
+  duration_ms: 106.4812
+  type: 'test'
+  ...
+# Subtest: cancel stops owned run and remaining queue; restart never replays
+ok 4 - cancel stops owned run and remaining queue; restart never replays
+  ---
+  duration_ms: 126.2105
+  type: 'test'
+  ...
+# Subtest: changed helper blocks before executor even after preview
+ok 5 - changed helper blocks before executor even after preview
+  ---
+  duration_ms: 102.0739
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 6 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 1.6558
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 7 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.2439
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 8 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.3415
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1738.3576
 ```
 
 ### Sync Record Status
@@ -176,12 +222,19 @@ DRY-RUN: no derived changes for REQ-0036-ui-ux-01-workbench-usability-review; ex
 
 ### Check AI Context
 
-- Exit code: `0`
+- Exit code: `1`
 
 ```text
-PASS ai-engineering-context checks
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
 ```
 
 ### Notes
 
-仅核对REQ-0036源文件与生成视图一致、合法验证状态；不执行或宣称UI重排实现。原走查成绩及日志不变。
+Official 4322/fresh-b browser acceptance and five real executor engineering scenarios are separate. 11 candidate requests, 0 Harness/model starts. See phase1 REPORT.md. Historical failures retained.

@@ -1,0 +1,82 @@
+{
+  "results": [
+    {
+      "run_id": "trial-8d804b4ab8b82178c99c9e0ac8189157861da0f5",
+      "status": "PASSED",
+      "media": [
+        {
+          "kind": "execution-video",
+          "width": 1280,
+          "height": 900,
+          "duration": 9.198899,
+          "played": true,
+          "paused": true,
+          "seek": 2
+        },
+        {
+          "kind": "original-video",
+          "width": 800,
+          "height": 450,
+          "duration": 2.88,
+          "played": true,
+          "paused": true,
+          "seek": 1.44
+        }
+      ],
+      "chapter_seek": true,
+      "screenshot_decoded": true,
+      "original_image_opened": true,
+      "trace_download_sha256": "AC8EDF0452A21665C1B7C195BF11017300F109C96B8A1CE2FC9BC1202D875B16"
+    },
+    {
+      "run_id": "trial-26dceaf11a1daf3504b651f3640b1d5a598debdd",
+      "status": "FAILED",
+      "media": [
+        {
+          "kind": "original-video",
+          "width": 800,
+          "height": 450,
+          "duration": 1.88,
+          "played": true,
+          "paused": true,
+          "seek": 0.94
+        }
+      ],
+      "replay_unavailable": "STEP_OBSERVATION_IDENTITY_OR_ORDER_MISMATCH",
+      "screenshot_decoded": true,
+      "original_image_opened": true,
+      "trace_download_sha256": "A2EA23DB381CD6CCE1C1BDD76B5068BDF2DE342C1CB973F89291A135D934D71D"
+    },
+    {
+      "run_id": "trial-3aeab69f1265dbe8b5ddba0241d64f4cee1a0c03",
+      "status": "FAILED",
+      "media": [
+        {
+          "kind": "execution-video",
+          "width": 1280,
+          "height": 900,
+          "duration": 9.203799,
+          "played": true,
+          "paused": true,
+          "seek": 2
+        },
+        {
+          "kind": "original-video",
+          "width": 800,
+          "height": 450,
+          "duration": 2,
+          "played": true,
+          "paused": true,
+          "seek": 1
+        }
+      ],
+      "chapter_seek": true,
+      "screenshot_decoded": true,
+      "original_image_opened": true,
+      "trace_download_sha256": "780C896950BAAB00107E714B44E2F6FB53C10A135A8211E4D030B622A2F9D13C"
+    }
+  ],
+  "invalid_run_no_fallback": true,
+  "harness_starts": 0,
+  "model_calls": 0
+}

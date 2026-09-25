@@ -10,17 +10,19 @@
 | VT | DR | 确认状态 | 执行状态 | 验证项 | 证据标准 | 当前证据 | 命令 | 退出码 | 测试数量 | 失败数量 | 跳过数量 | 证据路径 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | VT-0036-01 | DR-0036-01 | 已确认 | 仅静态检查 | 走查证据：12 张真实页面截图（地址+版本注明）、A-F 分类结论、三页线框与第一批范围 | 真实地址、运行实例版本核对记录、截图文件路径 | workbench/docs/UI_UX_REVIEW.md 及 workbench/docs/evidence/UI_UX_01_*.png；4322 app.js 与 6066bbc 哈希一致（135f9879…），4331 为 HEAD 8127e33 | - | - | - | - | - | - |
-| VT-0036-02 | DR-0036-02 | 人工待确认 | 未运行 | 第一批前端调整的实施与验证（待用户确认范围后排期） | 真实命令、退出码、测试统计和产物路径 | 无；本轮按任务要求停止在问题定位与方案 | - | - | - | - | - | - |
+| VT-0036-02 | DR-0036-02 | 已确认 | 人工待确认 | 第一批真实浏览器：24历史详情、Excel/JSON导入、单条/跨页/全项目、版本隔离、取消重启与媒体；11次已有候选执行请求、模型0；软断言观察修复后回放实际验证，原不完整运行保留 | 真实命令、退出码、测试统计和产物路径 | workbench/qa/20260925-workflow-phase1/REPORT.md、integrity.json、各批次与浏览器证据；工程纯单元8项退出0。正式门禁结论另记，候选未批准。 | - | - | - | - | - | - |
 
 ## 本轮命令与环境
 
-- 工作目录：C:/Users/20240082/.codex/worktrees/test-workbench-auth-session/ui-test-agent
-- 命令：git rev-parse HEAD / git status（基线核对）
-- 命令：curl /api/health、/api/case-library/projects*、execution-records（只读走查）
-- 命令：node .tmp-shots.mjs（Playwright 截图，只读页面）
-- 环境：Windows + Git Bash；4322=6066bbc 旧实例（运行中，未动）；4331=8127e33 本任务新起；4330 AUTH 合成站
-- 环境：Playwright 截图使用本机浏览器，未触发任何业务操作
+- 工作目录：D:/01_AI工程/01_工程项目/ui-test-agent
+- 命令：powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1 -Data fresh-b
+- 命令：node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs
+- 命令：node workbench/scripts/phase1-browser-run.mjs <模式>
+- 命令：node workbench/scripts/phase1-browser-media.mjs
+- 命令：node workbench/scripts/phase1-browser-version.mjs
+- 命令：node workbench/scripts/phase1-verify-integrity.mjs
+- 环境：唯一正式4322，既有workbench/.local/fresh25-b数据；测试目标站每run受控临时启动，不是第二个工作台；本机Edge/锁定Playwright
 
 ## 结论
 
-- 本轮为走查与方案，未运行单元/集成测试；DR-0036-02 实施前不宣称任何页面行为已改变。
+- 第一批限定流程可操作；原24任务与候选不改；11次候选执行请求含2次取消；8单元+5真实执行器工程场景分开统计；后两批未实施。

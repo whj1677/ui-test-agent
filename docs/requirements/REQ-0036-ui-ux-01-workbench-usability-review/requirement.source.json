@@ -3,7 +3,7 @@
   "req_id": "REQ-0036",
   "title": "UI-UX-01 真实工作台可用性走查与结构调整方案",
   "metadata": {
-    "requirement_status": "第一批已授权实施，后两批保留",
+    "requirement_status": "第一批流程已实现并自测；候选未批准，后两批未实施",
     "governance_level": "G2",
     "version": 3,
     "last_updated": "2026-09-25"
@@ -46,7 +46,7 @@
     },
     {
       "id": "DR-0036-02",
-      "status": "已确认",
+      "status": "已实现",
       "requirement": "第一批用例详情、有限批次串行技术试跑、要求核查与执行资格分离",
       "acceptance_criteria": "附件第一批第2至6节；不伪造历史批次，不自动批准；未执行清单可查",
       "constraints": "不换框架、不新增建例调用；后续两批不提前实施"
@@ -69,7 +69,7 @@
         "DR-0036-02"
       ],
       "status": "已确认",
-      "summary": "用例详情按内容状态/脚本准备/运行结果三区组织，生成脚本与运行已有脚本明确区分，哈希与内部 ID 折叠可查；结果详情失败结论与媒体置顶、索引折叠",
+      "summary": "用例正文、具体批次/运行、媒体、脚本及版本历史同页；复用现有播放器。新增最小批次服务冻结请求，串行调用已有candidate-trials；要求核查以来源记录+用例版本+包哈希关联，绝不作为批准。",
       "rationale": "对应走查 3/5 与 D/F，信息优先级按测试人员任务排序；登录状态前置依赖 AUTH 接线，列为后续"
     }
   ],
@@ -108,7 +108,7 @@
         "DD-0036-01",
         "DD-0036-02"
       ],
-      "status": "进行中",
+      "status": "已完成",
       "task": "实施第一批详情整合、批次/版本冻结、串行复跑与浏览器自测",
       "verification_ids": [
         "VT-0036-02"
@@ -133,25 +133,27 @@
         "DR-0036-02"
       ],
       "confirmation_status": "已确认",
-      "execution_status": "未运行",
-      "item": "第一批附件第6节浏览器验收与批次工程验证",
+      "execution_status": "人工待确认",
+      "item": "第一批真实浏览器：24历史详情、Excel/JSON导入、单条/跨页/全项目、版本隔离、取消重启与媒体；11次已有候选执行请求、模型0；软断言观察修复后回放实际验证，原不完整运行保留",
       "evidence_standard": "真实命令、退出码、测试统计和产物路径",
-      "current_evidence": "实施中，尚未执行"
+      "current_evidence": "workbench/qa/20260925-workflow-phase1/REPORT.md、integrity.json、各批次与浏览器证据；工程纯单元8项退出0。正式门禁结论另记，候选未批准。"
     }
   ],
   "verification_environment": {
-    "working_directory": "C:/Users/20240082/.codex/worktrees/test-workbench-auth-session/ui-test-agent",
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
-      "git rev-parse HEAD / git status（基线核对）",
-      "curl /api/health、/api/case-library/projects*、execution-records（只读走查）",
-      "node .tmp-shots.mjs（Playwright 截图，只读页面）"
+      "powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1 -Data fresh-b",
+      "node --test workbench/tests/batches.test.mjs workbench/tests/development-normal-only.test.mjs",
+      "node workbench/scripts/phase1-browser-run.mjs <模式>",
+      "node workbench/scripts/phase1-browser-media.mjs",
+      "node workbench/scripts/phase1-browser-version.mjs",
+      "node workbench/scripts/phase1-verify-integrity.mjs"
     ],
     "environment": [
-      "Windows + Git Bash；4322=6066bbc 旧实例（运行中，未动）；4331=8127e33 本任务新起；4330 AUTH 合成站",
-      "Playwright 截图使用本机浏览器，未触发任何业务操作"
+      "唯一正式4322，既有workbench/.local/fresh25-b数据；测试目标站每run受控临时启动，不是第二个工作台；本机Edge/锁定Playwright"
     ],
     "conclusion": [
-      "本轮为走查与方案，未运行单元/集成测试；DR-0036-02 实施前不宣称任何页面行为已改变。"
+      "第一批限定流程可操作；原24任务与候选不改；11次候选执行请求含2次取消；8单元+5真实执行器工程场景分开统计；后两批未实施。"
     ]
   },
   "trace_current": [
@@ -169,7 +171,7 @@
       "dd_id": "DD-0036-02",
       "tk_id": "TK-0036-02",
       "vt_id": "VT-0036-02",
-      "status": "进行中"
+      "status": "已完成"
     }
   ],
   "trace_history": [
@@ -180,7 +182,9 @@
       "notes": "新建需求包并完成本轮走查交付"
     }
   ],
-  "open_questions": [],
+  "open_questions": [
+    "本批无阻塞业务待确认；第二、三批按用户后续指令实施。"
+  ],
   "prohibited_implementation": [
     "本批Harness与模型0；不修改候选及原历史；不自动批准；不实施第二三批。"
   ],
@@ -200,6 +204,14 @@
       "description": "UI走查证据保留；已完成不是合法测试执行状态，改为仅静态检查。不宣布UI建议已实现。",
       "impact": "验证状态视图",
       "confirmed_by": "现有走查与本次门禁输出"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 3,
+      "type": "第一批实施",
+      "description": "接收已登记用户流程与第一批附件，完成详情、批次及零模型复跑；其余批次明确保留。",
+      "impact": "批次API与持久化、候选复用授权、用例详情和媒体",
+      "confirmed_by": "用户明确执行第一批附件"
     }
   ]
 }

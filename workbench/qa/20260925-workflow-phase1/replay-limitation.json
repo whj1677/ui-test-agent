@@ -1,0 +1,33 @@
+{
+  "run_id": "trial-26dceaf11a1daf3504b651f3640b1d5a598debdd",
+  "reason": "STEP_OBSERVATION_IDENTITY_OR_ORDER_MISMATCH",
+  "observation": [
+    {
+      "step_id": "CASE_STEP_1",
+      "status": "PASSED"
+    },
+    {
+      "step_id": "CASE_STEP_2",
+      "status": "PASSED"
+    },
+    {
+      "step_id": "CASE_STEP_3",
+      "status": "PASSED"
+    }
+  ],
+  "parsed_report": [
+    {
+      "step_id": "CASE_STEP_1",
+      "status": "FAILED"
+    },
+    {
+      "step_id": "CASE_STEP_2",
+      "status": "PASSED"
+    },
+    {
+      "step_id": "CASE_STEP_3",
+      "status": "FAILED"
+    }
+  ],
+  "action": "保留原始报告及截图；不放宽身份/状态检查、不事后补拍。"
+}

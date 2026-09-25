@@ -1,10 +1,10 @@
 # 需求索引
 
-- **下一批产品主流程（仅登记，待当前任务结束并交接）**：[REQ-0036 补充登记](REQ-0036-ui-ux-01-workbench-usability-review/product-workflow-intake-20260925.md)。届时读取根目录附件并与既有 UI 走查合并为一份当前有效需求，基于最新代码盘点能力后安排有限串行批次；本次不实施、不增加模型额度、不重启服务，当前任务原范围、预算和停止条件保持。该登记先于旧的局部待实施建议，尚不代表完整需求合并完成。
+- **产品流程第一批已实施**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)已接收原登记和用户附件，交付详情、最小批次及已有包零模型复跑；清晰字幕、脚本再生成、报告导出、旧UI最终删除保留后续两批。详见[第一批报告](../../workbench/qa/20260925-workflow-phase1/REPORT.md)。
 
 - [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；工程优先，两个真实任务限定验证。
 
-- [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：真实工作台可用性走查与三页结构调整方案；4322@6066bbc 与 4331@8127e33 已截图核对，A–F 问题已分类，停止在方案完成，前端第一批调整待用户确认。\r
+- [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：第一批详情/批次/零模型复跑已实施，开发者自测证据见第一批报告；候选未批准，后续两批未实施。
 \r
 - [REQ-0035-auth01-target-session](REQ-0035-auth01-target-session/current_state.md)：AUTH-01 被测系统人工登录与内存会话；独立合成站的真实 Harness 浏览器接入及新执行上下文复用已验证，现有工作台建例任务尚未绑定此登录环境。
 

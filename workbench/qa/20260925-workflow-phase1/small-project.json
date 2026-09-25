@@ -1,0 +1,148 @@
+{
+  "schema": "workbench/case-package-v1",
+  "package_id": "phase1-small-frozen-copies",
+  "exported_at": "2026-09-25T00:00:00Z",
+  "source_project": {
+    "project_id": "kimi-complex-source",
+    "name": "Kimi设备预约调度台",
+    "revision": 1
+  },
+  "cases": [
+    {
+      "package_case_id": "KC-02",
+      "source_version": 1,
+      "root_source": {
+        "type": "kimi-generated",
+        "stable_id": "kimi-complex-20260925:KC-02"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在搜索框输入小写eq-10",
+            "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          },
+          {
+            "order": 2,
+            "action": "清空后输入大写EQ-106",
+            "expected": "仅显示EQ-106，共1条，第1/1页"
+          },
+          {
+            "order": 3,
+            "action": "输入eq-1并查看边界",
+            "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "KC-05",
+      "source_version": 1,
+      "root_source": {
+        "type": "kimi-generated",
+        "stable_id": "kimi-complex-20260925:KC-05"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "KC-05",
+        "title": "状态多选空闲或维护",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "状态勾选空闲和维护，取消使用中",
+            "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中"
+          },
+          {
+            "order": 2,
+            "action": "翻页浏览结果",
+            "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页"
+          },
+          {
+            "order": 3,
+            "action": "取消维护仅留空闲",
+            "expected": "仅剩EQ-101/103/105/106/108共5条"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "KC-11",
+      "source_version": 1,
+      "root_source": {
+        "type": "kimi-generated",
+        "stable_id": "kimi-complex-20260925:KC-11"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "KC-11",
+        "title": "维护与使用中不可预约",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "查看EQ-102维护行",
+            "expected": "选择复选框禁用且标注不可预约，不能加入批量预约"
+          },
+          {
+            "order": 2,
+            "action": "搜索温循箱查看EQ-104使用中行",
+            "expected": "EQ-104复选框禁用，EQ-101可勾选"
+          },
+          {
+            "order": 3,
+            "action": "尝试全选含不可预约页",
+            "expected": "全选仅选择空闲可预约行，不可预约行保持未选"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "KC-22",
+      "source_version": 1,
+      "root_source": {
+        "type": "kimi-generated",
+        "stable_id": "kimi-complex-20260925:KC-22"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "KC-22",
+        "title": "紧接结束边界允许并刷新保持",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "选择EQ-103，填申请人钱七、用途边界回归验证、2026-10-10 12:00到14:00进入确认",
+            "expected": "与R-001在12:00紧接允许，第3步总价20乘2等于40元"
+          },
+          {
+            "order": 2,
+            "action": "确认预约一次",
+            "expected": "仅创建R-002，弹窗关闭，清空选择，跳转预约记录，状态已确认"
+          },
+          {
+            "order": 3,
+            "action": "刷新浏览器",
+            "expected": "R-001与R-002均保留，统计已确认2条、收入80元"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  ]
+}
