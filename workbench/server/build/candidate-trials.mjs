@@ -56,7 +56,8 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
   if (checkEnvironment && rejectedReview(review) && request.diagnostic !== true) throw new Error('REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY');
   const environment = manager.candidateTrialEnvironments.find(e => e.id === request.environment_id);
   if (checkEnvironment) {
-    if (!authorization || !authorization.lanes?.includes(request.lane)) throw new Error('TRIAL_NOT_AUTHORIZED');
+    const ownedNormalRun = manager.userInitiatedOperations === true && !mapped && task.source.project_id === request.project_id && request.lane === 'normal' && environment?.configurationIdentity?.kind === 'registered-static-html';
+    if ((!authorization || !authorization.lanes?.includes(request.lane)) && !ownedNormalRun) throw new Error('TRIAL_NOT_AUTHORIZED');
     if (!environment) throw new Error('TRIAL_ENVIRONMENT_UNAVAILABLE');
     await environment.check(); // identity check only: viewing never starts a service or run
   }

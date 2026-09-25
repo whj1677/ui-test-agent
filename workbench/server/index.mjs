@@ -81,6 +81,7 @@ const buildManager = new BuildTaskManager({
   otherActive: () => Boolean(manager.active),
 });
 buildManager.requirementReviews = trialConfig.requirement_reviews || [];
+buildManager.userInitiatedOperations = trialConfig.user_initiated_operations === true;
 const batchManager=new BatchManager({root:path.join(paths.dataRoot,'batches'),buildManager,caseStore,runStore:store});
 await batchManager.init();
 const records = id => projectRecords({buildStore,caseStore,store,buildManager},id);

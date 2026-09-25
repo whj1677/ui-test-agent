@@ -96,3 +96,42 @@ test('revision passes verified complete bundle and selected feedback; cancellati
   saved.state='RUNNING';saved.items[0].state='QUEUED';await op.save(saved);await op.init();
   const recovered=await op.get(v.operation_id,f.project.project_id);assert.equal(recovered.state,'INTERRUPTED');assert.equal(recovered.items[0].reason,'SERVICE_INTERRUPTED_NO_REPLAY');
 });
+
+
+test('explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only',async t=>{
+  const f=await fixture(t);let starts=0,acquires=0;
+  const used={logical_id:'old-consumed',task_id:'old-task',project_id:f.project.project_id,case_id:'case-unit'};
+  const ledger=path.join(f.root,'development-authorizations.json');await fs.writeFile(ledger,JSON.stringify({entries:[used]}));
+  const manager={store:{root:f.root,serial:fn=>fn(),getTask:async()=>({task_status:'FAILED',error:{code:'UNIT_NO_MODEL_EXECUTED'}})},
+    userInitiatedOperations:true,modelConfiguration:{configured:true},generationDisabled:false,developmentEnvironments:[{id:'unit-env',validation_mode:'normal-only'}],
+    candidateTrialEnvironments:[{id:'unit-env',configurationIdentity:{kind:'registered-static-html'},check:async()=>{},acquire:async()=>{acquires++;}}],
+    caseAutomation:async()=>({candidates:[]}),otherActive:()=>false,completions:new Map(),
+    submitDevelopment:async request=>{starts++;await claimDevelopmentAuthorization(manager.store,request.logical_id,'unit-new-task');manager.completions.set('unit-new-task',Promise.resolve());return{task_id:'unit-new-task'};}};
+  const operations=new ScriptOperations({root:path.join(f.root,'ops'),buildManager:manager,caseStore:f.caseStore,records:f.records});
+  const input={mode:'regenerate',environment_id:'unit-env',items:[{case_id:'case-unit',case_version:1}],request_id:'user-generation-test'};
+  const plan=await operations.preflight(f.project.project_id,input);assert.equal(plan.items[0].reason,null);assert.equal(plan.items[0].requires_model_confirmation,true);
+  assert.equal(plan.items[0].limits.harness_starts,1);assert.equal(plan.items[0].limits.wall_ms,1200000);
+  assert.deepEqual(JSON.parse(await fs.readFile(ledger)).entries,[used]);assert.equal(acquires,0);
+  await assert.rejects(operations.start(f.project.project_id,input),/MODEL_CONFIRMATION_REQUIRED/);assert.equal(starts,0);
+  const confirmed={...input,confirm_model_use:true};const [a,b]=await Promise.all([operations.start(f.project.project_id,confirmed),operations.start(f.project.project_id,confirmed)]);
+  assert.equal(a.operation_id,b.operation_id);await operations.completion;assert.equal(starts,1);
+  const entries=JSON.parse(await fs.readFile(ledger)).entries;assert.equal(entries.length,2);assert.deepEqual(entries[0],used);assert.equal(entries[1].task_id,'unit-new-task');assert.equal(entries[1].request_id,input.request_id);
+  assert.equal(entries[1].authorization_source,'EXPLICIT_USER_GENERATION_CONFIRMATION');assert.equal(entries[1].limits.harness_starts,1);
+  manager.candidateTrialEnvironments[0].check=async()=>{throw Error('TRIAL_ENVIRONMENT_CHANGED');};
+  const failed=await operations.preflight(f.project.project_id,{...input,request_id:'another-request'});assert.equal(failed.items[0].reason,'TRIAL_ENVIRONMENT_CHANGED');assert.equal(starts,1);
+});
+
+
+test('user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script',async t=>{
+  const f=await fixture(t),directory=path.join(f.root,'source/development/final');await fs.mkdir(directory,{recursive:true});
+  await fs.writeFile(path.join(directory,'candidate.spec.mjs'),'// 原始动作');await fs.writeFile(path.join(directory,'helper.mjs'),'// helper');
+  const {entries,...manifest}=await developmentBundle(directory,{validate:false});
+  const selection={project_id:f.project.project_id,case_id:'case-unit',case_version:1,source_task_id:'source',candidate_version:1,bundle_sha256:manifest.sha256};let submitted;
+  const manager={store:{root:f.root,serial:fn=>fn(),taskDirectory:()=>path.join(f.root,'source'),getTask:async id=>id==='source'?{task_id:id,candidates:[{version:1,bundle:manifest}]}:{task_status:'FAILED'}},
+    userInitiatedOperations:true,modelConfiguration:{configured:true},developmentEnvironments:[{id:'unit-env',validation_mode:'normal-only'}],candidateTrialEnvironments:[{id:'unit-env',configurationIdentity:{kind:'registered-static-html'},check:async()=>{}}],
+    caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection}]}),otherActive:()=>false,completions:new Map(),submitDevelopment:async r=>{submitted=r;manager.completions.set('unit-revision',Promise.resolve());return{task_id:'unit-revision'};}};
+  const op=new ScriptOperations({root:path.join(f.root,'ops'),buildManager:manager,caseStore:f.caseStore,records:f.records});
+  await op.start(f.project.project_id,{mode:'revise',environment_id:'unit-env',request_id:'explicit-revision-test',confirm_model_use:true,items:[{...selection,feedback:'只修定位，不改原要求'}]});await op.completion;
+  assert.equal(submitted.seedBundle.entries.length,2);assert.equal(submitted.seedBundle.sha256,manifest.sha256);
+  const receipt=JSON.parse(await fs.readFile(path.join(f.root,'development-authorizations.json'))).entries[0];assert.equal(receipt.seed_code,'// 原始动作');assert.equal(receipt.mode,'recovery');assert.equal(receipt.operation_mode,'revise');
+});

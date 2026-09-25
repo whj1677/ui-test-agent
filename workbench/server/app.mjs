@@ -1,3 +1,4 @@
+import { scriptEnvironments } from './build/user-workflow.mjs';
 import { projectRecords } from './execution-records.mjs';
 import { mediaType } from './build/candidate-trials.mjs';
 import http from 'node:http';
@@ -351,7 +352,7 @@ export function createWorkbenchServer(options = {}) {
         }
         return sendJson(response,404,{error:'PRODUCT_OPERATION_NOT_FOUND'});
       }
-      if(request.method==='GET'&&url.pathname==='/api/script-environments')return sendJson(response,200,{generation_disabled:buildManager.generationDisabled,environments:[...new Map([...buildManager.candidateTrialEnvironments,...buildManager.developmentEnvironments].map(e=>[e.id,{id:e.id,validation_mode:e.validation_mode||'paired'}])).values()]});
+      if(request.method==='GET'&&url.pathname==='/api/script-environments')return sendJson(response,200,await scriptEnvironments(buildManager));
       const batches=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/batches(?:\/([^/]+)(?:\/(start|stop))?)?$/);
       if(batchManager&&batches){
         const [projectId,id,action]=batches.slice(1).map(v=>v&&decodeURIComponent(v));

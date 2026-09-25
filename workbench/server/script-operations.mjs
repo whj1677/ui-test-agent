@@ -1,7 +1,9 @@
+import { USER_GENERATION_LIMITS, checkDevelopmentEnvironment } from './build/user-workflow.mjs';
+import { digest } from './build/development-session.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
-import { developmentAuthorizations } from './build/development-authorization.mjs';
+import { developmentAuthorizations, registerDevelopmentAuthorization } from './build/development-authorization.mjs';
 import { loadCandidateBundle } from './build/candidate-trials.mjs';
 
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -17,6 +19,9 @@ export class ScriptOperations {
     if(!['generate','revise','regenerate'].includes(request.mode)||!Array.isArray(request.items)||!request.items.length||request.items.length>200||new Set(request.items.map(i=>i.case_id)).size!==request.items.length)throw Error('GENERATION_REQUEST_INVALID');
     const project=await this.caseStore.getProject(projectId);if(!project)throw Error('CASE_PROJECT_NOT_FOUND');
     const m=this.buildManager, grants=await developmentAuthorizations(m.store), rows=[];
+    const environment=m.developmentEnvironments.find(e=>e.id===request.environment_id);
+    let environmentError=null;
+    if(m.userInitiatedOperations)try{await checkDevelopmentEnvironment(m,environment);}catch(e){environmentError=e.message;}
     for(const input of request.items){
       const item=project.cases.find(c=>c.case_id===input.case_id),version=item?.versions.find(v=>v.version===input.case_version);
       if(!version)throw Error('GENERATION_CASE_VERSION_INVALID');
@@ -27,13 +32,17 @@ export class ScriptOperations {
       if(request.mode==='revise'&&(!source||typeof input.feedback!=='string'||!input.feedback.trim()||input.feedback.length>6000))reason='REVISION_SCRIPT_AND_FEEDBACK_REQUIRED';
       if(request.mode==='revise'&&input.run_id){const r=(await this.records(projectId)).find(r=>r.run_id===input.run_id&&r.executed_case_id===input.case_id&&r.executed_case_version===input.case_version&&r.bundle_sha256===input.bundle_sha256);if(!r)throw Error('REVISION_RUN_IDENTITY_MISMATCH');}
       const eligible=grants.filter(g=>!g.task_id&&g.project_id===projectId&&g.case_id===input.case_id&&g.case_version===input.case_version&&g.content_sha256===version.content_sha256&&g.environment_id===request.environment_id&&
+        (!g.request_id||g.request_id===request.request_id)&&
         (g.operation_mode?g.operation_mode===request.mode:request.mode==='revise'?g.mode==='recovery':g.mode==='new'));
       const grant=eligible.length===1?eligible[0]:null;
-      if(!grant)reason ||= eligible.length?'GENERATION_AUTHORIZATION_AMBIGUOUS':'GENERATION_NOT_AUTHORIZED';
+      const userRequest=m.userInitiatedOperations===true&&!m.generationDisabled&&Boolean(m.modelConfiguration)&&Boolean(environment);
+      if(environmentError)reason ||= environmentError;
+      if(eligible.length>1)reason ||= 'GENERATION_AUTHORIZATION_AMBIGUOUS';
+      if(!grant&&!userRequest)reason ||= 'GENERATION_NOT_AUTHORIZED';
       if(!m.developmentEnvironments.some(e=>e.id===request.environment_id))reason ||= 'GENERATION_ENVIRONMENT_NOT_READY';
       if(m.generationDisabled)reason ||= 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE';
       rows.push({case_id:item.case_id,external_id:version.content.external_id,title:version.content.title,case_version:version.version,content_sha256:version.content_sha256,
-        old_scripts:candidates.map(c=>c.selection),logical_id:grant?.logical_id||null,limits:grant?.limits||null,state:reason?'BLOCKED':'QUEUED',reason,input:structuredClone(input)});
+        old_scripts:candidates.map(c=>c.selection),logical_id:grant?.logical_id||null,requires_model_confirmation:!grant&&userRequest,limits:grant?.limits||(userRequest?USER_GENERATION_LIMITS:null),state:reason?'BLOCKED':'QUEUED',reason,input:structuredClone(input)});
     }
     return {mode:request.mode,environment_id:request.environment_id,items:rows,model_calls_required:true};
   }
@@ -41,9 +50,32 @@ export class ScriptOperations {
     if(!/^[-\w]{8,100}$/.test(request.request_id||''))throw Error('GENERATION_REQUEST_ID_REQUIRED');
     const fingerprint=hash(request),prior=(await this.list(projectId)).find(v=>v.request_id===request.request_id);
     if(prior){if(prior.fingerprint!==fingerprint)throw Error('GENERATION_REQUEST_CONFLICT');return prior;}
-    const plan=await this.preflight(projectId,request);
+    let plan=await this.preflight(projectId,request);
     if(plan.items.some(i=>i.reason))throw Error('GENERATION_BLOCKED:'+plan.items.filter(i=>i.reason).map(i=>i.external_id+':'+i.reason).join(';'));
     const m=this.buildManager;if(this.active||m.generationOwner||m.batchOwner||m.active||m.starting||m.otherActive())throw Error('BUILD_TASK_ALREADY_ACTIVE');
+    if(plan.items.some(i=>i.requires_model_confirmation)){
+      if(request.confirm_model_use!==true)throw Error('GENERATION_MODEL_CONFIRMATION_REQUIRED');
+      // A receipt belongs to this explicit operation, never a reusable blanket
+      // permission or a reset of an earlier consumed authorization.
+      for(const item of plan.items.filter(i=>i.requires_model_confirmation)){
+        let seed={};
+        if(request.mode==='revise'){
+          const t=await m.store.getTask(item.input.source_task_id),c=t.candidates.find(c=>c.version===item.input.candidate_version);
+          const b=await loadCandidateBundle(path.join(m.store.taskDirectory(t.task_id),'development/final'),c.bundle);
+          const code=b.entries.find(f=>f.path==='candidate.spec.mjs').content.toString('utf8');
+          seed={seed_code:code,seed_sha256:digest(code)};
+        }
+        const logical_id='user-'+hash([projectId,request.request_id,item.case_id,item.case_version]).slice(0,48);
+        const old=(await developmentAuthorizations(m.store)).find(g=>g.logical_id===logical_id);
+        if(old)throw Error('GENERATION_REQUEST_ALREADY_RESERVED');
+        await registerDevelopmentAuthorization(m.store,{logical_id,request_id:request.request_id,project_id:projectId,
+          case_id:item.case_id,case_version:item.case_version,content_sha256:item.content_sha256,environment_id:request.environment_id,
+          mode:request.mode==='revise'?'recovery':'new',operation_mode:request.mode,limits:USER_GENERATION_LIMITS,
+          authorization_source:'EXPLICIT_USER_GENERATION_CONFIRMATION',...seed});
+      }
+      plan=await this.preflight(projectId,request);
+      if(plan.items.some(i=>i.reason||!i.logical_id))throw Error('GENERATION_AUTHORIZATION_NOT_READY');
+    }
     const operation=await this.save({...plan,operation_id:'generation-'+randomUUID(),project_id:projectId,request_id:request.request_id,fingerprint,state:'QUEUED',created_at:new Date().toISOString()});
     this.active={operation,cancelled:false};m.generationOwner=operation.operation_id;
     this.completion=this.execute(operation).finally(()=>{m.generationOwner=null;this.active=null;});return operation;
@@ -54,7 +86,7 @@ export class ScriptOperations {
       for(const item of v.items){
         if(this.active.cancelled){item.state='NOT_RUN';item.reason='GENERATION_CANCELLED';continue;}
         try{
-          const checked=await this.preflight(v.project_id,{mode:v.mode,environment_id:v.environment_id,items:[item.input]});
+          const checked=await this.preflight(v.project_id,{mode:v.mode,environment_id:v.environment_id,request_id:v.request_id,items:[item.input]});
           if(checked.items[0].reason)throw Error(checked.items[0].reason);
           const maintenance={mode:v.mode,operation_id:v.operation_id,feedback:v.mode==='revise'?item.input.feedback:null,run_id:v.mode==='revise'?item.input.run_id||null:null};
           let seedBundle;

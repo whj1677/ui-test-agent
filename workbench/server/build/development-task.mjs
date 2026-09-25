@@ -1,10 +1,11 @@
+import { managedDevelopmentTarget, checkDevelopmentEnvironment } from './user-workflow.mjs';
 import { verifyBundle } from './development-bundle.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { developmentPatch } from './development-patch.mjs';
 import { dshHomeSecrets, harnessStderrDiagnostic } from './diagnostic.mjs';
 import { DevelopmentSession, digest, evidenceFiles } from './development-session.mjs';
-import { claimDevelopmentAuthorization } from './development-authorization.mjs';
+import { claimDevelopmentAuthorization, developmentAuthorizations } from './development-authorization.mjs';
 import { startDevelopmentMcp } from './development-mcp.mjs';
 import { BROWSER_SEMANTICS_RULES } from './browser-semantics.mjs';
 import { counterexampleDetected } from './report.mjs';
@@ -28,15 +29,21 @@ export function developmentValidationLanes(environment) {
 export async function submitDevelopment(manager, request) {
   if (manager.starting || manager.active || manager.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
   manager.starting = true;
+  let environmentLease;
   try {
     const taskId = manager.idFactory();
     const maintenance = request.maintenance || null;
+    const registered=(await developmentAuthorizations(manager.store)).find(a=>a.logical_id===request.logical_id);
+    if(!registered)throw Error('DEVELOPMENT_NOT_AUTHORIZED');
+    let environment = manager.developmentEnvironments.find(item => item.id === registered.environment_id);
+    await checkDevelopmentEnvironment(manager, environment);
+    const managedTarget = managedDevelopmentTarget(manager, environment);
+    if (managedTarget) { environmentLease = await managedTarget.acquire('normal'); environment = { ...environment, normal_url: environmentLease.url }; }
+    developmentValidationLanes(environment);
     const authorization = await claimDevelopmentAuthorization(manager.store, request.logical_id, taskId, entry => {
       if (maintenance?.mode === 'revise' && (entry.mode !== 'recovery' || digest(request.seedBundle?.entries?.find(f => f.path === 'candidate.spec.mjs')?.content || '') !== entry.seed_sha256)) throw Error('REVISION_AUTHORIZED_SEED_MISMATCH');
       if (maintenance && maintenance.mode !== 'revise' && (entry.mode !== 'new' || request.seedBundle)) throw Error('GENERATION_FRESH_SEED_FORBIDDEN');
     });
-    const environment = manager.developmentEnvironments.find(item => item.id === authorization.environment_id);
-    developmentValidationLanes(environment);
     const project = await manager.caseStore.getProject(authorization.project_id);
     const item = project?.cases.find(item => item.case_id === authorization.case_id);
     const version = item?.versions.find(item => item.version === authorization.case_version);
@@ -49,7 +56,7 @@ export async function submitDevelopment(manager, request) {
       active_attempt_id: 'attempt-01-initial', revision_allowed: false,
       template: { title: frozenCase.title, template_id: 'registered-development-v1' },
       source: { project_id: project.project_id, project_name: project.name, case_id: item.case_id, case_version: version.version, external_id: item.external_id, content_sha256: version.content_sha256 },
-      environment_ref: { environment_id: environment.id, validation_mode: environment.validation_mode || 'paired' }, input_bundle: { snapshot: { content: frozenCase } },
+      environment_ref: { environment_id: environment.id, validation_mode: environment.validation_mode || 'paired', preparation: environmentLease?.identity || null }, input_bundle: { snapshot: { content: frozenCase } },
       authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits, recovery_origin: authorization.recovery_origin || null },
       maintenance,
       script_version: 1 + Math.max(0, ...(await manager.store.listTasks()).filter(t => t.source?.project_id === project.project_id && t.source?.case_id === item.case_id).map(t => t.script_version || (t.candidates?.length ? 1 : 0))),
@@ -58,13 +65,13 @@ export async function submitDevelopment(manager, request) {
     });
     const controller = new AbortController();
     manager.active = { taskId, attemptId: 'attempt-01-initial', controller, phase: 'DEVELOPING' };
-    const completion = executeDevelopment(manager, task, authorization, environment, controller, request.seedBundle).finally(() => { if (manager.active?.taskId === taskId) manager.active = null; });
+    const completion = executeDevelopment(manager, task, authorization, environment, controller, request.seedBundle, environmentLease).finally(() => { if (manager.active?.taskId === taskId) manager.active = null; });
     manager.completions.set(taskId, completion);
     return task;
-  } finally { manager.starting = false; }
+  } catch (error) { await environmentLease?.release(); throw error; } finally { manager.starting = false; }
 }
 
-async function executeDevelopment(manager, task, authorization, environment, controller, seedBundle) {
+async function executeDevelopment(manager, task, authorization, environment, controller, seedBundle, environmentLease) {
   const directory = path.join(manager.store.taskDirectory(task.task_id), 'development');
   const evidenceIdentity = { task_id: task.task_id, executed_case_id: task.source.case_id,
     executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
@@ -155,6 +162,7 @@ async function executeDevelopment(manager, task, authorization, environment, con
   } catch (caught) { error = { code: caught.message, message: caught.message }; finalStatus = controller.signal.aborted ? 'CANCELLED' : 'FAILED'; }
   finally {
     clearTimeout(timer); if (bridge) await bridge.close(); await session.queue;
+    try { await environmentLease?.release(); } catch (cleanupError) { error ||= { code: 'ENVIRONMENT_CLEANUP_FAILED', message: cleanupError.message }; }
     manager.active.phase = 'FINALIZING';
     await manager.store.appendLifecycle(task.task_id, 'attempt-01-initial', { type: 'development_settled', status: finalStatus, at: new Date().toISOString() });
     const listed = await evidenceFiles(directory, manager.store.taskDirectory(task.task_id));
