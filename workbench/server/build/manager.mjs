@@ -16,6 +16,7 @@ import { sha256File } from '../integrity.mjs';
 import { redactText } from '../../../harness-probe/src/redact.mjs';
 import { dshHomeSecrets, harnessStderrDiagnostic } from './diagnostic.mjs';
 import { renderStepReplay } from './step-replay.mjs';
+import { submitDevelopment } from './development-task.mjs';
 
 const MAX_TOOL_CALLS = 30;
 const TIMEOUT_MS = 600_000;
@@ -234,6 +235,7 @@ export class BuildTaskManager {
     this.modelConfiguration = options.modelConfiguration || null;
     this.caseSubmissions = new Map();
     this.authSessions = options.authSessions || null;
+    this.developmentEnvironments = options.developmentEnvironments || [];
     this.authWatch = null;
     this.authSessions?.setInvalidationListener?.((state) => {
       const watch = this.authWatch;
@@ -391,6 +393,11 @@ export class BuildTaskManager {
       runtime: { os_file_isolation: false, os_network_isolation: false, residual_risk_accepted: true },
       error: null,
     });
+  }
+
+  async submitDevelopment(request) {
+    this.#assertWritable();
+    return submitDevelopment(this, request);
   }
 
   async submitProjectCase(request) {

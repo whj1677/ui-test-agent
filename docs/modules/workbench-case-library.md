@@ -76,3 +76,5 @@ M3-A 在既有本地工作台内增加项目、用例、Excel 与原生 JSON 用
 - M3-B2 单条真实建例报告：[workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md](../../workbench/docs/M3B2_PROJECT_CASE_REAL_REPORT.md)
 - M3-B2 输入边界与候选首审：[workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md](../../workbench/docs/M3B2_INPUT_BOUNDARY_AND_CANDIDATE_REVIEW.md)
 - M3-C 限定首审资产回归：[workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md](../../workbench/docs/M3C_REVIEWED_ASSET_RUN_REPORT.md)
+
+2026-09-25（REQ-0037）：项目页增加已登记授权的自主建例入口。输入固定到CaseLibraryStore中的CONFIRMED版本与内容哈希，普通草稿可迭代，冻结用例不修改。任务详情读回每次开发执行、最终独立验证、原要求覆盖核查与证据；无授权时明确显示未登记，不追加用例编号白名单。此入口不改变原导入、确认、批准或正式回归语义。

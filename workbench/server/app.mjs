@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveInside, sha256File } from './integrity.mjs';
+import { developmentAuthorizations } from './build/development-authorization.mjs';
 
 const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
 const defaultWorkspaceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web-v2');
@@ -374,6 +375,17 @@ export function createWorkbenchServer(options = {}) {
         const body = await readJsonBody(request);
         if (Object.keys(body).sort().join(',') !== 'template_id' || typeof body.template_id !== 'string') return sendJson(response, 400, { error: 'INVALID_BUILD_TASK_REQUEST' });
         sendJson(response, 201, await buildManager.submit(body.template_id));
+        return;
+      }
+      if (buildManager && request.method === 'POST' && url.pathname === '/api/build/tasks/develop') {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        const body = await readJsonBody(request);
+        if (Object.keys(body).join(',') !== 'logical_id' || typeof body.logical_id !== 'string') return sendJson(response, 400, { error: 'INVALID_DEVELOPMENT_REQUEST' });
+        sendJson(response, 201, await buildManager.submitDevelopment(body));
+        return;
+      }
+      if (buildStore && request.method === 'GET' && url.pathname === '/api/build/development-authorizations') {
+        sendJson(response, 200, { authorizations: await developmentAuthorizations(buildStore) });
         return;
       }
       if (buildManager && request.method === 'POST' && url.pathname === '/api/build/tasks/from-project-case') {

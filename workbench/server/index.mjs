@@ -48,6 +48,11 @@ const authSessions = new TargetAuthSessions({
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
 });
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
+let developmentEnvironments = [];
+if (process.env.WORKBENCH_DEVELOPMENT_ENVIRONMENTS) {
+  developmentEnvironments = JSON.parse(await fs.readFile(process.env.WORKBENCH_DEVELOPMENT_ENVIRONMENTS, 'utf8'));
+  if (!Array.isArray(developmentEnvironments)) throw new Error('DEVELOPMENT_ENVIRONMENTS_INVALID');
+}
 const buildManager = new BuildTaskManager({
   store: buildStore,
   caseStore,
@@ -55,6 +60,7 @@ const buildManager = new BuildTaskManager({
   serviceInstanceId,
   authorizationId: buildAuthorizationId,
   authSessions,
+  developmentEnvironments,
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
   harnessDshHome,
   harnessPatchPath,

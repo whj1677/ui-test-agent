@@ -1,0 +1,1512 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260925002958-da75da50",
+  "created_at": "2026-09-25T00:29:58.404Z",
+  "started_at": "2026-09-25T00:29:58.404Z",
+  "finished_at": "2026-09-25T00:31:22.273Z",
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "generation_status": "GENERATED",
+  "verification_status": "TECHNICAL_VALIDATION_PASSED",
+  "human_review_status": "WAITING_REVIEW",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "分页筛选北站后翻页并返回",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-8fcc5449-0b5e-4421-abca-29c99924fc53",
+    "project_name": "20260925 自主建例有界验收",
+    "case_id": "case-6e67d24e-0e6e-456c-a977-dc9eb7bac4e1",
+    "case_version": 1,
+    "external_id": "NEW-001",
+    "content_sha256": "A3AA43CB818BE409E21C4D95FEA4C53FEE6CF194FD94820763A8C8FCBDBA5CF9"
+  },
+  "environment_ref": {
+    "environment_id": "qa-paging-20260925"
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "NEW-001",
+        "title": "分页筛选北站后翻页并返回",
+        "module": "paging",
+        "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。",
+        "test_data": "{\"records\":\"P01..P08，奇数北站，偶数南站\",\"page_size\":2,\"filter\":\"北站\"}\n入口=http://127.0.0.1:4343/?scene=paging&variant=normal",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+            "expected": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部"
+          },
+          {
+            "order": 2,
+            "action": "站点筛选选择北站，点击筛选",
+            "expected": "显示P01、P03；共4条，1/2页；当前筛选为北站"
+          },
+          {
+            "order": 3,
+            "action": "点击下一页",
+            "expected": "显示P05、P07；共4条，2/2页；当前筛选仍为北站"
+          },
+          {
+            "order": 4,
+            "action": "点击上一页",
+            "expected": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "authorization": {
+    "logical_id": "autodev-20260925-a",
+    "mode": "recovery",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 3,
+      "wall_ms": 1200000
+    }
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T00:29:58.404Z",
+      "finished_at": "2026-09-25T00:31:22.273Z"
+    }
+  ],
+  "candidates": [
+    {
+      "version": 2,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925002958-da75da50-normal",
+          "run_type": "normal",
+          "candidate_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+          "candidate_version": 2,
+          "executed_case_id": "case-6e67d24e-0e6e-456c-a977-dc9eb7bac4e1",
+          "executed_external_id": "NEW-001",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T00:31:11.307Z",
+          "finished_at": "2026-09-25T00:31:14.160Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4: 点击上一页",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-25T00:31:11.989Z",
+              "duration": 2150.272,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "category": null,
+                "duration": 169,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "category": null,
+                "duration": 121,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3: 点击下一页",
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "category": null,
+                "duration": 92,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4: 点击上一页",
+                "raw_title": "CASE_STEP_4: 点击上一页",
+                "category": null,
+                "duration": 74,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "build-20260925002958-da75da50-negative",
+          "run_type": "negative",
+          "candidate_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+          "candidate_version": 2,
+          "executed_case_id": "case-6e67d24e-0e6e-456c-a977-dc9eb7bac4e1",
+          "executed_external_id": "NEW-001",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T00:31:14.166Z",
+          "finished_at": "2026-09-25T00:31:22.255Z",
+          "status": "FAILED",
+          "complete_pass": false,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_4"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_3",
+                    "report_path": [
+                      2
+                    ],
+                    "error": {
+                      "type": "ASSERTION_MISMATCH",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+                      "expected": "P05",
+                      "actual": "P02",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \u001b[32m\"P0\u001b[7m5\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"P0\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <td>P02</td>\u001b[22m\n\u001b[2m       - unexpected value \"P02\"\u001b[22m\n",
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\candidate.spec.mjs",
+                        "line": 24,
+                        "column": 60
+                      },
+                      "snippet": "  22 |       await expect(dataRows).toHaveCount(ids.length);\n  23 |       for (let i = 0; i < ids.length; i += 1) {\n> 24 |         await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\n     |                                                            ^\n  25 |         await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\n  26 |       }\n  27 |     };"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+            "expected": "P05",
+            "actual": "P02",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "same_candidate_hash": true,
+          "specified_defect_detected": true,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "ASSERTION_MISMATCH",
+              "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+              "expected": "P05",
+              "actual": "P02",
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-25T00:31:14.822Z",
+              "duration": 7409.581,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                "category": null,
+                "duration": 176,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                "category": null,
+                "duration": 134,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3: 点击下一页",
+                "raw_title": "CASE_STEP_3: 点击下一页",
+                "category": null,
+                "duration": 5077,
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \"P05\"\nReceived: \"P02\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\n    14 × locator resolved to <td>P02</td>\n       - unexpected value \"P02\"\n",
+                  "expected": "P05",
+                  "actual": "P02",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\nExpected: \u001b[32m\"P0\u001b[7m5\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"P0\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').locator('table tbody tr:has(td)').first().locator('td').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <td>P02</td>\u001b[22m\n\u001b[2m       - unexpected value \"P02\"\u001b[22m\n",
+                  "location": {
+                    "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\candidate.spec.mjs",
+                    "line": 24,
+                    "column": 60
+                  },
+                  "snippet": "  22 |       await expect(dataRows).toHaveCount(ids.length);\n  23 |       for (let i = 0; i < ids.length; i += 1) {\n> 24 |         await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\n     |                                                            ^\n  25 |         await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\n  26 |       }\n  27 |     };"
+                },
+                "steps": []
+              }
+            ]
+          }
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部",
+          "check_lines": [
+            30,
+            32,
+            33,
+            18,
+            35,
+            22,
+            24,
+            25,
+            37
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "显示P01、P03；共4条，1/2页；当前筛选为北站",
+          "check_lines": [
+            41,
+            42,
+            44,
+            18,
+            45,
+            47,
+            22,
+            24,
+            25,
+            49
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "显示P05、P07；共4条，2/2页；当前筛选仍为北站",
+          "check_lines": [
+            53,
+            55,
+            18,
+            56,
+            58,
+            22,
+            24,
+            25,
+            60
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站",
+          "check_lines": [
+            64,
+            66,
+            18,
+            67,
+            69,
+            22,
+            24,
+            25,
+            71
+          ],
+          "execution": 2,
+          "uncovered": ""
+        }
+      ],
+      "approval_status": "NOT_APPROVED"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "development/.playwright-mcp/console-2026-09-25T00-30-12-685Z.log",
+      "bytes": 139,
+      "sha256": "68FBC8F8C7FB4B9F8799BAA180D5A53FA2606FC3AC88B5980D01734D9F37D967",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-25T00-30-12-685Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-30-12-800Z.yml",
+      "bytes": 1177,
+      "sha256": "47D2272B96E40AE0F314A8C32FEC20919FC1660B5EE6495ED07697EA62D96A24",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-30-12-800Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-30-23-295Z.yml",
+      "bytes": 1177,
+      "sha256": "2B1BCD4C1C325BF1394469C77E1D572C42969E01237FC221C398AB1F5CC32773",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-30-23-295Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-30-24-678Z.yml",
+      "bytes": 1177,
+      "sha256": "1A768C974ACA72C4D3C23C27054E9183A0EA46249833149B6FB1775DEA374C27",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-30-24-678Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-30-27-090Z.yml",
+      "bytes": 1177,
+      "sha256": "EEEBA83CA77566C5DA7C58960D19BC3A81DE56A399BBDD6CCA27CC7DD84E1F1C",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-30-27-090Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-30-29-956Z.yml",
+      "bytes": 1177,
+      "sha256": "EA8A00BCA83B828481FFC7082A740526EA07D2DDC2E8A59597047C8E2E08F4B6",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-30-29-956Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 4048,
+      "sha256": "00C0468DF8F3933731B19D5926E84815335727156A07285D3AA96C3E81035FF4",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 2801,
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/candidate.spec.mjs",
+      "bytes": 2801,
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "0F18694E2806F3004197EBAEC17D779A91EAD1548161383C56B31F8A7BA27BC3",
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/error-context.md",
+      "bytes": 4337,
+      "sha256": "8DD5CCDB71E61914C6556D78B829392871D8FCB7A4AC59AD212EA88A93667D89",
+      "file_id": "build-file-11",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "error-context.md",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png",
+      "bytes": 29284,
+      "sha256": "094A1255FD22A2EFB86F39E6B5815261AF5451683371A694CB9D2E1AFB3BBFC8",
+      "file_id": "build-file-12",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+      "bytes": 197281,
+      "sha256": "0D137F3BE1EB0175A9A9FFCA1266A70C64F6C320DB91631C4165B222414F1377",
+      "file_id": "build-file-13",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+      "bytes": 134007,
+      "sha256": "F11A5D2D1E4FBB6F8D4B1050074867C55D51FB4D995A8699CEF46D09D54AC2A4",
+      "file_id": "build-file-14",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/playwright-report.json",
+      "bytes": 14394,
+      "sha256": "52DDEF837F15F6E3621ABF410D7656CEEF64BD6D751EBE0003F13DF21B33753D",
+      "file_id": "build-file-15",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-16",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png",
+      "bytes": 29174,
+      "sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "file_id": "build-file-17",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+      "bytes": 180995,
+      "sha256": "66FEE554C42ED7540F9F7BAE221F99928AB1110338E3EEE8597F48DBEFD3A486",
+      "file_id": "build-file-18",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+      "bytes": 21258,
+      "sha256": "704C2578FF26E8B694AE3E7C0E0234762E1CF631CCD8A3537EB5CCA0F9CE0B30",
+      "file_id": "build-file-19",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/playwright-report.json",
+      "bytes": 5961,
+      "sha256": "7FC6F7B0DFED44A48490322C218AF77E7FF6A6B5E249B5A5F54F9F2B992EFD6D",
+      "file_id": "build-file-20",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 78191,
+      "sha256": "1D0B7001F2125F0F827AEF9D510B5DF6D87EE52F1C5DC5D1A37555D0FDF16F1F",
+      "file_id": "build-file-21",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 278,
+      "sha256": "664C9348FA50AF4E43D4E361899D5A8935A2D1851406002065AF44EA59188BB7",
+      "file_id": "build-file-22",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/candidate.spec.mjs",
+      "bytes": 3580,
+      "sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "file_id": "build-file-23",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "0F18694E2806F3004197EBAEC17D779A91EAD1548161383C56B31F8A7BA27BC3",
+      "file_id": "build-file-24",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/error-context.md",
+      "bytes": 5204,
+      "sha256": "B270F15DED78462CAD9F8A3CA2E4E787AB848D99E2AB19FBE376EC42B53709B3",
+      "file_id": "build-file-25",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "error-context.md",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png",
+      "bytes": 29473,
+      "sha256": "85B072DBE0E34C877F157424ACADDB8735A3913A1F06235F5A2AAB19AFCC3C9F",
+      "file_id": "build-file-26",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+      "bytes": 126082,
+      "sha256": "5768483AB85463340748A2C95F6D3D0EAEC2F290DE41580D513B7E7101176BDB",
+      "file_id": "build-file-27",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+      "bytes": 127470,
+      "sha256": "D330DDD42B4CBC00C4A1E410E0FD6F6840BAE8AC5E91DFE1F6CD2F8B25B2F64D",
+      "file_id": "build-file-28",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/playwright-report.json",
+      "bytes": 12953,
+      "sha256": "95F03862D440DD8D1ACB01C6CAAF7CCAAF4B86B50F5D465E393A86F888DF6FE9",
+      "file_id": "build-file-29",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/candidate.spec.mjs",
+      "bytes": 2801,
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "file_id": "build-file-30",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/evidence/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-31",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png",
+      "bytes": 29174,
+      "sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "file_id": "build-file-32",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+      "bytes": 181024,
+      "sha256": "CA4523F2175E90497479950D2216304FF06475896309DC7B81FDFEB1A26BEDD3",
+      "file_id": "build-file-33",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+      "bytes": 21565,
+      "sha256": "7A3D7B0426663B0C318277C87CDD4D5C54D5C27ADF5E22EDA054035B43796461",
+      "file_id": "build-file-34",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-2/evidence/playwright-report.json",
+      "bytes": 5971,
+      "sha256": "76E8F969FBF0C63B5AA765E28326BBFDC83336D471E4FD77A420F5A2BC410254",
+      "file_id": "build-file-35",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-36",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 14686,
+      "sha256": "42BA2630A6E7C332FEBD8B72EFA81F18598C2919B43C56CF580306B7E4CD1A8D",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": null,
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": null
+  },
+  "development": {
+    "started_at": 1790296198408,
+    "deadline_at": 1790297398408,
+    "draft_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+    "self_tests": [
+      {
+        "number": 1,
+        "sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790296203198,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "FAILED",
+          "test_count": 1,
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \"全部\"\nReceived: \"all\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for getByRole('combobox', { name: '站点筛选' })\n    14 × locator resolved to <select id=\"station\">…</select>\n       - unexpected value \"all\"\n",
+            "expected": "全部",
+            "actual": "all",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "complete_pass": false,
+          "stats": {
+            "startTime": "2026-09-25T00:30:03.790Z",
+            "duration": 6896.321,
+            "expected": 0,
+            "skipped": 0,
+            "unexpected": 1,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 1,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "category": null,
+              "duration": 5080,
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \"全部\"\nReceived: \"all\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for getByRole('combobox', { name: '站点筛选' })\n    14 × locator resolved to <select id=\"station\">…</select>\n       - unexpected value \"all\"\n",
+                "expected": "全部",
+                "actual": "all",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "raw_error": {
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n",
+                "location": {
+                  "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                  "line": 26,
+                  "column": 30
+                },
+                "snippet": "  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |"
+              },
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": false,
+          "order_valid": false,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1"
+          ],
+          "duplicates": [],
+          "missing": [
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4"
+          ],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "ASSERTION_MISMATCH",
+                    "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \"全部\"\nReceived: \"all\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for getByRole('combobox', { name: '站点筛选' })\n    14 × locator resolved to <select id=\"station\">…</select>\n       - unexpected value \"all\"\n",
+                    "expected": "全部",
+                    "actual": "all",
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n",
+                    "location": {
+                      "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                      "line": 26,
+                      "column": 30
+                    },
+                    "snippet": "  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 96,
+            "sha256": "0F18694E2806F3004197EBAEC17D779A91EAD1548161383C56B31F8A7BA27BC3"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/error-context.md",
+            "bytes": 5204,
+            "sha256": "B270F15DED78462CAD9F8A3CA2E4E787AB848D99E2AB19FBE376EC42B53709B3"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png",
+            "bytes": 29473,
+            "sha256": "85B072DBE0E34C877F157424ACADDB8735A3913A1F06235F5A2AAB19AFCC3C9F"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+            "bytes": 126082,
+            "sha256": "5768483AB85463340748A2C95F6D3D0EAEC2F290DE41580D513B7E7101176BDB"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+            "bytes": 127470,
+            "sha256": "D330DDD42B4CBC00C4A1E410E0FD6F6840BAE8AC5E91DFE1F6CD2F8B25B2F64D"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 12953,
+            "sha256": "95F03862D440DD8D1ACB01C6CAAF7CCAAF4B86B50F5D465E393A86F888DF6FE9"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+              "bytes": 126082,
+              "sha256": "5768483AB85463340748A2C95F6D3D0EAEC2F290DE41580D513B7E7101176BDB"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "ASSERTION_MISMATCH",
+                    "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \"全部\"\nReceived: \"all\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for getByRole('combobox', { name: '站点筛选' })\n    14 × locator resolved to <select id=\"station\">…</select>\n       - unexpected value \"all\"\n",
+                    "expected": "全部",
+                    "actual": "all",
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n",
+                    "location": {
+                      "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                      "line": 26,
+                      "column": 30
+                    },
+                    "snippet": "  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790296210711
+      },
+      {
+        "number": 2,
+        "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+        "candidate_path": "run-2/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790296254226,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T00:30:54.816Z",
+            "duration": 2077.655,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "category": null,
+              "duration": 155,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+              "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+              "category": null,
+              "duration": 134,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3: 点击下一页",
+              "raw_title": "CASE_STEP_3: 点击下一页",
+              "category": null,
+              "duration": 84,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_4: 点击上一页",
+              "raw_title": "CASE_STEP_4: 点击上一页",
+              "category": null,
+              "duration": 79,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3: 点击下一页",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4: 点击上一页",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "changed_after_execution": false,
+        "report_path": "run-2/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-2/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png",
+            "bytes": 29174,
+            "sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+            "bytes": 181024,
+            "sha256": "CA4523F2175E90497479950D2216304FF06475896309DC7B81FDFEB1A26BEDD3"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm",
+            "bytes": 21565,
+            "sha256": "7A3D7B0426663B0C318277C87CDD4D5C54D5C27ADF5E22EDA054035B43796461"
+          },
+          {
+            "relative_path": "run-2/evidence/playwright-report.json",
+            "bytes": 5971,
+            "sha256": "76E8F969FBF0C63B5AA765E28326BBFDC83336D471E4FD77A420F5A2BC410254"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip",
+              "bytes": 181024,
+              "sha256": "CA4523F2175E90497479950D2216304FF06475896309DC7B81FDFEB1A26BEDD3"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3: 点击下一页",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4: 点击上一页",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790296256915
+      }
+    ],
+    "submission": {
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部",
+          "check_lines": [
+            30,
+            32,
+            33,
+            18,
+            35,
+            22,
+            24,
+            25,
+            37
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "显示P01、P03；共4条，1/2页；当前筛选为北站",
+          "check_lines": [
+            41,
+            42,
+            44,
+            18,
+            45,
+            47,
+            22,
+            24,
+            25,
+            49
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "显示P05、P07；共4条，2/2页；当前筛选仍为北站",
+          "check_lines": [
+            53,
+            55,
+            18,
+            56,
+            58,
+            22,
+            24,
+            25,
+            60
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站",
+          "check_lines": [
+            64,
+            66,
+            18,
+            67,
+            69,
+            22,
+            24,
+            25,
+            71
+          ],
+          "execution": 2,
+          "uncovered": ""
+        }
+      ],
+      "submitted_at": 1790296266844,
+      "file": "final/candidate.spec.mjs",
+      "semantic_approval": false
+    },
+    "tool_calls": 15,
+    "harness_starts": 1,
+    "recovery": true,
+    "final_executions": [
+      {
+        "lane": "normal",
+        "started_at": "2026-09-25T00:31:11.307Z",
+        "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+        "status": "PASSED"
+      },
+      {
+        "lane": "negative",
+        "started_at": "2026-09-25T00:31:14.166Z",
+        "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+        "status": "FAILED"
+      }
+    ]
+  }
+}

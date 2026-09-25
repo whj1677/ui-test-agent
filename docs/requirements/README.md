@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；工程优先，两个真实任务限定验证。
+
 - [REQ-0036-ui-ux-01-workbench-usability-review](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)：真实工作台可用性走查与三页结构调整方案；4322@6066bbc 与 4331@8127e33 已截图核对，A–F 问题已分类，停止在方案完成，前端第一批调整待用户确认。\r
 \r
 - [REQ-0035-auth01-target-session](REQ-0035-auth01-target-session/current_state.md)：AUTH-01 被测系统人工登录与内存会话；独立合成站的真实 Harness 浏览器接入及新执行上下文复用已验证，现有工作台建例任务尚未绑定此登录环境。

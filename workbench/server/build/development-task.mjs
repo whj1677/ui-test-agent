@@ -1,0 +1,141 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { developmentPatch } from './development-patch.mjs';
+import { dshHomeSecrets, harnessStderrDiagnostic } from './diagnostic.mjs';
+import { DevelopmentSession, digest, evidenceFiles } from './development-session.mjs';
+import { claimDevelopmentAuthorization } from './development-authorization.mjs';
+import { startDevelopmentMcp } from './development-mcp.mjs';
+import { BROWSER_SEMANTICS_RULES } from './browser-semantics.mjs';
+import { parseCandidateReport, projectCaseStepCoverage, counterexampleDetected } from './report.mjs';
+import { contentHash } from '../cases/excel.mjs';
+
+function validateEnvironment(environment) {
+  if (!environment || !environment.id || !environment.normal_url || !environment.fault_url || !environment.detection) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_REGISTERED');
+  for (const url of [environment.normal_url, environment.fault_url]) {
+    const parsed = new URL(url); if (parsed.protocol !== 'http:' || parsed.hostname !== '127.0.0.1' || parsed.username || parsed.password) throw new Error('DEVELOPMENT_ENVIRONMENT_NOT_LOCAL');
+  }
+}
+
+export async function submitDevelopment(manager, request) {
+  if (manager.starting || manager.active || manager.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
+  manager.starting = true;
+  try {
+    const taskId = manager.idFactory();
+    const authorization = await claimDevelopmentAuthorization(manager.store, request.logical_id, taskId);
+    const environment = manager.developmentEnvironments.find(item => item.id === authorization.environment_id);
+    validateEnvironment(environment);
+    const project = await manager.caseStore.getProject(authorization.project_id);
+    const item = project?.cases.find(item => item.case_id === authorization.case_id);
+    const version = item?.versions.find(item => item.version === authorization.case_version);
+    if (!version || version.content_sha256 !== authorization.content_sha256 || contentHash(version.content) !== authorization.content_sha256 || version.content.status !== 'CONFIRMED') throw new Error('DEVELOPMENT_FROZEN_CASE_MISMATCH');
+    const now = new Date().toISOString();
+    const frozenCase = structuredClone(version.content);
+    const task = await manager.store.createTask({
+      schema: 'workbench/build-task-v1', task_id: taskId, created_at: now, started_at: now, finished_at: null,
+      task_status: 'GENERATING', generation_status: 'RUNNING', verification_status: 'NOT_STARTED', human_review_status: 'NOT_READY',
+      active_attempt_id: 'attempt-01-initial', revision_allowed: false,
+      template: { title: frozenCase.title, template_id: 'registered-development-v1' },
+      source: { project_id: project.project_id, project_name: project.name, case_id: item.case_id, case_version: version.version, external_id: item.external_id, content_sha256: version.content_sha256 },
+      environment_ref: { environment_id: environment.id }, input_bundle: { snapshot: { content: frozenCase } },
+      authorization: { logical_id: authorization.logical_id, mode: authorization.mode, limits: authorization.limits },
+      attempts: [{ attempt_id: 'attempt-01-initial', kind: 'initial', status: 'RUNNING', started_at: now }], candidates: [], files: [], error: null,
+      runtime: { os_file_isolation: false, os_network_isolation: false, scope: 'tool-policy-and-executor-allowlist', model: manager.modelConfiguration },
+    });
+    const controller = new AbortController();
+    manager.active = { taskId, attemptId: 'attempt-01-initial', controller, phase: 'DEVELOPING' };
+    const completion = executeDevelopment(manager, task, authorization, environment, controller).finally(() => { if (manager.active?.taskId === taskId) manager.active = null; });
+    manager.completions.set(taskId, completion);
+    return task;
+  } finally { manager.starting = false; }
+}
+
+async function executeDevelopment(manager, task, authorization, environment, controller) {
+  const directory = path.join(manager.store.taskDirectory(task.task_id), 'development');
+  const session = new DevelopmentSession({ directory, frozenCase: task.input_bundle.snapshot.content, normalUrl: environment.normal_url,
+    verify: options => manager.adapter.verifyCandidate({ ...options, browserExecutable: manager.browserExecutable }),
+    persist: development => manager.store.updateTask(task.task_id, current => ({ ...current, development })), signal: controller.signal, limits: authorization.limits });
+  let bridge; let finalStatus = 'FAILED'; let error = null;
+  const timer = setTimeout(() => controller.abort('development_time_limit'), authorization.limits.wall_ms);
+  const update = updater => manager.store.updateTask(task.task_id, updater);
+  try {
+    await session.init(authorization.mode === 'recovery' ? authorization.seed_code : null);
+    const patch = await fs.readFile(manager.harnessPatchPath, 'utf8');
+    // Runtime preparation is a zero-model profile check; no start claim is charged until process_spawn.
+    await manager.adapter.ensureHarnessRuntime(manager.harnessDshHome, directory);
+    bridge = await startDevelopmentMcp((name, args) => session.invoke(name, args));
+    const patchPath = path.join(directory, 'development.cordis.yml');
+    await fs.writeFile(patchPath, developmentPatch(patch, manager.paths.workbenchRoot));
+    const instructions = [
+      'Develop a Playwright test for the frozen normal case below using the workbench MCP tools in this SAME session.',
+      'Only workbench tools can read/write this task draft or self-test. Browser tools may observe and interact only with the bound normal entry. No shell, filesystem, other tasks, source code, references or alternate URLs.',
+      authorization.mode === 'recovery' ? 'This is a recovery task. FIRST call read_draft, then self_test the unchanged starting draft to receive the actual failure. Diagnose it yourself; inspect the normal page and repair your draft. No human diagnosis is supplied.' : 'This is a from-scratch task. Observe the normal page, write a draft, and self_test it. Never assume writing a file completes development.',
+      'Read execution errors and evidence; re-observe the normal page when uncertain. Repair locators, scope, control semantics or justified waiting. Never change business expectations, omit steps, skip tests, swallow exceptions, derive expected values from observed values, or use test.fail.',
+      'Use only @playwright/test. Navigate with await page.goto(process.env.PROBE_URL). Use one test and one await test.step("CASE_STEP_N", ...) per original step in order. Test every original requirement, including later selected state, retry, readings and close when required.',
+      'Do not use evaluate/evaluateAll, browser scripting, network calls or filesystem access. Use locators and Playwright assertions. No fixed URL in code. Helper functions inside the draft are allowed.',
+      'There are at most 3 development self-tests including the starting draft, 2 repair rounds, 120 total tool calls and 20 minutes. Failed tests are normal tool results: continue within budget without asking a human. Do not retry the same bytes without a reason.',
+      'After the current bytes have been tested, submit_candidate with their SHA and every original step requirement copied EXACTLY, actual source line numbers containing its checks, execution number and uncovered text. Read_draft returns exact current code. Do not mark ready with uncovered requirements. Genuine business mismatch or unresolved uncertainty must remain explicit.',
+      BROWSER_SEMANTICS_RULES, `Normal entry: ${environment.normal_url}`, `Frozen case: ${JSON.stringify(session.frozenCase)}`,
+    ].join('\n');
+    await fs.writeFile(path.join(directory, 'agent-input.txt'), instructions);
+    const credentials = manager.useStoredDshCredentials ? {} : manager.credentialProvider();
+    if (!manager.useStoredDshCredentials && (!credentials.apiKey || !credentials.baseUrl)) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
+    const harness = await manager.adapter.runHarnessTask({ task: instructions, workspace: directory, dshHome: manager.harnessDshHome, patchPath,
+      candidatePath: session.draftPath, browserExecutable: manager.browserExecutable, developmentEndpoint: bridge.url, developmentNormalUrl: environment.normal_url,
+      ...credentials, signal: controller.signal, timeoutMs: Math.max(1, session.state.deadline_at - Date.now()), maxToolCalls: authorization.limits.tool_calls,
+      onLifecycle: async event => {
+        if (event.type === 'process_spawn') { if (++session.state.harness_starts > authorization.limits.harness_starts) { controller.abort('harness_start_limit'); throw new Error('HARNESS_START_BUDGET_EXHAUSTED'); } }
+        if (event.event_type === 'tool_call') session.state.tool_calls++;
+        await session.save();
+        await manager.store.appendLifecycle(task.task_id, 'attempt-01-initial', event);
+      },
+    });
+    await session.queue;
+    await bridge.close(); bridge = null;
+    await fs.writeFile(path.join(directory, 'harness-events.json'), JSON.stringify(harness.events, null, 2));
+    await fs.writeFile(path.join(directory, 'harness-summary.json'), JSON.stringify(harness.assessment, null, 2));
+    const diagnostic = harnessStderrDiagnostic(harness.process?.stderr, await dshHomeSecrets(manager.harnessDshHome));
+    if (diagnostic) await fs.writeFile(path.join(directory, 'harness-diagnostic.json'), JSON.stringify(diagnostic, null, 2));
+    if (controller.signal.aborted || !harness.assessment.completed) throw new Error('HARNESS_INCOMPLETE:' + (harness.assessment.termination || controller.signal.reason || harness.assessment.turnEndReason));
+    if (!harness.assessment.browserToolCalls) throw new Error('NORMAL_PAGE_OBSERVATION_REQUIRED');
+    if (!session.state.submission) throw new Error('NO_TESTED_CANDIDATE_SUBMITTED');
+    const candidate = { version: session.state.self_tests.length, attempt_id: 'attempt-01-initial', sha256: session.state.submission.sha256, trial_runs: [], coverage_review: session.state.submission.coverage, approval_status: 'NOT_APPROVED' };
+    await update(current => ({ ...current, candidates: [candidate], task_status: 'VERIFYING', generation_status: 'GENERATED' }));
+    if (session.state.submission.outcome !== 'ready') { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
+    const finalPath = path.join(directory, session.state.submission.file);
+    const contract = { ...session.contract, detection: environment.detection };
+    for (const lane of ['normal', 'negative']) {
+      if (controller.signal.aborted) throw new Error('DEVELOPMENT_CANCELLED');
+      if (digest(await fs.readFile(finalPath)) !== candidate.sha256) throw new Error('FROZEN_CANDIDATE_CHANGED');
+      session.state.final_executions ||= [];
+      if (session.state.final_executions.some(run => run.lane === lane)) throw new Error('FINAL_EXECUTION_ALREADY_CONSUMED');
+      const startedAt = new Date().toISOString();
+      session.state.final_executions.push({ lane, started_at: startedAt, sha256: candidate.sha256, status: 'EXECUTING' }); await session.save();
+      const raw = await manager.adapter.verifyCandidate({ candidatePath: finalPath, fixtureUrl: lane === 'normal' ? environment.normal_url : environment.fault_url,
+        runDirectory: path.join(directory, 'final', lane), signal: controller.signal, browserExecutable: manager.browserExecutable });
+      const result = await parseCandidateReport(raw.reportPath, raw.process);
+      const coverage = projectCaseStepCoverage(result, contract);
+      const sameHash = digest(await fs.readFile(finalPath)) === candidate.sha256;
+      const run = { run_id: `${task.task_id}-${lane}`, run_type: lane, candidate_sha256: candidate.sha256, candidate_version: candidate.version,
+        executed_case_id: task.source.case_id, executed_external_id: task.source.external_id, executed_case_version: task.source.case_version,
+        started_at: startedAt, finished_at: new Date().toISOString(), status: result.test_status, complete_pass: result.complete_pass,
+        step_coverage: coverage, error: result.error, same_candidate_hash: sameHash, specified_defect_detected: lane === 'negative' && counterexampleDetected(result, contract), result };
+      session.state.final_executions.at(-1).status = result.test_status; await session.save();
+      candidate.trial_runs.push(run); await update(current => ({ ...current, candidates: [candidate] }));
+      if (!sameHash || (lane === 'normal' && (!result.complete_pass || !coverage.complete))) { finalStatus = 'CANDIDATE_VALIDATION_FAILED'; return; }
+    }
+    finalStatus = candidate.trial_runs.at(-1).specified_defect_detected ? 'WAITING_HUMAN_REVIEW' : 'CANDIDATE_VALIDATION_FAILED';
+  } catch (caught) { error = { code: caught.message, message: caught.message }; finalStatus = controller.signal.aborted ? 'CANCELLED' : 'FAILED'; }
+  finally {
+    clearTimeout(timer); if (bridge) await bridge.close(); await session.queue;
+    manager.active.phase = 'FINALIZING';
+    await manager.store.appendLifecycle(task.task_id, 'attempt-01-initial', { type: 'development_settled', status: finalStatus, at: new Date().toISOString() });
+    const listed = await evidenceFiles(directory, manager.store.taskDirectory(task.task_id));
+    const files = listed.filter(item => !item.relative_path.endsWith('.cordis.yml')).map((item, i) => ({ ...item, file_id: `build-file-${i + 1}`, attempt_id: 'attempt-01-initial', kind: item.relative_path.endsWith('.png') ? 'normal_screenshot' : 'development_evidence', content_type: item.relative_path.endsWith('.png') ? 'image/png' : 'text/plain; charset=utf-8', file_name: path.basename(item.relative_path), web_visible: !/harness-events/.test(item.relative_path) }));
+    await manager.store.serial(async () => {});
+    const lifecycle = await fs.readFile(manager.store.lifecycleFile(task.task_id, 'attempt-01-initial'));
+    files.push({ file_id: `build-file-${files.length + 1}`, attempt_id: 'attempt-01-initial', kind: 'lifecycle_log', relative_path: 'attempts/attempt-01-initial/lifecycle.ndjson', file_name: 'lifecycle.ndjson', bytes: lifecycle.length, sha256: digest(lifecycle), integrity_state: 'FINALIZED', web_visible: false });
+    await update(current => ({ ...current, task_status: finalStatus, finished_at: new Date().toISOString(), active_attempt_id: null,
+      verification_status: finalStatus === 'WAITING_HUMAN_REVIEW' ? 'TECHNICAL_VALIDATION_PASSED' : 'INCOMPLETE', human_review_status: finalStatus === 'WAITING_HUMAN_REVIEW' ? 'WAITING_REVIEW' : 'NOT_READY', files, error,
+      attempts: current.attempts.map(item => ({ ...item, status: finalStatus, finished_at: new Date().toISOString() })) }));
+  }
+}

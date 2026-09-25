@@ -98,6 +98,7 @@ function projectTabs(project, active) {
     <a data-nav class="${active === 'cases' ? 'active' : ''}" href="#/projects/${id}/cases">用例库</a>
     <a data-nav class="${active === 'auth' ? 'active' : ''}" href="#/projects/${id}/auth">登录准备</a>
     <a data-nav class="${active === 'build-tasks' ? 'active' : ''}" href="#/projects/${id}/build-tasks">建例任务</a>
+    <a data-nav class="${active === 'develop' ? 'active' : ''}" href="#/projects/${id}/develop">自主建例</a>
     <a data-nav class="${active === 'execution-records' ? 'active' : ''}" href="#/projects/${id}/execution-records">执行记录</a>
     <a data-nav class="${active === 'settings' ? 'active' : ''}" href="#/projects/${id}/settings">项目设置</a>
     <span class="stage-note">受控演示候选试跑 · 尚未批准</span>
@@ -402,6 +403,7 @@ function buildTaskActions(project, task) {
   return actions.join('');
 }
 function renderBuildTaskDetail(project, task) {
+  if (task.authorization?.logical_id) return renderDevelopmentDetail(project, task);
   setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'建例任务',href:`#/projects/${encodeURIComponent(project.project_id)}/build-tasks`},{label:task.source?.external_id || task.task_id}]);
   const content=task.input_bundle?.snapshot?.content; const latest=task.candidates?.at(-1);
   const steps=(content?.steps || []).map((step)=>`<article class="step-pair"><div class="step-number">${step.order}</div><div><small>动作</small><p>${esc(step.action)}</p></div><div><small>对应预期</small><p>${esc(step.expected)}</p></div></article>`).join('');
@@ -606,6 +608,31 @@ async function renderAuth(project) {
   await loadStatus();
 }
 
+async function renderDevelopmentStart(project) {
+  const response = await api('/api/build/development-authorizations');
+  const entries = response.authorizations.filter(item => item.project_id === project.project_id);
+  showPage(`<div class="page-heading"><h1>自主建例</h1></div>${projectTabs(project, 'develop')}<section class="panel"><div class="panel-body"><p>Agent观察正常页面、编写并实际自测，失败后在同一任务内有限修订。最终独立验证后仍等待人工核对。</p>${entries.length ? entries.map(entry => `<article class="preview-item"><h2>${esc(entry.logical_id)}</h2><p>${entry.mode === 'recovery' ? '从原失败草稿恢复' : '从零建例'} · 每任务最多 ${entry.limits.self_tests} 次开发自测、${entry.limits.tool_calls} 次工具调用</p>${entry.task_id ? `<a class="button" data-nav href="${buildTaskUrl(project, {task_id:entry.task_id})}">查看任务</a>` : `<button class="button primary" data-develop="${esc(entry.logical_id)}">开始已授权任务</button>`}</article>`).join('') : '<p>当前项目没有已登记的自主建例授权。</p>'}</div></section>`);
+  document.querySelectorAll('[data-develop]').forEach(button => button.addEventListener('click', async () => {
+    button.disabled = true;
+    try { const task = await mutate('/api/build/tasks/develop', jsonOptions({ logical_id: button.dataset.develop })); go(buildTaskUrl(project, task)); }
+    catch (error) { toast(messageFor(error), 'error'); button.disabled = false; }
+  }));
+}
+
+function renderDevelopmentDetail(project, task) {
+  const development = task.development || {};
+  const candidate = task.candidates?.at(-1);
+  const tests = development.self_tests || [];
+  const row = run => `<article class="preview-item"><h3>${esc(run.number ? `开发自测 ${run.number}` : `最终 ${run.run_type}`)} · ${esc(run.status)}</h3><p>候选 SHA：${esc(run.sha256 || run.candidate_sha256)}</p><pre>${esc(JSON.stringify(run.result?.error || run.error || null, null, 2))}</pre><ul>${(run.coverage?.items || run.step_coverage?.items || []).map(step => `<li>${esc(step.marker)}：${esc(step.execution_status)}</li>`).join('')}</ul></article>`;
+  const files = (task.files || []).filter(file => file.web_visible && /\.(json|mjs|txt|png)$/.test(file.file_name)).map(file => `<a href="/api/build/tasks/${encodeURIComponent(task.task_id)}/files/${encodeURIComponent(file.file_id)}" target="_blank" rel="noopener">${esc(file.relative_path)}</a>`).join('<br>');
+  showPage(`<div class="page-heading"><h1>自主建例任务 · ${esc(task.source.external_id)}</h1></div>${projectTabs(project, 'build-tasks')}<section class="panel"><div class="panel-body"><p data-testid="development-status">${esc(task.task_status)} · ${esc(task.human_review_status)}</p><p data-testid="development-counts">Harness ${development.harness_starts || 0} · 工具 ${development.tool_calls || 0} · 开发自测 ${tests.length}/3</p><p>冻结业务预期不变；技术验证不代表人工批准。</p>${task.active_attempt_id ? '<button class="button" id="cancel-development">取消任务</button>' : ''}${task.error ? `<pre>${esc(JSON.stringify(task.error, null, 2))}</pre>` : ''}${tests.map(row).join('')}${(candidate?.trial_runs || []).map(row).join('')}<h2>原要求覆盖核查材料</h2><pre>${esc(JSON.stringify(development.submission?.coverage || [], null, 2))}</pre><h2>执行证据</h2>${files}</div></section>`);
+  document.querySelector('#cancel-development')?.addEventListener('click', async () => { await mutate(`/api/build/tasks/${encodeURIComponent(task.task_id)}/stop`, jsonOptions({})); });
+  if (task.active_attempt_id) setTimeout(async () => {
+    if (!location.hash.includes(task.task_id)) return;
+    try { renderDevelopmentDetail(project, await api(`/api/build/tasks/${encodeURIComponent(task.task_id)}`)); } catch (error) { toast(messageFor(error), 'error'); }
+  }, 1500);
+}
+
 async function render(force = false) {
   if (force) { loading.hidden = false; app.hidden = true; state.error = null; }
   try {
@@ -619,6 +646,7 @@ async function render(force = false) {
     if (parts[2] === 'import') return renderImport(project);
     if (parts[2] === 'settings') return renderSettings(project);
     if (parts[2] === 'auth') return renderAuth(project);
+    if (parts[2] === 'develop') return renderDevelopmentStart(project);
     if (parts[2] === 'build-tasks') return renderBuildTasksRoute(project, parts[3] || null);
     if (parts[2] === 'execution-records') { await renderExecutionRecords(project); focusExecutionRecord(value.query.get('run_id')); return; }
     if (parts[2] === 'cases' && parts[3]) { const item = project.cases.find((entry) => entry.case_id === parts[3]); if (!item) throw new ApiError('CASE_NOT_FOUND', 404); return renderCaseDetail(project, item, value.query.get('version')); }

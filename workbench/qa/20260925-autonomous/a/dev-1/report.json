@@ -1,0 +1,188 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "分页筛选北站后翻页并返回",
+          "file": "candidate.spec.mjs",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "分页筛选北站后翻页并返回",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5794,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:26:30\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:23:5",
+                        "location": {
+                          "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                          "column": 30,
+                          "line": 26
+                        },
+                        "snippet": "  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                            "column": 30,
+                            "line": 26
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n\n\n  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:26:30\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:23:5"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                          "duration": 5080,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('combobox', { name: '站点筛选' })\nExpected: \u001b[32m\"全部\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"station\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"all\"\u001b[22m\n\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:26:30\n    at <REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs:23:5",
+                            "location": {
+                              "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                              "column": 30,
+                              "line": 26
+                            },
+                            "snippet": "  24 |       await page.goto(process.env.PROBE_URL);\n  25 |\n> 26 |       await expect(combobox).toHaveValue('全部');\n     |                              ^\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\n  29 |"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-09-25T00:30:04.345Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\evidence\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\evidence\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\evidence\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\evidence\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\run-1\\candidate.spec.mjs",
+                        "column": 30,
+                        "line": 26
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "bc3083f3c9c91830281f-688cee0fb63630447340",
+              "file": "candidate.spec.mjs",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T00:30:03.790Z",
+    "duration": 6896.321,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

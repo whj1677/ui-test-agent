@@ -1,5 +1,11 @@
 # 批准脚本测试工作台（第一阶段）
 
+2026-09-25 新增已登记授权的“自主建例”入口：项目页 → 自主建例 → 开始已授权任务。Agent在同一DSH会话观察、编写、实际自测并有限修订；提交后由工作台独立验证，最多停在等待人工核对。详细范围和证据见 [任务内自主建例记录](docs/AUTONOMOUS_DEVELOPMENT_20260925.md)。日常启动脚本和4322入口保持不变。
+
+环境接线：`WORKBENCH_DEVELOPMENT_ENVIRONMENTS`指定本机JSON数组文件，每项包含`id`、`normal_url`、`fault_url`和既有`detection`契约，仅支持已登记的本机合成环境。管理员通过`registerDevelopmentAuthorization`绑定项目、CONFIRMED用例版本/哈希及环境；普通页面/API不能自行授权或提交任意URL。授权账本位于现有BuildTaskStore内，历史账本不重置。运行依赖根目录、workbench、harness-probe三个锁文件及本机DSH私有运行时；不打包凭据。
+
+零模型工程验证：`node --test workbench/tests/development-session.test.mjs workbench/tests/development-production.test.mjs`（从仓库根执行）。锁定DSH插件检查：配置本机`DSH_HOME`后运行`node workbench/tests/development-dsh-preflight.mjs`；该检查不挂载Agent驱动、不调用模型。`scripts/accept-autonomous-20260925.mjs --run-authorized-pair`只用于本次明确授权的一次性真实验收，有持久化防重抽记录，不是日常自动重跑命令。
+
 这是独立于原产品的本地单用户子工程。M1 负责批准脚本执行，M2-C 增加固定合成探针候选建例，M3-A 增加项目与用例数据管理。M3-B1 允许从一个已确认的项目用例创建现有 build task 的冻结输入并停在“已创建，尚未启动”。M3-B2 只为一条明确选择、与固定无登录合成环境匹配的项目用例提供一次作用域授权，使冻结输入进入 Harness attempt、由同一候选完成正常/反例验证，并把结构化结果和登记媒体返回原项目关联任务；它不全局解除历史 `INPUT_ONLY`。M3-C 把用户已限定人工首审的同一候选登记为仅适用于该项目用例 v1 的耐久私有资产，并允许从项目页直接发起正常 Playwright 回归。
 
 第一阶段原始 normal/fault 组合、运行 ID、三方一致性、重启证据和边界见 [集成验收报告](docs/ACCEPTANCE_REPORT.md)。2026-09-21 的三项代码复审修复、修前/修后证据和新运行 ID 见 [M1 复审修复报告](docs/REVIEW_FIX_REPORT.md)；整体通过与既定三类媒体证据的后续关联见 [证据完整性修订记录](docs/EVIDENCE_COMPLETENESS_REVISION.md)。前两份历史报告没有改写。

@@ -1,0 +1,161 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/normal/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\normal\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "分页筛选北站后翻页并返回",
+          "file": "candidate.spec.mjs",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "分页筛选北站后翻页并返回",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 952,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）",
+                          "duration": 169
+                        },
+                        {
+                          "title": "CASE_STEP_2: 站点筛选选择北站，点击筛选",
+                          "duration": 121
+                        },
+                        {
+                          "title": "CASE_STEP_3: 点击下一页",
+                          "duration": 92
+                        },
+                        {
+                          "title": "CASE_STEP_4: 点击上一页",
+                          "duration": 74
+                        }
+                      ],
+                      "startTime": "2026-09-25T00:31:12.599Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\normal\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\normal\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925002958-da75da50\\development\\final\\normal\\artifacts\\candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "bc3083f3c9c91830281f-688cee0fb63630447340",
+              "file": "candidate.spec.mjs",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T00:31:11.989Z",
+    "duration": 2150.272,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

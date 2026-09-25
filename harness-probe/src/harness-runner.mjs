@@ -113,7 +113,7 @@ export async function runHarnessEventProcess({
   return { events, processResult, toolCalls: toolBudget.count(), maxToolCalls };
 }
 
-export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, browserAttachEndpoint = null, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
+export async function runHarnessTask({ task, workspace, dshHome, patchPath, candidatePath, browserExecutable, browserAttachEndpoint = null, developmentEndpoint = null, developmentNormalUrl = null, apiKey, baseUrl, timeoutMs, signal, maxToolCalls = 30, onLifecycle }) {
   const providerEnvironment = {};
   if (apiKey) providerEnvironment.DEEPSEEK_API_KEY = apiKey;
   if (baseUrl) providerEnvironment.DEEPSEEK_BASE_URL = baseUrl;
@@ -121,6 +121,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
     DSH_HOME: dshHome,
     DSH_PROBE_BROWSER_EXECUTABLE: browserExecutable,
     ...(browserAttachEndpoint ? { WORKBENCH_AUTH_CDP_ENDPOINT: browserAttachEndpoint } : {}),
+    ...(developmentEndpoint ? { WORKBENCH_DEVELOPMENT_ENDPOINT: developmentEndpoint, WORKBENCH_DEVELOPMENT_NORMAL_URL: developmentNormalUrl } : {}),
     ...providerEnvironment,
   });
   const execution = await runHarnessEventProcess({ command: process.execPath, args: [
@@ -143,7 +144,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
   assessment.toolCalls = execution.toolCalls;
   assessment.maxToolCalls = maxToolCalls;
   assessment.toolLimitReached = processResult.termination === 'tool_limit';
-  const secrets = [apiKey, browserAttachEndpoint].filter(Boolean);
+  const secrets = [apiKey, browserAttachEndpoint, developmentEndpoint].filter(Boolean);
   return {
     process: {
       ...processResult,

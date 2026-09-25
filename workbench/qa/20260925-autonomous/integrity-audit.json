@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-09-25T00:44:10.024Z",
+  "results": [
+    {
+      "task": "build-20260925002958-da75da50",
+      "registered_files_verified": 36,
+      "lifecycle_finalized": "FINALIZED",
+      "final_run_hashes_match": true,
+      "fault_entry_absent_from_agent_input": true
+    },
+    {
+      "task": "build-20260925003122-1a068ff3",
+      "registered_files_verified": 29,
+      "lifecycle_finalized": "FINALIZED",
+      "final_run_hashes_match": true,
+      "fault_entry_absent_from_agent_input": true
+    }
+  ]
+}

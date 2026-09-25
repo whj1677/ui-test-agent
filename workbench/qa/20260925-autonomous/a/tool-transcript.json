@@ -1,0 +1,594 @@
+[
+  {
+    "type": "status",
+    "phase": "turn_start",
+    "turn": 1
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 1
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_OmdbfJxU9ZEAjH9f3XCy6210",
+    "tool": "mcp__workbench__read_draft",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_OmdbfJxU9ZEAjH9f3XCy6210",
+    "status": "completed",
+    "result": "{\"frozen_case\":{\"external_id\":\"NEW-001\",\"title\":\"分页筛选北站后翻页并返回\",\"module\":\"paging\",\"preconditions\":\"仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。\",\"test_data\":\"{\\\"records\\\":\\\"P01..P08，奇数北站，偶数南站\\\",\\\"page_size\\\":2,\\\"filter\\\":\\\"北站\\\"}\\n入口=http://127.0.0.1:4343/?scene=paging&variant=normal\",\"steps\":[{\"order\":1,\"action\":\"打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"expected\":\"表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部\"},{\"order\":2,\"action\":\"站点筛选选择北站，点击筛选\",\"expected\":\"显示P01、P03；共4条，1/2页；当前筛选为北站\"},{\"order\":3,\"action\":\"点击下一页\",\"expected\":\"显示P05、P07；共4条，2/2页；当前筛选仍为北站\"},{\"order\":4,\"action\":\"点击上一页\",\"expected\":\"返回显示P01、P03；共4条，1/2页；当前筛选仍为北站\"}],\"status\":\"CONFIRMED\"},\"normal_entry\":\"http://127.0.0.1:53901/index.html?scene=paging&variant=normal\",\"code\":\"import { test, expect } from '@playwright/test';\\n\\nconst CASE_TITLE = '分页筛选北站后翻页并返回';\\n\\ntest.describe(CASE_TITLE, () => {\\n  test('分页筛选北站后翻页并返回', async ({ page }) => {\\n    const combobox = page.getByRole('combobox', { name: '站点筛选' });\\n    const filterButton = page.getByRole('button', { name: '筛选', exact: true });\\n    const currentFilter = page.getByText(/当前筛选：/);\\n    const dataRows = page.locator('table tbody tr');\\n    const prevButton = page.getByRole('button', { name: '上一页' });\\n    const nextButton = page.getByRole('button', { name: '下一页' });\\n    const pageInfo = page.getByText(/共\\\\d+条，\\\\d+\\\\/\\\\d+页/);\\n\\n    const expectRows = async (ids, sites) => {\\n      await expect(dataRows).toHaveCount(ids.length);\\n      for (let i = 0; i < ids.length; i += 1) {\\n        await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\\n        await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\\n      }\\n    };\\n\\n    await test.step('CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）', async () => {\\n      await page.goto(process.env.PROBE_URL);\\n\\n      await expect(combobox).toHaveValue('全部');\\n      await expect(combobox.locator('option[selected]')).toHaveText('全部');\\n      await expect(currentFilter).toHaveText('当前筛选：全部');\\n\\n      await expect(dataRows).toHaveCount(2);\\n      await expect(dataRows.nth(0).locator('td').nth(0)).toHaveText('P01');\\n      await expect(dataRows.nth(0).locator('td').nth(1)).toHaveText('北站');\\n      await expect(dataRows.nth(1).locator('td').nth(0)).toHaveText('P02');\\n      await expect(dataRows.nth(1).locator('td').nth(1)).toHaveText('南站');\\n\\n      await expect(pageInfo).toHaveText('共8条，1/4页');\\n      await expect(prevButton).toBeDisabled();\\n      await expect(nextButton).toBeEnabled();\\n    });\\n\\n    await test.step('CASE_STEP_2: 站点筛选选择北站，点击筛选', async () => {\\n      await combobox.selectOption('北站');\\n      await filterButton.click();\\n\\n      await expect(combobox).toHaveValue('北站');\\n      await expect(combobox.locator('option[selected]')).toHaveText('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，1/2页');\\n      await expect(prevButton).toBeDisabled();\\n      await expect(nextButton).toBeEnabled();\\n    });\\n\\n    await test.step('CASE_STEP_3: 点击下一页', async () => {\\n      await nextButton.click();\\n\\n      await expect(combobox).toHaveValue('北站');\\n      await expect(combobox.locator('option[selected]')).toHaveText('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P05', 'P07'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，2/2页');\\n      await expect(prevButton).toBeEnabled();\\n      await expect(nextButton).toBeDisabled();\\n    });\\n\\n    await test.step('CASE_STEP_4: 点击上一页', async () => {\\n      await prevButton.click();\\n\\n      await expect(combobox).toHaveValue('北站');\\n      await expect(combobox.locator('option[selected]')).toHaveText('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，1/2页');\\n      await expect(prevButton).toBeDisabled();\\n      await expect(nextButton).toBeEnabled();\\n    });\\n  });\\n});\\n\",\"sha256\":\"F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137\",\"executions_used\":0,\"limits\":{\"self_tests\":3,\"revisions\":2,\"tool_calls\":120,\"harness_starts\":3,\"wall_ms\":1200000}}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 1,
+    "usage": {
+      "inputTokens": 14463,
+      "outputTokens": 39,
+      "cacheReadTokens": 768,
+      "cacheWriteTokens": 0,
+      "totalTokens": 15270
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 2
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_cfmkkLqwk6KmPzhh5oFn6043",
+    "tool": "mcp__workbench__self_test",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_cfmkkLqwk6KmPzhh5oFn6043",
+    "status": "completed",
+    "result": "{\"number\":1,\"sha256\":\"F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137\",\"candidate_path\":\"run-1/candidate.spec.mjs\",\"status\":\"EXECUTED\",\"started_at\":1790296203198,\"result\":{\"report_status\":\"COMPLETE\",\"test_status\":\"FAILED\",\"test_count\":1,\"error\":{\"type\":\"ASSERTION_MISMATCH\",\"message\":\"Error: expect(locator).toHaveValue(expected) failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\\"全部\\\"\\nReceived: \\\"all\\\"\\nTimeout:  5000ms\\n\\nCall log:\\n  - Expect \\\"toHaveValue\\\" with timeout 5000ms\\n  - waiting for getByRole('combobox', { name: '站点筛选' })\\n    14 × locator resolved to <select id=\\\"station\\\">…</select>\\n       - unexpected value \\\"all\\\"\\n\",\"expected\":\"全部\",\"actual\":\"all\",\"attribution\":\"PENDING_ANALYSIS\"},\"complete_pass\":false,\"stats\":{\"startTime\":\"2026-09-25T00:30:03.790Z\",\"duration\":6896.321,\"expected\":0,\"skipped\":0,\"unexpected\":1,\"flaky\":0},\"process\":{\"exit_code\":1,\"termination\":null,\"error\":null},\"steps\":[{\"title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"category\":null,\"duration\":5080,\"error\":{\"type\":\"ASSERTION_MISMATCH\",\"message\":\"Error: expect(locator).toHaveValue(expected) failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\\"全部\\\"\\nReceived: \\\"all\\\"\\nTimeout:  5000ms\\n\\nCall log:\\n  - Expect \\\"toHaveValue\\\" with timeout 5000ms\\n  - waiting for getByRole('combobox', { name: '站点筛选' })\\n    14 × locator resolved to <select id=\\\"station\\\">…</select>\\n       - unexpected value \\\"all\\\"\\n\",\"expected\":\"全部\",\"actual\":\"all\",\"attribution\":\"PENDING_ANALYSIS\"},\"raw_error\":{\"message\":\"Error: \\u001b[2mexpect(\\u001b[22m\\u001b[31mlocator\\u001b[39m\\u001b[2m).\\u001b[22mtoHaveValue\\u001b[2m(\\u001b[22m\\u001b[32mexpected\\u001b[39m\\u001b[2m)\\u001b[22m failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\u001b[32m\\\"全部\\\"\\u001b[39m\\nReceived: \\u001b[31m\\\"all\\\"\\u001b[39m\\nTimeout:  5000ms\\n\\nCall log:\\n\\u001b[2m  - Expect \\\"toHaveValue\\\" with timeout 5000ms\\u001b[22m\\n\\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\\u001b[22m\\n\\u001b[2m    14 × locator resolved to <select id=\\\"station\\\">…</select>\\u001b[22m\\n\\u001b[2m       - unexpected value \\\"all\\\"\\u001b[22m\\n\",\"location\":{\"file\":\"<REPO>\\\\workbench\\\\.local\\\\a25\\\\build-tasks\\\\build-20260925002958-da75da50\\\\development\\\\run-1\\\\candidate.spec.mjs\",\"line\":26,\"column\":30},\"snippet\":\"  24 |       await page.goto(process.env.PROBE_URL);\\n  25 |\\n> 26 |       await expect(combobox).toHaveValue('全部');\\n     |                              ^\\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\\n  29 |\"},\"steps\":[]}]},\"coverage\":{\"rule_version\":\"project-case-step-title-v2\",\"complete\":false,\"order_valid\":false,\"expected_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\"],\"observed_sequence\":[\"CASE_STEP_1\"],\"duplicates\":[],\"missing\":[\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\"],\"unexpected\":[],\"malformed_titles\":[],\"unattributed_errors\":[],\"items\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"report_path\":[0],\"error_attributed\":true,\"execution_status\":\"FAILED\",\"attributed_errors\":[{\"step_id\":\"CASE_STEP_1\",\"report_path\":[0],\"error\":{\"type\":\"ASSERTION_MISMATCH\",\"message\":\"Error: expect(locator).toHaveValue(expected) failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\\"全部\\\"\\nReceived: \\\"all\\\"\\nTimeout:  5000ms\\n\\nCall log:\\n  - Expect \\\"toHaveValue\\\" with timeout 5000ms\\n  - waiting for getByRole('combobox', { name: '站点筛选' })\\n    14 × locator resolved to <select id=\\\"station\\\">…</select>\\n       - unexpected value \\\"all\\\"\\n\",\"expected\":\"全部\",\"actual\":\"all\",\"attribution\":\"PENDING_ANALYSIS\"},\"raw_error\":{\"message\":\"Error: \\u001b[2mexpect(\\u001b[22m\\u001b[31mlocator\\u001b[39m\\u001b[2m).\\u001b[22mtoHaveValue\\u001b[2m(\\u001b[22m\\u001b[32mexpected\\u001b[39m\\u001b[2m)\\u001b[22m failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\u001b[32m\\\"全部\\\"\\u001b[39m\\nReceived: \\u001b[31m\\\"all\\\"\\u001b[39m\\nTimeout:  5000ms\\n\\nCall log:\\n\\u001b[2m  - Expect \\\"toHaveValue\\\" with timeout 5000ms\\u001b[22m\\n\\u001b[2m  - waiting for getByRole('combobox', { name: '站点筛选' })\\u001b[22m\\n\\u001b[2m    14 × locator resolved to <select id=\\\"station\\\">…</select>\\u001b[22m\\n\\u001b[2m       - unexpected value \\\"all\\\"\\u001b[22m\\n\",\"location\":{\"file\":\"<REPO>\\\\workbench\\\\.local\\\\a25\\\\build-tasks\\\\build-20260925002958-da75da50\\\\development\\\\run-1\\\\candidate.spec.mjs\",\"line\":26,\"column\":30},\"snippet\":\"  24 |       await page.goto(process.env.PROBE_URL);\\n  25 |\\n> 26 |       await expect(combobox).toHaveValue('全部');\\n     |                              ^\\n  27 |       await expect(combobox.locator('option[selected]')).toHaveText('全部');\\n  28 |       await expect(currentFilter).toHaveText('当前筛选：全部');\\n  29 |\"}}]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":false,\"raw_title\":null,\"report_path\":null,\"error_attributed\":false,\"execution_status\":\"NOT_EXECUTED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":false,\"raw_title\":null,\"report_path\":null,\"error_attributed\":false,\"execution_status\":\"NOT_EXECUTED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":false,\"raw_title\":null,\"report_path\":null,\"error_attributed\":false,\"execution_status\":\"NOT_EXECUTED\",\"attributed_errors\":[]}]},\"changed_after_execution\":false,\"report_path\":\"run-1/evidence/playwright-report.json\",\"media\":[{\"relative_path\":\"run-1/evidence/artifacts/.last-run.json\",\"bytes\":96,\"sha256\":\"0F18694E2806F3004197EBAEC17D779A91EAD1548161383C56B31F8A7BA27BC3\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/error-context.md\",\"bytes\":5204,\"sha256\":\"B270F15DED78462CAD9F8A3CA2E4E787AB848D99E2AB19FBE376EC42B53709B3\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png\",\"bytes\":29473,\"sha256\":\"85B072DBE0E34C877F157424ACADDB8735A3913A1F06235F5A2AAB19AFCC3C9F\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip\",\"bytes\":126082,\"sha256\":\"5768483AB85463340748A2C95F6D3D0EAEC2F290DE41580D513B7E7101176BDB\"},{\"relative_path\":\"run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm\",\"bytes\":127470,\"sha256\":\"D330DDD42B4CBC00C4A1E410E0FD6F6840BAE8AC5E91DFE1F6CD2F8B25B2F64D\"},{\"relative_path\":\"run-1/evidence/playwright-report.json\",\"bytes\":12953,\"sha256\":\"95F03862D440DD8D1ACB01C6CAAF7CCAAF4B86B50F5D465E393A86F888DF6FE9\"}],\"trace_summary\":{\"interpretation\":\"metadata and reporter steps; no synthetic trace verdict\",\"archives\":[{\"relative_path\":\"run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip\",\"bytes\":126082,\"sha256\":\"5768483AB85463340748A2C95F6D3D0EAEC2F290DE41580D513B7E7101176BDB\"}],\"observed_steps\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"report_path\":[0],\"error_attributed\":true,\"execution_status\":\"FAILED\",\"attributed_errors\":[{\"step_id\":\"CASE_STEP_1\",\"report_path\":[0],\"error\":{\"type\":\"ASSERTION_MISMATCH\",\"message\":\"Error: expect(locator).toHaveValue(expected) failed\\n\\nLocator:  getByRole('combobox', { name: '站点筛选' })\\nExpected: \\\"全部\\\"\\nReceived: \\\"all\\\"\\nTimeout:  5000ms\\n\\nCall log:\\n  - Expect \\\"toHaveValue\\\" with time",
+    "truncated": true
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 2,
+    "usage": {
+      "inputTokens": 1599,
+      "outputTokens": 54,
+      "cacheReadTokens": 15232,
+      "cacheWriteTokens": 0,
+      "totalTokens": 16885
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 3
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_5w4KT4RzHzFpHGuKDCjy0954",
+    "tool": "mcp__playwright-mcp__browser_navigate",
+    "input": {
+      "url": "http://127.0.0.1:53901/index.html?scene=paging&variant=normal"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_5w4KT4RzHzFpHGuKDCjy0954",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:53901/index.html?scene=paging&variant=normal');\n```\n### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T00-30-12-800Z.yml)\n### Events\n- New console entries: .playwright-mcp\\console-2026-09-25T00-30-12-685Z.log#L1"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 3,
+    "usage": {
+      "inputTokens": 3696,
+      "outputTokens": 202,
+      "cacheReadTokens": 16768,
+      "cacheWriteTokens": 0,
+      "totalTokens": 20666
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 4
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_6DI6xc4TOSLbZ4eeO8tP4916",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_6DI6xc4TOSLbZ4eeO8tP4916",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- generic [active] [ref=e1]:\n  - banner [ref=e2]:\n    - heading \"设备维护演练台\" [level=1] [ref=e3]\n    - generic [ref=e4]: 纯本地演示，无账号、无网络、无真实数据。\n  - main [ref=e5]:\n    - region [ref=e6]:\n      - heading \"分页清单\" [level=2] [ref=e7]\n      - generic [ref=e8]:\n        - generic [ref=e9]: 站点筛选\n        - combobox \"站点筛选\" [ref=e10]:\n          - option \"全部\" [selected]\n          - option \"北站\"\n          - option \"南站\"\n        - button \"筛选\" [ref=e11] [cursor=pointer]\n        - generic [ref=e12]: 当前筛选：全部\n      - table [ref=e13]:\n        - rowgroup [ref=e14]:\n          - row [ref=e15]:\n            - columnheader \"编号\" [ref=e16]\n            - columnheader \"站点\" [ref=e17]\n        - rowgroup [ref=e18]:\n          - row [ref=e19]:\n            - cell \"P01\" [ref=e20]\n            - cell \"北站\" [ref=e21]\n          - row [ref=e22]:\n            - cell \"P02\" [ref=e23]\n            - cell \"南站\" [ref=e24]\n      - generic [ref=e25]:\n        - button \"上一页\" [disabled] [ref=e26]\n        - button \"下一页\" [ref=e27] [cursor=pointer]\n        - generic [ref=e28]: 共8条，1/4页\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 4,
+    "usage": {
+      "inputTokens": 227,
+      "outputTokens": 40,
+      "cacheReadTokens": 20608,
+      "cacheWriteTokens": 0,
+      "totalTokens": 20875
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 5
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_C2bC7AY5qmgfxzIV6uQ64695",
+    "tool": "mcp__playwright-mcp__browser_select_option",
+    "input": {
+      "target": "e10",
+      "element": "站点筛选 combobox",
+      "values": [
+        "北站"
+      ]
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_C2bC7AY5qmgfxzIV6uQ64695",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByLabel('站点筛选').selectOption('北站');\n```\n### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T00-30-23-295Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 5,
+    "usage": {
+      "inputTokens": 442,
+      "outputTokens": 2067,
+      "cacheReadTokens": 20864,
+      "cacheWriteTokens": 0,
+      "totalTokens": 23373
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 6
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_3WHl9udu4jCIHDr6bgxm6238",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "target": "e11",
+      "element": "筛选 button"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_3WHl9udu4jCIHDr6bgxm6238",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: '筛选' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T00-30-24-678Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 6,
+    "usage": {
+      "inputTokens": 197,
+      "outputTokens": 74,
+      "cacheReadTokens": 23296,
+      "cacheWriteTokens": 0,
+      "totalTokens": 23567
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 7
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_0J3wapfXo8QxwDZf4LQK2311",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_0J3wapfXo8QxwDZf4LQK2311",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- generic [ref=e1]:\n  - banner [ref=e2]:\n    - heading \"设备维护演练台\" [level=1] [ref=e3]\n    - generic [ref=e4]: 纯本地演示，无账号、无网络、无真实数据。\n  - main [ref=e5]:\n    - region [ref=e6]:\n      - heading \"分页清单\" [level=2] [ref=e7]\n      - generic [ref=e8]:\n        - generic [ref=e9]: 站点筛选\n        - combobox \"站点筛选\" [ref=e10]:\n          - option \"全部\"\n          - option \"北站\" [selected]\n          - option \"南站\"\n        - button \"筛选\" [active] [ref=e11] [cursor=pointer]\n        - generic [ref=e12]: 当前筛选：北站\n      - table [ref=e13]:\n        - rowgroup [ref=e14]:\n          - row [ref=e15]:\n            - columnheader \"编号\" [ref=e16]\n            - columnheader \"站点\" [ref=e17]\n        - rowgroup [ref=e18]:\n          - row [ref=e29]:\n            - cell \"P01\" [ref=e30]\n            - cell \"北站\" [ref=e31]\n          - row [ref=e32]:\n            - cell \"P03\" [ref=e33]\n            - cell \"北站\" [ref=e34]\n      - generic [ref=e25]:\n        - button \"上一页\" [disabled] [ref=e26]\n        - button \"下一页\" [ref=e27] [cursor=pointer]\n        - generic [ref=e28]: 共4条，1/2页\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 7,
+    "usage": {
+      "inputTokens": 137,
+      "outputTokens": 33,
+      "cacheReadTokens": 23552,
+      "cacheWriteTokens": 0,
+      "totalTokens": 23722
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 8
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_5acQ3Sr77EDCPeO8JisR7527",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "下一页 button",
+      "target": "e27"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_5acQ3Sr77EDCPeO8JisR7527",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: '下一页' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T00-30-27-090Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 8,
+    "usage": {
+      "inputTokens": 474,
+      "outputTokens": 105,
+      "cacheReadTokens": 23680,
+      "cacheWriteTokens": 0,
+      "totalTokens": 24259
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 9
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_rsn03KSKYKNR4aLAQ7O91173",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_rsn03KSKYKNR4aLAQ7O91173",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- generic [active] [ref=e1]:\n  - banner [ref=e2]:\n    - heading \"设备维护演练台\" [level=1] [ref=e3]\n    - generic [ref=e4]: 纯本地演示，无账号、无网络、无真实数据。\n  - main [ref=e5]:\n    - region [ref=e6]:\n      - heading \"分页清单\" [level=2] [ref=e7]\n      - generic [ref=e8]:\n        - generic [ref=e9]: 站点筛选\n        - combobox \"站点筛选\" [ref=e10]:\n          - option \"全部\"\n          - option \"北站\" [selected]\n          - option \"南站\"\n        - button \"筛选\" [ref=e11] [cursor=pointer]\n        - generic [ref=e12]: 当前筛选：北站\n      - table [ref=e13]:\n        - rowgroup [ref=e14]:\n          - row [ref=e15]:\n            - columnheader \"编号\" [ref=e16]\n            - columnheader \"站点\" [ref=e17]\n        - rowgroup [ref=e18]:\n          - row [ref=e35]:\n            - cell \"P05\" [ref=e36]\n            - cell \"北站\" [ref=e37]\n          - row [ref=e38]:\n            - cell \"P07\" [ref=e39]\n            - cell \"北站\" [ref=e40]\n      - generic [ref=e25]:\n        - button \"上一页\" [ref=e26] [cursor=pointer]\n        - button \"下一页\" [disabled] [ref=e27]\n        - generic [ref=e28]: 共4条，2/2页\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 9,
+    "usage": {
+      "inputTokens": 189,
+      "outputTokens": 33,
+      "cacheReadTokens": 24192,
+      "cacheWriteTokens": 0,
+      "totalTokens": 24414
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 10
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_i9w2s7TMSsIEtRHFXFvv2827",
+    "tool": "mcp__playwright-mcp__browser_click",
+    "input": {
+      "element": "上一页 button",
+      "target": "e26"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_i9w2s7TMSsIEtRHFXFvv2827",
+    "status": "completed",
+    "result": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: '上一页' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n- [Snapshot](.playwright-mcp\\page-2026-09-25T00-30-29-956Z.yml)"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 10,
+    "usage": {
+      "inputTokens": 526,
+      "outputTokens": 111,
+      "cacheReadTokens": 24320,
+      "cacheWriteTokens": 0,
+      "totalTokens": 24957
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 11
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_ET_Y9PM7Hkk6D7Kdbc2meKj0016",
+    "tool": "mcp__playwright-mcp__browser_snapshot",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_ET_Y9PM7Hkk6D7Kdbc2meKj0016",
+    "status": "completed",
+    "result": "### Page\n- Page URL: http://127.0.0.1:53901/index.html?scene=paging&variant=normal\n- Page Title: 设备维护演练台\n- Console: 1 errors, 0 warnings\n### Snapshot\n```yaml\n- generic [active] [ref=e1]:\n  - banner [ref=e2]:\n    - heading \"设备维护演练台\" [level=1] [ref=e3]\n    - generic [ref=e4]: 纯本地演示，无账号、无网络、无真实数据。\n  - main [ref=e5]:\n    - region [ref=e6]:\n      - heading \"分页清单\" [level=2] [ref=e7]\n      - generic [ref=e8]:\n        - generic [ref=e9]: 站点筛选\n        - combobox \"站点筛选\" [ref=e10]:\n          - option \"全部\"\n          - option \"北站\" [selected]\n          - option \"南站\"\n        - button \"筛选\" [ref=e11] [cursor=pointer]\n        - generic [ref=e12]: 当前筛选：北站\n      - table [ref=e13]:\n        - rowgroup [ref=e14]:\n          - row [ref=e15]:\n            - columnheader \"编号\" [ref=e16]\n            - columnheader \"站点\" [ref=e17]\n        - rowgroup [ref=e18]:\n          - row [ref=e41]:\n            - cell \"P01\" [ref=e42]\n            - cell \"北站\" [ref=e43]\n          - row [ref=e44]:\n            - cell \"P03\" [ref=e45]\n            - cell \"北站\" [ref=e46]\n      - generic [ref=e25]:\n        - button \"上一页\" [disabled] [ref=e26]\n        - button \"下一页\" [ref=e27] [cursor=pointer]\n        - generic [ref=e28]: 共4条，1/2页\n```"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 11,
+    "usage": {
+      "inputTokens": 248,
+      "outputTokens": 33,
+      "cacheReadTokens": 24832,
+      "cacheWriteTokens": 0,
+      "totalTokens": 25113
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 12
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_FKLLGVUwqy5HU5MHYFUk8348",
+    "tool": "mcp__workbench__write_draft",
+    "input": {
+      "previous_sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "code": "import { test, expect } from '@playwright/test';\n\nconst CASE_TITLE = '分页筛选北站后翻页并返回';\n\ntest.describe(CASE_TITLE, () => {\n  test(CASE_TITLE, async ({ page }) => {\n    const panel = page.locator('main');\n    const combobox = page.getByRole('combobox', { name: '站点筛选' });\n    const filterButton = page.getByRole('button', { name: '筛选', exact: true });\n    const currentFilter = page.getByText(/当前筛选：/);\n    const dataRows = panel.locator('table tbody tr:has(td)');\n    const prevButton = panel.getByRole('button', { name: '上一页' });\n    const nextButton = panel.getByRole('button', { name: '下一页' });\n    const pageInfo = page.getByText(/共\\d+条，\\d+\\/\\d+页/);\n\n    // Observe the live selected option; the [selected] attribute does not track later changes.\n    const expectSelected = async (label) => {\n      await expect(combobox.locator('option:checked')).toHaveText(label);\n    };\n\n    const expectRows = async (ids, sites) => {\n      await expect(dataRows).toHaveCount(ids.length);\n      for (let i = 0; i < ids.length; i += 1) {\n        await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\n        await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\n      }\n    };\n\n    await test.step('CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）', async () => {\n      await page.goto(process.env.PROBE_URL);\n\n      await expect(currentFilter).toHaveText('当前筛选：全部');\n      await expectSelected('全部');\n\n      await expectRows(['P01', 'P02'], ['北站', '南站']);\n\n      await expect(pageInfo).toHaveText('共8条，1/4页');\n    });\n\n    await test.step('CASE_STEP_2: 站点筛选选择北站，点击筛选', async () => {\n      await combobox.selectOption({ label: '北站' });\n      await filterButton.click();\n\n      await expectSelected('北站');\n      await expect(currentFilter).toHaveText('当前筛选：北站');\n\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\n\n      await expect(pageInfo).toHaveText('共4条，1/2页');\n    });\n\n    await test.step('CASE_STEP_3: 点击下一页', async () => {\n      await nextButton.click();\n\n      await expectSelected('北站');\n      await expect(currentFilter).toHaveText('当前筛选：北站');\n\n      await expectRows(['P05', 'P07'], ['北站', '北站']);\n\n      await expect(pageInfo).toHaveText('共4条，2/2页');\n    });\n\n    await test.step('CASE_STEP_4: 点击上一页', async () => {\n      await prevButton.click();\n\n      await expectSelected('北站');\n      await expect(currentFilter).toHaveText('当前筛选：北站');\n\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\n\n      await expect(pageInfo).toHaveText('共4条，1/2页');\n    });\n  });\n});\n"
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_FKLLGVUwqy5HU5MHYFUk8348",
+    "status": "completed",
+    "result": "{\"sha256\":\"0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D\",\"status\":\"DRAFT_NOT_VALIDATED\"}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 12,
+    "usage": {
+      "inputTokens": 457,
+      "outputTokens": 5057,
+      "cacheReadTokens": 25088,
+      "cacheWriteTokens": 0,
+      "totalTokens": 30602
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 13
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_PM29LdSQvONghto9HkZr0384",
+    "tool": "mcp__workbench__self_test",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_PM29LdSQvONghto9HkZr0384",
+    "status": "completed",
+    "result": "{\"number\":2,\"sha256\":\"0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D\",\"candidate_path\":\"run-2/candidate.spec.mjs\",\"status\":\"EXECUTED\",\"started_at\":1790296254226,\"result\":{\"report_status\":\"COMPLETE\",\"test_status\":\"PASSED\",\"test_count\":1,\"error\":null,\"complete_pass\":true,\"stats\":{\"startTime\":\"2026-09-25T00:30:54.816Z\",\"duration\":2077.655,\"expected\":1,\"skipped\":0,\"unexpected\":0,\"flaky\":0},\"process\":{\"exit_code\":0,\"termination\":null,\"error\":null},\"steps\":[{\"title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"category\":null,\"duration\":155,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_2: 站点筛选选择北站，点击筛选\",\"raw_title\":\"CASE_STEP_2: 站点筛选选择北站，点击筛选\",\"category\":null,\"duration\":134,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_3: 点击下一页\",\"raw_title\":\"CASE_STEP_3: 点击下一页\",\"category\":null,\"duration\":84,\"error\":null,\"raw_error\":null,\"steps\":[]},{\"title\":\"CASE_STEP_4: 点击上一页\",\"raw_title\":\"CASE_STEP_4: 点击上一页\",\"category\":null,\"duration\":79,\"error\":null,\"raw_error\":null,\"steps\":[]}]},\"coverage\":{\"rule_version\":\"project-case-step-title-v2\",\"complete\":true,\"order_valid\":true,\"expected_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\"],\"observed_sequence\":[\"CASE_STEP_1\",\"CASE_STEP_2\",\"CASE_STEP_3\",\"CASE_STEP_4\"],\"duplicates\":[],\"missing\":[],\"unexpected\":[],\"malformed_titles\":[],\"unattributed_errors\":[],\"items\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2: 站点筛选选择北站，点击筛选\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3: 点击下一页\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4: 点击上一页\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"changed_after_execution\":false,\"report_path\":\"run-2/evidence/playwright-report.json\",\"media\":[{\"relative_path\":\"run-2/evidence/artifacts/.last-run.json\",\"bytes\":45,\"sha256\":\"91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903\"},{\"relative_path\":\"run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png\",\"bytes\":29174,\"sha256\":\"28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636\"},{\"relative_path\":\"run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip\",\"bytes\":181024,\"sha256\":\"CA4523F2175E90497479950D2216304FF06475896309DC7B81FDFEB1A26BEDD3\"},{\"relative_path\":\"run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/video.webm\",\"bytes\":21565,\"sha256\":\"7A3D7B0426663B0C318277C87CDD4D5C54D5C27ADF5E22EDA054035B43796461\"},{\"relative_path\":\"run-2/evidence/playwright-report.json\",\"bytes\":5971,\"sha256\":\"76E8F969FBF0C63B5AA765E28326BBFDC83336D471E4FD77A420F5A2BC410254\"}],\"trace_summary\":{\"interpretation\":\"metadata and reporter steps; no synthetic trace verdict\",\"archives\":[{\"relative_path\":\"run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/trace.zip\",\"bytes\":181024,\"sha256\":\"CA4523F2175E90497479950D2216304FF06475896309DC7B81FDFEB1A26BEDD3\"}],\"observed_steps\":[{\"marker\":\"CASE_STEP_1\",\"step_id\":\"CASE_STEP_1\",\"order\":1,\"observed\":true,\"raw_title\":\"CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"report_path\":[0],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_2\",\"step_id\":\"CASE_STEP_2\",\"order\":2,\"observed\":true,\"raw_title\":\"CASE_STEP_2: 站点筛选选择北站，点击筛选\",\"report_path\":[1],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_3\",\"step_id\":\"CASE_STEP_3\",\"order\":3,\"observed\":true,\"raw_title\":\"CASE_STEP_3: 点击下一页\",\"report_path\":[2],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]},{\"marker\":\"CASE_STEP_4\",\"step_id\":\"CASE_STEP_4\",\"order\":4,\"observed\":true,\"raw_title\":\"CASE_STEP_4: 点击上一页\",\"report_path\":[3],\"error_attributed\":false,\"execution_status\":\"PASSED\",\"attributed_errors\":[]}]},\"finished_at\":1790296256915,\"executions_used\":2,\"executions_remaining\":1}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 13,
+    "usage": {
+      "inputTokens": 202,
+      "outputTokens": 124,
+      "cacheReadTokens": 30464,
+      "cacheWriteTokens": 0,
+      "totalTokens": 30790
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 14
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_C0KBz4Iq8p4WWtZevPP97805",
+    "tool": "mcp__workbench__read_draft",
+    "input": {}
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_C0KBz4Iq8p4WWtZevPP97805",
+    "status": "completed",
+    "result": "{\"frozen_case\":{\"external_id\":\"NEW-001\",\"title\":\"分页筛选北站后翻页并返回\",\"module\":\"paging\",\"preconditions\":\"仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=paging&variant=normal；刷新后内存状态重置。\",\"test_data\":\"{\\\"records\\\":\\\"P01..P08，奇数北站，偶数南站\\\",\\\"page_size\\\":2,\\\"filter\\\":\\\"北站\\\"}\\n入口=http://127.0.0.1:4343/?scene=paging&variant=normal\",\"steps\":[{\"order\":1,\"action\":\"打开该用例绑定入口（scene=paging，variant以入口配置为准）\",\"expected\":\"表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部\"},{\"order\":2,\"action\":\"站点筛选选择北站，点击筛选\",\"expected\":\"显示P01、P03；共4条，1/2页；当前筛选为北站\"},{\"order\":3,\"action\":\"点击下一页\",\"expected\":\"显示P05、P07；共4条，2/2页；当前筛选仍为北站\"},{\"order\":4,\"action\":\"点击上一页\",\"expected\":\"返回显示P01、P03；共4条，1/2页；当前筛选仍为北站\"}],\"status\":\"CONFIRMED\"},\"normal_entry\":\"http://127.0.0.1:53901/index.html?scene=paging&variant=normal\",\"code\":\"import { test, expect } from '@playwright/test';\\n\\nconst CASE_TITLE = '分页筛选北站后翻页并返回';\\n\\ntest.describe(CASE_TITLE, () => {\\n  test(CASE_TITLE, async ({ page }) => {\\n    const panel = page.locator('main');\\n    const combobox = page.getByRole('combobox', { name: '站点筛选' });\\n    const filterButton = page.getByRole('button', { name: '筛选', exact: true });\\n    const currentFilter = page.getByText(/当前筛选：/);\\n    const dataRows = panel.locator('table tbody tr:has(td)');\\n    const prevButton = panel.getByRole('button', { name: '上一页' });\\n    const nextButton = panel.getByRole('button', { name: '下一页' });\\n    const pageInfo = page.getByText(/共\\\\d+条，\\\\d+\\\\/\\\\d+页/);\\n\\n    // Observe the live selected option; the [selected] attribute does not track later changes.\\n    const expectSelected = async (label) => {\\n      await expect(combobox.locator('option:checked')).toHaveText(label);\\n    };\\n\\n    const expectRows = async (ids, sites) => {\\n      await expect(dataRows).toHaveCount(ids.length);\\n      for (let i = 0; i < ids.length; i += 1) {\\n        await expect(dataRows.nth(i).locator('td').nth(0)).toHaveText(ids[i]);\\n        await expect(dataRows.nth(i).locator('td').nth(1)).toHaveText(sites[i]);\\n      }\\n    };\\n\\n    await test.step('CASE_STEP_1: 打开该用例绑定入口（scene=paging，variant以入口配置为准）', async () => {\\n      await page.goto(process.env.PROBE_URL);\\n\\n      await expect(currentFilter).toHaveText('当前筛选：全部');\\n      await expectSelected('全部');\\n\\n      await expectRows(['P01', 'P02'], ['北站', '南站']);\\n\\n      await expect(pageInfo).toHaveText('共8条，1/4页');\\n    });\\n\\n    await test.step('CASE_STEP_2: 站点筛选选择北站，点击筛选', async () => {\\n      await combobox.selectOption({ label: '北站' });\\n      await filterButton.click();\\n\\n      await expectSelected('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，1/2页');\\n    });\\n\\n    await test.step('CASE_STEP_3: 点击下一页', async () => {\\n      await nextButton.click();\\n\\n      await expectSelected('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P05', 'P07'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，2/2页');\\n    });\\n\\n    await test.step('CASE_STEP_4: 点击上一页', async () => {\\n      await prevButton.click();\\n\\n      await expectSelected('北站');\\n      await expect(currentFilter).toHaveText('当前筛选：北站');\\n\\n      await expectRows(['P01', 'P03'], ['北站', '北站']);\\n\\n      await expect(pageInfo).toHaveText('共4条，1/2页');\\n    });\\n  });\\n});\\n\",\"sha256\":\"0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D\",\"executions_used\":2,\"limits\":{\"self_tests\":3,\"revisions\":2,\"tool_calls\":120,\"harness_starts\":3,\"wall_ms\":1200000}}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 14,
+    "usage": {
+      "inputTokens": 1753,
+      "outputTokens": 1460,
+      "cacheReadTokens": 30720,
+      "cacheWriteTokens": 0,
+      "totalTokens": 33933
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 15
+  },
+  {
+    "type": "tool_call",
+    "callId": "call_00_BHpkQG56bYCPnyN7qdOX7716",
+    "tool": "mcp__workbench__submit_candidate",
+    "input": {
+      "sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "表格显示P01、P02；文本为共8条，1/4页；当前筛选为全部",
+          "check_lines": [
+            30,
+            32,
+            33,
+            18,
+            35,
+            22,
+            24,
+            25,
+            37
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "显示P01、P03；共4条，1/2页；当前筛选为北站",
+          "check_lines": [
+            41,
+            42,
+            44,
+            18,
+            45,
+            47,
+            22,
+            24,
+            25,
+            49
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "显示P05、P07；共4条，2/2页；当前筛选仍为北站",
+          "check_lines": [
+            53,
+            55,
+            18,
+            56,
+            58,
+            22,
+            24,
+            25,
+            60
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "返回显示P01、P03；共4条，1/2页；当前筛选仍为北站",
+          "check_lines": [
+            64,
+            66,
+            18,
+            67,
+            69,
+            22,
+            24,
+            25,
+            71
+          ],
+          "execution": 2,
+          "uncovered": ""
+        }
+      ]
+    }
+  },
+  {
+    "type": "tool_result",
+    "callId": "call_00_BHpkQG56bYCPnyN7qdOX7716",
+    "status": "completed",
+    "result": "{\"status\":\"FROZEN_FOR_INDEPENDENT_VALIDATION\",\"sha256\":\"0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D\",\"approval\":\"NOT_APPROVED\"}"
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 15,
+    "usage": {
+      "inputTokens": 1333,
+      "outputTokens": 1220,
+      "cacheReadTokens": 33920,
+      "cacheWriteTokens": 0,
+      "totalTokens": 36473
+    }
+  },
+  {
+    "type": "status",
+    "phase": "step_start",
+    "turn": 1,
+    "step": 16
+  },
+  {
+    "type": "status",
+    "phase": "step_end",
+    "turn": 1,
+    "step": 16,
+    "usage": {
+      "inputTokens": 202,
+      "outputTokens": 579,
+      "cacheReadTokens": 36352,
+      "cacheWriteTokens": 0,
+      "totalTokens": 37133
+    }
+  },
+  {
+    "type": "status",
+    "phase": "turn_end",
+    "turn": 1,
+    "reason": {
+      "kind": "completed"
+    }
+  }
+]

@@ -1,0 +1,284 @@
+{
+  "schema": "autonomous-acceptance-evidence-v1",
+  "baseline": "38a5e1d5a73723d93deecf124db2d2e2a228ee83",
+  "exported_at": "2026-09-25T00:40:57.650Z",
+  "redaction": "Repository/home paths replaced; no sessions, reasoning, credentials, videos or trace archives exported. Candidate bytes unchanged.",
+  "files": [
+    {
+      "file": "a/task.json",
+      "source": "workbench/.local/a25/autodev-20260925-a-result.json",
+      "source_sha256": "4896A7EFD24E8439F06A4530720924F666A736363A4AA2371DA9F00DEC9D8077",
+      "exported_sha256": "3B32F68C0163341E2E592F751F9B6118EE1E5675131E835AF504DDBD53DE6C43",
+      "bytes": 62169,
+      "transformed": true
+    },
+    {
+      "file": "a/tool-transcript.json",
+      "source_sha256": "1D0B7001F2125F0F827AEF9D510B5DF6D87EE52F1C5DC5D1A37555D0FDF16F1F",
+      "exported_sha256": "8BA286686CBB8D0B4C675EA667651A2B09719583541B21B6851C85E1EE9E0AB2",
+      "transformed": true,
+      "omitted": [
+        "session",
+        "thinking",
+        "text",
+        "final"
+      ]
+    },
+    {
+      "file": "a/harness-summary.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/harness-summary.json",
+      "source_sha256": "664C9348FA50AF4E43D4E361899D5A8935A2D1851406002065AF44EA59188BB7",
+      "exported_sha256": "4C17B654633584429A24F60A04C2AC88F4235138C359B6C5163B7EFAA4DF3588",
+      "bytes": 279,
+      "transformed": true
+    },
+    {
+      "file": "a/agent-input.txt",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/agent-input.txt",
+      "source_sha256": "00C0468DF8F3933731B19D5926E84815335727156A07285D3AA96C3E81035FF4",
+      "exported_sha256": "00C0468DF8F3933731B19D5926E84815335727156A07285D3AA96C3E81035FF4",
+      "bytes": 4048,
+      "transformed": false
+    },
+    {
+      "file": "a/dev-1/candidate.spec.mjs",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1/candidate.spec.mjs",
+      "source_sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "exported_sha256": "F4BEF3A75B597BF948162470B344244BF2C3B01E4570336116DF5A2376A1F137",
+      "bytes": 3580,
+      "transformed": false
+    },
+    {
+      "file": "a/dev-1/report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1/evidence/playwright-report.json",
+      "source_sha256": "95F03862D440DD8D1ACB01C6CAAF7CCAAF4B86B50F5D465E393A86F888DF6FE9",
+      "exported_sha256": "FD8A9AA932BE58B239757E91A7E4249B92A0467FB281C1E51A846739FC1DD0A9",
+      "bytes": 12102,
+      "transformed": true
+    },
+    {
+      "file": "a/dev-1/screenshot.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-1/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png",
+      "source_sha256": "85B072DBE0E34C877F157424ACADDB8735A3913A1F06235F5A2AAB19AFCC3C9F",
+      "exported_sha256": "85B072DBE0E34C877F157424ACADDB8735A3913A1F06235F5A2AAB19AFCC3C9F",
+      "bytes": 29473,
+      "transformed": false
+    },
+    {
+      "file": "a/dev-2/candidate.spec.mjs",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-2/candidate.spec.mjs",
+      "source_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "exported_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "bytes": 2801,
+      "transformed": false
+    },
+    {
+      "file": "a/dev-2/report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-2/evidence/playwright-report.json",
+      "source_sha256": "76E8F969FBF0C63B5AA765E28326BBFDC83336D471E4FD77A420F5A2BC410254",
+      "exported_sha256": "E58834298097285BA74934D5C5327963AB8A57A67407CF4AAB281652C33315BE",
+      "bytes": 5571,
+      "transformed": true
+    },
+    {
+      "file": "a/dev-2/screenshot.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/run-2/evidence/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png",
+      "source_sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "exported_sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "bytes": 29174,
+      "transformed": false
+    },
+    {
+      "file": "a/final/candidate.spec.mjs",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/candidate.spec.mjs",
+      "source_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "exported_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "bytes": 2801,
+      "transformed": false
+    },
+    {
+      "file": "a/final/normal-report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/normal/playwright-report.json",
+      "source_sha256": "7FC6F7B0DFED44A48490322C218AF77E7FF6A6B5E249B5A5F54F9F2B992EFD6D",
+      "exported_sha256": "C3EAC6777055A0349AA735E993096ABCD2194E6DC36288BA6B5609C30C98B31F",
+      "bytes": 5561,
+      "transformed": true
+    },
+    {
+      "file": "a/final/normal.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/normal/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-finished-1.png",
+      "source_sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "exported_sha256": "28FD78B8552377AFD64C629884086742761F66771863C43DD91A87B4BFB7C636",
+      "bytes": 29174,
+      "transformed": false
+    },
+    {
+      "file": "a/final/negative-report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/negative/playwright-report.json",
+      "source_sha256": "52DDEF837F15F6E3621ABF410D7656CEEF64BD6D751EBE0003F13DF21B33753D",
+      "exported_sha256": "822DFCD0B2E2B73272574A8914D6B4F17CE4DE7AC446EEA23F83BA0EDBC9F949",
+      "bytes": 13420,
+      "transformed": true
+    },
+    {
+      "file": "a/final/negative.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925002958-da75da50/development/final/negative/artifacts/candidate-分页筛选北站后翻页并返回-分页筛选北站后翻页并返回/test-failed-1.png",
+      "source_sha256": "094A1255FD22A2EFB86F39E6B5815261AF5451683371A694CB9D2E1AFB3BBFC8",
+      "exported_sha256": "094A1255FD22A2EFB86F39E6B5815261AF5451683371A694CB9D2E1AFB3BBFC8",
+      "bytes": 29284,
+      "transformed": false
+    },
+    {
+      "file": "a/workbench.png",
+      "source": "workbench/.local/a25/autodev-20260925-a-workbench.png",
+      "source_sha256": "AE7F83F8B1138C09065DF99ABB982810EF26E3FA358FF0B3A47ABB2848B8B386",
+      "exported_sha256": "AE7F83F8B1138C09065DF99ABB982810EF26E3FA358FF0B3A47ABB2848B8B386",
+      "bytes": 214876,
+      "transformed": false
+    },
+    {
+      "file": "b/task.json",
+      "source": "workbench/.local/a25/autodev-20260925-b-result.json",
+      "source_sha256": "4A6C33CCF383BAD488615BF349C046315C3D59A90D3EF470AEF1624CD46B0830",
+      "exported_sha256": "89E3367D413BD088E21407A9BE997F39DC1B18EBE3B6AA076C88D90CC4129307",
+      "bytes": 48341,
+      "transformed": true
+    },
+    {
+      "file": "b/tool-transcript.json",
+      "source_sha256": "0FA9FD9DE780FFB551A379D9AAF0709324E05602021A460B30694D15A34FB0A1",
+      "exported_sha256": "B8639722583B71315D9E83883A5E2B70D97AD1A8BE7F9167292A79E65D805B2C",
+      "transformed": true,
+      "omitted": [
+        "session",
+        "thinking",
+        "text",
+        "final"
+      ]
+    },
+    {
+      "file": "b/harness-summary.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/harness-summary.json",
+      "source_sha256": "AB0E66A7E1D5ACA22AB8A2AEB56553DB2DA81D077FCB412B5EF6190EC17A2729",
+      "exported_sha256": "8FC9627350BF6FB6D3BCAB68264F29C874AC25F8DCC9FED130D1908643825CC9",
+      "bytes": 280,
+      "transformed": true
+    },
+    {
+      "file": "b/agent-input.txt",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/agent-input.txt",
+      "source_sha256": "90B9ADD8691BC7654D34D60FAB96717E77092B646EBC5EAD7BF250EEC0B8040C",
+      "exported_sha256": "90B9ADD8691BC7654D34D60FAB96717E77092B646EBC5EAD7BF250EEC0B8040C",
+      "bytes": 4171,
+      "transformed": false
+    },
+    {
+      "file": "b/dev-1/candidate.spec.mjs",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/run-1/candidate.spec.mjs",
+      "source_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "exported_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "bytes": 2174,
+      "transformed": false
+    },
+    {
+      "file": "b/dev-1/report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/run-1/evidence/playwright-report.json",
+      "source_sha256": "5280F4F7584DC7BCF9ED7D56325526DD39FB510AB25C0F9B91221E551E8ACD15",
+      "exported_sha256": "19950C9D0D7B60E70C37084F14CB9AEB2D14AFA265CF6834FBD07CE000F804F0",
+      "bytes": 5143,
+      "transformed": true
+    },
+    {
+      "file": "b/dev-1/screenshot.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b/final/candidate.spec.mjs",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/final/candidate.spec.mjs",
+      "source_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "exported_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "bytes": 2174,
+      "transformed": false
+    },
+    {
+      "file": "b/final/normal-report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/final/normal/playwright-report.json",
+      "source_sha256": "623C085AAD3B80C3716AE9747118DC860EA7C47F4489BEABA086F05C036DED59",
+      "exported_sha256": "56E81943C5704AC1C037BD7897C7953B324D6FF0324A67AB7C51CA64714ED457",
+      "bytes": 5122,
+      "transformed": true
+    },
+    {
+      "file": "b/final/normal.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "source_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "exported_sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "bytes": 23818,
+      "transformed": false
+    },
+    {
+      "file": "b/final/negative-report.json",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/final/negative/playwright-report.json",
+      "source_sha256": "363B205E95CBAF5EA72A9503B3C8EE5A5609A03952FF3C0B7CF082DA0B71EBD7",
+      "exported_sha256": "E4631000A83265C934CBED8CFF3F9145EA8ADA7700DDBA7862FE5687CADEA9A2",
+      "bytes": 11447,
+      "transformed": true
+    },
+    {
+      "file": "b/final/negative.png",
+      "source": "workbench/.local/a25/build-tasks/build-20260925003122-1a068ff3/development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "source_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "exported_sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "bytes": 32223,
+      "transformed": false
+    },
+    {
+      "file": "b/workbench.png",
+      "source": "workbench/.local/a25/autodev-20260925-b-workbench.png",
+      "source_sha256": "895BEFA973A09879316BE5C5B050703E9322CCB0D02DBC170D03138C7C930C73",
+      "exported_sha256": "895BEFA973A09879316BE5C5B050703E9322CCB0D02DBC170D03138C7C930C73",
+      "bytes": 182896,
+      "transformed": false
+    }
+  ],
+  "tasks": [
+    {
+      "logical_id": "autodev-20260925-a",
+      "task_id": "build-20260925002958-da75da50",
+      "external_id": "NEW-001",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-25T00:29:58.404Z",
+      "finished_at": "2026-09-25T00:31:22.273Z",
+      "elapsed_ms": 83869,
+      "harness_starts": 1,
+      "tool_calls": 15,
+      "tool_errors": 0,
+      "model_steps": 16,
+      "developer_self_tests": 2,
+      "final_executions": 2,
+      "final_sha256": "0CA052D2D1794DAB7484D1C1B0979C8EC1AE855878097855CA4E2113FE28802D",
+      "candidate_approved": false
+    },
+    {
+      "logical_id": "autodev-20260925-b",
+      "task_id": "build-20260925003122-1a068ff3",
+      "external_id": "NEW-002",
+      "status": "CANDIDATE_VALIDATION_FAILED",
+      "started_at": "2026-09-25T00:31:22.730Z",
+      "finished_at": "2026-09-25T00:36:42.168Z",
+      "elapsed_ms": 319438,
+      "harness_starts": 1,
+      "tool_calls": 42,
+      "tool_errors": 23,
+      "model_steps": 39,
+      "developer_self_tests": 1,
+      "final_executions": 2,
+      "final_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "candidate_approved": false
+    }
+  ]
+}

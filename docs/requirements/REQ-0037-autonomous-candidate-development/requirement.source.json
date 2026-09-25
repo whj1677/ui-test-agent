@@ -1,0 +1,172 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0037",
+  "title": "Coding Agent任务内自主自测与有界修订",
+  "metadata": {
+    "requirement_status": "部分实现：任务内自主自测接通，A恢复验证完成，B候选语义及指定差异证据未通过",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-09-25"
+  },
+  "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
+  "user_requirements": [
+    {
+      "id": "UN-0037-01",
+      "status": "已确认",
+      "goal": "观察→草稿→实际自测→反馈→有限修复→冻结最终候选，普通脚本错误无需人工逐轮诊断。",
+      "constraints": "D盘原目录单窗口；不扩展AUTH/UI重排/环境平台；两逻辑任务各最多3开发自测、初稿加2修订、120工具、20分钟、3Harness启动恢复，最终正常/故障各1次；不改冻结预期或自动批准。",
+      "success_criteria": "A从原失败初稿恢复，B从零生成；生产任务管理与模型工具路径；记录版本、原始执行证据和独立最终验证。"
+    }
+  ],
+  "confirmed_facts": [
+    "HEAD=38a5e1d5a73723d93deecf124db2d2e2a228ee83，原分支工作区干净；原AUTH任务未加载，未在写主目录。",
+    "锁定DSH0.1.6-alpha.2的dsh-mcp-client支持streamable-http、serverName、url、toolCallTimeoutMs；tools/pre-execute支持deny守卫。使用已安装锁定源码核对，不猜插件参数。",
+    "真实A：1次Harness、15工具、2开发自测、2最终运行；正常4步通过，故障步骤3期望P05实际P02。",
+    "真实B：1次Harness、42工具（23错误）、1开发自测、2最终运行；正常6步通过，故障步骤5只有缺元素，且第4步禁用义务被放宽。未批准候选，未追加模型调用。"
+  ],
+  "inferences_and_open_questions": [
+    "同会话MCP结果可反馈给Agent；先用零模型协议/控制器工程测试验证后才运行两个真实任务。当前不是操作系统强隔离，工具级约束不能冒称强沙箱。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0037-01",
+      "status": "部分实现",
+      "requirement": "复用现有BuildTaskManager、BuildTaskStore和verifyWorkbenchCandidate，提供绑定任务的自测工具、预算与哈希证据；Agent自主分析错误。",
+      "acceptance_criteria": "反馈入上下文、失败可继续、取消/预算停止、改字节必须复测；A恢复与B从零通过生产路径，最终正常和指定故障独立验证。",
+      "constraints": "工具不接受命令、URL或磁盘路径；执行器无模型密钥，故障答案不回传。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0037-01",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "status": "已确认",
+      "summary": "任务管理器持有有界开发会话，锁定DSH经本机MCP调用read_draft/write_draft/self_test/read_evidence/submit_candidate；草稿多次写入，每次执行先保存不可变快照与哈希。",
+      "rationale": "控制器只管范围、预算、状态、证据与提交条件，不代替模型诊断或修断言；独立最终验证在Harness结束后进行。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "已登记项目/用例版本/环境授权→生产建例API→同一Harness会话→任务MCP工具→锁定Playwright执行快照→原始错误及步骤反馈→最终哈希冻结→正常/故障独立验证。"
+  ],
+  "module_document_impact": [
+    "更新docs/modules/test-workbench.md，build管理器/存储、工具桥、执行器复用、必要API与页面读回。"
+  ],
+  "risks_and_rollback": [
+    "权限守卫和静态候选限制并非强OS沙箱；无法判清业务差异时报告待分析，不无限修绿。默认停在等待人工核对。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0037-01",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "dd_ids": [
+        "DD-0037-01"
+      ],
+      "status": "部分实现",
+      "task": "实现有界任务MCP自测闭环，先工程回归再执行两条真实任务，保留首稿/修订/最终证据并推送。",
+      "verification_ids": [
+        "VT-0037-01",
+        "VT-0037-02"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0037-01",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "零模型协议、生产浏览器与Playwright、取消/预算/哈希、空草稿准入工程回归",
+      "evidence_standard": "命令退出码、版本哈希、工具结果、调用计数及逐步状态",
+      "current_evidence": {
+        "command": "node --test workbench/tests/*.test.mjs",
+        "exit_code": 0,
+        "test_count": 120,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-autonomous/collector-workbench.log"
+      }
+    },
+    {
+      "id": "VT-0037-02",
+      "dr_ids": [
+        "DR-0037-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "两项真实任务已执行：A恢复完成，B候选语义及指定差异证据失败；待人工核对，不是产品通过",
+      "evidence_standard": "真实工具记录、执行报告、覆盖核查与相同候选哈希；不得仅靠绿色或模型自报",
+      "current_evidence": {
+        "command": "node workbench/scripts/accept-autonomous-20260925.mjs --run-authorized-pair",
+        "exit_code": 0,
+        "test_count": 2,
+        "failure_count": 1,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-autonomous/manifest.json"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "workbench/",
+    "commands": [
+      "npm test",
+      "npm --prefix ../harness-probe test"
+    ],
+    "environment": [
+      "Windows Node22、锁定Playwright1.62.1、DSH0.1.6-alpha.2；独立测试端口，日常4322不变。"
+    ],
+    "conclusion": [
+      "工作台最终collector回归见当前日志；Harness24/24退出0；锁定DSH零模型插件检查通过。",
+      "真实逻辑任务2/2，Harness2次，工具57次，开发执行3次+最终验证4次。A恢复完成，B仍有缺口；不得自动批准。",
+      "旧核心108项失败未修复/未重跑；AUTH扩展、任意环境接入、自动恢复不在本批完成范围。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0037-01",
+      "dr_id": "DR-0037-01",
+      "dd_id": "DD-0037-01",
+      "tk_id": "TK-0037-01",
+      "vt_id": "VT-0037-01",
+      "status": "部分实现"
+    },
+    {
+      "un_id": "UN-0037-01",
+      "dr_id": "DR-0037-01",
+      "dd_id": "DD-0037-01",
+      "tk_id": "TK-0037-01",
+      "vt_id": "VT-0037-02",
+      "status": "部分实现"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
+      "status": "工程闭环已实现，真实A完成，B未通过",
+      "notes": "任务状态卡：目标为两个逻辑任务内自主观察/自测/修订；工程先行；原输入与故障隔离；达到预算或最终验证后停止。"
+    }
+  ],
+  "open_questions": [
+    "B第4步禁用义务弱化、步骤5无法提取实际读数；本批预算停止，不代写或重抽。",
+    "候选均未人工批准；工具反馈信息不足及语义覆盖仍需后续单独任务处理。"
+  ],
+  "prohibited_implementation": [
+    "不代写产品候选、不改预期、不读故障答案修正常脚本、不按新task_id重置预算、不自动批准。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-25",
+      "version": 1,
+      "type": "新建",
+      "description": "任务内自主自测与有界修订",
+      "impact": "工作台建例开发闭环",
+      "confirmed_by": "用户当前明确任务及预算授权"
+    }
+  ]
+}

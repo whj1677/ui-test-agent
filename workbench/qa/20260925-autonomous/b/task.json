@@ -1,0 +1,1359 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260925003122-1a068ff3",
+  "created_at": "2026-09-25T00:31:22.730Z",
+  "started_at": "2026-09-25T00:31:22.730Z",
+  "finished_at": "2026-09-25T00:36:42.168Z",
+  "task_status": "CANDIDATE_VALIDATION_FAILED",
+  "generation_status": "GENERATED",
+  "verification_status": "INCOMPLETE",
+  "human_review_status": "NOT_READY",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "遥测首次失败后重试成功并关闭",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-8fcc5449-0b5e-4421-abca-29c99924fc53",
+    "project_name": "20260925 自主建例有界验收",
+    "case_id": "case-ca945746-b4b9-4ab3-b194-527d0a728664",
+    "case_version": 1,
+    "external_id": "NEW-002",
+    "content_sha256": "474EB539170E64CAEED1D9557AE862E52947078E364F753129CAA70B9406E5F6"
+  },
+  "environment_ref": {
+    "environment_id": "qa-retry-20260925"
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "NEW-002",
+        "title": "遥测首次失败后重试成功并关闭",
+        "module": "retry",
+        "preconditions": "仅打开本地单文件页面；无网络、无账号、无存储；入口查询参数 scene=retry&variant=normal；刷新后内存状态重置。",
+        "test_data": "{\"first_fail_ms\":400,\"retry_success_ms\":600,\"voltage\":\"750 V\",\"sample_time\":\"2026-09-24 10:00:00\"}\n入口=http://127.0.0.1:4343/?scene=retry&variant=normal",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开该用例绑定入口（scene=retry，variant以入口配置为准）",
+            "expected": "仅显示遥测读取相关控件；按钮查看遥测可用"
+          },
+          {
+            "order": 2,
+            "action": "点击查看遥测",
+            "expected": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见"
+          },
+          {
+            "order": 3,
+            "action": "等待约450毫秒",
+            "expected": "状态变为暂时无法读取；重试按钮可见且可用"
+          },
+          {
+            "order": 4,
+            "action": "点击重试",
+            "expected": "立即显示读取中…；重试按钮禁用"
+          },
+          {
+            "order": 5,
+            "action": "再等待约650毫秒",
+            "expected": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00"
+          },
+          {
+            "order": 6,
+            "action": "点击关闭",
+            "expected": "遥测详情dialog不可见"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "authorization": {
+    "logical_id": "autodev-20260925-b",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 3,
+      "wall_ms": 1200000
+    }
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "CANDIDATE_VALIDATION_FAILED",
+      "started_at": "2026-09-25T00:31:22.730Z",
+      "finished_at": "2026-09-25T00:36:42.168Z"
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925003122-1a068ff3-normal",
+          "run_type": "normal",
+          "candidate_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+          "candidate_version": 1,
+          "executed_case_id": "case-ca945746-b4b9-4ab3-b194-527d0a728664",
+          "executed_external_id": "NEW-002",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T00:36:28.028Z",
+          "finished_at": "2026-09-25T00:36:32.366Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": true,
+                "raw_title": "CASE_STEP_6",
+                "report_path": [
+                  5
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-25T00:36:28.686Z",
+              "duration": 3662.83,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 120,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 87,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 855,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 46,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_5",
+                "raw_title": "CASE_STEP_5",
+                "category": null,
+                "duration": 835,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_6",
+                "raw_title": "CASE_STEP_6",
+                "category": null,
+                "duration": 35,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "build-20260925003122-1a068ff3-negative",
+          "run_type": "negative",
+          "candidate_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+          "candidate_version": 1,
+          "executed_case_id": "case-ca945746-b4b9-4ab3-b194-527d0a728664",
+          "executed_external_id": "NEW-002",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T00:36:32.371Z",
+          "finished_at": "2026-09-25T00:36:42.141Z",
+          "status": "FAILED",
+          "complete_pass": false,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5",
+              "CASE_STEP_6"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_6"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_5",
+                    "report_path": [
+                      4
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\n",
+                      "expected": null,
+                      "actual": null,
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\u001b[22m\n",
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925003122-1a068ff3\\development\\final\\candidate.spec.mjs",
+                        "line": 48,
+                        "column": 62
+                      },
+                      "snippet": "  46 |   await test.step('CASE_STEP_5', async () => {\n  47 |     await expect(dialog.getByText('读取成功', { exact: true })).toBeVisible();\n> 48 |     await expect(dialog.getByText('750 V', { exact: true })).toBeVisible();\n     |                                                              ^\n  49 |     await expect(dialog.getByText('2026-09-24 10:00:00', { exact: true })).toBeVisible();\n  50 |   });\n  51 |"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_6",
+                "step_id": "CASE_STEP_6",
+                "order": 6,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\n",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "LOCATOR_OR_TARGET",
+              "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\n",
+              "expected": null,
+              "actual": null,
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-25T00:36:33.089Z",
+              "duration": 9033.975,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 119,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 95,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 859,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 44,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_5",
+                "raw_title": "CASE_STEP_5",
+                "category": null,
+                "duration": 5828,
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\n",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '遥测详情' }).getByText('750 V', { exact: true })\u001b[22m\n",
+                  "location": {
+                    "file": "<REPO>\\workbench\\.local\\a25\\build-tasks\\build-20260925003122-1a068ff3\\development\\final\\candidate.spec.mjs",
+                    "line": 48,
+                    "column": 62
+                  },
+                  "snippet": "  46 |   await test.step('CASE_STEP_5', async () => {\n  47 |     await expect(dialog.getByText('读取成功', { exact: true })).toBeVisible();\n> 48 |     await expect(dialog.getByText('750 V', { exact: true })).toBeVisible();\n     |                                                              ^\n  49 |     await expect(dialog.getByText('2026-09-24 10:00:00', { exact: true })).toBeVisible();\n  50 |   });\n  51 |"
+                },
+                "steps": []
+              }
+            ]
+          }
+        }
+      ],
+      "coverage_review": [
+        {
+          "check_lines": [
+            20,
+            22,
+            23,
+            24
+          ],
+          "execution": 1,
+          "order": 1,
+          "requirement": "仅显示遥测读取相关控件；按钮查看遥测可用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            12,
+            13,
+            14,
+            15,
+            28,
+            29,
+            30,
+            31
+          ],
+          "execution": 1,
+          "order": 2,
+          "requirement": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            35,
+            36,
+            37
+          ],
+          "execution": 1,
+          "order": 3,
+          "requirement": "状态变为暂时无法读取；重试按钮可见且可用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            12,
+            13,
+            14,
+            15,
+            41,
+            42,
+            43
+          ],
+          "execution": 1,
+          "order": 4,
+          "requirement": "立即显示读取中…；重试按钮禁用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            47,
+            48,
+            49
+          ],
+          "execution": 1,
+          "order": 5,
+          "requirement": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            53,
+            54
+          ],
+          "execution": 1,
+          "order": 6,
+          "requirement": "遥测详情dialog不可见",
+          "uncovered": ""
+        }
+      ],
+      "approval_status": "NOT_APPROVED"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "development/.playwright-mcp/console-2026-09-25T00-31-27-190Z.log",
+      "bytes": 139,
+      "sha256": "C708E09E1DA9FCA02CFB49A3394550A28E3A1508C069DBCA7AA3739A3E083321",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-25T00-31-27-190Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-31-27-326Z.yml",
+      "bytes": 425,
+      "sha256": "9887A9D2DFD8618BAE10DC4D16BAB2007967FF1E3E8A81EEAAF0D96495CA3373",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-31-27-326Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-31-30-644Z.yml",
+      "bytes": 934,
+      "sha256": "309B42287C4EFBA102D1054F8BC650A85250A39878FF57B0005194501822CE28",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-31-30-644Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-32-07-394Z.yml",
+      "bytes": 922,
+      "sha256": "940E56117D30DA581DCBEA1A8DA9D262E1992209B05C8E07E773C685B62CA3F4",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-32-07-394Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-32-13-559Z.yml",
+      "bytes": 443,
+      "sha256": "B319A9B4B40B1659A5E8E186CB540E01F8C181FB86E368A074C4501531834ED8",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-32-13-559Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/.playwright-mcp/page-2026-09-25T00-32-17-341Z.yml",
+      "bytes": 976,
+      "sha256": "DE7B4DBD61D89D6024A1924E97C30CCFD74C2AD909176DFAFB135743231490DE",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-25T00-32-17-341Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 4171,
+      "sha256": "90B9ADD8691BC7654D34D60FAB96717E77092B646EBC5EAD7BF250EEC0B8040C",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 2174,
+      "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/candidate.spec.mjs",
+      "bytes": 2174,
+      "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/.last-run.json",
+      "bytes": 96,
+      "sha256": "62B679ACC1E2BE924BDAA6B3570D57811EF29DDF80E88101D91518B01AFFE5C6",
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/error-context.md",
+      "bytes": 3992,
+      "sha256": "E4C1855B7226E4585BC608BB8DC2C032923097D8B3F9AAE02EA3FEEDEC2D0EE3",
+      "file_id": "build-file-11",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "error-context.md",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-failed-1.png",
+      "bytes": 32223,
+      "sha256": "63DAC5E5FC4AD14673565D376105915902211935F111AB42C7C9B568A5A35C1D",
+      "file_id": "build-file-12",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-failed-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+      "bytes": 190518,
+      "sha256": "82E83C9BD9476B23D6D8DED1AD68E3BA26629BDA960537A32D62DFE8F3C35324",
+      "file_id": "build-file-13",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/video.webm",
+      "bytes": 119675,
+      "sha256": "56BD1C273C877B3923E7DB7DD2F2EC221FC5992AC03F423F644C48AFB059D8ED",
+      "file_id": "build-file-14",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/negative/playwright-report.json",
+      "bytes": 12298,
+      "sha256": "363B205E95CBAF5EA72A9503B3C8EE5A5609A03952FF3C0B7CF082DA0B71EBD7",
+      "file_id": "build-file-15",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-16",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "bytes": 23818,
+      "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "file_id": "build-file-17",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+      "bytes": 176889,
+      "sha256": "7C29AFA081EEA01516AA8738C52AC502D9A97C730089367D1EC4E86C9ED2A418",
+      "file_id": "build-file-18",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/video.webm",
+      "bytes": 66776,
+      "sha256": "E326EB9713B69C26391DBD8D318BCA2667CB8CBD7DAF64E1D5C51B73131396DD",
+      "file_id": "build-file-19",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/playwright-report.json",
+      "bytes": 5522,
+      "sha256": "623C085AAD3B80C3716AE9747118DC860EA7C47F4489BEABA086F05C036DED59",
+      "file_id": "build-file-20",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 225610,
+      "sha256": "0FA9FD9DE780FFB551A379D9AAF0709324E05602021A460B30694D15A34FB0A1",
+      "file_id": "build-file-21",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 279,
+      "sha256": "AB0E66A7E1D5ACA22AB8A2AEB56553DB2DA81D077FCB412B5EF6190EC17A2729",
+      "file_id": "build-file-22",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/candidate.spec.mjs",
+      "bytes": 2174,
+      "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "file_id": "build-file-23",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-24",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+      "bytes": 23818,
+      "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B",
+      "file_id": "build-file-25",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+      "bytes": 177810,
+      "sha256": "C90A8621B3559922E422E5034EA1606CE8E6D2922D1CC62428BA9FAC8968E285",
+      "file_id": "build-file-26",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "trace.zip",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/video.webm",
+      "bytes": 68022,
+      "sha256": "FA772CCDC2A792B71056E5BF7144C6E5D0815CD48B3FADB37FA7CAF6FC029F4F",
+      "file_id": "build-file-27",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/playwright-report.json",
+      "bytes": 5543,
+      "sha256": "5280F4F7584DC7BCF9ED7D56325526DD39FB510AB25C0F9B91221E551E8ACD15",
+      "file_id": "build-file-28",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-29",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 35369,
+      "sha256": "48E56BC88E72A458C88CCE2A52637A476953A3DB6577B294DDF5B8CFB8634A71",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": null,
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": null
+  },
+  "development": {
+    "started_at": 1790296282732,
+    "deadline_at": 1790297482732,
+    "draft_sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+    "self_tests": [
+      {
+        "number": 1,
+        "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790296564598,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T00:36:05.261Z",
+            "duration": 3738.4939999999997,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 128,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 83,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 851,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_4",
+              "raw_title": "CASE_STEP_4",
+              "category": null,
+              "duration": 46,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_5",
+              "raw_title": "CASE_STEP_5",
+              "category": null,
+              "duration": 871,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_6",
+              "raw_title": "CASE_STEP_6",
+              "category": null,
+              "duration": 32,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5",
+            "CASE_STEP_6"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5",
+            "CASE_STEP_6"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_6",
+              "step_id": "CASE_STEP_6",
+              "order": 6,
+              "observed": true,
+              "raw_title": "CASE_STEP_6",
+              "report_path": [
+                5
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/test-finished-1.png",
+            "bytes": 23818,
+            "sha256": "7008EE488A20751C8397E1C0230C27BD6BC619E59B5197AA022FBF575148529B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+            "bytes": 177810,
+            "sha256": "C90A8621B3559922E422E5034EA1606CE8E6D2922D1CC62428BA9FAC8968E285"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/video.webm",
+            "bytes": 68022,
+            "sha256": "FA772CCDC2A792B71056E5BF7144C6E5D0815CD48B3FADB37FA7CAF6FC029F4F"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 5543,
+            "sha256": "5280F4F7584DC7BCF9ED7D56325526DD39FB510AB25C0F9B91221E551E8ACD15"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/candidate-NEW-002-遥测首次失败后重试成功并关闭/trace.zip",
+              "bytes": 177810,
+              "sha256": "C90A8621B3559922E422E5034EA1606CE8E6D2922D1CC62428BA9FAC8968E285"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_6",
+              "step_id": "CASE_STEP_6",
+              "order": 6,
+              "observed": true,
+              "raw_title": "CASE_STEP_6",
+              "report_path": [
+                5
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790296569030
+      }
+    ],
+    "submission": {
+      "coverage": [
+        {
+          "check_lines": [
+            20,
+            22,
+            23,
+            24
+          ],
+          "execution": 1,
+          "order": 1,
+          "requirement": "仅显示遥测读取相关控件；按钮查看遥测可用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            12,
+            13,
+            14,
+            15,
+            28,
+            29,
+            30,
+            31
+          ],
+          "execution": 1,
+          "order": 2,
+          "requirement": "出现role=dialog且aria-label为遥测详情；立即显示读取中…；重试按钮禁用或不可见",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            35,
+            36,
+            37
+          ],
+          "execution": 1,
+          "order": 3,
+          "requirement": "状态变为暂时无法读取；重试按钮可见且可用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            12,
+            13,
+            14,
+            15,
+            41,
+            42,
+            43
+          ],
+          "execution": 1,
+          "order": 4,
+          "requirement": "立即显示读取中…；重试按钮禁用",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            47,
+            48,
+            49
+          ],
+          "execution": 1,
+          "order": 5,
+          "requirement": "显示读取成功；电压750 V；采样时间2026-09-24 10:00:00",
+          "uncovered": ""
+        },
+        {
+          "check_lines": [
+            53,
+            54
+          ],
+          "execution": 1,
+          "order": 6,
+          "requirement": "遥测详情dialog不可见",
+          "uncovered": ""
+        }
+      ],
+      "outcome": "ready",
+      "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+      "submitted_at": 1790296583359,
+      "file": "final/candidate.spec.mjs",
+      "semantic_approval": false
+    },
+    "tool_calls": 42,
+    "harness_starts": 1,
+    "recovery": false,
+    "final_executions": [
+      {
+        "lane": "normal",
+        "started_at": "2026-09-25T00:36:28.028Z",
+        "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+        "status": "PASSED"
+      },
+      {
+        "lane": "negative",
+        "started_at": "2026-09-25T00:36:32.371Z",
+        "sha256": "E86E32845FB431D4E9B7EC033316E889064B10A2946526A8D5C443717B44AA15",
+        "status": "FAILED"
+      }
+    ]
+  }
+}
