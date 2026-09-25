@@ -1,0 +1,49 @@
+{
+  "kind": "Codex supplementary diagnosis; not a rerun or repair of Kimi cases",
+  "browser_sessions": 5,
+  "records": [
+    {
+      "id": "D01-reset",
+      "initial": "共 5 条，第 1/2 页，每页3条",
+      "all_states_via_ui": "共 8 条，第 1/3 页，每页3条",
+      "after_reset": "共 0 条，第 1/1 页，每页3条",
+      "sort_after_reset": "feeDesc",
+      "empty_visible": true
+    },
+    {
+      "id": "D02-details-stale",
+      "first_drawer": "编号：EQ-101\n\n名称：温循箱\n\n站点：北站\n\n状态：空闲\n\n费用：80元/小时\n\n基本信息\n预约历史",
+      "second_title": "设备详情 EQ-106",
+      "second_drawer": "编号：EQ-106\n\n名称：示波器\n\n站点：南站\n\n状态：空闲\n\n费用：30元/小时\n\n基本信息\n预约历史\n\n编号：EQ-101\n\n名称：温循箱\n\n站点：北站\n\n状态：空闲\n\n费用：80元/小时",
+      "second_basic": "编号：EQ-106\n\n名称：示波器\n\n站点：南站\n\n状态：空闲\n\n费用：30元/小时",
+      "second_tab_panel": "编号：EQ-101\n\n名称：温循箱\n\n站点：北站\n\n状态：空闲\n\n费用：80元/小时"
+    },
+    {
+      "id": "D03-conflict-valid-purpose",
+      "purpose": "时间冲突复测验证",
+      "separate_from_original_KC21": true,
+      "overlap_error": "EQ-103 在 2026-10-10 11:00-13:00 与已确认预约R-001冲突",
+      "boundary_confirmation_visible": true,
+      "boundary_summary": "EQ-103 示波器｜2026-10-10 09:00-10:00｜申请人 赵六｜用途 时间冲突复测验证\n\n时长：1小时　小时费合计：20元　总价：20元"
+    },
+    {
+      "id": "D04-single-click-multi",
+      "clicks": 1,
+      "confirmation": "EQ-101 温循箱｜2026-10-10 13:00-15:00｜申请人 赵六｜用途 联合压力测试\n\nEQ-105 电源柜｜2026-10-10 13:00-15:00｜申请人 赵六｜用途 联合压力测试\n\n时长：2小时　小时费合计：140元　总价：280元",
+      "rows": [
+        "R-001EQ-103 示波器2026-10-10 10:00至12:00李明精度校准40元已确认详情 取消预约",
+        "R-002EQ-101 温循箱2026-10-10 13:00至15:00赵六联合压力测试280元已确认详情 取消预约",
+        "R-002EQ-105 电源柜2026-10-10 13:00至15:00赵六联合压力测试280元已确认详情 取消预约"
+      ],
+      "confirmed_count": "3",
+      "confirmed_amount": "600"
+    },
+    {
+      "id": "D05-mobile",
+      "viewport": 390,
+      "document_width": 834,
+      "table_scroll_width": 760,
+      "visible_viewport_width": 390
+    }
+  ]
+}

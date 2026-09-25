@@ -1,0 +1,33 @@
+{
+  "run": "2026-09-25T03-04-13-091Z",
+  "tested_files": [
+    {
+      "file": "index.html",
+      "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+    },
+    {
+      "file": "cases.json",
+      "sha256": "391D062716D4B9DE78146B1D92F79FCA5AA40067C8E25CC3FABC7782537D2186"
+    },
+    {
+      "file": "SPEC.md",
+      "sha256": "7AF33141D0BE8F36FC76D70FB216DE519041A2DBB1E9E7BE3C666098354C6ECF"
+    },
+    {
+      "file": "verify.mjs",
+      "sha256": "60A9A342E0A4A59EAAC7E1344DC57A8B54246C9D78B1C9C7A283ACBC313A7550"
+    },
+    {
+      "file": "server.mjs",
+      "sha256": "9FB36354DA88D64FADA8E5BC1F1192594A634C6E35263035D7EF51BF1EA10880"
+    }
+  ],
+  "browser": "actual Chromium through Playwright",
+  "author": "Kimi page and human cases; Codex independent test implementation",
+  "total": 24,
+  "passed": 12,
+  "failed": 12,
+  "model_calls_in_browser_test": 0,
+  "results": "results.json",
+  "media_local_only": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z"
+}

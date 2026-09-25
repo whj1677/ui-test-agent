@@ -1,0 +1,747 @@
+[
+  {
+    "id": "KC-01",
+    "title": "初始数据与三页分页边界",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "初始设备及第1页",
+        "status": "FAILED",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-102',\n    'EQ-103',\n+   'EQ-105'\n  ]\n",
+        "screenshot": "KC-01-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:13.622Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-102',\n    'EQ-103',\n+   'EQ-105'\n  ]\n",
+      "expected": [
+        "EQ-101",
+        "EQ-102",
+        "EQ-103"
+      ],
+      "actual": [
+        "EQ-101",
+        "EQ-103",
+        "EQ-105"
+      ]
+    },
+    "elapsed_ms": 231,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-01/page@a057bb1e0f047bf0ed266155448991ca.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-01/trace.zip"
+  },
+  {
+    "id": "KC-02",
+    "title": "编号模糊搜索不区分大小写",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "小写编号模糊搜索",
+        "status": "FAILED",
+        "error": "The input did not match the regular expression /8/. Input:\n\n'共 5 条，第 1/2 页，每页3条'\n",
+        "screenshot": "KC-02-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:14.232Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "The input did not match the regular expression /8/. Input:\n\n'共 5 条，第 1/2 页，每页3条'\n",
+      "expected": {},
+      "actual": "共 5 条，第 1/2 页，每页3条"
+    },
+    "elapsed_ms": 187,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-02/page@4bbab57a7c6ca655439541056bab586c.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-02/trace.zip"
+  },
+  {
+    "id": "KC-03",
+    "title": "同名温循箱搜索",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "同名搜索",
+        "status": "FAILED",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-104'\n  ]\n",
+        "screenshot": "KC-03-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:14.739Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-104'\n  ]\n",
+      "expected": [
+        "EQ-101",
+        "EQ-104"
+      ],
+      "actual": [
+        "EQ-101"
+      ]
+    },
+    "elapsed_ms": 181,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-03/page@fa8695157d3b18407ebe68ee8b474562.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-03/trace.zip"
+  },
+  {
+    "id": "KC-04",
+    "title": "站点与状态AND组合筛选",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "选择北站",
+        "status": "FAILED",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-102',\n    'EQ-105'\n  ]\n",
+        "screenshot": "KC-04-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:15.245Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-101',\n-   'EQ-102',\n    'EQ-105'\n  ]\n",
+      "expected": [
+        "EQ-101",
+        "EQ-102",
+        "EQ-105"
+      ],
+      "actual": [
+        "EQ-101",
+        "EQ-105"
+      ]
+    },
+    "elapsed_ms": 223,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-04/page@151432bacc03b7349bb7f730aead969e.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-04/trace.zip"
+  },
+  {
+    "id": "KC-05",
+    "title": "状态多选空闲或维护",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "勾选空闲与维护",
+        "status": "PASSED",
+        "screenshot": "KC-05-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "前两页排除使用中",
+        "status": "PASSED",
+        "screenshot": "KC-05-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "末页与筛选标签",
+        "status": "PASSED",
+        "screenshot": "KC-05-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:15.786Z",
+    "elapsed_ms": 431,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-05/page@ff93ef0384b5db6860aa42cbe2cb917e.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-05/trace.zip"
+  },
+  {
+    "id": "KC-06",
+    "title": "无结果与重置恢复",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "无结果",
+        "status": "PASSED",
+        "screenshot": "KC-06-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "重置恢复8条",
+        "status": "FAILED",
+        "error": "The input did not match the regular expression /8.*1\\/3/. Input:\n\n'共 0 条，第 1/1 页，每页3条'\n",
+        "screenshot": "KC-06-step2.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:16.570Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "The input did not match the regular expression /8.*1\\/3/. Input:\n\n'共 0 条，第 1/1 页，每页3条'\n",
+      "expected": {},
+      "actual": "共 0 条，第 1/1 页，每页3条"
+    },
+    "elapsed_ms": 262,
+    "unexecuted_checkpoints": 1,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-06/page@fdee308ec2e93d9723871893db138257.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-06/trace.zip"
+  },
+  {
+    "id": "KC-07",
+    "title": "费用降序排序前三",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "费用降序及90/80/70",
+        "status": "FAILED",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n-   'EQ-104',\n    'EQ-101',\n    'EQ-108',\n+   'EQ-105'\n  ]\n",
+        "screenshot": "KC-07-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:17.151Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n-   'EQ-104',\n    'EQ-101',\n    'EQ-108',\n+   'EQ-105'\n  ]\n",
+      "expected": [
+        "EQ-104",
+        "EQ-101",
+        "EQ-108"
+      ],
+      "actual": [
+        "EQ-101",
+        "EQ-108",
+        "EQ-105"
+      ]
+    },
+    "elapsed_ms": 171,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-07/page@9ab7416ede96716b7a21b42f1bd32f62.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-07/trace.zip"
+  },
+  {
+    "id": "KC-08",
+    "title": "跨页选择保留",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "选择101",
+        "status": "PASSED",
+        "screenshot": "KC-08-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "下一页选择106",
+        "status": "PASSED",
+        "screenshot": "KC-08-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "返回保持选择",
+        "status": "PASSED",
+        "screenshot": "KC-08-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:17.644Z",
+    "elapsed_ms": 506,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-08/page@83d98214737bc311f635a8072dd1a9e6.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-08/trace.zip"
+  },
+  {
+    "id": "KC-09",
+    "title": "筛选变更清空选择并回第1页",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "选择后翻页",
+        "status": "PASSED",
+        "screenshot": "KC-09-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "筛选变更",
+        "status": "PASSED",
+        "screenshot": "KC-09-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "搜索清空后改南站",
+        "status": "FAILED",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-103',\n-   'EQ-104',\n    'EQ-106'\n  ]\n",
+        "screenshot": "KC-09-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:18.501Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    'EQ-103',\n-   'EQ-104',\n    'EQ-106'\n  ]\n",
+      "expected": [
+        "EQ-103",
+        "EQ-104",
+        "EQ-106"
+      ],
+      "actual": [
+        "EQ-103",
+        "EQ-106"
+      ]
+    },
+    "elapsed_ms": 466,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-09/page@15f565dd4275c7e4c5dbc7c79fe0783b.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-09/trace.zip"
+  },
+  {
+    "id": "KC-10",
+    "title": "当前页全选只选可预约行",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "当前页全选仅101和103",
+        "status": "FAILED",
+        "error": "The input did not match the regular expression /已选 2 项/. Input:\n\n'已选 3 项；跨页选择会保留，筛选变化会清空并回到第1页。'\n",
+        "screenshot": "KC-10-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:19.308Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "The input did not match the regular expression /已选 2 项/. Input:\n\n'已选 3 项；跨页选择会保留，筛选变化会清空并回到第1页。'\n",
+      "expected": {},
+      "actual": "已选 3 项；跨页选择会保留，筛选变化会清空并回到第1页。"
+    },
+    "elapsed_ms": 212,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-10/page@d947d010ab710d6f3612faaa3d66a3bf.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-10/trace.zip"
+  },
+  {
+    "id": "KC-11",
+    "title": "维护与使用中不可预约",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "维护102不可预约",
+        "status": "FAILED",
+        "error": "locator.waitFor: Timeout 3500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#devBody tr').filter({ has: locator('td').filter({ hasText: /^EQ-102$/ }) }) to be visible\u001b[22m\n",
+        "screenshot": "KC-11-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:19.859Z",
+    "error": {
+      "name": "TimeoutError",
+      "message": "locator.waitFor: Timeout 3500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#devBody tr').filter({ has: locator('td').filter({ hasText: /^EQ-102$/ }) }) to be visible\u001b[22m\n"
+    },
+    "elapsed_ms": 3643,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-11/page@0649d82a1a112b333352769e70b2c4e5.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-11/trace.zip"
+  },
+  {
+    "id": "KC-12",
+    "title": "南站同名设备详情与返回状态保持",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "同名南站104详情",
+        "status": "FAILED",
+        "error": "locator.click: Timeout 3500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#devBody tr').filter({ has: locator('td').filter({ hasText: /^EQ-104$/ }) }).getByRole('button', { name: '详情' })\u001b[22m\n",
+        "screenshot": "KC-12-step1.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:24.427Z",
+    "error": {
+      "name": "TimeoutError",
+      "message": "locator.click: Timeout 3500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#devBody tr').filter({ has: locator('td').filter({ hasText: /^EQ-104$/ }) }).getByRole('button', { name: '详情' })\u001b[22m\n"
+    },
+    "elapsed_ms": 3738,
+    "unexecuted_checkpoints": 2,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-12/page@5b4a69b76fbcf3f6ab72bdfbb288f7bc.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-12/trace.zip"
+  },
+  {
+    "id": "KC-13",
+    "title": "预约历史按编号隔离",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "103预约历史",
+        "status": "PASSED",
+        "screenshot": "KC-13-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "关闭并查看同名106",
+        "status": "PASSED",
+        "screenshot": "KC-13-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "历史不得串记录",
+        "status": "PASSED",
+        "screenshot": "KC-13-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:29.154Z",
+    "elapsed_ms": 1217,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-13/page@6961cbd1a6f642052f2d4f5e32c28e3c.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-13/trace.zip"
+  },
+  {
+    "id": "KC-14",
+    "title": "无选择批量预约禁用",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "无选择禁用",
+        "status": "PASSED",
+        "screenshot": "KC-14-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "选中后可预约",
+        "status": "PASSED",
+        "screenshot": "KC-14-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "取消选择恢复禁用",
+        "status": "PASSED",
+        "screenshot": "KC-14-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:30.815Z",
+    "elapsed_ms": 386,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-14/page@1b60968d2df997e8ea79727f89e1c0b7.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-14/trace.zip"
+  },
+  {
+    "id": "KC-15",
+    "title": "向导回退保留输入",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "选择101进入时间用途",
+        "status": "PASSED",
+        "screenshot": "KC-15-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "填写指定输入",
+        "status": "PASSED",
+        "screenshot": "KC-15-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "回退资源再进入保留全部输入",
+        "status": "PASSED",
+        "screenshot": "KC-15-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:31.528Z",
+    "elapsed_ms": 610,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-15/page@642628fb4ec2d4e6d89694d7f8c43a52.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-15/trace.zip"
+  },
+  {
+    "id": "KC-16",
+    "title": "申请人空值与长度校验",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "申请人空白拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-16-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "一字拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-16-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "李四允许且回退保留",
+        "status": "PASSED",
+        "screenshot": "KC-16-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:32.542Z",
+    "elapsed_ms": 616,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-16/page@5a5f7919c41aac9374b0e1be66d71912.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-16/trace.zip"
+  },
+  {
+    "id": "KC-17",
+    "title": "用途不足5字校验",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "用途空白拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-17-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "四字用途拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-17-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "五字用途允许",
+        "status": "PASSED",
+        "screenshot": "KC-17-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:33.578Z",
+    "elapsed_ms": 663,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-17/page@664aa87daca5f28e011eeb4ed0a61cfa.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-17/trace.zip"
+  },
+  {
+    "id": "KC-18",
+    "title": "日期越界拒绝",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "日期下界外拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-18-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "日期上界外拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-18-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "日期上界允许",
+        "status": "PASSED",
+        "screenshot": "KC-18-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:34.632Z",
+    "elapsed_ms": 628,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-18/page@3e07a85f5c02a1c0658bfd30ce49b18b.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-18/trace.zip"
+  },
+  {
+    "id": "KC-19",
+    "title": "结束不晚于开始拒绝",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "起止相同拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-19-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "结束早于开始拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-19-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "正确时段可继续",
+        "status": "PASSED",
+        "screenshot": "KC-19-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:35.657Z",
+    "elapsed_ms": 622,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-19/page@1bbfdb852b63565c190b6c168277b099.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-19/trace.zip"
+  },
+  {
+    "id": "KC-20",
+    "title": "超过4小时拒绝",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "五小时拒绝",
+        "status": "PASSED",
+        "screenshot": "KC-20-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "四小时边界允许",
+        "status": "PASSED",
+        "screenshot": "KC-20-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "晚间18点边界",
+        "status": "PASSED",
+        "screenshot": "KC-20-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:36.704Z",
+    "elapsed_ms": 686,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-20/page@8e8134b194de47c412f773a125ca1d0b.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-20/trace.zip"
+  },
+  {
+    "id": "KC-21",
+    "title": "与R-001半开区间重叠冲突",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "选103并填写重叠时段",
+        "status": "PASSED",
+        "screenshot": "KC-21-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "真实冲突提示且不进入确认",
+        "status": "FAILED",
+        "error": "The input did not match the regular expression /EQ-103.*R-001.*冲突/. Input:\n\n'用途必填，去两端空白后长度需为5到100字'\n",
+        "screenshot": "KC-21-step2.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:37.800Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "The input did not match the regular expression /EQ-103.*R-001.*冲突/. Input:\n\n'用途必填，去两端空白后长度需为5到100字'\n",
+      "expected": {},
+      "actual": "用途必填，去两端空白后长度需为5到100字"
+    },
+    "elapsed_ms": 443,
+    "unexecuted_checkpoints": 1,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-21/page@81c8703865d3f69cd820cfebf5221300.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-21/trace.zip"
+  },
+  {
+    "id": "KC-22",
+    "title": "紧接结束边界允许并刷新保持",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "紧接边界允许及40元",
+        "status": "PASSED",
+        "screenshot": "KC-22-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "创建记录",
+        "status": "PASSED",
+        "screenshot": "KC-22-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "刷新仍保留且详情正确",
+        "status": "PASSED",
+        "screenshot": "KC-22-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:38.649Z",
+    "elapsed_ms": 952,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-22/page@3f3ae57f792db62cb469cabf2e845286.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-22/trace.zip"
+  },
+  {
+    "id": "KC-23",
+    "title": "多设备总价与双击确认只增一条",
+    "status": "FAILED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "跨页选101和105",
+        "status": "PASSED",
+        "screenshot": "KC-23-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "真实鼠标快速双击确认",
+        "status": "FAILED",
+        "error": "one submission must create one new booking record, seed plus new = 2\n\n3 !== 2\n",
+        "screenshot": "KC-23-step2.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:40.053Z",
+    "error": {
+      "name": "AssertionError",
+      "message": "one submission must create one new booking record, seed plus new = 2\n\n3 !== 2\n",
+      "expected": 2,
+      "actual": 3
+    },
+    "elapsed_ms": 799,
+    "unexecuted_checkpoints": 1,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-23/page@a523a8c1d660de2815cf2a44751ef708.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-23/trace.zip"
+  },
+  {
+    "id": "KC-24",
+    "title": "取消先放弃再确认后可再约",
+    "status": "PASSED",
+    "steps": [
+      {
+        "number": 1,
+        "name": "取消确认选择放弃",
+        "status": "PASSED",
+        "screenshot": "KC-24-step1.png"
+      },
+      {
+        "number": 2,
+        "name": "确认取消保留价格并禁用",
+        "status": "PASSED",
+        "screenshot": "KC-24-step2.png"
+      },
+      {
+        "number": 3,
+        "name": "释放原时段再预约",
+        "status": "PASSED",
+        "screenshot": "KC-24-step3.png"
+      }
+    ],
+    "page_errors": [],
+    "started_at": "2026-09-25T03:04:41.355Z",
+    "elapsed_ms": 864,
+    "unexecuted_checkpoints": 0,
+    "video": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-24/page@413d2229e6859865c9754f6f06303277.webm",
+    "trace": "../../.local/kimi-complex/runs/2026-09-25T03-04-13-091Z/KC-24/trace.zip"
+  }
+]

@@ -3,10 +3,10 @@
   "req_id": "REQ-0015",
   "title": "Kimi复杂UI人工实测站点与分组用例",
   "metadata": {
-    "requirement_status": "已实现",
+    "requirement_status": "新复杂页面及24例已执行；12通过12失败，缺陷原样保留",
     "governance_level": "G2",
-    "version": 1,
-    "last_updated": "2026-09-18"
+    "version": 2,
+    "last_updated": "2026-09-25"
   },
   "original_input": "我现在要开始实测了。你让kimi准备复杂网址，要很复杂的那种；你给方案他执行，然后准备好对应测试用例跟步骤。我来手动测试一下。",
   "user_requirements": [
@@ -16,13 +16,21 @@
       "goal": "Codex制定合成业务规格，Kimi编写复杂本机UI及用例，独立核验后交用户手动测试Agent。",
       "constraints": "不更改Agent、旧任务、旧24例验收集或4179服务；无真实业务与模型调用；不发布新版本。",
       "success_criteria": "一个可运行复杂站点，18条有效+4条待澄清+2条已知缺陷用例，独立检查依据及操作手册。"
+    },
+    {
+      "id": "UN-0015-02",
+      "status": "已确认",
+      "goal": "Kimi制作新的复杂交互界面和至少20条用例，由Codex完成一轮真实浏览器测试并评价效果。",
+      "constraints": "独立合成资料，不改工作台工具政策或历史证据；Kimi编写页面和用例，Codex独立测试，不算产品建例Agent成绩。",
+      "success_criteria": "新页面、24条中文用例、逐条实际结果和媒体证据，保留首次缺陷。"
     }
   ],
   "confirmed_facts": [
     "当前用户授权Kimi执行本次合成站点与测试用例编写，用户负责最终Agent实测。",
     "现有导入器原生支持cases数组JSON；本次使用JSON，无需Excel转换。",
     "独立manual-lab目录不修改acceptance冻结基线。",
-    "Kimi CLI网站首轮到600秒上限后仅续写尾部一次；用例和网站尾部均退出0，Codex独立修正并运行。"
+    "Kimi CLI网站首轮到600秒上限后仅续写尾部一次；用例和网站尾部均退出0，Codex独立修正并运行。",
+    "2026-09-25：Kimi CLI一次启动257.997秒，生成24例及独立页面；真实Chromium执行12通过/12失败，另5个诊断场景单计。工作台产品代码/政策/历史结果不改。"
   ],
   "inferences_and_open_questions": [
     "将“负责网址/跟不走”按上下文理解为“复杂网址/对应步骤”。使用本机演示业务，无需外网部署。"
@@ -48,6 +56,13 @@
       "requirement": "独立核验与手动交接",
       "acceptance_criteria": "实际浏览器逐场景核验站点、导入与安全自检，提供启动及分组操作步骤。",
       "constraints": "不调用Agent或DeepSeek、不宣称Agent通过、发布或泛化验收。"
+    },
+    {
+      "id": "DR-0015-04",
+      "status": "已实现",
+      "requirement": "新增设备预约复杂页面及24例真实测试",
+      "acceptance_criteria": "完成筛选分页/同名对象/跨页选择/向导/冲突校验/预约取消的独立真实Chromium验证，逐条记录通过与失败，不为通过改预期。",
+      "constraints": "独立workbench/qa/20260925-kimi-complex；不触碰旧站点和工作台业务。"
     }
   ],
   "design_decisions": [
@@ -77,6 +92,15 @@
       "status": "已确认",
       "summary": "Codex真实Chromium夹具验证与截图，用户自主新建Agent任务。",
       "rationale": "不调用Agent或DeepSeek、不宣称Agent通过、发布或泛化验收。"
+    },
+    {
+      "id": "DD-0015-04",
+      "dr_ids": [
+        "DR-0015-04"
+      ],
+      "status": "已确认",
+      "summary": "冻结合成规格，Kimi文本输出完整HTML与24条用例；Codex落盘并用独立Chromium真实交互；每例隔离浏览器存储，采集截图/Trace/原始视频。",
+      "rationale": "页面与用例同源存在共同遗漏风险，因此以预先规格独立断言，不把Kimi自报作为测试证据。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -84,7 +108,8 @@
     "静态服务器仅提供index.html与应用路由，不提供SPEC、用例答案、日志或项目源码。"
   ],
   "module_document_impact": [
-    "本次无需模块文档变更，原因：新增manual-lab是独立合成被测网站和人工测试材料，不改变Agent核心模块、接口、运行配置、旧任务或acceptance冻结基线；启动与维护由manual-lab/README.md单独说明。"
+    "本次无需模块文档变更，原因：新增manual-lab是独立合成被测网站和人工测试材料，不改变Agent核心模块、接口、运行配置、旧任务或acceptance冻结基线；启动与维护由manual-lab/README.md单独说明。",
+    "v2：独立workbench/qa/20260925-kimi-complex合成页面、测试及证据；无工作台产品模块变化，维护启动/已知缺陷于该目录README.md和REPORT.md。"
   ],
   "risks_and_rollback": [
     "人工测试可暴露Agent暂不支持的组件/业务操作；如实记能力缺口，不修改用例迁就Agent。",
@@ -132,6 +157,20 @@
       "task": "独立核验与手动交接",
       "verification_ids": [
         "VT-0015-03"
+      ]
+    },
+    {
+      "id": "TK-0015-04",
+      "dr_ids": [
+        "DR-0015-04"
+      ],
+      "dd_ids": [
+        "DD-0015-04"
+      ],
+      "status": "已实现",
+      "task": "Kimi新复杂页面/24例生成及首轮浏览器测试交付；页面存在已记录缺陷，不宣称业务验收通过",
+      "verification_ids": [
+        "VT-0015-04"
       ]
     }
   ],
@@ -189,13 +228,32 @@
         "skipped_count": 0,
         "log_path": "validation/REQ-0015-lab-second.log"
       }
+    },
+    {
+      "id": "VT-0015-04",
+      "dr_ids": [
+        "DR-0015-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "已实际执行24例：12通过12失败；分类为页面缺陷11例、用例自身错误1例，首次失败保留，非页面验收通过",
+      "evidence_standard": "真实Chromium操作与业务断言、逐例错误和媒体、Kimi来源哈希；非工作台Agent通过率。",
+      "current_evidence": {
+        "command": "node workbench/qa/20260925-kimi-complex/verify.mjs",
+        "exit_code": 1,
+        "test_count": 24,
+        "failure_count": 12,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json"
+      }
     }
   ],
   "verification_environment": {
     "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
     "commands": [
       "node --test --test-reporter=tap manual-lab/verify.test.mjs",
-      "node acceptance/check.mjs"
+      "node acceptance/check.mjs",
+      "node workbench/qa/20260925-kimi-complex/verify.mjs"
     ],
     "environment": [
       "Windows Node22，Playwright Chromium，临时loopback端口与独立浏览器上下文；无外部网络请求。"
@@ -204,7 +262,9 @@
       "修正后26项夹具检查0失败/跳过；18有效用例、4输入审查、2已知页面缺陷包均可导入。",
       "1440/375px与双层弹窗截图已查看；原17文件/24例冻结检查不变。",
       "只验证新网站/用例，不运行Agent/DeepSeek、不修改4179或旧任务，不发布Release。",
-      "常驻后台4196启动被执行策略拒绝且未换路径重试；用户通过README前台命令启动，临时验证服务器已结束。"
+      "常驻后台4196启动被执行策略拒绝且未换路径重试；用户通过README前台命令启动，临时验证服务器已结束。",
+      "v2首轮24例退出1：12通过12失败；正常表单/单设备预约/取消可用，但默认筛选、重置、批量记录金额与详情串对象存在问题。未修页面或原预期。",
+      "正式检查仍有2项：历史26项集成测试通过与本轮12项失败同文时，现有检查器按全文混判；已保留最小复现，未修改检查器或旧成绩。"
     ]
   },
   "trace_current": [
@@ -231,6 +291,14 @@
       "tk_id": "TK-0015-03",
       "vt_id": "VT-0015-03",
       "status": "已实现"
+    },
+    {
+      "un_id": "UN-0015-02",
+      "dr_id": "DR-0015-04",
+      "dd_id": "DD-0015-04",
+      "tk_id": "TK-0015-04",
+      "vt_id": "VT-0015-04",
+      "status": "已实现"
     }
   ],
   "trace_history": [
@@ -239,6 +307,12 @@
       "link": "无",
       "status": "需求已确认",
       "notes": "用户委托复杂站点与测试用例；与旧冻结基线独立。"
+    },
+    {
+      "version": 1,
+      "link": "delivery_evidence-v1-20260918.md",
+      "status": "历史证据保留",
+      "notes": "原v1交付证据从本轮起始HEAD按原字节保留，v2不覆盖旧成绩。"
     }
   ],
   "open_questions": [
@@ -263,6 +337,22 @@
       "description": "Kimi源码与用例已复核落盘；Codex修正意外行为与用例提示泄露，26项浏览器/导入/隔离检查完成。后台启动受策略限制，保留人工启动步骤。",
       "impact": "独立manual-lab；Agent、旧任务和旧验收集不变",
       "confirmed_by": "用户授权范围内的实际检查，不代用户Agent验收"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 2,
+      "type": "新增验证",
+      "description": "用户授权Kimi制作新复杂交互页面和至少20条用例，并由Codex真实浏览器验证。原v1证据不改。",
+      "impact": "独立合成资料及浏览器验证，无工作台产品变化",
+      "confirmed_by": "用户当前请求"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 2,
+      "type": "首轮测试完成",
+      "description": "24条真实Chromium测试12通过12失败，首轮页面与用例原字节保留；补充5个诊断场景，不混入原分母。",
+      "impact": "独立合成资料与质量评价；无产品模型调用",
+      "confirmed_by": "真实执行及独立证据核对"
     }
   ]
 }

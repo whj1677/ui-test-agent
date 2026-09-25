@@ -1,0 +1,37 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T11:11:03+08:00
+Command: node --test workbench/qa/20260925-kimi-complex/audit.test.mjs
+Exit code: 0
+Parsed test count: 3
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+TAP version 13
+# Subtest: 原始Kimi页面/用例与实际受测字节一致
+ok 1 - 原始Kimi页面/用例与实际受测字节一致
+  ---
+  duration_ms: 7.831
+  type: 'test'
+  ...
+# Subtest: 原始成绩计数一致且101份媒体字节身份完整；不要求业务全绿
+ok 2 - 原始成绩计数一致且101份媒体字节身份完整；不要求业务全绿
+  ---
+  duration_ms: 54.2285
+  type: 'test'
+  ...
+# Subtest: 独立服务仅提供页面，不能读取用例/源码/媒体；不占用4322
+ok 3 - 独立服务仅提供页面，不能读取用例/源码/媒体；不占用4322
+  ---
+  duration_ms: 36.1249
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 268.493

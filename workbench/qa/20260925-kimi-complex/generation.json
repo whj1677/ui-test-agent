@@ -1,0 +1,27 @@
+{
+  "cli": "kimi 2.0.2",
+  "starts": 1,
+  "exit_code": 0,
+  "elapsed_seconds": 257.997,
+  "tools": [],
+  "model": "existing default; not overridden",
+  "provenance": "Kimi html and cases extracted from output without editing; Markdown is deterministic conversion",
+  "files": [
+    {
+      "path": "SPEC.md",
+      "sha256": "7AF33141D0BE8F36FC76D70FB216DE519041A2DBB1E9E7BE3C666098354C6ECF",
+      "bytes": 4536
+    },
+    {
+      "path": "index.html",
+      "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0",
+      "bytes": 22727
+    },
+    {
+      "path": "cases.json",
+      "sha256": "391D062716D4B9DE78146B1D92F79FCA5AA40067C8E25CC3FABC7782537D2186",
+      "bytes": 14926
+    }
+  ],
+  "response_sha256": "F00B30CC897F5AD272679EE9B23D5D1CB5361F4449566DF83AC2805EF3F96448"
+}

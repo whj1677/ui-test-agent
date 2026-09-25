@@ -2,260 +2,266 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-18T10:46:58+08:00`
+- Generated at: `2026-09-25T11:11:04+08:00`
 - Record: `REQ-0015-manual-complex-lab`
-- Change fingerprint: `9062b510716aa21d2aeee4bb91ff967359ebdc3f6ee96a1dc273441ed2b594f0`
+- Change fingerprint: `2a16c5e73dcb6b1081385eaf2877c304b19ca18706c1dc27108ffca1f119e03a`
 - Verification source: `collector-executed-v1`
-- Verification state: `集成测试通过`
-- Command: `node --test --test-reporter=tap manual-lab/verify.test.mjs`
+- Verification state: `人工待确认`
+- Command: `node --test workbench/qa/20260925-kimi-complex/audit.test.mjs`
 - Exit code: `0`
-- Test count: `26`
+- Test count: `3`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `validation/REQ-0015-lab-delivery.log`
-- Log SHA-256: `6fb08475229912663201baebe5c2377af1bb001555e663fa61965e73e05fe27a`
+- Log path: `workbench/qa/20260925-kimi-complex/evidence/integrity-final.log`
+- Log SHA-256: `a2474743e96260c0fa392f127807b1e48275bef1e3a671ed874176953e7e8d93`
 
 ### Git Status
 
 ```text
- M docs/requirements/README.md
-?? docs/requirements/REQ-0015-manual-complex-lab/00_user_requirement.md
-?? docs/requirements/REQ-0015-manual-complex-lab/01_development_requirement.md
-?? docs/requirements/REQ-0015-manual-complex-lab/02_design.md
-?? docs/requirements/REQ-0015-manual-complex-lab/03_tasks.md
-?? docs/requirements/REQ-0015-manual-complex-lab/04_verification.md
-?? docs/requirements/REQ-0015-manual-complex-lab/05_trace.md
-?? docs/requirements/REQ-0015-manual-complex-lab/change_log.md
-?? docs/requirements/REQ-0015-manual-complex-lab/current_state.md
-?? docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence.md
-?? docs/requirements/REQ-0015-manual-complex-lab/requirement.source.json
-?? manual-lab/CASES.md
-?? manual-lab/GRADING.md
-?? manual-lab/README.md
-?? manual-lab/SPEC.md
-?? manual-lab/VERIFICATION.md
-?? manual-lab/cases/01-valid.json
-?? manual-lab/cases/02-needs-review.json
-?? manual-lab/cases/03-known-defects.json
-?? manual-lab/public/index.html
-?? manual-lab/serve.mjs
-?? manual-lab/start.ps1
-?? manual-lab/verify.test.mjs
+ M .gitattributes
+ M docs/requirements/REQ-0015-manual-complex-lab/00_user_requirement.md
+ M docs/requirements/REQ-0015-manual-complex-lab/01_development_requirement.md
+ M docs/requirements/REQ-0015-manual-complex-lab/02_design.md
+ M docs/requirements/REQ-0015-manual-complex-lab/03_tasks.md
+ M docs/requirements/REQ-0015-manual-complex-lab/04_verification.md
+ M docs/requirements/REQ-0015-manual-complex-lab/05_trace.md
+ M docs/requirements/REQ-0015-manual-complex-lab/change_log.md
+ M docs/requirements/REQ-0015-manual-complex-lab/current_state.md
+ M docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence.md
+ M docs/requirements/REQ-0015-manual-complex-lab/requirement.source.json
+?? docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence-v1-20260918.md
+?? workbench/qa/20260925-kimi-complex/CASES.md
+?? workbench/qa/20260925-kimi-complex/README.md
+?? workbench/qa/20260925-kimi-complex/REPORT.md
+?? workbench/qa/20260925-kimi-complex/SPEC.md
+?? workbench/qa/20260925-kimi-complex/audit.test.mjs
+?? workbench/qa/20260925-kimi-complex/cases.json
+?? workbench/qa/20260925-kimi-complex/diagnose.mjs
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-01-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-02-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-03-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-04-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-06-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-06-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-07-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-10-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-11-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-12-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-21-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-21-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-23-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-23-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step1.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step2.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step3.png
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/media-manifest.json
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/playback.json
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json
+?? workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/summary.json
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D01-reset.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D02-details-stale.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D03-conflict-valid-purpose.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D03-overlap.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D04-single-click-multi.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/D05-mobile.png
+?? workbench/qa/20260925-kimi-complex/evidence/diagnostics/results.json
+?? workbench/qa/20260925-kimi-complex/evidence/governance-reproduction.txt
+?? workbench/qa/20260925-kimi-complex/evidence/integrity-check.log
+?? workbench/qa/20260925-kimi-complex/evidence/integrity-final.log
+?? workbench/qa/20260925-kimi-complex/generation.json
+?? workbench/qa/20260925-kimi-complex/index.html
+?? workbench/qa/20260925-kimi-complex/media-check.mjs
+?? workbench/qa/20260925-kimi-complex/server.mjs
+?? workbench/qa/20260925-kimi-complex/verify.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
- docs/requirements/README.md | 2 ++
- 1 file changed, 2 insertions(+)
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
+ .gitattributes                                     |   1 +
+ .../00_user_requirement.md                         |   2 +
+ .../01_development_requirement.md                  |   1 +
+ .../REQ-0015-manual-complex-lab/02_design.md       |   2 +
+ .../REQ-0015-manual-complex-lab/03_tasks.md        |   1 +
+ .../REQ-0015-manual-complex-lab/04_verification.md |   4 +
+ .../REQ-0015-manual-complex-lab/05_trace.md        |   2 +
+ .../REQ-0015-manual-complex-lab/change_log.md      |   2 +
+ .../REQ-0015-manual-complex-lab/current_state.md   |  11 +-
+ .../delivery_evidence.md                           | 428 +++++++++++----------
+ .../requirement.source.json                        | 104 ++++-
+ 11 files changed, 337 insertions(+), 221 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-docs/requirements/REQ-0015-manual-complex-lab/00_user_requirement.md
-docs/requirements/REQ-0015-manual-complex-lab/01_development_requirement.md
-docs/requirements/REQ-0015-manual-complex-lab/02_design.md
-docs/requirements/REQ-0015-manual-complex-lab/03_tasks.md
-docs/requirements/REQ-0015-manual-complex-lab/04_verification.md
-docs/requirements/REQ-0015-manual-complex-lab/05_trace.md
-docs/requirements/REQ-0015-manual-complex-lab/change_log.md
-docs/requirements/REQ-0015-manual-complex-lab/current_state.md
-docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence.md
-docs/requirements/REQ-0015-manual-complex-lab/requirement.source.json
-manual-lab/CASES.md
-manual-lab/GRADING.md
-manual-lab/README.md
-manual-lab/SPEC.md
-manual-lab/VERIFICATION.md
-manual-lab/cases/01-valid.json
-manual-lab/cases/02-needs-review.json
-manual-lab/cases/03-known-defects.json
-manual-lab/public/index.html
-manual-lab/serve.mjs
-manual-lab/start.ps1
-manual-lab/verify.test.mjs
+docs/requirements/REQ-0015-manual-complex-lab/delivery_evidence-v1-20260918.md
+workbench/qa/20260925-kimi-complex/CASES.md
+workbench/qa/20260925-kimi-complex/README.md
+workbench/qa/20260925-kimi-complex/REPORT.md
+workbench/qa/20260925-kimi-complex/SPEC.md
+workbench/qa/20260925-kimi-complex/audit.test.mjs
+workbench/qa/20260925-kimi-complex/cases.json
+workbench/qa/20260925-kimi-complex/diagnose.mjs
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-01-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-02-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-03-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-04-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-05-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-06-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-06-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-07-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-08-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-09-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-10-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-11-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-12-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-13-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-14-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-15-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-16-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-17-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-18-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-19-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-20-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-21-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-21-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-22-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-23-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-23-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step1.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step2.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/KC-24-step3.png
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/media-manifest.json
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/playback.json
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json
+workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/summary.json
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D01-reset.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D02-details-stale.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D03-conflict-valid-purpose.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D03-overlap.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D04-single-click-multi.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/D05-mobile.png
+workbench/qa/20260925-kimi-complex/evidence/diagnostics/results.json
+workbench/qa/20260925-kimi-complex/evidence/governance-reproduction.txt
+workbench/qa/20260925-kimi-complex/evidence/integrity-check.log
+workbench/qa/20260925-kimi-complex/evidence/integrity-final.log
+workbench/qa/20260925-kimi-complex/generation.json
+workbench/qa/20260925-kimi-complex/index.html
+workbench/qa/20260925-kimi-complex/media-check.mjs
+workbench/qa/20260925-kimi-complex/server.mjs
+workbench/qa/20260925-kimi-complex/verify.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-18T10:46:38+08:00
-Command: node --test --test-reporter=tap manual-lab/verify.test.mjs
+Started at: 2026-09-25T11:11:03+08:00
+Command: node --test workbench/qa/20260925-kimi-complex/audit.test.mjs
 Exit code: 0
-Parsed test count: 26
+Parsed test count: 3
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: 24 native-import cases have isolated identities, fixed groups and accurate original oracle
-ok 1 - 24 native-import cases have isolated identities, fixed groups and accurate original oracle
+# Subtest: 原始Kimi页面/用例与实际受测字节一致
+ok 1 - 原始Kimi页面/用例与实际受测字节一致
   ---
-  duration_ms: 306.0253
+  duration_ms: 7.831
   type: 'test'
   ...
-# Subtest: server exposes only local synthetic routes, never answer files, source or write APIs
-ok 2 - server exposes only local synthetic routes, never answer files, source or write APIs
+# Subtest: 原始成绩计数一致且101份媒体字节身份完整；不要求业务全绿
+ok 2 - 原始成绩计数一致且101份媒体字节身份完整；不要求业务全绿
   ---
-  duration_ms: 33.3031
+  duration_ms: 54.2285
   type: 'test'
   ...
-# Subtest: V01 homepage navigation exposes 12 assets and 5 first-page rows
-ok 3 - V01 homepage navigation exposes 12 assets and 5 first-page rows
+# Subtest: 独立服务仅提供页面，不能读取用例/源码/媒体；不占用4322
+ok 3 - 独立服务仅提供页面，不能读取用例/源码/媒体；不占用4322
   ---
-  duration_ms: 695.1606
+  duration_ms: 36.1249
   type: 'test'
   ...
-# Subtest: V02 compound AND filter distinguishes the same-name south device
-ok 4 - V02 compound AND filter distinguishes the same-name south device
-  ---
-  duration_ms: 290.1882
-  type: 'test'
-  ...
-# Subtest: V03 paginated same-name record binds D009, never D001
-ok 5 - V03 paginated same-name record binds D009, never D001
-  ---
-  duration_ms: 1087.5095
-  type: 'test'
-  ...
-# Subtest: V04 tabs preserve D009 identity and specified parameter values
-ok 6 - V04 tabs preserve D009 identity and specified parameter values
-  ---
-  duration_ms: 1161.0018
-  type: 'test'
-  ...
-# Subtest: V05 nested modal blocks background and closes only the top layer
-ok 7 - V05 nested modal blocks background and closes only the top layer
-  ---
-  duration_ms: 1511.3253
-  type: 'test'
-  ...
-# Subtest: V06 querying from later page and resetting restore pagination
-ok 8 - V06 querying from later page and resetting restore pagination
-  ---
-  duration_ms: 320.1102
-  type: 'test'
-  ...
-# Subtest: V07 descending numeric power sort and reset
-ok 9 - V07 descending numeric power sort and reset
-  ---
-  duration_ms: 314.2644
-  type: 'test'
-  ...
-# Subtest: V08 deterministic async read error recovers once with the correct device value
-ok 10 - V08 deterministic async read error recovers once with the correct device value
-  ---
-  duration_ms: 2833.69
-  type: 'test'
-  ...
-# Subtest: V09 inclusive date range returns exactly two matching maintenance rows
-ok 11 - V09 inclusive date range returns exactly two matching maintenance rows
-  ---
-  duration_ms: 1218.0398
-  type: 'test'
-  ...
-# Subtest: closing a loading detail prevents its delayed contents reopening on a new route
-ok 12 - closing a loading detail prevents its delayed contents reopening on a new route
-  ---
-  duration_ms: 1168.406
-  type: 'test'
-  ...
-# Subtest: V10 standard tariff correct non-defect values
-ok 13 - V10 standard tariff correct non-defect values
-  ---
-  duration_ms: 255.9561
-  type: 'test'
-  ...
-# Subtest: V11 conditional tariff help remains nested and keeps the right template
-ok 14 - V11 conditional tariff help remains nested and keeps the right template
-  ---
-  duration_ms: 370.6799
-  type: 'test'
-  ...
-# Subtest: V12 audit pages and result filter reset page position
-ok 15 - V12 audit pages and result filter reset page position
-  ---
-  duration_ms: 303.7788
-  type: 'test'
-  ...
-# Subtest: V13 wizard only creates on submit, uses dynamic id, persists all entered fields
-ok 16 - V13 wizard only creates on submit, uses dynamic id, persists all entered fields
-  ---
-  duration_ms: 488.6101
-  type: 'test'
-  ...
-# Subtest: V14 missing name prevents advancing and leaves seed data alone
-ok 17 - V14 missing name prevents advancing and leaves seed data alone
-  ---
-  duration_ms: 278.9475
-  type: 'test'
-  ...
-# Subtest: V15 step-back preserves all configured values without committing
-ok 18 - V15 step-back preserves all configured values without committing
-  ---
-  duration_ms: 498.768
-  type: 'test'
-  ...
-# Subtest: V16 dirty confirmation keeps data or discards only the draft
-ok 19 - V16 dirty confirmation keeps data or discards only the draft
-  ---
-  duration_ms: 396.8011
-  type: 'test'
-  ...
-# Subtest: V17 duplicate name is rejected at submit with no new persisted record
-ok 20 - V17 duplicate name is rejected at submit with no new persisted record
-  ---
-  duration_ms: 419.9275
-  type: 'test'
-  ...
-# Subtest: wizard keyboard priority, invalid period and escaped business text do not silently submit
-ok 21 - wizard keyboard priority, invalid period and escaped business text do not silently submit
-  ---
-  duration_ms: 433.6998
-  type: 'test'
-  ...
-# Subtest: V18 update and cleanup bind only the newly created record
-ok 22 - V18 update and cleanup bind only the newly created record
-  ---
-  duration_ms: 566.1971
-  type: 'test'
-  ...
-# Subtest: B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
-ok 23 - B01 seeded tariff defect is visible; correct 0.38 oracle is never derived from UI
-  ---
-  duration_ms: 254.4343
-  type: 'test'
-  ...
-# Subtest: B02 seeded frequency defect exists only on D004, not the valid D009
-ok 24 - B02 seeded frequency defect exists only on D004, not the valid D009
-  ---
-  duration_ms: 2140.8076
-  type: 'test'
-  ...
-# Subtest: reload, history navigation and reset preserve isolation from unrelated storage
-ok 25 - reload, history navigation and reset preserve isolation from unrelated storage
-  ---
-  duration_ms: 624.5481
-  type: 'test'
-  ...
-# Subtest: desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
-ok 26 - desktop and 375px viewports have bounded layout, keyboard operation and screenshot evidence
-  ---
-  duration_ms: 786.5496
-  type: 'test'
-  ...
-1..26
-# tests 26
+1..3
+# tests 3
 # suites 0
-# pass 26
+# pass 3
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 19229.0828
+# duration_ms 268.493
 ```
 
 ### Sync Record Status
@@ -266,12 +272,19 @@ DRY-RUN: no derived changes for REQ-0015-manual-complex-lab; explicit implementa
 
 ### Check AI Context
 
-- Exit code: `0`
+- Exit code: `1`
 
 ```text
-PASS ai-engineering-context checks
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
 ```
 
 ### Notes
 
-新网站/导入包工程检查26项，不是Agent实测。手册和独立目录说明齐备；后台常驻被策略拒绝且未绕过，用户前台启动。
+Only 3 engineering provenance and media checks. First real browser round remains 12 passed / 12 failed out of 24. Existing checker conflates old pass and new fail in the same file; minimal repro retained; checker unchanged.

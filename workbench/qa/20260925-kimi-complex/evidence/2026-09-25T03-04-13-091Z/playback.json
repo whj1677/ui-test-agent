@@ -1,0 +1,21 @@
+{
+  "browser_version": "151.0.7922.34",
+  "playback": [
+    {
+      "id": "KC-22",
+      "duration": 1.92,
+      "current_time": 0.010687,
+      "decoded_width": 1440,
+      "decoded_height": 1000,
+      "paused": true
+    },
+    {
+      "id": "KC-23",
+      "duration": 1.76,
+      "current_time": 0.007925,
+      "decoded_width": 1440,
+      "decoded_height": 1000,
+      "paused": true
+    }
+  ]
+}
