@@ -1,0 +1,31 @@
+{
+  "schema": "workbench/registered-candidate-trial-v1",
+  "model_calls_allowed": false,
+  "authorizations": [
+    {
+      "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+      "case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+      "case_version": 1,
+      "content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6",
+      "source_task_id": "build-20260925021610-943fbf86",
+      "candidate_version": 1,
+      "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+      "environment_id": "unfamiliar-b-20260925",
+      "lanes": [
+        "normal",
+        "negative"
+      ]
+    }
+  ],
+  "environments": [
+    {
+      "id": "unfamiliar-b-20260925",
+      "flow": "b",
+      "site_manifest_sha256": "0CCF1169179EAEB2DA443CD43CF56F773B2AB0D101A5FF180FEAD840D2773F3A",
+      "detection": {
+        "kind": "assertion-mismatch-at-step",
+        "step_marker": "CASE_STEP_3"
+      }
+    }
+  ]
+}

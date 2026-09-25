@@ -1,0 +1,751 @@
+{
+  "schema": "workbench/candidate-trial-v1",
+  "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+  "request_id": "trial-request-959386c4-5556-4140-b540-db75f7f6b694",
+  "request_fingerprint": "2E000FAEEC00DABB3DE5163DBC9DE3BCC7F5F309FEFD6E26D56A30D829003FAB",
+  "selection": {
+    "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+    "case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+    "case_version": 1,
+    "content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6",
+    "source_task_id": "build-20260925021610-943fbf86",
+    "candidate_version": 1,
+    "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+    "environment_id": "unfamiliar-b-20260925"
+  },
+  "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+  "case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+  "case_version": 1,
+  "content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6",
+  "source_task_id": "build-20260925021610-943fbf86",
+  "candidate_version": 1,
+  "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+  "environment_id": "unfamiliar-b-20260925",
+  "source_build_task_id": "build-20260925021610-943fbf86",
+  "source_case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+  "source_external_id": "FRESH-B",
+  "source_case_version": 1,
+  "executed_case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+  "executed_case_version": 1,
+  "executed_external_id": "FRESH-B",
+  "executed_content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6",
+  "frozen_case_content": {
+    "external_id": "FRESH-B",
+    "title": "同名工单目标选择、详情页签及返回保留筛选",
+    "module": "detail",
+    "preconditions": "本机合成站；无登录、网络写入、持久化或外部依赖；刷新重置内存状态。只使用绑定入口。",
+    "test_data": "以本用例步骤内明确的编号、字段和值为冻结业务预期。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "打开绑定正常入口",
+        "expected": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203"
+      },
+      {
+        "order": 2,
+        "action": "工单名称输入巡检任务，点击筛选",
+        "expected": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示"
+      },
+      {
+        "order": 3,
+        "action": "在编号WO-202且区域南区的行点击查看详情",
+        "expected": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高"
+      },
+      {
+        "order": 4,
+        "action": "切换到处理记录页签",
+        "expected": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件"
+      },
+      {
+        "order": 5,
+        "action": "点击返回列表",
+        "expected": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工"
+      }
+    ],
+    "status": "CONFIRMED"
+  },
+  "candidate_sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 5799,
+        "sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6"
+      }
+    ],
+    "sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02"
+  },
+  "run_type": "normal",
+  "origin": "EXPLICIT_CANDIDATE_TRIAL",
+  "created_at": "2026-09-25T02:36:20.434Z",
+  "started_at": "2026-09-25T02:36:20.434Z",
+  "execution_status": "FINISHED",
+  "status": "PASSED",
+  "complete_pass": true,
+  "approval_status": "NOT_APPROVED",
+  "harness_starts": 0,
+  "model_calls": 0,
+  "media": [
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "bytes": 314859,
+      "sha256": "1E8510A699FAFDB808827C3D724CCC2C652B1736527CC780DC1E7CF79B282AF4",
+      "kind": "trace",
+      "content_type": "application/zip",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "trace.zip"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+      "bytes": 53770,
+      "sha256": "19A2819703D8E4FE8A591B9AD3D9BB00CA05DF5B962C85C00ACFA832ECC05FC4",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 23951,
+      "sha256": "6A44FD3BF58F001D301BF3F22FB8833C0F0C1D549B81AC82A2288E981F8F55DB",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 4254,
+      "sha256": "3878570F4A62A0D65F57CF1754E0269E56EC797F4E36E26B44C172EB6E800401",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 21597,
+      "sha256": "B7809C8068C6A4A0E469D2EEC9008FDF343B7A44A91C4336034D5FBC3E85C38A",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 23951,
+      "sha256": "6A44FD3BF58F001D301BF3F22FB8833C0F0C1D549B81AC82A2288E981F8F55DB",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 17497,
+      "sha256": "8B68CF2DB7A9B49DA142F68A8AC23F8F75D93CFB0E40737ABAB37CA8BE2C1638",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 21597,
+      "sha256": "B7809C8068C6A4A0E469D2EEC9008FDF343B7A44A91C4336034D5FBC3E85C38A",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 15804,
+      "sha256": "B5768EFB4B41BA183698FF6868329F0686C6EFA4F68F3B54DA28134CA8479ABF",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 17497,
+      "sha256": "8B68CF2DB7A9B49DA142F68A8AC23F8F75D93CFB0E40737ABAB37CA8BE2C1638",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 15804,
+      "sha256": "B5768EFB4B41BA183698FF6868329F0686C6EFA4F68F3B54DA28134CA8479ABF",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 848459,
+      "sha256": "E328196478740BA6ECBA098576A6488F7B8A276E38157F91588DEC22B9FB9138",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-14",
+      "file_id": "media-14",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/test-finished-1.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/trace.zip",
+      "bytes": 314859,
+      "sha256": "1E8510A699FAFDB808827C3D724CCC2C652B1736527CC780DC1E7CF79B282AF4",
+      "kind": "trial_trace",
+      "content_type": "application/zip",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "trace.zip"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-同名工单目标选择、详情页签及返回保留筛选/video.webm",
+      "bytes": 53770,
+      "sha256": "19A2819703D8E4FE8A591B9AD3D9BB00CA05DF5B962C85C00ACFA832ECC05FC4",
+      "kind": "trial_video",
+      "content_type": "video/webm",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 23951,
+      "sha256": "6A44FD3BF58F001D301BF3F22FB8833C0F0C1D549B81AC82A2288E981F8F55DB",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 4254,
+      "sha256": "3878570F4A62A0D65F57CF1754E0269E56EC797F4E36E26B44C172EB6E800401",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 21597,
+      "sha256": "B7809C8068C6A4A0E469D2EEC9008FDF343B7A44A91C4336034D5FBC3E85C38A",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 23951,
+      "sha256": "6A44FD3BF58F001D301BF3F22FB8833C0F0C1D549B81AC82A2288E981F8F55DB",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 17497,
+      "sha256": "8B68CF2DB7A9B49DA142F68A8AC23F8F75D93CFB0E40737ABAB37CA8BE2C1638",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 21597,
+      "sha256": "B7809C8068C6A4A0E469D2EEC9008FDF343B7A44A91C4336034D5FBC3E85C38A",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 15804,
+      "sha256": "B5768EFB4B41BA183698FF6868329F0686C6EFA4F68F3B54DA28134CA8479ABF",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 17497,
+      "sha256": "8B68CF2DB7A9B49DA142F68A8AC23F8F75D93CFB0E40737ABAB37CA8BE2C1638",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 21563,
+      "sha256": "1F9BC3EE3A292A41CE058D58C8C49C7CFE8161ABDBCFA970615C556236945FB7",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 15804,
+      "sha256": "B5768EFB4B41BA183698FF6868329F0686C6EFA4F68F3B54DA28134CA8479ABF",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 848459,
+      "sha256": "E328196478740BA6ECBA098576A6488F7B8A276E38157F91588DEC22B9FB9138",
+      "kind": "trial_step_replay_video",
+      "content_type": "video/webm",
+      "media_id": "media-14",
+      "file_id": "media-14",
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "evidence_status": "COMPLETE",
+  "runner_version": "candidate-bundle-trial-v1",
+  "environment_binding": {
+    "environment_id": "unfamiliar-b-20260925",
+    "url": "http://127.0.0.1:52224/index.html?flow=b&variant=normal",
+    "ownership": "THIS_RUN_EPHEMERAL_LISTENER",
+    "site_manifest_sha256": "0CCF1169179EAEB2DA443CD43CF56F773B2AB0D101A5FF180FEAD840D2773F3A",
+    "files": [
+      {
+        "name": "index.html",
+        "sha256": "0ECFBF618D6E9D33132D1FBCB99B15F3423B04FA79B927C6A57C5D62ABC83D7A"
+      },
+      {
+        "name": "app.js",
+        "sha256": "5DB27F7DE47EE4BB5D32408BFE0866390AD8DAC4423116C49F4119F714138A79"
+      },
+      {
+        "name": "data.json",
+        "sha256": "72FF35CC6766B3B44E752750A23CF83B7100CE26E0B68168114975C35E779029"
+      },
+      {
+        "name": "cases.workbench.json",
+        "sha256": "E25E53C0B1E2B46FE97EE890B72A55B9329AF200B9C0D5E66BF56AEAFE37A53D"
+      }
+    ]
+  },
+  "entry_route": "http://127.0.0.1:52224/index.html?flow=b&variant=normal",
+  "result": {
+    "report_status": "COMPLETE",
+    "test_status": "PASSED",
+    "test_count": 1,
+    "error": null,
+    "complete_pass": true,
+    "stats": {
+      "startTime": "2026-09-25T02:36:21.054Z",
+      "duration": 2737.8860000000004,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 0,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1",
+        "raw_title": "CASE_STEP_1",
+        "category": null,
+        "duration": 290,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2",
+        "raw_title": "CASE_STEP_2",
+        "category": null,
+        "duration": 220,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3",
+        "raw_title": "CASE_STEP_3",
+        "category": null,
+        "duration": 183,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4",
+        "raw_title": "CASE_STEP_4",
+        "category": null,
+        "duration": 170,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_5",
+        "raw_title": "CASE_STEP_5",
+        "category": null,
+        "duration": 189,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      }
+    ]
+  },
+  "step_coverage": {
+    "rule_version": "project-case-step-title-v2",
+    "complete": true,
+    "order_valid": true,
+    "expected_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5"
+    ],
+    "observed_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5"
+    ],
+    "duplicates": [],
+    "missing": [],
+    "unexpected": [],
+    "malformed_titles": [],
+    "unattributed_errors": [],
+    "items": [
+      {
+        "marker": "CASE_STEP_1",
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "observed": true,
+        "raw_title": "CASE_STEP_1",
+        "report_path": [
+          0
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_2",
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "observed": true,
+        "raw_title": "CASE_STEP_2",
+        "report_path": [
+          1
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_3",
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "observed": true,
+        "raw_title": "CASE_STEP_3",
+        "report_path": [
+          2
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_4",
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "observed": true,
+        "raw_title": "CASE_STEP_4",
+        "report_path": [
+          3
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_5",
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "observed": true,
+        "raw_title": "CASE_STEP_5",
+        "report_path": [
+          4
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      }
+    ]
+  },
+  "failure_step": null,
+  "error": null,
+  "same_candidate_hash": true,
+  "specified_defect_detected": false,
+  "process": {
+    "exit_code": 0,
+    "termination": null,
+    "error": null
+  },
+  "step_replay": {
+    "schema": "workbench/step-evidence-replay-v1",
+    "status": "READY",
+    "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+    "candidate_sha256": "03B747D13C166E954C56F31884E3BC2334B4CC104B1FB039653B13FE023429B6",
+    "executed_external_id": "FRESH-B",
+    "executed_case_version": 1,
+    "observer_version": "e2e01-step-observer-v1",
+    "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+    "original_video_precise_seek": false,
+    "evidence_complete": true,
+    "missing_captures": [],
+    "steps": [
+      {
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "raw_title": "CASE_STEP_1",
+        "action": "打开绑定正常入口",
+        "expected": "工单名称筛选为空；列表共3条工单，编号依次WO-201、WO-202、WO-203",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T02:36:22.389Z",
+        "executed_end": "2026-09-25T02:36:22.557Z",
+        "observer_start": "2026-09-25T02:36:22.328Z",
+        "observer_end": "2026-09-25T02:36:22.615Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_1-after.png",
+        "before_screenshot_file_name": "case_step_1-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 119.1694
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "raw_title": "CASE_STEP_2",
+        "action": "工单名称输入巡检任务，点击筛选",
+        "expected": "列表恰有2条同名巡检任务：WO-201北区林工、WO-202南区林工，按此顺序显示",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T02:36:22.657Z",
+        "executed_end": "2026-09-25T02:36:22.799Z",
+        "observer_start": "2026-09-25T02:36:22.617Z",
+        "observer_end": "2026-09-25T02:36:22.837Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_2-after.png",
+        "before_screenshot_file_name": "case_step_2-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 77.65650000000005
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "raw_title": "CASE_STEP_3",
+        "action": "在编号WO-202且区域南区的行点击查看详情",
+        "expected": "进入工单详情；基本信息页签选中；基本信息面板的工单编号WO-202、名称巡检任务、区域南区、负责人林工、优先级高",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T02:36:22.878Z",
+        "executed_end": "2026-09-25T02:36:22.976Z",
+        "observer_start": "2026-09-25T02:36:22.838Z",
+        "observer_end": "2026-09-25T02:36:23.020Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_3-after.png",
+        "before_screenshot_file_name": "case_step_3-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 84.77059999999983
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "raw_title": "CASE_STEP_4",
+        "action": "切换到处理记录页签",
+        "expected": "处理记录页签选中、基本信息页签未选中；处理记录面板工单编号WO-202、最近处理人赵工、处理结果等待备件",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T02:36:23.077Z",
+        "executed_end": "2026-09-25T02:36:23.142Z",
+        "observer_start": "2026-09-25T02:36:23.021Z",
+        "observer_end": "2026-09-25T02:36:23.191Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_4-after.png",
+        "before_screenshot_file_name": "case_step_4-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 104.29989999999998
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "raw_title": "CASE_STEP_5",
+        "action": "点击返回列表",
+        "expected": "回到工单列表；工单名称仍为巡检任务；列表仍恰有2条，编号依次WO-201、WO-202，区域分别北区、南区，负责人均为林工",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-25T02:36:23.241Z",
+        "executed_end": "2026-09-25T02:36:23.351Z",
+        "observer_start": "2026-09-25T02:36:23.192Z",
+        "observer_end": "2026-09-25T02:36:23.381Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_5-after.png",
+        "before_screenshot_file_name": "case_step_5-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 78.9218000000003
+      }
+    ],
+    "chapters": [
+      {
+        "step_id": "CASE_STEP_1",
+        "start_seconds": 0,
+        "result_start_seconds": 1.226,
+        "end_seconds": 3.033,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "start_seconds": 3.033,
+        "result_start_seconds": 4.250400000095367,
+        "end_seconds": 6.051400000095367,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "start_seconds": 6.051400000095367,
+        "result_start_seconds": 7.2658000000715255,
+        "end_seconds": 9.075400000095367,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "start_seconds": 9.075400000095367,
+        "result_start_seconds": 10.282400000095368,
+        "end_seconds": 12.097800000071526,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "start_seconds": 12.097800000071526,
+        "result_start_seconds": 13.300200000047683,
+        "end_seconds": 15.1005,
+        "screenshot_phase": "after"
+      }
+    ],
+    "duration_seconds": 15.2205,
+    "output_file_name": "step-replay-v1.webm",
+    "reading_holds": "1200ms action / 1800ms result"
+  },
+  "evidence_error": null,
+  "finished_at": "2026-09-25T02:36:39.884Z"
+}

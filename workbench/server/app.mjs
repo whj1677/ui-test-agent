@@ -1,3 +1,4 @@
+import { developmentRecords, mediaType } from './build/candidate-trials.mjs';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -104,16 +105,17 @@ async function sendBuildFile(response, buildStore, taskId, fileId) {
   if (realFile !== realRoot && !realFile.startsWith(`${realRoot}${path.sep}`)) return sendJson(response, 403, { error: 'BUILD_FILE_PATH_OUTSIDE_TASK' });
   const stat = await fs.stat(realFile);
   if (!stat.isFile() || stat.size !== item.bytes || await sha256File(realFile) !== item.sha256) return sendJson(response, 409, { error: 'BUILD_FILE_CHANGED' });
-  response.writeHead(200, { ...securityHeaders(item.content_type), 'content-length': stat.size });
+  response.writeHead(200, { ...securityHeaders((task.development && mediaType(item)?.content_type) || item.content_type), 'content-length': stat.size });
   response.end(await fs.readFile(realFile));
 }
 
 async function sendBuildMedia(request, response, buildStore, taskId, fileId) {
   const task = await buildStore.getTask(taskId);
   const item = task?.files?.find((file) => file.file_id === fileId);
-  if (!item || !/^(?:normal|counterexample)_(?:screenshot|video|caption_video|step_replay_video|trace)$/.test(item.kind || '')) {
+  if (!item || !(task.development && mediaType(item)) && !/^(?:normal|counterexample)_(?:screenshot|video|caption_video|step_replay_video|trace)$/.test(item.kind || '')) {
     return sendJson(response, 404, { error: 'BUILD_MEDIA_NOT_FOUND' });
   }
+  if (task.development && mediaType(item)) return sendRegisteredMedia(request, response, buildStore.taskDirectory(taskId), { ...item, ...mediaType(item) });
   const mediaKind = item.kind.endsWith('_screenshot') ? 'screenshot' : item.kind.endsWith('_video') ? 'video' : 'trace';
   return sendRegisteredMedia(request, response, buildStore.taskDirectory(taskId), { ...item, kind: mediaKind }, {
     missing: 'BUILD_MEDIA_MISSING', outside: 'BUILD_MEDIA_PATH_OUTSIDE_TASK', changed: 'BUILD_MEDIA_CHANGED',
@@ -209,6 +211,7 @@ export function createWorkbenchServer(options = {}) {
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
+      if (buildManager?.generationDisabled && request.method === 'POST' && (url.pathname === '/api/build/tasks' || /\/api\/build\/tasks\/(develop|[^/]+\/(start|revise|revision))$/.test(url.pathname))) return sendJson(response, 403, { error: 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE' });
       if (request.method === 'GET' && url.pathname === '/api/health') {
         const buildDiagnostics = buildManager?.diagnostics?.() || null;
         sendJson(response, 200, {
@@ -311,18 +314,33 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 200, { tasks });
         return;
       }
+      const automation = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/([^/]+)\/automation$/);
+      if (buildManager && request.method === 'GET' && automation) {
+        sendJson(response, 200, await buildManager.caseAutomation(decodeURIComponent(automation[1]), decodeURIComponent(automation[2]), Number(url.searchParams.get('version')))); return;
+      }
+      if (buildManager && request.method === 'POST' && url.pathname === '/api/candidate-trials') {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 202, await buildManager.startCandidateTrial(await readJsonBody(request))); return;
+      }
+      const trialStop = url.pathname.match(/^\/api\/candidate-trials\/([^/]+)\/stop$/);
+      if (buildManager && request.method === 'POST' && trialStop) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 202, await buildManager.stopCandidateTrial(decodeURIComponent(trialStop[1]))); return;
+      }
       const projectExecutionRecords = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/execution-records$/);
       if (buildStore && request.method === 'GET' && projectExecutionRecords) {
         const projectId = decodeURIComponent(projectExecutionRecords[1]);
         const tasks = (await buildStore.listTasks()).filter((task) => task.source?.project_id === projectId);
         const project = caseStore ? await caseStore.getProject(projectId) : null;
-        const records = tasks.flatMap((task) => (task.candidates || []).flatMap((candidate) => (candidate.trial_runs || []).map((run) => ({
+        const records = tasks.filter(task => !task.development).flatMap((task) => (task.candidates || []).flatMap((candidate) => (candidate.trial_runs || []).map((run) => ({
           ...run, project_id: projectId, project_name: task.source.project_name, source_build_task_id: task.task_id,
           candidate_version: candidate.version, candidate_sha256: candidate.sha256,
           frozen_case_content: project?.cases.find((item) => item.case_id === run.executed_case_id)
             ?.versions.find((version) => version.version === run.executed_case_version)?.content || null,
           files: (task.files || []).filter((file) => run.media_file_ids?.includes(file.file_id)),
         }))));
+        records.push(...tasks.flatMap(developmentRecords));
+        if (store) records.push(...(await store.listRuns()).filter(r => r.schema === 'workbench/candidate-trial-v1' && r.project_id === projectId));
         sendJson(response, 200, { records: records.sort((left, right) => String(left.started_at).localeCompare(String(right.started_at))) });
         return;
       }

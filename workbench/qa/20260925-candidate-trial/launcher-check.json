@@ -1,0 +1,15 @@
+{
+  "command": "powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1 -Data fresh-b",
+  "service": "approved-test-workbench",
+  "status": "ready",
+  "active_run_id": null,
+  "run_count": 2,
+  "projects": [
+    {
+      "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+      "name": "20260925 陌生流程 B"
+    }
+  ],
+  "entry": "http://127.0.0.1:4322/workspace/",
+  "model_calls_triggered": 0
+}

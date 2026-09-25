@@ -1,5 +1,25 @@
 # 批准脚本测试工作台（第一阶段）
 
+### 已有 FRESH-B 文件包零模型试跑
+
+在D盘主目录执行统一启动入口：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1 -Data fresh-b
+```
+
+打开 http://127.0.0.1:4322/workspace/ → **20260925 陌生流程 B** → **FRESH-B** → **自动化脚本**。
+
+- **查看代码／文件清单／已有运行**只读。旧脚本始终标明原用例版本；新版本不会继承旧脚本的通过状态。
+- **试跑当前文件包（不调用模型）**明确启动一次新Playwright运行；候选仍未批准。可在新结果页取消，刷新、播放或下载不会重跑。
+- **生成新脚本**链接去既有自主建例入口；其中“开始已授权任务”会调用模型，需要独立建例授权。`fresh-b`配置在服务端禁止模型启动，本批没有新增建例额度。
+- 新运行在项目**执行记录**标为“本次显式试跑”，与“开发自测”“首次独立验证”分开。中文步骤回放由运行时截图生成，**非原始连续录像**；原始录像单独播放/下载，Trace和截图属于所选run。旧运行缺步骤截图会明确提示，不补拍。
+- 本批正常run：`trial-6220468896555a695ecae5e1e73260af133bd6f3`；故障run：`trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002`。查看它们不执行任何测试。
+- 受控验收入口是在同一用例详情URL附加 `&validation=negative` 后出现的“受控故障验证（不调用模型）”；仍须匹配服务端项目/版本/完整包/环境授权，不接受用户自填URL。
+
+此配置直接使用本机原 `workbench/.local/fresh25-b`，不复制/合并数据库。站点从已提交冻结文件核验后每次按需监听新本机端口，运行结束自动关闭；旧临时地址不会复用。工作台前台运行，**Ctrl+C停止**；4322已占用则拒绝启动，不终止未知进程或另起端口。Git不包含本机历史数据库、会话及原始录像；其他电脑缺这些资料时不会伪造项目关联。详细结果见[自主建例追加报告](docs/AUTONOMOUS_DEVELOPMENT_20260925.md)。
+
+
 2026-09-25 新增已登记授权的“自主建例”入口：项目页 → 自主建例 → 开始已授权任务。Agent在同一DSH会话观察、编写、实际自测并有限修订；提交后由工作台独立验证，最多停在等待人工核对。详细范围和证据见 [任务内自主建例记录](docs/AUTONOMOUS_DEVELOPMENT_20260925.md)。日常启动脚本和4322入口保持不变。
 
 环境接线：`WORKBENCH_DEVELOPMENT_ENVIRONMENTS`指定本机JSON数组文件，每项包含`id`、`normal_url`、`fault_url`和既有`detection`契约，仅支持已登记的本机合成环境。管理员通过`registerDevelopmentAuthorization`绑定项目、CONFIRMED用例版本/哈希及环境；普通页面/API不能自行授权或提交任意URL。授权账本位于现有BuildTaskStore内，历史账本不重置。运行依赖根目录、workbench、harness-probe三个锁文件及本机DSH私有运行时；不打包凭据。

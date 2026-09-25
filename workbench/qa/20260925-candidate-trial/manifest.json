@@ -1,0 +1,199 @@
+{
+  "schema": "candidate-trial-evidence-v1",
+  "harness_starts": 0,
+  "model_calls": 0,
+  "product_executions": 2,
+  "selection": {
+    "project_id": "project-2564e684-1dbb-460a-b644-bc344f847a48",
+    "case_id": "case-778027de-f333-43ab-ab73-7fcf4cb4b930",
+    "case_version": 1,
+    "content_sha256": "6E0C725DCB8F8C41B42B038659A9B70BAC5DDEE2C9041A05E9237A24CF44F5B6",
+    "source_task_id": "build-20260925021610-943fbf86",
+    "candidate_version": 1,
+    "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+    "environment_id": "unfamiliar-b-20260925",
+    "lanes": [
+      "normal",
+      "negative"
+    ]
+  },
+  "files": [
+    {
+      "file": "normal-run.json",
+      "source_sha256": "EBBBCD47A86D5A6A3C3E97F6C8FDCA6B7105989047AF5A9974E27605865EBDDA",
+      "sha256": "EBBBCD47A86D5A6A3C3E97F6C8FDCA6B7105989047AF5A9974E27605865EBDDA",
+      "bytes": 27589
+    },
+    {
+      "file": "normal-playwright-report.json",
+      "source_sha256": "4E55A0E0A9360205A4E92CBAD49E26EB2A568B15B467CCD68BC4B437B9AFC840",
+      "sha256": "85518ECB2E66CCEB4E3FEEC421880710130127C3BD6BF50D075B27D794A542D4",
+      "bytes": 5137
+    },
+    {
+      "file": "normal-step-observations.ndjson",
+      "source_sha256": "5AF84BFE3C22CDAB081D808543F36B03CF2204B7F0B8446D2435DC8FF8BF9BF4",
+      "sha256": "5AF84BFE3C22CDAB081D808543F36B03CF2204B7F0B8446D2435DC8FF8BF9BF4",
+      "bytes": 5054
+    },
+    {
+      "file": "normal-result.png",
+      "source_sha256": "4DB03AD5658B345355498A140A3829B6F4C14C13ACFACC718DCD5E9D6F36BD87",
+      "sha256": "4DB03AD5658B345355498A140A3829B6F4C14C13ACFACC718DCD5E9D6F36BD87",
+      "bytes": 421205
+    },
+    {
+      "file": "negative-run.json",
+      "source_sha256": "B5A7B4D7EC0BA97CBF82A3B887B335056EA5403E88A4E9CF2BE0C42B5B8B1BC6",
+      "sha256": "CF90BBDF22B25BE6EE56FA47E93FFB2E802C43D9BCBACED40D64A149A53641E8",
+      "bytes": 30770
+    },
+    {
+      "file": "negative-playwright-report.json",
+      "source_sha256": "0D315630D0821B7E46AF01295E6213CF6E305476728D1D7CB4435436C1C8F4A6",
+      "sha256": "87EDEF4762E2038090BD9F37517B284D436FF56AF5156F3BB118084CA85E82C9",
+      "bytes": 13135
+    },
+    {
+      "file": "negative-step-observations.ndjson",
+      "source_sha256": "C3DD102392D983C7854242D2EB7ECECF42601506303E778E9D75B397E9E10510",
+      "sha256": "CCE0E47C061D7194BBB5F23CC8232392415A5C8ABF40F13698469F9E23D381F0",
+      "bytes": 4900
+    },
+    {
+      "file": "negative-result.png",
+      "source_sha256": "27A93ADD7BA6C11381614329FE7ED9783AF366C9A50DC25E112E6CCB16F0B1AE",
+      "sha256": "27A93ADD7BA6C11381614329FE7ED9783AF366C9A50DC25E112E6CCB16F0B1AE",
+      "bytes": 406703
+    },
+    {
+      "file": "case-automation.png",
+      "source_sha256": "4149BD30CE73A0D13D9FE6F3A0E1090DCD0B90B99CA9D5B4DEF95B23A439F4F7",
+      "sha256": "4149BD30CE73A0D13D9FE6F3A0E1090DCD0B90B99CA9D5B4DEF95B23A439F4F7",
+      "bytes": 249790
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "status": "PASSED",
+      "complete_pass": true,
+      "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+      "evidence_status": "COMPLETE",
+      "environment": {
+        "environment_id": "unfamiliar-b-20260925",
+        "url": "http://127.0.0.1:52224/index.html?flow=b&variant=normal",
+        "ownership": "THIS_RUN_EPHEMERAL_LISTENER",
+        "site_manifest_sha256": "0CCF1169179EAEB2DA443CD43CF56F773B2AB0D101A5FF180FEAD840D2773F3A",
+        "files": [
+          {
+            "name": "index.html",
+            "sha256": "0ECFBF618D6E9D33132D1FBCB99B15F3423B04FA79B927C6A57C5D62ABC83D7A"
+          },
+          {
+            "name": "app.js",
+            "sha256": "5DB27F7DE47EE4BB5D32408BFE0866390AD8DAC4423116C49F4119F714138A79"
+          },
+          {
+            "name": "data.json",
+            "sha256": "72FF35CC6766B3B44E752750A23CF83B7100CE26E0B68168114975C35E779029"
+          },
+          {
+            "name": "cases.workbench.json",
+            "sha256": "E25E53C0B1E2B46FE97EE890B72A55B9329AF200B9C0D5E66BF56AEAFE37A53D"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step": "CASE_STEP_1",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_2",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_3",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_4",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_5",
+          "status": "PASSED"
+        }
+      ],
+      "error": null
+    },
+    {
+      "run_id": "trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002",
+      "status": "FAILED",
+      "complete_pass": false,
+      "bundle_sha256": "B85AA8B5BBBC57C175457358C65AA4E63660DD77C9021BB1DAE7DE2B6F2CFA02",
+      "evidence_status": "COMPLETE",
+      "environment": {
+        "environment_id": "unfamiliar-b-20260925",
+        "url": "http://127.0.0.1:59216/index.html?flow=b&variant=fault",
+        "ownership": "THIS_RUN_EPHEMERAL_LISTENER",
+        "site_manifest_sha256": "0CCF1169179EAEB2DA443CD43CF56F773B2AB0D101A5FF180FEAD840D2773F3A",
+        "files": [
+          {
+            "name": "index.html",
+            "sha256": "0ECFBF618D6E9D33132D1FBCB99B15F3423B04FA79B927C6A57C5D62ABC83D7A"
+          },
+          {
+            "name": "app.js",
+            "sha256": "5DB27F7DE47EE4BB5D32408BFE0866390AD8DAC4423116C49F4119F714138A79"
+          },
+          {
+            "name": "data.json",
+            "sha256": "72FF35CC6766B3B44E752750A23CF83B7100CE26E0B68168114975C35E779029"
+          },
+          {
+            "name": "cases.workbench.json",
+            "sha256": "E25E53C0B1E2B46FE97EE890B72A55B9329AF200B9C0D5E66BF56AEAFE37A53D"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "step": "CASE_STEP_1",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_2",
+          "status": "PASSED"
+        },
+        {
+          "step": "CASE_STEP_3",
+          "status": "FAILED"
+        },
+        {
+          "step": "CASE_STEP_4",
+          "status": "NOT_EXECUTED"
+        },
+        {
+          "step": "CASE_STEP_5",
+          "status": "NOT_EXECUTED"
+        }
+      ],
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\n    14 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n",
+        "expected": "WO-202",
+        "actual": "WO-201",
+        "attribution": "PENDING_ANALYSIS"
+      }
+    }
+  ],
+  "redaction": "Absolute repository paths replaced in JSON/text; no sessions, credentials, original videos or trace archives exported.",
+  "source_unchanged": {
+    "task_sha256": "41857649B63C39317535DD0946587CC385F3EE463AC1AA50C5E0FB497DC31AF3",
+    "registered_files": 32,
+    "harness_starts": 1,
+    "self_tests": 1
+  }
+}

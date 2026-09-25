@@ -1,3 +1,4 @@
+import { submitCandidateTrial, stopCandidateTrial, caseAutomation } from './candidate-trials.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
@@ -210,6 +211,11 @@ export class BuildTaskManager {
   constructor(options) {
     this.store = options.store;
     this.caseStore = options.caseStore || null;
+    this.runStore = options.runStore || null;
+    this.generationDisabled = options.generationDisabled === true;
+    this.candidateTrialAuthorizations = options.candidateTrialAuthorizations || [];
+    this.candidateTrialEnvironments = options.candidateTrialEnvironments || [];
+    this.trialRequests = new Map();
     this.paths = options.paths;
     this.adapter = options.adapter || buildAdapter;
     this.browserExecutable = options.browserExecutable || process.env.DSH_PROBE_BROWSER_EXECUTABLE;
@@ -1324,7 +1330,19 @@ export class BuildTaskManager {
     }));
   }
 
+  caseAutomation(projectId, caseId, version) { return caseAutomation(this, projectId, caseId, version); }
+  startCandidateTrial(request) {
+    const key = JSON.stringify([request?.project_id, request?.request_id]);
+    const serialized = JSON.stringify(Object.fromEntries(Object.keys(request || {}).sort().map(k => [k, request[k]])));
+    const pending = this.trialRequests.get(key);
+    if (pending) return pending.serialized === serialized ? pending.promise : Promise.reject(new Error('TRIAL_REQUEST_CONFLICT'));
+    const promise = submitCandidateTrial(this, request).finally(() => this.trialRequests.delete(key));
+    this.trialRequests.set(key, { serialized, promise });
+    return promise;
+  }
+  stopCandidateTrial(runId) { return stopCandidateTrial(this, runId); }
   async stop(taskIdValue) {
+    if (this.active?.taskId === taskIdValue && this.active?.runId) return this.stopCandidateTrial(this.active.runId);
     if (!this.active || this.active.taskId !== taskIdValue || this.active.phase === 'FINALIZING') throw new Error('BUILD_TASK_NOT_ACTIVE_OR_NOT_OWNED');
     const active = this.active;
     const recorded = this.#recordLifecycle(taskIdValue, active.attemptId, { type: 'cancel_requested', reason: 'user_cancelled', partial_observation: true })

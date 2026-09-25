@@ -85,3 +85,5 @@ REQ-0037 v4真实验证发现浏览器.playwright-mcp自动观察输出与执行
 REQ-0037 v5：现有DSH预检已替换engineering_fixture为真实DevelopmentSession/执行器，串联实际浏览器快照落盘与原生读取、helper、诊断、自测、报告/图片原字节。browser_snapshot保存只允许受控单文件yml；恢复任务显式记录旧task_id/seed SHA/运行器commit/工程正常结果。真实恢复技术验证完成，详细预算、失败链与残余工具限制见自主建例报告；未自动批准。
 
 REQ-0037 v6：产品代码及政策保持不变，新增独立合成站两流程和项目/用例/环境授权，均从生产自主建例入口启动；每条首稿正常五步通过、指定故障检出，完整包与自测一致。仅两样本技术验证，不代表稳定性或人工批准；证据见既有自主建例报告追加记录。
+
+REQ-0037 v7：用例详情按内部case_id/版本/内容哈希关联自主候选，显式试跑按完整包授权；复用BuildTaskManager调度、WorkbenchStore独立run、verify/步骤observer/replay。新run保存实际环境绑定及完整包，旧task保持终态和原字节。原生视频、中文步骤回放、截图与Trace按run读回；旧缺步骤截图不补拍。统一启动脚本新增fresh-b零模型配置，使用原独立数据与4322；冻结站点每run临时启动并关闭，不接受任意URL或重置模型额度。

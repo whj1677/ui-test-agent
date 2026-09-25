@@ -1,3 +1,4 @@
+import { frozenTrialEnvironment } from './build/trial-environment.mjs';
 import { createWorkbenchServer } from './app.mjs';
 import { createPaths } from './paths.mjs';
 import { WorkbenchStore } from './store.mjs';
@@ -53,7 +54,13 @@ if (process.env.WORKBENCH_DEVELOPMENT_ENVIRONMENTS) {
   developmentEnvironments = JSON.parse(await fs.readFile(process.env.WORKBENCH_DEVELOPMENT_ENVIRONMENTS, 'utf8'));
   if (!Array.isArray(developmentEnvironments)) throw new Error('DEVELOPMENT_ENVIRONMENTS_INVALID');
 }
+const trialConfig = process.env.WORKBENCH_CANDIDATE_TRIAL_CONFIG
+  ? JSON.parse(await fs.readFile(process.env.WORKBENCH_CANDIDATE_TRIAL_CONFIG, 'utf8')) : {};
 const buildManager = new BuildTaskManager({
+  runStore: store,
+  generationDisabled: trialConfig.model_calls_allowed === false,
+  candidateTrialAuthorizations: trialConfig.authorizations || [],
+  candidateTrialEnvironments: (trialConfig.environments || []).map(frozenTrialEnvironment),
   store: buildStore,
   caseStore,
   paths,
@@ -93,3 +100,6 @@ async function shutdown(signal) {
 }
 process.once('SIGINT', () => void shutdown('SIGINT'));
 process.once('SIGTERM', () => void shutdown('SIGTERM'));
+
+// Owned test/launcher IPC only; no HTTP shutdown endpoint.
+if (process.send) process.on('message', message => { if (message?.type === 'shutdown') void shutdown('owned-ipc').then(() => process.disconnect()); });

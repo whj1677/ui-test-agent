@@ -1,0 +1,187 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<REPO>\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "observed.spec.mjs",
+      "--config",
+      "<REPO>\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "<REPO>\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "<REPO>/workbench/.local/fresh25-b/data/runs/trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002/execution/observer-entry",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<REPO>/workbench/.local/fresh25-b/data/runs/trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002/execution/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<REPO>/workbench/.local/fresh25-b/data/runs/trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002/execution/observer-entry",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\execution\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "observed.spec.mjs",
+      "file": "observed.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "同名工单目标选择、详情页签及返回保留筛选",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6831,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:89:50\n    at <REPO>\\workbench\\server\\build\\step-observer.mjs:45:23\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:78:3",
+                    "location": {
+                      "file": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs",
+                      "column": 50,
+                      "line": 89
+                    },
+                    "snippet": "  87 |\n  88 |     const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n> 89 |     await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n     |                                                  ^\n  90 |     await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n  91 |     await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n  92 |     await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs",
+                        "column": 50,
+                        "line": 89
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n\n\n  87 |\n  88 |     const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n> 89 |     await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n     |                                                  ^\n  90 |     await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n  91 |     await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n  92 |     await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:89:50\n    at <REPO>\\workbench\\server\\build\\step-observer.mjs:45:23\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:78:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 256
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 207
+                    },
+                    {
+                      "title": "CASE_STEP_3",
+                      "duration": 5167,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\nExpected: \u001b[32m\"WO-20\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"WO-20\u001b[7m1\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tabpanel', { name: '基本信息' }).locator('dt:text-is(\"工单编号\") + dd')\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>WO-201</dd>\u001b[22m\n\u001b[2m       - unexpected value \"WO-201\"\u001b[22m\n\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:89:50\n    at <REPO>\\workbench\\server\\build\\step-observer.mjs:45:23\n    at <REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs:78:3",
+                        "location": {
+                          "file": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs",
+                          "column": 50,
+                          "line": 89
+                        },
+                        "snippet": "  87 |\n  88 |     const basicPanel = page.getByRole(\"tabpanel\", { name: \"基本信息\" });\n> 89 |     await expect(fieldValue(basicPanel, \"工单编号\")).toHaveText(\"WO-202\");\n     |                                                  ^\n  90 |     await expect(fieldValue(basicPanel, \"名称\")).toHaveText(\"巡检任务\");\n  91 |     await expect(fieldValue(basicPanel, \"区域\")).toHaveText(\"南区\");\n  92 |     await expect(fieldValue(basicPanel, \"负责人\")).toHaveText(\"林工\");"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T02:36:43.466Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\execution\\artifacts\\observed-同名工单目标选择、详情页签及返回保留筛选\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\execution\\artifacts\\observed-同名工单目标选择、详情页签及返回保留筛选\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\execution\\artifacts\\observed-同名工单目标选择、详情页签及返回保留筛选\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\execution\\artifacts\\observed-同名工单目标选择、详情页签及返回保留筛选\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<REPO>\\workbench\\.local\\fresh25-b\\data\\runs\\trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002\\bundle\\candidate.spec.mjs",
+                    "column": 50,
+                    "line": 89
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7937ecc4f5476f63fef5-43b6fb7afc7b98c6cd0b",
+          "file": "../../bundle/candidate.spec.mjs",
+          "line": 34,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T02:36:42.834Z",
+    "duration": 8036.072999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "source_task_sha256": "41857649B63C39317535DD0946587CC385F3EE463AC1AA50C5E0FB497DC31AF3",
+  "model_calls": 0,
+  "harness_starts": 0,
+  "browser": [
+    {
+      "run_id": "trial-6220468896555a695ecae5e1e73260af133bd6f3",
+      "media": [
+        {
+          "testId": "execution-video",
+          "played": true,
+          "paused": true,
+          "seeked": true,
+          "mouse_dragged": true,
+          "duration": 15.2205
+        },
+        {
+          "testId": "original-video",
+          "played": true,
+          "paused": true,
+          "seeked": true,
+          "mouse_dragged": true,
+          "duration": 2
+        }
+      ],
+      "chapter_seek": true,
+      "screenshot_decoded": true,
+      "downloads": [
+        {
+          "name": "下载本次 Trace",
+          "sha256": "1E8510A699FAFDB808827C3D724CCC2C652B1736527CC780DC1E7CF79B282AF4",
+          "bytes": 314859
+        },
+        {
+          "name": "下载带中文字幕的步骤证据回放",
+          "sha256": "E328196478740BA6ECBA098576A6488F7B8A276E38157F91588DEC22B9FB9138",
+          "bytes": 848459
+        },
+        {
+          "name": "下载原始连续录像",
+          "sha256": "19A2819703D8E4FE8A591B9AD3D9BB00CA05DF5B962C85C00ACFA832ECC05FC4",
+          "bytes": 53770
+        }
+      ]
+    },
+    {
+      "run_id": "trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002",
+      "media": [
+        {
+          "testId": "execution-video",
+          "played": true,
+          "paused": true,
+          "seeked": true,
+          "mouse_dragged": true,
+          "duration": 9.197399
+        },
+        {
+          "testId": "original-video",
+          "played": true,
+          "paused": true,
+          "seeked": true,
+          "mouse_dragged": true,
+          "duration": 7.56
+        }
+      ],
+      "chapter_seek": true,
+      "screenshot_decoded": true,
+      "downloads": [
+        {
+          "name": "下载本次 Trace",
+          "sha256": "92234F1158F9EEBADE30DAE60612E4E7AC4E2B37F694BFDAA0852D8E85EE230C",
+          "bytes": 239697
+        },
+        {
+          "name": "下载带中文字幕的步骤证据回放",
+          "sha256": "810AE9FC0EFD786AD8B3DE30293CDF92DE65FF62C0DC0AAF04C0AA8BC8F0435C",
+          "bytes": 567074
+        },
+        {
+          "name": "下载原始连续录像",
+          "sha256": "728A7187BCC153786ED4C0F6805C99A535CD30FBF2F36AC15F290E3E67F26775",
+          "bytes": 90732
+        }
+      ]
+    }
+  ],
+  "restart_readback": true,
+  "legacy_media_played": true,
+  "switch_records_verified": true,
+  "source_unchanged": true
+}

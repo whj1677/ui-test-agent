@@ -1,129 +1,3 @@
-# Delivery Evidence
-
-## Delivery Evidence (managed)
-
-- Generated at: `2026-09-25T10:48:44+08:00`
-- Record: `REQ-0037-autonomous-candidate-development`
-- Change fingerprint: `81fcd255cdba971a5c1a0c8a96eb6eebfaa05aaa8f228b22c8b82c40d3d62ea2`
-- Verification source: `collector-executed-v1`
-- Verification state: `集成测试通过`
-- Command: `node --test workbench/tests/*.test.mjs`
-- Exit code: `0`
-- Test count: `134`
-- Failure count: `0`
-- Skipped count: `0`
-- Log path: `workbench/qa/20260925-candidate-trial/collector-final.log`
-- Log SHA-256: `224668682755bfda0c4149dc8554dd89937b77017a0d1ebd9d84718a3cf64d4d`
-
-### Git Status
-
-```text
- M .gitattributes
- M docs/modules/test-workbench.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/03_tasks.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/04_verification.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/05_trace.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/change_log.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/current_state.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/requirement.source.json
- M workbench/README.md
- M workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md
- M workbench/scripts/start-workbench.ps1
- M workbench/server/app.mjs
- M workbench/server/build/manager.mjs
- M workbench/server/index.mjs
- M workbench/web-v2/app.js
-?? workbench/config/fresh-b-trial.json
-?? workbench/qa/20260925-candidate-trial/browser-summary.json
-?? workbench/qa/20260925-candidate-trial/case-automation.png
-?? workbench/qa/20260925-candidate-trial/collector-engineering.log
-?? workbench/qa/20260925-candidate-trial/collector-final.log
-?? workbench/qa/20260925-candidate-trial/engineering.log
-?? workbench/qa/20260925-candidate-trial/launcher-check.json
-?? workbench/qa/20260925-candidate-trial/manifest.json
-?? workbench/qa/20260925-candidate-trial/negative-playwright-report.json
-?? workbench/qa/20260925-candidate-trial/negative-result.png
-?? workbench/qa/20260925-candidate-trial/negative-run.json
-?? workbench/qa/20260925-candidate-trial/negative-step-observations.ndjson
-?? workbench/qa/20260925-candidate-trial/normal-playwright-report.json
-?? workbench/qa/20260925-candidate-trial/normal-result.png
-?? workbench/qa/20260925-candidate-trial/normal-run.json
-?? workbench/qa/20260925-candidate-trial/normal-step-observations.ndjson
-?? workbench/scripts/accept-candidate-trial.mjs
-?? workbench/scripts/export-candidate-trial.mjs
-?? workbench/server/build/candidate-trials.mjs
-?? workbench/server/build/trial-environment.mjs
-?? workbench/tests/candidate-trials.test.mjs
-```
-
-### Git Diff Stat
-
-```text
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/04_verification.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/05_trace.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/change_log.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/current_state.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md', LF will be replaced by CRLF the next time Git touches it
- .gitattributes                                     |   2 +
- docs/modules/test-workbench.md                     |   2 +
- .../00_user_requirement.md                         |   2 +
- .../01_development_requirement.md                  |   1 +
- .../02_design.md                                   |   2 +
- .../03_tasks.md                                    |   1 +
- .../04_verification.md                             |   1 +
- .../05_trace.md                                    |   2 +
- .../change_log.md                                  |   1 +
- .../current_state.md                               |   9 +-
- .../delivery_evidence.md                           | 534 ++++++++++-----------
- .../requirement.source.json                        |  87 +++-
- workbench/README.md                                |  20 +
- workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md  |  35 ++
- workbench/scripts/start-workbench.ps1              |  21 +-
- workbench/server/app.mjs                           |  24 +-
- workbench/server/build/manager.mjs                 |  18 +
- workbench/server/index.mjs                         |  10 +
- workbench/web-v2/app.js                            |  56 ++-
- 19 files changed, 536 insertions(+), 292 deletions(-)
-```
-
-### Untracked Files
-
-```text
-workbench/config/fresh-b-trial.json
-workbench/qa/20260925-candidate-trial/browser-summary.json
-workbench/qa/20260925-candidate-trial/case-automation.png
-workbench/qa/20260925-candidate-trial/collector-engineering.log
-workbench/qa/20260925-candidate-trial/collector-final.log
-workbench/qa/20260925-candidate-trial/engineering.log
-workbench/qa/20260925-candidate-trial/launcher-check.json
-workbench/qa/20260925-candidate-trial/manifest.json
-workbench/qa/20260925-candidate-trial/negative-playwright-report.json
-workbench/qa/20260925-candidate-trial/negative-result.png
-workbench/qa/20260925-candidate-trial/negative-run.json
-workbench/qa/20260925-candidate-trial/negative-step-observations.ndjson
-workbench/qa/20260925-candidate-trial/normal-playwright-report.json
-workbench/qa/20260925-candidate-trial/normal-result.png
-workbench/qa/20260925-candidate-trial/normal-run.json
-workbench/qa/20260925-candidate-trial/normal-step-observations.ndjson
-workbench/scripts/accept-candidate-trial.mjs
-workbench/scripts/export-candidate-trial.mjs
-workbench/server/build/candidate-trials.mjs
-workbench/server/build/trial-environment.mjs
-workbench/tests/candidate-trials.test.mjs
-```
-
-### Verification Log Excerpt
-
-```text
 ai-engineering-context verification-log-v1
 Started at: 2026-09-25T10:47:54+08:00
 Command: node --test workbench/tests/*.test.mjs
@@ -683,24 +557,272 @@ ok 91 - production lifecycle final indexing: normal, delayed append and close
   duration_ms: 1383.2888
   type: 'test'
   ...
-# {"mode":"cancel","integrity_state":"FINALIZED"
-... truncated ...
-```
-
-### Sync Record Status
-
-```text
-DRY-RUN: no derived changes for REQ-0037-autonomous-candidate-development; explicit implementation states retained, never inferred from verification.
-```
-
-### Check AI Context
-
-- Exit code: `0`
-
-```text
-PASS ai-engineering-context checks
-```
-
-### Notes
-
-Final coverage completeness regression; no new product execution; 2 original candidate reruns retained; zero model
+# {"mode":"cancel","integrity_state":"FINALIZED","registered_bytes":2364,"actual_bytes":2364,"registered_sha256":"CF2A1FA0B2310AEC366ED672D1E250F0B3D59DCAB90D1287B9F7FD1205C97441","actual_sha256":"CF2A1FA0B2310AEC366ED672D1E250F0B3D59DCAB90D1287B9F7FD1205C97441","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","cancel_requested","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: cancel, delayed append and close
+ok 92 - production lifecycle final indexing: cancel, delayed append and close
+  ---
+  duration_ms: 1336.4444
+  type: 'test'
+  ...
+# {"mode":"exception","integrity_state":"FINALIZED","registered_bytes":2053,"actual_bytes":2053,"registered_sha256":"471D7BB9626C6B66C85AB7A091DCF3BF08B3F4DD5B85F141346F8B3AF6EB1360","actual_sha256":"471D7BB9626C6B66C85AB7A091DCF3BF08B3F4DD5B85F141346F8B3AF6EB1360","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: exception, delayed append and close
+ok 93 - production lifecycle final indexing: exception, delayed append and close
+  ---
+  duration_ms: 1029.2562
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 94 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 42.752
+  type: 'test'
+  ...
+# Subtest: string
+ok 95 - string
+  ---
+  duration_ms: 0.7642
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 96 - ansi
+  ---
+  duration_ms: 0.1675
+  type: 'test'
+  ...
+# Subtest: missing
+ok 97 - missing
+  ---
+  duration_ms: 0.2634
+  type: 'test'
+  ...
+# Subtest: strict
+ok 98 - strict
+  ---
+  duration_ms: 0.3827
+  type: 'test'
+  ...
+# Subtest: single side
+ok 99 - single side
+  ---
+  duration_ms: 0.1292
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 100 - timeout
+  ---
+  duration_ms: 0.4115
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 101 - truncated array
+  ---
+  duration_ms: 0.9614
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 102 - truncated diff
+  ---
+  duration_ms: 0.8036
+  type: 'test'
+  ...
+# Subtest: array
+ok 103 - array
+  ---
+  duration_ms: 0.7725
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 104 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 2.0259
+  type: 'test'
+  ...
+# Subtest: approved sorting asset is derived from the real frozen records
+ok 105 - approved sorting asset is derived from the real frozen records
+  ---
+  duration_ms: 78.4046
+  type: 'test'
+  ...
+# Subtest: hash mismatch is rejected instead of becoming a new approval
+ok 106 - hash mismatch is rejected instead of becoming a new approval
+  ---
+  duration_ms: 25.3075
+  type: 'test'
+  ...
+# Subtest: complete passing report requires all registered steps and all media kinds
+ok 107 - complete passing report requires all registered steps and all media kinds
+  ---
+  duration_ms: 372.186
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when all media are missing
+ok 108 - raw passing result is not an overall pass when all media are missing
+  ---
+  duration_ms: 157.6371
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when screenshot is missing
+ok 109 - raw passing result is not an overall pass when screenshot is missing
+  ---
+  duration_ms: 49.5219
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when video is missing
+ok 110 - raw passing result is not an overall pass when video is missing
+  ---
+  duration_ms: 63.6997
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when trace is missing
+ok 111 - raw passing result is not an overall pass when trace is missing
+  ---
+  duration_ms: 22.7888
+  type: 'test'
+  ...
+# Subtest: assertion mismatch remains a failed test and later steps are not executed
+ok 112 - assertion mismatch remains a failed test and later steps are not executed
+  ---
+  duration_ms: 78.2485
+  type: 'test'
+  ...
+# Subtest: missing, corrupt, skipped and zero-target reports fail closed
+ok 113 - missing, corrupt, skipped and zero-target reports fail closed
+  ---
+  duration_ms: 54.9453
+  type: 'test'
+  ...
+# Subtest: exit code zero cannot override an incomplete step set
+ok 114 - exit code zero cannot override an incomplete step set
+  ---
+  duration_ms: 4.6983
+  type: 'test'
+  ...
+# Subtest: a passing Playwright report cannot override a non-normal execution terminal state
+ok 115 - a passing Playwright report cannot override a non-normal execution terminal state
+  ---
+  duration_ms: 88.2205
+  type: 'test'
+  ...
+# Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+ok 116 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+  ---
+  duration_ms: 1.8087
+  type: 'test'
+  ...
+# Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
+ok 117 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
+  ---
+  duration_ms: 5209.508
+  type: 'test'
+  ...
+# Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+ok 118 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+  ---
+  duration_ms: 2270.3932
+  type: 'test'
+  ...
+# Subtest: 项目用例新版本不会自动继承旧版本的限定首审资产
+ok 119 - 项目用例新版本不会自动继承旧版本的限定首审资产
+  ---
+  duration_ms: 3601.4863
+  type: 'test'
+  ...
+# Subtest: 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+ok 120 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+  ---
+  duration_ms: 173.128
+  type: 'test'
+  ...
+# Subtest: 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+ok 121 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+  ---
+  duration_ms: 201.0818
+  type: 'test'
+  ...
+# Subtest: health endpoint reports the independent workbench
+ok 122 - health endpoint reports the independent workbench
+  ---
+  duration_ms: 73.7438
+  type: 'test'
+  ...
+# Subtest: unknown routes fail closed
+ok 123 - unknown routes fail closed
+  ---
+  duration_ms: 14.042
+  type: 'test'
+  ...
+# Subtest: startup template isolates inherited authorization and rejects missing runtime without private data
+ok 124 - startup template isolates inherited authorization and rejects missing runtime without private data
+  ---
+  duration_ms: 17355.7849
+  type: 'test'
+  ...
+# Subtest: asset registration is persistent and idempotent
+ok 125 - asset registration is persistent and idempotent
+  ---
+  duration_ms: 58.9894
+  type: 'test'
+  ...
+# Subtest: runs remain readable and active records become interrupted after restart
+ok 126 - runs remain readable and active records become interrupted after restart
+  ---
+  duration_ms: 147.4424
+  type: 'test'
+  ...
+# Subtest: run ids cannot escape the data root
+ok 127 - run ids cannot escape the data root
+  ---
+  duration_ms: 92.6023
+  type: 'test'
+  ...
+# Subtest: workspace entry is a same-origin whitelist and old workbench remains available
+ok 128 - workspace entry is a same-origin whitelist and old workbench remains available
+  ---
+  duration_ms: 139.6116
+  type: 'test'
+  ...
+# Subtest: UI-D2A xlsx samples preserve exact source text and classifications through real parser
+ok 129 - UI-D2A xlsx samples preserve exact source text and classifications through real parser
+  ---
+  duration_ms: 289.9973
+  type: 'test'
+  ...
+# Subtest: committed native sample came from supported export schema and survives official import parser
+ok 130 - committed native sample came from supported export schema and survives official import parser
+  ---
+  duration_ms: 40.0173
+  type: 'test'
+  ...
+# Subtest: six-case xlsx uses the supported mapping and preserves paired business expectations
+ok 131 - six-case xlsx uses the supported mapping and preserves paired business expectations
+  ---
+  duration_ms: 323.8135
+  type: 'test'
+  ...
+# Subtest: committed six-case json is a formal backend package and reimports all six cases
+ok 132 - committed six-case json is a formal backend package and reimports all six cases
+  ---
+  duration_ms: 133.9799
+  type: 'test'
+  ...
+# Subtest: workbench候选使用同一Playwright运行根并真实执行正常与反例
+ok 133 - workbench候选使用同一Playwright运行根并真实执行正常与反例
+  ---
+  duration_ms: 16137.1555
+  type: 'test'
+  ...
+# Subtest: harness-probe默认运行根保持独立可执行
+ok 134 - harness-probe默认运行根保持独立可执行
+  ---
+  duration_ms: 3324.9223
+  type: 'test'
+  ...
+1..134
+# tests 134
+# suites 0
+# pass 134
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 48810.0474

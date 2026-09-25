@@ -22,3 +22,5 @@ pilot/revision-s02/tests/sorting.spec.ts text eol=lf
 # Autonomous-task evidence and model candidates are addressed by exact byte hashes.
 workbench/qa/20260925-autonomous/** -text
 workbench/qa/20260925-unfamiliar/** -text
+
+workbench/qa/20260925-candidate-trial/** -text

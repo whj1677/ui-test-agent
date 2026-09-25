@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
 param(
-  [ValidateSet('e2e', 'auth')]
+  [ValidateSet('e2e', 'auth', 'fresh-b')]
   [string]$Data = 'e2e',
   # 本机启动配置文件（Git 忽略）。默认 scripts/start-workbench.local.json；模板见同目录 .example。
   [string]$ConfigPath,
@@ -14,6 +14,25 @@ $repoRoot = Split-Path -Parent $workbenchRoot
 $port = 4322
 $dataDirName = if ($Data -eq 'auth') { 'auth01-user-trial' } else { 'six-case-e2e' }
 $dataDir = Join-Path $workbenchRoot (Join-Path '.local' $dataDirName)
+
+# Existing autonomous sample data: explicit zero-model profile, same daily port.
+if ($Data -eq 'fresh-b') {
+  $dataDir = Join-Path $workbenchRoot '.local/fresh25-b'
+  if (-not (Test-Path -LiteralPath (Join-Path $dataDir 'case-library/projects'))) { throw '原FRESH-B项目数据缺失；不会复制报告或生成替代项目。' }
+  $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+  if ($listener) { Write-Output '4322已占用；不结束未知进程、不换端口。'; exit 2 }
+  Write-Output "零模型试跑配置：$dataDir；4322空闲；合成站每次试跑按需启动，结束自动停止。"
+  if ($CheckOnly) { exit 0 }
+  foreach ($key in @('WORKBENCH_BUILD_AUTHORIZATION_ID','M2C_BUILD_AUTHORIZATION_ID','WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS')) { Remove-Item -LiteralPath "Env:$key" -ErrorAction SilentlyContinue }
+  $env:WORKBENCH_PORT = [string]$port
+  $env:WORKBENCH_DATA_DIR = $dataDir
+  $env:WORKBENCH_CANDIDATE_TRIAL_CONFIG = Join-Path $workbenchRoot 'config/fresh-b-trial.json'
+  $env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+  Write-Output '入口：http://127.0.0.1:4322/workspace/；前台运行，Ctrl+C停止工作台；不调用模型。'
+  & node (Join-Path $workbenchRoot 'server/index.mjs')
+  exit $LASTEXITCODE
+}
+Remove-Item -LiteralPath 'Env:WORKBENCH_CANDIDATE_TRIAL_CONFIG' -ErrorAction SilentlyContinue
 
 # ---- 配置来源与优先级 ------------------------------------------------------
 # 四个服务入口依赖的变量只接受两个来源：

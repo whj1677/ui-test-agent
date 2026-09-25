@@ -1,0 +1,807 @@
+TAP version 13
+# Subtest: state changes require exact local origin and JSON schema
+ok 1 - state changes require exact local origin and JSON schema
+  ---
+  duration_ms: 130.7964
+  type: 'test'
+  ...
+# Subtest: stop route accepts only an empty JSON object from local origin
+ok 2 - stop route accepts only an empty JSON object from local origin
+  ---
+  duration_ms: 12.9611
+  type: 'test'
+  ...
+# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+ok 3 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+  ---
+  duration_ms: 36508.2843
+  type: 'test'
+  ...
+# Subtest: build mutations require local origin and exact fixed schemas
+ok 4 - build mutations require local origin and exact fixed schemas
+  ---
+  duration_ms: 141.8602
+  type: 'test'
+  ...
+# Subtest: only registered web-visible unchanged task files are served
+ok 5 - only registered web-visible unchanged task files are served
+  ---
+  duration_ms: 104.8085
+  type: 'test'
+  ...
+# Subtest: only registered verification media are served with integrity and range checks
+ok 6 - only registered verification media are served with integrity and range checks
+  ---
+  duration_ms: 165.4199
+  type: 'test'
+  ...
+# Subtest: registers an idempotent derived assessment without rewriting the original task
+ok 7 - registers an idempotent derived assessment without rewriting the original task
+  ---
+  duration_ms: 354.6788
+  type: 'test'
+  ...
+# Subtest: rejects changed candidate or report identity and keeps a business gap out of human review
+ok 8 - rejects changed candidate or report identity and keeps a business gap out of human review
+  ---
+  duration_ms: 269.9008
+  type: 'test'
+  ...
+# Subtest: serves supplemental assessment beside the unchanged original failure
+ok 9 - serves supplemental assessment beside the unchanged original failure
+  ---
+  duration_ms: 469.3167
+  type: 'test'
+  ...
+# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
+ok 10 - Harness stderr diagnostic keeps error context and redacts credentials
+  ---
+  duration_ms: 2.9155
+  type: 'test'
+  ...
+# Subtest: stored DSH credential is redacted even without a sk prefix
+ok 11 - stored DSH credential is redacted even without a sk prefix
+  ---
+  duration_ms: 12.8395
+  type: 'test'
+  ...
+# Subtest: failed candidate enables exactly one explicit revision and preserves both versions
+ok 12 - failed candidate enables exactly one explicit revision and preserves both versions
+  ---
+  duration_ms: 1104.6597
+  type: 'test'
+  ...
+# Subtest: relative Harness patch resolves before task workspace changes
+ok 13 - relative Harness patch resolves before task workspace changes
+  ---
+  duration_ms: 724.4167
+  type: 'test'
+  ...
+# Subtest: 生命周期存储持续失败会降级服务并拒绝继续接纳建例
+ok 14 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
+  ---
+  duration_ms: 89.3831
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-25T02:37:55.882Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-25T02:37:56.714Z"}
+# Subtest: 后台completion最终状态持续写失败会被观察并关闭新建例入口
+ok 15 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
+  ---
+  duration_ms: 1027.3673
+  type: 'test'
+  ...
+# Subtest: duplicate start is rejected and cancel closes the owned attempt without restart
+ok 16 - duplicate start is rejected and cancel closes the owned attempt without restart
+  ---
+  duration_ms: 505.6412
+  type: 'test'
+  ...
+# Subtest: 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
+ok 17 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
+  ---
+  duration_ms: 506.9331
+  type: 'test'
+  ...
+# Subtest: 终态等待修复验证使用独立固定授权文件且不改旧授权
+ok 18 - 终态等待修复验证使用独立固定授权文件且不改旧授权
+  ---
+  duration_ms: 181.124
+  type: 'test'
+  ...
+# Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
+ok 19 - candidate report parser keeps normal pass and concrete assertion mismatch separate
+  ---
+  duration_ms: 14.849
+  type: 'test'
+  ...
+# Subtest: missing report and locator errors cannot become technical pass or specified mismatch
+ok 20 - missing report and locator errors cannot become technical pass or specified mismatch
+  ---
+  duration_ms: 6.5946
+  type: 'test'
+  ...
+# Subtest: Playwright array text diff preserves the expected and actual row order at the failed step
+ok 21 - Playwright array text diff preserves the expected and actual row order at the failed step
+  ---
+  duration_ms: 8.6103
+  type: 'test'
+  ...
+# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
+ok 22 - versioned step title rule accepts only bare or explicitly separated leading markers
+  ---
+  duration_ms: 0.6278
+  type: 'test'
+  ...
+# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+ok 23 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
+  ---
+  duration_ms: 1.0827
+  type: 'test'
+  ...
+# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+ok 24 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
+  ---
+  duration_ms: 0.6167
+  type: 'test'
+  ...
+# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
+ok 25 - steps after the attributed failure remain not executed without hiding the specified mismatch
+  ---
+  duration_ms: 0.3778
+  type: 'test'
+  ...
+# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
+ok 26 - parser preserves raw title hierarchy raw error and expected actual facts
+  ---
+  duration_ms: 9.0573
+  type: 'test'
+  ...
+# Subtest: associates exact task candidate and registers the same record idempotently
+ok 27 - associates exact task candidate and registers the same record idempotently
+  ---
+  duration_ms: 461.4882
+  type: 'test'
+  ...
+# Subtest: rejects candidate hash mismatch and does not associate media across tasks
+ok 28 - rejects candidate hash mismatch and does not associate media across tasks
+  ---
+  duration_ms: 530.9431
+  type: 'test'
+  ...
+# Subtest: serves only registered unchanged media with byte ranges
+ok 29 - serves only registered unchanged media with byte ranges
+  ---
+  duration_ms: 668.4006
+  type: 'test'
+  ...
+# Subtest: M2-C stage budget persists across task ids and store restarts
+ok 30 - M2-C stage budget persists across task ids and store restarts
+  ---
+  duration_ms: 29.4192
+  type: 'test'
+  ...
+# Subtest: restart marks active build interrupted without replaying it
+ok 31 - restart marks active build interrupted without replaying it
+  ---
+  duration_ms: 30.895
+  type: 'test'
+  ...
+# Subtest: task状态原子替换的短暂占用有限重试后成功
+ok 32 - task状态原子替换的短暂占用有限重试后成功
+  ---
+  duration_ms: 91.7645
+  type: 'test'
+  ...
+# Subtest: task状态持续写失败会显式返回错误而非静默成功
+ok 33 - task状态持续写失败会显式返回错误而非静默成功
+  ---
+  duration_ms: 721.6985
+  type: 'test'
+  ...
+# Subtest: 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
+ok 34 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
+  ---
+  duration_ms: 1272.1588
+  type: 'test'
+  ...
+# Subtest: exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
+ok 35 - exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
+  ---
+  duration_ms: 755.3853
+  type: 'test'
+  ...
+# Subtest: cross-project/version/content and unauthorized environment are rejected before execution
+ok 36 - cross-project/version/content and unauthorized environment are rejected before execution
+  ---
+  duration_ms: 448.3947
+  type: 'test'
+  ...
+# Subtest: helper change or missing file rejects unchanged entry; historical version remains explicitly historical
+ok 37 - helper change or missing file rejects unchanged entry; historical version remains explicitly historical
+  ---
+  duration_ms: 612.7504
+  type: 'test'
+  ...
+# Subtest: cancel uses owned signal and lease, does not reopen source; restart does not replay
+ok 38 - cancel uses owned signal and lease, does not reopen source; restart does not replay
+  ---
+  duration_ms: 1080.1506
+  type: 'test'
+  ...
+# Subtest: run media route enforces run ownership, digest and byte size; old build WebM has correct MIME
+ok 39 - run media route enforces run ownership, digest and byte size; old build WebM has correct MIME
+  ---
+  duration_ms: 354.667
+  type: 'test'
+  ...
+# Subtest: case library API requires local origin and serves only registered operations
+ok 40 - case library API requires local origin and serves only registered operations
+  ---
+  duration_ms: 311.4591
+  type: 'test'
+  ...
+# Subtest: real xlsx and native package round trip preserve fields, lineage and project isolation
+ok 41 - real xlsx and native package round trip preserve fields, lineage and project isolation
+  ---
+  duration_ms: 1240.2622
+  type: 'test'
+  ...
+# Subtest: formula cells and stale or cross-project confirmations fail closed
+ok 42 - formula cells and stale or cross-project confirmations fail closed
+  ---
+  duration_ms: 383.3973
+  type: 'test'
+  ...
+# Subtest: native file paths and read-only DOM operations are allowed; escapes and mutation remain denied
+ok 43 - native file paths and read-only DOM operations are allowed; escapes and mutation remain denied
+  ---
+  duration_ms: 32.7362
+  type: 'test'
+  ...
+# Subtest: real executor snapshots helpers, native edits invalidate old proof, and frozen bundle keeps exact dependency bytes
+ok 44 - real executor snapshots helpers, native edits invalidate old proof, and frozen bundle keeps exact dependency bytes
+  ---
+  duration_ms: 14083.7076
+  type: 'test'
+  ...
+# Subtest: finite path proof expands neutral helper calls, branches and early returns
+ok 45 - finite path proof expands neutral helper calls, branches and early returns
+  ---
+  duration_ms: 21.8169
+  type: 'test'
+  ...
+# Subtest: field identity is label-bound and independent of expected answer; unknown code never semantic_pass
+ok 46 - field identity is label-bound and independent of expected answer; unknown code never semantic_pass
+  ---
+  duration_ms: 3.2025
+  type: 'test'
+  ...
+# Subtest: real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
+ok 47 - real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
+  ---
+  duration_ms: 6931.4637
+  type: 'test'
+  ...
+# Subtest: production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
+ok 48 - production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
+  ---
+  duration_ms: 295.6478
+  type: 'test'
+  ...
+# Subtest: isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
+ok 49 - isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
+  ---
+  duration_ms: 10231.995
+  type: 'test'
+  ...
+# Subtest: production task API + pinned MCP + real Playwright: failed draft feedback, repair, independent final pair and browser readback
+ok 50 - production task API + pinned MCP + real Playwright: failed draft feedback, repair, independent final pair and browser readback
+  ---
+  duration_ms: 30357.4582
+  type: 'test'
+  ...
+# Subtest: pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+ok 51 - pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+  ---
+  duration_ms: 402.0291
+  type: 'test'
+  ...
+# Subtest: self-test limit is cumulative and further edits cannot create an unverified final version
+ok 52 - self-test limit is cumulative and further edits cannot create an unverified final version
+  ---
+  duration_ms: 130.6709
+  type: 'test'
+  ...
+# Subtest: cancellation reaches an active execution and later tools stop
+ok 53 - cancellation reaches an active execution and later tools stop
+  ---
+  duration_ms: 65.4546
+  type: 'test'
+  ...
+# Subtest: wall budget terminates before another tool or executor admission
+ok 54 - wall budget terminates before another tool or executor admission
+  ---
+  duration_ms: 42.7095
+  type: 'test'
+  ...
+# Subtest: from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+ok 55 - from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+  ---
+  duration_ms: 191.8091
+  type: 'test'
+  ...
+# Subtest: task guard denies arbitrary commands, filesystem, code and alternate navigation
+ok 56 - task guard denies arbitrary commands, filesystem, code and alternate navigation
+  ---
+  duration_ms: 5.9633
+  type: 'test'
+  ...
+# Subtest: E2E-01 recovery adds one start while retaining all six original claims
+ok 57 - E2E-01 recovery adds one start while retaining all six original claims
+  ---
+  duration_ms: 84.1379
+  type: 'test'
+  ...
+# Subtest: static or visually repeated frames cannot be used as a unique video clock anchor
+ok 58 - static or visually repeated frames cannot be used as a unique video clock anchor
+  ---
+  duration_ms: 1.5956
+  type: 'test'
+  ...
+# Subtest: trace-derived timeline preserves source timing and unexecuted step
+ok 59 - trace-derived timeline preserves source timing and unexecuted step
+  ---
+  duration_ms: 67.1097
+  type: 'test'
+  ...
+# Subtest: missing or uncalibrated trace never invents a seek timeline
+ok 60 - missing or uncalibrated trace never invents a seek timeline
+  ---
+  duration_ms: 85.8846
+  type: 'test'
+  ...
+# Subtest: derived WebM duration is explicit and invalid media fails closed
+ok 61 - derived WebM duration is explicit and invalid media fails closed
+  ---
+  duration_ms: 1.2302
+  type: 'test'
+  ...
+# Subtest: versioned derived caption video is indexed as caption media without replacing v1
+ok 62 - versioned derived caption video is indexed as caption media without replacing v1
+  ---
+  duration_ms: 318.3464
+  type: 'test'
+  ...
+# Subtest: step replay, source screenshots and observer record are independently indexed
+ok 63 - step replay, source screenshots and observer record are independently indexed
+  ---
+  duration_ms: 340.3406
+  type: 'test'
+  ...
+# Subtest: E2E-01 reaches human review only after a passing normal run and the specified raw failure
+ok 64 - E2E-01 reaches human review only after a passing normal run and the specified raw failure
+  ---
+  duration_ms: 2.7865
+  type: 'test'
+  ...
+# Subtest: new trial readiness requires execution-time replay and four registered media for both lanes
+ok 65 - new trial readiness requires execution-time replay and four registered media for both lanes
+  ---
+  duration_ms: 0.6825
+  type: 'test'
+  ...
+# Subtest: real xlsx preserves numeric-looking text, physical rows and blank columns
+ok 66 - real xlsx preserves numeric-looking text, physical rows and blank columns
+  ---
+  duration_ms: 137.8318
+  type: 'test'
+  ...
+# Subtest: real xlsx keeps step and expected cell-line positions instead of compacting blanks
+ok 67 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
+  ---
+  duration_ms: 32.9705
+  type: 'test'
+  ...
+# Subtest: approved run uses fixed argument arrays and a reduced environment
+ok 68 - approved run uses fixed argument arrays and a reduced environment
+  ---
+  duration_ms: 376.6474
+  type: 'test'
+  ...
+# Subtest: duplicate starts are rejected and stop targets only the owned process
+ok 69 - duplicate starts are rejected and stop targets only the owned process
+  ---
+  duration_ms: 346.9108
+  type: 'test'
+  ...
+# Subtest: unapproved, wrong-hash, traversal and illegal environment records are refused
+ok 70 - unapproved, wrong-hash, traversal and illegal environment records are refused
+  ---
+  duration_ms: 727.9384
+  type: 'test'
+  ...
+# Subtest: runtime-copy integrity failure preserves the raw passing report but blocks overall pass
+ok 71 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
+  ---
+  duration_ms: 514.117
+  type: 'test'
+  ...
+# Subtest: 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
+ok 72 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
+  ---
+  duration_ms: 503.3778
+  type: 'test'
+  ...
+# Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+ok 73 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
+  ---
+  duration_ms: 427.801
+  type: 'test'
+  ...
+# Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+ok 74 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
+  ---
+  duration_ms: 1329.7454
+  type: 'test'
+  ...
+# Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+ok 75 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
+  ---
+  duration_ms: 897.6239
+  type: 'test'
+  ...
+# Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+ok 76 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
+  ---
+  duration_ms: 188.9392
+  type: 'test'
+  ...
+# Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+ok 77 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
+  ---
+  duration_ms: 919.5175
+  type: 'test'
+  ...
+# Subtest: only indexed media for the selected run can be read
+ok 78 - only indexed media for the selected run can be read
+  ---
+  duration_ms: 302.3343
+  type: 'test'
+  ...
+# Subtest: changed media bytes are not served as the registered attachment
+ok 79 - changed media bytes are not served as the registered attachment
+  ---
+  duration_ms: 140.7962
+  type: 'test'
+  ...
+# Subtest: 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
+ok 80 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
+  ---
+  duration_ms: 720.9811
+  type: 'test'
+  ...
+# Subtest: v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
+ok 81 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
+  ---
+  duration_ms: 1045.7219
+  type: 'test'
+  ...
+# Subtest: request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
+ok 82 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
+  ---
+  duration_ms: 634.6735
+  type: 'test'
+  ...
+# Subtest: request_id 正在处理时只复用相同身份，不同身份立即冲突
+ok 83 - request_id 正在处理时只复用相同身份，不同身份立即冲突
+  ---
+  duration_ms: 259.9232
+  type: 'test'
+  ...
+# Subtest: 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
+ok 84 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
+  ---
+  duration_ms: 376.4533
+  type: 'test'
+  ...
+# Subtest: M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
+ok 85 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
+  ---
+  duration_ms: 2083.3594
+  type: 'test'
+  ...
+# Subtest: 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
+ok 86 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
+  ---
+  duration_ms: 2.3553
+  type: 'test'
+  ...
+# Subtest: M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
+ok 87 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
+  ---
+  duration_ms: 306.6967
+  type: 'test'
+  ...
+# Subtest: engineering counterexamples: labels, live selection, visibility and scope (zero model)
+ok 88 - engineering counterexamples: labels, live selection, visibility and scope (zero model)
+  ---
+  duration_ms: 4166.5907
+  type: 'test'
+  ...
+# {"mode":"normal","integrity_state":"FINALIZED","registered_bytes":2367,"actual_bytes":2367,"registered_sha256":"BE0763F2F0BBD1EE484391E212BA1012BA2C44FE5814803FC6AA35D4EF663682","actual_sha256":"BE0763F2F0BBD1EE484391E212BA1012BA2C44FE5814803FC6AA35D4EF663682","last_event":"attempt_settled","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","phase","attempt_settled"]}
+# Subtest: production lifecycle final indexing: normal, delayed append and close
+ok 89 - production lifecycle final indexing: normal, delayed append and close
+  ---
+  duration_ms: 1375.5013
+  type: 'test'
+  ...
+# {"mode":"cancel","integrity_state":"FINALIZED","registered_bytes":2364,"actual_bytes":2364,"registered_sha256":"87CDFBE7EC0CF0A2361A255C634BFAA145FB51B3F1B6E1BC81C7FA6BAF39D9A6","actual_sha256":"87CDFBE7EC0CF0A2361A255C634BFAA145FB51B3F1B6E1BC81C7FA6BAF39D9A6","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","cancel_requested","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: cancel, delayed append and close
+ok 90 - production lifecycle final indexing: cancel, delayed append and close
+  ---
+  duration_ms: 766.3532
+  type: 'test'
+  ...
+# {"mode":"exception","integrity_state":"FINALIZED","registered_bytes":2053,"actual_bytes":2053,"registered_sha256":"723A898F3B77B299CAE3B0729EEA8CFF78991D5AD53D52250C72E2E960CB19C6","actual_sha256":"723A898F3B77B299CAE3B0729EEA8CFF78991D5AD53D52250C72E2E960CB19C6","last_event":"attempt_error","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","attempt_error"]}
+# Subtest: production lifecycle final indexing: exception, delayed append and close
+ok 91 - production lifecycle final indexing: exception, delayed append and close
+  ---
+  duration_ms: 527.8914
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 92 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 33.5019
+  type: 'test'
+  ...
+# Subtest: string
+ok 93 - string
+  ---
+  duration_ms: 0.7783
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 94 - ansi
+  ---
+  duration_ms: 0.2048
+  type: 'test'
+  ...
+# Subtest: missing
+ok 95 - missing
+  ---
+  duration_ms: 0.351
+  type: 'test'
+  ...
+# Subtest: strict
+ok 96 - strict
+  ---
+  duration_ms: 0.5046
+  type: 'test'
+  ...
+# Subtest: single side
+ok 97 - single side
+  ---
+  duration_ms: 0.1806
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 98 - timeout
+  ---
+  duration_ms: 0.5251
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 99 - truncated array
+  ---
+  duration_ms: 0.6899
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 100 - truncated diff
+  ---
+  duration_ms: 0.7606
+  type: 'test'
+  ...
+# Subtest: array
+ok 101 - array
+  ---
+  duration_ms: 1.3448
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 102 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.4917
+  type: 'test'
+  ...
+# Subtest: approved sorting asset is derived from the real frozen records
+ok 103 - approved sorting asset is derived from the real frozen records
+  ---
+  duration_ms: 128.8809
+  type: 'test'
+  ...
+# Subtest: hash mismatch is rejected instead of becoming a new approval
+ok 104 - hash mismatch is rejected instead of becoming a new approval
+  ---
+  duration_ms: 89.8311
+  type: 'test'
+  ...
+# Subtest: complete passing report requires all registered steps and all media kinds
+ok 105 - complete passing report requires all registered steps and all media kinds
+  ---
+  duration_ms: 153.0865
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when all media are missing
+ok 106 - raw passing result is not an overall pass when all media are missing
+  ---
+  duration_ms: 138.4236
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when screenshot is missing
+ok 107 - raw passing result is not an overall pass when screenshot is missing
+  ---
+  duration_ms: 105.2796
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when video is missing
+ok 108 - raw passing result is not an overall pass when video is missing
+  ---
+  duration_ms: 117.5631
+  type: 'test'
+  ...
+# Subtest: raw passing result is not an overall pass when trace is missing
+ok 109 - raw passing result is not an overall pass when trace is missing
+  ---
+  duration_ms: 40.5867
+  type: 'test'
+  ...
+# Subtest: assertion mismatch remains a failed test and later steps are not executed
+ok 110 - assertion mismatch remains a failed test and later steps are not executed
+  ---
+  duration_ms: 90.0896
+  type: 'test'
+  ...
+# Subtest: missing, corrupt, skipped and zero-target reports fail closed
+ok 111 - missing, corrupt, skipped and zero-target reports fail closed
+  ---
+  duration_ms: 35.0939
+  type: 'test'
+  ...
+# Subtest: exit code zero cannot override an incomplete step set
+ok 112 - exit code zero cannot override an incomplete step set
+  ---
+  duration_ms: 29.6469
+  type: 'test'
+  ...
+# Subtest: a passing Playwright report cannot override a non-normal execution terminal state
+ok 113 - a passing Playwright report cannot override a non-normal execution terminal state
+  ---
+  duration_ms: 345.6574
+  type: 'test'
+  ...
+# Subtest: error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+ok 114 - error facts distinguish missing targets, strict conflicts, unavailable values and real value mismatches
+  ---
+  duration_ms: 2.4919
+  type: 'test'
+  ...
+# Subtest: 复验驱动只等待本次task终态，不被旧历史终态提前满足
+ok 115 - 复验驱动只等待本次task终态，不被旧历史终态提前满足
+  ---
+  duration_ms: 2504.2614
+  type: 'test'
+  ...
+# Subtest: 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+ok 116 - 原扫描任意历史卡片逻辑无法通过同一task终态等待断言
+  ---
+  duration_ms: 1454.0786
+  type: 'test'
+  ...
+# Subtest: 项目用例新版本不会自动继承旧版本的限定首审资产
+ok 117 - 项目用例新版本不会自动继承旧版本的限定首审资产
+  ---
+  duration_ms: 3556.8535
+  type: 'test'
+  ...
+# Subtest: 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+ok 118 - 限定人工首审资产按精确任务、候选和用例版本登记并幂等保存原字节
+  ---
+  duration_ms: 218.2445
+  type: 'test'
+  ...
+# Subtest: 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+ok 119 - 缺少有效首审、候选哈希变化或项目关联错误均拒绝登记
+  ---
+  duration_ms: 657.1372
+  type: 'test'
+  ...
+# Subtest: health endpoint reports the independent workbench
+ok 120 - health endpoint reports the independent workbench
+  ---
+  duration_ms: 68.1649
+  type: 'test'
+  ...
+# Subtest: unknown routes fail closed
+ok 121 - unknown routes fail closed
+  ---
+  duration_ms: 12.1787
+  type: 'test'
+  ...
+# Subtest: startup template isolates inherited authorization and rejects missing runtime without private data
+ok 122 - startup template isolates inherited authorization and rejects missing runtime without private data
+  ---
+  duration_ms: 18492.7184
+  type: 'test'
+  ...
+# Subtest: asset registration is persistent and idempotent
+ok 123 - asset registration is persistent and idempotent
+  ---
+  duration_ms: 114.5313
+  type: 'test'
+  ...
+# Subtest: runs remain readable and active records become interrupted after restart
+ok 124 - runs remain readable and active records become interrupted after restart
+  ---
+  duration_ms: 140.6515
+  type: 'test'
+  ...
+# Subtest: run ids cannot escape the data root
+ok 125 - run ids cannot escape the data root
+  ---
+  duration_ms: 40.2167
+  type: 'test'
+  ...
+# Subtest: workspace entry is a same-origin whitelist and old workbench remains available
+ok 126 - workspace entry is a same-origin whitelist and old workbench remains available
+  ---
+  duration_ms: 128.8597
+  type: 'test'
+  ...
+# Subtest: UI-D2A xlsx samples preserve exact source text and classifications through real parser
+ok 127 - UI-D2A xlsx samples preserve exact source text and classifications through real parser
+  ---
+  duration_ms: 357.5112
+  type: 'test'
+  ...
+# Subtest: committed native sample came from supported export schema and survives official import parser
+ok 128 - committed native sample came from supported export schema and survives official import parser
+  ---
+  duration_ms: 102.3937
+  type: 'test'
+  ...
+# Subtest: six-case xlsx uses the supported mapping and preserves paired business expectations
+ok 129 - six-case xlsx uses the supported mapping and preserves paired business expectations
+  ---
+  duration_ms: 405.4982
+  type: 'test'
+  ...
+# Subtest: committed six-case json is a formal backend package and reimports all six cases
+ok 130 - committed six-case json is a formal backend package and reimports all six cases
+  ---
+  duration_ms: 199.9767
+  type: 'test'
+  ...
+# Subtest: workbench候选使用同一Playwright运行根并真实执行正常与反例
+ok 131 - workbench候选使用同一Playwright运行根并真实执行正常与反例
+  ---
+  duration_ms: 15003.8262
+  type: 'test'
+  ...
+# Subtest: harness-probe默认运行根保持独立可执行
+ok 132 - harness-probe默认运行根保持独立可执行
+  ---
+  duration_ms: 3388.6741
+  type: 'test'
+  ...
+1..132
+# tests 132
+# suites 0
+# pass 132
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37154.477
