@@ -1,0 +1,183 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925044522-e2ff40d5/development/run-1",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925044522-e2ff40d5/development/run-1/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925044522-e2ff40d5/development/run-1",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "KC-21 与R-001半开区间重叠冲突",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6358,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:49:28\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:35:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs",
+                      "column": 28,
+                      "line": 49
+                    },
+                    "snippet": "  47 |     // 与 R-001 的 10:00-12:00 半开区间重叠：提示冲突并拒绝\n  48 |     const feedback = booking.locator('[aria-live=\"assertive\"]');\n> 49 |     await expect(feedback).toContainText(\"冲突\");\n     |                            ^\n  50 |     await expect(feedback).toContainText(\"R-001\");\n  51 |     await expect(booking.getByRole(\"heading\", { name: \"确认信息\" })).toBeHidden();\n  52 |     await expect(booking.getByRole(\"button\", { name: \"确认预约\" })).toBeHidden();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs",
+                        "column": 28,
+                        "line": 49
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n\n\n  47 |     // 与 R-001 的 10:00-12:00 半开区间重叠：提示冲突并拒绝\n  48 |     const feedback = booking.locator('[aria-live=\"assertive\"]');\n> 49 |     await expect(feedback).toContainText(\"冲突\");\n     |                            ^\n  50 |     await expect(feedback).toContainText(\"R-001\");\n  51 |     await expect(booking.getByRole(\"heading\", { name: \"确认信息\" })).toBeHidden();\n  52 |     await expect(booking.getByRole(\"button\", { name: \"确认预约\" })).toBeHidden();\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:49:28\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:35:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 292
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 5136,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:49:28\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs:35:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs",
+                          "column": 28,
+                          "line": 49
+                        },
+                        "snippet": "  47 |     // 与 R-001 的 10:00-12:00 半开区间重叠：提示冲突并拒绝\n  48 |     const feedback = booking.locator('[aria-live=\"assertive\"]');\n> 49 |     await expect(feedback).toContainText(\"冲突\");\n     |                            ^\n  50 |     await expect(feedback).toContainText(\"R-001\");\n  51 |     await expect(booking.getByRole(\"heading\", { name: \"确认信息\" })).toBeHidden();\n  52 |     await expect(booking.getByRole(\"button\", { name: \"确认预约\" })).toBeHidden();"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T04:48:09.883Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\evidence\\artifacts\\candidate-KC-21-与R-001半开区间重叠冲突\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\evidence\\artifacts\\candidate-KC-21-与R-001半开区间重叠冲突\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\evidence\\artifacts\\candidate-KC-21-与R-001半开区间重叠冲突\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\evidence\\artifacts\\candidate-KC-21-与R-001半开区间重叠冲突\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs",
+                    "column": 28,
+                    "line": 49
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-cd6d45993f6115cd04fc",
+          "file": "candidate.spec.mjs",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T04:48:09.278Z",
+    "duration": 7602.88,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

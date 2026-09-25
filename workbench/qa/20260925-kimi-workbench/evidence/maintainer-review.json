@@ -1,0 +1,358 @@
+{
+  "scope": "维护者独立源码与实际执行证据核查，不是Agent自报，不回传修法，不自动批准",
+  "reviews": [
+    {
+      "external_id": "KC-01",
+      "task_id": "build-20260925033421-adbef154",
+      "execution_status": "PASSED",
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED",
+      "finding": "原第1步要求重置后直接查看8条初始设备。候选在检查前额外勾选空闲、使用中、维护，改变被检查的默认状态，绕过默认只显示空闲的差异。因此分页执行通过不代表原用例完整通过。",
+      "evidence": [
+        "KC-01/final/candidate.spec.mjs",
+        "KC-01/result.json"
+      ],
+      "repair_observation": "首次自测在重置确认框交互超时；第二稿改为先注册dialog处理再click，实际复测与独立执行通过。这个运行修复与原要求保真是两个不同结论。",
+      "human_intervention": "仅事后核查与记录，没有修改候选或向运行中的Agent提供诊断"
+    },
+    {
+      "external_id": "KC-02",
+      "task_id": "build-20260925033830-71eef5ec",
+      "execution_status": "FAILED",
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "第1步保留8条预期，实际5条；第二稿采用软断言继续取得第2步通过、第3步失败，整体仍FAILED。没有增加状态选择绕过问题。第3步额外严格要求全部8编号，原文仅要求编号含eq-1并组合筛选，此处属于附加约束；第1步8/5是原要求的真实差异。",
+      "evidence": [
+        "KC-02/final/candidate.spec.mjs",
+        "KC-02/execution-2-report.json",
+        "KC-02/result.json"
+      ],
+      "repair_observation": "没有修好业务差异；改为软断言扩大诊断覆盖，原错误保留。Agent自行提交business_difference。现有控制器对此不再启动独立正常验收，不能宣称独立执行完成。",
+      "human_intervention": "仅核查，未向Agent提供修法；其提交中人工观察字样实际指Agent浏览器观察，并非维护者介入。"
+    },
+    {
+      "external_id": "KC-03",
+      "task_id": "build-20260925034539-640747ed",
+      "execution_status": "FAILED",
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "最终脚本保留搜索后应有两条同名设备的要求，实际1条；编号、名称与站点检查绑定同一行。后两步在最终运行未执行。",
+      "evidence": [
+        "KC-03/final/candidate.spec.mjs",
+        "KC-03/execution-3/candidate.spec.mjs",
+        "KC-03/result.json"
+      ],
+      "repair_observation": "四次开发执行为FAILED/FAILED/PASSED/FAILED。第3次明确是额外选择全部状态的临时诊断，非候选通过；Agent恢复原脚本并再次取得失败，提交business_difference。放宽预算使这条实际多用了诊断运行，不代表提高成功率。",
+      "human_intervention": "没有人工修稿或传入诊断；维护者仅核对版本链及终态。"
+    },
+    {
+      "external_id": "KC-04",
+      "task_id": "build-20260925035209-9b4736a4",
+      "execution_status": "FAILED",
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "最终三步均实际执行，北站初始列表3/2不符；仅空闲以及空闲或维护的后两步通过。按表头索引逐行核对编号与站点，没有额外勾选状态绕过第1步。",
+      "evidence": [
+        "KC-04/final/candidate.spec.mjs",
+        "KC-04/result.json"
+      ],
+      "repair_observation": "三次执行：原稿失败、重置/状态诊断失败、原三步软断言失败。诊断对象diff没有可靠双侧标量，解析保持ASSERTION_UNRESOLVED；不把诊断误算新的独立业务缺陷。",
+      "human_intervention": "仅事后核查，未代写候选或反馈修法。"
+    },
+    {
+      "external_id": "KC-05",
+      "task_id": "build-20260925035824-a39f1836",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原三步均有实际检查：空闲/维护7条且5+2、排除104；逐页指定编号顺序；取消维护后5条完整集合。状态值绑定行内单元格，翻页汇总而非只查当前页。额外翻页用于全量核对并回到原步所需页面，没有改变业务筛选前提。",
+      "evidence": [
+        "KC-05/final/candidate.spec.mjs",
+        "KC-05/result.json"
+      ],
+      "repair_observation": "首个执行包通过，独立执行同包通过；无需修订，不人为增加修改。",
+      "human_intervention": "事后源码与执行核查，未代写；候选仍未批准。"
+    },
+    {
+      "external_id": "KC-06",
+      "task_id": "build-20260925040011-a3e56831",
+      "execution_status": "FAILED",
+      "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+      "finding": "空结果及禁用分页通过；重置后输入/站点/状态/排序检查通过，预期3条数据行实际0条，第3步未执行。候选保留共8条和101/102/103预期。",
+      "evidence": [
+        "KC-06/final/candidate.spec.mjs",
+        "KC-06/result.json"
+      ],
+      "repair_observation": "第二稿仅将按钮变量改为内联locator，不能称修复业务问题；改稿后确实复测，仍失败。",
+      "human_intervention": "仅核查，无人工修稿。原生工具记录含17次策略拒绝、5次浏览器观察错误、1次无草稿；任务rejections摘要只显示部分工具错误，统计采用原始Harness工具结果。",
+      "tool_limit_examples": [
+        {
+          "source": "original harness tool_call paired with TASK_TOOL_POLICY_DENIED",
+          "operation": "() => [...document.querySelectorAll('input[type=checkbox]')].map(c => c.value + '=' + c.checked).join(',')",
+          "judgment": "合理只读DOM状态汇总被拒绝；不是业务断言失败。"
+        },
+        {
+          "operation": "browser_take_screenshot with filename=step1-no-match.png",
+          "judgment": "普通命名截图被现有受管路径政策拒绝；不能将所有截图能力描述为开放。"
+        },
+        {
+          "operation": "browser_evaluate writes input.value and dispatchEvent",
+          "judgment": "页面内修改操作被守卫拒绝，不归为只读误拒绝。"
+        }
+      ]
+    },
+    {
+      "external_id": "KC-07",
+      "task_id": "build-20260925040629-f5e7d833",
+      "execution_status": "PASSED",
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED",
+      "finding": "最终稿在排序前额外勾选所有状态，原前置仅独立重置、步骤仅选择排序。改变默认过滤条件掩盖差异，不能将同包自测及独立执行通过称原用例通过。",
+      "evidence": [
+        "KC-07/final/candidate.spec.mjs",
+        "KC-07/result.json"
+      ],
+      "repair_observation": "前五次是诊断脚本，含DUMP/DIAG占位故意失败及将当前页行数错当总数；第六次才是完整步骤脚本且已改变前提。五次诊断失败不是五次业务缺陷，最终绿色也非原义务修复。",
+      "human_intervention": "仅事后核对，未修稿；不自动批准。"
+    },
+    {
+      "external_id": "KC-08",
+      "task_id": "build-20260925041407-0b067f6f",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "三步实际执行，按EQ-101/EQ-106控件身份勾选并回访两页检查选中状态和已选数量，批量预约可用性有检查。没有改变默认筛选。",
+      "limitation": "页码定位额外绑定当前总页数2，原用例未要求总页数；当前样本满足原义务，但存在实现耦合。",
+      "evidence": [
+        "KC-08/final/candidate.spec.mjs",
+        "KC-08/result.json"
+      ],
+      "repair_observation": "首稿通过，无自测后修改。",
+      "human_intervention": "仅事后核查，候选未批准。"
+    },
+    {
+      "external_id": "KC-09",
+      "task_id": "build-20260925041519-b2b6ee4e",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原三步均执行。先选EQ-101并回访确认跨页保留，再筛选EQ-103检查归零及回第一页；第三步重新建立有选择且第2页后改变站点，实际观察清空与回页，南站逐行字段绑定。额外准备让再次清空可观测，没有绕过预期。",
+      "evidence": [
+        "KC-09/final/candidate.spec.mjs",
+        "KC-09/result.json"
+      ],
+      "repair_observation": "首稿通过，独立同包通过，无通过后改稿。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-10",
+      "task_id": "build-20260925041741-dd0e9bfe",
+      "execution_status": "PASSED",
+      "requirements_status": "NOT_ACCEPTED_ACTION_CHANGED",
+      "finding": "候选在步骤前额外勾选维护，让EQ-102出现；原前置只有独立重置，并没有这项筛选动作。后续全选/单选/按钮禁用检查本身执行通过，但不是原默认状态下的用例复现。",
+      "evidence": [
+        "KC-10/final/candidate.spec.mjs",
+        "KC-10/result.json"
+      ],
+      "repair_observation": "首稿即改变前提，自测及独立同包通过，不属于任务内修复。",
+      "human_intervention": "仅事后核查，未改用例以接受该前提，候选未批准。"
+    },
+    {
+      "external_id": "KC-11",
+      "task_id": "build-20260925042041-42ee6c62",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原目标为查看维护/使用中设备并核对禁用、不可预约标注、全选排除；并未要求默认列表必须呈现这些行。通过状态筛选找到EQ-102/EQ-104，再在各自行内检查disabled与未选中；EQ-101实际勾选/取消，全选后仅它选中。目标状态要求没有被弱化。",
+      "limitation": "增加状态筛选用于找到原指定对象，需与KC-01初始列表、KC-07仅排序、KC-10当前第一页动作改变区分，不机械禁止查找目标的正常导航。",
+      "evidence": [
+        "KC-11/final/candidate.spec.mjs",
+        "KC-11/result.json"
+      ],
+      "repair_observation": "两次自测包哈希完全相同，均通过；没有修订，不能将重复运行称为修复，独立执行亦通过。",
+      "human_intervention": "维护者源码与证据判断，不自动批准。"
+    },
+    {
+      "external_id": "KC-12",
+      "task_id": "build-20260925042329-faeefd2a",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEW_REQUIRED_PRECONDITION_ADDED",
+      "finding": "同包两次自测及独立执行通过；原字段、加载状态、历史页签、关闭与筛选保持均有断言，Trace原始帧确认EQ-104五字段确实可见。候选额外勾选使用中才能取得目标，原动作只明确搜索与南站，是否接受这项补充前置需核对，不能直接宣称原流程无差异。",
+      "evidence": [
+        "KC-12/final/candidate.spec.mjs",
+        "KC-12/result.json",
+        "KC-12/trace-frame-loading.jpeg",
+        "KC-12/trace-frame-fields.jpeg"
+      ],
+      "repair_observation": "包哈希相同，第二次为重复自测，不是修订。",
+      "human_intervention": "维护者只从本次独立执行Trace提取原帧核查，没有重演或摆拍，也没有提供修法。",
+      "trace_frames": [
+        {
+          "file": "trace-frame-loading.jpeg",
+          "trace_entry": "0-trace.trace",
+          "frame_index": 17,
+          "timestamp": 2317.571,
+          "sha256": "AA57A9832242AFFE8DB74993B5D9508AC5128ECDE136B6D73E465ABBC821A280"
+        },
+        {
+          "file": "trace-frame-fields.jpeg",
+          "trace_entry": "0-trace.trace",
+          "frame_index": 23,
+          "timestamp": 2633.527,
+          "sha256": "32F76D17B61C2FFDEE59ABD502BD93CDDF7ADFB2D0471F02B838427FBEC5039D"
+        }
+      ]
+    },
+    {
+      "external_id": "KC-13",
+      "task_id": "build-20260925042653-d11d10e5",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "EQ-103历史逐项检查R-001时间/人/用途/状态；关闭后翻页按EQ-106打开并检查无历史；统计卡片标签与各自值分别绑定。原三步均实际执行。",
+      "evidence": [
+        "KC-13/final/candidate.spec.mjs",
+        "KC-13/result.json"
+      ],
+      "repair_observation": "首稿通过后新增两条统计卡片标签断言，再自测通过并独立同包通过；属于检查细化，不是修复已发生失败，未见回归。",
+      "human_intervention": "仅事后核对，没有指导新增断言，未批准。"
+    },
+    {
+      "external_id": "KC-14",
+      "task_id": "build-20260925042909-b2b8630a",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "依次检查初始0/禁用，勾选EQ-101后1/可用，取消后0/禁用，动态checked同时核对。",
+      "evidence": [
+        "KC-14/final/candidate.spec.mjs",
+        "KC-14/result.json"
+      ],
+      "repair_observation": "首稿通过后将main .hint限定为已选计数提示，再复测及独立执行通过；属于缩小定位范围，不是失败修复，未见回归。",
+      "human_intervention": "仅事后核查，没有人工改稿，未批准。"
+    },
+    {
+      "external_id": "KC-15",
+      "task_id": "build-20260925043104-eeae7bf4",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原三步完整执行，资源EQ-101、五项原输入、无错误提示均检查；回退再进入后逐字段核对，时间使用当前option:checked可见标签。",
+      "evidence": [
+        "KC-15/final/candidate.spec.mjs",
+        "KC-15/result.json"
+      ],
+      "repair_observation": "首稿通过，同包独立执行通过，无改稿。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-16",
+      "task_id": "build-20260925043407-4feecbae",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "空格、一字姓名均点击下一步触发拒绝并检查原输入保留/未进入确认；李四进入确认后回退检查姓名用途和其余字段保持。对未指定日期时间的前后值比较用于保持性要求，不是将现场值替代冻结业务预期。",
+      "evidence": [
+        "KC-16/final/candidate.spec.mjs",
+        "KC-16/result.json"
+      ],
+      "repair_observation": "首稿自测及独立同包执行通过，无改稿。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-17",
+      "task_id": "build-20260925043552-fb3bce7f",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "校准、带空格四字用途分别点击下一步并检查明确错误及未进入确认；功能联调验证可进入确认，返回用途保留。",
+      "evidence": [
+        "KC-17/final/candidate.spec.mjs",
+        "KC-17/result.json"
+      ],
+      "repair_observation": "首稿及独立执行通过，无改稿。",
+      "limitation": "脚本注释称导航恢复数据；实际可靠依据是执行器每次新浏览器上下文，不能把任意现有会话刷新都称重置。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-18",
+      "task_id": "build-20260925043750-80802d76",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原张三/稳定性验证输入不变，2026-10-09实际触发错误并停留第2步，2026-10-20实际进入第3步且确认日期一致。",
+      "evidence": [
+        "KC-18/final/candidate.spec.mjs",
+        "KC-18/result.json"
+      ],
+      "repair_observation": "首稿及独立同包执行通过，无修订。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-19",
+      "task_id": "build-20260925044113-e7b1019f",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "10到10及14到12均实际触发结束必须严格晚于开始并未进入确认；原先填写姓名用途保留；12到14实际进入确认并核对时间。",
+      "evidence": [
+        "KC-19/final/candidate.spec.mjs",
+        "KC-19/result.json"
+      ],
+      "repair_observation": "首稿及独立执行通过，无改稿。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-20",
+      "task_id": "build-20260925044243-75b3e593",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "选择EQ-105、合法姓名用途，08到13实际触发1到4小时错误且不能确认，08到12实际进入确认并显示4小时。",
+      "limitation": "附加了原用例未逐字要求的设备整行文案和完整规则文案断言，增加文本耦合；没有削弱本次三个步骤的要求。",
+      "evidence": [
+        "KC-20/final/candidate.spec.mjs",
+        "KC-20/result.json"
+      ],
+      "repair_observation": "首稿及独立执行通过，无改稿。",
+      "human_intervention": "仅事后核查，未批准。"
+    },
+    {
+      "external_id": "KC-21",
+      "task_id": "build-20260925044522-e2ff40d5",
+      "execution_status": "FAILED",
+      "requirements_status": "FROZEN_CASE_INPUT_CONFLICT",
+      "finding": "原用途复测验证四字被保留。第2步真实错误为预期冲突、实际用途5到100字；冲突义务未触达，第3步未执行。第1步自动PASSED只证明表单填写及规则可见，不证明原文所称合法输入/进入冲突校验。",
+      "evidence": [
+        "KC-21/final/candidate.spec.mjs",
+        "KC-21/result.json"
+      ],
+      "repair_observation": "只有一次候选执行，未改稿；Agent自行说明用途长度冲突并提交business_difference。其额外改用途的浏览器观察不计原用例成绩，也不等于原候选验证通过。",
+      "human_intervention": "没有将已知输入矛盾诊断提供给Agent；维护者事后分为用例输入问题，未归为冲突功能缺陷，未批准。"
+    },
+    {
+      "external_id": "KC-22",
+      "task_id": "build-20260925045006-0e847875",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "原钱七/边界回归验证/日期/12到14不变，确认20乘2等于40；仅新增R-002、关闭弹窗清空选择；刷新后R-001/R-002及2条80元均核对。",
+      "evidence": [
+        "KC-22/execution-1-report.json",
+        "KC-22/execution-1/candidate.spec.mjs",
+        "KC-22/final/candidate.spec.mjs",
+        "KC-22/result.json"
+      ],
+      "repair_observation": "首次实际错误预期12:00/实际12。Agent自行改为selectOption(label)及option:checked文字断言，两处时间同时修正；改稿后自测和同包独立执行通过，业务要求未弱化。",
+      "human_intervention": "维护者没有给根因或修法；事后核对，候选未批准。"
+    },
+    {
+      "external_id": "KC-23",
+      "task_id": "build-20260925045331-ce81611f",
+      "execution_status": "FAILED",
+      "requirements_status": "BUSINESS_DIFFERENCE_WITH_COVERAGE_GAP",
+      "finding": "最终第3步真实统计差异预期2/实际3保留；第一步两设备/140/2小时/280满足。第2步用Set去重预约号后比较R-001/R-002，不证明只新增一条记录；第3步R-002数量仅要求>0。并发两次click且泛化接受Timeout不能可靠证明原快速双击与拒绝原因；禁用在第一次点击完成后检查，不能独立证明创建过程时序。",
+      "evidence": [
+        "KC-23/final/candidate.spec.mjs",
+        "KC-23/result.json"
+      ],
+      "repair_observation": "7次执行均FAILED，包含诊断探针。先自行修正统计定位、13:00显示值/13内部值，再修正隐藏按钮定位，后续拿到2/3差异并保留。不能将全部6次改稿都称有效修复，也不能将去重判断视为原记录数量义务已覆盖。",
+      "human_intervention": "没有代写或提示根因；维护者事后发现覆盖缺项并记录，不回传重抽，不批准。"
+    },
+    {
+      "external_id": "KC-24",
+      "task_id": "build-20260925050900-73b87996",
+      "execution_status": "PASSED",
+      "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+      "finding": "实际取消放弃并核对状态统计不变；再次确认取消后保留40元及记录、按钮禁用、统计归零；同时间重新预约创建R-002，重新导航后新旧记录状态与时间均核对。",
+      "evidence": [
+        "KC-24/final/candidate.spec.mjs",
+        "KC-24/result.json"
+      ],
+      "repair_observation": "首稿通过后重写确认框helper及定位写法，第二稿和独立执行通过。没有已发生失败需要修复；且删除了缺表头的明确错误检查，健壮性变弱，不能将改稿统称改进。当前原义务未见执行回归。",
+      "human_intervention": "仅事后核查，未代写或批准。"
+    }
+  ]
+}

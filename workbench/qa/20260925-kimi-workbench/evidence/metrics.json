@@ -1,0 +1,48 @@
+{
+  "task_count": 24,
+  "harness_starts": 24,
+  "tool_calls": 1402,
+  "development_executions": 49,
+  "independent_executions": 18,
+  "development_statuses": {
+    "TIMEDOUT": 1,
+    "PASSED": 24,
+    "FAILED": 24
+  },
+  "first_execution_statuses": {
+    "TIMEDOUT": 1,
+    "FAILED": 8,
+    "PASSED": 15
+  },
+  "task_statuses": {
+    "WAITING_HUMAN_REVIEW": 18,
+    "CANDIDATE_VALIDATION_FAILED": 6
+  },
+  "requirements_review": {
+    "NOT_ACCEPTED_ACTION_CHANGED": 3,
+    "BUSINESS_DIFFERENCE_RETAINED": 4,
+    "REVIEWED_COMPLETE_FOR_THIS_CASE": 14,
+    "REVIEW_REQUIRED_PRECONDITION_ADDED": 1,
+    "FROZEN_CASE_INPUT_CONFLICT": 1,
+    "BUSINESS_DIFFERENCE_WITH_COVERAGE_GAP": 1
+  },
+  "tool_errors": 234,
+  "tool_error_categories": {
+    "draft_absent": 13,
+    "browser_observation_error": 69,
+    "policy_rejection": 139,
+    "submission_rejection": 4,
+    "evidence_unavailable": 3,
+    "parameter_error": 3,
+    "other_tool_error": 3
+  },
+  "repeated_identical_failed_requests": 2,
+  "sum_task_elapsed_seconds": 5977.742,
+  "start": "2026-09-25T03:34:21.070Z",
+  "finish": "2026-09-25T05:14:16.263Z",
+  "provider_api_requests": null,
+  "provider_tokens": null,
+  "provider_cost": null,
+  "source_commit": "c2e2acaa48d73523f85d7681c1e26803eb51b0ec",
+  "wall_seconds": 5995.193
+}

@@ -87,3 +87,5 @@ REQ-0037 v5：现有DSH预检已替换engineering_fixture为真实DevelopmentSes
 REQ-0037 v6：产品代码及政策保持不变，新增独立合成站两流程和项目/用例/环境授权，均从生产自主建例入口启动；每条首稿正常五步通过、指定故障检出，完整包与自测一致。仅两样本技术验证，不代表稳定性或人工批准；证据见既有自主建例报告追加记录。
 
 REQ-0037 v7：用例详情按内部case_id/版本/内容哈希关联自主候选，显式试跑按完整包授权；复用BuildTaskManager调度、WorkbenchStore独立run、verify/步骤observer/replay。新run保存实际环境绑定及完整包，旧task保持终态和原字节。原生视频、中文步骤回放、截图与Trace按run读回；旧缺步骤截图不补拍。统一启动脚本新增fresh-b零模型配置，使用原独立数据与4322；冻结站点每run临时启动并关闭，不接受任意URL或重置模型额度。
+
+REQ-0037 v8：环境登记显式支持`validation_mode: normal-only`，仅有正常站点的任务不虚构故障验证。默认成对验证条件不变。新授权可选择exploratory档，上限为30分钟、360工具、10次开发执行、9次修订；旧授权继续使用原标准档。Agent自主决定何时提交，界面将资源计数放在技术详情，独立执行与人工要求核对仍分开。当前24条Kimi任务各仅授权一次Harness启动，详见`workbench/qa/20260925-kimi-workbench/REPORT.md`；本批结果不能替代通用稳定性结论。

@@ -1,0 +1,219 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925035209-9b4736a4/development/run-3",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925035209-9b4736a4/development/run-3/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925035209-9b4736a4/development/run-3",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "KC-04 站点与状态AND组合筛选",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 26798,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:57:27)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                      "column": 27,
+                      "line": 57
+                    },
+                    "snippet": "  55 |\n  56 |   const rows = deviceRows(page);\n> 57 |   await expect.soft(rows).toHaveCount(ids.length);\n     |                           ^\n  58 |\n  59 |   const headers = (await table.getByRole(\"columnheader\").allInnerTexts()).map((text) => text.trim());\n  60 |   const idIndex = headers.indexOf(\"编号\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                        "column": 27,
+                        "line": 57
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n\n  55 |\n  56 |   const rows = deviceRows(page);\n> 57 |   await expect.soft(rows).toHaveCount(ids.length);\n     |                           ^\n  58 |\n  59 |   const headers = (await table.getByRole(\"columnheader\").allInnerTexts()).map((text) => text.trim());\n  60 |   const idIndex = headers.indexOf(\"编号\");\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:57:27)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                        "column": 45,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(1).getByRole('cell').nth(1)\nExpected: \u001b[32m\"EQ-10\u001b[7m2\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"EQ-10\u001b[7m5\u001b[27m\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(1).getByRole('cell').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <td>EQ-105</td>\u001b[22m\n\u001b[2m       - unexpected value \"EQ-105\"\u001b[22m\n\n\n  66 |     for (let i = 0; i < ids.length; i += 1) {\n  67 |       const cells = rows.nth(i).getByRole(\"cell\");\n> 68 |       await expect.soft(cells.nth(idIndex)).toHaveText(ids[i]);\n     |                                             ^\n  69 |       await expect.soft(cells.nth(siteIndex)).toHaveText(site);\n  70 |     }\n  71 |   }\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:68:45)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                        "column": 45,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(2).getByRole('cell').nth(1)\nExpected: \u001b[32m\"EQ-105\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(2).getByRole('cell').nth(1)\u001b[22m\n\n\n  66 |     for (let i = 0; i < ids.length; i += 1) {\n  67 |       const cells = rows.nth(i).getByRole(\"cell\");\n> 68 |       await expect.soft(cells.nth(idIndex)).toHaveText(ids[i]);\n     |                                             ^\n  69 |       await expect.soft(cells.nth(siteIndex)).toHaveText(site);\n  70 |     }\n  71 |   }\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:68:45)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                        "column": 47,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(2).getByRole('cell').nth(3)\nExpected: \u001b[32m\"北站\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr').nth(2).getByRole('cell').nth(3)\u001b[22m\n\n\n  67 |       const cells = rows.nth(i).getByRole(\"cell\");\n  68 |       await expect.soft(cells.nth(idIndex)).toHaveText(ids[i]);\n> 69 |       await expect.soft(cells.nth(siteIndex)).toHaveText(site);\n     |                                               ^\n  70 |     }\n  71 |   }\n  72 |\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:69:47)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                        "column": 28,
+                        "line": 74
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//table[@aria-label=\"设备列表\"]/parent::div/following-sibling::*[contains(normalize-space(.), \"共\")]')\nExpected pattern: \u001b[32m/共\\s*3\\s*条/\u001b[39m\nReceived string:  \u001b[31m\"共 2 条，第 1/1 页，每页3条上一页下一页\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//table[@aria-label=\"设备列表\"]/parent::div/following-sibling::*[contains(normalize-space(.), \"共\")]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"pager\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"共 2 条，第 1/1 页，每页3条上一页下一页\"\u001b[22m\n\n\n  72 |\n  73 |   const pager = listPager(page);\n> 74 |   await expect.soft(pager).toContainText(new RegExp(`共\\\\s*${total}\\\\s*条`));\n     |                            ^\n  75 |   await expect.soft(pager).toContainText(/第\\s*1\\s*\\/\\s*\\d+\\s*页/);\n  76 | }\n  77 |\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:74:28)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 25228,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('table[aria-label=\"设备列表\"]').locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at expectDeviceList (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:57:27)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:83:5\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs:81:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                          "column": 27,
+                          "line": 57
+                        },
+                        "snippet": "  55 |\n  56 |   const rows = deviceRows(page);\n> 57 |   await expect.soft(rows).toHaveCount(ids.length);\n     |                           ^\n  58 |\n  59 |   const headers = (await table.getByRole(\"columnheader\").allInnerTexts()).map((text) => text.trim());\n  60 |   const idIndex = headers.indexOf(\"编号\");"
+                      }
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 93
+                    },
+                    {
+                      "title": "CASE_STEP_3",
+                      "duration": 121
+                    }
+                  ],
+                  "startTime": "2026-09-25T03:57:14.481Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\evidence\\artifacts\\candidate-KC-04-站点与状态AND组合筛选\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\evidence\\artifacts\\candidate-KC-04-站点与状态AND组合筛选\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\evidence\\artifacts\\candidate-KC-04-站点与状态AND组合筛选\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\evidence\\artifacts\\candidate-KC-04-站点与状态AND组合筛选\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925035209-9b4736a4\\development\\run-3\\candidate.spec.mjs",
+                    "column": 27,
+                    "line": 57
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-2d2fbe37c46d5e3e1283",
+          "file": "candidate.spec.mjs",
+          "line": 78,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T03:57:13.892Z",
+    "duration": 27946.735,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

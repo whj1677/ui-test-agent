@@ -1,0 +1,597 @@
+{
+  "external_id": "KC-18",
+  "title": "日期越界拒绝",
+  "task_id": "build-20260925043750-80802d76",
+  "status": "WAITING_HUMAN_REVIEW",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-f7c78d9d-b8e1-465c-8e17-bfbfda2b66a8",
+    "case_version": 1,
+    "external_id": "KC-18",
+    "content_sha256": "FF3A6689BA4353049D413C4214411599A1D17F309BB84B6BCDBB1E4F86F5B41E"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "WAITING_REVIEW",
+  "started_at": "2026-09-25T04:37:50.775Z",
+  "finished_at": "2026-09-25T04:41:12.315Z",
+  "elapsed_ms": 201540,
+  "harness_starts": 1,
+  "tool_calls": 60,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "PASSED",
+      "bundle_sha256": "BA16C13EF2D8E9A274C5CA56D60A4585C8D7BAB8C82488A6F0CA7CFB79CC29D1",
+      "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790311237044,
+      "finished_at": 1790311239836
+    }
+  ],
+  "submission": {
+    "outcome": "ready",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "基础字段通过，停留在第2步",
+        "check_lines": [
+          8,
+          9,
+          10,
+          13,
+          14,
+          15,
+          18,
+          19,
+          22,
+          23,
+          24,
+          27,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          36
+        ],
+        "execution": 1,
+        "uncovered": ""
+      },
+      {
+        "order": 2,
+        "requirement": "提示日期需在2026-10-10至2026-10-20含边界，不进入确认",
+        "check_lines": [
+          41,
+          42,
+          43,
+          46,
+          47,
+          48,
+          51,
+          52,
+          53
+        ],
+        "execution": 1,
+        "uncovered": ""
+      },
+      {
+        "order": 3,
+        "requirement": "允许进入第3步，日期边界包含",
+        "check_lines": [
+          58,
+          59,
+          60,
+          63,
+          64,
+          65
+        ],
+        "execution": 1,
+        "uncovered": ""
+      }
+    ]
+  },
+  "independent_runs": [
+    {
+      "run_id": "build-20260925043750-80802d76-normal",
+      "run_type": "normal",
+      "validation_scope": "normal-only",
+      "candidate_sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "candidate_version": 1,
+      "executed_case_id": "case-f7c78d9d-b8e1-465c-8e17-bfbfda2b66a8",
+      "executed_external_id": "KC-18",
+      "executed_case_version": 1,
+      "started_at": "2026-09-25T04:41:09.546Z",
+      "finished_at": "2026-09-25T04:41:12.300Z",
+      "status": "PASSED",
+      "complete_pass": true,
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "error": null,
+      "same_candidate_hash": true,
+      "specified_defect_detected": false,
+      "result": {
+        "report_status": "COMPLETE",
+        "test_status": "PASSED",
+        "test_count": 1,
+        "error": null,
+        "complete_pass": true,
+        "stats": {
+          "startTime": "2026-09-25T04:41:10.124Z",
+          "duration": 2147.371,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 0,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1",
+            "raw_title": "CASE_STEP_1",
+            "category": null,
+            "duration": 279,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2",
+            "raw_title": "CASE_STEP_2",
+            "category": null,
+            "duration": 81,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_3",
+            "raw_title": "CASE_STEP_3",
+            "category": null,
+            "duration": 60,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          }
+        ]
+      }
+    }
+  ],
+  "candidate": {
+    "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 2733,
+          "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F"
+        }
+      ],
+      "sha256": "BA16C13EF2D8E9A274C5CA56D60A4585C8D7BAB8C82488A6F0CA7CFB79CC29D1"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "A05757BFB179393930B6E0E38E22F9AD4B6FC3D78DB58905EE8E84714AA7B745",
+      "bytes": 5862
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790311236148/candidate.spec.mjs",
+      "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "bytes": 2733
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-37-55-095Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-38-08-205Z.yml",
+      "sha256": "8457A6FB8E1645909EDF8F0D342D3239BF95F4B10CADFCCABE550CDDE1EF721A",
+      "bytes": 4333
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-38-10-567Z.yml",
+      "sha256": "5C3F7D892F59BCCD07A23172A3FC43319FA7A7315F89E689705A489D3CD13A18",
+      "bytes": 4864
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-38-14-206Z.yml",
+      "sha256": "777B1D76FCB84A569794C4E9D7D8F03476DE25E56CD541CA7AB25E8B981C5C0E",
+      "bytes": 6384
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-38-32-137Z.yml",
+      "sha256": "5BB859F534903E8DEF2ECD6E37F9F362C9FB2908D84D718F71C5B8D4C32C94D9",
+      "bytes": 6468
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-38-42-037Z.yml",
+      "sha256": "A7CBCE54D66FC02BFFF00348C66F2DA04908822099E266B7D573432CAB29E1BB",
+      "bytes": 5149
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-02-555Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-04-189Z.yml",
+      "sha256": "C002B2D4871EF6CA6925545B7F9621A48A79C7AC1E9E1A14BA32F01F01A57F35",
+      "bytes": 4549
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-05-769Z.yml",
+      "sha256": "2D8A4C54181771683801C0A83DF1B82A1F2E43248514FF7EED7111626394F6CA",
+      "bytes": 4504
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-07-654Z.yml",
+      "sha256": "D913E919D266D1ACC9C48BE92637B809EC813018F0B79A6D47FD05945715683F",
+      "bytes": 4520
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-11-218Z.yml",
+      "sha256": "66CC22FDC92106087D7804DA3259FB4917399C367556F00C22D09BE3D1B6F956",
+      "bytes": 5075
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-26-873Z.yml",
+      "sha256": "22C09F54DF26DD987C8271832E44C5F96AA4FBDFA48A85057E21043F5489D4D2",
+      "bytes": 6629
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-34-808Z.yml",
+      "sha256": "F37AF9257AB11367E5B6D7EF26B0ACFE61DC8A8BF78A698E8B61CA60E48FE855",
+      "bytes": 6763
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-39-193Z.yml",
+      "sha256": "22A6AE19632D651D72DFEF6A1456894C7A57E62CEB12AFAD81AE3CFF4B7CC58D",
+      "bytes": 5370
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-39-54-079Z.yml",
+      "sha256": "0B634472FDC5E973D258A9C18FD20C277FA7844E1A063E04D18FC3CB1C4E7542",
+      "bytes": 6690
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "bytes": 2733
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "bytes": 2733
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/final/normal/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/final/normal/artifacts/candidate-KC-18-日期越界拒绝/test-finished-1.png",
+      "sha256": "B71FC16E44DCA52DEA5FE673782E4BD2917AEC6D0A0105D6244DE9E24FAF3E50",
+      "bytes": 63879
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/final/normal/artifacts/candidate-KC-18-日期越界拒绝/trace.zip",
+      "sha256": "35CA07E5A0DC1C54821D94071100798C8264CA88527569059617770DF52B362C",
+      "bytes": 482407
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/final/normal/artifacts/candidate-KC-18-日期越界拒绝/video.webm",
+      "sha256": "9B3AF885D3B97C63911BB5659A2D75BB4E29475D08B195FB712ADDDD783979CA",
+      "bytes": 80342
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/final/normal/playwright-report.json",
+      "sha256": "CDC9A966C5063C5ED58566C5381F20BC3C651190C9BE2C18EF91430AF8B82D4E",
+      "bytes": 5074
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/harness-events.json",
+      "sha256": "8238B692CC6AF3A02C7B6888E438624394CEC1E1F257051E89385906C6AB47CE",
+      "bytes": 223173
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/harness-summary.json",
+      "sha256": "5F70990C21F628BF86F493B8CBB96BF68608C7641F635415C26C13B5E267A3FC",
+      "bytes": 279
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "31510BC141E54683E9FE72B00CB94096EE2B8C20DC9487B3C05E8AAEDEE6565F",
+      "bytes": 2733
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-18-日期越界拒绝/test-finished-1.png",
+      "sha256": "B71FC16E44DCA52DEA5FE673782E4BD2917AEC6D0A0105D6244DE9E24FAF3E50",
+      "bytes": 63879
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-18-日期越界拒绝/trace.zip",
+      "sha256": "4D9DA1B5F413DB086D1EF59B5B2CA525AB06F08F5EBC7FFE52E799989113A5B5",
+      "bytes": 483306
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-18-日期越界拒绝/video.webm",
+      "sha256": "C591227E0F73E380E8606BA42259D08925F835AB05C0AE8860CA104555774C14",
+      "bytes": 81448
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "79E6E147E84AB79B5516ABA29E575CC38AB8432B6AEF2A2793FE489E350A0EB4",
+      "bytes": 5085
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "917927D1ADF0121D87F8C0B1A23956A0F551B4A96333A67B4E7CB719556E0481",
+      "bytes": 50057
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "240C5461980DF3FE92DA5199405BF6E421EE3A17B99EAD7508C91AB5CBB87284",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aria-ref=e97')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"drawerClose\" aria-label=\"关闭详情\">关闭</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "26D684F0BFE5AC8D4C7933C3106E6F9D9BF6B68FCABE5F480B0BA75D1B238265",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "553525C6F4D08898FF0BF01125B8FF463DA26D60BC9C382246DA077F73ABE407",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: \"#bulkBook\" does not match any elements.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_snapshot",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "BFCC00202CCE041A4AF3B5D2952B2FDF782BB3839FCCF2FC231601790C0BD66E",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f1e133 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "898D69D0D54AB83E33BA927271452DED6A3CD3A6F64A4ECB418F1251FA3D9072",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_fill_form",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "FF9E0B68BDC5A401335548C765AC0EB631645030BA624CECF4F61A0BC973FA8D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#applicant')\u001b[22m\n\u001b[2m    - locator resolved to <input id=\"applicant\" maxlength=\"30\" placeholder=\"2到20字，去两端空白\"/>\u001b[22m\n\u001b[2m    - fill(\"张三\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    10 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "B6A4E7DDDB5775C70D00CEEACA650C6F4EB839DE987FE20096BB0C6F461F7A43",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('button:has-text(\"下一步\")') resolved to 2 elements:\n    1) <button id=\"to2\" class=\"primary\">下一步</button> aka locator('#step1').getByText('下一步')\n    2) <button id=\"to3\" class=\"primary\">下一步</button> aka getByRole('button', { name: '下一步' })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"下一步\")')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "A72D935E3D7057AADC5F00E7933EA3662B1E4559C8B52B3B2E4230C512315DE2",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "8417AF85382FFE59AED2CC1ED4DC45824CE6700BE6FBF966D0D470B5FCA44B00",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    }
+  ]
+}

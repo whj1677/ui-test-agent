@@ -1,0 +1,179 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-2",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-2/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-2",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "KC-23 多设备总价与双击确认只增一条",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6290,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:74:45\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:42:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs",
+                      "column": 45,
+                      "line": 74
+                    },
+                    "snippet": "  72 |     await expect(dialog.getByRole(\"textbox\", { name: \"用途\" })).toHaveValue(\"联合压力测试\");\n  73 |     await expect(dialog.getByRole(\"textbox\", { name: \"日期\" })).toHaveValue(\"2026-10-12\");\n> 74 |     await expect(dialog.getByLabel(\"开始整点\")).toHaveValue(\"13:00\");\n     |                                             ^\n  75 |     await expect(dialog.getByLabel(\"结束整点\")).toHaveValue(\"15:00\");\n  76 |\n  77 |     // 步骤 2 → 步骤 3（确认）"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs",
+                        "column": 45,
+                        "line": 74
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n\n\n  72 |     await expect(dialog.getByRole(\"textbox\", { name: \"用途\" })).toHaveValue(\"联合压力测试\");\n  73 |     await expect(dialog.getByRole(\"textbox\", { name: \"日期\" })).toHaveValue(\"2026-10-12\");\n> 74 |     await expect(dialog.getByLabel(\"开始整点\")).toHaveValue(\"13:00\");\n     |                                             ^\n  75 |     await expect(dialog.getByLabel(\"结束整点\")).toHaveValue(\"15:00\");\n  76 |\n  77 |     // 步骤 2 → 步骤 3（确认）\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:74:45\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:42:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 5462,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:74:45\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs:42:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs",
+                          "column": 45,
+                          "line": 74
+                        },
+                        "snippet": "  72 |     await expect(dialog.getByRole(\"textbox\", { name: \"用途\" })).toHaveValue(\"联合压力测试\");\n  73 |     await expect(dialog.getByRole(\"textbox\", { name: \"日期\" })).toHaveValue(\"2026-10-12\");\n> 74 |     await expect(dialog.getByLabel(\"开始整点\")).toHaveValue(\"13:00\");\n     |                                             ^\n  75 |     await expect(dialog.getByLabel(\"结束整点\")).toHaveValue(\"15:00\");\n  76 |\n  77 |     // 步骤 2 → 步骤 3（确认）"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T05:02:49.156Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs",
+                    "column": 45,
+                    "line": 74
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-9050ae1243abdd6ca5d9",
+          "file": "candidate.spec.mjs",
+          "line": 37,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T05:02:48.547Z",
+    "duration": 7432.133000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

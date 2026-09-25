@@ -1,0 +1,882 @@
+{
+  "external_id": "KC-03",
+  "title": "同名温循箱搜索",
+  "task_id": "build-20260925034539-640747ed",
+  "status": "CANDIDATE_VALIDATION_FAILED",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-10f76195-b576-44e6-b4d2-8e6043bd0256",
+    "case_version": 1,
+    "external_id": "KC-03",
+    "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "NOT_READY",
+  "started_at": "2026-09-25T03:45:39.462Z",
+  "finished_at": "2026-09-25T03:52:08.320Z",
+  "elapsed_ms": 388858,
+  "harness_starts": 1,
+  "tool_calls": 69,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "FAILED",
+      "bundle_sha256": "C6B4FE18EBE4C83BDD26258B3E52CE4B13CADF20C7D7F6DA668A4204C6F6A54E",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+        "expected": "2",
+        "actual": "1",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+                  "expected": "2",
+                  "actual": "1",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925034539-640747ed\\development\\run-1\\candidate.spec.mjs",
+                    "line": 21,
+                    "column": 28
+                  },
+                  "snippet": "  19 |\n  20 |     // Only two devices named 温循箱 exist in the demo data.\n> 21 |     await expect(dataRows).toHaveCount(2);\n     |                            ^\n  22 |\n  23 |     const row101 = rowByCode(\"EQ-101\");\n  24 |     const row104 = rowByCode(\"EQ-104\");"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790308060241,
+      "finished_at": 1790308067985
+    },
+    {
+      "number": 2,
+      "status": "FAILED",
+      "bundle_sha256": "7D801B6C3D10AF9CF9AC92B03C658C22810C685F44A40E86BEFAA234FC0C1C69",
+      "sha256": "8F033049D2B7485CAF9FB64CB17E20DA6DEBA78870B8D01AB47243FF73841D8C",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toBeChecked() failed\n\nLocator:  getByRole('group', { name: '状态多选' }).getByRole('checkbox', { name: '使用中' })\nExpected: checked\nReceived: unchecked\nTimeout:  5000ms\n\nCall log:\n  - Expect \"soft toBeChecked\" with timeout 5000ms\n  - waiting for getByRole('group', { name: '状态多选' }).getByRole('checkbox', { name: '使用中' })\n    14 × locator resolved to <input id=\"stBusy\" value=\"使用中\" type=\"checkbox\"/>\n       - unexpected value \"unchecked\"\n",
+        "expected": null,
+        "actual": null,
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-2/evidence/playwright-report.json",
+      "started_at": 1790308231901,
+      "finished_at": 1790308264179
+    },
+    {
+      "number": 3,
+      "status": "PASSED",
+      "bundle_sha256": "1A371B7FEBA1F3F3A4B3461629EB9D1470D5AD61A662FFEE6A6ED6B2196EEE8C",
+      "sha256": "18DBDCDA297B1FD19B98A5B6870878F57F35C0A79BF3C941DABDD281B33D2036",
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "MISSING",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-3/evidence/playwright-report.json",
+      "started_at": 1790308284812,
+      "finished_at": 1790308287822
+    },
+    {
+      "number": 4,
+      "status": "FAILED",
+      "bundle_sha256": "C6B4FE18EBE4C83BDD26258B3E52CE4B13CADF20C7D7F6DA668A4204C6F6A54E",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+        "expected": "2",
+        "actual": "1",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 2\nReceived: 1\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 1 element\n       - unexpected value \"1\"\n",
+                  "expected": "2",
+                  "actual": "1",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925034539-640747ed\\development\\run-4\\candidate.spec.mjs",
+                    "line": 21,
+                    "column": 28
+                  },
+                  "snippet": "  19 |\n  20 |     // Only two devices named 温循箱 exist in the demo data.\n> 21 |     await expect(dataRows).toHaveCount(2);\n     |                            ^\n  22 |\n  23 |     const row101 = rowByCode(\"EQ-101\");\n  24 |     const row104 = rowByCode(\"EQ-104\");"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-4/evidence/playwright-report.json",
+      "started_at": 1790308295848,
+      "finished_at": 1790308303386
+    }
+  ],
+  "submission": {
+    "outcome": "business_difference",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "仅显示EQ-101北站温循箱和EQ-104南站温循箱，共2条",
+        "check_lines": [
+          21,
+          25,
+          26,
+          31,
+          34,
+          37,
+          40,
+          42
+        ],
+        "execution": 4,
+        "uncovered": "检查已执行但业务预期未满足：正常入口/重置演示数据后，“状态多选”默认仅勾选“空闲”，搜索“温循箱”实际只显示 1 条(EQ-101 北站 温循箱)；EQ-104(南站 温循箱)状态为“使用中”，被默认状态筛选过滤，无法出现第 2 行。"
+      },
+      {
+        "order": 2,
+        "requirement": "两行编号分别为EQ-101与EQ-104，不因同名合并或串用",
+        "check_lines": [
+          47,
+          54,
+          55,
+          61,
+          64,
+          67,
+          70
+        ],
+        "execution": 4,
+        "uncovered": "未执行：CASE_STEP_1 断言失败使测试在第 1 步中止，本步骤的编号/站点绑定检查未运行。已用诊断运行(run-3)在补充勾选“使用中/维护”后验证同一逻辑可通过。"
+      },
+      {
+        "order": 3,
+        "requirement": "恢复8条，筛选清空选择并回到第1页",
+        "check_lines": [
+          77,
+          81,
+          82,
+          83,
+          84
+        ],
+        "execution": 4,
+        "uncovered": "未执行：CASE_STEP_1 断言失败使测试在第 1 步中止，本步骤的 8 条/清空选择/回到第1页检查未运行。默认“空闲”筛选下清空搜索实际只恢复 5 条（诊断 run-2 实测）。"
+      }
+    ]
+  },
+  "independent_runs": [],
+  "candidate": {
+    "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 3142,
+          "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68"
+        }
+      ],
+      "sha256": "C6B4FE18EBE4C83BDD26258B3E52CE4B13CADF20C7D7F6DA668A4204C6F6A54E"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [
+    {
+      "tool": "check_fidelity",
+      "at": 1790307942896,
+      "code": "DRAFT_NOT_CREATED",
+      "rule": "DRAFT_NOT_CREATED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+      "draft_saved": false,
+      "draft_exists": false,
+      "current_sha256": null,
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    },
+    {
+      "tool": "write_draft",
+      "at": 1790308216786,
+      "code": "DOM_READ_CONTRACT_REQUIRED",
+      "rule": "READ_ONLY_DOM_EXPRESSION",
+      "node": "CallExpression",
+      "identifier": null,
+      "location": {
+        "line": 11,
+        "column": 48
+      },
+      "message": "Use DOM selectors, attribute/text/state reads and read-only array mapping; mutation, arbitrary calls and browser globals require a controlled entry. Use browser_snapshot for unsupported expressions.",
+      "draft_saved": false,
+      "draft_exists": true,
+      "current_sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    }
+  ],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "A900AE74D5510A0F2F1816874541E9C8A7A114A7B4529E7983C4AA8D1A46DBE0",
+      "bytes": 5825
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790308059262/candidate.spec.mjs",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "bytes": 3142
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-45-44-493Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-45-50-275Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-45-59-747Z.yml",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-02-724Z.yml",
+      "sha256": "70E8E8D95C9BC11ADC6E35974A465E65C3291FF92A1C3F9D18DD03CAA02C6083",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-15-712Z.yml",
+      "sha256": "4493330FD4EC032AE77C961CC3229102B95C9C60E4A74A04FBB8925C79A01E35",
+      "bytes": 3243
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-21-431Z.yml",
+      "sha256": "B63A82470475CB6A648EBA7099ADB4484EE96D08BE405E2DA4B8B68F90359E05",
+      "bytes": 3670
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-22-844Z.yml",
+      "sha256": "8BF77184AD4610501E884C27109304F3293EE5E85CD62F1C5FA9AE3B8D7DF3E1",
+      "bytes": 3680
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-26-959Z.yml",
+      "sha256": "5AA28ECCD8AB435FBC94B28A63B0A84CE960F68BBCF9ED8A2E7D71EFF3C54931",
+      "bytes": 4114
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-46-52-990Z.yml",
+      "sha256": "4D6F76B3B030F0758844FDCDBFE9F47FDDF4A328049B2EA7B0697D2AD7EDAFFF",
+      "bytes": 4140
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-48-03-998Z.yml",
+      "sha256": "EEDAB84A3AB48F6126C97ECB400296DE8F48F5FC661DE9B2DB848B1A15A1CD1E",
+      "bytes": 3232
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-48-43-536Z.yml",
+      "sha256": "CEF1FF3118220B221029FB6A31EB76D2C6E690586B16422ABE3E626D21D74495",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-49-35-077Z.yml",
+      "sha256": "0E12AFD3058C4C7802080F39B83FBEDA41EDE8C49064D95F459EE989B83D82DC",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-49-37-214Z.yml",
+      "sha256": "2C2759507322B35C55DD2132BCA852A87A55D1C634A2B6F5748EC6B04F8560CF",
+      "bytes": 4108
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T03-49-39-379Z.yml",
+      "sha256": "25CEF76FDD6AE74949E2E6B72CA5095574B9296C33B3F2940A0A6F2415F81F37",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "bytes": 3142
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "bytes": 3142
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/harness-events.json",
+      "sha256": "F0E871F190E0174FF378DE7225340CDA1B9E58779C152B6EF29F8450CBB3CBCD",
+      "bytes": 322258
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/harness-summary.json",
+      "sha256": "2345FF07B4B93BE946C2D78B0352130C34BA8A8E9CFD3B7EF046E9516E8EF815",
+      "bytes": 279
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "bytes": 3142
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "9C4305985EA9418EA01DB81DC2742435348F777B5ABCF2AA4CBE795ADBC87B9A",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-03-同名温循箱搜索/error-context.md",
+      "sha256": "92C937307395EBDB361717B514A70578AFC60A50CE72A4FD7D4EE610E9E86BD6",
+      "bytes": 8135
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-03-同名温循箱搜索/test-failed-1.png",
+      "sha256": "6E1942D1883E0E82B6CA9A82EF093D94CDBB4A1F201402DC58A36224C7E2B928",
+      "bytes": 46252
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-03-同名温循箱搜索/trace.zip",
+      "sha256": "37E63990728A53D26A24593B5482894995BF70CE2574BE3EEAFA6C414946527D",
+      "bytes": 446656
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-03-同名温循箱搜索/video.webm",
+      "sha256": "23D61323350837F32396DC6BCF5DD9E139ED487034A946800199C22F231CE3ED",
+      "bytes": 158631
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "7118EC49BEF37262EB1553AB34AEFE2E3D126A86903443F396D39A18A34BE45C",
+      "bytes": 11972
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/run-2/candidate.spec.mjs",
+      "sha256": "8F033049D2B7485CAF9FB64CB17E20DA6DEBA78870B8D01AB47243FF73841D8C",
+      "bytes": 1239
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/run-2/evidence/artifacts/.last-run.json",
+      "sha256": "A941D319400831ECF892E50D698A62106C15D5B0CD05F52B4AA1CBE0D7360203",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/run-2/evidence/artifacts/candidate-probe-reset-state/error-context.md",
+      "sha256": "3E08BB3460641F7E267A8BD590AE7414B6427574C5448644FBCAEE71E6C34D92",
+      "bytes": 7253
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/run-2/evidence/artifacts/candidate-probe-reset-state/test-failed-1.png",
+      "sha256": "45EFCAA464A0BD7778E96C3A75A4C9DB940E865EAE08E1F68AF5B37CE195C39A",
+      "bytes": 55461
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/run-2/evidence/artifacts/candidate-probe-reset-state/trace.zip",
+      "sha256": "9F648ED6C1DFDAF52A1927033BF06E5129DA1B1B39FF2C426A458B082D413B0B",
+      "bytes": 1385613
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "development/run-2/evidence/artifacts/candidate-probe-reset-state/video.webm",
+      "sha256": "64639003031899E0EEBA7F4F6F2CAE628C451924A8BC4CCCAE41837D9C05053C",
+      "bytes": 440398
+    },
+    {
+      "file_id": "build-file-34",
+      "path": "development/run-2/evidence/playwright-report.json",
+      "sha256": "AAE3995E26B6EFA00B55DC962B1315C4FA3A0FD8ED4190E70466563FFFD10DFE",
+      "bytes": 16616
+    },
+    {
+      "file_id": "build-file-35",
+      "path": "development/run-3/candidate.spec.mjs",
+      "sha256": "18DBDCDA297B1FD19B98A5B6870878F57F35C0A79BF3C941DABDD281B33D2036",
+      "bytes": 2357
+    },
+    {
+      "file_id": "build-file-36",
+      "path": "development/run-3/evidence/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-37",
+      "path": "development/run-3/evidence/artifacts/candidate-probe-candidate-logic-with-full-status-filter/test-finished-1.png",
+      "sha256": "54F6EFC738E47F20B90AF4DBD6718FBAAFE72E53E14AAEF836B0A34FEC411E0F",
+      "bytes": 55457
+    },
+    {
+      "file_id": "build-file-38",
+      "path": "development/run-3/evidence/artifacts/candidate-probe-candidate-logic-with-full-status-filter/trace.zip",
+      "sha256": "C63F2A8DFBF360E3906403EF28B1731F2A04F09430D2496EF79E092EBFD6C8CE",
+      "bytes": 368523
+    },
+    {
+      "file_id": "build-file-39",
+      "path": "development/run-3/evidence/artifacts/candidate-probe-candidate-logic-with-full-status-filter/video.webm",
+      "sha256": "78ED3F616C7FB565EC98488E03458E5E1B120EF87EB93148E764BD90F8351DC2",
+      "bytes": 50903
+    },
+    {
+      "file_id": "build-file-40",
+      "path": "development/run-3/evidence/playwright-report.json",
+      "sha256": "0C260C59FCFF58115B7413D85851BC9C6A5A3BE474EEB551306DD679507876D1",
+      "bytes": 4745
+    },
+    {
+      "file_id": "build-file-41",
+      "path": "development/run-4/candidate.spec.mjs",
+      "sha256": "0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68",
+      "bytes": 3142
+    },
+    {
+      "file_id": "build-file-42",
+      "path": "development/run-4/evidence/artifacts/.last-run.json",
+      "sha256": "9C4305985EA9418EA01DB81DC2742435348F777B5ABCF2AA4CBE795ADBC87B9A",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-43",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-03-同名温循箱搜索/error-context.md",
+      "sha256": "FC4D9FBE44162F3217D6C99B1B35D3428ABC675A0AC383FCE46AD13944818D18",
+      "bytes": 8135
+    },
+    {
+      "file_id": "build-file-44",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-03-同名温循箱搜索/test-failed-1.png",
+      "sha256": "6E1942D1883E0E82B6CA9A82EF093D94CDBB4A1F201402DC58A36224C7E2B928",
+      "bytes": 46252
+    },
+    {
+      "file_id": "build-file-45",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-03-同名温循箱搜索/trace.zip",
+      "sha256": "033D66D1A4E7AB1FC529CE6F807ED9E0BDB77FFF016C58CED34BF9E468C94835",
+      "bytes": 449154
+    },
+    {
+      "file_id": "build-file-46",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-03-同名温循箱搜索/video.webm",
+      "sha256": "BAA6096AE90E00CE7F693EE2AAD9938F19AB3819DA9CC84FB37ED1CBC8D631D9",
+      "bytes": 99402
+    },
+    {
+      "file_id": "build-file-47",
+      "path": "development/run-4/evidence/playwright-report.json",
+      "sha256": "68A5FA76DB32AA5BA4D184AAF2779C25C26E79098BBB33BF34259898DC7F5063",
+      "bytes": 11972
+    },
+    {
+      "file_id": "build-file-48",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "E089397C8911192BB4A32CCDE0E19C7170D98DE4658E07067BA8B54E345C47D3",
+      "bytes": 59157
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "DRAFT_NOT_CREATED",
+      "category": "draft_absent",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_NOT_CREATED\",\"rule\":\"DRAFT_NOT_CREATED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"No draft has been saved. Use write_draft with ES module code and previous_sha256=null.\",\"draft_saved\":false,\"draft_exists\":false,\"current_sha256\":null,\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "FFFE025C71D93B36697B87F9AB69D6192E79A9EF360A0919BFB6C4C5E1BCA32D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "1916BA5895ACC3CA495D3BF8B68423F14A4F3F3225F9432FB8EB3DEE20A7FB37",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref e8 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_press_key",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "08C1A20FE7570CD6FF3D987C25F295F0098C8C7A28872EF42D7FD2ABD71CF020",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Tool \"browser_press_key\" does not handle the modal state.\n### Modal state\n- [\"confirm\" dialog with message \"确认重置演示数据？仅重置本演示命名空间 kimi-complex-lab-v1。\"]: can be handled by browser_handle_dialog",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "2EE0609103B87A3E7FC3CD0F44F2F508AE8BD6DC7B4AABA87DF4F059185762EC",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "0118CD1CCFED5A73D9F48D0FC3C11E4509C1077AB19ED4E2ECDB3D6548C51881",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "90CD953F7ED8D42CC458051F1E32E3802F02FD8AD6374A96B22DDC3393C41260",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_fill_form",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "78661D36F8CEF18D49CCC0A83CBD93B765F50A0A4C66F99FF5EACE5EFD4AC71F",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f2e24 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_snapshot",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "876F062E35ABAC8492A3D8DE54F8B4182F4CA56AD6967CECD8D495038CC96C23",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f2e22 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_snapshot",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "243502D7816C2A8C623B6273CF62E4428ABA8DA1AD94B1D12F6E0DBE2D3D5836",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f2e90 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "6F25D57EB745E3FAA54074A4DF2A03094FCEDA8D3352CBE404BB66EC3B25CA84",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "2EA1669420B7378A1149DF43A35D66FBA25FF399FC44E9DB24E4347EAAA851A2",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__write_draft",
+      "code": "DOM_READ_CONTRACT_REQUIRED",
+      "category": "policy_rejection",
+      "input_sha256": "37B3E31017DA04FB44B095B861433FEAE685E549484C59FCF12B72D8EB76847C",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DOM_READ_CONTRACT_REQUIRED\",\"rule\":\"READ_ONLY_DOM_EXPRESSION\",\"node\":\"CallExpression\",\"identifier\":null,\"location\":{\"line\":11,\"column\":48},\"message\":\"Use DOM selectors, attribute/text/state reads and read-only array mapping; mutation, arbitrary calls and browser globals require a controlled entry. Use browser_snapshot for unsupported expressions.\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"0860B7DACDCC910B285C8F6D2FE6E2AB0177FB1504FA2281EC5E515BC9829C68\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    }
+  ]
+}

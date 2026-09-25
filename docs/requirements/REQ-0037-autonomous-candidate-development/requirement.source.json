@@ -3,7 +3,7 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "24条Kimi用例已导入；宽松自主开发与正常入口验收工程预检完成，真实模型执行待开始",
+    "requirement_status": "24条真实自主建例流程已执行；18独立技术通过、6失败保留；原要求核查分层，候选未批准",
     "governance_level": "G2",
     "version": 8,
     "last_updated": "2026-09-25"
@@ -161,17 +161,17 @@
       ]
     },
     {
-      "id": "TK-0037-03",
+      "id": "TK-0037-04",
       "dr_ids": [
         "DR-0037-03"
       ],
       "dd_ids": [
         "DD-0037-03"
       ],
-      "status": "部分实现",
-      "task": "工程接线与UI导入已完成，24条真实建例待执行",
+      "status": "已实现",
+      "task": "完成正常入口模式、探索档、状态展示、24条保真UI导入及真实自主建例；逐条独立核查和证据收口，业务失败保留",
       "verification_ids": [
-        "VT-0037-03"
+        "VT-0037-06"
       ]
     }
   ],
@@ -260,13 +260,13 @@
       }
     },
     {
-      "id": "VT-0037-03",
+      "id": "VT-0037-06",
       "dr_ids": [
         "DR-0037-03"
       ],
       "confirmation_status": "已确认",
       "execution_status": "人工待确认",
-      "item": "工作台138项工程及真实DSH零模型工具链完成；24条真实Agent任务尚未启动",
+      "item": "工作台138项工程及真实DSH零模型链路；24真实任务已结束，18独立执行通过/6失败保留，语义核查14完整/其余分层，候选未批准",
       "evidence_standard": "生产UI导入/启动记录，候选包/执行报告/截图来源一致，语义另行核对",
       "current_evidence": {
         "command": "node --test workbench/tests/*.test.mjs",
@@ -338,9 +338,9 @@
       "un_id": "UN-0037-03",
       "dr_id": "DR-0037-03",
       "dd_id": "DD-0037-03",
-      "tk_id": "TK-0037-03",
-      "vt_id": "VT-0037-03",
-      "status": "部分实现"
+      "tk_id": "TK-0037-04",
+      "vt_id": "VT-0037-06",
+      "status": "已实现"
     }
   ],
   "trace_history": [
@@ -385,6 +385,12 @@
       "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
       "status": "工程及产品接线验证完成，候选未批准",
       "notes": "任务卡：复用FRESH-B原始独立数据与完整包；用例详情关联、显式零模型复跑、新run与中文媒体；0 Harness/0建例调用，旧任务与批准状态不改；工程身份/重复/取消/媒体测试后实际正常与故障验证；日常4322统一入口，完成并推送后停止，不扩展UI/AUTH/工具政策。"
+    },
+    {
+      "version": 8,
+      "link": "workbench/qa/20260925-kimi-workbench/REPORT.md",
+      "status": "24条真实流程已执行，候选未批准",
+      "notes": "24 Harness/49开发执行/18独立执行/1402工具；正常页不等于保真，通过后的修改/重复/诊断分开记录，原失败不改写。"
     }
   ],
   "open_questions": [

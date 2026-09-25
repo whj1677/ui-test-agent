@@ -1,0 +1,810 @@
+{
+  "external_id": "KC-24",
+  "title": "取消先放弃再确认后可再约",
+  "task_id": "build-20260925050900-73b87996",
+  "status": "WAITING_HUMAN_REVIEW",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-990df219-7734-42c1-945d-cb0d31be12cc",
+    "case_version": 1,
+    "external_id": "KC-24",
+    "content_sha256": "E58D60DD0C6A9DFB51048A1ABD00C4FDA6ED004EB8E6A70CF7D3020BE0520584"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "WAITING_REVIEW",
+  "started_at": "2026-09-25T05:09:00.126Z",
+  "finished_at": "2026-09-25T05:14:16.263Z",
+  "elapsed_ms": 316137,
+  "harness_starts": 1,
+  "tool_calls": 77,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "PASSED",
+      "bundle_sha256": "C4586D06E258599860F1F8B60A402C18FFF77F370FFD246C7A739A2C5683FEE7",
+      "sha256": "F72EA4BD62F1A46EED7E34FE9FBAC12DFE68EDDD82513E27EAE8388776E614B0",
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790313171467,
+      "finished_at": 1790313174790
+    },
+    {
+      "number": 2,
+      "status": "PASSED",
+      "bundle_sha256": "A050FB4D929A63659FA9B11B59C5C8F65ABFD8494BA9C7636A794F10A5C4208C",
+      "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-2/evidence/playwright-report.json",
+      "started_at": 1790313221920,
+      "finished_at": 1790313225107
+    }
+  ],
+  "submission": {
+    "outcome": "ready",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "R-001仍为已确认，统计不变，取消按钮仍可用",
+        "check_lines": [
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          89,
+          90,
+          92,
+          93,
+          95,
+          96,
+          97
+        ],
+        "execution": 2,
+        "uncovered": ""
+      },
+      {
+        "order": 2,
+        "requirement": "R-001变为已取消，记录与总价40保留，取消按钮禁用，已确认预约0，收入0",
+        "check_lines": [
+          101,
+          102,
+          103,
+          105,
+          106,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123
+        ],
+        "execution": 2,
+        "uncovered": ""
+      },
+      {
+        "order": 3,
+        "requirement": "已取消释放时间，不再冲突，创建R-002成功且刷新后保留，R-001保持已取消",
+        "check_lines": [
+          127,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          136,
+          137,
+          138,
+          139,
+          141,
+          142,
+          143,
+          144,
+          145,
+          147,
+          148,
+          149,
+          151,
+          152,
+          153,
+          154,
+          155,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186
+        ],
+        "execution": 2,
+        "uncovered": ""
+      }
+    ]
+  },
+  "independent_runs": [
+    {
+      "run_id": "build-20260925050900-73b87996-normal",
+      "run_type": "normal",
+      "validation_scope": "normal-only",
+      "candidate_sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+      "candidate_version": 2,
+      "executed_case_id": "case-990df219-7734-42c1-945d-cb0d31be12cc",
+      "executed_external_id": "KC-24",
+      "executed_case_version": 1,
+      "started_at": "2026-09-25T05:14:12.908Z",
+      "finished_at": "2026-09-25T05:14:16.244Z",
+      "status": "PASSED",
+      "complete_pass": true,
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "error": null,
+      "same_candidate_hash": true,
+      "specified_defect_detected": false,
+      "result": {
+        "report_status": "COMPLETE",
+        "test_status": "PASSED",
+        "test_count": 1,
+        "error": null,
+        "complete_pass": true,
+        "stats": {
+          "startTime": "2026-09-25T05:14:13.497Z",
+          "duration": 2735.761,
+          "expected": 1,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "process": {
+          "exit_code": 0,
+          "termination": null,
+          "error": null
+        },
+        "steps": [
+          {
+            "title": "CASE_STEP_1",
+            "raw_title": "CASE_STEP_1",
+            "category": null,
+            "duration": 235,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_2",
+            "raw_title": "CASE_STEP_2",
+            "category": null,
+            "duration": 111,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          },
+          {
+            "title": "CASE_STEP_3",
+            "raw_title": "CASE_STEP_3",
+            "category": null,
+            "duration": 578,
+            "error": null,
+            "raw_error": null,
+            "steps": []
+          }
+        ]
+      }
+    }
+  ],
+  "candidate": {
+    "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 7340,
+          "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE"
+        }
+      ],
+      "sha256": "A050FB4D929A63659FA9B11B59C5C8F65ABFD8494BA9C7636A794F10A5C4208C"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [
+    {
+      "tool": "check_fidelity",
+      "at": 1790313101582,
+      "code": "DRAFT_NOT_CREATED",
+      "rule": "DRAFT_NOT_CREATED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+      "draft_saved": false,
+      "draft_exists": false,
+      "current_sha256": null,
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    }
+  ],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "64BA9EEFFA17E26D17A41C0154260638C0354668A0B6384158229E65E9A37038",
+      "bytes": 5986
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790313170546/candidate.spec.mjs",
+      "sha256": "F72EA4BD62F1A46EED7E34FE9FBAC12DFE68EDDD82513E27EAE8388776E614B0",
+      "bytes": 6834
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/diagnostic-1790313206548/candidate.spec.mjs",
+      "sha256": "29C72CA2FC5259948FBE0FD0F7A3A67E8CE772A856D75F0E88E85840418E64CE",
+      "bytes": 6692
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-04-587Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-19-406Z.yml",
+      "sha256": "CA1BA94353F607DBE22856D351B78F9D6A2CE3166E4F0A59E9E8A362B49A8337",
+      "bytes": 2128
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-21-220Z.yml",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-26-463Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-36-329Z.yml",
+      "sha256": "13216744DC8AAA684FE1EF8A3E18DE33538E6BFDD973B0BE1C6C1E32542CEA96",
+      "bytes": 4987
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-39-587Z.yml",
+      "sha256": "56657BCD1DA9809A68F818DCC25F44EBEEC839E5A143A8EAD6B4C0D09D2BF42B",
+      "bytes": 4987
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-41-005Z.yml",
+      "sha256": "0EBEA22B6C17D59EFE8FDF4AE27D00761441C8C3F0B9844BD455998D8B7682BC",
+      "bytes": 5033
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-44-212Z.yml",
+      "sha256": "1D2AAEEF6EE8C73F7F2BEFB95AE45395193EE04AE6C691665A42297E1F137C1A",
+      "bytes": 5588
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-09-47-089Z.yml",
+      "sha256": "1F701685613AEFA7733EA610FAD5F48D0777B76CD57A1A3AA75F70B3D14720DD",
+      "bytes": 7142
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-13-294Z.yml",
+      "sha256": "A88F4CC86F0D52E3750D52394084C5580DB821212F3D640CDFCF3967FFB8C413",
+      "bytes": 7200
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-18-626Z.yml",
+      "sha256": "0658ACC340AA5A01CBD919658DAAF5995D92D59ACFAA231C8BD7B5005FC1F761",
+      "bytes": 7200
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-18-651Z.yml",
+      "sha256": "BEEC02FA399220DF2FD805E698FB0B00338A64719BA13D30E703B7D424E14DE6",
+      "bytes": 7200
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-20-601Z.yml",
+      "sha256": "1DA855F2B6E7ADFFE41E47EE1E51493817868C415BD02483DC32207C8B4DA066",
+      "bytes": 7284
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-24-635Z.yml",
+      "sha256": "BCBBA2BBAD12C79C7EB3852C031CA4C11A1675C92FFE4177DECEB38A80C9FE1A",
+      "bytes": 5886
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-29-806Z.yml",
+      "sha256": "813B7F54054297DB311ADF3E62B4D2606CB58EA7EA3425F91CB727CC167DA532",
+      "bytes": 3281
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-37-890Z.yml",
+      "sha256": "0998EA3153F1671400F3002A7A879EE397A82E54F38D4B5364740B691BCF35A0",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-42-800Z.yml",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-10-57-936Z.yml",
+      "sha256": "76228503E1B446B7BEE7257DD8416E961EA590F12B1336F80318D0969AD47D94",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+      "bytes": 7340
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+      "bytes": 7340
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/final/normal/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/final/normal/artifacts/candidate-KC-24-取消先放弃再确认后可再约/test-finished-1.png",
+      "sha256": "41299E559F7AD769D2D90CDB30B30D0DAE08D9D98E25A247C9337D9B71612B1E",
+      "bytes": 41039
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/final/normal/artifacts/candidate-KC-24-取消先放弃再确认后可再约/trace.zip",
+      "sha256": "620D7323183597965A8DBF88BB5FC7B16BE4E9B2F2162F8381D1031A60430587",
+      "bytes": 609166
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/final/normal/artifacts/candidate-KC-24-取消先放弃再确认后可再约/video.webm",
+      "sha256": "12C17988088AEF3A1137AAC9FBDDB5AF55F04203D8E538BEC026A9882FD1A2B0",
+      "bytes": 103147
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/final/normal/playwright-report.json",
+      "sha256": "A120A2699E0066F1E3AE1C5F1C5ACEF6C134FC00BAAB4A46E3DA157ED9F89227",
+      "bytes": 5150
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/harness-events.json",
+      "sha256": "39B95D4676A3D182BCCD798EFE4B40C3601FA41CD54B08E3764C72B4A68F2110",
+      "bytes": 317446
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/harness-summary.json",
+      "sha256": "515FE682FE1E03F1CD8D60BD0B807EEF0F2CE8482AF14181C2A22D8C9E4F2026",
+      "bytes": 279
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "F72EA4BD62F1A46EED7E34FE9FBAC12DFE68EDDD82513E27EAE8388776E614B0",
+      "bytes": 6834
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/test-finished-1.png",
+      "sha256": "41299E559F7AD769D2D90CDB30B30D0DAE08D9D98E25A247C9337D9B71612B1E",
+      "bytes": 41039
+    },
+    {
+      "file_id": "build-file-34",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/trace.zip",
+      "sha256": "C7F53CFE84D13BBF6A6ACF6AC07D6DB8A5A1719EB3F7CB690F2E207A054DCB65",
+      "bytes": 575900
+    },
+    {
+      "file_id": "build-file-35",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/video.webm",
+      "sha256": "27A87284603395E86F34B7C4F8C3E1A0A81F2890112E94C6FAC217A505DC74B3",
+      "bytes": 93840
+    },
+    {
+      "file_id": "build-file-36",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "4BEC8C1DA8079D810B20B7C4CC1B34388BE43BC9D8F5015F8F296350C255A3B9",
+      "bytes": 5159
+    },
+    {
+      "file_id": "build-file-37",
+      "path": "development/run-2/candidate.spec.mjs",
+      "sha256": "FD499A19E09858C6375C4129EF5094A83B92DF12523EAE6D187717DC180AEFBE",
+      "bytes": 7340
+    },
+    {
+      "file_id": "build-file-38",
+      "path": "development/run-2/evidence/artifacts/.last-run.json",
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "bytes": 45
+    },
+    {
+      "file_id": "build-file-39",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/test-finished-1.png",
+      "sha256": "41299E559F7AD769D2D90CDB30B30D0DAE08D9D98E25A247C9337D9B71612B1E",
+      "bytes": 41039
+    },
+    {
+      "file_id": "build-file-40",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/trace.zip",
+      "sha256": "983C28A77888AEC4823A566641A6A3E6F21465A7B209EC3BC329C60122E29C7A",
+      "bytes": 563761
+    },
+    {
+      "file_id": "build-file-41",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-24-取消先放弃再确认后可再约/video.webm",
+      "sha256": "538807A5DB75C5939B0E6B0AD106143199036FACA2B303064CD43DE33317BD69",
+      "bytes": 84882
+    },
+    {
+      "file_id": "build-file-42",
+      "path": "development/run-2/evidence/playwright-report.json",
+      "sha256": "9ADA0D547CB8ED467A93547787313DBD8C19131E7CB318F8EA95D32A4693FDF0",
+      "bytes": 5159
+    },
+    {
+      "file_id": "build-file-43",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "8F098ADF0C267EF99A7BCF2C50723EABEDBB7AB5CE66B9F6170572161E155E96",
+      "bytes": 60805
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "240C5461980DF3FE92DA5199405BF6E421EE3A17B99EAD7508C91AB5CBB87284",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aria-ref=e97')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"drawerClose\" aria-label=\"关闭详情\">关闭</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "C7EF130491C16668A692FBB193DAA6FDBAFDCC1926D826122506F0F08D54A357",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_press_key",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "B524ACEA23A6ECF6B789987FB98C2707E6DFE31F4B21245F64B1959EBE0F60AF",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Tool \"browser_press_key\" does not handle the modal state.\n### Modal state\n- [\"confirm\" dialog with message \"确认取消预约 R-001 ？取消后保留记录与总价并释放时间。\"]: can be handled by browser_handle_dialog",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "F4FF6409F07AE7022679D90D81D074CAD8908191A269A043DE6EEFF4D5A7CC60",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1BD3CDA03213997587B2D7AECCB07213D64ABD3B8480080CA915BADA7CE93821",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "7C3DBAACC88922C88E3FE5F3D8F04328097D4D484580967004F7BA73BAEF805A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "E346E93EE7308877679F26C8DE07C17493CDCA25B7B650E8478B296F66A7D359",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "0E98FFE0EBDB203445E9B83B7F65A8F822EFA944DFCF649BB0D67B88CD21E580",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "E3746B322EB93DD4FF575B579C7F8989AFF1A3440B6434A38092EB539B7AA51D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "DRAFT_NOT_CREATED",
+      "category": "draft_absent",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_NOT_CREATED\",\"rule\":\"DRAFT_NOT_CREATED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"No draft has been saved. Use write_draft with ES module code and previous_sha256=null.\",\"draft_saved\":false,\"draft_exists\":false,\"current_sha256\":null,\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    }
+  ]
+}

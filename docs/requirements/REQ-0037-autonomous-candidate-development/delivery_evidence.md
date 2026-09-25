@@ -2,24 +2,25 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-25T10:48:44+08:00`
+- Generated at: `2026-09-25T13:22:03+08:00`
 - Record: `REQ-0037-autonomous-candidate-development`
-- Change fingerprint: `81fcd255cdba971a5c1a0c8a96eb6eebfaa05aaa8f228b22c8b82c40d3d62ea2`
+- Change fingerprint: `e68116fcb93fa9c1dbd4ec2a10b4747193031c7e09ea056439d0c6bb47b6edec`
 - Verification source: `collector-executed-v1`
-- Verification state: `集成测试通过`
-- Command: `node --test workbench/tests/*.test.mjs`
+- Verification state: `单元测试通过`
+- Command: `node --test workbench/tests/development-normal-only.test.mjs`
 - Exit code: `0`
-- Test count: `134`
+- Test count: `3`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `workbench/qa/20260925-candidate-trial/collector-final.log`
-- Log SHA-256: `224668682755bfda0c4149dc8554dd89937b77017a0d1ebd9d84718a3cf64d4d`
+- Log path: `workbench/qa/20260925-kimi-workbench/collector-final.log`
+- Log SHA-256: `f286d69bac496b6e58e26095aae192e3cf8412fb523b5b6cf6bc060c8fd1a5e0`
 
 ### Git Status
 
 ```text
- M .gitattributes
+ M AGENTS.md
  M docs/modules/test-workbench.md
+ M docs/requirements/README.md
  M docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md
  M docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md
  M docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md
@@ -31,38 +32,199 @@
  M docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md
  M docs/requirements/REQ-0037-autonomous-candidate-development/requirement.source.json
  M workbench/README.md
- M workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md
- M workbench/scripts/start-workbench.ps1
- M workbench/server/app.mjs
- M workbench/server/build/manager.mjs
- M workbench/server/index.mjs
- M workbench/web-v2/app.js
-?? workbench/config/fresh-b-trial.json
-?? workbench/qa/20260925-candidate-trial/browser-summary.json
-?? workbench/qa/20260925-candidate-trial/case-automation.png
-?? workbench/qa/20260925-candidate-trial/collector-engineering.log
-?? workbench/qa/20260925-candidate-trial/collector-final.log
-?? workbench/qa/20260925-candidate-trial/engineering.log
-?? workbench/qa/20260925-candidate-trial/launcher-check.json
-?? workbench/qa/20260925-candidate-trial/manifest.json
-?? workbench/qa/20260925-candidate-trial/negative-playwright-report.json
-?? workbench/qa/20260925-candidate-trial/negative-result.png
-?? workbench/qa/20260925-candidate-trial/negative-run.json
-?? workbench/qa/20260925-candidate-trial/negative-step-observations.ndjson
-?? workbench/qa/20260925-candidate-trial/normal-playwright-report.json
-?? workbench/qa/20260925-candidate-trial/normal-result.png
-?? workbench/qa/20260925-candidate-trial/normal-run.json
-?? workbench/qa/20260925-candidate-trial/normal-step-observations.ndjson
-?? workbench/scripts/accept-candidate-trial.mjs
-?? workbench/scripts/export-candidate-trial.mjs
-?? workbench/server/build/candidate-trials.mjs
-?? workbench/server/build/trial-environment.mjs
-?? workbench/tests/candidate-trials.test.mjs
+ M workbench/qa/20260925-kimi-workbench/REPORT.md
+?? UI_TEST_WORKBENCH_USER_WORKFLOW_REQUIREMENTS_v1.0.md
+?? docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/product-workflow-intake-20260925.md
+?? workbench/qa/20260925-kimi-workbench/collector-final.log
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-01/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-02/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-3-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-3/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-4-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-4/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-03/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-3-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-3/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-04/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-05-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-05/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-05/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-05/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-05/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-06/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-3-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-3/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-4-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-4/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-5-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-5/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-6-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-6/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-07/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-08-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-08/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-08/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-08/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-08/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-09-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-09/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-09/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-09/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-09/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-10-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-10/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-10/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-10/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-10/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-11/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/trace-frame-fields.jpeg
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-12/trace-frame-loading.jpeg
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-13/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-14/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-15-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-15/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-15/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-15/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-15/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-16-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-16/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-16/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-16/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-16/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-17-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-17/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-17/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-17/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-17/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-18-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-18/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-18/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-18/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-18/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-19-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-19/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-19/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-19/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-19/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-20-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-20/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-20/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-20/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-20/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-21-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-21/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-21/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-21/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-21/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-22/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-3-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-3/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-4-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-4/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-5-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-5/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-6-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-6/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-7-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-7/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-23/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24-task.png
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-1-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-1/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-2-report.json
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-2/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/final/candidate.spec.mjs
+?? workbench/qa/20260925-kimi-workbench/evidence/KC-24/result.json
+?? workbench/qa/20260925-kimi-workbench/evidence/case-library.png
+?? workbench/qa/20260925-kimi-workbench/evidence/import-preview.png
+?? workbench/qa/20260925-kimi-workbench/evidence/import-result.png
+?? workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json
+?? workbench/qa/20260925-kimi-workbench/evidence/metrics.json
+?? workbench/qa/20260925-kimi-workbench/evidence/project-tasks.png
+?? workbench/qa/20260925-kimi-workbench/evidence/readback.json
+?? workbench/qa/20260925-kimi-workbench/evidence/summary.json
+?? workbench/scripts/export-kimi-workbench-20260925.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/modules/test-workbench.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/README.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md', LF will be replaced by CRLF the next time Git touches it
@@ -72,619 +234,254 @@ warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md', LF will be replaced by CRLF the next time Git touches it
- .gitattributes                                     |   2 +
- docs/modules/test-workbench.md                     |   2 +
- .../00_user_requirement.md                         |   2 +
- .../01_development_requirement.md                  |   1 +
- .../02_design.md                                   |   2 +
- .../03_tasks.md                                    |   1 +
- .../04_verification.md                             |   1 +
- .../05_trace.md                                    |   2 +
- .../change_log.md                                  |   1 +
- .../current_state.md                               |   9 +-
- .../delivery_evidence.md                           | 534 ++++++++++-----------
- .../requirement.source.json                        |  87 +++-
- workbench/README.md                                |  20 +
- workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md  |  35 ++
- workbench/scripts/start-workbench.ps1              |  21 +-
- workbench/server/app.mjs                           |  24 +-
- workbench/server/build/manager.mjs                 |  18 +
- workbench/server/index.mjs                         |  10 +
- workbench/web-v2/app.js                            |  56 ++-
- 19 files changed, 536 insertions(+), 292 deletions(-)
+warning: in the working copy of 'workbench/README.md', LF will be replaced by CRLF the next time Git touches it
+ AGENTS.md                                          |    8 +
+ docs/modules/test-workbench.md                     |    2 +
+ docs/requirements/README.md                        |    2 +
+ .../00_user_requirement.md                         |    1 +
+ .../01_development_requirement.md                  |    1 +
+ .../02_design.md                                   |    2 +
+ .../03_tasks.md                                    |    1 +
+ .../04_verification.md                             |    1 +
+ .../05_trace.md                                    |    2 +
+ .../change_log.md                                  |    1 +
+ .../current_state.md                               |    9 +-
+ .../delivery_evidence.md                           | 1046 ++++++++------------
+ .../requirement.source.json                        |   26 +-
+ workbench/README.md                                |    8 +
+ workbench/qa/20260925-kimi-workbench/REPORT.md     |   89 +-
+ 15 files changed, 548 insertions(+), 651 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
-workbench/config/fresh-b-trial.json
-workbench/qa/20260925-candidate-trial/browser-summary.json
-workbench/qa/20260925-candidate-trial/case-automation.png
-workbench/qa/20260925-candidate-trial/collector-engineering.log
-workbench/qa/20260925-candidate-trial/collector-final.log
-workbench/qa/20260925-candidate-trial/engineering.log
-workbench/qa/20260925-candidate-trial/launcher-check.json
-workbench/qa/20260925-candidate-trial/manifest.json
-workbench/qa/20260925-candidate-trial/negative-playwright-report.json
-workbench/qa/20260925-candidate-trial/negative-result.png
-workbench/qa/20260925-candidate-trial/negative-run.json
-workbench/qa/20260925-candidate-trial/negative-step-observations.ndjson
-workbench/qa/20260925-candidate-trial/normal-playwright-report.json
-workbench/qa/20260925-candidate-trial/normal-result.png
-workbench/qa/20260925-candidate-trial/normal-run.json
-workbench/qa/20260925-candidate-trial/normal-step-observations.ndjson
-workbench/scripts/accept-candidate-trial.mjs
-workbench/scripts/export-candidate-trial.mjs
-workbench/server/build/candidate-trials.mjs
-workbench/server/build/trial-environment.mjs
-workbench/tests/candidate-trials.test.mjs
+UI_TEST_WORKBENCH_USER_WORKFLOW_REQUIREMENTS_v1.0.md
+docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/product-workflow-intake-20260925.md
+workbench/qa/20260925-kimi-workbench/collector-final.log
+workbench/qa/20260925-kimi-workbench/evidence/KC-01-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-01/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-02-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-02/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-03-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-3-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-3/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-4-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/execution-4/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-03/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-04-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-3-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/execution-3/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-04/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-05-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-05/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-05/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-05/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-05/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-06-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-06/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-3-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-3/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-4-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-4/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-5-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-5/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-6-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/execution-6/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-07/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-08-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-08/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-08/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-08/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-08/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-09-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-09/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-09/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-09/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-09/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-10-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-10/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-10/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-10/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-10/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-11-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-11/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-12-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/trace-frame-fields.jpeg
+workbench/qa/20260925-kimi-workbench/evidence/KC-12/trace-frame-loading.jpeg
+workbench/qa/20260925-kimi-workbench/evidence/KC-13-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-13/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-14-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-14/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-15-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-15/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-15/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-15/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-15/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-16-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-16/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-16/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-16/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-16/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-17-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-17/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-17/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-17/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-17/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-18-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-18/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-18/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-18/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-18/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-19-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-19/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-19/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-19/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-19/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-20-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-20/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-20/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-20/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-20/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-21-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-21/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-21/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-21/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-21/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-22-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-22/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-3-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-3/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-4-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-4/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-5-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-5/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-6-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-6/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-7-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/execution-7/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-23/result.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-24-task.png
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-1-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-1/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-2-report.json
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/execution-2/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/final/candidate.spec.mjs
+workbench/qa/20260925-kimi-workbench/evidence/KC-24/result.json
+workbench/qa/20260925-kimi-workbench/evidence/case-library.png
+workbench/qa/20260925-kimi-workbench/evidence/import-preview.png
+workbench/qa/20260925-kimi-workbench/evidence/import-result.png
+workbench/qa/20260925-kimi-workbench/evidence/maintainer-review.json
+workbench/qa/20260925-kimi-workbench/evidence/metrics.json
+workbench/qa/20260925-kimi-workbench/evidence/project-tasks.png
+workbench/qa/20260925-kimi-workbench/evidence/readback.json
+workbench/qa/20260925-kimi-workbench/evidence/summary.json
+workbench/scripts/export-kimi-workbench-20260925.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-25T10:47:54+08:00
-Command: node --test workbench/tests/*.test.mjs
+Started at: 2026-09-25T13:22:00+08:00
+Command: node --test workbench/tests/development-normal-only.test.mjs
 Exit code: 0
-Parsed test count: 134
+Parsed test count: 3
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: state changes require exact local origin and JSON schema
-ok 1 - state changes require exact local origin and JSON schema
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 1 - normal-only requires explicit registration and never invents a fault lane
   ---
-  duration_ms: 75.1455
+  duration_ms: 1.5423
   type: 'test'
   ...
-# Subtest: stop route accepts only an empty JSON object from local origin
-ok 2 - stop route accepts only an empty JSON object from local origin
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 2 - paired default still requires fault, and semantic remains explicit
   ---
-  duration_ms: 6.3206
+  duration_ms: 0.2286
   type: 'test'
   ...
-# Subtest: AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
-ok 3 - AUTH-01 server-backed login, roles, CDP identity and two independent executor contexts
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 3 - exploratory budget is explicit, bounded and does not inflate standard receipts
   ---
-  duration_ms: 22965.6728
+  duration_ms: 0.3287
   type: 'test'
   ...
-# Subtest: build mutations require local origin and exact fixed schemas
-ok 4 - build mutations require local origin and exact fixed schemas
-  ---
-  duration_ms: 145.5789
-  type: 'test'
-  ...
-# Subtest: only registered web-visible unchanged task files are served
-ok 5 - only registered web-visible unchanged task files are served
-  ---
-  duration_ms: 82.9404
-  type: 'test'
-  ...
-# Subtest: only registered verification media are served with integrity and range checks
-ok 6 - only registered verification media are served with integrity and range checks
-  ---
-  duration_ms: 188.033
-  type: 'test'
-  ...
-# Subtest: registers an idempotent derived assessment without rewriting the original task
-ok 7 - registers an idempotent derived assessment without rewriting the original task
-  ---
-  duration_ms: 229.5052
-  type: 'test'
-  ...
-# Subtest: rejects changed candidate or report identity and keeps a business gap out of human review
-ok 8 - rejects changed candidate or report identity and keeps a business gap out of human review
-  ---
-  duration_ms: 631.8366
-  type: 'test'
-  ...
-# Subtest: serves supplemental assessment beside the unchanged original failure
-ok 9 - serves supplemental assessment beside the unchanged original failure
-  ---
-  duration_ms: 526.8232
-  type: 'test'
-  ...
-# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
-ok 10 - Harness stderr diagnostic keeps error context and redacts credentials
-  ---
-  duration_ms: 5.0541
-  type: 'test'
-  ...
-# Subtest: stored DSH credential is redacted even without a sk prefix
-ok 11 - stored DSH credential is redacted even without a sk prefix
-  ---
-  duration_ms: 13.3809
-  type: 'test'
-  ...
-# Subtest: failed candidate enables exactly one explicit revision and preserves both versions
-ok 12 - failed candidate enables exactly one explicit revision and preserves both versions
-  ---
-  duration_ms: 1658.3484
-  type: 'test'
-  ...
-# Subtest: relative Harness patch resolves before task workspace changes
-ok 13 - relative Harness patch resolves before task workspace changes
-  ---
-  duration_ms: 1402.9044
-  type: 'test'
-  ...
-# {"type":"build_storage_failure","code":"EIO","operation":"append_lifecycle","at":"2026-09-25T02:47:59.704Z"}
-# Subtest: 生命周期存储持续失败会降级服务并拒绝继续接纳建例
-ok 14 - 生命周期存储持续失败会降级服务并拒绝继续接纳建例
-  ---
-  duration_ms: 365.9929
-  type: 'test'
-  ...
-# {"type":"build_storage_failure","code":"EIO","operation":"background_completion","at":"2026-09-25T02:48:00.016Z"}
-# Subtest: 后台completion最终状态持续写失败会被观察并关闭新建例入口
-ok 15 - 后台completion最终状态持续写失败会被观察并关闭新建例入口
-  ---
-  duration_ms: 449.8207
-  type: 'test'
-  ...
-# Subtest: duplicate start is rejected and cancel closes the owned attempt without restart
-ok 16 - duplicate start is rejected and cancel closes the owned attempt without restart
-  ---
-  duration_ms: 419.7147
-  type: 'test'
-  ...
-# Subtest: 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
-ok 17 - 单次复验授权只在Harness进程启动事件时消耗且不改旧预算
-  ---
-  duration_ms: 753.8705
-  type: 'test'
-  ...
-# Subtest: 终态等待修复验证使用独立固定授权文件且不改旧授权
-ok 18 - 终态等待修复验证使用独立固定授权文件且不改旧授权
-  ---
-  duration_ms: 344.3648
-  type: 'test'
-  ...
-# Subtest: candidate report parser keeps normal pass and concrete assertion mismatch separate
-ok 19 - candidate report parser keeps normal pass and concrete assertion mismatch separate
-  ---
-  duration_ms: 38.4468
-  type: 'test'
-  ...
-# Subtest: missing report and locator errors cannot become technical pass or specified mismatch
-ok 20 - missing report and locator errors cannot become technical pass or specified mismatch
-  ---
-  duration_ms: 21.0833
-  type: 'test'
-  ...
-# Subtest: Playwright array text diff preserves the expected and actual row order at the failed step
-ok 21 - Playwright array text diff preserves the expected and actual row order at the failed step
-  ---
-  duration_ms: 17.9763
-  type: 'test'
-  ...
-# Subtest: versioned step title rule accepts only bare or explicitly separated leading markers
-ok 22 - versioned step title rule accepts only bare or explicitly separated leading markers
-  ---
-  duration_ms: 1.4766
-  type: 'test'
-  ...
-# Subtest: step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
-ok 23 - step mapping distinguishes 1 from 10 and rejects duplicate missing malformed and out-of-order markers
-  ---
-  duration_ms: 1.4067
-  type: 'test'
-  ...
-# Subtest: nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
-ok 24 - nested assertion error is attributed to its business step and another step cannot satisfy the counterexample
-  ---
-  duration_ms: 0.8011
-  type: 'test'
-  ...
-# Subtest: steps after the attributed failure remain not executed without hiding the specified mismatch
-ok 25 - steps after the attributed failure remain not executed without hiding the specified mismatch
-  ---
-  duration_ms: 0.443
-  type: 'test'
-  ...
-# Subtest: parser preserves raw title hierarchy raw error and expected actual facts
-ok 26 - parser preserves raw title hierarchy raw error and expected actual facts
-  ---
-  duration_ms: 29.954
-  type: 'test'
-  ...
-# Subtest: associates exact task candidate and registers the same record idempotently
-ok 27 - associates exact task candidate and registers the same record idempotently
-  ---
-  duration_ms: 470.8547
-  type: 'test'
-  ...
-# Subtest: rejects candidate hash mismatch and does not associate media across tasks
-ok 28 - rejects candidate hash mismatch and does not associate media across tasks
-  ---
-  duration_ms: 712.1725
-  type: 'test'
-  ...
-# Subtest: serves only registered unchanged media with byte ranges
-ok 29 - serves only registered unchanged media with byte ranges
-  ---
-  duration_ms: 566.3185
-  type: 'test'
-  ...
-# Subtest: M2-C stage budget persists across task ids and store restarts
-ok 30 - M2-C stage budget persists across task ids and store restarts
-  ---
-  duration_ms: 48.8932
-  type: 'test'
-  ...
-# Subtest: restart marks active build interrupted without replaying it
-ok 31 - restart marks active build interrupted without replaying it
-  ---
-  duration_ms: 51.1808
-  type: 'test'
-  ...
-# Subtest: task状态原子替换的短暂占用有限重试后成功
-ok 32 - task状态原子替换的短暂占用有限重试后成功
-  ---
-  duration_ms: 129.2466
-  type: 'test'
-  ...
-# Subtest: task状态持续写失败会显式返回错误而非静默成功
-ok 33 - task状态持续写失败会显式返回错误而非静默成功
-  ---
-  duration_ms: 726.7056
-  type: 'test'
-  ...
-# Subtest: 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
-ok 34 - 协调进程被终止后重启保留逐事件记录、标中断且不重放预算
-  ---
-  duration_ms: 1314.7707
-  type: 'test'
-  ...
-# Subtest: exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
-ok 35 - exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
-  ---
-  duration_ms: 965.6262
-  type: 'test'
-  ...
-# Subtest: cross-project/version/content and unauthorized environment are rejected before execution
-ok 36 - cross-project/version/content and unauthorized environment are rejected before execution
-  ---
-  duration_ms: 504.4678
-  type: 'test'
-  ...
-# Subtest: helper change or missing file rejects unchanged entry; historical version remains explicitly historical
-ok 37 - helper change or missing file rejects unchanged entry; historical version remains explicitly historical
-  ---
-  duration_ms: 463.7552
-  type: 'test'
-  ...
-# Subtest: cancel uses owned signal and lease, does not reopen source; restart does not replay
-ok 38 - cancel uses owned signal and lease, does not reopen source; restart does not replay
-  ---
-  duration_ms: 1359.4586
-  type: 'test'
-  ...
-# Subtest: green Playwright report with missing original steps is not complete_pass
-ok 39 - green Playwright report with missing original steps is not complete_pass
-  ---
-  duration_ms: 434.3398
-  type: 'test'
-  ...
-# Subtest: helper mutation during execution cannot inherit a passing report
-ok 40 - helper mutation during execution cannot inherit a passing report
-  ---
-  duration_ms: 539.3823
-  type: 'test'
-  ...
-# Subtest: run media route enforces run ownership, digest and byte size; old build WebM has correct MIME
-ok 41 - run media route enforces run ownership, digest and byte size; old build WebM has correct MIME
-  ---
-  duration_ms: 237.3505
-  type: 'test'
-  ...
-# Subtest: case library API requires local origin and serves only registered operations
-ok 42 - case library API requires local origin and serves only registered operations
-  ---
-  duration_ms: 261.4938
-  type: 'test'
-  ...
-# Subtest: real xlsx and native package round trip preserve fields, lineage and project isolation
-ok 43 - real xlsx and native package round trip preserve fields, lineage and project isolation
-  ---
-  duration_ms: 794.0261
-  type: 'test'
-  ...
-# Subtest: formula cells and stale or cross-project confirmations fail closed
-ok 44 - formula cells and stale or cross-project confirmations fail closed
-  ---
-  duration_ms: 358.8853
-  type: 'test'
-  ...
-# Subtest: native file paths and read-only DOM operations are allowed; escapes and mutation remain denied
-ok 45 - native file paths and read-only DOM operations are allowed; escapes and mutation remain denied
-  ---
-  duration_ms: 28.6252
-  type: 'test'
-  ...
-# Subtest: real executor snapshots helpers, native edits invalidate old proof, and frozen bundle keeps exact dependency bytes
-ok 46 - real executor snapshots helpers, native edits invalidate old proof, and frozen bundle keeps exact dependency bytes
-  ---
-  duration_ms: 15400.9153
-  type: 'test'
-  ...
-# Subtest: finite path proof expands neutral helper calls, branches and early returns
-ok 47 - finite path proof expands neutral helper calls, branches and early returns
-  ---
-  duration_ms: 22.4741
-  type: 'test'
-  ...
-# Subtest: field identity is label-bound and independent of expected answer; unknown code never semantic_pass
-ok 48 - field identity is label-bound and independent of expected answer; unknown code never semantic_pass
-  ---
-  duration_ms: 4.4761
-  type: 'test'
-  ...
-# Subtest: real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
-ok 49 - real browser predicate boundaries: hidden/enabled, hidden/disabled and missing are distinct
-  ---
-  duration_ms: 8365.4688
-  type: 'test'
-  ...
-# Subtest: production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
-ok 50 - production MCP exposes actionable admission/absence/parameter feedback and retains original B advisory gaps without claiming semantic approval
-  ---
-  duration_ms: 254.6425
-  type: 'test'
-  ...
-# Subtest: isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
-ok 51 - isolated semantic fixture changes only retry disabled/visibility, keeping status and readings
-  ---
-  duration_ms: 9387.0947
-  type: 'test'
-  ...
-# Subtest: production task API + pinned MCP + real Playwright: failed draft feedback, repair, independent final pair and browser readback
-ok 52 - production task API + pinned MCP + real Playwright: failed draft feedback, repair, independent final pair and browser readback
-  ---
-  duration_ms: 46691.8471
-  type: 'test'
-  ...
-# Subtest: pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
-ok 53 - pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
-  ---
-  duration_ms: 328.8421
-  type: 'test'
-  ...
-# Subtest: self-test limit is cumulative and further edits cannot create an unverified final version
-ok 54 - self-test limit is cumulative and further edits cannot create an unverified final version
-  ---
-  duration_ms: 222.9498
-  type: 'test'
-  ...
-# Subtest: cancellation reaches an active execution and later tools stop
-ok 55 - cancellation reaches an active execution and later tools stop
-  ---
-  duration_ms: 76.7458
-  type: 'test'
-  ...
-# Subtest: wall budget terminates before another tool or executor admission
-ok 56 - wall budget terminates before another tool or executor admission
-  ---
-  duration_ms: 64.7977
-  type: 'test'
-  ...
-# Subtest: from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
-ok 57 - from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
-  ---
-  duration_ms: 86.7503
-  type: 'test'
-  ...
-# Subtest: task guard denies arbitrary commands, filesystem, code and alternate navigation
-ok 58 - task guard denies arbitrary commands, filesystem, code and alternate navigation
-  ---
-  duration_ms: 8.6178
-  type: 'test'
-  ...
-# Subtest: E2E-01 recovery adds one start while retaining all six original claims
-ok 59 - E2E-01 recovery adds one start while retaining all six original claims
-  ---
-  duration_ms: 141.0416
-  type: 'test'
-  ...
-# Subtest: static or visually repeated frames cannot be used as a unique video clock anchor
-ok 60 - static or visually repeated frames cannot be used as a unique video clock anchor
-  ---
-  duration_ms: 1.6356
-  type: 'test'
-  ...
-# Subtest: trace-derived timeline preserves source timing and unexecuted step
-ok 61 - trace-derived timeline preserves source timing and unexecuted step
-  ---
-  duration_ms: 23.1335
-  type: 'test'
-  ...
-# Subtest: missing or uncalibrated trace never invents a seek timeline
-ok 62 - missing or uncalibrated trace never invents a seek timeline
-  ---
-  duration_ms: 6.0663
-  type: 'test'
-  ...
-# Subtest: derived WebM duration is explicit and invalid media fails closed
-ok 63 - derived WebM duration is explicit and invalid media fails closed
-  ---
-  duration_ms: 1.2194
-  type: 'test'
-  ...
-# Subtest: versioned derived caption video is indexed as caption media without replacing v1
-ok 64 - versioned derived caption video is indexed as caption media without replacing v1
-  ---
-  duration_ms: 269.7653
-  type: 'test'
-  ...
-# Subtest: step replay, source screenshots and observer record are independently indexed
-ok 65 - step replay, source screenshots and observer record are independently indexed
-  ---
-  duration_ms: 513.018
-  type: 'test'
-  ...
-# Subtest: E2E-01 reaches human review only after a passing normal run and the specified raw failure
-ok 66 - E2E-01 reaches human review only after a passing normal run and the specified raw failure
-  ---
-  duration_ms: 1.7682
-  type: 'test'
-  ...
-# Subtest: new trial readiness requires execution-time replay and four registered media for both lanes
-ok 67 - new trial readiness requires execution-time replay and four registered media for both lanes
-  ---
-  duration_ms: 0.6905
-  type: 'test'
-  ...
-# Subtest: real xlsx preserves numeric-looking text, physical rows and blank columns
-ok 68 - real xlsx preserves numeric-looking text, physical rows and blank columns
-  ---
-  duration_ms: 120.4377
-  type: 'test'
-  ...
-# Subtest: real xlsx keeps step and expected cell-line positions instead of compacting blanks
-ok 69 - real xlsx keeps step and expected cell-line positions instead of compacting blanks
-  ---
-  duration_ms: 91.8248
-  type: 'test'
-  ...
-# Subtest: approved run uses fixed argument arrays and a reduced environment
-ok 70 - approved run uses fixed argument arrays and a reduced environment
-  ---
-  duration_ms: 387.9804
-  type: 'test'
-  ...
-# Subtest: duplicate starts are rejected and stop targets only the owned process
-ok 71 - duplicate starts are rejected and stop targets only the owned process
-  ---
-  duration_ms: 252.3055
-  type: 'test'
-  ...
-# Subtest: unapproved, wrong-hash, traversal and illegal environment records are refused
-ok 72 - unapproved, wrong-hash, traversal and illegal environment records are refused
-  ---
-  duration_ms: 298.8829
-  type: 'test'
-  ...
-# Subtest: runtime-copy integrity failure preserves the raw passing report but blocks overall pass
-ok 73 - runtime-copy integrity failure preserves the raw passing report but blocks overall pass
-  ---
-  duration_ms: 1060.7453
-  type: 'test'
-  ...
-# Subtest: 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
-ok 74 - 限定首审资产使用PROBE_URL且正常入口不能越权运行受控反例
-  ---
-  duration_ms: 842.9446
-  type: 'test'
-  ...
-# Subtest: HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
-ok 75 - HOLD-Q1 原生包可逆保留完整原用例并通过真实导入预览确认
-  ---
-  duration_ms: 440.741
-  type: 'test'
-  ...
-# Subtest: M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
-ok 76 - M4-A flash复验使用独立单次授权和显式已登录DSH运行配置
-  ---
-  duration_ms: 1448.0777
-  type: 'test'
-  ...
-# Subtest: M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
-ok 77 - M4-A生产组装仅向Harness传递正常输入并由控制器执行冻结q1/q2
-  ---
-  duration_ms: 961.0099
-  type: 'test'
-  ...
-# Subtest: HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
-ok 78 - HOLD-Q1环境拒绝内容哈希不匹配且不创建任务或消耗授权
-  ---
-  duration_ms: 436.1275
-  type: 'test'
-  ...
-# Subtest: M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
-ok 79 - M4-A仅在正常页失败时允许一次定向修订并在两次启动后耗尽
-  ---
-  duration_ms: 1982.2193
-  type: 'test'
-  ...
-# Subtest: only indexed media for the selected run can be read
-ok 80 - only indexed media for the selected run can be read
-  ---
-  duration_ms: 420.1922
-  type: 'test'
-  ...
-# Subtest: changed media bytes are not served as the registered attachment
-ok 81 - changed media bytes are not served as the registered attachment
-  ---
-  duration_ms: 59.0291
-  type: 'test'
-  ...
-# Subtest: 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
-ok 82 - 真实 Excel 用例完整冻结为既有 build task，且不启动 Harness 或消耗预算
-  ---
-  duration_ms: 853.6324
-  type: 'test'
-  ...
-# Subtest: v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
-ok 83 - v1/v2 快照独立，精确关联校验和并发幂等均 fail closed
-  ---
-  duration_ms: 959.4791
-  type: 'test'
-  ...
-# Subtest: request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
-ok 84 - request_id 同时绑定五项请求身份，顺序、重启幂等且身份变化明确冲突
-  ---
-  duration_ms: 667.9625
-  type: 'test'
-  ...
-# Subtest: request_id 正在处理时只复用相同身份，不同身份立即冲突
-ok 85 - request_id 正在处理时只复用相同身份，不同身份立即冲突
-  ---
-  duration_ms: 1354.693
-  type: 'test'
-  ...
-# Subtest: 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
-ok 86 - 旧任务从 source 和 environment_ref 推导身份，身份不完整时拒绝复用
-  ---
-  duration_ms: 351.8124
-  type: 'test'
-  ...
-# Subtest: M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
-ok 87 - M3-B2生产接线把冻结输入和渲染指令送入attempt并按作用域只消费一次授权
-  ---
-  duration_ms: 2633.298
-  type: 'test'
-  ...
-# Subtest: 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
-ok 88 - 两个验证侧哨兵仅进入控制器契约且合法业务原文不被字符串清洗
-  ---
-  duration_ms: 1.6441
-  type: 'test'
-  ...
-# Subtest: M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
-ok 89 - M3-B2作用域冲突不创建第二任务且历史INPUT_ONLY仍不可启动
-  ---
-  duration_ms: 767.5275
-  type: 'test'
-  ...
-# Subtest: engineering counterexamples: labels, live selection, visibility and scope (zero model)
-ok 90 - engineering counterexamples: labels, live selection, visibility and scope (zero model)
-  ---
-  duration_ms: 20551.8862
-  type: 'test'
-  ...
-# {"mode":"normal","integrity_state":"FINALIZED","registered_bytes":2367,"actual_bytes":2367,"registered_sha256":"B4C3FA6F7A489546B8666CA64222925644A65C8DCCE8806FEB76208CEAAA0B3E","actual_sha256":"B4C3FA6F7A489546B8666CA64222925644A65C8DCCE8806FEB76208CEAAA0B3E","last_event":"attempt_settled","events":["attempt_started","phase","phase","process_spawn","output_complete","process_close","phase","attempt_settled"]}
-# Subtest: production lifecycle final indexing: normal, delayed append and close
-ok 91 - production lifecycle final indexing: normal, delayed append and close
-  ---
-  duration_ms: 1383.2888
-  type: 'test'
-  ...
-# {"mode":"cancel","integrity_state":"FINALIZED"
-... truncated ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 623.932
 ```
 
 ### Sync Record Status
@@ -695,12 +492,22 @@ DRY-RUN: no derived changes for REQ-0037-autonomous-candidate-development; expli
 
 ### Check AI Context
 
-- Exit code: `0`
+- Exit code: `1`
 
 ```text
-PASS ai-engineering-context checks
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+3. docs
+   Problem: Code/test/config changes are linked to multiple or mixed governance records.
+   Fix: Keep one changed FIX or one changed real REQ for this delivery, or split the work. Changed records: REQ-0036-ui-ux-01-workbench-usability-review, REQ-0037-autonomous-candidate-development
 ```
 
 ### Notes
 
-Final coverage completeness regression; no new product execution; 2 original candidate reruns retained; zero model
+Current focused unit checks only; full 138 engineering tests preceded the model batch. 24 real tasks and 67 executions are separately recorded in workbench/qa/20260925-kimi-workbench/REPORT.md; candidates remain unapproved.

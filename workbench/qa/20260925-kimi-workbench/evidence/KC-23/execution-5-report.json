@@ -1,0 +1,183 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-5",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-5/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045331-ce81611f/development/run-5",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "KC-23 多设备总价与双击确认只增一条",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4330,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:124:7\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:93:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs",
+                      "column": 7,
+                      "line": 124
+                    },
+                    "snippet": "  122 |     expect(\n  123 |       `DIAG|duringFirst=${stateDuringFirst}|afterFirst=${stateAfterFirst}|second=${secondResult}|numbers=${diagNumbers.join(\"/\")}`,\n> 124 |     ).toBe(\"DIAG\");\n      |       ^\n  125 |\n  126 |     // 仅新增一个预约号 R-002\n  127 |     await expect(bookingRows(page, \"R-002\").first()).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs",
+                        "column": 7,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m\n\n  122 |     expect(\n  123 |       `DIAG|duringFirst=${stateDuringFirst}|afterFirst=${stateAfterFirst}|second=${secondResult}|numbers=${diagNumbers.join(\"/\")}`,\n> 124 |     ).toBe(\"DIAG\");\n      |       ^\n  125 |\n  126 |     // 仅新增一个预约号 R-002\n  127 |     await expect(bookingRows(page, \"R-002\").first()).toBeVisible();\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:124:7\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:93:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 529
+                    },
+                    {
+                      "title": "CASE_STEP_2",
+                      "duration": 3044,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:124:7\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs:93:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs",
+                          "column": 7,
+                          "line": 124
+                        },
+                        "snippet": "  122 |     expect(\n  123 |       `DIAG|duringFirst=${stateDuringFirst}|afterFirst=${stateAfterFirst}|second=${secondResult}|numbers=${diagNumbers.join(\"/\")}`,\n> 124 |     ).toBe(\"DIAG\");\n      |       ^\n  125 |\n  126 |     // 仅新增一个预约号 R-002\n  127 |     await expect(bookingRows(page, \"R-002\").first()).toBeVisible();"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T05:06:51.201Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\evidence\\artifacts\\candidate-KC-23-多设备总价与双击确认只增一条\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs",
+                    "column": 7,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-9050ae1243abdd6ca5d9",
+          "file": "candidate.spec.mjs",
+          "line": 37,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T05:06:50.601Z",
+    "duration": 5493.637,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,515 @@
+{
+  "external_id": "KC-21",
+  "title": "与R-001半开区间重叠冲突",
+  "task_id": "build-20260925044522-e2ff40d5",
+  "status": "CANDIDATE_VALIDATION_FAILED",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-79844a6b-bfb2-4603-ab3b-44f92474fbac",
+    "case_version": 1,
+    "external_id": "KC-21",
+    "content_sha256": "8CE56B46FC510FC70CFD4719E4FAB44F26414B070452D6C7BA6656DB4C3661E0"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "NOT_READY",
+  "started_at": "2026-09-25T04:45:22.469Z",
+  "finished_at": "2026-09-25T04:50:06.015Z",
+  "elapsed_ms": 283546,
+  "harness_starts": 1,
+  "tool_calls": 58,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "FAILED",
+      "bundle_sha256": "D0E5088AD2F31F375A4E23D8003EF0E652C42E9405CACB814B75852A992FD1B2",
+      "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \"冲突\"\nReceived string:    \"用途必填，去两端空白后长度需为5到100字\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\n    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\n       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\n",
+        "expected": "冲突",
+        "actual": "用途必填，去两端空白后长度需为5到100字",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \"冲突\"\nReceived string:    \"用途必填，去两端空白后长度需为5到100字\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\n    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\n       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\n",
+                  "expected": "冲突",
+                  "actual": "用途必填，去两端空白后长度需为5到100字",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\nExpected substring: \u001b[32m\"冲突\"\u001b[39m\nReceived string:    \u001b[31m\"用途必填，去两端空白后长度需为5到100字\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('div[role=\"dialog\"]').locator('[aria-live=\"assertive\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to <div class=\"msg\" id=\"bookMsg\" aria-live=\"assertive\">用途必填，去两端空白后长度需为5到100字</div>\u001b[22m\n\u001b[2m       - unexpected value \"用途必填，去两端空白后长度需为5到100字\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925044522-e2ff40d5\\development\\run-1\\candidate.spec.mjs",
+                    "line": 49,
+                    "column": 28
+                  },
+                  "snippet": "  47 |     // 与 R-001 的 10:00-12:00 半开区间重叠：提示冲突并拒绝\n  48 |     const feedback = booking.locator('[aria-live=\"assertive\"]');\n> 49 |     await expect(feedback).toContainText(\"冲突\");\n     |                            ^\n  50 |     await expect(feedback).toContainText(\"R-001\");\n  51 |     await expect(booking.getByRole(\"heading\", { name: \"确认信息\" })).toBeHidden();\n  52 |     await expect(booking.getByRole(\"button\", { name: \"确认预约\" })).toBeHidden();"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790311688532,
+      "finished_at": 1790311696904
+    }
+  ],
+  "submission": {
+    "outcome": "business_difference",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "进入时间冲突校验",
+        "check_lines": [
+          11,
+          12,
+          13,
+          16,
+          17,
+          18,
+          21,
+          24,
+          25,
+          26,
+          29,
+          30,
+          31,
+          32
+        ],
+        "execution": 1,
+        "uncovered": ""
+      },
+      {
+        "order": 2,
+        "requirement": "与R-001的10:00-12:00半开区间重叠，提示冲突并拒绝",
+        "check_lines": [
+          37,
+          38,
+          40,
+          41,
+          42,
+          43,
+          45,
+          49,
+          50,
+          51,
+          52,
+          53
+        ],
+        "execution": 1,
+        "uncovered": "期望未满足：点击“下一步”后 aria-live 区域显示“用途必填，去两端空白后长度需为5到100字”，未出现“冲突/R-001”提示，未进入时间冲突校验。原因：用例输入用途“复测验证”为4字，低于页面用途字段“去两端空白后长度需为5到100字”的规则，字段校验先于冲突校验执行；执行1在第49行断言失败，第50-53行的拒绝断言未执行到，故“拒绝”未被本次执行直接验证。定位性独立观察（未改动用例输入）：将用途临时替换为5字后，同一 2026-10-10 11:00-13:00 会提示“EQ-103 在 2026-10-10 11:00-13:00 与已确认预约R-001冲突”且确认步骤未进入；09:00-10:00 允许进入确认。即半开区间冲突逻辑与用例一致，差异位于用途字段长度校验（用例数据 vs 应用规则）。"
+      },
+      {
+        "order": 3,
+        "requirement": "结束紧接R-001开始不重叠，允许进入确认",
+        "check_lines": [
+          58,
+          59,
+          60,
+          61,
+          63,
+          66,
+          67,
+          68
+        ],
+        "execution": 1,
+        "uncovered": "NOT_EXECUTED：执行1在CASE_STEP_2第49行失败，本步骤未运行，无法验证“结束紧接R-001开始不重叠，允许进入确认”；阻断根因与步骤2相同（用途“复测验证”4字不满足页面“5到100字”规则，无法到达时间冲突/确认流程）。"
+      }
+    ]
+  },
+  "independent_runs": [],
+  "candidate": {
+    "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 3587,
+          "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8"
+        }
+      ],
+      "sha256": "D0E5088AD2F31F375A4E23D8003EF0E652C42E9405CACB814B75852A992FD1B2"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [
+    {
+      "tool": "check_fidelity",
+      "at": 1790311621471,
+      "code": "DRAFT_NOT_CREATED",
+      "rule": "DRAFT_NOT_CREATED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+      "draft_saved": false,
+      "draft_exists": false,
+      "current_sha256": null,
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    }
+  ],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "F78BB2C88BA2EC1DD8D77BBB95E042B8F2C5615208B3C3F0019B42BAD209EF61",
+      "bytes": 5859
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790311687488/candidate.spec.mjs",
+      "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+      "bytes": 3587
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-26-510Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-29-853Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-31-154Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-37-219Z.yml",
+      "sha256": "683387F0D5130D9A99115808729EC89AA35CED175E63E96AA9562343F0DCED6E",
+      "bytes": 4519
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-39-218Z.yml",
+      "sha256": "7E67C63BC9EE3FF86598DE7DB074A86B3BD89C5280AFFC6AA3D5C4FF99EACADF",
+      "bytes": 5074
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-51-888Z.yml",
+      "sha256": "5DCD89F05BCE6726A209880D9A36814C57ECFAAC8A3205D6F6F2C5DDD546C231",
+      "bytes": 6628
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-56-694Z.yml",
+      "sha256": "10D7FFA1A06982B5CF1CC99A043CEA7BED2DD4A5C2CF69992AC4D60B25531E25",
+      "bytes": 6686
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-56-720Z.yml",
+      "sha256": "7AE3393AA492702414BB61A507D4EE7A10E41EB2294912AE42CD684A0F269903",
+      "bytes": 6686
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-45-59-839Z.yml",
+      "sha256": "B85A1FC4B6245C05DAF83F0E90AD6C0FEA54C8289BD1A64E244CADE26E197A39",
+      "bytes": 6770
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-27-755Z.yml",
+      "sha256": "626042E4048FE8FE8CB741903592DFC90C382A44A2B9A28EE67996FCF548D109",
+      "bytes": 6781
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-30-786Z.yml",
+      "sha256": "013D1EFD70BBB442DB410764B01F2D49E164FB22CFB0F6E43672C9E481B42AEF",
+      "bytes": 6781
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-30-809Z.yml",
+      "sha256": "8987C7417CB98ED12C45E57A90697AEC85117DB7ED695262B3F5D5FEC87894E5",
+      "bytes": 6781
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-32-302Z.yml",
+      "sha256": "D16AA7523B617A096EC9976A98299CC3E869F97E8E3672D3A519F677FF99A258",
+      "bytes": 5369
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-45-136Z.yml",
+      "sha256": "683387F0D5130D9A99115808729EC89AA35CED175E63E96AA9562343F0DCED6E",
+      "bytes": 4519
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-46-47-020Z.yml",
+      "sha256": "C57BD5C18F96EF283856B82360322FFA6795D6473393196CDD812712C45EA0FA",
+      "bytes": 2225
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-38-989Z.yml",
+      "sha256": "70E8E8D95C9BC11ADC6E35974A465E65C3291FF92A1C3F9D18DD03CAA02C6083",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-40-911Z.yml",
+      "sha256": "F2AC72ED749160BE690AE8FF9CCD3E9C5068F469EAB4EA642F846C94F95FF724",
+      "bytes": 4519
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-43-088Z.yml",
+      "sha256": "4014C3407CAD52D0F91C722B8A895141B91F6A6451B375B6405E69BCECC02613",
+      "bytes": 5074
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-45-114Z.yml",
+      "sha256": "443DFB37189E75DDDAA6BC248028B904E1E0E3B74456E61A488E59920B8412AC",
+      "bytes": 6628
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-46-964Z.yml",
+      "sha256": "CC986EFE647603C4543F68E4F7674BC24A2C5772E1838E110C66E169E173AA3E",
+      "bytes": 6686
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-46-987Z.yml",
+      "sha256": "6916E368588EAFFB74ACBF52B386DF15FF5A31F5118C6D3E783F6731F9E869E0",
+      "bytes": 6686
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-49-377Z.yml",
+      "sha256": "111F8B886B68C72C844E68400A38C683C771416D3FC2A660383F2FFEB34F1815",
+      "bytes": 6770
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-49-51-196Z.yml",
+      "sha256": "111F8B886B68C72C844E68400A38C683C771416D3FC2A660383F2FFEB34F1815",
+      "bytes": 6770
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+      "bytes": 3587
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+      "bytes": 3587
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/harness-events.json",
+      "sha256": "AFBD6FAC553D9C9D2DEBC8E5E9033C06C3F426401400359612B4CB2ED97E5081",
+      "bytes": 226496
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/harness-summary.json",
+      "sha256": "73E67B7D466DB76157CFE624EF71100562AADBAA8F1E500AB297A55C0DB27340",
+      "bytes": 279
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "B987ED2B608F31FCDAE2499D7C3664FBDA30B78645F9A68B8CACD177593BBDA8",
+      "bytes": 3587
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "3757090FD3CA218F94BAFDA55DCC2514D23FC90192DF01D7058990080183DE22",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-21-与R-001半开区间重叠冲突/error-context.md",
+      "sha256": "812F9844364D49DE6748E6FD9E89FDEB39DE87C613367FA8AACE100445587092",
+      "bytes": 5287
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-21-与R-001半开区间重叠冲突/test-failed-1.png",
+      "sha256": "4EBA5E4B14FC2F1472052AEE094FA6C72B4132521D0C9B645A9FF9E1C89DE17A",
+      "bytes": 68732
+    },
+    {
+      "file_id": "build-file-34",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-21-与R-001半开区间重叠冲突/trace.zip",
+      "sha256": "2DEEE6DF5A6A7957672B670DD31256CD0DEDA6B8A828BC043AD3B1C0D0D3E2BD",
+      "bytes": 608099
+    },
+    {
+      "file_id": "build-file-35",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-21-与R-001半开区间重叠冲突/video.webm",
+      "sha256": "756FBBCBF53CC9E9B521625A350DAC2113BF4C57EDFAD5F7134810B1DA265DB4",
+      "bytes": 202252
+    },
+    {
+      "file_id": "build-file-36",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "FF626A96FE943494D63ABAB9973603AD37562CD70522F6315A8F0B4174FBCD44",
+      "bytes": 14180
+    },
+    {
+      "file_id": "build-file-37",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "D4A33784AA740BB378AC94D33645C826CFDF9BD6DC056E6E5951CC7BF2EA671C",
+      "bytes": 47418
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "7E03DF26FB430FCEF70C5C01A898A4821D479F9B7E6B87262FE3B19042EF4CD3",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref e70 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "A79A10E3A99D23BE6A9AC12B4256B7A73978D661CA3DD32F1E8ECFF2CC46BAD2",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: \"dialog:has-text(\"新建预约\") button:has-text(\"下一步\")\" does not match any elements.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "4642EA4F0446DBF65098FE369BB915155554A5DC0AC8A7D20ACE9529EB49A8E5",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('div.dialog button:has-text(\"下一步\")') resolved to 2 elements:\n    1) <button id=\"to2\" class=\"primary\">下一步</button> aka getByRole('button', { name: '下一步' })\n    2) <button id=\"to3\" class=\"primary\">下一步</button> aka locator('#step2').getByText('下一步')\n\nCall log:\n\u001b[2m  - waiting for locator('div.dialog button:has-text(\"下一步\")')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "CEED90AF16CFFCCFCA1E1E8078412A14CB6BF88B969F7D82A675B6A47CA36CF7",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "618A72ED044C3697725624D79D89FCD1A7C77851775C3FA1BB1D58116DFCE821",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "DRAFT_NOT_CREATED",
+      "category": "draft_absent",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_NOT_CREATED\",\"rule\":\"DRAFT_NOT_CREATED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"No draft has been saved. Use write_draft with ES module code and previous_sha256=null.\",\"draft_saved\":false,\"draft_exists\":false,\"current_sha256\":null,\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    }
+  ]
+}

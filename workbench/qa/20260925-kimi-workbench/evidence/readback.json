@@ -1,0 +1,19 @@
+{
+  "command": "node workbench/scripts/run-kimi-workbench-20260925.mjs --view",
+  "exit_code": 0,
+  "actual_browser_readback": true,
+  "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+  "cases": 24,
+  "tasks": 24,
+  "counts_after_readback": {
+    "harness_starts": 24,
+    "development_executions": 49,
+    "independent_executions": 18
+  },
+  "source_commit": "c2e2acaa48d73523f85d7681c1e26803eb51b0ec",
+  "owned_services_closed": [
+    4322,
+    4391
+  ],
+  "synthetic_site_started_during_readback": false
+}

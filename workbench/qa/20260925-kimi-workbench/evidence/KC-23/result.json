@@ -1,0 +1,2024 @@
+{
+  "external_id": "KC-23",
+  "title": "多设备总价与双击确认只增一条",
+  "task_id": "build-20260925045331-ce81611f",
+  "status": "CANDIDATE_VALIDATION_FAILED",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-f1b16ed7-2db1-4e40-830d-fdcdd5af11bd",
+    "case_version": 1,
+    "external_id": "KC-23",
+    "content_sha256": "EAFC2DAC2B817D36A96CEA2DC1C1BD1246DE5EC16F2AB7F9766F131442868FD3"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "NOT_READY",
+  "started_at": "2026-09-25T04:53:31.460Z",
+  "finished_at": "2026-09-25T05:08:59.673Z",
+  "elapsed_ms": 928213,
+  "harness_starts": 1,
+  "tool_calls": 212,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "FAILED",
+      "bundle_sha256": "D939E1396A7DA28AB7209B13C1F070B04D3BDD7120A22BDE0EC2DEDEB938C41C",
+      "sha256": "EC36227D401C7117DB205D15B290CFF3BFFE85201CB58075C1D92A63C40D5218",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\nExpected: \"1\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\n",
+        "expected": "1",
+        "actual": null,
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\nExpected: \"1\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\n",
+                  "expected": "1",
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\nExpected: \u001b[32m\"1\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '统计' }).locator('> div').filter({ hasText: '已确认预约' }).locator('> div')\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-1\\candidate.spec.mjs",
+                    "line": 44,
+                    "column": 44
+                  },
+                  "snippet": "  42 |     page.on(\"dialog\", (dialog) => dialog.accept());\n  43 |     await page.getByRole(\"button\", { name: \"重置演示数据\" }).click();\n> 44 |     await expect(statValue(page, \"已确认预约\")).toHaveText(\"1\");\n     |                                            ^\n  45 |\n  46 |     idleCountBeforeBooking = (await statValue(page, \"可预约设备\").innerText()).trim();\n  47 |     expect(idleCountBeforeBooking).not.toBe(\"\");"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790312496427,
+      "finished_at": 1790312504061
+    },
+    {
+      "number": 2,
+      "status": "FAILED",
+      "bundle_sha256": "32009C4BAC193438D2A42E3AF1ED20AC17471E8B0FF6A7A4224201EAB6689F6B",
+      "sha256": "5D4BD228885B2E04BB11A48B6D7D379242A127FA248613CC4D411F9493815C04",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \"13:00\"\nReceived: \"13\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\n    14 × locator resolved to <select id=\"start\">…</select>\n       - unexpected value \"13\"\n",
+        "expected": "13:00",
+        "actual": "13",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \"13:00\"\nReceived: \"13\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" with timeout 5000ms\n  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\n    14 × locator resolved to <select id=\"start\">…</select>\n       - unexpected value \"13\"\n",
+                  "expected": "13:00",
+                  "actual": "13",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\nExpected: \u001b[32m\"13\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"13\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByLabel('开始整点')\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"13\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-2\\candidate.spec.mjs",
+                    "line": 74,
+                    "column": 45
+                  },
+                  "snippet": "  72 |     await expect(dialog.getByRole(\"textbox\", { name: \"用途\" })).toHaveValue(\"联合压力测试\");\n  73 |     await expect(dialog.getByRole(\"textbox\", { name: \"日期\" })).toHaveValue(\"2026-10-12\");\n> 74 |     await expect(dialog.getByLabel(\"开始整点\")).toHaveValue(\"13:00\");\n     |                                             ^\n  75 |     await expect(dialog.getByLabel(\"结束整点\")).toHaveValue(\"15:00\");\n  76 |\n  77 |     // 步骤 2 → 步骤 3（确认）"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-2/evidence/playwright-report.json",
+      "started_at": 1790312567948,
+      "finished_at": 1790312575999
+    },
+    {
+      "number": 3,
+      "status": "FAILED",
+      "bundle_sha256": "88FA172257D8AEDC3EA897B24D565A8899CFA03963C21F89134F32AAC0EF8875",
+      "sha256": "3B58856C6DD1B593CD832665E2CAC67BB85B9EDFD5BF46E0FC66764B0442A580",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toBeDisabled() failed\n\nLocator: locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\nExpected: disabled\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeDisabled\" with timeout 5000ms\n  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\n    - locator resolved to <button class=\"primary\" id=\"confirmBook\">确认预约</button>\n    - unexpected value \"enabled\"\n",
+        "expected": null,
+        "actual": null,
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toBeDisabled() failed\n\nLocator: locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\nExpected: disabled\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeDisabled\" with timeout 5000ms\n  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\n    - locator resolved to <button class=\"primary\" id=\"confirmBook\">确认预约</button>\n    - unexpected value \"enabled\"\n",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\nExpected: disabled\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[role=\"dialog\"]').filter({ hasText: '新建预约' }).getByRole('button', { name: '确认预约' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"primary\" id=\"confirmBook\">确认预约</button>\u001b[22m\n\u001b[2m    - unexpected value \"enabled\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-3\\candidate.spec.mjs",
+                    "line": 110,
+                    "column": 33
+                  },
+                  "snippet": "  108 |\n  109 |     // 创建中按钮必须禁用\n> 110 |     await expect(confirmButton).toBeDisabled();\n      |                                 ^\n  111 |\n  112 |     await firstClick;\n  113 |     const secondError = await secondClick;"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-3/evidence/playwright-report.json",
+      "started_at": 1790312601621,
+      "finished_at": 1790312609944
+    },
+    {
+      "number": 4,
+      "status": "FAILED",
+      "bundle_sha256": "14F14FD69B41B3891274DB591FBC7259E8B259DE5F0EC3A0B78EF8C11FA19FB7",
+      "sha256": "B0B55CE2DBB29B2394A48A508C3237F7568A5DF6F63A354EBC2008D95E0596C0",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+        "expected": "2",
+        "actual": "3",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+                  "expected": "2",
+                  "actual": "3",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"3\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\u001b[22m\n\u001b[2m    14 × locator resolved to <b id=\"statConf\">3</b>\u001b[22m\n\u001b[2m       - unexpected value \"3\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-4\\candidate.spec.mjs",
+                    "line": 148,
+                    "column": 44
+                  },
+                  "snippet": "  146 |\n  147 |     // 统计：已确认预约 2 条\n> 148 |     await expect(statValue(page, \"已确认预约\")).toHaveText(\"2\");\n      |                                            ^\n  149 |\n  150 |     // 空闲设备静态状态不变\n  151 |     await expect(statValue(page, \"可预约设备\")).toHaveText(idleCountBeforeBooking);"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "report_path": "run-4/evidence/playwright-report.json",
+      "started_at": 1790312778113,
+      "finished_at": 1790312788337
+    },
+    {
+      "number": 5,
+      "status": "FAILED",
+      "bundle_sha256": "47003117633BFE39F311AEE687330817039A06B5020F682372C2C4339419F7B6",
+      "sha256": "ED788E9EE8499A53AA0A28D0AE844BAD845A0E567F54EC7AEC62E2A5207FAD47",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: \"DIAG\"\nReceived: \"DIAG|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\"",
+        "expected": "DIAG",
+        "actual": "DIAG|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: \"DIAG\"\nReceived: \"DIAG|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\"",
+                  "expected": "DIAG",
+                  "actual": "DIAG|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"DIAG\"\u001b[39m\nReceived: \u001b[31m\"DIAG\u001b[7m|duringFirst=false|afterFirst=true|second=rejected|numbers=R-001/R-002\u001b[27m\"\u001b[39m",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-5\\candidate.spec.mjs",
+                    "line": 124,
+                    "column": 7
+                  },
+                  "snippet": "  122 |     expect(\n  123 |       `DIAG|duringFirst=${stateDuringFirst}|afterFirst=${stateAfterFirst}|second=${secondResult}|numbers=${diagNumbers.join(\"/\")}`,\n> 124 |     ).toBe(\"DIAG\");\n      |       ^\n  125 |\n  126 |     // 仅新增一个预约号 R-002\n  127 |     await expect(bookingRows(page, \"R-002\").first()).toBeVisible();"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-5/evidence/playwright-report.json",
+      "started_at": 1790312810007,
+      "finished_at": 1790312816115
+    },
+    {
+      "number": 6,
+      "status": "FAILED",
+      "bundle_sha256": "27A1E0095E4CCC09E4A2B57B72501F82445F527BF084C8A8EF93805687BD4AB9",
+      "sha256": "EA72E7CCF26F1AD6F68603CED64DA151DC7EDEF272ABF5605886348E810AF62B",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+        "expected": "2",
+        "actual": "3",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+                  "expected": "2",
+                  "actual": "3",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"3\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\u001b[22m\n\u001b[2m    14 × locator resolved to <b id=\"statConf\">3</b>\u001b[22m\n\u001b[2m       - unexpected value \"3\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-6\\candidate.spec.mjs",
+                    "line": 155,
+                    "column": 44
+                  },
+                  "snippet": "  153 |\n  154 |     // 统计：已确认预约 2 条\n> 155 |     await expect(statValue(page, \"已确认预约\")).toHaveText(\"2\");\n      |                                            ^\n  156 |\n  157 |     // 空闲设备静态状态不变\n  158 |     await expect(statValue(page, \"可预约设备\")).toHaveText(idleCountBeforeBooking);"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "report_path": "run-6/evidence/playwright-report.json",
+      "started_at": 1790312868691,
+      "finished_at": 1790312879850
+    },
+    {
+      "number": 7,
+      "status": "FAILED",
+      "bundle_sha256": "D62746F91F176BDBD9F961B154AF02A2C90F5CF498905A0929D2700CCCE2EEB6",
+      "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+      "error": {
+        "type": "ASSERTION_MISMATCH",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+        "expected": "2",
+        "actual": "3",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error": {
+                  "type": "ASSERTION_MISMATCH",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \"2\"\nReceived: \"3\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\n    14 × locator resolved to <b id=\"statConf\">3</b>\n       - unexpected value \"3\"\n",
+                  "expected": "2",
+                  "actual": "3",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"3\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '统计' }).getByText('已确认预约', { exact: true }).locator('xpath=following-sibling::b')\u001b[22m\n\u001b[2m    14 × locator resolved to <b id=\"statConf\">3</b>\u001b[22m\n\u001b[2m       - unexpected value \"3\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\run-7\\candidate.spec.mjs",
+                    "line": 161,
+                    "column": 44
+                  },
+                  "snippet": "  159 |\n  160 |     // 统计：已确认预约 2 条\n> 161 |     await expect(statValue(page, \"已确认预约\")).toHaveText(\"2\");\n      |                                            ^\n  162 |   });\n  163 | });\n  164 |"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "report_path": "run-7/evidence/playwright-report.json",
+      "started_at": 1790312904592,
+      "finished_at": 1790312913010
+    }
+  ],
+  "submission": {
+    "outcome": "business_difference",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "第3步列出两台设备，小时费合计140，时长2小时，总价280元",
+        "check_lines": [
+          51,
+          54,
+          59,
+          60,
+          61,
+          65,
+          76,
+          77,
+          78,
+          80,
+          81,
+          88,
+          89,
+          93,
+          94,
+          95
+        ],
+        "execution": 7,
+        "uncovered": ""
+      },
+      {
+        "order": 2,
+        "requirement": "防止抖动，仅新增R-002一条记录，按钮在创建中禁用",
+        "check_lines": [
+          105,
+          118,
+          123,
+          128,
+          131,
+          132,
+          136
+        ],
+        "execution": 7,
+        "uncovered": ""
+      },
+      {
+        "order": 3,
+        "requirement": "跳转预约记录，R-002已确认总价280，已确认预约2条，空闲设备静态状态不变",
+        "check_lines": [
+          141,
+          143,
+          148,
+          150,
+          151,
+          155,
+          157,
+          158,
+          161
+        ],
+        "execution": 7,
+        "uncovered": "统计卡“已确认预约”实测为 3（=已确认的设备行数），用例要求 2 条，已执行断言失败（expected \"2\", received \"3\"）。同一笔含 EQ-101/EQ-105 的预约在预约记录中被拆成 2 行、每行“总价”都显示批次总价 280 元，导致“已确认收入”=600（=40+280+280），与第 3 步确认的整单总价 280 元不一致。若“已确认预约2条”按预约号口径理解（R-001、R-002 共 2 个已确认预约号），业务口径成立；但页面上以标签“已确认预约”显示的唯一数值是 3，故按标签绑定时与冻结用例不一致，统计口径需人工判定。"
+      }
+    ]
+  },
+  "independent_runs": [],
+  "candidate": {
+    "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 6855,
+          "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5"
+        }
+      ],
+      "sha256": "D62746F91F176BDBD9F961B154AF02A2C90F5CF498905A0929D2700CCCE2EEB6"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [
+    {
+      "tool": "check_fidelity",
+      "at": 1790312014799,
+      "code": "DRAFT_NOT_CREATED",
+      "rule": "DRAFT_NOT_CREATED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+      "draft_saved": false,
+      "draft_exists": false,
+      "current_sha256": null,
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    },
+    {
+      "tool": "write_draft",
+      "at": 1790312564035,
+      "code": "DRAFT_CHANGED_RELOAD_REQUIRED",
+      "rule": "DRAFT_CHANGED_RELOAD_REQUIRED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "DRAFT_CHANGED_RELOAD_REQUIRED",
+      "draft_saved": false,
+      "draft_exists": true,
+      "current_sha256": "5D4BD228885B2E04BB11A48B6D7D379242A127FA248613CC4D411F9493815C04",
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    },
+    {
+      "tool": "self_test",
+      "at": 1790312746968,
+      "code": "DOM_READ_CONTRACT_REQUIRED",
+      "rule": "READ_ONLY_DOM_EXPRESSION",
+      "node": "CallExpression",
+      "identifier": null,
+      "location": {
+        "line": 3,
+        "column": 22
+      },
+      "message": "Use DOM selectors, attribute/text/state reads and read-only array mapping; mutation, arbitrary calls and browser globals require a controlled entry. Use browser_snapshot for unsupported expressions.",
+      "draft_saved": false,
+      "draft_exists": true,
+      "current_sha256": "FE080D3A451EC3105F157CCE447F3EB47AA0D7DD4E136D51F28428D1AE8615C0",
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    },
+    {
+      "tool": "check_fidelity",
+      "at": 1790312933669,
+      "code": "CANDIDATE_ALREADY_FROZEN",
+      "rule": "CANDIDATE_ALREADY_FROZEN",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "CANDIDATE_ALREADY_FROZEN",
+      "draft_saved": false,
+      "draft_exists": true,
+      "current_sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    }
+  ],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "F048BC3223E5CF36C8C8FDF3CF046537A173E63C314DAA7F8C4BF98DBAF5D9D0",
+      "bytes": 6006
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790312494543/candidate.spec.mjs",
+      "sha256": "EC36227D401C7117DB205D15B290CFF3BFFE85201CB58075C1D92A63C40D5218",
+      "bytes": 6253
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-53-36-361Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-53-48-620Z.yml",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-53-53-144Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-53-57-104Z.yml",
+      "sha256": "6F5631E378BE8CBD24B4B600C9579F8169422030E42CE0BED5C905CB7F753605",
+      "bytes": 4519
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-00-295Z.yml",
+      "sha256": "D50D0BC3D23191F4AD180DF2F5A4045CE539837DC08B9717A1CA76605B1C9D5A",
+      "bytes": 4530
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-01-733Z.yml",
+      "sha256": "E04A24D37076D8784531820B8D1853409EFF7D3C84987571A5C6537A583327C9",
+      "bytes": 5188
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-05-465Z.yml",
+      "sha256": "5586485065704C091063AB97454E02514B7D32E18890E45F4BB678D36DF18173",
+      "bytes": 6639
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-09-700Z.yml",
+      "sha256": "FA94E111C548124FF5FC3E6AAF20EF062E09E15B9E3D67666AC1150317C21AC7",
+      "bytes": 6703
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-09-743Z.yml",
+      "sha256": "705712347F81D9826A34C6A3F5CDC4119F09903A77308C6BE74F6B2BE02EA7AD",
+      "bytes": 6703
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-12-153Z.yml",
+      "sha256": "9485D89F10EEC632756D6413E3A693649629D1A7A90FF91F849E5B0CAC357320",
+      "bytes": 5508
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-54-22-991Z.yml",
+      "sha256": "789C8475CBD0BBD4CC0070AD32F2A3CE61CEDE3869C150796D1B91F411174853",
+      "bytes": 3314
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-03-182Z.yml",
+      "sha256": "B8D18ED2D5FACFB014ED56BDB86486D45EF719C26ECCC23856DBB8CBC64B0BEC",
+      "bytes": 4505
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-07-015Z.yml",
+      "sha256": "A9A80A720EC3ED2AFC3E24AE8B42BC44686A0D82C38E9234E630196D68787B58",
+      "bytes": 4521
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-08-502Z.yml",
+      "sha256": "94FC597EAF9E380B80ECDEA5854AE373C2660F3FD08948CA9AB7213AA2C756DD",
+      "bytes": 5076
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-10-505Z.yml",
+      "sha256": "1491E6CAECE91107C2574D3C1F4EE4CC1A2A6ADEE93E5A93F7C37607217FE5E8",
+      "bytes": 6630
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-14-817Z.yml",
+      "sha256": "91C130BBDDC3BEFCFD06B2AC3ACAEA52E5EF32D291B33E2B6D045FBBE96EE159",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-14-856Z.yml",
+      "sha256": "8061B33D2A098A8DFC8AED276A592D5955E84B1574ED4C89B1ACA7C6D97C16E3",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-16-248Z.yml",
+      "sha256": "4C8F763F6F808DDFF69DF521688D51C869A0F89386D7D055827E480570F89299",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-35-054Z.yml",
+      "sha256": "5C5AD5FA63400C9D20601F9C8200A1A64DC46C4C3BCE204DE8F80D4D1F70EFCF",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-40-918Z.yml",
+      "sha256": "A9A80A720EC3ED2AFC3E24AE8B42BC44686A0D82C38E9234E630196D68787B58",
+      "bytes": 4521
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-45-104Z.yml",
+      "sha256": "60ACE96634ED84A8AA54AA4E238A6D00A004442C956E2C774B2E64DCDBB40CC0",
+      "bytes": 4505
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-50-708Z.yml",
+      "sha256": "3CC5FC2887204A2D765CA2549FB8845D0A8CAA570A40242296D171DE08DC3495",
+      "bytes": 4521
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-52-869Z.yml",
+      "sha256": "91B734BF04B2413B2BDB1C1DE6D88C7E0256AFDF972EA2C3CE9867A9421C02A1",
+      "bytes": 5076
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-55-57-033Z.yml",
+      "sha256": "0419B0314C4E7F09E7874331BA27D214584D5180CBE260C876B877A59B1C716E",
+      "bytes": 6630
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-02-735Z.yml",
+      "sha256": "EC55C5F8D918A2480909797B9ED36831CF6360F0862B3086F8B49056B5EF3E3D",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-02-760Z.yml",
+      "sha256": "D020981B82C3B6FCC8705730CA36CA887CF90544A3413B243D08BBB86447880C",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-04-394Z.yml",
+      "sha256": "690A8CED7D7A4F6B6C4250C84FB18408FC1A730A653178DD229A0241DA7E0561",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-11-125Z.yml",
+      "sha256": "E5D8112966AAAC8C93241FA19F2E76FA77F76507E7AECFE50C80587A8B3E4161",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-13-958Z.yml",
+      "sha256": "3F473044A04EA11B7B19119D1A0BD4C6EE56B8DDEBAAFA50BE882E50831092DC",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-13-982Z.yml",
+      "sha256": "60E742881360BBA0CFA322A921B8F6109B465A1471F4F6FD5A23469860A49135",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-17-009Z.yml",
+      "sha256": "B8E211670E6D46594BB02C37A60BB0CD1749649C478DF3622B5B89F8931DE96E",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-34",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-45-413Z.yml",
+      "sha256": "D34395D07BE3A5D2A4C3CFAE8434BD9B628E107CDB8263C8812D3BB6E15B2886",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-35",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-47-051Z.yml",
+      "sha256": "AE02A20DF4083B8DBB25022F4D3AA3816104C0B04F348551A2189C168A9C12FC",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-36",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-47-073Z.yml",
+      "sha256": "AE02A20DF4083B8DBB25022F4D3AA3816104C0B04F348551A2189C168A9C12FC",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-37",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-48-630Z.yml",
+      "sha256": "C36965E63787A942B801CA4F1025ADDA90C2CAAD71C5D91BAE64B4C29079F3FA",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-38",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-56-53-911Z.yml",
+      "sha256": "C36965E63787A942B801CA4F1025ADDA90C2CAAD71C5D91BAE64B4C29079F3FA",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-39",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-07-494Z.yml",
+      "sha256": "60E742881360BBA0CFA322A921B8F6109B465A1471F4F6FD5A23469860A49135",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-40",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-11-071Z.yml",
+      "sha256": "99109B6AC0CD325F378EE0B046F31EFAFB2F60230844D198E68C4D3B4D773975",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-41",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-13-514Z.yml",
+      "sha256": "99109B6AC0CD325F378EE0B046F31EFAFB2F60230844D198E68C4D3B4D773975",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-42",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-20-377Z.yml",
+      "sha256": "99109B6AC0CD325F378EE0B046F31EFAFB2F60230844D198E68C4D3B4D773975",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-43",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-28-743Z.yml",
+      "sha256": "5EFB34EC2DF8B0DA7BFAA50AD4C3F110B8C0794C6DC0CA55C158CBD296EA766A",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-44",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-30-556Z.yml",
+      "sha256": "D14BDCDC402A744012D57C439C79202D91F0F36D20F98D84ECFB7216EC5C2980",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-45",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-30-597Z.yml",
+      "sha256": "48444C5B3E2364A949D434A643D832DC6DCCF5F723783B587045D800D8DE347A",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-46",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-32-420Z.yml",
+      "sha256": "656C11F0B100802A8E93D817AEBA027EEF8809313D3B468F7D6D23F607404AD8",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-47",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-39-359Z.yml",
+      "sha256": "656C11F0B100802A8E93D817AEBA027EEF8809313D3B468F7D6D23F607404AD8",
+      "bytes": 5371
+    },
+    {
+      "file_id": "build-file-48",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-43-582Z.yml",
+      "sha256": "A4806EEB1AE3F4AFF6788976CC2A0F9B1955476A04F96EB1AEA0825EBDD32BAC",
+      "bytes": 6697
+    },
+    {
+      "file_id": "build-file-49",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-46-081Z.yml",
+      "sha256": "98DF0C49A884847AB53B5EE005770F27D1D6BCD2CC7A0D19C2582EEC0C584AA9",
+      "bytes": 5368
+    },
+    {
+      "file_id": "build-file-50",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-57-58-523Z.yml",
+      "sha256": "3CC5FC2887204A2D765CA2549FB8845D0A8CAA570A40242296D171DE08DC3495",
+      "bytes": 4521
+    },
+    {
+      "file_id": "build-file-51",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-00-182Z.yml",
+      "sha256": "CAB8E60E6B3D6F70B087FBC54F6CF0CF4DBE196A0A80DFCE446DDC1C1D622CC4",
+      "bytes": 4505
+    },
+    {
+      "file_id": "build-file-52",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-02-013Z.yml",
+      "sha256": "81C780D2845C181DC7938EFBD731225ACDB457F1D071299B5B24353884723311",
+      "bytes": 4070
+    },
+    {
+      "file_id": "build-file-53",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-05-312Z.yml",
+      "sha256": "CFD8C3B3B1CC063B5921BDAC139721A820C196C308B535DD163CFAC191DC6057",
+      "bytes": 4086
+    },
+    {
+      "file_id": "build-file-54",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-07-151Z.yml",
+      "sha256": "C61EC5BDD22D1E7E51A7757545AF2F818572A6AA11244F935B32C7E444AAD92D",
+      "bytes": 4641
+    },
+    {
+      "file_id": "build-file-55",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-08-885Z.yml",
+      "sha256": "66A4A362F612549AA00EDFF4A5DCD7831CB937FD198FA3E00115369DE568C55F",
+      "bytes": 6195
+    },
+    {
+      "file_id": "build-file-56",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-10-592Z.yml",
+      "sha256": "B38926EE00367E6ECDF2A160202531F1A0B400F725456ED2BB485DEFB438E25D",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-57",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-10-622Z.yml",
+      "sha256": "ABB5DF85F96408B7C409CC372645ADCA9F1D73C393E0B98D20D7626C874C861C",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-58",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-11-936Z.yml",
+      "sha256": "2B9B9E6B508E53BAA83663E9E9A599DBA15B976B198ED4CC505D0A8D6858A46E",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-59",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-16-031Z.yml",
+      "sha256": "2B9B9E6B508E53BAA83663E9E9A599DBA15B976B198ED4CC505D0A8D6858A46E",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-60",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-27-724Z.yml",
+      "sha256": "EF440889BB2A386CEC42CFA1377CA05EE3A741235E7EC99E81DDB1BD8E686177",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-61",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-29-117Z.yml",
+      "sha256": "C0BA7490F4E1BE107755CCC0994B1D9DAAFF9CB4A59C25591DB17B26C9866E2C",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-62",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-29-138Z.yml",
+      "sha256": "EEC1D8C9B5C57322F5087796BA79F7240566181F98712BFE9F5C9ED1EEA495A5",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-63",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-30-593Z.yml",
+      "sha256": "B99ED04CD342AAA727F1F1C06FC89937B639ED04813DBE88374CDF050AB22D84",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-64",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-32-891Z.yml",
+      "sha256": "B99ED04CD342AAA727F1F1C06FC89937B639ED04813DBE88374CDF050AB22D84",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-65",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-36-491Z.yml",
+      "sha256": "EEC1D8C9B5C57322F5087796BA79F7240566181F98712BFE9F5C9ED1EEA495A5",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-66",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-39-543Z.yml",
+      "sha256": "113052E1B13AA88E4892F7806907E52A6097C766A6CD0382C4896A731B5C7D0D",
+      "bytes": 4933
+    },
+    {
+      "file_id": "build-file-67",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-46-228Z.yml",
+      "sha256": "C7DC5B7F26DBFF3A4B74E1D95F59B0912C4A09170491FA2A58E57636381821C7",
+      "bytes": 6259
+    },
+    {
+      "file_id": "build-file-68",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-51-060Z.yml",
+      "sha256": "9D5C9B72D81560CB444187CEA8EE8DDAB2D00370024847DEA4E53570C26732F4",
+      "bytes": 4933
+    },
+    {
+      "file_id": "build-file-69",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-58-58-061Z.yml",
+      "sha256": "9D5C9B72D81560CB444187CEA8EE8DDAB2D00370024847DEA4E53570C26732F4",
+      "bytes": 4933
+    },
+    {
+      "file_id": "build-file-70",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-59-07-592Z.yml",
+      "sha256": "0BFFC2431EBA47A49DBC2E5EBEDEF2D33C776473D11A36B9D99DA81E3C4B39E6",
+      "bytes": 4475
+    },
+    {
+      "file_id": "build-file-71",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-06-010Z.yml",
+      "sha256": "C93B3D5CB03BF8C5C5EBA35874C3F380972351E3E7B832CE9E37CD7D03BB2F58",
+      "bytes": 4475
+    },
+    {
+      "file_id": "build-file-72",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-08-007Z.yml",
+      "sha256": "4A0826FB004B9ADAFB7C984DCB9F3F8B89BEF1DB8F4C268A8E51A101343B52CA",
+      "bytes": 4069
+    },
+    {
+      "file_id": "build-file-73",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-11-311Z.yml",
+      "sha256": "33995931BA7715EC216E9B293385A6D3877204AD3B45E4184B6B4C723BA4660B",
+      "bytes": 4086
+    },
+    {
+      "file_id": "build-file-74",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-13-475Z.yml",
+      "sha256": "E58E9C3E443588573B53D3BE5309439904F0F150EF29B1D72A8B37391A510566",
+      "bytes": 4641
+    },
+    {
+      "file_id": "build-file-75",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-15-109Z.yml",
+      "sha256": "870216A71CF9B45745C9B6F3FFA6B960D37903DF5AF1837DA25EBF6634B89F1E",
+      "bytes": 6195
+    },
+    {
+      "file_id": "build-file-76",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-16-873Z.yml",
+      "sha256": "BC8E50CEE32C2AE06BB8665DF243D2F5924CFF2B53882BC8BE53F721FAD190D4",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-77",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-16-906Z.yml",
+      "sha256": "37B22B2AE85B5C8A608D09D7F7E802C82A58052B18CC3C2F43355BCC87B100A8",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-78",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-19-377Z.yml",
+      "sha256": "F3F94F7E08071780FF8B4CEA62B5D926531F2F789B1D4F7BC91A82C5BC0BF99B",
+      "bytes": 4943
+    },
+    {
+      "file_id": "build-file-79",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-23-804Z.yml",
+      "sha256": "381D779C37D1193BC2C30FCD7C8311015C532C77A0E346C03BDC12FC4971E41E",
+      "bytes": 3861
+    },
+    {
+      "file_id": "build-file-80",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-43-038Z.yml",
+      "sha256": "B2606A04D22983191BAEFD09BD5CC1FCA0693649BB62C55746FEA72CBD1D3A8D",
+      "bytes": 4070
+    },
+    {
+      "file_id": "build-file-81",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-53-590Z.yml",
+      "sha256": "D89AC59CF0BC3B35C0BBEDC09D1B3D219A89912C06183CB405333D6B66B42D46",
+      "bytes": 4086
+    },
+    {
+      "file_id": "build-file-82",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-55-795Z.yml",
+      "sha256": "B3DC1012B40BA6AE59E5F367312BDAF6E0BA7226B78A40739DE4515F5ABAA514",
+      "bytes": 4641
+    },
+    {
+      "file_id": "build-file-83",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-04-58-572Z.yml",
+      "sha256": "3E67B652789C7B3C938502C4AA3C6F24D4AB45C43010A2BD5DA0DB6348420F0F",
+      "bytes": 6195
+    },
+    {
+      "file_id": "build-file-84",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-01-102Z.yml",
+      "sha256": "BA27246562DC6EDA9027F0A38E06DFAA718EA352302B4272D8FB2278C629B3D4",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-85",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-01-124Z.yml",
+      "sha256": "D0F21D696FB09F0562CA9A58D25DEB643D22659DF8F169E9C27599E8235ECC56",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-86",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-02-772Z.yml",
+      "sha256": "1CAC0F317C6759F109120E0EBD5AE90BB91D9D28F119ADDC4BEE6B22B25B3BF4",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-87",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-07-250Z.yml",
+      "sha256": "1CAC0F317C6759F109120E0EBD5AE90BB91D9D28F119ADDC4BEE6B22B25B3BF4",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-88",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-13-601Z.yml",
+      "sha256": "1BC1E6016CA4379A55C69AD01064B848FE9C93212F9149A8227973F2B3880735",
+      "bytes": 6262
+    },
+    {
+      "file_id": "build-file-89",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-16-699Z.yml",
+      "sha256": "1E7B665891189568DCD0B177BA74280E694E5C600E4AC2570B13AE8340DA40E4",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-90",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T05-05-22-018Z.yml",
+      "sha256": "1E7B665891189568DCD0B177BA74280E694E5C600E4AC2570B13AE8340DA40E4",
+      "bytes": 4936
+    },
+    {
+      "file_id": "build-file-91",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+      "bytes": 6855
+    },
+    {
+      "file_id": "build-file-92",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+      "bytes": 6855
+    },
+    {
+      "file_id": "build-file-93",
+      "path": "development/harness-events.json",
+      "sha256": "2AB31514EF631A8385647F441D7DD77CD5D3F8AF82DB4E0E9772C0399CB2AC84",
+      "bytes": 716365
+    },
+    {
+      "file_id": "build-file-94",
+      "path": "development/harness-summary.json",
+      "sha256": "3F8724CAC1C1232842FCB4FAF81058AF255071B4F5CEDC60DA59AE2BD1D17809",
+      "bytes": 281
+    },
+    {
+      "file_id": "build-file-95",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "EC36227D401C7117DB205D15B290CFF3BFFE85201CB58075C1D92A63C40D5218",
+      "bytes": 6253
+    },
+    {
+      "file_id": "build-file-96",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-97",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "A5584A1554F66355A56CC6CB0216C0F28F46348DF388B9976D33F5D84C508351",
+      "bytes": 10673
+    },
+    {
+      "file_id": "build-file-98",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+      "bytes": 54306
+    },
+    {
+      "file_id": "build-file-99",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "6DE6D66DA46405F70C2FF07AAB984851612390EB37AFB98CFAD05EAB702F960C",
+      "bytes": 258854
+    },
+    {
+      "file_id": "build-file-100",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "23AC6191085379ECAD9716936E1DBAB33427864998028BDE8961BCDC4E4FC95D",
+      "bytes": 118144
+    },
+    {
+      "file_id": "build-file-101",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "A4EC6B8947D83D0D06772AE7F1561EF1EE90D1B51C933994881CB2A164690812",
+      "bytes": 12512
+    },
+    {
+      "file_id": "build-file-102",
+      "path": "development/run-2/candidate.spec.mjs",
+      "sha256": "5D4BD228885B2E04BB11A48B6D7D379242A127FA248613CC4D411F9493815C04",
+      "bytes": 6302
+    },
+    {
+      "file_id": "build-file-103",
+      "path": "development/run-2/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-104",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "51AD2AF2D1985F516DE267186B2F5EB25E04EFBA859B0C349939EAF234CB9308",
+      "bytes": 8778
+    },
+    {
+      "file_id": "build-file-105",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "751917457BAE86F490F2702655456CDD725A13E11D1FC95AD204744EF34075F7",
+      "bytes": 66336
+    },
+    {
+      "file_id": "build-file-106",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "48767B9BA4D21A2717E2D82E8732CCF7EADB96B7E6D823BE7FBDCD6BC3066B36",
+      "bytes": 576619
+    },
+    {
+      "file_id": "build-file-107",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "B10B34CC9AE64ACA630FE896F5050BBCAC90CA3C75D230D9748BF410B983AD08",
+      "bytes": 193306
+    },
+    {
+      "file_id": "build-file-108",
+      "path": "development/run-2/evidence/playwright-report.json",
+      "sha256": "541789AF1B917FCEE665288C1A5D6D0558C387F9830672D2695B40EEDBF3D9C3",
+      "bytes": 13329
+    },
+    {
+      "file_id": "build-file-109",
+      "path": "development/run-3/candidate.spec.mjs",
+      "sha256": "3B58856C6DD1B593CD832665E2CAC67BB85B9EDFD5BF46E0FC66764B0442A580",
+      "bytes": 6409
+    },
+    {
+      "file_id": "build-file-110",
+      "path": "development/run-3/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-111",
+      "path": "development/run-3/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "658007B69BD698B83233A299BB9E883219DE41CAC7E673BD522B7334B111F24A",
+      "bytes": 10539
+    },
+    {
+      "file_id": "build-file-112",
+      "path": "development/run-3/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "B45ADC032A2393351DF195176CC447F6BA847CBD6B6B1F4554200541A6D77951",
+      "bytes": 48478
+    },
+    {
+      "file_id": "build-file-113",
+      "path": "development/run-3/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "5BCA500F2647F8598FD4CD7234842A6C531250C6FA8948A774C5D83A0C339093",
+      "bytes": 615292
+    },
+    {
+      "file_id": "build-file-114",
+      "path": "development/run-3/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "7A0442659A7092B32625D72267E5039C643D98DF828DA33EF94B5F0D4DE81560",
+      "bytes": 218453
+    },
+    {
+      "file_id": "build-file-115",
+      "path": "development/run-3/evidence/playwright-report.json",
+      "sha256": "6C27AE7E2688DA06BA19943202347EBABC2AC6773157234479381AD7650274C4",
+      "bytes": 12635
+    },
+    {
+      "file_id": "build-file-116",
+      "path": "development/run-4/candidate.spec.mjs",
+      "sha256": "B0B55CE2DBB29B2394A48A508C3237F7568A5DF6F63A354EBC2008D95E0596C0",
+      "bytes": 6923
+    },
+    {
+      "file_id": "build-file-117",
+      "path": "development/run-4/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-118",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "33C72C97CCD5CFD1AEB8FFC895568A160D014F497BE5235A13BAC9A2435235C8",
+      "bytes": 7329
+    },
+    {
+      "file_id": "build-file-119",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "B45ADC032A2393351DF195176CC447F6BA847CBD6B6B1F4554200541A6D77951",
+      "bytes": 48478
+    },
+    {
+      "file_id": "build-file-120",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "DE66A16B8FA5145EC316473982E906041AB28F86301C5CD0C9C33AEF69A85662",
+      "bytes": 649893
+    },
+    {
+      "file_id": "build-file-121",
+      "path": "development/run-4/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "E4FAC01C56C77B1940946B38DAE191B4926452CDFBC5A5E3DB2FF02157532072",
+      "bytes": 217652
+    },
+    {
+      "file_id": "build-file-122",
+      "path": "development/run-4/evidence/playwright-report.json",
+      "sha256": "3088986AA75804E15D437CD4D4D1808D40A8D228C3B5778E97E3E5729DF4D882",
+      "bytes": 14316
+    },
+    {
+      "file_id": "build-file-123",
+      "path": "development/run-5/candidate.spec.mjs",
+      "sha256": "ED788E9EE8499A53AA0A28D0AE844BAD845A0E567F54EC7AEC62E2A5207FAD47",
+      "bytes": 7079
+    },
+    {
+      "file_id": "build-file-124",
+      "path": "development/run-5/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-125",
+      "path": "development/run-5/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "D49D014A1CEED24FD8E262AE3B8104563FF6FE538A4D2B158D1C567AB88C8407",
+      "bytes": 11345
+    },
+    {
+      "file_id": "build-file-126",
+      "path": "development/run-5/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "B45ADC032A2393351DF195176CC447F6BA847CBD6B6B1F4554200541A6D77951",
+      "bytes": 48478
+    },
+    {
+      "file_id": "build-file-127",
+      "path": "development/run-5/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "69990ABEA3B5C5937198FFB18453700628CF3EBDB4B24ED12CC8F18DA10425E6",
+      "bytes": 653850
+    },
+    {
+      "file_id": "build-file-128",
+      "path": "development/run-5/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "3DDA6FEF61F225231D8EC4FC837EFB2B86E6B6A8038D3374012FE5467EE17910",
+      "bytes": 177675
+    },
+    {
+      "file_id": "build-file-129",
+      "path": "development/run-5/evidence/playwright-report.json",
+      "sha256": "E226F3EAC93B0E67914051C27E126232B4158C97451E8907467CABA2F62E8B03",
+      "bytes": 11035
+    },
+    {
+      "file_id": "build-file-130",
+      "path": "development/run-6/candidate.spec.mjs",
+      "sha256": "EA72E7CCF26F1AD6F68603CED64DA151DC7EDEF272ABF5605886348E810AF62B",
+      "bytes": 6855
+    },
+    {
+      "file_id": "build-file-131",
+      "path": "development/run-6/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-132",
+      "path": "development/run-6/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "A1194E57221442358CAE8B4EC42B40C74AAEC8255311B27F4400E07D3B5FB05F",
+      "bytes": 6971
+    },
+    {
+      "file_id": "build-file-133",
+      "path": "development/run-6/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "B45ADC032A2393351DF195176CC447F6BA847CBD6B6B1F4554200541A6D77951",
+      "bytes": 48478
+    },
+    {
+      "file_id": "build-file-134",
+      "path": "development/run-6/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "C6E5FA4E46F7C9F558183FF30B210CF851499375223B2EC77F82797F922AFE4C",
+      "bytes": 689830
+    },
+    {
+      "file_id": "build-file-135",
+      "path": "development/run-6/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "C300DEDEFF713489A9F68804BD9DEE46A0876417E04BADEA06176A8DBDFFDBB8",
+      "bytes": 264454
+    },
+    {
+      "file_id": "build-file-136",
+      "path": "development/run-6/evidence/playwright-report.json",
+      "sha256": "7EC113B2DE1D5578083A757C88AACC53CBC40C4886E082BCDF1A1773BBE41B00",
+      "bytes": 13262
+    },
+    {
+      "file_id": "build-file-137",
+      "path": "development/run-7/candidate.spec.mjs",
+      "sha256": "1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5",
+      "bytes": 6855
+    },
+    {
+      "file_id": "build-file-138",
+      "path": "development/run-7/evidence/artifacts/.last-run.json",
+      "sha256": "3583016D6BF253593D9ED76234972782DE61D62A00D82B7843FB627C544C2428",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-139",
+      "path": "development/run-7/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/error-context.md",
+      "sha256": "3520A0F9A25623C736EAAC824AD150724F0AF3A140A1A5E40F2407DBC2F4716C",
+      "bytes": 6574
+    },
+    {
+      "file_id": "build-file-140",
+      "path": "development/run-7/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/test-failed-1.png",
+      "sha256": "DBCCA5220F47AF54F2B4B404AF1F52E67224BD5854D7D746AAEB76C668724F41",
+      "bytes": 55122
+    },
+    {
+      "file_id": "build-file-141",
+      "path": "development/run-7/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/trace.zip",
+      "sha256": "606C7BA52B7F624771BF4CEAB91F3ED7C723D69A842D1002A92DFB4C7DDA4509",
+      "bytes": 717578
+    },
+    {
+      "file_id": "build-file-142",
+      "path": "development/run-7/evidence/artifacts/candidate-KC-23-多设备总价与双击确认只增一条/video.webm",
+      "sha256": "BA84095CC23A0D6DFBA886F77EF520C31E8BE946AD6809C874BA2C8E4DA4A0FA",
+      "bytes": 214056
+    },
+    {
+      "file_id": "build-file-143",
+      "path": "development/run-7/evidence/playwright-report.json",
+      "sha256": "29DF2B45E69B06251DA3CE144D6A48AC53243042E955E7B80326B1D11FE41761",
+      "bytes": 12903
+    },
+    {
+      "file_id": "build-file-144",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "C0230C6A574DF4B8CE31A17A4E575BE13409911886571540ADFCD7B1A0264802",
+      "bytes": 169065
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "DRAFT_NOT_CREATED",
+      "category": "draft_absent",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_NOT_CREATED\",\"rule\":\"DRAFT_NOT_CREATED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"No draft has been saved. Use write_draft with ES module code and previous_sha256=null.\",\"draft_saved\":false,\"draft_exists\":false,\"current_sha256\":null,\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1E873A414866A7CD8008ECD8311BE869908094EFFA53A40A79EBC15A484A684B",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_press_key",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "08C1A20FE7570CD6FF3D987C25F295F0098C8C7A28872EF42D7FD2ABD71CF020",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Tool \"browser_press_key\" does not handle the modal state.\n### Modal state\n- [\"confirm\" dialog with message \"确认重置演示数据？仅重置本演示命名空间 kimi-complex-lab-v1。\"]: can be handled by browser_handle_dialog",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "598512F233D5197693437C059BF95CE494900276ED50BC8D88D315D58CCD5EC3",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f1e81 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "3F900F5999BB07CF5FD38A9C7DD6B86ECC4990CAA9A27E1D2B36A9358F0974DF",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "4DB627155D3CA4A701956F3BEF31CC47FAEACA8686BB7B13FED6A699E01AD437",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "17616C251F645733D3258C78D3D1ED9933DCAC05FA52266605FBAD87961A6272",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "211266E8163AA0AD63FA5D415CD7E89BBFC9C40909DD316576392548F533408E",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "48210BBF397C3D657BF836D28B734464C5599183ECA1C9E3966819F82CCED541",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f1e307 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "DDBA587C3CB4F9B2A60A8B6099BBD574E8889F5E27ABD30579A8B3FB41D3BAE0",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Unexpected token \"\" while parsing css selector \"\". Did you mean to CSS.escape it?",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "61EC73569620188806C3A8937577EF00DC4502928E417B4FEA2CF7EA2E1ECE23",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('button:text-is(\"下一步\")') resolved to 2 elements:\n    1) <button id=\"to2\" class=\"primary\">下一步</button> aka getByRole('button', { name: '下一步' })\n    2) <button id=\"to3\" class=\"primary\">下一步</button> aka locator('#step2').getByText('下一步')\n\nCall log:\n\u001b[2m  - waiting for locator('button:text-is(\"下一步\")')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "3CD3E1B0DB976463B56814682F064A14E1226E724E83DBBD9F7CDAA3A8DE8175",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_select_option",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "18B14A96BF36082B8564EC01BE0411D50A134147E2557080F011F201DE215B4C",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('#step2 select:first-of-type') resolved to 2 elements:\n    1) <select id=\"start\">…</select> aka getByLabel('开始整点')\n    2) <select id=\"end\">…</select> aka getByLabel('结束整点')\n\nCall log:\n\u001b[2m  - waiting for locator('#step2 select:first-of-type')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_select_option",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "B9E055FE628171E859D5159FC9D58F9AF55D3C30C284C0DBF25B0000A8D67616",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('#step2 select:last-of-type') resolved to 2 elements:\n    1) <select id=\"start\">…</select> aka getByLabel('开始整点')\n    2) <select id=\"end\">…</select> aka getByLabel('结束整点')\n\nCall log:\n\u001b[2m  - waiting for locator('#step2 select:last-of-type')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "2C3EEC288BD4DCBED277AA0E6A6D95236F87F22A97B8FE427C84C98EC3ABF09C",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aria-ref=f1e212')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled class=\"primary\" id=\"confirmBook\">确认预约</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_snapshot",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "87C3B164C79C8A89E465DB778FBF43061444BC8B3DE42AC1418678E4A56CFEFE",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: \"region[aria-label=\"统计\"]\" does not match any elements.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "3B23BB238B92E5A5F9A7CC653284D4C08641A61140719EBFC7AA54727B537542",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "0A30002E2B938FA9E838963FE6CE6FD6EDF84292AA8D38F447F86EF25DF39B5D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTypeError: Cannot read properties of null (reading 'tagName')\n    at eval (eval at <anonymous> (eval at evaluate (:311:30)), <anonymous>:1:49)\n    at eval (eval at evaluate (:311:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "A882EC5693A0DF40251F6E47336EE7D893D47AB844986CDC0597D5FB4E120886",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "E57598C3E8BA3EEC5A3F882214602FDD24E8AC4773C389DB0CC4CA90AC6709A7",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "57D7F47850EF89A872849F106C9E4E3E827D72141B51BB845E83CC456FB388D5",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "edit",
+      "code": null,
+      "category": "other_tool_error",
+      "input_sha256": "91FCCC08ED04D7776B008EB100E0DFD748FD5D1DC37AF52AD635E89DBDF8F14E",
+      "repeated_identical_failed_request": false,
+      "message": "Error: cannot modify \"D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045331-ce81611f\\development\\draft\\candidate.spec.mjs\": file has not been read — read the file, then retry",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__write_draft",
+      "code": "DRAFT_CHANGED_RELOAD_REQUIRED",
+      "category": "other_tool_error",
+      "input_sha256": "25B5BD5F95F1F8620329C8A129DDB3973735DB4DAAB373EBE05FD042A1A4850D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_CHANGED_RELOAD_REQUIRED\",\"rule\":\"DRAFT_CHANGED_RELOAD_REQUIRED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"DRAFT_CHANGED_RELOAD_REQUIRED\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"5D4BD228885B2E04BB11A48B6D7D379242A127FA248613CC4D411F9493815C04\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "F2E78E146DA142FB53B0EB8E70EC064C5E96CF7C0391A458E498D754BAB1B430",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "02C87ABD7D358B8320B97E045031371D957F7E09637CC49E6ED9B911DA2A4469",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nTimeoutError: browserBackend.callTool: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:text-is(\"下一页\")')\u001b[22m\n\u001b[2m    - locator resolved to <button disabled id=\"next\">下一页</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__self_test",
+      "code": "DOM_READ_CONTRACT_REQUIRED",
+      "category": "policy_rejection",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DOM_READ_CONTRACT_REQUIRED\",\"rule\":\"READ_ONLY_DOM_EXPRESSION\",\"node\":\"CallExpression\",\"identifier\":null,\"location\":{\"line\":3,\"column\":22},\"message\":\"Use DOM selectors, attribute/text/state reads and read-only array mapping; mutation, arbitrary calls and browser globals require a controlled entry. Use browser_snapshot for unsupported expressions.\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"FE080D3A451EC3105F157CCE447F3EB47AA0D7DD4E136D51F28428D1AE8615C0\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "read",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "FBBA6479B560AF020705E22B376F2A601B40746174072846CBF87FA15B8BA47C",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"read\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__read_evidence",
+      "code": "TOOL_ARGUMENTS_INVALID",
+      "category": "parameter_error",
+      "input_sha256": "432066972154E76CE5FF054A5C0275973B03C30FAD6E5B4A9E7C4B370A2B0F7E",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TOOL_ARGUMENTS_INVALID\",\"rule\":\"EXACT_TOOL_SCHEMA\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"TOOL_ARGUMENTS_INVALID\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"],\"required\":[\"execution\",\"kind\"],\"allowed_parameters\":[\"execution\",\"kind\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__read_evidence",
+      "code": "TOOL_ARGUMENTS_INVALID",
+      "category": "parameter_error",
+      "input_sha256": "432066972154E76CE5FF054A5C0275973B03C30FAD6E5B4A9E7C4B370A2B0F7E",
+      "repeated_identical_failed_request": true,
+      "message": "Error: {\"code\":\"TOOL_ARGUMENTS_INVALID\",\"rule\":\"EXACT_TOOL_SCHEMA\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"TOOL_ARGUMENTS_INVALID\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"],\"required\":[\"execution\",\"kind\"],\"allowed_parameters\":[\"execution\",\"kind\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "CANDIDATE_ALREADY_FROZEN",
+      "category": "other_tool_error",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": true,
+      "message": "Error: {\"code\":\"CANDIDATE_ALREADY_FROZEN\",\"rule\":\"CANDIDATE_ALREADY_FROZEN\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"CANDIDATE_ALREADY_FROZEN\",\"draft_saved\":false,\"draft_exists\":true,\"current_sha256\":\"1A531538178C7EE108A82A9EC9E742872CE4C54ED1CDE2FC2EDEFF382C6DF5B5\",\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    }
+  ]
+}

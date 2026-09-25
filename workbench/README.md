@@ -1,5 +1,11 @@
 # 批准脚本测试工作台（第一阶段）
 
+### Kimi 24条用例的工作台实测
+
+使用下方同一 `-Data fresh-b` 启动入口，进入 **Kimi复杂预约台 · 24条工作台实测** → **用例库** 或 **建例任务**。项目内已导入原24条用例，来源任务和候选保持按用例版本关联。查看任务、代码及历史证据不调用模型；“开始已授权任务”才会调用模型，已消费授权不能重复启动。
+
+本轮由Coding Agent自主观察、编写、执行和决定提交；资源计数折叠在技术详情。业务差异的实际开发执行报告也在技术详情中，不能把“任务结束”或“独立执行通过”当作人工批准。当前日常只读启动配置不开放新模型调用，也没有为这24个候选追加任意试跑授权。结果及语义核查见[本轮报告](qa/20260925-kimi-workbench/REPORT.md)。
+
 ### 已有 FRESH-B 文件包零模型试跑
 
 在D盘主目录执行统一启动入口：
@@ -23,6 +29,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-work
 2026-09-25 新增已登记授权的“自主建例”入口：项目页 → 自主建例 → 开始已授权任务。Agent在同一DSH会话观察、编写、实际自测并有限修订；提交后由工作台独立验证，最多停在等待人工核对。详细范围和证据见 [任务内自主建例记录](docs/AUTONOMOUS_DEVELOPMENT_20260925.md)。日常启动脚本和4322入口保持不变。
 
 环境接线：`WORKBENCH_DEVELOPMENT_ENVIRONMENTS`指定本机JSON数组文件，每项包含`id`、`normal_url`、`fault_url`和既有`detection`契约，仅支持已登记的本机合成环境。管理员通过`registerDevelopmentAuthorization`绑定项目、CONFIRMED用例版本/哈希及环境；普通页面/API不能自行授权或提交任意URL。授权账本位于现有BuildTaskStore内，历史账本不重置。运行依赖根目录、workbench、harness-probe三个锁文件及本机DSH私有运行时；不打包凭据。
+
+仅有正常入口时，管理员可显式登记`validation_mode: "normal-only"`及`id/normal_url`；此模式不接受故障入口或检测答案，也不声称故障检出。默认成对验证要求不变。新授权可显式使用exploratory档，历史标准档及已消费额度不变；用户页面不直接设置工具权限或额度。
 
 零模型工程验证：`node --test workbench/tests/development-session.test.mjs workbench/tests/development-production.test.mjs`（从仓库根执行）。锁定DSH插件检查：配置本机`DSH_HOME`后运行`node workbench/tests/development-dsh-preflight.mjs`；该检查不挂载Agent驱动、不调用模型。`scripts/accept-autonomous-20260925.mjs --run-authorized-pair`只用于本次明确授权的一次性真实验收，有持久化防重抽记录，不是日常自动重跑命令。
 

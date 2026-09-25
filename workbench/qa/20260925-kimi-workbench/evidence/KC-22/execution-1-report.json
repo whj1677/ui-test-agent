@@ -1,0 +1,179 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "candidate.spec.mjs",
+      "--config",
+      "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs"
+    ],
+    "configFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\config\\candidate.playwright.config.mjs",
+    "rootDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045006-0e847875/development/run-1",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045006-0e847875/development/run-1/evidence/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/01_AI工程/01_工程项目/ui-test-agent/workbench/.local/fresh25-b/build-tasks/build-20260925045006-0e847875/development/run-1",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "candidate.spec.mjs",
+      "file": "candidate.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "KC-22 紧接结束边界允许并刷新保持",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6299,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\nExpected: \u001b[32m\"12\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"12\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"12\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\nExpected: \u001b[32m\"12\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"12\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"12\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:38:29\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:21:3",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs",
+                      "column": 29,
+                      "line": 38
+                    },
+                    "snippet": "  36 |     const startHour = bookingDialog.getByRole('combobox', { name: '开始整点' });\n  37 |     await startHour.selectOption('12:00');\n> 38 |     await expect(startHour).toHaveValue('12:00');\n     |                             ^\n  39 |     const endHour = bookingDialog.getByRole('combobox', { name: '结束整点' });\n  40 |     await endHour.selectOption('14:00');\n  41 |     await expect(endHour).toHaveValue('14:00');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs",
+                        "column": 29,
+                        "line": 38
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\nExpected: \u001b[32m\"12\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"12\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"12\"\u001b[22m\n\n\n  36 |     const startHour = bookingDialog.getByRole('combobox', { name: '开始整点' });\n  37 |     await startHour.selectOption('12:00');\n> 38 |     await expect(startHour).toHaveValue('12:00');\n     |                             ^\n  39 |     const endHour = bookingDialog.getByRole('combobox', { name: '结束整点' });\n  40 |     await endHour.selectOption('14:00');\n  41 |     await expect(endHour).toHaveValue('14:00');\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:38:29\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:21:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "CASE_STEP_1",
+                      "duration": 5281,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\nExpected: \u001b[32m\"12\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"12\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"12\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\nExpected: \u001b[32m\"12\u001b[7m:00\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"12\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').filter({ has: getByRole('heading', { name: '新建预约' }) }).getByRole('combobox', { name: '开始整点' })\u001b[22m\n\u001b[2m    14 × locator resolved to <select id=\"start\">…</select>\u001b[22m\n\u001b[2m       - unexpected value \"12\"\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:38:29\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs:21:3",
+                        "location": {
+                          "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs",
+                          "column": 29,
+                          "line": 38
+                        },
+                        "snippet": "  36 |     const startHour = bookingDialog.getByRole('combobox', { name: '开始整点' });\n  37 |     await startHour.selectOption('12:00');\n> 38 |     await expect(startHour).toHaveValue('12:00');\n     |                             ^\n  39 |     const endHour = bookingDialog.getByRole('combobox', { name: '结束整点' });\n  40 |     await endHour.selectOption('14:00');\n  41 |     await expect(endHour).toHaveValue('14:00');"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-09-25T04:52:40.112Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\evidence\\artifacts\\candidate-KC-22-紧接结束边界允许并刷新保持\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\evidence\\artifacts\\candidate-KC-22-紧接结束边界允许并刷新保持\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\evidence\\artifacts\\candidate-KC-22-紧接结束边界允许并刷新保持\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\evidence\\artifacts\\candidate-KC-22-紧接结束边界允许并刷新保持\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925045006-0e847875\\development\\run-1\\candidate.spec.mjs",
+                    "column": 29,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bc3083f3c9c91830281f-3fe985276369cdc16c11",
+          "file": "candidate.spec.mjs",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-25T04:52:39.500Z",
+    "duration": 7483.875,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,822 @@
+{
+  "external_id": "KC-06",
+  "title": "无结果与重置恢复",
+  "task_id": "build-20260925040011-a3e56831",
+  "status": "CANDIDATE_VALIDATION_FAILED",
+  "source": {
+    "project_id": "project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "project_name": "Kimi复杂预约台 · 24条工作台实测",
+    "case_id": "case-e04cc6ea-98b2-416b-b708-9018c89d74aa",
+    "case_version": 1,
+    "external_id": "KC-06",
+    "content_sha256": "8A1B8581530A082C0A891A949F52F2BD71164FF13975DAC3E4173F8C9FD2BADC"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "validation_mode": "normal-only",
+  "human_review_status": "NOT_READY",
+  "started_at": "2026-09-25T04:00:11.832Z",
+  "finished_at": "2026-09-25T04:06:29.448Z",
+  "elapsed_ms": 377616,
+  "harness_starts": 1,
+  "tool_calls": 102,
+  "self_tests": [
+    {
+      "number": 1,
+      "status": "FAILED",
+      "bundle_sha256": "1378176D1A620D6532803006F96FADEFD004FAF137616C427BF8C888D250F37F",
+      "sha256": "25C2FEC8066F0E1BD0EAE8988C97FC015478C10455AD77738E342DC821CCE1AB",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 3\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "expected": "3",
+        "actual": "0",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 3\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+                  "expected": "3",
+                  "actual": "0",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925040011-a3e56831\\development\\run-1\\candidate.spec.mjs",
+                    "line": 74,
+                    "column": 34
+                  },
+                  "snippet": "  72 |     await expect(sortSelect.locator('option:checked')).toHaveText('编号升序');\n  73 |\n> 74 |     await expect(dataRows(page)).toHaveCount(3);\n     |                                  ^\n  75 |     await expect(await idColumnCells(page)).toHaveText(['EQ-101', 'EQ-102', 'EQ-103']);\n  76 |     await expect(pagerSummary(page)).toContainText(/共\\s*8\\s*条/);\n  77 |   });"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-1/evidence/playwright-report.json",
+      "started_at": 1790309087748,
+      "finished_at": 1790309095498
+    },
+    {
+      "number": 2,
+      "status": "FAILED",
+      "bundle_sha256": "AB5C178257351BADB836A09A678802A8EA722C878FFDE9DC6677A4124E0E08AC",
+      "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 3\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "expected": "3",
+        "actual": "0",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": false,
+        "order_valid": false,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2"
+        ],
+        "duplicates": [],
+        "missing": [
+          "CASE_STEP_3"
+        ],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: 3\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+                  "expected": "3",
+                  "actual": "0",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('table', { name: '设备列表' }).locator('tbody tr')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).locator('tbody tr')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925040011-a3e56831\\development\\run-2\\candidate.spec.mjs",
+                    "line": 71,
+                    "column": 34
+                  },
+                  "snippet": "  69 |     await expect(sortSelect.locator('option:checked')).toHaveText('编号升序');\n  70 |\n> 71 |     await expect(dataRows(page)).toHaveCount(3);\n     |                                  ^\n  72 |     await expect(await idColumnCells(page)).toHaveText(['EQ-101', 'EQ-102', 'EQ-103']);\n  73 |     await expect(pagerSummary(page)).toContainText(/共\\s*8\\s*条/);\n  74 |   });"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": false,
+            "raw_title": null,
+            "report_path": null,
+            "error_attributed": false,
+            "execution_status": "NOT_EXECUTED",
+            "attributed_errors": []
+          }
+        ]
+      },
+      "report_path": "run-2/evidence/playwright-report.json",
+      "started_at": 1790309155860,
+      "finished_at": 1790309163571
+    }
+  ],
+  "submission": {
+    "outcome": "business_difference",
+    "coverage": [
+      {
+        "order": 1,
+        "requirement": "显示没有匹配设备，无数据行，总数0，第1/1页，分页按钮禁用",
+        "check_lines": [
+          53,
+          54,
+          55,
+          56,
+          57,
+          58
+        ],
+        "execution": 2,
+        "uncovered": ""
+      },
+      {
+        "order": 2,
+        "requirement": "搜索/站点/状态清空，编号升序恢复，第1页显示101/102/103，共8条",
+        "check_lines": [
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          71,
+          72,
+          73
+        ],
+        "execution": 2,
+        "uncovered": ""
+      },
+      {
+        "order": 3,
+        "requirement": "重置后已选0项，批量预约禁用",
+        "check_lines": [
+          77,
+          78
+        ],
+        "execution": 2,
+        "uncovered": "CASE_STEP_2 断言失败后用例中止，CASE_STEP_3 未执行（NOT_EXECUTED，见执行2 coverage.missing）。重置后“已选 0 项/批量预约禁用”只见于同一次执行的失败截图，未由该步骤断言验证。"
+      }
+    ]
+  },
+  "independent_runs": [],
+  "candidate": {
+    "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+    "bundle": {
+      "files": [
+        {
+          "path": "candidate.spec.mjs",
+          "bytes": 3287,
+          "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1"
+        }
+      ],
+      "sha256": "AB5C178257351BADB836A09A678802A8EA722C878FFDE9DC6677A4124E0E08AC"
+    },
+    "approval_status": "NOT_APPROVED"
+  },
+  "rejections": [
+    {
+      "tool": "check_fidelity",
+      "at": 1790308815014,
+      "code": "DRAFT_NOT_CREATED",
+      "rule": "DRAFT_NOT_CREATED",
+      "node": null,
+      "identifier": null,
+      "location": null,
+      "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+      "draft_saved": false,
+      "draft_exists": false,
+      "current_sha256": null,
+      "allowed_next_steps": [
+        "read_draft",
+        "correct the reported issue",
+        "write_draft",
+        "self_test"
+      ]
+    }
+  ],
+  "error": null,
+  "registered_files": [
+    {
+      "file_id": "build-file-1",
+      "path": "development/agent-input.txt",
+      "sha256": "5EE480A3F80C0D4FADF5C3EF40CCBA4E5A9502FC158049BF0533D19AA3D25D15",
+      "bytes": 5860
+    },
+    {
+      "file_id": "build-file-2",
+      "path": "development/diagnostic-1790309086768/candidate.spec.mjs",
+      "sha256": "25C2FEC8066F0E1BD0EAE8988C97FC015478C10455AD77738E342DC821CCE1AB",
+      "bytes": 3394
+    },
+    {
+      "file_id": "build-file-3",
+      "path": "development/diagnostic-1790309154565/candidate.spec.mjs",
+      "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+      "bytes": 3287
+    },
+    {
+      "file_id": "build-file-4",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-00-16-428Z.yml",
+      "sha256": "BDE3E950C2CEEBCFCEEF0718C81D56362EB52C36435BF0E70D507867C398D30F",
+      "bytes": 4288
+    },
+    {
+      "file_id": "build-file-5",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-00-33-616Z.png",
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+      "bytes": 54306
+    },
+    {
+      "file_id": "build-file-6",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-00-39-439Z.yml",
+      "sha256": "386AF8916DE3A11AF4089D07D7A6DF9F7C4AD7FFE4104A15989DE474B91D68B6",
+      "bytes": 3105
+    },
+    {
+      "file_id": "build-file-7",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-00-42-723Z.yml",
+      "sha256": "386AF8916DE3A11AF4089D07D7A6DF9F7C4AD7FFE4104A15989DE474B91D68B6",
+      "bytes": 3105
+    },
+    {
+      "file_id": "build-file-8",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-00-45-856Z.yml",
+      "sha256": "386AF8916DE3A11AF4089D07D7A6DF9F7C4AD7FFE4104A15989DE474B91D68B6",
+      "bytes": 3105
+    },
+    {
+      "file_id": "build-file-9",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-03-119Z.yml",
+      "sha256": "386AF8916DE3A11AF4089D07D7A6DF9F7C4AD7FFE4104A15989DE474B91D68B6",
+      "bytes": 3105
+    },
+    {
+      "file_id": "build-file-10",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-07-108Z.yml",
+      "sha256": "386AF8916DE3A11AF4089D07D7A6DF9F7C4AD7FFE4104A15989DE474B91D68B6",
+      "bytes": 3105
+    },
+    {
+      "file_id": "build-file-11",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-10-480Z.yml",
+      "sha256": "87DFC904B5D686C4C2C8350ACD88961EF2CDA49C2ED46B9A9D5EF198DA626BFC",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-12",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-20-172Z.yml",
+      "sha256": "79D82E7ED13AAA8B561B875F45A76196D35FC29C4DF139E7E919817258435BDD",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-13",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-25-777Z.yml",
+      "sha256": "79D82E7ED13AAA8B561B875F45A76196D35FC29C4DF139E7E919817258435BDD",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-14",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-30-144Z.yml",
+      "sha256": "79D82E7ED13AAA8B561B875F45A76196D35FC29C4DF139E7E919817258435BDD",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-15",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-38-891Z.yml",
+      "sha256": "70E8E8D95C9BC11ADC6E35974A465E65C3291FF92A1C3F9D18DD03CAA02C6083",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-16",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-41-362Z.yml",
+      "sha256": "9D57B67FB19B67DF8E38564DAF357DCBB1CB80C351296BFA6143048F8EA1CB20",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-17",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-52-561Z.yml",
+      "sha256": "4266AFF0B72CD69C0D0DBE3C17FB76A7C10E73262EB4BDE624DE5E8CC18A4B19",
+      "bytes": 3659
+    },
+    {
+      "file_id": "build-file-18",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-01-57-731Z.yml",
+      "sha256": "CEF1FF3118220B221029FB6A31EB76D2C6E690586B16422ABE3E626D21D74495",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-19",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-00-962Z.yml",
+      "sha256": "5E38FFA9BC5737F03AE05CABAF79BD0631B51B0E9960E89320EEB64D0304C553",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-20",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-14-096Z.yml",
+      "sha256": "778F2ACE5DDE58991E4F16E1EC39F9B745AC34DD8237E145DB6ABBBA822F75BC",
+      "bytes": 4504
+    },
+    {
+      "file_id": "build-file-21",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-15-778Z.yml",
+      "sha256": "137FBBFB0CBC7AB8B67FA63C6DEDD0F3A8B3C829AAEE2A41F634B3AC9C79E9ED",
+      "bytes": 4534
+    },
+    {
+      "file_id": "build-file-22",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-17-097Z.yml",
+      "sha256": "473444EFA4BFFE856ACE41265E65B12857F2C78776B07D710C11C0FB42F18653",
+      "bytes": 4541
+    },
+    {
+      "file_id": "build-file-23",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-36-010Z.yml",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "file_id": "build-file-24",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-02-38-816Z.yml",
+      "sha256": "25CEF76FDD6AE74949E2E6B72CA5095574B9296C33B3F2940A0A6F2415F81F37",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-25",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-08-209Z.yml",
+      "sha256": "38D98ECE404BA69138D3A722B66899F810C8B8AF35DE825D4055609C179F60B1",
+      "bytes": 4835
+    },
+    {
+      "file_id": "build-file-26",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-12-742Z.yml",
+      "sha256": "911DE815BA6B08F0B14AA3C8B62734F15ECA7B6FBF8CFEC526775880F935EB07",
+      "bytes": 4474
+    },
+    {
+      "file_id": "build-file-27",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-19-968Z.png",
+      "sha256": "9698368D2FFC63433DC5A6201DD98F22B59A6F0C01F8754CF8F2A55EC088D78B",
+      "bytes": 44984
+    },
+    {
+      "file_id": "build-file-28",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-22-316Z.yml",
+      "sha256": "443EBB86DEB59AA9E2AE7000D326B3026DF2EC95AE61AD2882C24A74D1F9EF7F",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-29",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-24-678Z.yml",
+      "sha256": "443EBB86DEB59AA9E2AE7000D326B3026DF2EC95AE61AD2882C24A74D1F9EF7F",
+      "bytes": 3231
+    },
+    {
+      "file_id": "build-file-30",
+      "path": "development/draft/.playwright-mcp/page-2026-09-25T04-03-25-518Z.png",
+      "sha256": "EE304A93DC0A3CB755E37821D14BD9D0A74CA991814EED92ED7FD27B68C5DC89",
+      "bytes": 44225
+    },
+    {
+      "file_id": "build-file-31",
+      "path": "development/draft/candidate.spec.mjs",
+      "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+      "bytes": 3287
+    },
+    {
+      "file_id": "build-file-32",
+      "path": "development/final/candidate.spec.mjs",
+      "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+      "bytes": 3287
+    },
+    {
+      "file_id": "build-file-33",
+      "path": "development/harness-events.json",
+      "sha256": "A47EA972950F0EFF61E0BEB9F6E969F1D1D4B60DE1CBF31F58460A8AAB6435EC",
+      "bytes": 369818
+    },
+    {
+      "file_id": "build-file-34",
+      "path": "development/harness-summary.json",
+      "sha256": "BA5936351802BDCE57ED5AD91F7A5F0F835EF6BB0C11593F12E4CB5549E9A0B2",
+      "bytes": 280
+    },
+    {
+      "file_id": "build-file-35",
+      "path": "development/run-1/candidate.spec.mjs",
+      "sha256": "25C2FEC8066F0E1BD0EAE8988C97FC015478C10455AD77738E342DC821CCE1AB",
+      "bytes": 3394
+    },
+    {
+      "file_id": "build-file-36",
+      "path": "development/run-1/evidence/artifacts/.last-run.json",
+      "sha256": "08619B67E3BC12EA41AC36E1082853BAABDC6C32BDE579F2A4417E2E528F2670",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-37",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-06-无结果与重置恢复/error-context.md",
+      "sha256": "16E0159D4E2AFDB9E846D7D36AE4808A27BDE35D0BED240FA1A2FE2CD13943B8",
+      "bytes": 7999
+    },
+    {
+      "file_id": "build-file-38",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-06-无结果与重置恢复/test-failed-1.png",
+      "sha256": "EE304A93DC0A3CB755E37821D14BD9D0A74CA991814EED92ED7FD27B68C5DC89",
+      "bytes": 44225
+    },
+    {
+      "file_id": "build-file-39",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-06-无结果与重置恢复/trace.zip",
+      "sha256": "B453B44C0F5D3CB09DE334EED92B4616CD7CE6D680CCE90E8C5E1CCE1F12E45E",
+      "bytes": 271766
+    },
+    {
+      "file_id": "build-file-40",
+      "path": "development/run-1/evidence/artifacts/candidate-KC-06-无结果与重置恢复/video.webm",
+      "sha256": "0355B0C9D9D238E9593ECFC60CA8EC8DA97019C3B1B91955C76BF0F027E05C41",
+      "bytes": 126513
+    },
+    {
+      "file_id": "build-file-41",
+      "path": "development/run-1/evidence/playwright-report.json",
+      "sha256": "D2B9B97454839F0A80007F74EB5D0909CFDA1E80D40C82FA4451B99ACCD6FB53",
+      "bytes": 12457
+    },
+    {
+      "file_id": "build-file-42",
+      "path": "development/run-2/candidate.spec.mjs",
+      "sha256": "0A7882E4C6865A7AF08A1248FFC313C6F4AEA8E542EF8DC9BE1F8CC9EB054AB1",
+      "bytes": 3287
+    },
+    {
+      "file_id": "build-file-43",
+      "path": "development/run-2/evidence/artifacts/.last-run.json",
+      "sha256": "08619B67E3BC12EA41AC36E1082853BAABDC6C32BDE579F2A4417E2E528F2670",
+      "bytes": 96
+    },
+    {
+      "file_id": "build-file-44",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-06-无结果与重置恢复/error-context.md",
+      "sha256": "9AAA9721D6F3BD93945000B1FF0EAF26EB3335DE414B6FE63CE507F71A3C96F0",
+      "bytes": 7871
+    },
+    {
+      "file_id": "build-file-45",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-06-无结果与重置恢复/test-failed-1.png",
+      "sha256": "EE304A93DC0A3CB755E37821D14BD9D0A74CA991814EED92ED7FD27B68C5DC89",
+      "bytes": 44225
+    },
+    {
+      "file_id": "build-file-46",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-06-无结果与重置恢复/trace.zip",
+      "sha256": "1CF4C9F3D0B95AFB2957BB0D384E6303A9B95F44BCF129F9E425BA582BE09F85",
+      "bytes": 271671
+    },
+    {
+      "file_id": "build-file-47",
+      "path": "development/run-2/evidence/artifacts/candidate-KC-06-无结果与重置恢复/video.webm",
+      "sha256": "D32B621468C90E547B11DC57A9F94A2243045E1D43E434A57B5263C055641119",
+      "bytes": 126513
+    },
+    {
+      "file_id": "build-file-48",
+      "path": "development/run-2/evidence/playwright-report.json",
+      "sha256": "40C6E13E58B15D03D939BA24D541C6E776D2B675021D049F4DA69BCC9EFDA152",
+      "bytes": 12457
+    },
+    {
+      "file_id": "build-file-49",
+      "path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "sha256": "C995FF2C7F44D628459BE502874E472455925E44D2591DFA6099FB6BCA7B2D14",
+      "bytes": 86422
+    }
+  ],
+  "tool_failures": [
+    {
+      "tool": "mcp__workbench__check_fidelity",
+      "code": "DRAFT_NOT_CREATED",
+      "category": "draft_absent",
+      "input_sha256": "44136FA355B3678A1146AD16F7E8649E94FB4FC21FE77E8310C060F61CAAFF8A",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"DRAFT_NOT_CREATED\",\"rule\":\"DRAFT_NOT_CREATED\",\"node\":null,\"identifier\":null,\"location\":null,\"message\":\"No draft has been saved. Use write_draft with ES module code and previous_sha256=null.\",\"draft_saved\":false,\"draft_exists\":false,\"current_sha256\":null,\"allowed_next_steps\":[\"read_draft\",\"correct the reported issue\",\"write_draft\",\"self_test\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1F2E07AE9AEFB0DD377936FE64B5039D1A8396C7939469BC28EA575BE0E17970",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "7BFC824B04F3D28481B6D0217EC326E7BBE70D74D22DE04F19F3BDB458005193",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "08B4D55ED128B77549AFD51579EF9E107378C792E1780B964D0978C95CF3CFC7",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "CF61EEC29C7ECBAFD8A0309A3EFF3A97D5D1D6197B40AC9020584F2EAC4A2685",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1FBDA90778B4D290D9407CE59CA9EB3A1190F4772EC1EEEAED8A68964254CB80",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "2F449B592F9993C005609A6C6F94F724975AFC2F72B0D4F26766C30A0A0500ED",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "3BF7ED5E7FB873DE1D9991A9A4334C8A4CE91AF365A3CB2E335545B5B0307202",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_fill_form",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "8DB85F92CFD196C21AFA11F98A6F421C67A49AB138ACA83E2B9FBDEC6A44F478",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref e24 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1B4613B0FFF4537C8342D389C481606F496C29A2FAE4F3E25895DA85597FB470",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "B5A5402CCC080BE344D088C5678AB106D000D3405EBE758D89B5A8940A1D6468",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "AD0BA8C8F4B6540E93DFEF5853CBEB09EADE745FFFC14BB05CC66934C522B500",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: browserBackend.callTool: Error: strict mode violation: locator('button:has-text(\"重置\")') resolved to 2 elements:\n    1) <button id=\"resetDemo\" class=\"danger\">重置演示数据</button> aka getByRole('button', { name: '重置演示数据' })\n    2) <button id=\"resetFilter\">重置</button> aka getByRole('button', { name: '重置', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"重置\")')\u001b[22m\n",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "E4242077E4AA22911ED2290CF9FA8E471195731F7AB6C88A5593B81061F7AD07",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_press_key",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "B524ACEA23A6ECF6B789987FB98C2707E6DFE31F4B21245F64B1959EBE0F60AF",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Tool \"browser_press_key\" does not handle the modal state.\n### Modal state\n- [\"confirm\" dialog with message \"确认重置演示数据？仅重置本演示命名空间 kimi-complex-lab-v1。\"]: can be handled by browser_handle_dialog",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "3112B799A9FAB6C07EBF82615F7D91F60AFD7A83CE89FD5DEE24DC3F7175B117",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "6DEEC5CBDB2A0D1A56B335CD8C9432B564CA0165B9B2F7E87B16C91397627E73",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "27DEE9C7EB1AC71977E34B332CCDE14933BB5660D3169DEA95BF92ED64B5AD59",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "F51DFE130B0E2DD51F0A8197095514FD0FFEE4DDBA531ADCEF3BC473445B136F",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_click",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "EE29DE8F072946B8DAC3D2FCD2B266F4058B97AD9112D30522F9A549D7F98927",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: Ref f3e28 not found in the current page snapshot. Try capturing new snapshot.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_fill_form",
+      "code": null,
+      "category": "browser_observation_error",
+      "input_sha256": "5F7E0E3DA303302748C35F783C67F8CC6B9037E7F8C9FCBD2711358CB68E8A1F",
+      "repeated_identical_failed_request": false,
+      "message": "Error: ### Error\nError: \"searchbox\" does not match any elements.",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1AE45C27977ECEB4E90AD9A49CF288C641ED21D5049FC396BD673FD39CD1112D",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_take_screenshot",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "1D4FCAA28B907777A8BF5856100A929340B99A93E7296FDC09D7852BEC1CE143",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_take_screenshot\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    },
+    {
+      "tool": "mcp__playwright-mcp__browser_evaluate",
+      "code": "TASK_TOOL_POLICY_DENIED",
+      "category": "policy_rejection",
+      "input_sha256": "22C42096435B7D469D823F898AC9D2FE5166D26E845B18381D36179013AB5EDA",
+      "repeated_identical_failed_request": false,
+      "message": "Error: {\"code\":\"TASK_TOOL_POLICY_DENIED\",\"rule\":\"TASK_DEVELOPMENT_SCOPE\",\"tool\":\"mcp__playwright-mcp__browser_evaluate\",\"draft_saved\":false,\"reason\":\"Native file tools are confined to the development directory (no links/runtime overrides). Browser navigation is bound; evaluate accepts read-only DOM expressions; screenshots use browser-managed output. Arbitrary shell and script execution remain unavailable without stronger isolation.\",\"alternatives\":[\"read\",\"read_image\",\"write\",\"edit\",\"mcp__workbench__run_diagnostic\",\"mcp__workbench__read_draft\",\"mcp__workbench__write_draft\",\"mcp__workbench__self_test\",\"mcp__workbench__read_evidence\",\"mcp__workbench__check_fidelity\",\"mcp__workbench__submit_candidate\",\"mcp__playwright-mcp__browser_navigate\",\"mcp__playwright-mcp__browser_snapshot\",\"mcp__playwright-mcp__browser_take_screenshot\",\"mcp__playwright-mcp__browser_evaluate\",\"mcp__playwright-mcp__browser_click\",\"mcp__playwright-mcp__browser_select_option\",\"mcp__playwright-mcp__browser_wait_for\",\"mcp__playwright-mcp__browser_press_key\",\"mcp__playwright-mcp__browser_fill_form\"]}",
+      "message_truncated": false
+    }
+  ]
+}
