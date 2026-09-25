@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "name": "index.html",
+      "sha256": "0ECFBF618D6E9D33132D1FBCB99B15F3423B04FA79B927C6A57C5D62ABC83D7A"
+    },
+    {
+      "name": "app.js",
+      "sha256": "5DB27F7DE47EE4BB5D32408BFE0866390AD8DAC4423116C49F4119F714138A79"
+    },
+    {
+      "name": "data.json",
+      "sha256": "72FF35CC6766B3B44E752750A23CF83B7100CE26E0B68168114975C35E779029"
+    },
+    {
+      "name": "cases.workbench.json",
+      "sha256": "E25E53C0B1E2B46FE97EE890B72A55B9329AF200B9C0D5E66BF56AEAFE37A53D"
+    }
+  ],
+  "accepted_at": "2026-09-25T02:11:34.764Z",
+  "faults": {
+    "a": "重置控件清空，但结果仍按重置前区域过滤；第4步数量错误",
+    "b": "详情按同名第一条取值而非所选编号；第3步工单编号错误"
+  },
+  "reference": "../reference/results.json",
+  "product_candidate": false
+}

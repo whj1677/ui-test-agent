@@ -1,0 +1,138 @@
+{
+  "reference_commit": "8e2aad695a3e53fce9474cd6616ac7235b0b5e13",
+  "policy": "unchanged",
+  "files": [
+    {
+      "name": "harness-probe/package-lock.json",
+      "sha256": "CDFE21323D9AD12C8932B5FFCFC3D481AE75CFC644252EA0F9E8DC69D97F8CA9"
+    },
+    {
+      "name": "harness-probe/src/harness-runner.mjs",
+      "sha256": "885426712FC3DE3682B015DEF63C340672C3E79127AD3E63A08384FC20915778"
+    },
+    {
+      "name": "harness-probe/src/verify-candidate.mjs",
+      "sha256": "0BA6E3D62E1811206BB581163DE68EC2F739376F72BBA8A09656F2B9525FC2BE"
+    },
+    {
+      "name": "workbench/config/candidate.playwright.config.mjs",
+      "sha256": "FA069430DA63AD36A97E072D94C0835AB4052174AB4C6427762A9E7BFD4BEA37"
+    },
+    {
+      "name": "workbench/package-lock.json",
+      "sha256": "D1E00DC3D29F174465C4152A1CF831454BBA0B34CC9299ED7DD02559CE973892"
+    },
+    {
+      "name": "workbench/server/build/adapter.mjs",
+      "sha256": "ED60A5D79FEF540891737434E43EE2CD83917C513DAD9ACE008BF03CCE8EC9E9"
+    },
+    {
+      "name": "workbench/server/build/assessments.mjs",
+      "sha256": "69B01F4C23B26113D79646D1A46A7A1C7A092BE1C9CEC01F4FEB2A087BCBF81A"
+    },
+    {
+      "name": "workbench/server/build/browser-semantics.mjs",
+      "sha256": "523EE0183C14B6AEA3F26E90FB20CB6F612AAC1225D869331B1B545D78B4D1E4"
+    },
+    {
+      "name": "workbench/server/build/caption-video.mjs",
+      "sha256": "664E7B55062EAA4D28DC398FA57D011F11BD5A69BBF96FCBB4927DA6EB8000E9"
+    },
+    {
+      "name": "workbench/server/build/development-authorization.mjs",
+      "sha256": "FA83FFE381AF4F25CA56C271DEA2E3A67C2F80A1E84180857275D78C6E8F073A"
+    },
+    {
+      "name": "workbench/server/build/development-bundle.mjs",
+      "sha256": "D76A2BED0729395DAC46CE325B95D4C445002AAFCDF4F487A9069BE60DE2723E"
+    },
+    {
+      "name": "workbench/server/build/development-dom-read.mjs",
+      "sha256": "8BDB6F8FE1E9F992583D36DA2583B1A0C1716E2B3B733E72993956317CB77EB6"
+    },
+    {
+      "name": "workbench/server/build/development-feedback.mjs",
+      "sha256": "84023F427FEF0F37561B69EBFAD3935BDF9A0AFEE0A4155E52047B71192384F9"
+    },
+    {
+      "name": "workbench/server/build/development-fidelity.mjs",
+      "sha256": "2E9754978694B976BC298801B067670AA536A257D0534AEBA18F7058BC6F1D45"
+    },
+    {
+      "name": "workbench/server/build/development-mcp.mjs",
+      "sha256": "59CE5BD073CFA4C679C47DF3D0DBBAC7B9BA7265946226E12248635AC0FB6447"
+    },
+    {
+      "name": "workbench/server/build/development-patch.mjs",
+      "sha256": "708852FE63AF8190F8C62CCD6C792FC7B4E6F6A5BA1065448FDEC8125DD6F380"
+    },
+    {
+      "name": "workbench/server/build/development-policy.mjs",
+      "sha256": "9D08D94475267497CA1E3DE1AD107CECC8919CCA7D6664A2EE5BFB59CADA6EE1"
+    },
+    {
+      "name": "workbench/server/build/development-session.mjs",
+      "sha256": "A86C996BEBA5879EE43AC88BD98FF1F41DF270F53F8A9EC1798EE28D2E7A029D"
+    },
+    {
+      "name": "workbench/server/build/development-task.mjs",
+      "sha256": "FC2070D0B5A623261B063FF80034CAD72D79AE8EEDD1C8335E6834CF40BD4D23"
+    },
+    {
+      "name": "workbench/server/build/development-tool-guard.mjs",
+      "sha256": "BAE4AE52083D9FF81F13709E050B1FC740D91D65C644C39536E4028D95EE5448"
+    },
+    {
+      "name": "workbench/server/build/diagnostic.mjs",
+      "sha256": "532A199AD2F6C5386EB814B14E8D6E1E16980EB8D76F7958C7BE6CD465A98000"
+    },
+    {
+      "name": "workbench/server/build/files.mjs",
+      "sha256": "C0E0BB153B560386834C2E51A0D1695E6DD146320A719297F2880AA07C05CF0D"
+    },
+    {
+      "name": "workbench/server/build/finalize-lifecycle.mjs",
+      "sha256": "9198EE9341929DE338B47595008DB43297877AFCDEFEE3BA742881974F237B39"
+    },
+    {
+      "name": "workbench/server/build/heldout-query.mjs",
+      "sha256": "2DDBD69B432A16972F50AD9C417E8E905ADF7745445774F795109302B8EC5B90"
+    },
+    {
+      "name": "workbench/server/build/manager.mjs",
+      "sha256": "D935BAD4956FCAF398C7085AB52C023FF21F7D1958BB15083188FD5FC9491FE1"
+    },
+    {
+      "name": "workbench/server/build/project-case.mjs",
+      "sha256": "169DDB192512C7126DC9DE39D08F08F0E90F4E69C97DDCE38374B966799C43AC"
+    },
+    {
+      "name": "workbench/server/build/report.mjs",
+      "sha256": "244436CC9CC64D99762450A979ED5865197BC6E9D5199F8390CEBE196DE96877"
+    },
+    {
+      "name": "workbench/server/build/revalidations.mjs",
+      "sha256": "11F45F19F8AF938883784531455EF3A5A2776B31897BA70412D29A5B4BCD7561"
+    },
+    {
+      "name": "workbench/server/build/step-observer.mjs",
+      "sha256": "8BA856B74B1E2BFE781E752B7306EFBB63D01771A8FE6FBA9D7A122E0338B696"
+    },
+    {
+      "name": "workbench/server/build/step-replay.mjs",
+      "sha256": "9E06C45763E160C289A62DEFDFAA02634E8FF39A288C4C0D22A1A01A36B4440A"
+    },
+    {
+      "name": "workbench/server/build/store.mjs",
+      "sha256": "D1EE66A59FFBC6519D48355D49E1B9EB987B413FCC07EC3BD246E5EF9010B029"
+    },
+    {
+      "name": "workbench/server/build/template.mjs",
+      "sha256": "DD29411359C237D46AB1231990033EE9D6892DB1A0E76074CC64AA2781057294"
+    },
+    {
+      "name": "workbench/server/build/trial-timeline.mjs",
+      "sha256": "CB9C1344EA60B6661AFA41A715AFF701824E36FF73476B01C5CD1F16FE089842"
+    }
+  ]
+}

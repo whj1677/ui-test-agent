@@ -3,9 +3,9 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "真实工具链与B恢复技术验证完成，候选等待人工核对",
+    "requirement_status": "固定产品版本的两条陌生流程从零验证进行中",
     "governance_level": "G2",
-    "version": 5,
+    "version": 6,
     "last_updated": "2026-09-25"
   },
   "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
@@ -216,6 +216,12 @@
       "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
       "status": "技术验证完成，等待人工核对",
       "notes": "任务卡：原稿E8B05F...字节保留；真实DSH工具→实际会话与执行器先行；原稿正常工程执行1次；新恢复任务1启动、3开发+3最终、120工具/20分钟，无替补；完成后停止。"
+    },
+    {
+      "version": 6,
+      "link": "workbench/docs/AUTONOMOUS_DEVELOPMENT_20260925.md",
+      "status": "进行中",
+      "notes": "任务卡：新流程A自定义筛选/空态/重置，B同名记录/页签/返回保持，各5步；独立参考验收后冻结。产品政策不改，两任务各1启动/3自测/2最终/120工具/20分钟，合计最多10候选执行；共享阻塞时停未启动任务；不重跑B恢复，不自动批准。"
     }
   ],
   "open_questions": [
@@ -266,6 +272,14 @@
       "description": "串联真实DSH浏览器/文件/MCP/执行器，工程复跑原稿并新建关联来源的恢复任务",
       "impact": "预检工具集成与恢复来源记录，非新语义规则",
       "confirmed_by": "用户明确的原稿恢复授权"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 6,
+      "type": "验证",
+      "description": "同一固定产品条件下两条陌生流程从零验证",
+      "impact": "合成站点/授权/证据，产品代码不修改",
+      "confirmed_by": "用户明确两条限定样本授权"
     }
   ]
 }

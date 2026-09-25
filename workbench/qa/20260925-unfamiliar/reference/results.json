@@ -1,0 +1,53 @@
+[
+  {
+    "flow": "a",
+    "variant": "normal",
+    "business_result": "PASSED",
+    "completed": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "failed_step": null,
+    "error": null
+  },
+  {
+    "flow": "a",
+    "variant": "fault",
+    "business_result": "FAILED",
+    "completed": [
+      1,
+      2,
+      3
+    ],
+    "failed_step": 4,
+    "error": "expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('status')\nExpected: \"3条记录\"\nReceived: \"1条记录\"\nTimeout:  1000ms\n\nCall log:\n  - Expect \"to.have.text\" with timeout 1000ms\n  - waiting for getByRole('status')\n    11 × locator resolved to <p id=\"count\" role=\"status\" aria-label=\"结果数量\">1条记录</p>\n       - unexpected value \"1条记录\"\n"
+  },
+  {
+    "flow": "b",
+    "variant": "normal",
+    "business_result": "PASSED",
+    "completed": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "failed_step": null,
+    "error": null
+  },
+  {
+    "flow": "b",
+    "variant": "fault",
+    "business_result": "FAILED",
+    "completed": [
+      1,
+      2
+    ],
+    "failed_step": 3,
+    "error": "expect(locator).toHaveText(expected) failed\n\nLocator:  getByRole('tabpanel').locator('dt').filter({ hasText: /^工单编号$/ }).locator('xpath=following-sibling::dd[1]')\nExpected: \"WO-202\"\nReceived: \"WO-201\"\nTimeout:  1000ms\n\nCall log:\n  - Expect \"to.have.text\" with timeout 1000ms\n  - waiting for getByRole('tabpanel').locator('dt').filter({ hasText: /^工单编号$/ }).locator('xpath=following-sibling::dd[1]')\n    11 × locator resolved to <dd>WO-201</dd>\n       - unexpected value \"WO-201\"\n"
+  }
+]
