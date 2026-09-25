@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { verifyWorkbenchCandidate } from '../server/build/adapter.mjs';
-import { parseCandidateReport } from '../server/build/report.mjs';
+import { parseCandidateReport, projectCaseStepCoverage } from '../server/build/report.mjs';
 import { chromium } from '@playwright/test';
 import { renderStepReplay } from '../server/build/step-replay.mjs';
 
@@ -133,5 +133,16 @@ try {
   }, replay.replay.chapters[1].result_start_seconds + 0.3);
   await page.locator('video').screenshot({ path: path.join(workspace, 'replay-step-2-result.png') });
 } finally { await replayBrowser.close(); }
-console.log(JSON.stringify({ status: 'PASS', checks: 24, workspace, replay_video: replay.videoPath,
-  decoded_frame: path.join(workspace, 'replay-step-2-result.png') }));
+const soft = await run('soft', `${importLine}
+test.beforeEach(async({page})=>page.goto(process.env.PROBE_URL));
+test('soft failure continues without tainting next step',async({page})=>{
+ await test.step('CASE_STEP_1: wrong',async()=>{expect.soft(await page.locator('#change').textContent()).toBe('WRONG')});
+ await test.step('CASE_STEP_2: unchanged',async()=>{await expect(page.locator('#change')).toHaveText('A')});
+ await test.step('CASE_STEP_3: another wrong',async()=>{expect.soft(2).toBe(3)});
+});`);
+assert.equal(soft.report.test_status,'FAILED');
+assert.deepEqual(soft.observations.map(o=>o.status),['FAILED','PASSED','FAILED']);
+const softCoverage=projectCaseStepCoverage(soft.report,{required_step_markers:['CASE_STEP_1','CASE_STEP_2','CASE_STEP_3']});
+const softReplay=await renderStepReplay({runDirectory:soft.runDirectory,runId:'run-soft',candidateSha256:'A'.repeat(64),executedExternalId:'ENGINEERING',executedCaseVersion:1,caseContent:{steps:[1,2,3].map(order=>({order,action:'synthetic step',expected:'frozen engineering expectation'}))},coverage:softCoverage,browserExecutable:executable});
+assert.equal(softReplay.replay.status,'READY',softReplay.replay.reason);assert.equal(softReplay.replay.evidence_complete,true);assert.deepEqual(softReplay.replay.steps.map(s=>s.execution_status),['FAILED','PASSED','FAILED']);
+console.log(JSON.stringify({status:'ENGINEERING_SCENARIOS_VERIFIED',scenarios:['ordered-captures','long-windows-path','hard-failure','capture-failure','soft-failure-and-replay'],workspace,model_calls:0}));

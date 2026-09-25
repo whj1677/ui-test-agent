@@ -6,17 +6,17 @@ const b=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/
 const navigate=async hash=>{await p.goto(base+'/workspace/'+hash);await p.waitForTimeout(250);};
 try{
  const project=['cross','single'].includes(mode)?original:small;
- if((mode==='single'||mode.startsWith('label'))){
- const c=project.cases.find(c=>c.external_id==='KC-22');await navigate(`#/projects/${project.project_id}/cases/${c.case_id}`);await p.locator('[data-candidate-trial]').first().click();
+ if((mode==='single'||mode.startsWith('label')||mode==='soft-fix')){
+ const c=project.cases.find(c=>c.external_id===(mode==='soft-fix'?'KC-02':'KC-22'));await navigate(`#/projects/${project.project_id}/cases/${c.case_id}`);await p.locator('[data-candidate-trial]').first().click();
  }else{await navigate(`#/projects/${project.project_id}/cases`);await p.locator('#rerun-project').waitFor();
  if(mode==='cross'){await p.getByRole('checkbox',{name:'选择 KC-02',exact:true}).check();await p.locator('#next-page').click();await p.getByRole('checkbox',{name:'选择 KC-11',exact:true}).check();assert.match(await p.locator('.selection-note').innerText(),/2 条/);await p.locator('#rerun-selected').click();}else await p.locator('#rerun-project').click();}
  await p.locator('#batch-software').fill(mode.startsWith('label')?'模拟构建-V2':'模拟构建-V1');
  const pre=p.waitForResponse(r=>r.url().endsWith('/batches')&&r.request().method()==='POST');await p.locator('#batch-preflight').click();const preview=await(await pre).json();await p.locator('#batch-start:enabled').waitFor();if(await p.locator('#batch-partial').count())await p.locator('#batch-partial').check();
  await fs.writeFile(local+'/'+mode+'-receipt.json',JSON.stringify(preview,null,2),{flag:'wx'});
  const start=p.waitForResponse(r=>r.url().endsWith('/start')&&r.request().method()==='POST');await p.locator('#batch-start').dblclick();const response=await start;assert.equal(response.status(),200);const started=await response.json();
- let done;
+ let done,cancelRequested=false;
  for(let n=0;n<240;n++){done=await get(`/api/case-library/projects/${project.project_id}/batches/${started.batch_id}`);if(['FINISHED','CANCELLED','INTERRUPTED'].includes(done.state))break;
- if(mode.startsWith('cancel')&&done.items.some(i=>i.state==='RUNNING')){await p.locator('#cancel-batch').click();}
+ if(!cancelRequested&&mode.startsWith('cancel')&&done.items.some(i=>i.state==='RUNNING')){cancelRequested=true;await p.locator('#cancel-batch').click();}
  await new Promise(r=>setTimeout(r,1000));}
  assert.ok(['FINISHED','CANCELLED'].includes(done.state),JSON.stringify(done));
  if(!mode.startsWith('cancel'))for(const i of done.items.filter(i=>i.selection&&i.state!=='BLOCKED'))assert.equal(i.state,'FINISHED',i.reason);

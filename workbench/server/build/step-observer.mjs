@@ -4,7 +4,7 @@ import { performance } from 'node:perf_hooks';
 import { test } from '@playwright/test';
 import { parseProjectCaseStepTitle } from './report.mjs';
 
-export const STEP_OBSERVER_VERSION = 'e2e01-step-observer-v1';
+export const STEP_OBSERVER_VERSION = 'e2e01-step-observer-v2';
 
 export function installStepObserver({ directory, identity, capture = async (page, file) => page.screenshot({ path: file }) }) {
   if (!directory || !identity?.run_id || !identity?.candidate_sha256) throw new Error('STEP_OBSERVER_IDENTITY_REQUIRED');
@@ -41,9 +41,13 @@ export function installStepObserver({ directory, identity, capture = async (page
       let after;
       let state = 'PASSED';
       let rawError = null;
+      const initialErrors = test.info().errors.length;
       try {
         const value = await callback(...args);
         businessEndedAt = new Date().toISOString();
+        // Soft assertions return normally but are real Playwright errors.
+        const recorded = test.info().errors.slice(initialErrors);
+        if (recorded.length) { state = 'FAILED'; rawError = { name: 'PlaywrightSoftAssertion', message: recorded.map(e => e.message || '').join('\n'), stack: recorded.map(e => e.stack || '').join('\n') }; }
         return value;
       } catch (error) {
         businessEndedAt = new Date().toISOString();
