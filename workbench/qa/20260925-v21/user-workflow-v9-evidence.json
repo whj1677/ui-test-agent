@@ -1,0 +1,726 @@
+{
+  "captured_at": "2026-09-25T12:48:34.051Z",
+  "base": "http://127.0.0.1:4322",
+  "project": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "before": {
+    "case_hash": "289acea1e1ddf1bd3785c9b9d03fb17c18ba915d275b01bbc4c1a46da58b2d46",
+    "ledger_count": 41,
+    "ledger_hash": "19c2a151948d8840ea0d21347e2eecbd858f39dd3036faeaa5d2b5f2e6f0837d",
+    "old_receipt_hashes": [
+      {
+        "logical_id": "unfamiliar-20260925-b",
+        "sha256": "50c091f61f64317eaeeb8cdad3535a61a71d9df32debd05f2be381a43c0e87b4"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-01",
+        "sha256": "335051a1db08f1adbf6bc69df0e49804594ba4d184c7c07a7c3f1f5a57996dca"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-02",
+        "sha256": "6ec96cfd3bf5224751ff6365cd6b4bf0ba5376276e15b9679a2296d6d4e366ca"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-03",
+        "sha256": "3c177dc08865c95d3e287a851cb6f9f39438c3eadeb00b245092b5f19fd2ab7b"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-04",
+        "sha256": "c9e25c4ec7fe9bcdf1aeaad44062f7e8cdd48e303e8ccedcea217e27cd76940b"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-05",
+        "sha256": "e996cc536b42c8b1bbba0cb94fcbdc91b289d89257f69039bfab3b854b455c51"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-06",
+        "sha256": "3d4daa6cfc32308c4689c3121f5b0da4073065f374f5c2528cb58e641404f9ab"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-07",
+        "sha256": "578dfd8dc910c338f0197af6c7d09b1b370c6c1c65e59a634b1f2497350f6c92"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-08",
+        "sha256": "9a64823b56214f821f278e521014c3069f726f953f39ea80d318808acf46bd45"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-09",
+        "sha256": "3daad52f49d2ea3e7ec72182137934b0c90ed22ab8932e8be68813b95c3e1457"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-10",
+        "sha256": "f4b473ca81260b5254bee4a6e835021404776b0df9876fc58c659034cfdb13d4"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-11",
+        "sha256": "279adae65dd06c445b352eb1b23f8c5d7ef8dc54e52af9a5584031a441f846ae"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-12",
+        "sha256": "ea5da420b67a4b22a3709e68a5a4b7e235ec60442515e2ee93cc1f948f636a88"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-13",
+        "sha256": "afd1aa90e8294728fe628eb2e38deecfd512820527d964f70f8227ff534f5bb2"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-14",
+        "sha256": "684d524a347b70248c1285dc97e38803033b0902df5758082c0e01fdbed1f2e3"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-15",
+        "sha256": "c538489b8bcda46853fb2888d80270369f37733569ef5bfe785b19e01ce1433c"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-16",
+        "sha256": "399d7834c57649e660c0df78b0d668aaa489cd6e59d0fd01cc9a6fe2d5a591a9"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-17",
+        "sha256": "01bd323384b688271b6144c012d42f96ee773d13b9adf05d93bb0cf2be575410"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-18",
+        "sha256": "483cf21ecae4e831fa101275cf0a7a366c2acbbd667a7d8a2d52498058a661b9"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-19",
+        "sha256": "7cc32ebcf81ea2a3e4e8374bd1757aaeb94050b3c6048abeae14990103248c9a"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-20",
+        "sha256": "2360069396892ab8999860d491b9d692c9deb9a1d053a1cec05da018930bce59"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-21",
+        "sha256": "589353ab37ea84e49e3beee930a38c2c81102633db41fb9bddeefac09362e87e"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-22",
+        "sha256": "5e6eb6ba8dff572cf3c8667bb2101864fb5ee199337fdc94f0cc87d9ea8fbcde"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-23",
+        "sha256": "e908671e4ba77e6fb156d3574aebacf4c8c1bf83281d3318aeae3bbb1880803e"
+      },
+      {
+        "logical_id": "kimi-wb-20260925-KC-24",
+        "sha256": "48be82b737a66b92e72fc841707c100d90118cc792c854c6a34b09dca73f32e3"
+      },
+      {
+        "logical_id": "v21-real-20260925-generate-KC-11",
+        "sha256": "812ceacaccb7bc841caa1ece479cd2ee3eebe4bff302024530e9cc3e2e5697f4"
+      },
+      {
+        "logical_id": "v21-real-20260925-generate-KC-06",
+        "sha256": "6c01818ecd8c67b7a8bbb18dbe44ca3b499e8eb8ee385bb9868197154d96f8c3"
+      },
+      {
+        "logical_id": "v21-real-20260925-generate-KC-12",
+        "sha256": "297f9c3ee1bbbb89b4edd8b1268321addacd4e17d8dc57d68f16cccf84cf9b08"
+      },
+      {
+        "logical_id": "v21-real-20260925-revise-KC-11",
+        "sha256": "6352b7b7d990015bc3f244fa9f642b1641d3e5c5d97ae938f0f831165f2e7df2"
+      },
+      {
+        "logical_id": "v21-real-20260925-regenerate-KC-11",
+        "sha256": "42f1f03dcffdeed0da39b72208d33895a353ea26525a1adbe11ea669abf8527c"
+      },
+      {
+        "logical_id": "v21-real-20260925-regenerate-KC-06",
+        "sha256": "bcf04adaa1ba1f2139246bc63d8a9bd35488736232de1106e27bf85dfc8378d5"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-01",
+        "sha256": "c35ad5f508759367fff69ee048a6d05d1f6b230793c8d4ae2d050cdd848e94e9"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-02",
+        "sha256": "cf4af7eab73d6ea05da5eac1e3a17359b3a665c961480c3ee2797ba8c2fcd7ba"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-03",
+        "sha256": "cf4400f19d4f53c2a9c3fc7543e65de65a945a8283fbdae8a1bc088e675b0143"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-04",
+        "sha256": "db6addaef6630ee0e5e2c1a07b0d5b361889c9967eee0b41335e13e4ff2b6121"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-05",
+        "sha256": "dadff3a18e3e313f25a0f7d88384bbaff606500862278a087b5d4a07b4ccf2c6"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-06",
+        "sha256": "0a83a06a902b9cfca9571630d2dee3c16ee74d3313868ca6d511b85aca652dce"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-07",
+        "sha256": "b9b514501195a8eb50fa4f4e18ae7b67bdefb7e37b3e8a8c0c89374077cad5c0"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-08",
+        "sha256": "23a29232a5bb241ebb974f049cefe0f514ece69d78a3906affcd0e68ef77fab4"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-09",
+        "sha256": "11308770db3481b6858a03e17109f4d75496a154ccfdce1b8341efba4b28c76b"
+      },
+      {
+        "logical_id": "v21-engineer-20260925-KC-10",
+        "sha256": "74f0bf81a84a61fd253a6c0f173e8a7005824b2883eb9ab079327f7d8f06ca25"
+      }
+    ],
+    "operations": 6,
+    "environments": {
+      "generation_disabled": false,
+      "user_initiated_operations": true,
+      "environments": [
+        {
+          "id": "kimi-complex-20260925",
+          "name": "本机被测应用 · kimi-complex-20260925",
+          "validation_mode": "normal-only",
+          "browser": "每次独立启动测试浏览器（后台无窗口）",
+          "ready": true,
+          "preparation": "AUTO_START_ISOLATED_TARGET",
+          "entry": "运行时自动准备本机被测页面"
+        }
+      ]
+    },
+    "active": {
+      "run": null,
+      "build": null,
+      "batch": null,
+      "generation": null
+    },
+    "cases_hash": "de39839e00c6e6aa865ff5d640f58a5968ffec78c18009d5fa4ffd621e7cdaeb",
+    "project_description": "本轮12条均有当前版本脚本；KC-01至KC-10已真实生成并自测，KC-11/12复用。统一新批次实际2执行/10授权阻塞，未宣称全项目通过。正常体验：打开KC-11，选择S2，运行此用例。KC-12技术可跑但额外筛选前置待确认；KC-01/07/10原动作偏离不采纳。新包精确授权及核查已准备，4322重载被自动审批阻止，当前服务尚未加载；详情中的生成自测可查看真实失败。原用例、历史与批准状态不变。报告见本轮11:25批次及离线工程师报告。"
+  },
+  "browser_checks": [
+    {
+      "check": "generation_cancel_reopen",
+      "result": "verified; no start before consent"
+    },
+    {
+      "check": "generation_env_empty_then_select",
+      "result": "blocked then ready; missing-env backend reason priority change not loaded; frontend clarifies"
+    },
+    {
+      "check": "start_busy_recovers",
+      "result": "actual BATCH_EXECUTOR_BUSY, retry enabled and card enabled after cancel"
+    },
+    {
+      "check": "cross_page",
+      "result": "KC-02 page1 + KC-11 page2; 2 selected and S2 explicitly chosen"
+    },
+    {
+      "check": "whole_project_preflight",
+      "requested": 12,
+      "runnable": 7,
+      "blocked": 5,
+      "reasons": "KC01/07/10 rejected; KC05/11 require script selection; no missing scripts"
+    },
+    {
+      "check": "kc02_playback",
+      "result": "1280x900 Chinese replay progressed 3.178299→9.171999 seconds; raw1280x720 distinct same run"
+    }
+  ],
+  "description_update": {
+    "revision": 8,
+    "cases_unchanged": true
+  },
+  "generation": {
+    "operation_id": "generation-dc0db76f-c617-4500-81ab-45b8e2e03437",
+    "task_id": "build-20260925125100-829168c1",
+    "case": "KC-05",
+    "version": 2,
+    "harness": 1,
+    "tools": 28,
+    "self_tests": 1
+  },
+  "batches": [
+    "batch-e0565710-c438-4e8e-a668-050809873f15",
+    "batch-43655e65-217f-4a20-a4f1-158466571043"
+  ],
+  "verification": {
+    "checked_at": "2026-09-25T13:10:10.507Z",
+    "cases_unchanged": true,
+    "old_receipts_unchanged": 41,
+    "new_receipts": 1,
+    "new_operations": 1,
+    "batches": [
+      {
+        "id": "batch-e0565710-c438-4e8e-a668-050809873f15",
+        "scope": "selected",
+        "software_version": "v9-user-flow-649508B8",
+        "items": [
+          {
+            "case": "KC-02",
+            "script_version": 1,
+            "result": "FAILED",
+            "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b"
+          },
+          {
+            "case": "KC-11",
+            "script_version": 2,
+            "result": "PASSED",
+            "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4"
+          }
+        ]
+      },
+      {
+        "id": "batch-43655e65-217f-4a20-a4f1-158466571043",
+        "scope": "single",
+        "software_version": "v9-new-script-rerun-649508B8",
+        "items": [
+          {
+            "case": "KC-05",
+            "script_version": 2,
+            "result": "PASSED",
+            "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3"
+          }
+        ]
+      }
+    ],
+    "executions": [
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "case": "KC-02",
+        "case_version": 1,
+        "script_version": 1,
+        "status": "FAILED",
+        "origin": "EXPLICIT_CANDIDATE_TRIAL",
+        "steps": [
+          "FAILED",
+          "PASSED",
+          "PASSED"
+        ],
+        "evidence_status": "COMPLETE"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "case": "KC-11",
+        "case_version": 1,
+        "script_version": 2,
+        "status": "PASSED",
+        "origin": "EXPLICIT_CANDIDATE_TRIAL",
+        "steps": [
+          "PASSED",
+          "PASSED",
+          "PASSED"
+        ],
+        "evidence_status": "COMPLETE"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "case": "KC-05",
+        "case_version": 1,
+        "script_version": 2,
+        "status": "PASSED",
+        "origin": "EXPLICIT_CANDIDATE_TRIAL",
+        "steps": [
+          "PASSED",
+          "PASSED",
+          "PASSED"
+        ],
+        "evidence_status": "COMPLETE"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "case": "KC-05",
+        "case_version": 1,
+        "script_version": 2,
+        "status": "PASSED",
+        "origin": "DEVELOPMENT_SELF_TEST",
+        "steps": [
+          "PASSED",
+          "PASSED",
+          "PASSED"
+        ],
+        "evidence_status": "COMPLETE"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "case": "KC-05",
+        "case_version": 1,
+        "script_version": 2,
+        "status": "PASSED",
+        "origin": "INITIAL_INDEPENDENT_VALIDATION",
+        "steps": [
+          "PASSED",
+          "PASSED",
+          "PASSED"
+        ],
+        "evidence_status": "COMPLETE"
+      }
+    ],
+    "media": [
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-1",
+        "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37",
+        "bytes": 52772,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-2",
+        "sha256": "1920B026A900C7A9E5D5641A0F1989806B490A21BA73E2E838DBF7E1ADA82B1F",
+        "bytes": 2316452,
+        "kind": "trial_trace"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-3",
+        "sha256": "4E1FB3A0DD090687CE85B706449783C992C850A6F266F3F3E6662A3C54656D51",
+        "bytes": 315059,
+        "kind": "trial_video"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-4",
+        "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+        "bytes": 54306,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-5",
+        "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1",
+        "bytes": 52942,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-6",
+        "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+        "bytes": 46152,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-7",
+        "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1",
+        "bytes": 52942,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-8",
+        "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37",
+        "bytes": 52772,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-9",
+        "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097",
+        "bytes": 46152,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-9adf10c4a3fcf2fad7f164d5180dd51ad0567d0b",
+        "file_id": "media-10",
+        "sha256": "39355B38F4D4693DBB918DEA269879165F16261B3F5831E1C8C771858CAB0216",
+        "bytes": 807109,
+        "kind": "trial_step_replay_video"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-1",
+        "sha256": "3A4E5845B9DB29554FBF9EFAE73498C0EA4C66C0D4FAB2E803F3FAD1485F6324",
+        "bytes": 54721,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-2",
+        "sha256": "410203945A849E3BDEB5340C18206BF72B62EDA451983F632256F9EED49AC30F",
+        "bytes": 1655053,
+        "kind": "trial_trace"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-3",
+        "sha256": "8669BAECF360CE4D569F93E59A8C02F5934CE6B44C1D5FDCC0224FAEBD2B3A8C",
+        "bytes": 203919,
+        "kind": "trial_video"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-4",
+        "sha256": "33C649B45921053155B6DC4F8E90AFE44F27EE87DF2A95A3BED583C295EF821C",
+        "bytes": 54311,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-5",
+        "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+        "bytes": 54306,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-6",
+        "sha256": "B3902AFA9FCB1B029C4A2197C126ABCB406313193E040913342E907FDDCC190C",
+        "bytes": 49099,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-7",
+        "sha256": "33C649B45921053155B6DC4F8E90AFE44F27EE87DF2A95A3BED583C295EF821C",
+        "bytes": 54311,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-8",
+        "sha256": "3A4E5845B9DB29554FBF9EFAE73498C0EA4C66C0D4FAB2E803F3FAD1485F6324",
+        "bytes": 54721,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-9",
+        "sha256": "B3902AFA9FCB1B029C4A2197C126ABCB406313193E040913342E907FDDCC190C",
+        "bytes": 49099,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-2ec4a79ed6bdff626fa08c472aed4e20637becb4",
+        "file_id": "media-10",
+        "sha256": "A0812D5B4DEF1C06E8F58946ED3765C22EF5ADA68FF1C21A052A0E18D8402451",
+        "bytes": 781206,
+        "kind": "trial_step_replay_video"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-1",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-2",
+        "sha256": "80B3A1E0C61FD4BF833772422894341A652C19F40243AC19C0BF7555147756A1",
+        "bytes": 1656175,
+        "kind": "trial_trace"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-3",
+        "sha256": "359C25966E558E3CA44155CA50C03EEDD0AC732C67A033F738A195D82AAD6799",
+        "bytes": 246956,
+        "kind": "trial_video"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-4",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-5",
+        "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+        "bytes": 54306,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-6",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-7",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-8",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-9",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "trial_screenshot"
+      },
+      {
+        "run_id": "trial-c5b4767dd326584cc7f0e42c9423fde11481c9c3",
+        "file_id": "media-10",
+        "sha256": "B21EAC9A03F568A367618641AEE2BC0AA03280A5373B99DAF460B380918A4792",
+        "bytes": 739089,
+        "kind": "trial_step_replay_video"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-30",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-31",
+        "sha256": "2BF8F169D7200D045F91B7294EF46F1A93D915BEFE2EA131F4DA7489C046776E",
+        "bytes": 1647593,
+        "kind": "development_trace"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-32",
+        "sha256": "60CA2F2DE36FE48C102110FFD065CC8B1443FA38E205F40E76097DFBED3B74D6",
+        "bytes": 229871,
+        "kind": "development_video"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-33",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-34",
+        "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+        "bytes": 54306,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-35",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-36",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-37",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-38",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-dev-1",
+        "file_id": "build-file-40",
+        "sha256": "DF38F1DC17824ECF758520AD31B8CD13BC6D0EA370C5057EA388C8B4A4B46938",
+        "bytes": 735401,
+        "kind": "development_step_replay_video"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-13",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-14",
+        "sha256": "8478FC6491D07E6834C57E8DAC63C69B4B1110649CC1E3B1B758DA5A6EA83D5D",
+        "bytes": 1619239,
+        "kind": "development_trace"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-15",
+        "sha256": "29F77452D8DCA52C0DD56E04EC288AB5256FE377607F5FDE4E7A6B541EF93186",
+        "bytes": 133675,
+        "kind": "development_video"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-16",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-17",
+        "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+        "bytes": 54306,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-18",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-19",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-20",
+        "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241",
+        "bytes": 50467,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-21",
+        "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4",
+        "bytes": 46388,
+        "kind": "development_screenshot"
+      },
+      {
+        "run_id": "build-20260925125100-829168c1-normal",
+        "file_id": "build-file-23",
+        "sha256": "377773306A457808521F304D78CE9C9FCCACE415AB8A12013AFE030319010DF2",
+        "bytes": 736970,
+        "kind": "development_step_replay_video"
+      }
+    ],
+    "active_tasks": 0,
+    "missing_run_media_status": 404
+  },
+  "report": {
+    "id": "report-7820b3165381b20eeaede6e184b1879de782b23b",
+    "counts": {
+      "requested": 2,
+      "executed": 2,
+      "passed": 1,
+      "failed": 1,
+      "not_run": 0
+    },
+    "embedded_media": 20,
+    "bytes": 12871113,
+    "sha256": "3a0761f85b5a5bc0960efbd33bd980abfc718898d980cba29a751c5d8e7e5dec"
+  }
+}

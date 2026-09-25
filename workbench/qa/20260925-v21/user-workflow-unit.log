@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: report snapshots freeze exact run, escape content, redact fields and embed verified media
+ok 1 - report snapshots freeze exact run, escape content, redact fields and embed verified media
+  ---
+  duration_ms: 19.3588
+  type: 'test'
+  ...
+# Subtest: report missing/tampered media remains missing and blocked batch items stay in denominator
+ok 2 - report missing/tampered media remains missing and blocked batch items stay in denominator
+  ---
+  duration_ms: 11.8116
+  type: 'test'
+  ...
+# Subtest: report cancellation prevents snapshot commit and pending conflicting request is rejected
+ok 3 - report cancellation prevents snapshot commit and pending conflicting request is rejected
+  ---
+  duration_ms: 9.9727
+  type: 'test'
+  ...
+# Subtest: generation preflight has real authorization boundary, separates revision input, no task on rejection
+ok 4 - generation preflight has real authorization boundary, separates revision input, no task on rejection
+  ---
+  duration_ms: 8.1526
+  type: 'test'
+  ...
+# Subtest: invalid revision seed cannot consume an existing authorization
+ok 5 - invalid revision seed cannot consume an existing authorization
+  ---
+  duration_ms: 5.2648
+  type: 'test'
+  ...
+# Subtest: generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+ok 6 - generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+  ---
+  duration_ms: 17.1194
+  type: 'test'
+  ...
+# Subtest: revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+ok 7 - revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+  ---
+  duration_ms: 53.0856
+  type: 'test'
+  ...
+# Subtest: explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+ok 8 - explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+  ---
+  duration_ms: 27.6093
+  type: 'test'
+  ...
+# Subtest: user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+ok 9 - user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+  ---
+  duration_ms: 25.8781
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 890.3445

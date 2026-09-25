@@ -1,0 +1,10 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T21:10:09+08:00
+Command: node workbench/qa/20260925-v21/verify-user-workflow.mjs
+Exit code: 0
+Parsed test count: unavailable
+Parsed failure count: 0
+Parsed skipped count: unavailable
+
+--- command output ---
+{"scope":"FORMAL_4322_READ_ONLY","generation":1,"rerun_batches":2,"reruns":3,"results":["FAILED","PASSED","PASSED"],"media_verified":50,"old_receipts_unchanged":41,"cases_unchanged":true}

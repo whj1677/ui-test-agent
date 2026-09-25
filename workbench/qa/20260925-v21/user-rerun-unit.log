@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
+ok 1 - exact identity + whole helper bundle; concurrent and persisted request replay executes once without changing source task
+  ---
+  duration_ms: 93.9186
+  type: 'test'
+  ...
+# Subtest: cross-project/version/content and unauthorized environment are rejected before execution
+ok 2 - cross-project/version/content and unauthorized environment are rejected before execution
+  ---
+  duration_ms: 45.3648
+  type: 'test'
+  ...
+# Subtest: helper change or missing file rejects unchanged entry; historical version remains explicitly historical
+ok 3 - helper change or missing file rejects unchanged entry; historical version remains explicitly historical
+  ---
+  duration_ms: 48.9594
+  type: 'test'
+  ...
+# Subtest: cancel uses owned signal and lease, does not reopen source; restart does not replay
+ok 4 - cancel uses owned signal and lease, does not reopen source; restart does not replay
+  ---
+  duration_ms: 74.9792
+  type: 'test'
+  ...
+# Subtest: green Playwright report with missing original steps is not complete_pass
+ok 5 - green Playwright report with missing original steps is not complete_pass
+  ---
+  duration_ms: 70.8255
+  type: 'test'
+  ...
+# Subtest: helper mutation during execution cannot inherit a passing report
+ok 6 - helper mutation during execution cannot inherit a passing report
+  ---
+  duration_ms: 209.8923
+  type: 'test'
+  ...
+# Subtest: run media route enforces run ownership, digest and byte size; old build WebM has correct MIME
+ok 7 - run media route enforces run ownership, digest and byte size; old build WebM has correct MIME # SKIP Legacy ephemeral workbench fixture disabled: route acceptance must use the existing formal 4322 service.
+  ---
+  duration_ms: 0.3316
+  type: 'test'
+  ...
+# Subtest: user-owned normal rerun uses verified local target without model grant; negative and changed inputs stay blocked
+ok 8 - user-owned normal rerun uses verified local target without model grant; negative and changed inputs stay blocked
+  ---
+  duration_ms: 563.5495
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 1987.5528

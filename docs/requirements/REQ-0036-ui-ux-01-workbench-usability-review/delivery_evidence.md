@@ -2,24 +2,23 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-09-25T20:06:04+08:00`
+- Generated at: `2026-09-25T21:10:11+08:00`
 - Record: `REQ-0036-ui-ux-01-workbench-usability-review`
-- Change fingerprint: `8b1f4771139fa494eb6500bf17892a9c64f4f2e84154c7b4ebf316bee1f4c9fa`
+- Change fingerprint: `2f1642f2ac1e0ddfb68cacdd57a192929a2891ecedee3745e82220d044f5a701`
 - Verification source: `collector-executed-v1`
-- Verification state: `正式加载阻塞；媒体/报告核验命令退出0；整体检查失败`
-- Command: `node workbench/qa/20260925-v21/prepare-user-trial.mjs`
+- Verification state: `检查失败；最后后端调整重载受阻；人工待确认`
+- Command: `node workbench/qa/20260925-v21/verify-user-workflow.mjs`
 - Exit code: `0`
 - Test count: `未解析`
 - Failure count: `0`
 - Skipped count: `未解析`
-- Log path: `workbench/qa/20260925-v21/caption-delivery-check.log`
-- Log SHA-256: `d1559fa563a88a01cca277b72bf0b7000a1a19569eaf77292b5e5e82870f76d8`
+- Log path: `workbench/qa/20260925-v21/user-workflow-delivery.log`
+- Log SHA-256: `738a1a86fd4697ff20339d85a8f607d7ee44ac41daa965cc36d1de152d67d456`
 
 ### Git Status
 
 ```text
  M docs/modules/test-workbench.md
- M docs/requirements/README.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md
@@ -30,10 +29,30 @@
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
  M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/requirement.source.json
  M workbench/qa/20260925-v21/REPORT.md
+ M workbench/qa/20260925-v21/USER_TRIAL.md
+ M workbench/server/app.mjs
  M workbench/server/build/candidate-trials.mjs
- M workbench/server/build/development-session.mjs
  M workbench/server/build/development-task.mjs
- M workbench/server/build/step-replay.mjs
+ M workbench/server/index.mjs
+ M workbench/server/script-operations.mjs
+ M workbench/tests/candidate-trials.test.mjs
+ M workbench/tests/product-v21.test.mjs
+ M workbench/web-v2/app.js
+ M workbench/web-v2/script-actions.js
+ M workbench/web-v2/workflow.js
+?? docs/reviews/2026-09-25-agent-diagnosis/REPORT.md
+?? docs/reviews/2026-09-25-agent-diagnosis/STATE.md
+?? docs/reviews/2026-09-25-agent-diagnosis/auth-live-dom.txt
+?? docs/reviews/2026-09-25-agent-diagnosis/boundary-probes.json
+?? docs/reviews/2026-09-25-agent-diagnosis/boundary-probes.mjs
+?? docs/reviews/2026-09-25-agent-diagnosis/engineering-checks.log
+?? docs/reviews/2026-09-25-agent-diagnosis/health-end.json
+?? docs/reviews/2026-09-25-agent-diagnosis/health.json
+?? docs/reviews/2026-09-25-agent-diagnosis/historical-count-check.json
+?? docs/reviews/2026-09-25-agent-diagnosis/kc10-live-dom.txt
+?? docs/reviews/2026-09-25-agent-diagnosis/probe-data-SjD9oj/draft/candidate.spec.mjs
+?? docs/reviews/2026-09-25-agent-diagnosis/probe-data-SjD9oj/run-1/candidate.spec.mjs
+?? docs/reviews/2026-09-25-agent-diagnosis/source-manifest.json
 ?? docs/需求/02-case-library.png
 ?? docs/需求/04-case-evidence.png
 ?? docs/需求/ALL_SCREENS.png
@@ -48,40 +67,38 @@
 ?? workbench/docs/ui-workflow-proposal/05-script-panel.png
 ?? workbench/docs/ui-workflow-proposal/README.md
 ?? workbench/docs/ui-workflow-proposal/index.html
-?? workbench/qa/20260925-v21/USER_TRIAL.md
-?? workbench/qa/20260925-v21/caption-chain-integration.log
-?? workbench/qa/20260925-v21/caption-chain-regression.log
-?? workbench/qa/20260925-v21/caption-delivery-check.log
-?? workbench/qa/20260925-v21/caption-existing-script.json
-?? workbench/qa/20260925-v21/caption-existing-script.log
-?? workbench/qa/20260925-v21/caption-history-verification.json
-?? workbench/qa/20260925-v21/caption-history-verification.log
-?? workbench/qa/20260925-v21/caption-kc02-continued-frame.png
-?? workbench/qa/20260925-v21/caption-kc02-failure-frame.png
-?? workbench/qa/20260925-v21/caption-live-result.txt
-?? workbench/qa/20260925-v21/caption-live-step2.png
-?? workbench/qa/20260925-v21/caption-user-trial-verification.json
 ?? workbench/qa/20260925-v21/engineer-batch-evidence.html
 ?? workbench/qa/20260925-v21/engineer-report-package.zip
-?? workbench/qa/20260925-v21/prepare-user-trial.mjs
+?? workbench/qa/20260925-v21/user-rerun-unit.log
 ?? workbench/qa/20260925-v21/user-trial-kit/12条原用例-导入练习.xlsx
 ?? workbench/qa/20260925-v21/user-trial-kit/KC-02-后续步骤画面.png
 ?? workbench/qa/20260925-v21/user-trial-kit/KC-02-失败画面.png
 ?? workbench/qa/20260925-v21/user-trial-kit/KC-02-新采集链路工程复验.webm
+?? workbench/qa/20260925-v21/user-trial-kit/KC-02-本轮正式字幕画面.png
 ?? workbench/qa/20260925-v21/user-trial-kit/KC-11-本次批次报告.html
 ?? workbench/qa/20260925-v21/user-trial-kit/manifest.json
 ?? workbench/qa/20260925-v21/user-trial-kit/开始使用.md
 ?? workbench/qa/20260925-v21/user-trial-kit/当前12条用例包.json
-?? workbench/qa/20260925-v21/verify-caption-existing-script.mjs
+?? workbench/qa/20260925-v21/user-trial-kit/本轮复测报告-KC02与KC11.html
+?? workbench/qa/20260925-v21/user-workflow-context.log
+?? workbench/qa/20260925-v21/user-workflow-delivery.log
+?? workbench/qa/20260925-v21/user-workflow-live.log
+?? workbench/qa/20260925-v21/user-workflow-unit.log
+?? workbench/qa/20260925-v21/user-workflow-v9-evidence.json
+?? workbench/qa/20260925-v21/v9-environment.png
+?? workbench/qa/20260925-v21/v9-generation-start.png
+?? workbench/qa/20260925-v21/v9-kc02-caption.png
+?? workbench/qa/20260925-v21/v9-kc02-encoded-frame.png
+?? workbench/qa/20260925-v21/v9-kc02-step2.png
+?? workbench/qa/20260925-v21/v9-project-preflight.png
+?? workbench/qa/20260925-v21/verify-user-workflow.mjs
 ?? workbench/qa/20260925-v21/自己体验工作台-20260925.zip
-?? workbench/server/build/development-evidence.mjs
-?? workbench/tests/development-evidence.integration.mjs
+?? workbench/server/build/user-workflow.mjs
 ```
 
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of 'docs/modules/test-workbench.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
@@ -90,33 +107,48 @@ warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-u
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/qa/20260925-v21/REPORT.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/candidate-trials.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-session.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/server/build/development-task.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/step-replay.mjs', LF will be replaced by CRLF the next time Git touches it
  docs/modules/test-workbench.md                     |   7 +
- docs/requirements/README.md                        |   2 +-
- .../00_user_requirement.md                         |   4 +-
+ .../00_user_requirement.md                         |   5 +-
  .../02_design.md                                   |   4 +-
- .../03_tasks.md                                    |   1 +
- .../04_verification.md                             |   1 +
- .../05_trace.md                                    |   1 +
+ .../03_tasks.md                                    |   3 +-
+ .../04_verification.md                             |   4 +-
+ .../05_trace.md                                    |   3 +-
  .../change_log.md                                  |   1 +
- .../current_state.md                               |   6 +-
- .../delivery_evidence.md                           | 272 ++++++++-------------
- .../requirement.source.json                        |  63 ++++-
- workbench/qa/20260925-v21/REPORT.md                |  36 +++
- workbench/server/build/candidate-trials.mjs        |  12 +-
- workbench/server/build/development-session.mjs     |  14 +-
- workbench/server/build/development-task.mjs        |  18 +-
- workbench/server/build/step-replay.mjs             |   8 +-
- 16 files changed, 243 insertions(+), 207 deletions(-)
+ .../current_state.md                               |  16 +-
+ .../delivery_evidence.md                           | 176 ++++++++++++---------
+ .../requirement.source.json                        |  79 +++++++--
+ workbench/qa/20260925-v21/REPORT.md                |  49 ++++++
+ workbench/qa/20260925-v21/USER_TRIAL.md            |  30 ++--
+ workbench/server/app.mjs                           |   3 +-
+ workbench/server/build/candidate-trials.mjs        |   3 +-
+ workbench/server/build/development-task.mjs        |  22 ++-
+ workbench/server/index.mjs                         |   1 +
+ workbench/server/script-operations.mjs             |  42 ++++-
+ workbench/tests/candidate-trials.test.mjs          |  15 +-
+ workbench/tests/product-v21.test.mjs               |  39 +++++
+ workbench/web-v2/app.js                            |  20 ++-
+ workbench/web-v2/script-actions.js                 |  61 ++++---
+ workbench/web-v2/workflow.js                       |   4 +-
+ 22 files changed, 429 insertions(+), 158 deletions(-)
 ```
 
 ### Untracked Files
 
 ```text
+docs/reviews/2026-09-25-agent-diagnosis/REPORT.md
+docs/reviews/2026-09-25-agent-diagnosis/STATE.md
+docs/reviews/2026-09-25-agent-diagnosis/auth-live-dom.txt
+docs/reviews/2026-09-25-agent-diagnosis/boundary-probes.json
+docs/reviews/2026-09-25-agent-diagnosis/boundary-probes.mjs
+docs/reviews/2026-09-25-agent-diagnosis/engineering-checks.log
+docs/reviews/2026-09-25-agent-diagnosis/health-end.json
+docs/reviews/2026-09-25-agent-diagnosis/health.json
+docs/reviews/2026-09-25-agent-diagnosis/historical-count-check.json
+docs/reviews/2026-09-25-agent-diagnosis/kc10-live-dom.txt
+docs/reviews/2026-09-25-agent-diagnosis/probe-data-SjD9oj/draft/candidate.spec.mjs
+docs/reviews/2026-09-25-agent-diagnosis/probe-data-SjD9oj/run-1/candidate.spec.mjs
+docs/reviews/2026-09-25-agent-diagnosis/source-manifest.json
 docs/需求/02-case-library.png
 docs/需求/04-case-evidence.png
 docs/需求/ALL_SCREENS.png
@@ -131,49 +163,48 @@ workbench/docs/ui-workflow-proposal/04-batch-results.png
 workbench/docs/ui-workflow-proposal/05-script-panel.png
 workbench/docs/ui-workflow-proposal/README.md
 workbench/docs/ui-workflow-proposal/index.html
-workbench/qa/20260925-v21/USER_TRIAL.md
-workbench/qa/20260925-v21/caption-chain-integration.log
-workbench/qa/20260925-v21/caption-chain-regression.log
-workbench/qa/20260925-v21/caption-delivery-check.log
-workbench/qa/20260925-v21/caption-existing-script.json
-workbench/qa/20260925-v21/caption-existing-script.log
-workbench/qa/20260925-v21/caption-history-verification.json
-workbench/qa/20260925-v21/caption-history-verification.log
-workbench/qa/20260925-v21/caption-kc02-continued-frame.png
-workbench/qa/20260925-v21/caption-kc02-failure-frame.png
-workbench/qa/20260925-v21/caption-live-result.txt
-workbench/qa/20260925-v21/caption-live-step2.png
-workbench/qa/20260925-v21/caption-user-trial-verification.json
 workbench/qa/20260925-v21/engineer-batch-evidence.html
 workbench/qa/20260925-v21/engineer-report-package.zip
-workbench/qa/20260925-v21/prepare-user-trial.mjs
+workbench/qa/20260925-v21/user-rerun-unit.log
 workbench/qa/20260925-v21/user-trial-kit/12条原用例-导入练习.xlsx
 workbench/qa/20260925-v21/user-trial-kit/KC-02-后续步骤画面.png
 workbench/qa/20260925-v21/user-trial-kit/KC-02-失败画面.png
 workbench/qa/20260925-v21/user-trial-kit/KC-02-新采集链路工程复验.webm
+workbench/qa/20260925-v21/user-trial-kit/KC-02-本轮正式字幕画面.png
 workbench/qa/20260925-v21/user-trial-kit/KC-11-本次批次报告.html
 workbench/qa/20260925-v21/user-trial-kit/manifest.json
 workbench/qa/20260925-v21/user-trial-kit/开始使用.md
 workbench/qa/20260925-v21/user-trial-kit/当前12条用例包.json
-workbench/qa/20260925-v21/verify-caption-existing-script.mjs
+workbench/qa/20260925-v21/user-trial-kit/本轮复测报告-KC02与KC11.html
+workbench/qa/20260925-v21/user-workflow-context.log
+workbench/qa/20260925-v21/user-workflow-delivery.log
+workbench/qa/20260925-v21/user-workflow-live.log
+workbench/qa/20260925-v21/user-workflow-unit.log
+workbench/qa/20260925-v21/user-workflow-v9-evidence.json
+workbench/qa/20260925-v21/v9-environment.png
+workbench/qa/20260925-v21/v9-generation-start.png
+workbench/qa/20260925-v21/v9-kc02-caption.png
+workbench/qa/20260925-v21/v9-kc02-encoded-frame.png
+workbench/qa/20260925-v21/v9-kc02-step2.png
+workbench/qa/20260925-v21/v9-project-preflight.png
+workbench/qa/20260925-v21/verify-user-workflow.mjs
 workbench/qa/20260925-v21/自己体验工作台-20260925.zip
-workbench/server/build/development-evidence.mjs
-workbench/tests/development-evidence.integration.mjs
+workbench/server/build/user-workflow.mjs
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-09-25T20:06:02+08:00
-Command: node workbench/qa/20260925-v21/prepare-user-trial.mjs
+Started at: 2026-09-25T21:10:09+08:00
+Command: node workbench/qa/20260925-v21/verify-user-workflow.mjs
 Exit code: 0
 Parsed test count: unavailable
 Parsed failure count: 0
 Parsed skipped count: unavailable
 
 --- command output ---
-{"media_verified":10,"attachments":10,"kit":"workbench/qa/20260925-v21/user-trial-kit","files":7,"model_calls":0}
+{"scope":"FORMAL_4322_READ_ONLY","generation":1,"rerun_batches":2,"reruns":3,"results":["FAILED","PASSED","PASSED"],"media_verified":50,"old_receipts_unchanged":41,"cases_unchanged":true}
 ```
 
 ### Sync Record Status
@@ -199,6 +230,4 @@ FAIL ai-engineering-context checks
 
 ### Notes
 
-Read-only formal4322 media/report integrity and local user kit. New development capture code not loaded: automatic approval rejected idle service update. No model calls. Separate engineering logs contain17 regression tests and8 real executor cases.
-
-Additional check log: `workbench/qa/20260925-v21/caption-context-check.log`. Final delivery state: blocked; new backend not loaded.
+正式4322只读核验退出0；全库门禁存在无关REQ0015历史宣称冲突，未修改。真实生成1/复跑3、50媒体、41旧授权及12正文保真；报告20附件另核验。最后后端调整待重载，自动审批拒绝。docs/reviews、docs/需求与workbench/docs/ui-workflow-proposal为其他窗口，全部排除；大型HTML、user-trial-kit、工程师ZIP与体验ZIP只保留本机。
