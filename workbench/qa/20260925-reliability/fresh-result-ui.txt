@@ -1,0 +1,48 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 脚本生成
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "自主建例任务 · KC-05" [level=1]
+  - paragraph: 独立技术验证完成，待核对
+  - paragraph: 冻结业务预期不变；技术验证不代表人工批准。
+  - paragraph: 有限规则核查：0 项明确缺口，3 处步骤前状态变化；材料不代替人工核对。
+  - article:
+    - heading "最终 normal · PASSED" [level=3]
+    - paragraph: 候选 SHA：A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A
+    - generic: "null"
+    - list:
+      - listitem: CASE_STEP_1：PASSED
+      - listitem: CASE_STEP_2：PASSED
+      - listitem: CASE_STEP_3：PASSED
+  - generic "技术详情：开发过程、资源与覆盖核查"
+  - generic "执行证据与文件"
+- status

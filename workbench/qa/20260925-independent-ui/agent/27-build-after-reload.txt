@@ -1,0 +1,24 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "项目":
+      - /url: "#/projects"
+      - generic: ◇
+      - text: 项目
+    - generic: ○
+    - text: 建例任务
+    - generic: 请先选择项目
+    - generic: □
+    - text: 执行记录
+    - generic: 请先选择项目
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- generic: 服务就绪 · 真实后端
+- main:
+  - generic: 正在读取真实后端数据…
+- status

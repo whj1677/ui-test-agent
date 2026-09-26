@@ -1,0 +1,4 @@
+ERROR: --test-count cannot be verified from the collector-executed command output.
+ERROR: --skipped-count cannot be verified from the collector-executed command output.
+ERROR: Pass state rejected because a positive test count was not parsed from command output.
+ERROR: Pass state rejected because skipped-test count was not parsed from command output.

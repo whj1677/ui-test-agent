@@ -1,0 +1,19 @@
+{
+  "schema": "workbench/official-readonly-check-v1",
+  "at": "2026-09-25T13:43:22.001Z",
+  "entry": "http://127.0.0.1:4322/workspace/",
+  "scope": "read-only official service and source identity; no new business/model execution",
+  "checks": 4,
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-7212bf08-2662-4cf3-b288-d792141c9705",
+    "captured_at": "2026-09-25T13:43:02.927Z",
+    "source_sha256": "0c214fcaacf72fafcb115a49ea9281eae52fb7f15a3624fa0074616ae51fbde6",
+    "source_file_count": 86,
+    "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "project_count": 6,
+  "active": false
+}

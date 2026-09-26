@@ -1,0 +1,20 @@
+{
+  "positive": {
+    "status": "PACKAGE_BYTES_VERIFIED_NOT_PRODUCT_ACCEPTANCE",
+    "file_count": 98,
+    "content_sha256": "a00f061b8d73b894c6c7f542247d2d58991ac4406a55077f667242cc41ae2f8b",
+    "zip_sha256": "0ad03d40c87ecd846ed4360c8c0327b6942909601f4ca48c2f16ad2c4f7bca15",
+    "archive": "D:\\01_AI����\\01_������Ŀ\\ui-test-agent\\workbench\\qa\\20260925-release\\package-candidate-20260926-02.zip"
+  },
+  "file_count_with_manifest": 99,
+  "new_files_against_01": [
+    "workbench/server/auth/session-request-policy.mjs"
+  ],
+  "three_locks_unchanged": true,
+  "source_byte_drift": [],
+  "rejections": {
+    "tampered_byte": "PACKAGE_FILE_DIGEST_MISMATCH:workbench/server/auth/session-request-policy.mjs",
+    "extra_file": "PACKAGE_FILE_SET_MISMATCH",
+    "path_traversal": "PACKAGE_UNSAFE_OR_DUPLICATE_ENTRY"
+  }
+}

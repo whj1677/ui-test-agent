@@ -1,0 +1,247 @@
+{
+  "project": {
+    "schema": "workbench/case-project-v1",
+    "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "name": "发布收口 · Kimi合成登录库存台",
+    "description": "Kimi独立生成的合成页面与3条原用例，验证认证接入、查询详情和跨页选择；不代表真实业务验收。",
+    "revision": 2,
+    "created_at": "2026-09-25T15:12:33.777Z",
+    "updated_at": "2026-09-25T15:14:57.278Z",
+    "cases": [
+      {
+        "case_id": "case-fdecce74-218e-415b-8aba-929050ef3b3d",
+        "external_id": "CASE-01",
+        "title": "未登录访问保护、公开合成账号登录、身份核验与模拟会话到期",
+        "module": "Kimi合成库存台",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "stable_id": "kimi-release-20260925-CASE-01"
+        },
+        "lineage": [
+          {
+            "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+            "case_id": "case-fdecce74-218e-415b-8aba-929050ef3b3d",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-25T15:14:57.278Z"
+          }
+        ],
+        "import_batch_id": "preview-e2113608-6614-45c3-ae8d-57762a577859",
+        "created_at": "2026-09-25T15:14:57.278Z",
+        "updated_at": "2026-09-25T15:14:57.278Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "CASE-01",
+              "title": "未登录访问保护、公开合成账号登录、身份核验与模拟会话到期",
+              "module": "Kimi合成库存台",
+              "preconditions": "服务已在本机启动（默认 http://127.0.0.1:4381）；浏览器未持有本站有效会话 Cookie（如有，请先点击“退出登录”或清除本站 Cookie）。",
+              "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "在浏览器地址栏直接访问 http://127.0.0.1:4381/workspace",
+                  "expected": "页面被重定向到 /login（地址栏显示 /login），登录页可见“公开合成账号登录”按钮，不展示任何设备业务数据。"
+                },
+                {
+                  "order": 2,
+                  "action": "在登录页点击“公开合成账号登录”按钮",
+                  "expected": "无需输入用户名或密码即完成登录，页面跳转至 /workspace，顶部可见账号 synthetic-inspector、角色 inspector，以及一个有效 ISO 格式的会话到期时间。"
+                },
+                {
+                  "order": 3,
+                  "action": "新开浏览器标签访问 http://127.0.0.1:4381/api/identity",
+                  "expected": "返回 200 JSON，精确包含 authenticated:true、account_id:\"synthetic-inspector\"、role:\"inspector\"，且 expires_at 为有效 ISO 时间字符串。"
+                },
+                {
+                  "order": 4,
+                  "action": "回到工作台页面，点击可见的“模拟会话到期”按钮",
+                  "expected": "页面出现“会话已到期，即将返回登录页…”的可见提示，随后自动回到 /login；再次访问 /api/identity 返回 401（unauthenticated）。"
+                },
+                {
+                  "order": 5,
+                  "action": "再次在地址栏直接访问 http://127.0.0.1:4381/workspace",
+                  "expected": "再次被重定向到 /login，业务页面与业务 API 均不可访问（业务 API 返回 401）。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "5E5D1A7CF0B902895448DAAD99260D31ABDB47D4B04CCFC535B2AB29DD9A1805",
+            "created_at": "2026-09-25T15:14:57.278Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+        "external_id": "CASE-02",
+        "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+        "module": "Kimi合成库存台",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "stable_id": "kimi-release-20260925-CASE-02"
+        },
+        "lineage": [
+          {
+            "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+            "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-25T15:14:57.278Z"
+          }
+        ],
+        "import_batch_id": "preview-e2113608-6614-45c3-ae8d-57762a577859",
+        "created_at": "2026-09-25T15:14:57.278Z",
+        "updated_at": "2026-09-25T15:14:57.278Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "CASE-02",
+              "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+              "module": "Kimi合成库存台",
+              "preconditions": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+              "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+                  "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。"
+                },
+                {
+                  "order": 2,
+                  "action": "观察筛选结果第 1 页的行内容与顺序",
+                  "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。"
+                },
+                {
+                  "order": 3,
+                  "action": "点击“下一页”翻到第 2 页",
+                  "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击 INV-104 所在行的“查看详情”按钮",
+                  "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。"
+                },
+                {
+                  "order": 5,
+                  "action": "点击抽屉内的“关闭详情”按钮",
+                  "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+            "created_at": "2026-09-25T15:14:57.278Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+        "external_id": "CASE-03",
+        "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+        "module": "Kimi合成库存台",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "stable_id": "kimi-release-20260925-CASE-03"
+        },
+        "lineage": [
+          {
+            "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+            "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-09-25T15:14:57.278Z"
+          }
+        ],
+        "import_batch_id": "preview-e2113608-6614-45c3-ae8d-57762a577859",
+        "created_at": "2026-09-25T15:14:57.278Z",
+        "updated_at": "2026-09-25T15:14:57.278Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "CASE-03",
+              "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+              "module": "Kimi合成库存台",
+              "preconditions": "已登录并处于 /workspace 工作台页面；“名称筛选”输入框为空（无筛选）；当前未勾选任何设备。",
+              "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "确认筛选框为空后点击“查询”按钮",
+                  "expected": "加载提示“正在加载设备列表…”出现后消失；第 1 页显示 INV-101、INV-102，分页指示为“第 1 页 / 共 3 页（共 5 条）”。"
+                },
+                {
+                  "order": 2,
+                  "action": "勾选 INV-101 行的复选框",
+                  "expected": "已选区域显示“已选 1 台：INV-101”。"
+                },
+                {
+                  "order": 3,
+                  "action": "点击“下一页”翻到第 2 页",
+                  "expected": "第 2 页显示 INV-103（电池巡检仪）、INV-104（温控采集器C）；INV-103 的复选框为禁用状态，行内可见原因文案“该设备为受限资产，当前角色 inspector 无权选择”，可选状态显示“受限不可选”。"
+                },
+                {
+                  "order": 4,
+                  "action": "尝试点击 INV-103 的复选框，然后勾选 INV-104 的复选框",
+                  "expected": "INV-103 无法被勾选且不计入已选；勾选 INV-104 后已选区域显示“已选 2 台：INV-101、INV-104”。"
+                },
+                {
+                  "order": 5,
+                  "action": "点击“下一页”翻到第 3 页",
+                  "expected": "第 3 页显示 INV-105（电源模块）；已选区域仍保持“已选 2 台：INV-101、INV-104”，跨页勾选状态保留。"
+                },
+                {
+                  "order": 6,
+                  "action": "点击“上一页”两次返回第 1 页，观察 INV-101 复选框",
+                  "expected": "INV-101 复选框仍为勾选状态；整个过程无任何保存、提交或真实数据修改入口。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+            "created_at": "2026-09-25T15:14:57.278Z",
+            "source": "IMPORT"
+          }
+        ]
+      }
+    ],
+    "imports": [
+      {
+        "preview_id": "preview-e2113608-6614-45c3-ae8d-57762a577859",
+        "upload_id": "upload-b3f400d1-0a31-4b67-bf79-6220a0e4c9e9",
+        "source_type": "case-package",
+        "confirmed_at": "2026-09-25T15:14:57.278Z",
+        "result": {
+          "added": 3,
+          "skipped_duplicate": 0,
+          "skipped_conflict": 0,
+          "skipped_unimportable": 0,
+          "imported_case_ids": [
+            "case-fdecce74-218e-415b-8aba-929050ef3b3d",
+            "case-9aa84871-f484-4062-8601-02502bda01dd",
+            "case-e79c5ee3-0668-459b-967e-2c22acd1244d"
+          ]
+        }
+      }
+    ]
+  },
+  "result": {
+    "added": 3,
+    "skipped_duplicate": 0,
+    "skipped_conflict": 0,
+    "skipped_unimportable": 0,
+    "imported_case_ids": [
+      "case-fdecce74-218e-415b-8aba-929050ef3b3d",
+      "case-9aa84871-f484-4062-8601-02502bda01dd",
+      "case-e79c5ee3-0668-459b-967e-2c22acd1244d"
+    ]
+  },
+  "idempotent": false
+}

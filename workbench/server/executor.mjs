@@ -116,9 +116,16 @@ export class WorkbenchRunManager extends EventEmitter {
     this.active = null;
     this.starting = false;
     this.completions = new Map();
+    this.shutdownRequested = false;
+    this.storageFault = null;
+    this.otherActive = options.otherActive || (() => false);
+    this.onStorageFault = options.onStorageFault || (() => {});
   }
 
   async start(assetId, environmentId, options = {}) {
+    if (this.shutdownRequested) throw new Error('WORKBENCH_SHUTTING_DOWN');
+    if (this.storageFault) throw new Error('WORKBENCH_STORAGE_UNAVAILABLE');
+    if (this.otherActive()) throw new Error('WORKBENCH_BUSY');
     if (this.starting || this.active) throw new Error('RUN_ALREADY_ACTIVE');
     this.starting = true;
     let run;
@@ -195,6 +202,7 @@ export class WorkbenchRunManager extends EventEmitter {
 
       const cli = path.join(this.paths.workbenchRoot, 'node_modules', '@playwright', 'test', 'cli.js');
       const args = [cli, 'test', '--config', configFile, '--workers=1', '--retries=0'];
+      if (this.shutdownRequested) throw new Error('WORKBENCH_SHUTTING_DOWN');
       const child = this.spawnProcess(process.execPath, args, {
         cwd: this.paths.workbenchRoot,
         env: childEnvironment(
@@ -210,26 +218,37 @@ export class WorkbenchRunManager extends EventEmitter {
       const stderr = [];
       capture(child.stdout, stdout);
       capture(child.stderr, stderr);
-      this.active = { runId, child, stopRequested: false };
+      this.active = { runId, child, stopRequested: false, phase: 'EXECUTING' };
+      const completion = this.finishOnChild(runId, child, { source, runtimeScript, runtimeRoot, fixtureServer, reportFile, consoleFile, stdout, stderr });
+      this.completions.set(runId, completion);
+      void completion.catch(error => this.recordStorageFault(error, 'run_finalization'));
+      void completion.finally(() => this.completions.delete(runId)).catch(() => {});
       run = await this.store.updateRun(runId, (current) => ({
         ...current, started_at: this.now().toISOString(), execution_status: 'RUNNING',
         process: { ...current.process, pid: child.pid || null, state: 'RUNNING' },
         integrity: { ...current.integrity, runtime_sha256: runtimeSha },
-      }));
-      const completion = this.finishOnChild(runId, child, { source, runtimeScript, runtimeRoot, fixtureServer, reportFile, consoleFile, stdout, stderr });
-      this.completions.set(runId, completion);
-      completion.finally(() => this.completions.delete(runId));
+      })).catch(error => { this.recordStorageFault(error, 'persist_running'); throw error; });
       this.emit('changed', runId);
       return run;
     } catch (error) {
-      await fixtureServer?.close().catch(() => {});
-      if (runtimeRoot) await fs.rm(runtimeRoot, { recursive: true, force: true }).catch(() => {});
-      if (run?.run_id) {
+      const owned = this.active;
+      if (owned && owned.runId === run?.run_id && Number.isInteger(owned.child.pid) && owned.phase !== 'FINALIZING') {
+        owned.stopRequested = true;
+        await this.killTree(owned.child.pid).catch(killError => this.recordStorageFault(killError, 'failed_start_cleanup'));
+      }
+      // After spawn the completion owns evidence and cleanup, including failed starts.
+      // Removing the runtime here could make its final hash check read deleted bytes.
+      const completionOwnsCleanup = run?.run_id && this.completions.has(run.run_id);
+      if (!completionOwnsCleanup) {
+        await fixtureServer?.close().catch(() => {});
+        if (runtimeRoot) await fs.rm(runtimeRoot, { recursive: true, force: true }).catch(() => {});
+      }
+      if (run?.run_id && !completionOwnsCleanup) {
         await this.store.updateRun(run.run_id, (current) => ({
           ...current, finished_at: this.now().toISOString(), execution_status: 'START_FAILED',
           process: { ...current.process, state: 'START_FAILED' }, evidence_status: 'INCOMPLETE',
           error: { code: error.message.split(':')[0], message: stripAnsi(error.message) },
-        }));
+        })).catch(writeError => this.recordStorageFault(writeError, 'persist_start_failure'));
       }
       throw error;
     } finally {
@@ -238,14 +257,16 @@ export class WorkbenchRunManager extends EventEmitter {
   }
 
   finishOnChild(runId, child, context) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let settled = false;
       const finish = async (exitCode, signal, startError) => {
         if (settled) return;
         settled = true;
         const owned = this.active?.runId === runId ? this.active : null;
         const stopped = Boolean(owned?.stopRequested);
-        if (owned) this.active = null;
+        if (owned) owned.phase = 'FINALIZING';
+        let result, failure;
+        try {
         const consoleBytes = Buffer.concat([
           ...context.stdout, Buffer.from('\n--- stderr ---\n'), ...context.stderr,
         ]);
@@ -284,10 +305,15 @@ export class WorkbenchRunManager extends EventEmitter {
             ? { code: integrityError, message: '批准脚本来源或本次运行副本的结束哈希不一致。' }
             : startError ? { code: 'PROCESS_START_FAILED', message: stripAnsi(startError.message) } : analysis.error,
         }));
-        await context.fixtureServer?.close().catch(() => {});
-        await fs.rm(context.runtimeRoot, { recursive: true, force: true }).catch(() => {});
         this.emit('changed', runId);
-        resolve(next);
+        result = next;
+        } catch (error) { failure = error; }
+        finally {
+          await context.fixtureServer?.close().catch(error => this.recordStorageFault(error, 'fixture_cleanup'));
+          await fs.rm(context.runtimeRoot, { recursive: true, force: true }).catch(error => this.recordStorageFault(error, 'runtime_cleanup'));
+          if (this.active?.runId === runId) this.active = null;
+        }
+        if (failure) reject(failure); else resolve(result);
       };
       child.once('error', (error) => finish(null, null, error));
       child.once('exit', (code, signal) => finish(code, signal, null));
@@ -295,14 +321,28 @@ export class WorkbenchRunManager extends EventEmitter {
   }
 
   async stop(runId) {
-    if (!this.active || this.active.runId !== runId) throw new Error('RUN_NOT_ACTIVE_OR_NOT_OWNED');
-    if (this.active.stopRequested) return this.store.getRun(runId);
-    this.active.stopRequested = true;
-    const run = await this.store.updateRun(runId, (current) => ({
-      ...current, execution_status: 'STOPPING', process: { ...current.process, state: 'STOPPING' },
-    }));
-    await this.killTree(this.active.child.pid);
+    const owned = this.active;
+    if (!owned || owned.runId !== runId) {
+      const saved = await this.store.getRun(runId);
+      if (saved && !['QUEUED', 'STARTING', 'RUNNING', 'STOPPING'].includes(saved.execution_status)) return saved;
+      throw new Error('RUN_NOT_ACTIVE_OR_NOT_OWNED');
+    }
+    if (owned.stopSignalSent || owned.phase === 'FINALIZING') return this.store.getRun(runId);
+    owned.stopRequested = true;
+    let run, failure;
+    try {
+      run = await this.store.updateRun(runId, (current) => ({
+        ...current, ...(['QUEUED', 'STARTING', 'RUNNING', 'STOPPING'].includes(current.execution_status)
+          ? { execution_status: 'STOPPING', process: { ...current.process, state: 'STOPPING' } } : {}),
+      }));
+    } catch (error) { this.recordStorageFault(error, 'persist_stopping'); failure = error; }
+    // Cancellation of an owned process must not depend on the disk being writable.
+    if (this.active === owned && owned.phase !== 'FINALIZING' && Number.isInteger(owned.child.pid)) {
+      try { await this.killTree(owned.child.pid); owned.stopSignalSent = true; }
+      catch (error) { this.recordStorageFault(error, 'stop_owned_process'); throw error; }
+    }
     this.emit('changed', runId);
+    if (failure) throw failure;
     return run;
   }
 
@@ -314,6 +354,13 @@ export class WorkbenchRunManager extends EventEmitter {
     const completion = this.completions.get(runId);
     return completion ? completion : this.store.getRun(runId);
   }
+
+  recordStorageFault(error, operation) {
+    this.storageFault ||= { code: error?.code || 'RUN_PERSISTENCE_FAILED', operation };
+    this.onStorageFault(error, operation);
+  }
+
+  async settle() { await Promise.allSettled([...this.completions.values()]); }
 }
 
 export const executorInternals = { childEnvironment, createRunId, runtimeConfig };

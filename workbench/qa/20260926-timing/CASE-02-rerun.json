@@ -1,0 +1,797 @@
+{
+  "schema": "workbench/candidate-trial-v1",
+  "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+  "batch_id": "batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d",
+  "requirement_review": null,
+  "diagnostic": false,
+  "request_id": "batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d-0",
+  "request_fingerprint": "F36B390A4F813B539B69DEFD65F900873393C3B7F54F95A4905BA998FCD3364D",
+  "selection": {
+    "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+    "case_version": 1,
+    "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+    "source_task_id": "build-20260926021703-79029f54",
+    "candidate_version": 1,
+    "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0",
+    "environment_id": "kimi-release-auth-20260925"
+  },
+  "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+  "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+  "case_version": 1,
+  "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+  "source_task_id": "build-20260926021703-79029f54",
+  "candidate_version": 1,
+  "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0",
+  "environment_id": "kimi-release-auth-20260925",
+  "source_build_task_id": "build-20260926021703-79029f54",
+  "source_case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+  "source_external_id": "CASE-02",
+  "source_case_version": 1,
+  "executed_case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+  "executed_case_version": 1,
+  "executed_external_id": "CASE-02",
+  "executed_content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+  "frozen_case_content": {
+    "external_id": "CASE-02",
+    "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+    "module": "Kimi合成库存台",
+    "preconditions": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+    "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+        "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。"
+      },
+      {
+        "order": 2,
+        "action": "观察筛选结果第 1 页的行内容与顺序",
+        "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。"
+      },
+      {
+        "order": 3,
+        "action": "点击“下一页”翻到第 2 页",
+        "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。"
+      },
+      {
+        "order": 4,
+        "action": "点击 INV-104 所在行的“查看详情”按钮",
+        "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。"
+      },
+      {
+        "order": 5,
+        "action": "点击抽屉内的“关闭详情”按钮",
+        "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。"
+      }
+    ],
+    "status": "CONFIRMED"
+  },
+  "script_version": 3,
+  "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 5163,
+        "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0"
+      }
+    ],
+    "sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0"
+  },
+  "recording": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "video_size": {
+      "width": 1280,
+      "height": 720
+    },
+    "device_scale_factor": 1,
+    "codec": "Playwright WebM",
+    "encoding_parameters": "Playwright defaults; bitrate not overridden"
+  },
+  "run_type": "normal",
+  "origin": "EXPLICIT_CANDIDATE_TRIAL",
+  "created_at": "2026-09-26T02:21:57.866Z",
+  "started_at": "2026-09-26T02:21:57.866Z",
+  "execution_status": "FINISHED",
+  "status": "PASSED",
+  "complete_pass": true,
+  "approval_status": "NOT_APPROVED",
+  "harness_starts": 0,
+  "model_calls": 0,
+  "media": [
+    {
+      "relative_path": "execution/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/test-finished-1.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/video.webm",
+      "bytes": 351639,
+      "sha256": "A3185D5A25221B803A735D9DE250380F13F7561F46923FAA453E22F52B4CDDB8",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 1204319,
+      "sha256": "BDA73AE68CDEEAFC18F48B63276597E748AD77152C552103E6BC1FD4AE6E3890",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "execution/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/test-finished-1.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/video.webm",
+      "bytes": 351639,
+      "sha256": "A3185D5A25221B803A735D9DE250380F13F7561F46923FAA453E22F52B4CDDB8",
+      "kind": "trial_video",
+      "content_type": "video/webm",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 1204319,
+      "sha256": "BDA73AE68CDEEAFC18F48B63276597E748AD77152C552103E6BC1FD4AE6E3890",
+      "kind": "trial_step_replay_video",
+      "content_type": "video/webm",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "evidence_status": "COMPLETE",
+  "runner_version": "candidate-bundle-trial-v1",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-92268f32-ed3f-4ceb-91bd-786fe2a379ac",
+    "captured_at": "2026-09-26T02:10:02.198Z",
+    "source_sha256": "b8d31fc25a89cab94668f85790321b642faf85550e74bd4bc1685149687e07bc",
+    "source_file_count": 91,
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "auth": {
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_id": "synthetic-inspector",
+    "session_version": "a5180ea0-c234-4440-ad69-f88e57966a84",
+    "bound_at": "2026-09-26T02:21:57.878Z"
+  },
+  "software_version": "Kimi-fixture-frozen-20260925; timing-runner-b8d31fc-20260926",
+  "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+  "environment_binding": {
+    "environment_id": "kimi-release-auth-20260925",
+    "url": "http://127.0.0.1:4381/workspace",
+    "ownership": "REGISTERED_EXISTING_AUTH_TARGET"
+  },
+  "entry_route": "http://127.0.0.1:4381/workspace",
+  "result": {
+    "report_status": "COMPLETE",
+    "test_status": "PASSED",
+    "test_count": 1,
+    "error": null,
+    "complete_pass": true,
+    "stats": {
+      "startTime": "2026-09-26T02:21:58.605Z",
+      "duration": 5646.969,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 0,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1",
+        "raw_title": "CASE_STEP_1",
+        "category": null,
+        "duration": 991,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2",
+        "raw_title": "CASE_STEP_2",
+        "category": null,
+        "duration": 150,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3",
+        "raw_title": "CASE_STEP_3",
+        "category": null,
+        "duration": 931,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4",
+        "raw_title": "CASE_STEP_4",
+        "category": null,
+        "duration": 989,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_5",
+        "raw_title": "CASE_STEP_5",
+        "category": null,
+        "duration": 133,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      }
+    ]
+  },
+  "timing_validation": {
+    "required": true,
+    "complete": true,
+    "observations": [
+      {
+        "id": "CASE_STEP_1:timing:1",
+        "step": 1,
+        "kind": "visible_duration",
+        "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+        "target": "正在加载设备列表…",
+        "min_ms": 400,
+        "max_ms": 600,
+        "raw_range": "400-600ms",
+        "status": "PASSED",
+        "observed_duration_ms": 515.2000000476837,
+        "cycles": [
+          {
+            "appeared_ms": 54.39999997615814,
+            "disappeared_ms": 569.6000000238419,
+            "duration_ms": 515.2000000476837
+          }
+        ],
+        "reason": null,
+        "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+        "tolerance_added_ms": 0
+      },
+      {
+        "id": "CASE_STEP_4:timing:1",
+        "step": 4,
+        "kind": "visible_duration",
+        "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+        "target": "正在加载设备详情…",
+        "min_ms": 400,
+        "max_ms": 600,
+        "raw_range": "400-600ms",
+        "status": "PASSED",
+        "observed_duration_ms": 511.5,
+        "cycles": [
+          {
+            "appeared_ms": 47.5,
+            "disappeared_ms": 559,
+            "duration_ms": 511.5
+          }
+        ],
+        "reason": null,
+        "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+        "tolerance_added_ms": 0
+      }
+    ]
+  },
+  "step_coverage": {
+    "rule_version": "project-case-step-title-v2",
+    "complete": true,
+    "order_valid": true,
+    "expected_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5"
+    ],
+    "observed_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5"
+    ],
+    "duplicates": [],
+    "missing": [],
+    "unexpected": [],
+    "malformed_titles": [],
+    "unattributed_errors": [],
+    "items": [
+      {
+        "marker": "CASE_STEP_1",
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "observed": true,
+        "raw_title": "CASE_STEP_1",
+        "report_path": [
+          0
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_2",
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "observed": true,
+        "raw_title": "CASE_STEP_2",
+        "report_path": [
+          1
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_3",
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "observed": true,
+        "raw_title": "CASE_STEP_3",
+        "report_path": [
+          2
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_4",
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "observed": true,
+        "raw_title": "CASE_STEP_4",
+        "report_path": [
+          3
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_5",
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "observed": true,
+        "raw_title": "CASE_STEP_5",
+        "report_path": [
+          4
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      }
+    ]
+  },
+  "failure_step": null,
+  "error": null,
+  "same_candidate_hash": true,
+  "specified_defect_detected": false,
+  "process": {
+    "exit_code": 0,
+    "termination": null,
+    "error": null
+  },
+  "step_replay": {
+    "schema": "workbench/step-evidence-replay-v1",
+    "status": "READY",
+    "run_id": "trial-92afa4a702a28a4270257bfa268aa4a11050e758",
+    "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+    "executed_external_id": "CASE-02",
+    "executed_case_version": 1,
+    "observer_version": "e2e01-step-observer-v3",
+    "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+    "original_video_precise_seek": false,
+    "evidence_complete": true,
+    "missing_captures": [],
+    "steps": [
+      {
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "raw_title": "CASE_STEP_1",
+        "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+        "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:00.645Z",
+        "executed_end": "2026-09-26T02:22:01.548Z",
+        "observer_start": "2026-09-26T02:22:00.602Z",
+        "observer_end": "2026-09-26T02:22:01.591Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_1-after.png",
+        "before_screenshot_file_name": "case_step_1-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 85.95029999999997
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "raw_title": "CASE_STEP_2",
+        "action": "观察筛选结果第 1 页的行内容与顺序",
+        "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:01.649Z",
+        "executed_end": "2026-09-26T02:22:01.706Z",
+        "observer_start": "2026-09-26T02:22:01.593Z",
+        "observer_end": "2026-09-26T02:22:01.742Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_2-after.png",
+        "before_screenshot_file_name": "case_step_2-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 91.94080000000031
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "raw_title": "CASE_STEP_3",
+        "action": "点击“下一页”翻到第 2 页",
+        "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:01.789Z",
+        "executed_end": "2026-09-26T02:22:02.637Z",
+        "observer_start": "2026-09-26T02:22:01.743Z",
+        "observer_end": "2026-09-26T02:22:02.673Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_3-after.png",
+        "before_screenshot_file_name": "case_step_3-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 81.75719999999956
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "raw_title": "CASE_STEP_4",
+        "action": "点击 INV-104 所在行的“查看详情”按钮",
+        "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:02.734Z",
+        "executed_end": "2026-09-26T02:22:03.619Z",
+        "observer_start": "2026-09-26T02:22:02.675Z",
+        "observer_end": "2026-09-26T02:22:03.662Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_4-after.png",
+        "before_screenshot_file_name": "case_step_4-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 101.61819999999989
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "raw_title": "CASE_STEP_5",
+        "action": "点击抽屉内的“关闭详情”按钮",
+        "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:03.718Z",
+        "executed_end": "2026-09-26T02:22:03.756Z",
+        "observer_start": "2026-09-26T02:22:03.664Z",
+        "observer_end": "2026-09-26T02:22:03.795Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_5-after.png",
+        "before_screenshot_file_name": "case_step_5-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 92.84379999999965
+      }
+    ],
+    "chapters": [
+      {
+        "step_id": "CASE_STEP_1",
+        "start_seconds": 0,
+        "result_start_seconds": 1.2256999999284743,
+        "end_seconds": 3.0275,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "start_seconds": 3.0275,
+        "result_start_seconds": 4.229799999952316,
+        "end_seconds": 6.043299999952317,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "start_seconds": 6.043299999952317,
+        "result_start_seconds": 7.250699999928474,
+        "end_seconds": 9.050899999976158,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "start_seconds": 9.051,
+        "result_start_seconds": 10.255600000023842,
+        "end_seconds": 12.059899999976158,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "start_seconds": 12.059899999976158,
+        "result_start_seconds": 13.275100000023842,
+        "end_seconds": 15.076899999976158,
+        "screenshot_phase": "after"
+      }
+    ],
+    "duration_seconds": 15.196899,
+    "output_file_name": "step-replay-v1.webm",
+    "reading_holds": "1200ms action / 1800ms result"
+  },
+  "evidence_error": null,
+  "trace_policy": "DISABLED_FOR_AUTH_PRIVACY",
+  "finished_at": "2026-09-26T02:22:20.431Z"
+}

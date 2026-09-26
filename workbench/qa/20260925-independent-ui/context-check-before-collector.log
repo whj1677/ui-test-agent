@@ -1,0 +1,17 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `�޷�����` / `δ����` / `����̬���` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `�޷�����` / `δ����` / `����̬���` / failure, and keep the original command output.
+3. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: workbench/qa/20260925-independent-ui/REPORT.md, workbench/qa/20260925-independent-ui/STATE.md, workbench/qa/20260925-independent-ui/agent/01-case-list.png, workbench/qa/20260925-independent-ui/agent/01-case-list.txt, workbench/qa/20260925-independent-ui/agent/02-cross-page-page2-settled.txt, workbench/qa/20260925-independent-ui/agent/02-cross-page-page2.txt, workbench/qa/20260925-independent-ui/agent/03-filter-hidden-selection-settled.txt, workbench/qa/20260925-independent-ui/agent/03-filter-hidden-selection.txt �� 149 ���ļ�
+4. docs\requirements\REQ-0037-autonomous-candidate-development\delivery_evidence.md
+   Problem: REQ delivery evidence fingerprint is missing or stale for the current behavior diff.
+   Fix: Re-run `python scripts/collect_delivery_evidence.py --req REQ-0037-autonomous-candidate-development ...` after the final code/test/config edit.
+5. docs\requirements\REQ-0037-autonomous-candidate-development\delivery_evidence.md
+   Problem: REQ delivery evidence does not bind every current behavior file.
+   Fix: Regenerate evidence. Missing: workbench/web-v2/execution-media.js, workbench/web-v2/workflow.js, workbench/qa/20260925-independent-ui/history-after.json, workbench/qa/20260925-independent-ui/history-before.json, workbench/qa/20260925-independent-ui/preserve-history.mjs, workbench/qa/20260925-independent-ui/supervisor/fresh-kc08-candidate.mjs, workbench/qa/20260925-independent-ui/supervisor/fresh-kc08-task.json, workbench/qa/20260925-independent-ui/supervisor/health-after.json, workbench/qa/20260925-independent-ui/supervisor/health-before.json, workbench/qa/20260925-independent-ui/supervisor/mixed-report.html, workbench/qa/20260925-independent-ui/supervisor/original-case-inputs.json, workbench/qa/20260925-independent-ui/supervisor/post-reload-integrity.json, workbench/qa/20260925-independent-ui/supervisor/step3-media-position.json, workbench/qa/20260925-independent-ui/supervisor/trial-12d38ecb9df671211ac9d27a94319247a22c8d08.json, workbench/qa/20260925-independent-ui/supervisor/trial-32533f98868dd9c09674ff3a53baa0051d60f625.json, workbench/qa/20260925-independent-ui/supervisor/trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d.json, workbench/qa/20260925-independent-ui/supervisor/trial-9e0be1ee280daf1516938327f1f23dfdca29040a.json, workbench/qa/20260925-independent-ui/supervisor/verified-results.json, workbench/qa/20260925-independent-ui/verify-round2.mjs

@@ -14,6 +14,9 @@ export async function projectRecords({buildStore, caseStore, store, buildManager
   records.push(...tasks.flatMap(developmentRecords));
   for (const run of records) {
     const task = tasks.find(t => t.task_id === run.source_build_task_id);
+    run.service_identity = task.service_identity || null;
+    run.failure_category = task.failure?.category || null;
+    run.fidelity_review = task.development?.fidelity_review || task.development?.fidelity || null;
     run.requirement_review = reviewFor(buildManager, {...task.source, source_task_id: task.task_id, bundle_sha256: run.bundle_sha256});
     run.script_version = task.script_version || null;
   }

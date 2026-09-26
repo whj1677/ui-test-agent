@@ -9,6 +9,7 @@ import { startUnfamiliarSite, siteRoot } from '../../scripts/unfamiliar-site-ser
 // A fresh listener is owned per execution and always closed by its lease.
 export function frozenTrialEnvironment(config) {
   if(config.kind === 'registered-static-html') return staticEnvironment(config);
+  if(config.kind === 'registered-auth-target') return authEnvironment(config);
 
   const check = async () => {
     try {
@@ -29,6 +30,24 @@ export function frozenTrialEnvironment(config) {
     return { url, detection: config.detection, release: site.close,
       identity: { environment_id: config.id, url, ownership: 'THIS_RUN_EPHEMERAL_LISTENER', site_manifest_sha256: config.site_manifest_sha256, files: manifest.files } };
   } };
+}
+
+function authEnvironment(config) {
+  return { id: config.id, configurationIdentity: config,
+    async check() {
+      let entry;
+      try { entry = new URL(config.normal_url); } catch { throw Error('TRIAL_AUTH_TARGET_INVALID'); }
+      if (entry.username || entry.password || entry.hash ||
+          !(entry.protocol === 'https:' || entry.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(entry.hostname))) {
+        throw Error('TRIAL_AUTH_TARGET_INVALID');
+      }
+    },
+    async acquire(lane) {
+      if (lane !== 'normal') throw Error('TRIAL_ENVIRONMENT_UNAVAILABLE');
+      await this.check();
+      return { url: config.normal_url, identity: { environment_id: config.id, url: config.normal_url,
+        ownership: 'REGISTERED_EXISTING_AUTH_TARGET' }, release: async () => {} };
+    } };
 }
 
 function staticEnvironment(config){

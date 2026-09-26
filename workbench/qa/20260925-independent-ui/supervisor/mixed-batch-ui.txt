@@ -1,0 +1,73 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 测试批次
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试批次" [level=1]
+  - paragraph: 每次明确运行创建新批次；范围和三个版本分别记录。
+  - link "预览与导出本批报告":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9"
+  - button "重跑本批未通过"
+  - text: 按本次状态筛选
+  - combobox "按本次状态筛选":
+    - option "全部请求项" [selected]
+    - option "通过"
+    - option "未通过"
+    - option "阻塞"
+    - option "取消 / 未执行"
+  - article:
+    - heading "测试批次 · 2026-09-25T14:22:38.441Z" [level=3]
+    - paragraph: 范围：选中列表 · 软件版本：independent-ui-round2-mixed-20260925 · 状态：执行结束 · 限定技术试跑，未批准
+    - paragraph: 请求 2 条；已执行 2；阻塞 0；未执行 0。结果只属于本批。
+    - table:
+      - rowgroup:
+        - row "用例 版本 / 脚本 本次状态 原因":
+          - columnheader "用例"
+          - columnheader "版本 / 脚本"
+          - columnheader "本次状态"
+          - columnheader "原因"
+      - rowgroup:
+        - row "KC-02 · 编号模糊搜索不区分大小写 用例v1 / 脚本 S1 执行结束 · 失败 —":
+          - cell "KC-02 · 编号模糊搜索不区分大小写":
+            - link "KC-02 · 编号模糊搜索不区分大小写":
+              - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-e5653d1c-84f2-4114-b487-5d59e2025f9a?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d"
+          - cell "用例v1 / 脚本 S1"
+          - cell "执行结束 · 失败"
+          - cell "—"
+        - row "KC-08 · 跨页选择保留 用例v1 / 脚本 S1 执行结束 · 通过 —":
+          - cell "KC-08 · 跨页选择保留":
+            - link "KC-08 · 跨页选择保留":
+              - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-9e0be1ee280daf1516938327f1f23dfdca29040a"
+          - cell "用例v1 / 脚本 S1"
+          - cell "执行结束 · 通过"
+          - cell "—"
+    - generic "技术详情：冻结清单及身份"
+- status

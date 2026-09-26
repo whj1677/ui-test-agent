@@ -1,0 +1,857 @@
+{
+  "schema": "workbench/candidate-trial-v1",
+  "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+  "batch_id": "batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d",
+  "requirement_review": null,
+  "diagnostic": false,
+  "request_id": "batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d-1",
+  "request_fingerprint": "1FC541C875854A887EAF3A839F99E60024A06FC9E4D7EFE6E08101001085C6BA",
+  "selection": {
+    "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+    "case_version": 1,
+    "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+    "source_task_id": "build-20260926011026-be1ef079",
+    "candidate_version": 2,
+    "bundle_sha256": "92F93AE45518799D0022336BCB7FADFF6C0E9E54172EA74FF4C05C8AAF0B85E2",
+    "environment_id": "kimi-release-auth-20260925"
+  },
+  "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+  "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+  "case_version": 1,
+  "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+  "source_task_id": "build-20260926011026-be1ef079",
+  "candidate_version": 2,
+  "bundle_sha256": "92F93AE45518799D0022336BCB7FADFF6C0E9E54172EA74FF4C05C8AAF0B85E2",
+  "environment_id": "kimi-release-auth-20260925",
+  "source_build_task_id": "build-20260926011026-be1ef079",
+  "source_case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+  "source_external_id": "CASE-03",
+  "source_case_version": 1,
+  "executed_case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+  "executed_case_version": 1,
+  "executed_external_id": "CASE-03",
+  "executed_content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+  "frozen_case_content": {
+    "external_id": "CASE-03",
+    "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+    "module": "Kimi合成库存台",
+    "preconditions": "已登录并处于 /workspace 工作台页面；“名称筛选”输入框为空（无筛选）；当前未勾选任何设备。",
+    "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "确认筛选框为空后点击“查询”按钮",
+        "expected": "加载提示“正在加载设备列表…”出现后消失；第 1 页显示 INV-101、INV-102，分页指示为“第 1 页 / 共 3 页（共 5 条）”。"
+      },
+      {
+        "order": 2,
+        "action": "勾选 INV-101 行的复选框",
+        "expected": "已选区域显示“已选 1 台：INV-101”。"
+      },
+      {
+        "order": 3,
+        "action": "点击“下一页”翻到第 2 页",
+        "expected": "第 2 页显示 INV-103（电池巡检仪）、INV-104（温控采集器C）；INV-103 的复选框为禁用状态，行内可见原因文案“该设备为受限资产，当前角色 inspector 无权选择”，可选状态显示“受限不可选”。"
+      },
+      {
+        "order": 4,
+        "action": "尝试点击 INV-103 的复选框，然后勾选 INV-104 的复选框",
+        "expected": "INV-103 无法被勾选且不计入已选；勾选 INV-104 后已选区域显示“已选 2 台：INV-101、INV-104”。"
+      },
+      {
+        "order": 5,
+        "action": "点击“下一页”翻到第 3 页",
+        "expected": "第 3 页显示 INV-105（电源模块）；已选区域仍保持“已选 2 台：INV-101、INV-104”，跨页勾选状态保留。"
+      },
+      {
+        "order": 6,
+        "action": "点击“上一页”两次返回第 1 页，观察 INV-101 复选框",
+        "expected": "INV-101 复选框仍为勾选状态；整个过程无任何保存、提交或真实数据修改入口。"
+      }
+    ],
+    "status": "CONFIRMED"
+  },
+  "script_version": 1,
+  "candidate_sha256": "1580D690E73CD83E028E9B657D600743228DC9F200810B38D13DE334784BF351",
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 5201,
+        "sha256": "1580D690E73CD83E028E9B657D600743228DC9F200810B38D13DE334784BF351"
+      },
+      {
+        "path": "helpers.mjs",
+        "bytes": 3861,
+        "sha256": "674AC6433F62371925B97E459C2BAA8F2AD8C5A27977D140C254CB1CD6CB60E3"
+      }
+    ],
+    "sha256": "92F93AE45518799D0022336BCB7FADFF6C0E9E54172EA74FF4C05C8AAF0B85E2"
+  },
+  "recording": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "video_size": {
+      "width": 1280,
+      "height": 720
+    },
+    "device_scale_factor": 1,
+    "codec": "Playwright WebM",
+    "encoding_parameters": "Playwright defaults; bitrate not overridden"
+  },
+  "run_type": "normal",
+  "origin": "EXPLICIT_CANDIDATE_TRIAL",
+  "created_at": "2026-09-26T02:22:20.443Z",
+  "started_at": "2026-09-26T02:22:20.443Z",
+  "execution_status": "FINISHED",
+  "status": "PASSED",
+  "complete_pass": true,
+  "approval_status": "NOT_APPROVED",
+  "harness_starts": 0,
+  "model_calls": 0,
+  "media": [
+    {
+      "relative_path": "execution/artifacts/observed-CASE-03-无筛选跨页勾选-I-e6886-、受限-INV-103-禁用、已选计数保持至第-3-页/test-finished-1.png",
+      "bytes": 41328,
+      "sha256": "4A42B09E073B78681FEB9FE3F2F4815544CEBC654AF4E36701D01E252235B904",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-CASE-03-无筛选跨页勾选-I-e6886-、受限-INV-103-禁用、已选计数保持至第-3-页/video.webm",
+      "bytes": 417263,
+      "sha256": "B564D4C7CE43F8443C18E0AF1EF4706B030537BC3488C195F41236AC1FA91A25",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 40397,
+      "sha256": "E02513FC86217B345022AFBEA06B13728A6051E5DDA06AB86B99742260945F38",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 40952,
+      "sha256": "7F59250F02C7AD617D70DF0EE8C0BA5161D29815CC0DFCA1F3A412177636B46E",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 40397,
+      "sha256": "E02513FC86217B345022AFBEA06B13728A6051E5DDA06AB86B99742260945F38",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 44688,
+      "sha256": "7B033A84D7B52A9BFADF335E39A8346ECB18ECFB1F12FEBCA7792FD2DF79BF97",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 40952,
+      "sha256": "7F59250F02C7AD617D70DF0EE8C0BA5161D29815CC0DFCA1F3A412177636B46E",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 45035,
+      "sha256": "B9A0AFC58C3A56D11F41D1630FBA7B64154F459DF8EFA868BD595CE5B39065D5",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 44688,
+      "sha256": "7B033A84D7B52A9BFADF335E39A8346ECB18ECFB1F12FEBCA7792FD2DF79BF97",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 37598,
+      "sha256": "DE002A8B83923DFD31143B6908197B47718948F790F038AFE63381EAE989DB7C",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 45035,
+      "sha256": "B9A0AFC58C3A56D11F41D1630FBA7B64154F459DF8EFA868BD595CE5B39065D5",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_6-after.png",
+      "bytes": 41328,
+      "sha256": "4A42B09E073B78681FEB9FE3F2F4815544CEBC654AF4E36701D01E252235B904",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_6-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_6-before.png",
+      "bytes": 37598,
+      "sha256": "DE002A8B83923DFD31143B6908197B47718948F790F038AFE63381EAE989DB7C",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-14",
+      "file_id": "media-14",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_6-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 1379021,
+      "sha256": "7D303055148EC1C2AD544D0B2E4D744BEC7C887FC7E63E8A86551A870E96328E",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-15",
+      "file_id": "media-15",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "execution/artifacts/observed-CASE-03-无筛选跨页勾选-I-e6886-、受限-INV-103-禁用、已选计数保持至第-3-页/test-finished-1.png",
+      "bytes": 41328,
+      "sha256": "4A42B09E073B78681FEB9FE3F2F4815544CEBC654AF4E36701D01E252235B904",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "test-finished-1.png"
+    },
+    {
+      "relative_path": "execution/artifacts/observed-CASE-03-无筛选跨页勾选-I-e6886-、受限-INV-103-禁用、已选计数保持至第-3-页/video.webm",
+      "bytes": 417263,
+      "sha256": "B564D4C7CE43F8443C18E0AF1EF4706B030537BC3488C195F41236AC1FA91A25",
+      "kind": "trial_video",
+      "content_type": "video/webm",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "video.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 40397,
+      "sha256": "E02513FC86217B345022AFBEA06B13728A6051E5DDA06AB86B99742260945F38",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-3",
+      "file_id": "media-3",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_1-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-4",
+      "file_id": "media-4",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_1-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 40952,
+      "sha256": "7F59250F02C7AD617D70DF0EE8C0BA5161D29815CC0DFCA1F3A412177636B46E",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-5",
+      "file_id": "media-5",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_2-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 40397,
+      "sha256": "E02513FC86217B345022AFBEA06B13728A6051E5DDA06AB86B99742260945F38",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-6",
+      "file_id": "media-6",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_2-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 44688,
+      "sha256": "7B033A84D7B52A9BFADF335E39A8346ECB18ECFB1F12FEBCA7792FD2DF79BF97",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-7",
+      "file_id": "media-7",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_3-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 40952,
+      "sha256": "7F59250F02C7AD617D70DF0EE8C0BA5161D29815CC0DFCA1F3A412177636B46E",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-8",
+      "file_id": "media-8",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_3-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 45035,
+      "sha256": "B9A0AFC58C3A56D11F41D1630FBA7B64154F459DF8EFA868BD595CE5B39065D5",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-9",
+      "file_id": "media-9",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_4-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 44688,
+      "sha256": "7B033A84D7B52A9BFADF335E39A8346ECB18ECFB1F12FEBCA7792FD2DF79BF97",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-10",
+      "file_id": "media-10",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_4-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 37598,
+      "sha256": "DE002A8B83923DFD31143B6908197B47718948F790F038AFE63381EAE989DB7C",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-11",
+      "file_id": "media-11",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_5-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 45035,
+      "sha256": "B9A0AFC58C3A56D11F41D1630FBA7B64154F459DF8EFA868BD595CE5B39065D5",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-12",
+      "file_id": "media-12",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_5-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_6-after.png",
+      "bytes": 41328,
+      "sha256": "4A42B09E073B78681FEB9FE3F2F4815544CEBC654AF4E36701D01E252235B904",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-13",
+      "file_id": "media-13",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_6-after.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_6-before.png",
+      "bytes": 37598,
+      "sha256": "DE002A8B83923DFD31143B6908197B47718948F790F038AFE63381EAE989DB7C",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-14",
+      "file_id": "media-14",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "case_step_6-before.png"
+    },
+    {
+      "relative_path": "execution/artifacts/step-replay-v1.webm",
+      "bytes": 1379021,
+      "sha256": "7D303055148EC1C2AD544D0B2E4D744BEC7C887FC7E63E8A86551A870E96328E",
+      "kind": "trial_step_replay_video",
+      "content_type": "video/webm",
+      "media_id": "media-15",
+      "file_id": "media-15",
+      "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+      "file_name": "step-replay-v1.webm"
+    }
+  ],
+  "evidence_status": "COMPLETE",
+  "runner_version": "candidate-bundle-trial-v1",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-92268f32-ed3f-4ceb-91bd-786fe2a379ac",
+    "captured_at": "2026-09-26T02:10:02.198Z",
+    "source_sha256": "b8d31fc25a89cab94668f85790321b642faf85550e74bd4bc1685149687e07bc",
+    "source_file_count": 91,
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "auth": {
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_id": "synthetic-inspector",
+    "session_version": "a5180ea0-c234-4440-ad69-f88e57966a84",
+    "bound_at": "2026-09-26T02:22:20.447Z"
+  },
+  "software_version": "Kimi-fixture-frozen-20260925; timing-runner-b8d31fc-20260926",
+  "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+  "environment_binding": {
+    "environment_id": "kimi-release-auth-20260925",
+    "url": "http://127.0.0.1:4381/workspace",
+    "ownership": "REGISTERED_EXISTING_AUTH_TARGET"
+  },
+  "entry_route": "http://127.0.0.1:4381/workspace",
+  "result": {
+    "report_status": "COMPLETE",
+    "test_status": "PASSED",
+    "test_count": 1,
+    "error": null,
+    "complete_pass": true,
+    "stats": {
+      "startTime": "2026-09-26T02:22:21.147Z",
+      "duration": 7995.312,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "process": {
+      "exit_code": 0,
+      "termination": null,
+      "error": null
+    },
+    "steps": [
+      {
+        "title": "CASE_STEP_1",
+        "raw_title": "CASE_STEP_1",
+        "category": null,
+        "duration": 1025,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_2",
+        "raw_title": "CASE_STEP_2",
+        "category": null,
+        "duration": 134,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_3",
+        "raw_title": "CASE_STEP_3",
+        "category": null,
+        "duration": 959,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_4",
+        "raw_title": "CASE_STEP_4",
+        "category": null,
+        "duration": 149,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_5",
+        "raw_title": "CASE_STEP_5",
+        "category": null,
+        "duration": 946,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      },
+      {
+        "title": "CASE_STEP_6",
+        "raw_title": "CASE_STEP_6",
+        "category": null,
+        "duration": 1770,
+        "error": null,
+        "raw_error": null,
+        "steps": []
+      }
+    ]
+  },
+  "timing_validation": {
+    "required": false,
+    "complete": true,
+    "observations": []
+  },
+  "step_coverage": {
+    "rule_version": "project-case-step-title-v2",
+    "complete": true,
+    "order_valid": true,
+    "expected_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5",
+      "CASE_STEP_6"
+    ],
+    "observed_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3",
+      "CASE_STEP_4",
+      "CASE_STEP_5",
+      "CASE_STEP_6"
+    ],
+    "duplicates": [],
+    "missing": [],
+    "unexpected": [],
+    "malformed_titles": [],
+    "unattributed_errors": [],
+    "items": [
+      {
+        "marker": "CASE_STEP_1",
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "observed": true,
+        "raw_title": "CASE_STEP_1",
+        "report_path": [
+          0
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_2",
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "observed": true,
+        "raw_title": "CASE_STEP_2",
+        "report_path": [
+          1
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_3",
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "observed": true,
+        "raw_title": "CASE_STEP_3",
+        "report_path": [
+          2
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_4",
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "observed": true,
+        "raw_title": "CASE_STEP_4",
+        "report_path": [
+          3
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_5",
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "observed": true,
+        "raw_title": "CASE_STEP_5",
+        "report_path": [
+          4
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_6",
+        "step_id": "CASE_STEP_6",
+        "order": 6,
+        "observed": true,
+        "raw_title": "CASE_STEP_6",
+        "report_path": [
+          5
+        ],
+        "error_attributed": false,
+        "execution_status": "PASSED",
+        "attributed_errors": []
+      }
+    ]
+  },
+  "failure_step": null,
+  "error": null,
+  "same_candidate_hash": true,
+  "specified_defect_detected": false,
+  "process": {
+    "exit_code": 0,
+    "termination": null,
+    "error": null
+  },
+  "step_replay": {
+    "schema": "workbench/step-evidence-replay-v1",
+    "status": "READY",
+    "run_id": "trial-2f174261971ea771b01a3bb33153c86039b720d7",
+    "candidate_sha256": "1580D690E73CD83E028E9B657D600743228DC9F200810B38D13DE334784BF351",
+    "executed_external_id": "CASE-03",
+    "executed_case_version": 1,
+    "observer_version": "e2e01-step-observer-v3",
+    "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+    "original_video_precise_seek": false,
+    "evidence_complete": true,
+    "missing_captures": [],
+    "steps": [
+      {
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "raw_title": "CASE_STEP_1",
+        "action": "确认筛选框为空后点击“查询”按钮",
+        "expected": "加载提示“正在加载设备列表…”出现后消失；第 1 页显示 INV-101、INV-102，分页指示为“第 1 页 / 共 3 页（共 5 条）”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:23.7Z",
+        "executed_end": "2026-09-26T02:22:24.636Z",
+        "observer_start": "2026-09-26T02:22:23.656Z",
+        "observer_end": "2026-09-26T02:22:24.678Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_1-after.png",
+        "before_screenshot_file_name": "case_step_1-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 86.12190000000055
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "raw_title": "CASE_STEP_2",
+        "action": "勾选 INV-101 行的复选框",
+        "expected": "已选区域显示“已选 1 台：INV-101”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:24.721Z",
+        "executed_end": "2026-09-26T02:22:24.77Z",
+        "observer_start": "2026-09-26T02:22:24.682Z",
+        "observer_end": "2026-09-26T02:22:24.815Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_2-after.png",
+        "before_screenshot_file_name": "case_step_2-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 83.4665
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "raw_title": "CASE_STEP_3",
+        "action": "点击“下一页”翻到第 2 页",
+        "expected": "第 2 页显示 INV-103（电池巡检仪）、INV-104（温控采集器C）；INV-103 的复选框为禁用状态，行内可见原因文案“该设备为受限资产，当前角色 inspector 无权选择”，可选状态显示“受限不可选”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:24.859Z",
+        "executed_end": "2026-09-26T02:22:25.729Z",
+        "observer_start": "2026-09-26T02:22:24.817Z",
+        "observer_end": "2026-09-26T02:22:25.775Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_3-after.png",
+        "before_screenshot_file_name": "case_step_3-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 88.12069999999994
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "order": 4,
+        "raw_title": "CASE_STEP_4",
+        "action": "尝试点击 INV-103 的复选框，然后勾选 INV-104 的复选框",
+        "expected": "INV-103 无法被勾选且不计入已选；勾选 INV-104 后已选区域显示“已选 2 台：INV-101、INV-104”。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:25.822Z",
+        "executed_end": "2026-09-26T02:22:25.878Z",
+        "observer_start": "2026-09-26T02:22:25.777Z",
+        "observer_end": "2026-09-26T02:22:25.924Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_4-after.png",
+        "before_screenshot_file_name": "case_step_4-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 91.77490000000034
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "order": 5,
+        "raw_title": "CASE_STEP_5",
+        "action": "点击“下一页”翻到第 3 页",
+        "expected": "第 3 页显示 INV-105（电源模块）；已选区域仍保持“已选 2 台：INV-101、INV-104”，跨页勾选状态保留。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:25.976Z",
+        "executed_end": "2026-09-26T02:22:26.827Z",
+        "observer_start": "2026-09-26T02:22:25.926Z",
+        "observer_end": "2026-09-26T02:22:26.871Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_5-after.png",
+        "before_screenshot_file_name": "case_step_5-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 94.71309999999994
+      },
+      {
+        "step_id": "CASE_STEP_6",
+        "order": 6,
+        "raw_title": "CASE_STEP_6",
+        "action": "点击“上一页”两次返回第 1 页，观察 INV-101 复选框",
+        "expected": "INV-101 复选框仍为勾选状态；整个过程无任何保存、提交或真实数据修改入口。",
+        "execution_status": "PASSED",
+        "actual": "未单独采集实际值",
+        "assertion_expected": null,
+        "raw_error": null,
+        "executed_start": "2026-09-26T02:22:26.919Z",
+        "executed_end": "2026-09-26T02:22:28.596Z",
+        "observer_start": "2026-09-26T02:22:26.873Z",
+        "observer_end": "2026-09-26T02:22:28.642Z",
+        "screenshot_phase": "after",
+        "screenshot_file_name": "case_step_6-after.png",
+        "before_screenshot_file_name": "case_step_6-before.png",
+        "screenshot_error": null,
+        "capture_duration_ms": 92.35679999999957
+      }
+    ],
+    "chapters": [
+      {
+        "step_id": "CASE_STEP_1",
+        "start_seconds": 0,
+        "result_start_seconds": 1.2258000000715257,
+        "end_seconds": 3.032700000047684,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_2",
+        "start_seconds": 3.032700000047684,
+        "result_start_seconds": 4.236899999976158,
+        "end_seconds": 6.050399999976158,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_3",
+        "start_seconds": 6.050399999976158,
+        "result_start_seconds": 7.257600000023841,
+        "end_seconds": 9.058600000023842,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_4",
+        "start_seconds": 9.058600000023842,
+        "result_start_seconds": 10.276,
+        "end_seconds": 12.081300000071526,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_5",
+        "start_seconds": 12.081300000071526,
+        "result_start_seconds": 13.288200000047684,
+        "end_seconds": 15.100800000071526,
+        "screenshot_phase": "after"
+      },
+      {
+        "step_id": "CASE_STEP_6",
+        "start_seconds": 15.100800000071526,
+        "result_start_seconds": 16.30739999997616,
+        "end_seconds": 18.108700000047683,
+        "screenshot_phase": "after"
+      }
+    ],
+    "duration_seconds": 18.2287,
+    "output_file_name": "step-replay-v1.webm",
+    "reading_holds": "1200ms action / 1800ms result"
+  },
+  "evidence_error": null,
+  "trace_policy": "DISABLED_FOR_AUTH_PRIVACY",
+  "finished_at": "2026-09-26T02:22:48.418Z"
+}

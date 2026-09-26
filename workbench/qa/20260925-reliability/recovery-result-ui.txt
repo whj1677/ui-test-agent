@@ -1,0 +1,49 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 脚本生成
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "自主建例任务 · KC-10" [level=1]
+  - paragraph: 发现业务差异，待分析
+  - paragraph: 冻结业务预期不变；技术验证不代表人工批准。
+  - paragraph: 任务未完成原因：BUSINESS_DIFFERENCE · business_difference
+  - paragraph: 有限规则核查：0 项明确缺口，0 处步骤前状态变化；材料不代替人工核对。
+  - article:
+    - heading "最终 normal · FAILED" [level=3]
+    - paragraph: 候选 SHA：76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF
+    - generic: "{ \"type\": \"LOCATOR_OR_TARGET\", \"message\": \"Error: expect(locator).toBeVisible() failed\\n\\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\\nExpected: visible\\nTimeout: 5000ms\\nError: element(s) not found\\n\\nCall log:\\n - Expect \\\"toBeVisible\\\" with timeout 5000ms\\n - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\\n\", \"expected\": null, \"actual\": null, \"attribution\": \"PENDING_ANALYSIS\" }"
+    - list:
+      - listitem: CASE_STEP_1：FAILED
+      - listitem: CASE_STEP_2：NOT_EXECUTED
+      - listitem: CASE_STEP_3：NOT_EXECUTED
+  - generic "技术详情：开发过程、资源与覆盖核查"
+  - generic "执行证据与文件"
+- status

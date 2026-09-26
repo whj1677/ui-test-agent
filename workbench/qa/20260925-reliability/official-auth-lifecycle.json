@@ -1,0 +1,20 @@
+{
+  "schema": "workbench/official-auth-lifecycle-v1",
+  "observed_at": "2026-09-25T14:02:52.1101061Z",
+  "workbench": "http://127.0.0.1:4322/workspace/",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "environment_id": "auth01-local-fixture-v1",
+  "role": "inspector",
+  "fixture_confirmed": true,
+  "initial_status": "NOT_LOGGED_IN",
+  "concurrent_open_same_version": true,
+  "open_statuses": [
+    "AWAITING_LOGIN",
+    "AWAITING_LOGIN"
+  ],
+  "check_status": "AWAITING_LOGIN",
+  "clear_status": "NOT_LOGGED_IN",
+  "final_status": "NOT_LOGGED_IN",
+  "new_direct_browser_children_after_clear": 0,
+  "result": "LIFECYCLE_ASSERTIONS_MET"
+}

@@ -185,6 +185,7 @@ export class BuildTaskStore {
   }
 
   async createTask(task, initialFiles = []) {
+    if (this.serviceIdentity) task = { ...task, service_identity: this.serviceIdentity };
     return this.serial(async () => {
       const directory = this.taskDirectory(task.task_id);
       await this.io.mkdir(directory, { recursive: false });

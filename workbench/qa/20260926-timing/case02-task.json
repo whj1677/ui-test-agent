@@ -1,0 +1,2810 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260926021703-79029f54",
+  "created_at": "2026-09-26T02:17:03.864Z",
+  "started_at": "2026-09-26T02:17:03.864Z",
+  "finished_at": "2026-09-26T02:20:01.876Z",
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "generation_status": "GENERATED",
+  "verification_status": "TECHNICAL_VALIDATION_PASSED",
+  "human_review_status": "WAITING_REVIEW",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "project_name": "发布收口 · Kimi合成登录库存台",
+    "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+    "case_version": 1,
+    "external_id": "CASE-02",
+    "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A"
+  },
+  "environment_ref": {
+    "environment_id": "kimi-release-auth-20260925",
+    "validation_mode": "normal-only",
+    "preparation": null
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "CASE-02",
+        "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+        "module": "Kimi合成库存台",
+        "preconditions": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+        "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+            "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。"
+          },
+          {
+            "order": 2,
+            "action": "观察筛选结果第 1 页的行内容与顺序",
+            "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。"
+          },
+          {
+            "order": 3,
+            "action": "点击“下一页”翻到第 2 页",
+            "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。"
+          },
+          {
+            "order": 4,
+            "action": "点击 INV-104 所在行的“查看详情”按钮",
+            "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。"
+          },
+          {
+            "order": 5,
+            "action": "点击抽屉内的“关闭详情”按钮",
+            "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "auth_requirement": {
+    "schema": "workbench/development-auth-requirement-v1",
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_requirement": "ROLE_MATCH"
+  },
+  "authorization": {
+    "logical_id": "user-732db5ae21278964f1c56e4e63b0fb8db76295f7513bb239",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "maintenance": {
+    "mode": "regenerate",
+    "operation_id": "generation-c956611c-9fdd-4924-b79d-882594a4b641",
+    "feedback": null,
+    "run_id": null
+  },
+  "script_version": 3,
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "WAITING_HUMAN_REVIEW",
+      "started_at": "2026-09-26T02:17:03.864Z",
+      "finished_at": "2026-09-26T02:20:01.876Z"
+    }
+  ],
+  "candidates": [
+    {
+      "version": 1,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "trial_runs": [
+        {
+          "run_id": "build-20260926021703-79029f54-normal",
+          "run_type": "normal",
+          "validation_scope": "normal-only",
+          "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+          "candidate_version": 1,
+          "executed_case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+          "executed_external_id": "CASE-02",
+          "executed_case_version": 1,
+          "started_at": "2026-09-26T02:19:39.045Z",
+          "finished_at": "2026-09-26T02:20:01.849Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3",
+              "CASE_STEP_4",
+              "CASE_STEP_5"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_4",
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "observed": true,
+                "raw_title": "CASE_STEP_4",
+                "report_path": [
+                  3
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_5",
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "observed": true,
+                "raw_title": "CASE_STEP_5",
+                "report_path": [
+                  4
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-26T02:19:39.702Z",
+              "duration": 5657.945,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 992,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 144,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 937,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_4",
+                "raw_title": "CASE_STEP_4",
+                "category": null,
+                "duration": 956,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_5",
+                "raw_title": "CASE_STEP_5",
+                "category": null,
+                "duration": 137,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          },
+          "step_replay": {
+            "schema": "workbench/step-evidence-replay-v1",
+            "status": "READY",
+            "run_id": "build-20260926021703-79029f54-normal",
+            "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+            "executed_external_id": "CASE-02",
+            "executed_case_version": 1,
+            "observer_version": "e2e01-step-observer-v3",
+            "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+            "original_video_precise_seek": false,
+            "evidence_complete": true,
+            "missing_captures": [],
+            "steps": [
+              {
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "raw_title": "CASE_STEP_1",
+                "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+                "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-26T02:19:41.817Z",
+                "executed_end": "2026-09-26T02:19:42.704Z",
+                "observer_start": "2026-09-26T02:19:41.759Z",
+                "observer_end": "2026-09-26T02:19:42.749Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_1-after.png",
+                "before_screenshot_file_name": "case_step_1-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 102.6857
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "raw_title": "CASE_STEP_2",
+                "action": "观察筛选结果第 1 页的行内容与顺序",
+                "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-26T02:19:42.793Z",
+                "executed_end": "2026-09-26T02:19:42.847Z",
+                "observer_start": "2026-09-26T02:19:42.752Z",
+                "observer_end": "2026-09-26T02:19:42.896Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_2-after.png",
+                "before_screenshot_file_name": "case_step_2-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 89.94810000000007
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "raw_title": "CASE_STEP_3",
+                "action": "点击“下一页”翻到第 2 页",
+                "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-26T02:19:42.941Z",
+                "executed_end": "2026-09-26T02:19:43.792Z",
+                "observer_start": "2026-09-26T02:19:42.897Z",
+                "observer_end": "2026-09-26T02:19:43.831Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_3-after.png",
+                "before_screenshot_file_name": "case_step_3-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 84.19899999999961
+              },
+              {
+                "step_id": "CASE_STEP_4",
+                "order": 4,
+                "raw_title": "CASE_STEP_4",
+                "action": "点击 INV-104 所在行的“查看详情”按钮",
+                "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-26T02:19:43.875Z",
+                "executed_end": "2026-09-26T02:19:44.746Z",
+                "observer_start": "2026-09-26T02:19:43.833Z",
+                "observer_end": "2026-09-26T02:19:44.788Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_4-after.png",
+                "before_screenshot_file_name": "case_step_4-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 82.97299999999996
+              },
+              {
+                "step_id": "CASE_STEP_5",
+                "order": 5,
+                "raw_title": "CASE_STEP_5",
+                "action": "点击抽屉内的“关闭详情”按钮",
+                "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-26T02:19:44.838Z",
+                "executed_end": "2026-09-26T02:19:44.891Z",
+                "observer_start": "2026-09-26T02:19:44.789Z",
+                "observer_end": "2026-09-26T02:19:44.925Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_5-after.png",
+                "before_screenshot_file_name": "case_step_5-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 83.10749999999916
+              }
+            ],
+            "chapters": [
+              {
+                "step_id": "CASE_STEP_1",
+                "start_seconds": 0.00010000002384185791,
+                "result_start_seconds": 1.2255,
+                "end_seconds": 3.029100000023842,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "start_seconds": 3.029100000023842,
+                "result_start_seconds": 4.2415,
+                "end_seconds": 6.050899999976158,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "start_seconds": 6.050899999976158,
+                "result_start_seconds": 7.257600000023841,
+                "end_seconds": 9.058100000023842,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_4",
+                "start_seconds": 9.058100000023842,
+                "result_start_seconds": 10.2765,
+                "end_seconds": 12.087100000023842,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_5",
+                "start_seconds": 12.087100000023842,
+                "result_start_seconds": 13.300700000047684,
+                "end_seconds": 15.107800000071526,
+                "screenshot_phase": "after"
+              }
+            ],
+            "duration_seconds": 15.2278,
+            "output_file_name": "step-replay-v1.webm",
+            "reading_holds": "1200ms action / 1800ms result"
+          },
+          "timing_validation": {
+            "required": true,
+            "complete": true,
+            "observations": [
+              {
+                "id": "CASE_STEP_1:timing:1",
+                "step": 1,
+                "kind": "visible_duration",
+                "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+                "target": "正在加载设备列表…",
+                "min_ms": 400,
+                "max_ms": 600,
+                "raw_range": "400-600ms",
+                "status": "PASSED",
+                "observed_duration_ms": 519.4000000953674,
+                "cycles": [
+                  {
+                    "appeared_ms": 49.799999952316284,
+                    "disappeared_ms": 569.2000000476837,
+                    "duration_ms": 519.4000000953674
+                  }
+                ],
+                "reason": null,
+                "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+                "tolerance_added_ms": 0
+              },
+              {
+                "id": "CASE_STEP_4:timing:1",
+                "step": 4,
+                "kind": "visible_duration",
+                "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+                "target": "正在加载设备详情…",
+                "min_ms": 400,
+                "max_ms": 600,
+                "raw_range": "400-600ms",
+                "status": "PASSED",
+                "observed_duration_ms": 517.5,
+                "cycles": [
+                  {
+                    "appeared_ms": 41,
+                    "disappeared_ms": 558.5,
+                    "duration_ms": 517.5
+                  }
+                ],
+                "reason": null,
+                "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+                "tolerance_added_ms": 0
+              }
+            ]
+          },
+          "trace_policy": "DISABLED_FOR_AUTH_PRIVACY",
+          "recording": {
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "video_size": {
+              "width": 1280,
+              "height": 720
+            },
+            "device_scale_factor": 1,
+            "codec": "Playwright WebM",
+            "encoding_parameters": "Playwright defaults; bitrate not overridden"
+          },
+          "evidence_status": "STEPS_CAPTURED",
+          "evidence_error": null
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+          "check_lines": [
+            34,
+            35,
+            38,
+            39,
+            40,
+            41,
+            43
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+          "check_lines": [
+            47,
+            52,
+            53,
+            54,
+            55,
+            56,
+            58,
+            59,
+            60,
+            61,
+            62,
+            68
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+          "check_lines": [
+            72,
+            74,
+            76,
+            77,
+            78,
+            81
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+          "check_lines": [
+            87,
+            89,
+            90,
+            91,
+            92,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+          "check_lines": [
+            104,
+            106,
+            109,
+            110,
+            111,
+            113,
+            114,
+            115
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "fidelity_review": "fidelity-review.json",
+      "approval_status": "NOT_APPROVED",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5163,
+            "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0"
+          }
+        ],
+        "sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0"
+      }
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 8556,
+      "sha256": "1BB797388D3C703F4D7D0F1329540D61211A226F7461C27070A442CC10637496",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/diagnostic-1790389137192/candidate.spec.mjs",
+      "bytes": 5163,
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-17-08-859Z.yml",
+      "bytes": 1674,
+      "sha256": "D43BA5E9935687FA4831F70BD71B064C0ED29C4EE398052D86B3932D1CE9F540",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-17-08-859Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-17-18-813Z.yml",
+      "bytes": 1744,
+      "sha256": "C6866070821CB2DBCFBA5AB44C15A99F7BC7A31903639CA1086BC0699CC0D905",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-17-18-813Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-17-52-340Z.yml",
+      "bytes": 2572,
+      "sha256": "850285FD22F7D113AAA702D4A1303DDCEC288E64091C03A4CAC0F7329063C63B",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-17-52-340Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-17-55-169Z.yml",
+      "bytes": 2152,
+      "sha256": "F6FBB825A481DBA826D36E1800524B5BB0154CABA55CEB872D690E6EE08B23DE",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-17-55-169Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-17-58-449Z.yml",
+      "bytes": 2880,
+      "sha256": "28D749393E01F802318B51A93F210A974E426B3869124727B6153E1FDCACD12F",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-17-58-449Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T02-18-01-055Z.yml",
+      "bytes": 2152,
+      "sha256": "F6FBB825A481DBA826D36E1800524B5BB0154CABA55CEB872D690E6EE08B23DE",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T02-18-01-055Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/candidate.spec.mjs",
+      "bytes": 5163,
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/fidelity-review.json",
+      "bytes": 26878,
+      "sha256": "A4742CFEF1515A83C1C24DE6E53D8FCB3BB2FBDBFE0F6127AB077F8B62773F1A",
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "fidelity-review.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/candidate.spec.mjs",
+      "bytes": 5163,
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "file_id": "build-file-11",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-12",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/test-finished-1.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-13",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/video.webm",
+      "bytes": 192405,
+      "sha256": "108C8E20679B7AA37678B31FABC1712619FEDF3D44B964DF0FC2F60B3B7305EB",
+      "file_id": "build-file-14",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-15",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_1-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "file_id": "build-file-16",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_1-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-17",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_2-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-18",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_2-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-19",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_3-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-20",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_3-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "file_id": "build-file-21",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_4-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-22",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_4-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-23",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_5-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "file_id": "build-file-24",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_5-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-evidence/step-observations.ndjson",
+      "bytes": 6823,
+      "sha256": "156DBFE8480AFBCF64ADF474A16870364652630309DCC7F93F0BCAA71D315CD0",
+      "file_id": "build-file-25",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "step-observations.ndjson",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/artifacts/step-replay-v1.webm",
+      "bytes": 1150533,
+      "sha256": "CC9F709AC9215AA101E003C69DF486FAFC66CCEF994F60C2EAFF8D053EE5637F",
+      "file_id": "build-file-26",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "step-replay-v1.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/observer-entry/observed.spec.mjs",
+      "bytes": 2003,
+      "sha256": "F226A3A2123D1B5F816FC83E92DC4649C6F814A5EA5114F5432FB0877E439C49",
+      "file_id": "build-file-27",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "observed.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/final/normal/playwright-report.json",
+      "bytes": 5195,
+      "sha256": "731FBCEB05CAFB413B68B6C2EABAF78D88F31F2BDA4893752D7551E475AB4CBA",
+      "file_id": "build-file-28",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 125778,
+      "sha256": "65A2660D95D78957ED49C47D6F084FC33312B7705CB5BF9FFF8AEECCA877576D",
+      "file_id": "build-file-29",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 279,
+      "sha256": "170D62CF67330E5B051B9597DA8A0518A94A190994F042F3F97898A00E32AC14",
+      "file_id": "build-file-30",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/candidate.spec.mjs",
+      "bytes": 5163,
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "file_id": "build-file-31",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "candidate.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/.last-run.json",
+      "bytes": 45,
+      "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903",
+      "file_id": "build-file-32",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": ".last-run.json",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/test-finished-1.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-33",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "test-finished-1.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/video.webm",
+      "bytes": 194937,
+      "sha256": "751FC3C53D6D040799E92E01208FCFA9C8FC986D485C076E77A1E354143C075A",
+      "file_id": "build-file-34",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "video.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_1-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-35",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_1-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 40292,
+      "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65",
+      "file_id": "build-file-36",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_1-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_2-after.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-37",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_2-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_2-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-38",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_2-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_3-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-39",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_3-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_3-before.png",
+      "bytes": 39993,
+      "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49",
+      "file_id": "build-file-40",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_3-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_4-after.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "file_id": "build-file-41",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_4-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_4-before.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-42",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_4-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_5-after.png",
+      "bytes": 36417,
+      "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2",
+      "file_id": "build-file-43",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_5-after.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/case_step_5-before.png",
+      "bytes": 51982,
+      "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18",
+      "file_id": "build-file-44",
+      "attempt_id": "attempt-01-initial",
+      "kind": "normal_screenshot",
+      "content_type": "image/png",
+      "file_name": "case_step_5-before.png",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-evidence/step-observations.ndjson",
+      "bytes": 6843,
+      "sha256": "DAC127BA78571E1C398F2AC7BCE31EB558FC7ADCF39B42E7F9F54C9502E3F138",
+      "file_id": "build-file-45",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "step-observations.ndjson",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/artifacts/step-replay-v1.webm",
+      "bytes": 1187538,
+      "sha256": "9D92E358AF6E14BA2F204AAA5F5B6C97CA5D90960E2ACFD183CB0FE627622C16",
+      "file_id": "build-file-46",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "step-replay-v1.webm",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/observer-entry/observed.spec.mjs",
+      "bytes": 2004,
+      "sha256": "0A04EE93765CFF668A688388C0440F3772AB3760EF1F52404BDD8F81C938A911",
+      "file_id": "build-file-47",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "observed.spec.mjs",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/run-1/evidence/playwright-report.json",
+      "bytes": 5217,
+      "sha256": "72AB45EEAF591109D4571A1E8B814CDFDC747A7C7D32E55D798082080D6A5E72",
+      "file_id": "build-file-48",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "playwright-report.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-49",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 25056,
+      "sha256": "8CB86B2514A9BA405D953A01E7B536CE46BA6A6ACBC2B816AE165C8410610AE5",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": null,
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-92268f32-ed3f-4ceb-91bd-786fe2a379ac",
+    "captured_at": "2026-09-26T02:10:02.198Z",
+    "source_sha256": "b8d31fc25a89cab94668f85790321b642faf85550e74bd4bc1685149687e07bc",
+    "source_file_count": 91,
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "auth": {
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_id": "synthetic-inspector",
+    "session_version": "a5180ea0-c234-4440-ad69-f88e57966a84",
+    "bound_at": "2026-09-26T02:17:03.908Z"
+  },
+  "development": {
+    "started_at": 1790389023905,
+    "deadline_at": 1790390223905,
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "draft_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+    "self_tests": [
+      {
+        "number": 1,
+        "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5163,
+            "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0"
+          }
+        ],
+        "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790389137935,
+        "observation_epoch": 8,
+        "recovery_original": false,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-26T02:18:58.571Z",
+            "duration": 5539.293000000001,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 1012,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 149,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 933,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_4",
+              "raw_title": "CASE_STEP_4",
+              "category": null,
+              "duration": 957,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_5",
+              "raw_title": "CASE_STEP_5",
+              "category": null,
+              "duration": 121,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3",
+            "CASE_STEP_4",
+            "CASE_STEP_5"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "step_replay": {
+          "schema": "workbench/step-evidence-replay-v1",
+          "status": "READY",
+          "run_id": "build-20260926021703-79029f54-dev-1",
+          "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+          "executed_external_id": "CASE-02",
+          "executed_case_version": 1,
+          "observer_version": "e2e01-step-observer-v3",
+          "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+          "original_video_precise_seek": false,
+          "evidence_complete": true,
+          "missing_captures": [],
+          "steps": [
+            {
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "raw_title": "CASE_STEP_1",
+              "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+              "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-26T02:19:00.664Z",
+              "executed_end": "2026-09-26T02:19:01.568Z",
+              "observer_start": "2026-09-26T02:19:00.607Z",
+              "observer_end": "2026-09-26T02:19:01.616Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_1-after.png",
+              "before_screenshot_file_name": "case_step_1-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 104.12639999999942
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "raw_title": "CASE_STEP_2",
+              "action": "观察筛选结果第 1 页的行内容与顺序",
+              "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-26T02:19:01.662Z",
+              "executed_end": "2026-09-26T02:19:01.717Z",
+              "observer_start": "2026-09-26T02:19:01.619Z",
+              "observer_end": "2026-09-26T02:19:01.767Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_2-after.png",
+              "before_screenshot_file_name": "case_step_2-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 93.37809999999945
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "raw_title": "CASE_STEP_3",
+              "action": "点击“下一页”翻到第 2 页",
+              "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-26T02:19:01.813Z",
+              "executed_end": "2026-09-26T02:19:02.646Z",
+              "observer_start": "2026-09-26T02:19:01.768Z",
+              "observer_end": "2026-09-26T02:19:02.7Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_3-after.png",
+              "before_screenshot_file_name": "case_step_3-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 98.68960000000015
+            },
+            {
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "raw_title": "CASE_STEP_4",
+              "action": "点击 INV-104 所在行的“查看详情”按钮",
+              "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-26T02:19:02.744Z",
+              "executed_end": "2026-09-26T02:19:03.616Z",
+              "observer_start": "2026-09-26T02:19:02.702Z",
+              "observer_end": "2026-09-26T02:19:03.658Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_4-after.png",
+              "before_screenshot_file_name": "case_step_4-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 84.94430000000057
+            },
+            {
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "raw_title": "CASE_STEP_5",
+              "action": "点击抽屉内的“关闭详情”按钮",
+              "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-26T02:19:03.698Z",
+              "executed_end": "2026-09-26T02:19:03.741Z",
+              "observer_start": "2026-09-26T02:19:03.659Z",
+              "observer_end": "2026-09-26T02:19:03.779Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_5-after.png",
+              "before_screenshot_file_name": "case_step_5-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 77.32980000000043
+            }
+          ],
+          "chapters": [
+            {
+              "step_id": "CASE_STEP_1",
+              "start_seconds": 0,
+              "result_start_seconds": 1.2258999999761582,
+              "end_seconds": 3.028,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "start_seconds": 3.028,
+              "result_start_seconds": 4.244199999928474,
+              "end_seconds": 6.050599999904633,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "start_seconds": 6.050599999904633,
+              "result_start_seconds": 7.255799999952316,
+              "end_seconds": 9.0615,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_4",
+              "start_seconds": 9.0615,
+              "result_start_seconds": 10.275199999928475,
+              "end_seconds": 12.075399999976158,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_5",
+              "start_seconds": 12.075399999976158,
+              "result_start_seconds": 13.277699999928474,
+              "end_seconds": 15.080699999928475,
+              "screenshot_phase": "after"
+            }
+          ],
+          "duration_seconds": 15.200699,
+          "output_file_name": "step-replay-v1.webm",
+          "reading_holds": "1200ms action / 1800ms result"
+        },
+        "timing_validation": {
+          "required": true,
+          "complete": true,
+          "observations": [
+            {
+              "id": "CASE_STEP_1:timing:1",
+              "step": 1,
+              "kind": "visible_duration",
+              "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+              "target": "正在加载设备列表…",
+              "min_ms": 400,
+              "max_ms": 600,
+              "raw_range": "400-600ms",
+              "status": "PASSED",
+              "observed_duration_ms": 510,
+              "cycles": [
+                {
+                  "appeared_ms": 51.700000047683716,
+                  "disappeared_ms": 561.7000000476837,
+                  "duration_ms": 510
+                }
+              ],
+              "reason": null,
+              "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+              "tolerance_added_ms": 0
+            },
+            {
+              "id": "CASE_STEP_4:timing:1",
+              "step": 4,
+              "kind": "visible_duration",
+              "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+              "target": "正在加载设备详情…",
+              "min_ms": 400,
+              "max_ms": 600,
+              "raw_range": "400-600ms",
+              "status": "PASSED",
+              "observed_duration_ms": 521.3000000715256,
+              "cycles": [
+                {
+                  "appeared_ms": 39.09999990463257,
+                  "disappeared_ms": 560.3999999761581,
+                  "duration_ms": 521.3000000715256
+                }
+              ],
+              "reason": null,
+              "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+              "tolerance_added_ms": 0
+            }
+          ]
+        },
+        "trace_policy": "DISABLED_FOR_AUTH_PRIVACY",
+        "recording": {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "video_size": {
+            "width": 1280,
+            "height": 720
+          },
+          "device_scale_factor": 1,
+          "codec": "Playwright WebM",
+          "encoding_parameters": "Playwright defaults; bitrate not overridden"
+        },
+        "evidence_status": "STEPS_CAPTURED",
+        "evidence_error": null,
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/test-finished-1.png",
+            "bytes": 36417,
+            "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-CASE-02-登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉/video.webm",
+            "bytes": 194937,
+            "sha256": "751FC3C53D6D040799E92E01208FCFA9C8FC986D485C076E77A1E354143C075A"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-after.png",
+            "bytes": 39993,
+            "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-before.png",
+            "bytes": 40292,
+            "sha256": "A2AD0426A58A595AE96783958297F20B9712CDC10124423173D377A99BAADE65"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_2-after.png",
+            "bytes": 39993,
+            "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_2-before.png",
+            "bytes": 39993,
+            "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_3-after.png",
+            "bytes": 36417,
+            "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_3-before.png",
+            "bytes": 39993,
+            "sha256": "1AFE8709136C489B5BC7DE67922581B3BEBDE392CE3BEB7ED8CF7D018E3CFD49"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_4-after.png",
+            "bytes": 51982,
+            "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_4-before.png",
+            "bytes": 36417,
+            "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_5-after.png",
+            "bytes": 36417,
+            "sha256": "15B7AC370190687E2B18F4A96E8365B7AC63220F7604CFBEF6AA2814168438E2"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_5-before.png",
+            "bytes": 51982,
+            "sha256": "AA372BFFAEAB2B19AE8A800E1F9222BCEEEEAB19DFEA8B672A44C601A3EE0B18"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/step-observations.ndjson",
+            "bytes": 6843,
+            "sha256": "DAC127BA78571E1C398F2AC7BCE31EB558FC7ADCF39B42E7F9F54C9502E3F138"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-replay-v1.webm",
+            "bytes": 1187538,
+            "sha256": "9D92E358AF6E14BA2F204AAA5F5B6C97CA5D90960E2ACFD183CB0FE627622C16"
+          },
+          {
+            "relative_path": "run-1/evidence/observer-entry/observed.spec.mjs",
+            "bytes": 2004,
+            "sha256": "0A04EE93765CFF668A688388C0440F3772AB3760EF1F52404BDD8F81C938A911"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 5217,
+            "sha256": "72AB45EEAF591109D4571A1E8B814CDFDC747A7C7D32E55D798082080D6A5E72"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790389160258
+      }
+    ],
+    "submission": {
+      "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+          "check_lines": [
+            34,
+            35,
+            38,
+            39,
+            40,
+            41,
+            43
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+          "check_lines": [
+            47,
+            52,
+            53,
+            54,
+            55,
+            56,
+            58,
+            59,
+            60,
+            61,
+            62,
+            68
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+          "check_lines": [
+            72,
+            74,
+            76,
+            77,
+            78,
+            81
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+          "check_lines": [
+            87,
+            89,
+            90,
+            91,
+            92,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100
+          ],
+          "execution": 1,
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "requirement": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+          "check_lines": [
+            104,
+            106,
+            109,
+            110,
+            111,
+            113,
+            114,
+            115
+          ],
+          "execution": 1,
+          "uncovered": ""
+        }
+      ],
+      "submitted_at": 1790389175674,
+      "file": "final/candidate.spec.mjs",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5163,
+            "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0"
+          }
+        ],
+        "sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0"
+      },
+      "fidelity_review": "fidelity-review.json",
+      "semantic_approval": false,
+      "requirements_review": "PENDING_INDEPENDENT_REVIEW"
+    },
+    "tool_calls": 26,
+    "harness_starts": 1,
+    "recovery": false,
+    "rejections": [
+      {
+        "tool": "check_fidelity",
+        "at": 1790389027803,
+        "code": "DRAFT_NOT_CREATED",
+        "rule": "DRAFT_NOT_CREATED",
+        "node": null,
+        "identifier": null,
+        "location": null,
+        "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+        "draft_saved": false,
+        "draft_exists": false,
+        "current_sha256": null,
+        "allowed_next_steps": [
+          "read_draft",
+          "read_evidence",
+          "correct the reported issue",
+          "write_draft",
+          "self_test",
+          "check_fidelity",
+          "submit_candidate"
+        ]
+      },
+      {
+        "tool": "write_draft",
+        "at": 1790389131327,
+        "code": "DRAFT_BYPASS_NOT_ALLOWED",
+        "rule": "DRAFT_BYPASS_NOT_ALLOWED",
+        "node": "MemberExpression",
+        "identifier": "request",
+        "location": {
+          "line": 6,
+          "column": 55
+        },
+        "message": "This syntax/capability is outside the task execution contract.",
+        "draft_saved": false,
+        "draft_exists": false,
+        "current_sha256": null,
+        "allowed_next_steps": [
+          "read_draft",
+          "read_evidence",
+          "correct the reported issue",
+          "write_draft",
+          "self_test",
+          "check_fidelity",
+          "submit_candidate"
+        ]
+      }
+    ],
+    "observation_epoch": 8,
+    "fidelity": {
+      "version": "finite-obligations-v1",
+      "semantic_pass": false,
+      "human_review_required": true,
+      "pre_step_state_changes": [],
+      "timing_requirements": [
+        {
+          "id": "CASE_STEP_1:timing:1",
+          "step": 1,
+          "kind": "visible_duration",
+          "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+          "target": "正在加载设备列表…",
+          "min_ms": 400,
+          "max_ms": 600,
+          "raw_range": "400-600ms",
+          "status": "RUNTIME_REQUIRED"
+        },
+        {
+          "id": "CASE_STEP_4:timing:1",
+          "step": 4,
+          "kind": "visible_duration",
+          "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+          "target": "正在加载设备详情…",
+          "min_ms": 400,
+          "max_ms": 600,
+          "raw_range": "400-600ms",
+          "status": "RUNTIME_REQUIRED"
+        }
+      ],
+      "timing_violations": [],
+      "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+      "status": "NEEDS_REVIEW",
+      "obligations": [],
+      "remaining_requirements": [
+        {
+          "step": 1,
+          "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 2,
+          "requirement": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 3,
+          "requirement": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 4,
+          "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        },
+        {
+          "step": 5,
+          "requirement": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+          "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+        }
+      ],
+      "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0"
+    },
+    "fidelity_review": {
+      "schema": "workbench/development-fidelity-review-v1",
+      "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0",
+      "candidate_sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+      "frozen_case_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+      "case_preconditions": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+      "semantic_approval": false,
+      "human_review_required": true,
+      "finite_checks": {
+        "version": "finite-obligations-v1",
+        "semantic_pass": false,
+        "human_review_required": true,
+        "pre_step_state_changes": [],
+        "timing_requirements": [
+          {
+            "id": "CASE_STEP_1:timing:1",
+            "step": 1,
+            "kind": "visible_duration",
+            "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+            "target": "正在加载设备列表…",
+            "min_ms": 400,
+            "max_ms": 600,
+            "raw_range": "400-600ms",
+            "status": "RUNTIME_REQUIRED"
+          },
+          {
+            "id": "CASE_STEP_4:timing:1",
+            "step": 4,
+            "kind": "visible_duration",
+            "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+            "target": "正在加载设备详情…",
+            "min_ms": 400,
+            "max_ms": 600,
+            "raw_range": "400-600ms",
+            "status": "RUNTIME_REQUIRED"
+          }
+        ],
+        "timing_violations": [],
+        "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+        "status": "NEEDS_REVIEW",
+        "obligations": [],
+        "remaining_requirements": [
+          {
+            "step": 1,
+            "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 2,
+            "requirement": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 3,
+            "requirement": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 4,
+            "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 5,
+            "requirement": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          }
+        ],
+        "bundle_sha256": "224752C8BC34749ADF6A003E0A8EC8C742E18125A2AEC55C9B4AE5E5932FE5C0"
+      },
+      "timing_validation": {
+        "required": true,
+        "complete": true,
+        "observations": [
+          {
+            "id": "CASE_STEP_1:timing:1",
+            "step": 1,
+            "kind": "visible_duration",
+            "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+            "target": "正在加载设备列表…",
+            "min_ms": 400,
+            "max_ms": 600,
+            "raw_range": "400-600ms",
+            "status": "PASSED",
+            "observed_duration_ms": 510,
+            "cycles": [
+              {
+                "appeared_ms": 51.700000047683716,
+                "disappeared_ms": 561.7000000476837,
+                "duration_ms": 510
+              }
+            ],
+            "reason": null,
+            "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+            "tolerance_added_ms": 0
+          },
+          {
+            "id": "CASE_STEP_4:timing:1",
+            "step": 4,
+            "kind": "visible_duration",
+            "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+            "target": "正在加载设备详情…",
+            "min_ms": 400,
+            "max_ms": 600,
+            "raw_range": "400-600ms",
+            "status": "PASSED",
+            "observed_duration_ms": 521.3000000715256,
+            "cycles": [
+              {
+                "appeared_ms": 39.09999990463257,
+                "disappeared_ms": 560.3999999761581,
+                "duration_ms": 521.3000000715256
+              }
+            ],
+            "reason": null,
+            "measurement": "same-document performance.now; exact named live/status element; DOM visibility transitions; mutation and animation-frame observations",
+            "tolerance_added_ms": 0
+          }
+        ]
+      },
+      "steps": [
+        {
+          "order": 1,
+          "precondition": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+          "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+          "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+          "claimed_check_lines": [
+            34,
+            35,
+            38,
+            39,
+            40,
+            41,
+            43
+          ],
+          "claimed_check_source": [
+            {
+              "line": 34,
+              "code": "    await filterInput.fill(\"温控\");"
+            },
+            {
+              "line": 35,
+              "code": "    await page.getByRole(\"button\", { name: \"查询\" }).click();"
+            },
+            {
+              "line": 38,
+              "code": "    await expect(listLoading).toHaveAttribute(\"role\", \"status\");"
+            },
+            {
+              "line": 39,
+              "code": "    await expect(listLoading).toHaveText(\"正在加载设备列表…\");"
+            },
+            {
+              "line": 40,
+              "code": "    await expect(listLoading).toBeVisible();"
+            },
+            {
+              "line": 41,
+              "code": "    await expect(listLoading).toBeHidden();"
+            },
+            {
+              "line": 43,
+              "code": "    await expect(pageInfo).toHaveText(\"第 1 页 / 共 2 页（共 3 条）\");"
+            }
+          ],
+          "self_test": {
+            "execution": 1,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-26T02:18:58.571Z",
+                "duration": 5539.293000000001,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 1012,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 149,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 933,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_4",
+                  "raw_title": "CASE_STEP_4",
+                  "category": null,
+                  "duration": 957,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_5",
+                  "raw_title": "CASE_STEP_5",
+                  "category": null,
+                  "duration": 121,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "precondition": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+          "action": "观察筛选结果第 1 页的行内容与顺序",
+          "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。",
+          "claimed_check_lines": [
+            47,
+            52,
+            53,
+            54,
+            55,
+            56,
+            58,
+            59,
+            60,
+            61,
+            62,
+            68
+          ],
+          "claimed_check_source": [
+            {
+              "line": 47,
+              "code": "    await expect(rows).toHaveCount(2);"
+            },
+            {
+              "line": 52,
+              "code": "    await expect(cell(first, \"编号\")).toHaveText(\"INV-101\");"
+            },
+            {
+              "line": 53,
+              "code": "    await expect(cell(first, \"名称\")).toHaveText(\"温控采集器A\");"
+            },
+            {
+              "line": 54,
+              "code": "    await expect(cell(first, \"库存状态\")).toBeVisible();"
+            },
+            {
+              "line": 55,
+              "code": "    await expect(cell(first, \"库存状态\")).toHaveText(/\\S/);"
+            },
+            {
+              "line": 56,
+              "code": "    await expect(cell(first, \"可选状态\")).toHaveText(\"可选\");"
+            },
+            {
+              "line": 58,
+              "code": "    await expect(cell(second, \"编号\")).toHaveText(\"INV-102\");"
+            },
+            {
+              "line": 59,
+              "code": "    await expect(cell(second, \"名称\")).toHaveText(\"温控采集器B\");"
+            },
+            {
+              "line": 60,
+              "code": "    await expect(cell(second, \"库存状态\")).toBeVisible();"
+            },
+            {
+              "line": 61,
+              "code": "    await expect(cell(second, \"库存状态\")).toHaveText(/\\S/);"
+            },
+            {
+              "line": 62,
+              "code": "    await expect(cell(second, \"可选状态\")).toHaveText(\"可选\");"
+            },
+            {
+              "line": 68,
+              "code": "    expect(pageOneIds).toEqual([\"INV-101\", \"INV-102\"]);"
+            }
+          ],
+          "self_test": {
+            "execution": 1,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-26T02:18:58.571Z",
+                "duration": 5539.293000000001,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 1012,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 149,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 933,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_4",
+                  "raw_title": "CASE_STEP_4",
+                  "category": null,
+                  "duration": 957,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_5",
+                  "raw_title": "CASE_STEP_5",
+                  "category": null,
+                  "duration": 121,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "precondition": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+          "action": "点击“下一页”翻到第 2 页",
+          "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。",
+          "claimed_check_lines": [
+            72,
+            74,
+            76,
+            77,
+            78,
+            81
+          ],
+          "claimed_check_source": [
+            {
+              "line": 72,
+              "code": "    await page.getByRole(\"button\", { name: \"下一页\" }).click();"
+            },
+            {
+              "line": 74,
+              "code": "    await expect(rows).toHaveCount(1);"
+            },
+            {
+              "line": 76,
+              "code": "    await expect(cell(only, \"编号\")).toHaveText(\"INV-104\");"
+            },
+            {
+              "line": 77,
+              "code": "    await expect(cell(only, \"名称\")).toHaveText(\"温控采集器C\");"
+            },
+            {
+              "line": 78,
+              "code": "    await expect(pageInfo).toHaveText(\"第 2 页 / 共 2 页（共 3 条）\");"
+            },
+            {
+              "line": 81,
+              "code": "    expect([...pageOneIds, ...pageTwoIds]).toEqual([\"INV-101\", \"INV-102\", \"INV-104\"]);"
+            }
+          ],
+          "self_test": {
+            "execution": 1,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-26T02:18:58.571Z",
+                "duration": 5539.293000000001,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 1012,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 149,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 933,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_4",
+                  "raw_title": "CASE_STEP_4",
+                  "category": null,
+                  "duration": 957,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_5",
+                  "raw_title": "CASE_STEP_5",
+                  "category": null,
+                  "duration": 121,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 4,
+          "precondition": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+          "action": "点击 INV-104 所在行的“查看详情”按钮",
+          "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+          "claimed_check_lines": [
+            87,
+            89,
+            90,
+            91,
+            92,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100
+          ],
+          "claimed_check_source": [
+            {
+              "line": 87,
+              "code": "    await targetRow.getByRole(\"button\", { name: \"查看 INV-104 详情\" }).click();"
+            },
+            {
+              "line": 89,
+              "code": "    await expect(detailLoading).toHaveAttribute(\"role\", \"status\");"
+            },
+            {
+              "line": 90,
+              "code": "    await expect(detailLoading).toHaveText(\"正在加载设备详情…\");"
+            },
+            {
+              "line": 91,
+              "code": "    await expect(detailLoading).toBeVisible();"
+            },
+            {
+              "line": 92,
+              "code": "    await expect(detailLoading).toBeHidden();"
+            },
+            {
+              "line": 94,
+              "code": "    await expect(drawer).toBeVisible();"
+            },
+            {
+              "line": 95,
+              "code": "    await expect(detailField(\"编号\")).toHaveText(\"INV-104\");"
+            },
+            {
+              "line": 96,
+              "code": "    await expect(detailField(\"名称\")).toHaveText(\"温控采集器C\");"
+            },
+            {
+              "line": 97,
+              "code": "    await expect(detailField(\"型号\")).toHaveText(\"TCA-100C\");"
+            },
+            {
+              "line": 98,
+              "code": "    await expect(detailField(\"库位\")).toHaveText(\"A-01-03\");"
+            },
+            {
+              "line": 99,
+              "code": "    await expect(detailField(\"库存状态\")).toHaveText(\"在库（充足）\");"
+            },
+            {
+              "line": 100,
+              "code": "    await expect(detailField(\"权限提示\")).toHaveText(\"当前角色 inspector 可选择该设备\");"
+            }
+          ],
+          "self_test": {
+            "execution": 1,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-26T02:18:58.571Z",
+                "duration": 5539.293000000001,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 1012,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 149,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 933,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_4",
+                  "raw_title": "CASE_STEP_4",
+                  "category": null,
+                  "duration": 957,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_5",
+                  "raw_title": "CASE_STEP_5",
+                  "category": null,
+                  "duration": 121,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_4",
+              "step_id": "CASE_STEP_4",
+              "order": 4,
+              "observed": true,
+              "raw_title": "CASE_STEP_4",
+              "report_path": [
+                3
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 5,
+          "precondition": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+          "action": "点击抽屉内的“关闭详情”按钮",
+          "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。",
+          "claimed_check_lines": [
+            104,
+            106,
+            109,
+            110,
+            111,
+            113,
+            114,
+            115
+          ],
+          "claimed_check_source": [
+            {
+              "line": 104,
+              "code": "    await drawer.getByRole(\"button\", { name: \"关闭详情\" }).click();"
+            },
+            {
+              "line": 106,
+              "code": "    await expect(drawer).toBeHidden();"
+            },
+            {
+              "line": 109,
+              "code": "    await expect(filterInput).toHaveValue(\"温控\");"
+            },
+            {
+              "line": 110,
+              "code": "    await expect(pageInfo).toHaveText(\"第 2 页 / 共 2 页（共 3 条）\");"
+            },
+            {
+              "line": 111,
+              "code": "    await expect(rows).toHaveCount(1);"
+            },
+            {
+              "line": 113,
+              "code": "    await expect(cell(only, \"编号\")).toHaveText(\"INV-104\");"
+            },
+            {
+              "line": 114,
+              "code": "    await expect(cell(only, \"名称\")).toHaveText(\"温控采集器C\");"
+            },
+            {
+              "line": 115,
+              "code": "    await expect(page.locator(\"#selectedInfo\")).toHaveText(\"已选 0 台\");"
+            }
+          ],
+          "self_test": {
+            "execution": 1,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-26T02:18:58.571Z",
+                "duration": 5539.293000000001,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 1012,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 149,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 933,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_4",
+                  "raw_title": "CASE_STEP_4",
+                  "category": null,
+                  "duration": 957,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_5",
+                  "raw_title": "CASE_STEP_5",
+                  "category": null,
+                  "duration": 121,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_5",
+              "step_id": "CASE_STEP_5",
+              "order": 5,
+              "observed": true,
+              "raw_title": "CASE_STEP_5",
+              "report_path": [
+                4
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        }
+      ]
+    },
+    "final_executions": [
+      {
+        "lane": "normal",
+        "started_at": "2026-09-26T02:19:39.045Z",
+        "sha256": "37CF6ED33738E4A35826D1583D151E39BDE07A9286270534561C30563625A0F0",
+        "status": "PASSED"
+      }
+    ]
+  },
+  "failure": null,
+  "revalidations": [],
+  "supplemental_assessments": []
+}

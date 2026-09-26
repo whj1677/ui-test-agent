@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto';
 import { runOwnedProcess } from './process-control.mjs';
 import { evaluatePlaywrightReport } from './candidate-verifier.mjs';
 import { allowedEnvironment } from './harness-runner.mjs';
+import { validateTimingEvidence } from '../../workbench/server/build/timing-evidence.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -51,9 +52,13 @@ export async function inspectPlaywrightRuntime({ candidatePath, runtimeRoot = ro
 
 export async function verifyCandidate({
   candidatePath, browserExecutable, fixtureUrl, runDirectory, signal,
-  stepObservation = null, authStorageState = null,
+  stepObservation = null, authStorageState = null, sessionTerminationEndpoints = [], timingRequirements = [],
   runtimeRoot = root, configPath = path.join(runtimeRoot, 'config', 'playwright.config.mjs'),
 }) {
+  if (authStorageState && sessionTerminationEndpoints.length && !stepObservation)
+    throw new Error('AUTH_REQUEST_POLICY_REQUIRES_STEP_OBSERVATION');
+  if (timingRequirements.length && !stepObservation) throw new Error('TIMING_REQUIRES_STEP_OBSERVATION');
+  if (timingRequirements.some(item => item.status !== 'RUNTIME_REQUIRED')) throw new Error('TIMING_REQUIREMENT_NEEDS_REVIEW');
   const reportPath = path.join(runDirectory, 'playwright-report.json');
   await mkdir(runDirectory, { recursive: true });
   const runtime = await inspectPlaywrightRuntime({ candidatePath, runtimeRoot, configPath });
@@ -66,7 +71,9 @@ export async function verifyCandidate({
     entryPath = path.join(wrapperDir, 'observed.spec.mjs');
     const { writeFile } = await import('node:fs/promises');
     await writeFile(entryPath, `import { installStepObserver } from ${JSON.stringify(new URL(`file:///${observerPath.replaceAll('\\', '/')}`).href)};\n` +
-      `installStepObserver(${JSON.stringify({ directory: path.join(runDirectory, 'artifacts', 'step-evidence'), identity: stepObservation })});\n` +
+      `installStepObserver(${JSON.stringify({ directory: path.join(runDirectory, 'artifacts', 'step-evidence'), identity: stepObservation,
+        allowedOrigin: authStorageState ? new URL(fixtureUrl).origin : null,
+        sessionTerminationEndpoints: authStorageState ? sessionTerminationEndpoints : [], timingRequirements })});\n` +
       `await import(${JSON.stringify(new URL(`file:///${candidatePath.replaceAll('\\', '/')}`).href)});\n`);
   }
   const cli = runtime.cli_path;
@@ -113,8 +120,17 @@ export async function verifyCandidate({
   let report = null;
   try { report = JSON.parse(await readFile(reportPath, 'utf8')); } catch {}
   const reportAssessment = evaluatePlaywrightReport(report);
+  let observations = [];
+  if (timingRequirements.length) {
+    try {
+      observations = (await readFile(path.join(runDirectory, 'artifacts', 'step-evidence', 'step-observations.ndjson'), 'utf8'))
+        .trim().split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+    } catch { /* Missing or invalid timing evidence must not become a pass. */ }
+  }
+  const timing = validateTimingEvidence(timingRequirements, observations, stepObservation);
   return {
-    success: processResult.exitCode === 0 && processResult.termination === null && reportAssessment.success,
+    success: processResult.exitCode === 0 && processResult.termination === null && reportAssessment.success && timing.complete,
+    timing,
     process: processResult,
     report: reportAssessment,
     reportPath,

@@ -1,0 +1,4 @@
+SYNTAX_OK:workbench/server/build/timing-obligations.mjs
+SYNTAX_OK:workbench/server/build/timing-observer.mjs
+SYNTAX_OK:workbench/server/build/timing-evidence.mjs
+SYNTAX_OK:harness-probe/src/verify-candidate.mjs

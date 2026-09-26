@@ -1,0 +1,11 @@
+{
+  "same_batches_and_runs": [
+    "batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9",
+    "batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411",
+    "batch-036f6471-e080-41be-a066-be03a8a7c5a2"
+  ],
+  "same_candidate_and_authorization": "build-20260925142505-0fc7ce0d",
+  "configuration_and_data_unchanged": true,
+  "active": false,
+  "source_sha256": "aa496e2e1610072cf559a7fe6fc9d52a095a52787d9fa8f6c905d503e50abbb6"
+}

@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import { checkFidelity } from '../../server/build/development-fidelity.mjs';
+import { assertBundleTiming } from '../../server/build/development-bundle.mjs';
+const frozen = JSON.parse(await fs.readFile(new URL('../20260925-release/case02-task-retry.json', import.meta.url), 'utf8').then(s => s.replace(/^\uFEFF/, ''))).input_bundle.snapshot.content;
+const code = await fs.readFile(new URL('../../.local/fresh25-b/build-tasks/build-20260926013556-3e1dd8a8/development/final/candidate.spec.mjs', import.meta.url), 'utf8');
+const result = checkFidelity(code, frozen);
+assert.deepEqual(result.timing_requirements.map(r=>[r.step,r.min_ms,r.max_ms]), [[1,400,600],[4,400,600]]);
+assert.equal(result.timing_violations.length,4);
+assert.throws(()=>assertBundleTiming({entries:[{path:'candidate.spec.mjs',content:Buffer.from(code)}]}, frozen), /TIMING_MUST_USE_RUNNER_OBSERVATION/);
+console.log(JSON.stringify({original_unchanged:true,semantic_approval:result.semantic_pass,timing_requirements:result.timing_requirements,violations:result.timing_violations,admission:'REJECTED'},null,2));

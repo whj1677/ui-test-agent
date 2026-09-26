@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: health remains inspectable after storage read failure and rejects new writes
+ok 1 - health remains inspectable after storage read failure and rejects new writes
+  ---
+  duration_ms: 2.7212
+  type: 'test'
+  ...
+# Subtest: generation ownership blocks new work but allows owned candidate cancellation
+ok 2 - generation ownership blocks new work but allows owned candidate cancellation
+  ---
+  duration_ms: 0.6665
+  type: 'test'
+  ...
+# Subtest: preparing build prevents approved run entry before active is assigned
+ok 3 - preparing build prevents approved run entry before active is assigned
+  ---
+  duration_ms: 0.5452
+  type: 'test'
+  ...
+# Subtest: shutdown refuses admission first, stops both executors, drains and closes auth once
+ok 4 - shutdown refuses admission first, stops both executors, drains and closes auth once
+  ---
+  duration_ms: 1.3416
+  type: 'test'
+  ...
+# Subtest: service identity changes with source and new records retain captured identity
+ok 5 - service identity changes with source and new records retain captured identity
+  ---
+  duration_ms: 32.4389
+  type: 'test'
+  ...
+# Subtest: approved executor keeps ownership through failed finalization and rejects the completion
+ok 6 - approved executor keeps ownership through failed finalization and rejects the completion
+  ---
+  duration_ms: 5.1921
+  type: 'test'
+  ...
+# Subtest: approved executor start guard includes peer preparation and shutdown
+ok 7 - approved executor start guard includes peer preparation and shutdown
+  ---
+  duration_ms: 0.8093
+  type: 'test'
+  ...
+# Subtest: offline report carries the captured execution identity and escaped fidelity materials
+ok 8 - offline report carries the captured execution identity and escaped fidelity materials
+  ---
+  duration_ms: 0.7259
+  type: 'test'
+  ...
+# Subtest: failed STOPPING persistence still cancels owned child and latches fault
+ok 9 - failed STOPPING persistence still cancels owned child and latches fault
+  ---
+  duration_ms: 0.4458
+  type: 'test'
+  ...
+# Subtest: shutdown timeout is bounded, closes auth and never reports drained success
+ok 10 - shutdown timeout is bounded, closes auth and never reports drained success
+  ---
+  duration_ms: 60.3728
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 810.8008

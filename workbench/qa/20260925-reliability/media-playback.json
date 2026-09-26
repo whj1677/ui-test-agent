@@ -1,0 +1,36 @@
+{
+  "playing": [
+    {
+      "currentTime": 0.922497,
+      "duration": 9.1806,
+      "error": null,
+      "paused": false,
+      "readyState": 4,
+      "src": "/api/runs/trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1/media/media-10"
+    },
+    {
+      "currentTime": 0,
+      "duration": 6.88,
+      "error": null,
+      "paused": true,
+      "readyState": 4,
+      "src": "/api/runs/trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1/media/media-3"
+    }
+  ],
+  "after_step_2": [
+    {
+      "currentTime": 3.294223,
+      "duration": 9.1806,
+      "error": null,
+      "paused": false,
+      "readyState": 4
+    },
+    {
+      "currentTime": 0,
+      "duration": 6.88,
+      "error": null,
+      "paused": true,
+      "readyState": 4
+    }
+  ]
+}

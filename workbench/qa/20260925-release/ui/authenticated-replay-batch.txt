@@ -1,0 +1,73 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: 发布收口 · Kimi合成登录库存台
+    - generic: 项目空间 · 3 条用例
+    - link "用例库":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/batches"
+    - link "报告":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "发布收口 · Kimi合成登录库存台":
+  - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+- generic: /
+- strong: 测试批次
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试批次" [level=1]
+  - paragraph: 每次明确运行创建新批次；范围和三个版本分别记录。
+  - link "预览与导出本批报告":
+    - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/reports?batch_id=batch-6448393a-3b57-437b-997e-f6dc8a49fed1"
+  - button "重跑本批未通过" [disabled]
+  - text: 按本次状态筛选
+  - combobox "按本次状态筛选":
+    - option "全部请求项" [selected]
+    - option "通过"
+    - option "未通过"
+    - option "阻塞"
+    - option "取消 / 未执行"
+  - article:
+    - heading "测试批次 · 2026-09-26T01:40:57.678Z" [level=3]
+    - paragraph: 范围：选中列表 · 软件版本：Kimi-fixture-frozen-20260925; auth-guard-20260926 · 状态：执行结束 · 限定技术试跑，未批准
+    - paragraph: 请求 2 条；执行结束 2；执行中 0；已取消 0；阻塞 0；未执行 0。结果只属于本批。
+    - table:
+      - rowgroup:
+        - row "用例 版本 / 脚本 本次状态 原因":
+          - columnheader "用例"
+          - columnheader "版本 / 脚本"
+          - columnheader "本次状态"
+          - columnheader "原因"
+      - rowgroup:
+        - row "CASE-02 · 登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉 用例v1 / 脚本 S2 执行结束 · 通过 —":
+          - cell "CASE-02 · 登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉":
+            - link "CASE-02 · 登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉":
+              - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&batch_id=batch-6448393a-3b57-437b-997e-f6dc8a49fed1&run_id=trial-412754a6fefcff2cb3f6cb3caa6d26f18bed83d8"
+          - cell "用例v1 / 脚本 S2"
+          - cell "执行结束 · 通过"
+          - cell "—"
+        - row "CASE-03 · 无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页 用例v1 / 脚本 S1 执行结束 · 通过 —":
+          - cell "CASE-03 · 无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页":
+            - link "CASE-03 · 无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页":
+              - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-e79c5ee3-0668-459b-967e-2c22acd1244d?version=1&batch_id=batch-6448393a-3b57-437b-997e-f6dc8a49fed1&run_id=trial-c17f41c319910f85941c4602db0eea0467c737db"
+          - cell "用例v1 / 脚本 S1"
+          - cell "执行结束 · 通过"
+          - cell "—"
+    - generic "技术详情：冻结清单及身份"
+- status: 专用登录窗口已打开；完成登录后点击“检查登录”。

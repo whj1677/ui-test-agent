@@ -1,0 +1,91 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 报告
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "报告" [level=1]
+  - paragraph: 指定批次或单用例的指定运行；与用例包导出分别管理。
+  - heading "创建固定范围报告" [level=2]
+  - text: 报告范围
+  - combobox "报告范围":
+    - option "指定测试批次" [selected]
+    - option "单用例指定运行"
+  - text: 测试批次
+  - combobox "测试批次":
+    - option "请选择"
+    - option "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925 · 2 条 · 执行结束" [selected]
+    - option "2026-09-25T14:01:10.150Z · reliability-20260925-cancel · 1 条 · 已取消"
+    - option "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry · 2 条 · 执行结束"
+    - option "2026-09-25T13:44:02.079Z · reliability-20260925-4322 · 2 条 · 服务中断"
+    - option "2026-09-25T12:59:09.568Z · v9-new-script-rerun-649508B8 · 1 条 · 执行结束"
+    - option "2026-09-25T12:54:43.230Z · v9-user-flow-649508B8 · 2 条 · 执行结束"
+    - option "2026-09-25T12:17:13.590Z · 版本未提供 · 1 条 · 执行结束"
+    - option "2026-09-25T11:57:34.152Z · caption-user-ready-20260925-649508B8 · 1 条 · 执行结束"
+    - option "2026-09-25T11:28:58.563Z · engineer-20260925-single · 1 条 · 执行结束"
+    - option "2026-09-25T11:27:22.504Z · engineer-20260925-selected-retry · 2 条 · 执行结束"
+    - option "2026-09-25T11:26:43.941Z · engineer-20260925-selected-cancel · 2 条 · 已取消"
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 12 条 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 12 条 · 执行结束"
+    - option "2026-09-25T09:51:54.886Z · model-round-20260925-selected · 2 条 · 执行结束"
+    - option "2026-09-25T09:51:01.809Z · model-round-20260925-single-S2 · 1 条 · 执行结束"
+  - paragraph: 截图默认内嵌；可选择原始录像、中文回放和 Trace。附件合计上限 80 MB；超限或缺失项明确标记，不输出本机链接冒充离线附件。
+  - checkbox "携带视频（可能较大）"
+  - text: 携带视频（可能较大）
+  - checkbox "携带 Trace（请确认无敏感业务资料）"
+  - text: 携带 Trace（请确认无敏感业务资料）
+  - status
+  - button "生成快照并预览"
+  - heading "已保存报告" [level=2]
+  - paragraph:
+    - link "2026-09-25T09:42:41.386Z · 单用例运行 · 1 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-38d1c690622e129af702786ae7b7e11addf1cd6d"
+  - paragraph:
+    - link "2026-09-25T12:13:30.346Z · 测试批次 · 12 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-4535e499cf76e2ae2ebbe02c1f8a2b2b888956ab"
+  - paragraph:
+    - link "2026-09-25T13:03:16.150Z · 测试批次 · 2 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-7820b3165381b20eeaede6e184b1879de782b23b"
+  - paragraph:
+    - link "2026-09-25T11:59:59.173Z · 测试批次 · 1 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-84111a2656dfe7ee739e00992909b23525ff1a2f"
+  - paragraph:
+    - link "2026-09-25T09:54:25.973Z · 测试批次 · 12 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-9830c25dad4a6e110b321904da4cea44eca6a7c5"
+  - paragraph:
+    - link "2026-09-25T13:51:33.988Z · 测试批次 · 2 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-ad0c0d10308ea57c6d0bc4d6e116e2ceb8d940fb"
+  - paragraph:
+    - link "2026-09-25T11:29:14.496Z · 测试批次 · 12 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-baf16d385450467d072af738a6649331d18a9562"
+  - paragraph:
+    - link "2026-09-25T14:02:17.124Z · 单用例运行 · 1 条":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports?report_id=report-ddedbeeb3595c4bb596b3b937510caa2ec5845b4"
+- status

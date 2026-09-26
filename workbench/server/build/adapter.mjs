@@ -14,16 +14,19 @@ const REQUIRED_PLUGINS = {
   '@deepseek-ai/dsh-experimental-browser-use-playwright-mcp': '0.1.6-alpha.2',
 };
 
-export async function ensureHarnessRuntime(dshHome, cwd) {
+export async function ensureHarnessRuntime(dshHome, cwd, signal) {
+  if (signal?.aborted) throw new Error('DEVELOPMENT_CANCELLED');
   await fs.mkdir(dshHome, { recursive: true });
   const env = allowedEnvironment({ DSH_HOME: dshHome });
-  let result = await runOwnedProcess(process.execPath, [DSH_BIN, '--profile', 'headless', '--dump-default-config'], { cwd, env, timeoutMs: 60_000 });
+  let result = await runOwnedProcess(process.execPath, [DSH_BIN, '--profile', 'headless', '--dump-default-config'], { cwd, env, signal, timeoutMs: 60_000 });
+  if (signal?.aborted) throw new Error('DEVELOPMENT_CANCELLED');
   if (result.exitCode !== 0) throw new Error(`HARNESS_PROFILE_INIT_FAILED:${result.error || result.stderr}`);
   const packageFile = path.join(dshHome, 'profiles', 'headless', 'package.json');
   const profile = JSON.parse(await fs.readFile(packageFile, 'utf8'));
   const missing = Object.entries(REQUIRED_PLUGINS).filter(([name, version]) => profile.dependencies?.[name] !== version);
   if (missing.length) {
-    result = await runOwnedProcess(process.execPath, [DSH_BIN, 'plugin', '--profile', 'headless', 'add', ...missing.map(([name, version]) => `${name}@${version}`)], { cwd, env, timeoutMs: 180_000 });
+    result = await runOwnedProcess(process.execPath, [DSH_BIN, 'plugin', '--profile', 'headless', 'add', ...missing.map(([name, version]) => `${name}@${version}`)], { cwd, env, signal, timeoutMs: 180_000 });
+    if (signal?.aborted) throw new Error('DEVELOPMENT_CANCELLED');
     if (result.exitCode !== 0) throw new Error(`HARNESS_PLUGIN_SETUP_FAILED:${result.error || result.stderr}`);
   }
   const finalProfile = JSON.parse(await fs.readFile(packageFile, 'utf8'));

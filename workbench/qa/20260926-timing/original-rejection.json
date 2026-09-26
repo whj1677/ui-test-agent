@@ -1,0 +1,55 @@
+{
+  "original_unchanged": true,
+  "semantic_approval": false,
+  "timing_requirements": [
+    {
+      "id": "CASE_STEP_1:timing:1",
+      "step": 1,
+      "kind": "visible_duration",
+      "requirement": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。",
+      "target": "正在加载设备列表…",
+      "min_ms": 400,
+      "max_ms": 600,
+      "raw_range": "400-600ms",
+      "status": "RUNTIME_REQUIRED"
+    },
+    {
+      "id": "CASE_STEP_4:timing:1",
+      "step": 4,
+      "kind": "visible_duration",
+      "requirement": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。",
+      "target": "正在加载设备详情…",
+      "min_ms": 400,
+      "max_ms": 600,
+      "raw_range": "400-600ms",
+      "status": "RUNTIME_REQUIRED"
+    }
+  ],
+  "violations": [
+    {
+      "code": "TIMING_MUST_USE_RUNNER_OBSERVATION",
+      "line": 36,
+      "column": 23,
+      "message": "Candidate-owned clocks cannot establish visible loading duration. The trusted runner measures the quoted loading target against the frozen range."
+    },
+    {
+      "code": "TIMING_MUST_USE_RUNNER_OBSERVATION",
+      "line": 40,
+      "column": 23,
+      "message": "Candidate-owned clocks cannot establish visible loading duration. The trusted runner measures the quoted loading target against the frozen range."
+    },
+    {
+      "code": "TIMING_MUST_USE_RUNNER_OBSERVATION",
+      "line": 87,
+      "column": 23,
+      "message": "Candidate-owned clocks cannot establish visible loading duration. The trusted runner measures the quoted loading target against the frozen range."
+    },
+    {
+      "code": "TIMING_MUST_USE_RUNNER_OBSERVATION",
+      "line": 92,
+      "column": 23,
+      "message": "Candidate-owned clocks cannot establish visible loading duration. The trusted runner measures the quoted loading target against the frozen range."
+    }
+  ],
+  "admission": "REJECTED"
+}

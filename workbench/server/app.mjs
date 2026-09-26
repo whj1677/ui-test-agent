@@ -172,6 +172,8 @@ function trustedMutation(request) {
 }
 
 function errorStatus(error) {
+  if (['WORKBENCH_SHUTTING_DOWN','WORKBENCH_STORAGE_UNAVAILABLE'].includes(error.message)) return 503;
+  if (['WORKBENCH_BUSY','BATCH_EXECUTOR_BUSY','GENERATION_EXECUTOR_BUSY'].includes(error.message)) return 409;
   if (['ASSET_NOT_APPROVED', 'ENVIRONMENT_NOT_ALLOWED'].includes(error.message)) return 400;
   if (error.message === 'RUN_ALREADY_ACTIVE') return 409;
   if (error.message === 'RUN_NOT_ACTIVE_OR_NOT_OWNED') return 404;
@@ -199,6 +201,8 @@ function errorStatus(error) {
 }
 
 export function createWorkbenchServer(options = {}) {
+  const serviceState = options.serviceState || { accepting: true };
+  const serviceIdentity = options.serviceIdentity || null;
   const batchManager=options.batchManager;
   const {scriptOperations, reportSnapshots} = options;
   const store = options.store;
@@ -215,20 +219,32 @@ export function createWorkbenchServer(options = {}) {
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
-      if(buildManager?.generationOwner && request.method==='POST' && (url.pathname==='/api/candidate-trials'||url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'GENERATION_EXECUTOR_BUSY'});
-      if(batchManager?.active&&request.method==='POST'&&(url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'BATCH_EXECUTOR_BUSY'});
+      const mutation = !['GET','HEAD','OPTIONS'].includes(request.method);
+      const stopping = /\/(?:stop|cancel)$/.test(url.pathname);
+      if (mutation && serviceState.accepting === false) return sendJson(response,503,{error:'WORKBENCH_SHUTTING_DOWN'});
+      if (mutation && !stopping && (buildManager?.storageFault || manager?.storageFault)) return sendJson(response,503,{error:'BUILD_STORAGE_UNAVAILABLE'});
+      if((buildManager?.generationOwner||buildManager?.generationStarting) && !stopping && request.method==='POST' && (url.pathname==='/api/candidate-trials'||url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'GENERATION_EXECUTOR_BUSY'});
+      if((batchManager?.active||batchManager?.starting)&&!stopping&&request.method==='POST'&&(url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'BATCH_EXECUTOR_BUSY'});
       if (buildManager?.generationDisabled && request.method === 'POST' && (url.pathname === '/api/build/tasks' || /\/api\/build\/tasks\/(develop|[^/]+\/(start|revise|revision))$/.test(url.pathname))) return sendJson(response, 403, { error: 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE' });
       if (request.method === 'GET' && url.pathname === '/api/health') {
+        let budget = null, authorization = null;
+        try { budget = buildStore ? await buildStore.getBudget() : null;
+          authorization = buildStore?.getRevalidationAuthorization ? await buildStore.getRevalidationAuthorization() : null;
+        } catch (error) { buildManager?.reportStorageFault?.(error,'health_storage_read'); }
         const buildDiagnostics = buildManager?.diagnostics?.() || null;
         sendJson(response, 200, {
-          service: 'approved-test-workbench', status: buildDiagnostics?.storage_status === 'FAILED' ? 'degraded' : 'ready',
+          service: 'approved-test-workbench', status: serviceState.accepting === false ? 'stopping' : (buildDiagnostics?.storage_status === 'FAILED'||manager?.storageFault) ? 'degraded' : 'ready',
+          service_identity: serviceIdentity,
+          accepting: serviceState.accepting !== false && !buildManager?.storageFault && !manager?.storageFault,
+          preparing: Boolean(manager?.starting || buildManager?.starting || batchManager?.starting || scriptOperations?.starting),
           active_run_id: manager?.active?.runId || buildManager?.active?.runId || null,
           active_build_task_id: buildManager?.active?.taskId || null,
           active_batch_id: batchManager?.active?.id || null,
           active_script_operation_id: scriptOperations?.active?.operation.operation_id || null,
-          build_budget: buildStore ? await buildStore.getBudget() : null,
-          build_authorization: buildStore?.getRevalidationAuthorization ? await buildStore.getRevalidationAuthorization() : null,
+          build_budget: budget,
+          build_authorization: authorization,
           build_diagnostics: buildDiagnostics,
+          run_storage_error: manager?.storageFault || null,
         });
         return;
       }
@@ -513,7 +529,7 @@ export function createWorkbenchServer(options = {}) {
       }
       if (manager && request.method === 'POST' && url.pathname === '/api/runs') {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
-        if (buildManager?.active) return sendJson(response, 409, { error: 'WORKBENCH_BUSY' });
+        if (buildManager?.active || buildManager?.starting || batchManager?.starting || scriptOperations?.starting) return sendJson(response, 409, { error: 'WORKBENCH_BUSY' });
         const body = await readJsonBody(request);
         const allowedKeys = Object.keys(body).sort().join(',') === 'asset_id,environment';
         if (!allowedKeys || typeof body.asset_id !== 'string' || typeof body.environment !== 'string') {

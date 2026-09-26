@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>设备库存台（合成试点夹具）</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif; background: #f4f6f8; color: #1f2933; }
+  header { background: #1f3a5f; color: #fff; padding: 16px 24px; }
+  header h1 { margin: 0 0 4px; font-size: 20px; }
+  header .badge { margin: 0; font-size: 12px; color: #ffd166; }
+  main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+  section { background: #fff; border: 1px solid #d9e2ec; border-radius: 8px; padding: 20px 24px; }
+  button { cursor: pointer; border: 1px solid #1f3a5f; background: #1f3a5f; color: #fff; border-radius: 4px; padding: 8px 16px; font-size: 14px; }
+  button:hover { background: #2a4d7f; }
+  button:disabled { background: #cbd2d9; border-color: #cbd2d9; color: #52606d; cursor: not-allowed; }
+  button.secondary { background: #fff; color: #1f3a5f; }
+  button.secondary:hover { background: #eef2f7; }
+  input[type="text"] { padding: 7px 10px; border: 1px solid #9aa5b1; border-radius: 4px; font-size: 14px; min-width: 220px; }
+  #whoami { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+  #sessionNotice, #loginStatus { color: #b91c1c; font-weight: 600; min-height: 20px; }
+  #filterBar { display: flex; gap: 8px; align-items: center; margin: 16px 0; }
+  #listLoading, #detailLoading { color: #1f3a5f; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  th, td { border: 1px solid #d9e2ec; padding: 8px 10px; text-align: left; font-size: 14px; }
+  th { background: #eef2f7; }
+  .reason { color: #b91c1c; font-size: 12px; margin-top: 4px; }
+  #pager { display: flex; gap: 12px; align-items: center; margin: 14px 0; }
+  #selectedInfo { background: #eef7ee; border: 1px solid #9cc69c; border-radius: 4px; padding: 8px 12px; font-weight: 600; }
+  #drawer { position: fixed; top: 0; right: 0; width: 340px; max-width: 90vw; height: 100vh; background: #fff; border-left: 2px solid #1f3a5f; box-shadow: -4px 0 12px rgba(0,0,0,.15); padding: 20px; overflow-y: auto; z-index: 10; }
+  #drawer h2 { margin-top: 0; font-size: 18px; }
+  #drawer dl { display: grid; grid-template-columns: 90px 1fr; row-gap: 10px; margin: 16px 0; }
+  #drawer dt { font-weight: 700; color: #52606d; }
+  #drawer dd { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>设备库存台（合成试点夹具）</h1>
+  <p class="badge">完全合成数据 · 仅供本地测试 · 无任何真实凭证或真实修改</p>
+</header>
+<main>
+  <section id="loginView" hidden>
+    <h2>登录</h2>
+    <p>本站为合成测试站，仅提供公开合成账号（synthetic-inspector，角色 inspector），无需输入用户名或密码。</p>
+    <button id="loginBtn" type="button">公开合成账号登录</button>
+    <p id="alreadyBox" hidden>当前已登录。<a href="/workspace">进入工作台</a></p>
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="workspaceView" hidden>
+    <div id="whoami">
+      <span>账号：<strong id="whoAccount"></strong></span>
+      <span>角色：<strong id="whoRole"></strong></span>
+      <span>会话到期：<time id="whoExpires"></time></span>
+      <button id="expireBtn" type="button">模拟会话到期</button>
+      <button id="logoutBtn" type="button" class="secondary">退出登录</button>
+    </div>
+    <p id="sessionNotice" role="status" aria-live="polite"></p>
+
+    <div id="filterBar">
+      <label for="filterInput">名称筛选</label>
+      <input id="filterInput" type="text" placeholder="例如：温控">
+      <button id="searchBtn" type="button">查询</button>
+    </div>
+
+    <p id="listLoading" role="status" aria-live="polite" hidden>正在加载设备列表…</p>
+    <table id="deviceTable" aria-label="设备库存列表">
+      <thead>
+        <tr>
+          <th scope="col">选择</th>
+          <th scope="col">编号</th>
+          <th scope="col">名称</th>
+          <th scope="col">库存状态</th>
+          <th scope="col">可选状态</th>
+          <th scope="col">操作</th>
+        </tr>
+      </thead>
+      <tbody id="deviceTbody"></tbody>
+    </table>
+
+    <div id="pager">
+      <button id="prevBtn" type="button" class="secondary">上一页</button>
+      <span id="pageInfo">第 1 页 / 共 1 页（共 0 条）</span>
+      <button id="nextBtn" type="button" class="secondary">下一页</button>
+    </div>
+
+    <p id="selectedInfo" aria-live="polite">已选 0 台</p>
+
+    <aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+      <h2 id="drawerTitle">设备详情</h2>
+      <p id="detailLoading" role="status" aria-live="polite" hidden>正在加载设备详情…</p>
+      <dl id="detailBody" hidden>
+        <dt>编号</dt><dd id="dId"></dd>
+        <dt>名称</dt><dd id="dName"></dd>
+        <dt>型号</dt><dd id="dModel"></dd>
+        <dt>库位</dt><dd id="dLocation"></dd>
+        <dt>库存状态</dt><dd id="dStock"></dd>
+        <dt>权限提示</dt><dd id="dNote"></dd>
+      </dl>
+      <button id="closeDrawerBtn" type="button" class="secondary">关闭详情</button>
+    </aside>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { page: 1, totalPages: 1, filter: '', selection: new Map() };
+
+async function api(path, options = {}) {
+  const res = await fetch(path, options);
+  let data = null;
+  try { data = await res.json(); } catch (e) { data = null; }
+  return { status: res.status, data };
+}
+
+function showSessionExpired() {
+  const n = $('sessionNotice');
+  if (n) n.textContent = '会话已到期，即将返回登录页…';
+  setTimeout(() => { location.href = '/login'; }, 1500);
+}
+
+function renderSelection() {
+  const ids = [...state.selection.keys()];
+  $('selectedInfo').textContent = ids.length ? '已选 ' + ids.length + ' 台：' + ids.join('、') : '已选 0 台';
+}
+
+function updatePager(total) {
+  $('pageInfo').textContent = '第 ' + state.page + ' 页 / 共 ' + state.totalPages + ' 页（共 ' + total + ' 条）';
+  $('prevBtn').disabled = state.page <= 1;
+  $('nextBtn').disabled = state.page >= state.totalPages;
+}
+
+function td(text) {
+  const cell = document.createElement('td');
+  cell.textContent = text;
+  return cell;
+}
+
+function renderRows(items) {
+  const tbody = $('deviceTbody');
+  tbody.innerHTML = '';
+  for (const d of items) {
+    const tr = document.createElement('tr');
+
+    const tdSel = document.createElement('td');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.setAttribute('aria-label', '选择 ' + d.id);
+    cb.checked = state.selection.has(d.id);
+    cb.disabled = !d.selectable;
+    if (!d.selectable) cb.title = d.restriction_reason;
+    cb.addEventListener('change', () => {
+      if (cb.checked) state.selection.set(d.id, d);
+      else state.selection.delete(d.id);
+      renderSelection();
+    });
+    tdSel.appendChild(cb);
+    tr.appendChild(tdSel);
+
+    tr.appendChild(td(d.id));
+    tr.appendChild(td(d.name));
+    tr.appendChild(td(d.stock_status));
+
+    const tdStatus = td(d.selectable_label);
+    if (!d.selectable) {
+      const reason = document.createElement('div');
+      reason.className = 'reason';
+      reason.textContent = '原因：' + d.restriction_reason;
+      tdStatus.appendChild(reason);
+    }
+    tr.appendChild(tdStatus);
+
+    const tdOp = document.createElement('td');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'secondary';
+    btn.textContent = '查看详情';
+    btn.setAttribute('aria-label', '查看 ' + d.id + ' 详情');
+    btn.addEventListener('click', () => openDetail(d.id));
+    tdOp.appendChild(btn);
+    tr.appendChild(tdOp);
+
+    tbody.appendChild(tr);
+  }
+}
+
+async function loadList() {
+  $('listLoading').hidden = false;
+  $('prevBtn').disabled = true;
+  $('nextBtn').disabled = true;
+  const q = new URLSearchParams({ page: String(state.page), name_filter: state.filter });
+  const { status, data } = await api('/api/devices?' + q.toString());
+  $('listLoading').hidden = true;
+  if (status === 401) { showSessionExpired(); return; }
+  if (status !== 200 || !data) {
+    $('deviceTbody').innerHTML = '';
+    $('pageInfo').textContent = '列表加载失败';
+    return;
+  }
+  state.page = data.page;
+  state.totalPages = data.total_pages;
+  renderRows(data.items);
+  updatePager(data.total);
+  renderSelection();
+}
+
+async function openDetail(id) {
+  $('drawer').hidden = false;
+  $('detailBody').hidden = true;
+  $('detailLoading').hidden = false;
+  $('detailLoading').textContent = '正在加载设备详情…';
+  const { status, data } = await api('/api/devices/' + encodeURIComponent(id));
+  if (status === 401) {
+    $('drawer').hidden = true;
+    showSessionExpired();
+    return;
+  }
+  if (status !== 200 || !data) {
+    $('detailLoading').textContent = '详情加载失败。';
+    return;
+  }
+  $('detailLoading').hidden = true;
+  $('dId').textContent = data.id;
+  $('dName').textContent = data.name;
+  $('dModel').textContent = data.model;
+  $('dLocation').textContent = data.location;
+  $('dStock').textContent = data.stock_status;
+  $('dNote').textContent = data.permission_note;
+  $('detailBody').hidden = false;
+}
+
+$('loginBtn').addEventListener('click', async () => {
+  $('loginStatus').textContent = '正在登录…';
+  const { status } = await api('/api/login', { method: 'POST' });
+  if (status === 200) {
+    location.href = '/workspace';
+  } else {
+    $('loginStatus').textContent = '登录失败，请重试。';
+  }
+});
+
+$('logoutBtn').addEventListener('click', async () => {
+  await api('/api/logout', { method: 'POST' });
+  location.href = '/login';
+});
+
+$('expireBtn').addEventListener('click', async () => {
+  await api('/api/expire', { method: 'POST' });
+  showSessionExpired();
+});
+
+$('searchBtn').addEventListener('click', () => {
+  state.filter = $('filterInput').value.trim();
+  state.page = 1;
+  loadList();
+});
+
+$('filterInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $('searchBtn').click();
+});
+
+$('prevBtn').addEventListener('click', () => {
+  if (state.page > 1) { state.page -= 1; loadList(); }
+});
+
+$('nextBtn').addEventListener('click', () => {
+  if (state.page < state.totalPages) { state.page += 1; loadList(); }
+});
+
+$('closeDrawerBtn').addEventListener('click', () => {
+  $('drawer').hidden = true;
+});
+
+async function init() {
+  const { status, data } = await api('/api/identity');
+  if (location.pathname === '/login') {
+    $('loginView').hidden = false;
+    if (status === 200 && data && data.authenticated) {
+      $('loginBtn').hidden = true;
+      $('alreadyBox').hidden = false;
+    }
+    return;
+  }
+  if (status !== 200) {
+    location.href = '/login';
+    return;
+  }
+  $('workspaceView').hidden = false;
+  $('whoAccount').textContent = data.account_id;
+  $('whoRole').textContent = data.role;
+  $('whoExpires').textContent = data.expires_at;
+  loadList();
+}
+
+init();
+</script>
+</body>
+</html>

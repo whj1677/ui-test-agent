@@ -1,0 +1,207 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 报告
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试报告预览" [level=1]
+  - paragraph: 固定测试批次 · batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9 · 2026-09-25T14:25:35.014Z
+  - link "下载离线 HTML 报告":
+    - /url: /api/case-library/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports/report-52201e00c26f334a826ef5129d7f7e2214657f2c/html?download=1
+  - paragraph: 这是已保存快照；后续复测不更新此报告。请求 2 条，未执行 0 条；未携带的媒体会在报告中明确列出。
+  - link "返回报告列表":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+  - iframe:
+    - heading "V2.1 真实模型全流程 · 20260925 · 测试报告" [level=1]
+    - paragraph:
+      - text: 固定范围：指定测试批次 · batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9
+      - text: 快照 report-52201e00c26f334a826ef5129d7f7e2214657f2c · 2026-09-25T14:25:35.014Z
+    - paragraph: 请求 2 · 已执行 2 · 原始通过 1 · 未通过 1 · 未执行 0
+    - paragraph: 执行通过、要求完整、脚本正式采用分别核对。本报告不拼接其他批次成绩；后续复测不改变此快照。所有已携带媒体离线可用，未携带项明确列出。
+    - generic "报告生成服务身份"
+    - heading "KC-02 · 编号模糊搜索不区分大小写" [level=2]
+    - paragraph: 用例 v1 · 脚本 1 / 候选 2 · 被测版本 independent-ui-round2-mixed-20260925
+    - paragraph: 原始执行：失败 · 要求核对：业务差异保留，待核对 · 脚本资格：未批准 · 媒体：完整
+    - paragraph: 最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 在搜索框输入小写eq-10 立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页 FAILED / 共 5 条，第 1/2 页，每页3条":
+          - cell "1"
+          - cell "在搜索框输入小写eq-10"
+          - cell "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          - cell "FAILED / 共 5 条，第 1/2 页，每页3条"
+        - row "2 清空后输入大写EQ-106 仅显示EQ-106，共1条，第1/1页 PASSED / 未单独采集实际值":
+          - cell "2"
+          - cell "清空后输入大写EQ-106"
+          - cell "仅显示EQ-106，共1条，第1/1页"
+          - cell "PASSED / 未单独采集实际值"
+        - row "3 输入eq-1并查看边界 匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效 PASSED / 未单独采集实际值":
+          - cell "3"
+          - cell "输入eq-1并查看边界"
+          - cell "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          - cell "PASSED / 未单独采集实际值"
+    - heading "原始错误" [level=3]
+    - generic: "{ \"type\": \"LOCATOR_OR_TARGET\", \"message\": \"Error: expect(locator).toHaveText(expected) failed\\n\\nLocator: getByText(/共 \\\\d+ 条，第 \\\\d+\\\\/\\\\d+ 页/)\\nExpected pattern: /共 8 条，第 1\\\\/\\\\d+ 页/\\nReceived string: \\\"共 5 条，第 1/2 页，每页3条\\\"\\nTimeout: 5000ms\\n\\nCall log:\\n - Expect \\\"soft toHaveText\\\" with timeout 5000ms\\n - waiting for getByText(/共 \\\\d+ 条，第 \\\\d+\\\\/\\\\d+ 页/)\\n 14 × locator resolved to <span id=\\\"pageInfo\\\" aria-live=\\\"polite\\\">共 5 条，第 1/2 页，每页3条</span>\\n - unexpected value \\\"共 5 条，第 1/2 页，每页3条\\\"\\n\", \"expected\": null, \"actual\": \"共 5 条，第 1/2 页，每页3条\", \"attribution\": \"PENDING_ANALYSIS\" }"
+    - heading "同一次运行的证据" [level=3]
+    - article:
+      - paragraph: test-failed-1.png · image · 52772 字节 · SHA256 378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: trace.zip · trace · 2089676 字节 · SHA256 50FA75EE8F26FAE5D5226B04C7DFDB03AD9CEEBB767B9A6336A12FFE28136653
+      - paragraph: 未携带：未选择随报告携带
+    - article:
+      - paragraph: video.webm · video · 314105 字节 · SHA256 DD18BB73401F680808BA17E0CB1370F456DEED2DD7CBADA6A43158F66B161ADF
+      - paragraph: 未携带：未选择随报告携带
+    - article:
+      - paragraph: case_step_1-before.png · image · 54306 字节 · SHA256 17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_1-failure-after.png · image · 52942 字节 · SHA256 15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_2-after.png · image · 46152 字节 · SHA256 E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_2-before.png · image · 52942 字节 · SHA256 15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_3-after.png · image · 52772 字节 · SHA256 378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_3-before.png · image · 46152 字节 · SHA256 E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097
+      - img "KC-02 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: step-replay-v1.webm · video · 812810 字节 · SHA256 D35E0FF7DAEB2483CA93E48B54B37FFFF8664D4980BACDA262BF88D853BBF34F
+      - paragraph: 未携带：未选择随报告携带
+    - generic "固定身份"
+    - heading "KC-08 · 跨页选择保留" [level=2]
+    - paragraph: 用例 v1 · 脚本 1 / 候选 1 · 被测版本 independent-ui-round2-mixed-20260925
+    - paragraph: 原始执行：通过 · 要求核对：本次核查完整，未批准 · 脚本资格：未批准 · 媒体：完整
+    - paragraph: 逐行核查101首选、翻页106新增后计数2、往返两页两行保持勾选，且103/108未误选；真实操作与计数/行复选框绑定，无额外状态条件，无修改原预期。自测及最终独立验证通过，最终文件与受审草稿同哈希；本轮结果仍由新批次决定。
+    - generic "环境与角色依据"
+    - heading "原要求" [level=3]
+    - paragraph: 独立重置演示数据
+    - paragraph: 正常入口由任务绑定；本机合成数据；保留原始用例输入。
+    - table:
+      - rowgroup:
+        - row "步骤 原动作 原预期 实际状态 / 值":
+          - columnheader "步骤"
+          - columnheader "原动作"
+          - columnheader "原预期"
+          - columnheader "实际状态 / 值"
+      - rowgroup:
+        - row "1 第1页勾选EQ-101 已选1项，批量预约可用 PASSED / 未单独采集实际值":
+          - cell "1"
+          - cell "第1页勾选EQ-101"
+          - cell "已选1项，批量预约可用"
+          - cell "PASSED / 未单独采集实际值"
+        - row "2 翻到第2页勾选EQ-106 翻页后EQ-101选择保留，已选2项 PASSED / 未单独采集实际值":
+          - cell "2"
+          - cell "翻到第2页勾选EQ-106"
+          - cell "翻页后EQ-101选择保留，已选2项"
+          - cell "PASSED / 未单独采集实际值"
+        - row "3 返回第1页和第2页核对 EQ-101与EQ-106均保持勾选，已选2项 PASSED / 未单独采集实际值":
+          - cell "3"
+          - cell "返回第1页和第2页核对"
+          - cell "EQ-101与EQ-106均保持勾选，已选2项"
+          - cell "PASSED / 未单独采集实际值"
+    - heading "原始错误" [level=3]
+    - generic: 未记录错误；实际值以步骤及本次证据为准，不从预期推测
+    - heading "同一次运行的证据" [level=3]
+    - article:
+      - paragraph: test-finished-1.png · image · 50513 字节 · SHA256 43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: trace.zip · trace · 1313033 字节 · SHA256 F308D1CF387AB1C43F9C2E462C01E6FC5A8FBF3B520758065A696CE7DAACF1D5
+      - paragraph: 未携带：未选择随报告携带
+    - article:
+      - paragraph: video.webm · video · 175563 字节 · SHA256 BA449D44240817BC05AA04C55806FEC2873B17499119D3DEABA301ECE39B5650
+      - paragraph: 未携带：未选择随报告携带
+    - article:
+      - paragraph: case_step_1-after.png · image · 54335 字节 · SHA256 852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_1-before.png · image · 54306 字节 · SHA256 17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_2-after.png · image · 50558 字节 · SHA256 9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_2-before.png · image · 54335 字节 · SHA256 852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_3-after.png · image · 50513 字节 · SHA256 43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: case_step_3-before.png · image · 50558 字节 · SHA256 9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC
+      - img "KC-08 本次截图"
+      - link "下载截图":
+        - /url: [embedded media omitted]
+    - article:
+      - paragraph: step-replay-v1.webm · video · 771116 字节 · SHA256 2554473DD526A1D23A95DBEE47CB6AE5DC2CC42D36C4AA9FEC9E6BBC8CA978CF
+      - paragraph: 未携带：未选择随报告携带
+    - generic "固定身份"
+- status

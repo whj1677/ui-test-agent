@@ -1,0 +1,120 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-10
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-10 · 当前页全选只选可预约行" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S1 · 2026-09-25T11:20:34." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-c5b5e60a-bde6-42d3-89b2-35e98399624d?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-c5b5e60a-bde6-42d3-89b2-35e98399624d?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-c5b5e60a-bde6-42d3-89b2-35e98399624d?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-c5b5e60a-bde6-42d3-89b2-35e98399624d?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）" [selected]
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 执行结束"
+  - paragraph: 历史结果 / 来源未分批；开发自测与独立验证分别保留。
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本版本最近历史结果"
+    - option "2026-09-25T11:23:18.768Z · 开发自测 · 通过"
+    - option "2026-09-25T11:23:56.988Z · 独立验证 · 通过" [selected]
+  - paragraph: 执行状态：历史已执行 · 软件版本：未提供 · 脚本候选v1 · 资格：未批准
+  - article:
+    - heading "KC-10 · 运行结果" [level=3]
+    - paragraph: 候选来源 KC-10 v1 · 当前执行 KC-10 v1
+    - generic "候选技术身份"
+    - generic: 通过
+    - paragraph: 入口： · 失败步骤：无 · 运行器：历史版本未记录
+    - generic "技术详情：运行身份与原始记录"
+    - strong: 要求核查：动作/预期偏离，不采纳
+    - paragraph: 最终候选在原第1页全选操作前补勾维护，把默认101/103/105改成101/102/103，然后才断言只选101/103共2项。人工原动作实际选中3项，附加前置掩盖了原预期差异；即使独立技术验证通过也不采纳为原路径通过。
+    - generic "核查来源（不等于正式批准）"
+    - button "步骤回放"
+    - button "原始录像" [pressed]
+    - button "截图"
+    - link "打开原始录像":
+      - /url: /api/build/tasks/build-20260925112034-eed511e6/media/build-file-23
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/build/tasks/build-20260925112034-eed511e6/media/build-file-22
+    - paragraph: 原始连续录像（无中文步骤字幕）。步骤结果列在下方，未采集可靠时间轴，不能精确定位。 本记录未登记录制尺寸。
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "无法定位步骤 1" [disabled]: 1. 第1页点击当前页全选
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项
+      - term: 实际
+      - definition: 未单独采集实际值
+      - button "无法定位步骤 2" [disabled]: 2. 取消全选再单选EQ-103
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 仅EQ-103选中，EQ-102复选框仍禁用
+      - term: 实际
+      - definition: 未单独采集实际值
+      - button "无法定位步骤 3" [disabled]: 3. 确认批量预约状态
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 存在可预约选择时批量预约可用，清空后禁用
+      - term: 实际
+      - definition: 未单独采集实际值
+  - paragraph: 本次记录未登记录制尺寸，清晰度未核验。
+  - paragraph: 本次运行未采集现场步骤截图，无法提供中文步骤证据回放；不事后补拍。
+  - img "本次运行截图"
+- status

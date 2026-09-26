@@ -1,6 +1,7 @@
 import net from 'node:net';
 import { randomUUID } from 'node:crypto';
 import { chromium } from 'playwright';
+import { sessionTerminationRequest } from './session-request-policy.mjs';
 
 function scopeKey(scope) {
   if (!scope || !/^project-[\w-]+$/.test(scope.project_id || '') ||
@@ -34,6 +35,9 @@ export class TargetAuthSessions {
     this.headless = headless;
     this.now = now;
     this.sessions = new Map();
+    this.operations = new Map();
+    this.opening = new Map();
+    this.closing = null;
     this.invalidationListener = null;
   }
 
@@ -76,7 +80,39 @@ export class TargetAuthSessions {
   async open(scope) {
     const environment = this.environment(scope);
     const key = scopeKey(scope);
-    if (this.sessions.has(key)) await this.clear(scope);
+    if (this.closing) throw new Error('AUTH_SESSIONS_CLOSING');
+    if (this.opening.has(key)) return this.opening.get(key);
+    const pending = this.#enqueue(key, async () => this.#openUnlocked(scope, environment, key));
+    this.opening.set(key, pending);
+    pending.finally(() => { if (this.opening.get(key) === pending) this.opening.delete(key); }).catch(() => {});
+    return pending;
+  }
+
+  beginTaskProtection(scope, expectedVersion) {
+    this.environment(scope);
+    const item = this.sessions.get(scopeKey(scope));
+    if (!item || item.status !== 'VALID' || item.version !== expectedVersion) throw new Error('AUTH_SESSION_NOT_VALID');
+    const lease = Symbol('auth-task-protection');
+    item.protectionLeases ||= new Set();
+    item.protectionLeases.add(lease);
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      item.protectionLeases.delete(lease);
+    };
+  }
+
+  #enqueue(key, operation) {
+    const previous = this.operations.get(key) || Promise.resolve();
+    const current = previous.catch(() => {}).then(operation);
+    this.operations.set(key, current);
+    current.finally(() => { if (this.operations.get(key) === current) this.operations.delete(key); }).catch(() => {});
+    return current;
+  }
+
+  async #openUnlocked(scope, environment, key) {
+    if (this.sessions.has(key)) await this.#clearUnlocked(scope, key);
     if (!this.browserExecutable) throw new Error('AUTH_BROWSER_EXECUTABLE_REQUIRED');
     const port = await freeLoopbackPort();
     const browser = await this.browserType.launch({
@@ -85,11 +121,20 @@ export class TargetAuthSessions {
     });
     try {
       // newContext is off-the-record; no persistent profile is reused.
-      const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+      const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, serviceWorkers: 'block' });
+      let item;
+      await context.route('**/*', route => {
+        let target;
+        try { target = new URL(route.request().url()); } catch { return route.abort(); }
+        if (target.origin !== environment.origin) return route.abort();
+        if (item?.protectionLeases?.size && sessionTerminationRequest(target.href, route.request().method(),
+          environment.origin, environment.session_termination_endpoints)) return route.abort('blockedbyclient');
+        return route.continue();
+      });
       const page = await context.newPage();
       await page.goto(environment.login_url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-      const item = { scope: { ...scope }, version: randomUUID(), browser, context, page, port,
-        status: 'AWAITING_LOGIN', identity: null, reason: null };
+      item = { scope: { ...scope }, version: randomUUID(), browser, context, page, port,
+        status: 'AWAITING_LOGIN', identity: null, reason: null, protectionLeases: new Set() };
       browser.on('disconnected', () => {
         if (this.sessions.get(key) === item) {
           const wasValid = item.status === 'VALID';
@@ -97,8 +142,8 @@ export class TargetAuthSessions {
           if (wasValid) this.#notifyInvalid(item, 'browser_disconnected');
         }
       });
-      this.sessions.set(key, item);
       await page.bringToFront();
+      this.sessions.set(key, item);
       return publicState(item);
     } catch (error) {
       await browser.close().catch(() => {});
@@ -108,7 +153,12 @@ export class TargetAuthSessions {
 
   async check(scope) {
     const environment = this.environment(scope);
-    const item = this.sessions.get(scopeKey(scope));
+    const key = scopeKey(scope);
+    return this.#enqueue(key, () => this.#checkUnlocked(scope, environment, key));
+  }
+
+  async #checkUnlocked(scope, environment, key) {
+    const item = this.sessions.get(key);
     if (!item) return this.status(scope);
     const wasValid = item.status === 'VALID';
     const finish = () => {
@@ -123,9 +173,13 @@ export class TargetAuthSessions {
     try {
       // BrowserContext.request shares this context's cookies; the endpoint is
       // explicitly configured as read-only and supplies account and role facts.
-      response = await item.context.request.get(environment.identity_url, { timeout: 5000, failOnStatusCode: false });
+      response = await item.context.request.get(environment.identity_url, { timeout: 5000, failOnStatusCode: false, maxRedirects: 0 });
     } catch {
       item.status = 'CHECK_UNAVAILABLE'; item.reason = 'IDENTITY_CHECK_UNAVAILABLE';
+      return finish();
+    }
+    if (!item.browser.isConnected()) {
+      item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
       return finish();
     }
     if (response.status() === 401) {
@@ -144,6 +198,10 @@ export class TargetAuthSessions {
     }
     let body;
     try { body = await response.json(); } catch {}
+    if (!item.browser.isConnected()) {
+      item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
+      return finish();
+    }
     if (body?.authenticated !== true || typeof body.account_id !== 'string' || !body.account_id ||
         typeof body.role !== 'string' || !body.role) {
       item.status = 'IDENTITY_UNVERIFIED'; item.identity = null; item.reason = 'IDENTITY_EVIDENCE_MISSING';
@@ -176,29 +234,42 @@ export class TargetAuthSessions {
   }
 
   async stateForExecution(scope, expectedVersion) {
-    const status = await this.check(scope);
-    if (status.status !== 'VALID' || status.session_version !== expectedVersion) throw new Error('AUTH_SESSION_NOT_VALID');
-    const item = this.sessions.get(scopeKey(scope));
-    return structuredClone(await item.context.storageState({ indexedDB: true }));
+    const environment = this.environment(scope);
+    const key = scopeKey(scope);
+    return this.#enqueue(key, async () => {
+      const status = await this.#checkUnlocked(scope, environment, key);
+      if (status.status !== 'VALID' || status.session_version !== expectedVersion) throw new Error('AUTH_SESSION_NOT_VALID');
+      const item = this.sessions.get(key);
+      return structuredClone(await item.context.storageState({ indexedDB: true }));
+    });
   }
 
   async attachEndpoint(scope, expectedVersion) {
-    const status = await this.check(scope);
-    if (status.status !== 'VALID' || status.session_version !== expectedVersion) throw new Error('AUTH_SESSION_NOT_VALID');
-    const item = this.sessions.get(scopeKey(scope));
-    const response = await fetch(`http://127.0.0.1:${item.port}/json/version`);
-    if (!response.ok) throw new Error('AUTH_BROWSER_CDP_UNAVAILABLE');
-    const endpoint = (await response.json()).webSocketDebuggerUrl;
-    if (!/^ws:\/\/127\.0\.0\.1:\d+\/devtools\/browser\/[\w-]+$/.test(endpoint || '')) {
-      throw new Error('AUTH_BROWSER_CDP_UNAVAILABLE');
-    }
-    return endpoint;
+    const environment = this.environment(scope);
+    const key = scopeKey(scope);
+    return this.#enqueue(key, async () => {
+      const status = await this.#checkUnlocked(scope, environment, key);
+      if (status.status !== 'VALID' || status.session_version !== expectedVersion) throw new Error('AUTH_SESSION_NOT_VALID');
+      const item = this.sessions.get(key);
+      const response = await fetch(`http://127.0.0.1:${item.port}/json/version`);
+      if (!response.ok) throw new Error('AUTH_BROWSER_CDP_UNAVAILABLE');
+      const endpoint = (await response.json()).webSocketDebuggerUrl;
+      if (!/^ws:\/\/127\.0\.0\.1:\d+\/devtools\/browser\/[\w-]+$/.test(endpoint || '')) {
+        throw new Error('AUTH_BROWSER_CDP_UNAVAILABLE');
+      }
+      return endpoint;
+    });
   }
 
   async clear(scope) {
-    const item = this.sessions.get(scopeKey(scope));
+    const key = scopeKey(scope);
+    return this.#enqueue(key, () => this.#clearUnlocked(scope, key));
+  }
+
+  async #clearUnlocked(scope, key) {
+    const item = this.sessions.get(key);
     if (!item) return this.status(scope);
-    this.sessions.delete(scopeKey(scope));
+    this.sessions.delete(key);
     const wasValid = item.status === 'VALID';
     item.identity = null;
     if (wasValid) {
@@ -211,7 +282,11 @@ export class TargetAuthSessions {
   }
 
   async close() {
-    for (const item of this.sessions.values()) await item.browser.close().catch(() => {});
-    this.sessions.clear();
+    if (this.closing) return this.closing;
+    this.closing = (async () => {
+      await Promise.allSettled([...this.operations.values()]);
+      await Promise.all([...this.sessions.entries()].map(([key, item]) => this.#enqueue(key, () => this.#clearUnlocked(item.scope, key))));
+    })();
+    return this.closing;
   }
 }

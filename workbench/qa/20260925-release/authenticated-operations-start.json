@@ -1,0 +1,51 @@
+{
+  "operations": [
+    {
+      "mode": "generate",
+      "environment_id": "kimi-release-auth-20260925",
+      "items": [
+        {
+          "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+          "external_id": "CASE-03",
+          "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+          "case_version": 1,
+          "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+          "old_scripts": [],
+          "logical_id": "user-dc1c3f726c44805388cf85eb5c53e75e2890c8ebc5b4df4b",
+          "requires_model_confirmation": false,
+          "limits": {
+            "self_tests": 3,
+            "revisions": 2,
+            "tool_calls": 120,
+            "harness_starts": 1,
+            "wall_ms": 1200000
+          },
+          "state": "RUNNING",
+          "reason": null,
+          "input": {
+            "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+            "case_version": 1
+          },
+          "task_id": "build-20260926011026-be1ef079"
+        }
+      ],
+      "model_calls_required": true,
+      "operation_id": "generation-44f11cac-9749-45d3-8121-7e14e10208f8",
+      "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+      "request_id": "script-acef8b63-9218-4ca6-a1fd-bdd62400adf3",
+      "fingerprint": "78f55d11dc689e50779c8d2c3c0215274f897517457195a6e30d201a243e040e",
+      "state": "RUNNING",
+      "created_at": "2026-09-26T01:10:26.27Z",
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-08ce0762-2722-4c0e-bf37-9b837054fb4a",
+        "captured_at": "2026-09-25T15:17:44.132Z",
+        "source_sha256": "a280efc6f9f958859f6ff7cb69f654e0940eba37b7aec5f928f53bdb11bf14f7",
+        "source_file_count": 87,
+        "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      }
+    }
+  ]
+}

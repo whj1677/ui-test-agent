@@ -27,8 +27,10 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     locale: 'zh-CN',
     ...(authStorageState ? { storageState: authStorageState } : {}),
+    ...(authStorageState ? { serviceWorkers: 'block' } : {}),
     screenshot: 'on',
     video: { mode: 'on', size: { width: 1280, height: 720 } },
-    trace: 'on',
+    // Authenticated network traces can retain Cookie and Authorization headers.
+    trace: authStorageState ? 'off' : 'on',
   },
 });

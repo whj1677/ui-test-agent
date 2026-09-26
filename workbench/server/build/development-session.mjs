@@ -6,24 +6,32 @@ import { createHash } from 'node:crypto';
 import { verifyDevelopmentRun } from './development-evidence.mjs';
 import { checkDevelopmentCandidate } from './development-policy.mjs';
 import { developmentError, safeFeedback, DEVELOPMENT_CONTRACT } from './development-feedback.mjs';
-import { developmentBundle, saveBundle, verifyBundle } from './development-bundle.mjs';
+import { developmentBundle, saveBundle, verifyBundle, assertBundleTiming } from './development-bundle.mjs';
 import { checkFidelity } from './development-fidelity.mjs';
+import { checkCandidateTiming, extractTimingObligations } from './timing-obligations.mjs';
 
 export const DEVELOPMENT_LIMITS = Object.freeze({ self_tests: 3, revisions: 2, tool_calls: 120, harness_starts: 3, wall_ms: 20 * 60_000 });
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 
 export class DevelopmentSession {
-  constructor({ directory, frozenCase, normalUrl, verify, persist, signal, limits = DEVELOPMENT_LIMITS, now = Date.now, evidenceIdentity = null, browserExecutable }) {
-    Object.assign(this, { directory, frozenCase, normalUrl, verify, persist, signal, limits, now, evidenceIdentity, browserExecutable });
+  constructor({ directory, frozenCase, normalUrl, verify, persist, signal, limits = DEVELOPMENT_LIMITS, now = Date.now, evidenceIdentity = null, browserExecutable, authStateForExecution = null, sessionTerminationEndpoints = [] }) {
+    Object.assign(this, { directory, frozenCase, normalUrl, verify, persist, signal, limits, now, evidenceIdentity, browserExecutable, authStateForExecution, sessionTerminationEndpoints });
     this.draftPath = path.join(directory, 'draft', 'candidate.spec.mjs');
     this.contract = { required_step_markers: frozenCase.steps.map(step => `CASE_STEP_${step.order}`) };
-    this.state = { started_at: now(), deadline_at: now() + limits.wall_ms, draft_sha256: null, self_tests: [], submission: null, tool_calls: 0, harness_starts: 0 };
+    this.state = { started_at: now(), deadline_at: now() + limits.wall_ms, limits, draft_sha256: null, self_tests: [], submission: null, tool_calls: 0, harness_starts: 0 };
     this.queue = Promise.resolve();
   }
   async init(seed = null) {
     await fs.mkdir(path.dirname(this.draftPath), { recursive: true });
     this.state.recovery = seed !== null;
-    if (seed !== null) { await fs.writeFile(this.draftPath, seed, { flag: 'wx' }); this.state.draft_sha256 = digest(seed); }
+    if (seed !== null) {
+      if (typeof seed === 'string') await fs.writeFile(this.draftPath, seed, { flag: 'wx' });
+      else await saveBundle(seed, path.dirname(this.draftPath));
+      // Keep the authorized complete package outside the native tool's writable root.
+      this.recoverySeed = await developmentBundle(path.dirname(this.draftPath));
+      this.state.recovery_seed_bundle_sha256 = this.recoverySeed.sha256;
+      this.state.draft_sha256 = this.recoverySeed.files.find(file => file.path === 'candidate.spec.mjs').sha256;
+    }
     await this.save();
   }
   async save() { await this.persist(structuredClone(this.state)); }
@@ -49,13 +57,18 @@ export class DevelopmentSession {
       if (this.state.recovery && this.state.self_tests.length === 0) throw new Error('EXECUTE_ORIGINAL_RECOVERY_DRAFT_FIRST');
       if (args.previous_sha256 !== this.state.draft_sha256) throw new Error('DRAFT_CHANGED_RELOAD_REQUIRED');
       checkDevelopmentCandidate(args.code, { importAllowed: value => /^\.\.?\//.test(value) && value.endsWith('.mjs') });
+      const timing = checkCandidateTiming(args.code, this.frozenCase);
+      if (timing.violations.length) throw developmentError('TIMING_MUST_USE_RUNNER_OBSERVATION', { violations: timing.violations,
+        message: 'Do not create candidate clocks or tolerance. Use original UI actions and visibility assertions; the trusted runner measures the frozen interval.' });
       if (this.state.self_tests.length >= this.limits.self_tests) throw new Error('SELF_TEST_BUDGET_EXHAUSTED_NO_UNVERIFIABLE_EDIT');
       await fs.writeFile(this.draftPath, args.code); this.state.draft_sha256 = digest(args.code); await this.save();
       return { sha256: this.state.draft_sha256, draft_saved: true, static_admission: 'ACCEPTED', runtime_verified: false, status: 'DRAFT_NOT_VALIDATED' };
     }
     if (name === 'check_fidelity') {
       const code = (await this.readDraftBytes()).toString('utf8');
-      const review = checkFidelity(code, this.frozenCase); this.state.fidelity = review; await this.save(); return review;
+      const bundle = await developmentBundle(path.dirname(this.draftPath));
+      const review = { ...checkFidelity(code, this.frozenCase), bundle_sha256: bundle.sha256 };
+      this.state.fidelity = review; await this.save(); return review;
     }
     if (name === 'run_diagnostic') {
       const bundle = await developmentBundle(path.dirname(this.draftPath), { validate: false });
@@ -83,6 +96,7 @@ export class DevelopmentSession {
       const bytes = await this.readDraftBytes(); const sha = digest(bytes);
       const bundle = await developmentBundle(path.dirname(this.draftPath));
       const last = this.state.self_tests.at(-1);
+      assertBundleTiming(bundle, this.frozenCase);
       if (args.sha256 !== sha || last?.sha256 !== sha || last?.bundle_sha256 !== bundle.sha256 || !last.result) throw new Error('CURRENT_BYTES_REQUIRE_SELF_TEST');
       if (!['ready', 'business_difference', 'needs_analysis', 'environment_blocked', 'budget_exhausted'].includes(args.outcome)) throw new Error('SUBMISSION_OUTCOME_INVALID');
       if (!Array.isArray(args.coverage) || args.coverage.length !== this.frozenCase.steps.length) throw new Error('COVERAGE_REQUIRED');
@@ -94,10 +108,32 @@ export class DevelopmentSession {
         if (args.outcome === 'ready' && (item.uncovered || !item.check_lines.length)) throw new Error('READY_WITH_UNCOVERED_REQUIREMENT');
       }
       if (args.outcome === 'ready' && (!last.result.complete_pass || !last.coverage.complete || last.changed_after_execution)) throw new Error('READY_REQUIRES_CURRENT_COMPLETE_SELF_TEST');
-      // Coverage is a review artifact, not an AST semantic proof or approval.
+      const timingRequirements = extractTimingObligations(this.frozenCase);
+      if (args.outcome === 'ready' && timingRequirements.length &&
+          (timingRequirements.some(item => item.status !== 'RUNTIME_REQUIRED') || !last.timing_validation?.required || !last.timing_validation.complete))
+        throw developmentError('READY_REQUIRES_FROZEN_TIMING_EVIDENCE', { timing_requirements: timingRequirements });
+      // The finite checker can disqualify known gaps, but cannot approve semantics.
+      const fidelity = { ...checkFidelity(bytes.toString('utf8'), this.frozenCase), bundle_sha256: bundle.sha256 };
+      if (args.outcome === 'ready' && fidelity.obligations.some(item => item.status === 'INSUFFICIENT')) throw developmentError('READY_WITH_FINITE_FIDELITY_GAP', { gaps: fidelity.obligations.filter(item => item.status === 'INSUFFICIENT').map(item => ({ step: item.step, kind: item.kind, target: item.target })) });
+      if (args.outcome === 'ready' && fidelity.pre_step_state_changes.some(item => item.status === 'BLOCKING_UNREQUESTED_PRE_STEP_STATE_CHANGE')) throw developmentError('READY_WITH_PRECONDITION_CHANGE', { lines: fidelity.pre_step_state_changes.filter(item => item.status === 'BLOCKING_UNREQUESTED_PRE_STEP_STATE_CHANGE').map(item => item.line) });
+      const review = {
+        schema: 'workbench/development-fidelity-review-v1', bundle_sha256: bundle.sha256,
+        candidate_sha256: sha, frozen_case_sha256: digest(JSON.stringify(this.frozenCase)),
+        case_preconditions: this.frozenCase.preconditions ?? null,
+        semantic_approval: false, human_review_required: true, finite_checks: fidelity,
+        timing_validation: last.timing_validation || null,
+        steps: this.frozenCase.steps.map((step, i) => ({ order: step.order,
+          precondition: step.precondition ?? step.preconditions ?? this.frozenCase.preconditions ?? null, action: step.action,
+          expected: step.expected, claimed_check_lines: args.coverage[i].check_lines,
+          claimed_check_source: args.coverage[i].check_lines.map(line => ({ line, code: lines[line - 1] })),
+          self_test: { execution: last.number, status: last.status, result: last.result, observed_step: last.coverage?.items?.find(item => item.marker === `CASE_STEP_${step.order}`) ?? null },
+          action_precondition_review: 'PENDING_INDEPENDENT_REVIEW', uncovered: args.coverage[i].uncovered })),
+      };
       const finalPath = path.join(this.directory, 'final', 'candidate.spec.mjs'); await fs.mkdir(path.dirname(finalPath), { recursive: true });
       await saveBundle(bundle, path.dirname(finalPath));
-      this.state.submission = { ...args, submitted_at: this.now(), file: 'final/candidate.spec.mjs', bundle: { files: bundle.files, sha256: bundle.sha256 }, semantic_approval: false, requirements_review: 'PENDING_INDEPENDENT_REVIEW' };
+      await fs.writeFile(path.join(this.directory, 'fidelity-review.json'), JSON.stringify(review, null, 2));
+      this.state.fidelity_review = review;
+      this.state.submission = { ...args, submitted_at: this.now(), file: 'final/candidate.spec.mjs', bundle: { files: bundle.files, sha256: bundle.sha256 }, fidelity_review: 'fidelity-review.json', semantic_approval: false, requirements_review: 'PENDING_INDEPENDENT_REVIEW' };
       await this.save(); return { status: 'FROZEN_FOR_INDEPENDENT_VALIDATION', sha256: sha, approval: 'NOT_APPROVED' };
     }
     throw new Error('TOOL_NOT_ALLOWED');
@@ -108,16 +144,27 @@ export class DevelopmentSession {
   async selfTest() {
     this.check();
     if (this.state.self_tests.length >= this.limits.self_tests) throw new Error('SELF_TEST_BUDGET_EXHAUSTED');
-    const bytes = await this.readDraftBytes(); const bundle = await developmentBundle(path.dirname(this.draftPath));
+    const firstRecovery = this.state.recovery && this.state.self_tests.length === 0;
+    const bundle = firstRecovery ? this.recoverySeed : await developmentBundle(path.dirname(this.draftPath));
+    if (!bundle) throw new Error('RECOVERY_SEED_PACKAGE_MISSING');
+    // Recovery must retain the original bytes and receive the actual admission
+    // failure; do not silently edit its seed to make the new policy pass.
+    const bytes = bundle.entries.find(file => file.path === 'candidate.spec.mjs')?.content;
+    if (!bytes) throw new Error('DRAFT_NOT_CREATED');
+    const last = this.state.self_tests.at(-1);
+    if (last?.bundle_sha256 === bundle.sha256 && last.observation_epoch === (this.state.observation_epoch || 0) && (last.status === 'EXECUTOR_ERROR' || !last.result?.complete_pass)) throw developmentError('UNCHANGED_FAILURE_REQUIRES_NEW_EVIDENCE', { executions_remaining: this.limits.self_tests - this.state.self_tests.length });
     const number = this.state.self_tests.length + 1;
     const root = path.join(this.directory, `run-${number}`); await fs.mkdir(root, { recursive: true });
     const candidatePath = path.join(root, 'candidate.spec.mjs'); await saveBundle(bundle, root);
-    const run = { number, bundle_sha256: bundle.sha256, files: bundle.files, sha256: digest(bytes), candidate_path: `run-${number}/candidate.spec.mjs`, status: 'EXECUTING', started_at: this.now() };
+    const run = { number, bundle_sha256: bundle.sha256, files: bundle.files, sha256: digest(bytes), candidate_path: `run-${number}/candidate.spec.mjs`, status: 'EXECUTING', started_at: this.now(), observation_epoch: this.state.observation_epoch || 0, recovery_original: firstRecovery };
     this.state.self_tests.push(run); await this.save();
     try {
+      assertBundleTiming(bundle, this.frozenCase);
       const identity = this.evidenceIdentity && { ...this.evidenceIdentity, run_id: `${this.evidenceIdentity.task_id}-dev-${number}`, candidate_sha256: run.sha256 };
+      const authStorageState = this.authStateForExecution ? await this.authStateForExecution() : null;
       const { raw, result, coverage, evidence } = await verifyDevelopmentRun({ verify: this.verify,
-        options: { candidatePath, fixtureUrl: this.normalUrl, runDirectory: path.join(root, 'evidence'), signal: this.signal },
+        options: { candidatePath, fixtureUrl: this.normalUrl, runDirectory: path.join(root, 'evidence'), signal: this.signal, authStorageState,
+          sessionTerminationEndpoints: this.sessionTerminationEndpoints },
         identity, caseContent: this.frozenCase, contract: this.contract, browserExecutable: this.browserExecutable });
       run.result = result; run.coverage = coverage; Object.assign(run, evidence);
       run.changed_after_execution = !(await verifyBundle(root, bundle));

@@ -1,0 +1,643 @@
+{
+  "schema": "workbench/case-package-v1",
+  "package_id": "case-package-53f1f10f-2faa-4156-82f8-488016e66238",
+  "exported_at": "2026-09-25T12:06:03.184Z",
+  "source_project": {
+    "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+    "name": "V2.1 真实模型全流程 · 20260925",
+    "revision": 7
+  },
+  "cases": [
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-83f61409-1da9-4c90-a4a0-94e0676e6c8f:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:2",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 2
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-83f61409-1da9-4c90-a4a0-94e0676e6c8f",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-01",
+        "title": "初始数据与三页分页边界",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "打开页面并确认已重置命名空间后查看设备资源",
+            "expected": "共8条，按编号EQ-101至EQ-108升序，第1页显示101/102/103，每页3条，总数8、第1/3页"
+          },
+          {
+            "order": 2,
+            "action": "点击下一页到第2页",
+            "expected": "显示EQ-104/105/106，第2/3页，上一页可用"
+          },
+          {
+            "order": 3,
+            "action": "点击下一页到第3页并尝试继续下一页",
+            "expected": "显示EQ-107/108，第3/3页，下一页禁用；返回第1页后上一页禁用"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-e5653d1c-84f2-4114-b487-5d59e2025f9a:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:3",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 3
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-02",
+        "title": "编号模糊搜索不区分大小写",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在搜索框输入小写eq-10",
+            "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+          },
+          {
+            "order": 2,
+            "action": "清空后输入大写EQ-106",
+            "expected": "仅显示EQ-106，共1条，第1/1页"
+          },
+          {
+            "order": 3,
+            "action": "输入eq-1并查看边界",
+            "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-5e437e3c-1ff5-445b-895c-24adc6353f6a:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:4",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 4
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-03",
+        "title": "同名温循箱搜索",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "搜索框输入温循箱",
+            "expected": "仅显示EQ-101北站温循箱和EQ-104南站温循箱，共2条"
+          },
+          {
+            "order": 2,
+            "action": "按编号确认两行区分",
+            "expected": "两行编号分别为EQ-101与EQ-104，不因同名合并或串用"
+          },
+          {
+            "order": 3,
+            "action": "清空搜索",
+            "expected": "恢复8条，筛选清空选择并回到第1页"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-2fc028e1-4ed9-4f53-9616-fad8909cb398:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:5",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 5
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-2fc028e1-4ed9-4f53-9616-fad8909cb398",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-04",
+        "title": "站点与状态AND组合筛选",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "站点自定义下拉选择北站",
+            "expected": "立即显示北站EQ-101/102/105，共3条，第1页"
+          },
+          {
+            "order": 2,
+            "action": "状态仅勾选空闲",
+            "expected": "AND组合后仅EQ-101与EQ-105，共2条"
+          },
+          {
+            "order": 3,
+            "action": "再勾选维护",
+            "expected": "状态内部OR且与站点AND，显示EQ-101/102/105，共3条"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:6",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 6
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-05",
+        "title": "状态多选空闲或维护",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "状态勾选空闲和维护，取消使用中",
+            "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中"
+          },
+          {
+            "order": 2,
+            "action": "翻页浏览结果",
+            "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页"
+          },
+          {
+            "order": 3,
+            "action": "取消维护仅留空闲",
+            "expected": "仅剩EQ-101/103/105/106/108共5条"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-b86c33dc-5001-4052-abf5-efda22cb6eff:v2",
+      "source_version": 2,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:7",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 7
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+          "version": 2,
+          "change": "MANUAL_EDIT",
+          "at": "2026-09-25T09:53:47.347Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-b86c33dc-5001-4052-abf5-efda22cb6eff",
+          "version": 2,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-06",
+        "title": "无结果与重置恢复（v2版本隔离验收）",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "搜索框输入不存在编号EQ-999",
+            "expected": "显示没有匹配设备，无数据行，总数0，第1/1页，分页按钮禁用"
+          },
+          {
+            "order": 2,
+            "action": "点击重置",
+            "expected": "搜索/站点/状态清空，编号升序恢复，第1页显示101/102/103，共8条"
+          },
+          {
+            "order": 3,
+            "action": "确认选择状态",
+            "expected": "重置后已选0项，批量预约禁用"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-e8a78bb2-b13b-4a7e-9788-fccf468307a6:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:8",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 8
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-e8a78bb2-b13b-4a7e-9788-fccf468307a6",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-07",
+        "title": "费用降序排序前三",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "排序选择费用降序",
+            "expected": "第1页前三为EQ-104(90)、EQ-101(80)、EQ-108(70)"
+          },
+          {
+            "order": 2,
+            "action": "翻到第2页",
+            "expected": "继续降序显示EQ-105(60)、EQ-102(50)、EQ-107(40)"
+          },
+          {
+            "order": 3,
+            "action": "切回编号升序",
+            "expected": "恢复EQ-101至EQ-108升序，当前页内容正确"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:9",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 9
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-08",
+        "title": "跨页选择保留",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "第1页勾选EQ-101",
+            "expected": "已选1项，批量预约可用"
+          },
+          {
+            "order": 2,
+            "action": "翻到第2页勾选EQ-106",
+            "expected": "翻页后EQ-101选择保留，已选2项"
+          },
+          {
+            "order": 3,
+            "action": "返回第1页和第2页核对",
+            "expected": "EQ-101与EQ-106均保持勾选，已选2项"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-58d5959c-4d7a-4d12-ac75-02a7d9255950:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:10",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 10
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-58d5959c-4d7a-4d12-ac75-02a7d9255950",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-09",
+        "title": "筛选变更清空选择并回第1页",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "勾选EQ-101后翻到第2页",
+            "expected": "选择保留且当前为第2页"
+          },
+          {
+            "order": 2,
+            "action": "修改搜索为EQ-103",
+            "expected": "选择被清空，回到第1页，仅显示EQ-103，已选0项"
+          },
+          {
+            "order": 3,
+            "action": "清空搜索再改站点为南站",
+            "expected": "再次清空选择并回到第1页，显示南站设备"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-c5b5e60a-bde6-42d3-89b2-35e98399624d:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:11",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 11
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-10",
+        "title": "当前页全选只选可预约行",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "第1页点击当前页全选",
+            "expected": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项"
+          },
+          {
+            "order": 2,
+            "action": "取消全选再单选EQ-103",
+            "expected": "仅EQ-103选中，EQ-102复选框仍禁用"
+          },
+          {
+            "order": 3,
+            "action": "确认批量预约状态",
+            "expected": "存在可预约选择时批量预约可用，清空后禁用"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-8da92707-600e-4f5b-8c61-d4cbfc0544f2:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:12",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 12
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-8da92707-600e-4f5b-8c61-d4cbfc0544f2",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-11",
+        "title": "维护与使用中不可预约",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "查看EQ-102维护行",
+            "expected": "选择复选框禁用且标注不可预约，不能加入批量预约"
+          },
+          {
+            "order": 2,
+            "action": "搜索温循箱查看EQ-104使用中行",
+            "expected": "EQ-104复选框禁用，EQ-101可勾选"
+          },
+          {
+            "order": 3,
+            "action": "尝试全选含不可预约页",
+            "expected": "全选仅选择空闲可预约行，不可预约行保持未选"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "project-80875248-3e14-4055-b077-b890dead1a9e:case-35175118-48c2-4471-8d52-e3eef51bc406:v1",
+      "source_version": 1,
+      "root_source": {
+        "type": "xlsx",
+        "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:13",
+        "file_name": "cases.xlsx",
+        "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+        "sheet": "原用例副本",
+        "row": 13
+      },
+      "lineage": [
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+          "version": 1,
+          "imported_from": "xlsx",
+          "at": "2026-09-25T09:23:15.879Z"
+        },
+        {
+          "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+          "case_id": "case-35175118-48c2-4471-8d52-e3eef51bc406",
+          "version": 1,
+          "exported_at": "2026-09-25T12:06:03.184Z"
+        }
+      ],
+      "content": {
+        "external_id": "KC-12",
+        "title": "南站同名设备详情与返回状态保持",
+        "module": "设备预约调度",
+        "preconditions": "独立重置演示数据",
+        "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "搜索温循箱并站点选南站，打开EQ-104详情",
+            "expected": "抽屉先显示加载中，随后编号EQ-104、名称温循箱、站点南站、状态使用中、费用90"
+          },
+          {
+            "order": 2,
+            "action": "切换到预约历史页签",
+            "expected": "EQ-104显示无预约历史，不串用同名EQ-101数据"
+          },
+          {
+            "order": 3,
+            "action": "关闭详情",
+            "expected": "搜索温循箱、站点南站、页码与选择保持原样"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { resolveTrialCandidate } from './build/candidate-trials.mjs';
+import { writeAtomicJson } from './atomic-json.mjs';
 
 export const reviewFor = (manager, selection) => (manager.requirementReviews || []).find(r =>
   ['project_id','case_id','case_version','content_sha256','source_task_id','bundle_sha256'].every(k => r[k] === selection[k])) || null;
@@ -11,10 +12,10 @@ const now = () => new Date().toISOString();
 
 // Durable preview is the frozen selection, not a second execution system.
 export class BatchManager {
-  constructor({root, buildManager, caseStore, runStore}) { Object.assign(this,{root,buildManager,caseStore,runStore}); this.queue=Promise.resolve(); this.writeQueue=Promise.resolve(); this.active=null; }
+  constructor({root, buildManager, caseStore, runStore, atomicJson = writeAtomicJson}) { Object.assign(this,{root,buildManager,caseStore,runStore,atomicJson}); this.queue=Promise.resolve(); this.writeQueue=Promise.resolve(); this.active=null; this.starting=false; }
   serial(fn) { const p=this.queue.then(fn,fn);this.queue=p.catch(()=>{});return p; }
   file(id) { if(!/^batch-[a-f0-9-]{36}$/.test(id))throw Error('BATCH_ID_INVALID');return path.join(this.root,id+'.json'); }
-  save(b) { const operation=async()=>{ await fs.mkdir(this.root,{recursive:true});const f=this.file(b.batch_id),tmp=f+'.'+randomUUID()+'.tmp';await fs.writeFile(tmp,JSON.stringify(b,null,2));await fs.rename(tmp,f);return b; };const next=this.writeQueue.then(operation,operation);this.writeQueue=next.catch(()=>{});return next; }
+  save(b) { const operation=async()=>{await this.atomicJson(this.file(b.batch_id),b);return b;};const next=this.writeQueue.then(operation,operation).catch(error=>{this.buildManager.reportStorageFault(error,'batch_save');throw error;});this.writeQueue=next.catch(()=>{});return next; }
   async get(id,project) { let b;try{b=JSON.parse(await fs.readFile(this.file(id),'utf8'));}catch(e){if(e.code==='ENOENT')throw Error('BATCH_NOT_FOUND');throw e;}if(project&&b.project_id!==project)throw Error('BATCH_PROJECT_MISMATCH');return b; }
   async list(project) { await fs.mkdir(this.root,{recursive:true});const all=await Promise.all((await fs.readdir(this.root)).filter(f=>/^batch-[a-f0-9-]{36}\.json$/.test(f)).map(f=>this.get(f.slice(0,-5))));return all.filter(b=>!project||b.project_id===project).sort((a,b)=>b.created_at.localeCompare(a.created_at)); }
   async init() { for(const b of await this.list())if(['QUEUED','RUNNING','STOPPING'].includes(b.state)){b.state='INTERRUPTED';b.finished_at=now();for(const i of b.items)if(['QUEUED','RUNNING'].includes(i.state)){const r=i.run_id&&await this.runStore.getRun(i.run_id);i.state=r?.execution_status==='FINISHED'?'FINISHED':'NOT_RUN';i.reason=r?.execution_status==='FINISHED'?(r.technical_error?.code||null):'SERVICE_INTERRUPTED_NO_REPLAY';if(r){i.result=r.status;i.complete_pass=r.complete_pass;}}await this.save(b);} }
@@ -42,27 +43,38 @@ export class BatchManager {
     return persist?this.save(result):result;
   }
   async start(id,project,request) { return this.serial(async()=>{
+    const m=this.buildManager;
+    const preparing=!this.active;
+    if(preparing){m.assertStorageWritable();if(this.starting||m.generationStarting||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');this.starting=true;m.batchStarting=true;}
+    try {
     const b=await this.get(id,project);
     if(b.request_id){if(b.request_id!==request.request_id||b.allow_partial!==request.allow_partial)throw Error('BATCH_REQUEST_CONFLICT');return b;}
     if((await this.list(project)).some(other=>other.batch_id!==id&&other.request_id===request.request_id))throw Error('BATCH_REQUEST_CONFLICT');
     if(b.state!=='PREVIEW'||!/^[-\w]{8,100}$/.test(request.request_id||''))throw Error('BATCH_REQUEST_INVALID');
     if(b.items.some(i=>i.state==='BLOCKED')&&request.allow_partial!==true)throw Error('BATCH_PARTIAL_CONFIRMATION_REQUIRED');
-    const m=this.buildManager;if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
+    if(this.active||m.generationOwner||m.generationStarting||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
     if(!b.items.some(i=>i.state==='QUEUED'))throw Error('BATCH_NO_RUNNABLE_CASES');
     // Revalidate the frozen selection before recording admission, as well as at execution.
     for(const item of b.items.filter(i=>i.state==='QUEUED')){
+      m.assertStorageWritable();
       const {environment}=await resolveTrialCandidate(m,{...item.selection,lane:'normal',diagnostic:b.mode==='diagnostic'});
       if(JSON.stringify(environment?.configurationIdentity||null)!==JSON.stringify(item.environment_identity))throw Error('BATCH_ENVIRONMENT_CONFIGURATION_CHANGED');
     }
     if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
-    b.request_id=request.request_id;b.allow_partial=request.allow_partial;b.state='QUEUED';b.started_at=now();await this.save(b);
-    m.batchOwner=id;m.batchToken=randomUUID();this.active={id,token:m.batchToken,cancelled:false,batch:b};this.completion=this.execute(b).finally(()=>{m.batchOwner=null;m.batchToken=null;this.active=null;});return b;
+    m.assertStorageWritable();
+    b.request_id=request.request_id;b.allow_partial=request.allow_partial;b.state='QUEUED';b.started_at=now();b.service_identity=m.store.serviceIdentity||null;await this.save(b);
+    m.assertStorageWritable();
+    m.batchOwner=id;m.batchToken=randomUUID();this.active={id,token:m.batchToken,cancelled:false,batch:b};this.completion=this.execute(b).finally(()=>{m.batchOwner=null;m.batchToken=null;this.active=null;});
+    void this.completion.catch(error=>m.reportStorageFault(error,'batch_background_completion'));
+    return b;
+    } finally {if(preparing){this.starting=false;m.batchStarting=false;}}
   }); }
   async execute(b) {
     try {
       b.state='RUNNING';await this.save(b);
       const blockedEnvironments=new Set();
       for(const item of b.items){
+        this.buildManager.assertStorageWritable();
         if(item.state!=='QUEUED')continue;
         if(this.active.cancelled){item.state='NOT_RUN';item.reason='BATCH_CANCELLED';continue;}
         if(blockedEnvironments.has(item.selection.environment_id)){item.state='BLOCKED';item.reason='SHARED_ENVIRONMENT_UNAVAILABLE';continue;}
@@ -76,11 +88,11 @@ export class BatchManager {
           await this.buildManager.completions.get(run.run_id);
           const done=await this.runStore.getRun(run.run_id);item.state=done.execution_status==='CANCELLED'?'CANCELLED':done.result?'FINISHED':'BLOCKED';item.result=done.status;item.complete_pass=done.complete_pass;item.reason=done.technical_error?.code||null;
           if(item.reason&&/ENVIRONMENT|SITE_|ECONN|AUTH_SESSION/.test(item.reason))blockedEnvironments.add(item.selection.environment_id);
-        }catch(e){item.state='BLOCKED';item.reason=e.message;if(/ENVIRONMENT|SITE_|AUTH_SESSION/.test(e.message))blockedEnvironments.add(item.selection.environment_id);}
+        }catch(e){if(this.buildManager.storageFault)throw e;item.state='BLOCKED';item.reason=e.message;if(/ENVIRONMENT|SITE_|AUTH_SESSION/.test(e.message))blockedEnvironments.add(item.selection.environment_id);}
         await this.save(b);
       }
       b.state=this.active.cancelled?'CANCELLED':'FINISHED';
-    }catch(e){b.state='INTERRUPTED';b.error=e.message;for(const i of b.items)if(['RUNNING','QUEUED'].includes(i.state)){i.state='NOT_RUN';i.reason='BATCH_ENGINEERING_INTERRUPTED';}}
+    }catch(e){b.state='INTERRUPTED';b.error=e.message;for(const i of b.items)if(['RUNNING','QUEUED'].includes(i.state)){i.state='NOT_RUN';i.reason='BATCH_ENGINEERING_INTERRUPTED';}if(this.buildManager.storageFault)throw e;}
     b.finished_at=now();await this.save(b);
   }
   async stop(id,project) {return this.serial(async()=>{const b=await this.get(id,project);if(terminal.has(b.state))return b;if(this.active?.id!==id)throw Error('BATCH_NOT_ACTIVE');this.active.cancelled=true;this.active.batch.state='STOPPING';this.active.batch.cancel_requested_at=now();await this.save(this.active.batch);if(this.buildManager.active?.runId)await this.buildManager.stopCandidateTrial(this.buildManager.active.runId);return this.get(id,project);});}

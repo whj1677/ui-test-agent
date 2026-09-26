@@ -1,0 +1,112 @@
+{
+  "checked_at": "2026-09-25T14:01:09.479Z",
+  "tasks": [
+    {
+      "task_id": "build-20260925135104-907921c7",
+      "case": "KC-10",
+      "mode": "recovery",
+      "status": "CANDIDATE_VALIDATION_FAILED",
+      "outcome": "business_difference",
+      "failure": {
+        "category": "BUSINESS_DIFFERENCE",
+        "reason": "business_difference"
+      },
+      "harness": 1,
+      "tools": 29,
+      "self_tests": [
+        {
+          "number": 1,
+          "status": "PASSED",
+          "bundle_sha256": "67B4A31A3735A496BDB14033545693A169FE0FEB52DE536EF861B0C6D1470827",
+          "recovery_original": true
+        },
+        {
+          "number": 2,
+          "status": "FAILED",
+          "bundle_sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0",
+          "recovery_original": false
+        }
+      ],
+      "independent_runs": [
+        {
+          "run_id": "build-20260925135104-907921c7-normal",
+          "status": "FAILED",
+          "steps": [
+            {
+              "step": "CASE_STEP_1",
+              "status": "FAILED"
+            },
+            {
+              "step": "CASE_STEP_2",
+              "status": "NOT_EXECUTED"
+            },
+            {
+              "step": "CASE_STEP_3",
+              "status": "NOT_EXECUTED"
+            }
+          ]
+        }
+      ],
+      "bundle_sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0",
+      "source_sha256": "035e0daeb5221c0b4b127c2769e8c6b356cead993f0645f9062a6da10fbb7db2",
+      "media_files_verified": 22,
+      "provider_usage": null,
+      "cost": null,
+      "approval": "NOT_APPROVED"
+    },
+    {
+      "task_id": "build-20260925135700-4097fd1b",
+      "case": "KC-05",
+      "mode": "new",
+      "status": "WAITING_HUMAN_REVIEW",
+      "outcome": "ready",
+      "failure": null,
+      "harness": 1,
+      "tools": 41,
+      "self_tests": [
+        {
+          "number": 1,
+          "status": "FAILED",
+          "bundle_sha256": "F3D08F0C711FDC6F69898255D8876E1E190D353BDDD4288AFB5287F6F4AE0C3F",
+          "recovery_original": false
+        },
+        {
+          "number": 2,
+          "status": "PASSED",
+          "bundle_sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D",
+          "recovery_original": false
+        }
+      ],
+      "independent_runs": [
+        {
+          "run_id": "build-20260925135700-4097fd1b-normal",
+          "status": "PASSED",
+          "steps": [
+            {
+              "step": "CASE_STEP_1",
+              "status": "PASSED"
+            },
+            {
+              "step": "CASE_STEP_2",
+              "status": "PASSED"
+            },
+            {
+              "step": "CASE_STEP_3",
+              "status": "PASSED"
+            }
+          ]
+        }
+      ],
+      "bundle_sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D",
+      "source_sha256": "538c77a45cd0569bde344db9df3789a25ed079b2c8170780ea962b10247e2989",
+      "media_files_verified": 26,
+      "provider_usage": null,
+      "cost": null,
+      "approval": "NOT_APPROVED"
+    }
+  ],
+  "harness_starts": 2,
+  "tool_calls": 70,
+  "supplier_tokens": null,
+  "supplier_cost": null
+}

@@ -1,0 +1,226 @@
+TAP version 13
+# Subtest: batch concurrent replay, frozen versions, software label and no model
+ok 1 - batch concurrent replay, frozen versions, software label and no model
+  ---
+  duration_ms: 152.0528
+  type: 'test'
+  ...
+# Subtest: whole project retains missing scripts and requires partial consent
+ok 2 - whole project retains missing scripts and requires partial consent
+  ---
+  duration_ms: 105.5623
+  type: 'test'
+  ...
+# Subtest: requirements rejection is separate from PASSED, explicit diagnostic only
+ok 3 - requirements rejection is separate from PASSED, explicit diagnostic only
+  ---
+  duration_ms: 105.6664
+  type: 'test'
+  ...
+# Subtest: cancel stops owned run and remaining queue; restart never replays
+ok 4 - cancel stops owned run and remaining queue; restart never replays
+  ---
+  duration_ms: 146.421
+  type: 'test'
+  ...
+# Subtest: changed helper rejects admission; restored bytes can retry same request
+ok 5 - changed helper rejects admission; restored bytes can retry same request
+  ---
+  duration_ms: 352.3097
+  type: 'test'
+  ...
+# Subtest: automatic preflight is read-only, invalid input and zero runnable cannot start
+ok 6 - automatic preflight is read-only, invalid input and zero runnable cannot start
+  ---
+  duration_ms: 171.5259
+  type: 'test'
+  ...
+# Subtest: changed authorization and environment are checked again before admission
+ok 7 - changed authorization and environment are checked again before admission
+  ---
+  duration_ms: 148.073
+  type: 'test'
+  ...
+# Subtest: whole-project explicit script choice resolves ambiguity and freezes that version
+ok 8 - whole-project explicit script choice resolves ambiguity and freezes that version
+  ---
+  duration_ms: 158.2098
+  type: 'test'
+  ...
+# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
+ok 9 - Harness stderr diagnostic keeps error context and redacts credentials
+  ---
+  duration_ms: 3.3642
+  type: 'test'
+  ...
+# Subtest: stored DSH credential is redacted even without a sk prefix
+ok 10 - stored DSH credential is redacted even without a sk prefix
+  ---
+  duration_ms: 16.9544
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 11 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 1.6388
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 12 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.2557
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 13 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.4199
+  type: 'test'
+  ...
+# Subtest: report snapshots freeze exact run, escape content, redact fields and embed verified media
+ok 14 - report snapshots freeze exact run, escape content, redact fields and embed verified media
+  ---
+  duration_ms: 32.2857
+  type: 'test'
+  ...
+# Subtest: report missing/tampered media remains missing and blocked batch items stay in denominator
+ok 15 - report missing/tampered media remains missing and blocked batch items stay in denominator
+  ---
+  duration_ms: 17.7148
+  type: 'test'
+  ...
+# Subtest: report cancellation prevents snapshot commit and pending conflicting request is rejected
+ok 16 - report cancellation prevents snapshot commit and pending conflicting request is rejected
+  ---
+  duration_ms: 24.9439
+  type: 'test'
+  ...
+# Subtest: generation preflight has real authorization boundary, separates revision input, no task on rejection
+ok 17 - generation preflight has real authorization boundary, separates revision input, no task on rejection
+  ---
+  duration_ms: 10.3814
+  type: 'test'
+  ...
+# Subtest: invalid revision seed cannot consume an existing authorization
+ok 18 - invalid revision seed cannot consume an existing authorization
+  ---
+  duration_ms: 9.2734
+  type: 'test'
+  ...
+# Subtest: generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+ok 19 - generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+  ---
+  duration_ms: 32.612
+  type: 'test'
+  ...
+# Subtest: revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+ok 20 - revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+  ---
+  duration_ms: 67.6516
+  type: 'test'
+  ...
+# Subtest: explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+ok 21 - explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+  ---
+  duration_ms: 38.2643
+  type: 'test'
+  ...
+# Subtest: user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+ok 22 - user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+  ---
+  duration_ms: 48.6148
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 23 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 14.8481
+  type: 'test'
+  ...
+# Subtest: string
+ok 24 - string
+  ---
+  duration_ms: 0.9551
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 25 - ansi
+  ---
+  duration_ms: 0.3343
+  type: 'test'
+  ...
+# Subtest: missing
+ok 26 - missing
+  ---
+  duration_ms: 0.3882
+  type: 'test'
+  ...
+# Subtest: strict
+ok 27 - strict
+  ---
+  duration_ms: 0.5685
+  type: 'test'
+  ...
+# Subtest: single side
+ok 28 - single side
+  ---
+  duration_ms: 0.2422
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 29 - timeout
+  ---
+  duration_ms: 0.6184
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 30 - truncated array
+  ---
+  duration_ms: 0.7645
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 31 - truncated diff
+  ---
+  duration_ms: 0.6944
+  type: 'test'
+  ...
+# Subtest: array
+ok 32 - array
+  ---
+  duration_ms: 0.6427
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 33 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.4653
+  type: 'test'
+  ...
+# Subtest: real KC-02 self-tests retain failure, continued steps and captured locator actual
+ok 34 - real KC-02 self-tests retain failure, continued steps and captured locator actual
+  ---
+  duration_ms: 12.4487
+  type: 'test'
+  ...
+# Subtest: only attributed evidence is displayed; zero and false are not missing
+ok 35 - only attributed evidence is displayed; zero and false are not missing
+  ---
+  duration_ms: 0.4681
+  type: 'test'
+  ...
+# Subtest: recorded replay steps remain authoritative and successful run has no failure notice
+ok 36 - recorded replay steps remain authoritative and successful run has no failure notice
+  ---
+  duration_ms: 0.1644
+  type: 'test'
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 36
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2400.9609

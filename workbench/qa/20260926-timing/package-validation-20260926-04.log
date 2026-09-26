@@ -1,0 +1,27 @@
+{
+  "positive": {
+    "status": "PACKAGE_BYTES_VERIFIED_NOT_PRODUCT_ACCEPTANCE",
+    "file_count": 101,
+    "content_sha256": "475d95e85c72ca0f8006956da282e9901b8ca9dfd11f600e838f6dfc801fa1ff",
+    "zip_sha256": "28ad0485003fba314e25bc7f8b63835675d732a430d9cf5509015b13a87962e2",
+    "archive": "D:\\01_AI����\\01_������Ŀ\\ui-test-agent\\workbench\\qa\\20260926-timing\\package-candidate-20260926-04.zip"
+  },
+  "source_file_count": 101,
+  "added": [],
+  "removed": [],
+  "modified": [
+    "workbench/docs/release-candidate.md",
+    "workbench/web-v2/app.js",
+    "workbench/web-v2/execution-media.js"
+  ],
+  "protected_source_file_count": 70,
+  "protected_source_changed": [],
+  "locks_unchanged": [
+    "package-lock.json",
+    "workbench/package-lock.json",
+    "harness-probe/package-lock.json"
+  ],
+  "packager_unchanged": true,
+  "source_byte_drift": [],
+  "extracted_for_static_checks": "D:\\01_AI����\\01_������Ŀ\\ui-test-agent\\workbench\\qa\\20260926-timing\\package-extract-20260926-04"
+}

@@ -1,0 +1,63 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: 发布收口 · Kimi合成登录库存台
+    - generic: 项目空间 · 3 条用例
+    - link "用例库":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/batches"
+    - link "报告":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "发布收口 · Kimi合成登录库存台":
+  - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+- generic: /
+- strong: 登录准备
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "被测系统与登录" [level=1]
+  - paragraph: 环境就是要测试的系统：它的地址、版本和登录条件。测试浏览器由执行器独立启动，你不需要手动新建浏览器。
+  - heading "脚本生成可选的被测系统" [level=2]
+  - article:
+    - heading "本机被测应用 · 自动准备" [level=3]
+    - paragraph: 运行时自动准备本机被测页面 · 准备就绪
+    - paragraph: 此测试页面由工作台在任务开始时自动准备、结束后释放；不用填写临时地址，也不用先打开登录浏览器。 每次独立启动测试浏览器（后台无窗口）
+    - generic "环境标识"
+    - text: kimi-complex-20260925
+  - article:
+    - heading "Kimi合成库存台 · 需inspector登录" [level=3]
+    - paragraph: http://127.0.0.1:4381/workspace · 已登记，需检查本项目登录
+    - paragraph: 运行前需确保目标系统可访问，并按其要求完成登录。 每次独立启动测试浏览器（后台无窗口）
+    - generic "环境标识"
+    - text: kimi-release-auth-20260925
+  - paragraph: 重新运行会复用所选脚本绑定的被测系统；生成新脚本时在确认框选择目标。被测软件版本在每次运行确认中填写。
+  - heading "需要登录的系统（按用例需要准备）" [level=2]
+  - generic: 被测环境
+  - combobox "被测环境":
+    - option "AUTH-01 独立合成登录样例"
+    - option "Kimi合成库存台（非真实业务）" [selected]
+  - generic: 账号角色
+  - combobox "账号角色":
+    - option "inspector" [selected]
+  - status: 状态：等待人工登录 · 角色：inspector · 账号：未确认 · 原因：LOGIN_REQUIRED
+  - button "打开专用登录浏览器"
+  - button "检查登录"
+  - button "清除会话"
+  - paragraph: 以下登录功能仅用于已绑定登录环境的用例。请在专用窗口自行输入账号和密码；验证码、扫码或多因素认证也由你完成。登录阶段不启动模型观察、不采集业务录像、截图或 Trace。选择与用例绑定的环境及角色，显示“有效”后，启动建例与候选复跑会复核并绑定当前会话版本；会话失效或被清除时关联运行立即停止，需要重新登录后再复跑。
+- status

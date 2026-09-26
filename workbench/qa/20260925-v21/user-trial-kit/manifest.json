@@ -1,0 +1,51 @@
+{
+  "version": 9,
+  "source": "formal 4322; original sources preserved",
+  "files": [
+    {
+      "file": "12条原用例-导入练习.xlsx",
+      "bytes": 8733,
+      "sha256": "509909283636679b4ead5917ee319e5d6f759781c42d1f5fac5b439eaee965ef"
+    },
+    {
+      "file": "KC-02-后续步骤画面.png",
+      "bytes": 160479,
+      "sha256": "51c3b6bd716740613a678297360378fc97a8c61460876c6aba0bd9a391a0ac46"
+    },
+    {
+      "file": "KC-02-失败画面.png",
+      "bytes": 252998,
+      "sha256": "7818e0e201b0d11d239d63f35b021960f573e919e101c7dc28386b9c4070d03a"
+    },
+    {
+      "file": "KC-02-新采集链路工程复验.webm",
+      "bytes": 789475,
+      "sha256": "45b527c1730df54a2559cd5ab0c1aaea2a9726650795cf5268d760e2ced0ee6f"
+    },
+    {
+      "file": "KC-02-本轮正式字幕画面.png",
+      "bytes": 160816,
+      "sha256": "6052bb47ec1c13848e27e41153a15004e85e4674f7046d2f0f6792868b38218a"
+    },
+    {
+      "file": "KC-11-本次批次报告.html",
+      "bytes": 5412344,
+      "sha256": "94418c333c61d252c329edb2d3d0f50c0386f719a4e7bb0d0e4a959f501ad272"
+    },
+    {
+      "file": "开始使用.md",
+      "bytes": 7602,
+      "sha256": "7b5e3dec116030c29ecff6a7aed6af23f6ec92a527916e6bb1d0161656e45729"
+    },
+    {
+      "file": "当前12条用例包.json",
+      "bytes": 24092,
+      "sha256": "5eab150080aab214d4f020b342b0d48d7c5ba44ad925cbc9a6b5bf46c44d5ad3"
+    },
+    {
+      "file": "本轮复测报告-KC02与KC11.html",
+      "bytes": 12871113,
+      "sha256": "3a0761f85b5a5bc0960efbd33bd980abfc718898d980cba29a751c5d8e7e5dec"
+    }
+  ]
+}

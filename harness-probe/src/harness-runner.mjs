@@ -32,10 +32,12 @@ function parseEvent(line, events) {
   return null;
 }
 
-function eventMetadata(event) {
+export function eventMetadata(event) {
   const metadata = { type: 'harness_event', at: new Date().toISOString(), event_type: event?.type || 'unknown' };
   if (typeof event?.phase === 'string') metadata.phase = event.phase;
   if (typeof event?.tool === 'string') metadata.tool = event.tool;
+  if (typeof event?.callId === 'string' && /^[a-zA-Z0-9_-]{1,128}$/.test(event.callId)) metadata.call_id = event.callId;
+  if (event?.type === 'tool_result' && ['completed', 'error'].includes(event.status)) metadata.tool_status = event.status;
   if (typeof event?.reason?.kind === 'string') metadata.reason = event.reason.kind;
   if (Number.isInteger(event?.bytes)) metadata.bytes = event.bytes;
   return metadata;
@@ -127,7 +129,7 @@ export async function runHarnessTask({ task, workspace, dshHome, patchPath, cand
   const execution = await runHarnessEventProcess({ command: process.execPath, args: [
     DSH_BIN,
     '--profile', 'headless',
-    '--patch', browserAttachEndpoint ? path.join(ROOT, 'config', 'browser-auth-attach.cordis.yml') : patchPath,
+    '--patch', browserAttachEndpoint && !developmentEndpoint ? path.join(ROOT, 'config', 'browser-auth-attach.cordis.yml') : patchPath,
     '--json',
     task,
   ],

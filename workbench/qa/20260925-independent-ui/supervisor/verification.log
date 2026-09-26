@@ -1,0 +1,10 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-25T22:42:15+08:00
+Command: node workbench/qa/20260925-independent-ui/verify-round2.mjs batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9 batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411 batch-036f6471-e080-41be-a066-be03a8a7c5a2 report-52201e00c26f334a826ef5129d7f7e2214657f2c build-20260925142505-0fc7ce0d
+Exit code: 0
+Parsed test count: unavailable
+Parsed failure count: 0
+Parsed skipped count: unavailable
+
+--- command output ---
+[{"kind":"batch","id":"batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9","state":"FINISHED","runs":[{"case":"KC-02","status":"FAILED","media":10},{"case":"KC-08","status":"PASSED","media":10}]},{"kind":"batch","id":"batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411","state":"FINISHED","runs":[{"case":"KC-08","status":"PASSED","media":10}]},{"kind":"batch","id":"batch-036f6471-e080-41be-a066-be03a8a7c5a2","state":"CANCELLED","runs":[{"case":"KC-02","status":"NOT_RUN","media":2}]},{"kind":"report","id":"report-52201e00c26f334a826ef5129d7f7e2214657f2c"},{"kind":"build","id":"build-20260925142505-0fc7ce0d","state":"WAITING_HUMAN_REVIEW","tools":52,"independent":[{"status":"PASSED","complete_pass":true}]}]

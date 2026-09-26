@@ -1,0 +1,153 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: 发布收口 · Kimi合成登录库存台
+    - generic: 项目空间 · 3 条用例
+    - link "用例库":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/batches"
+    - link "报告":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "发布收口 · Kimi合成登录库存台":
+  - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+- generic: /
+- strong: CASE-02
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases"
+  - heading "CASE-02 · 登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉" [level=1]
+  - paragraph: Kimi合成库存台 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择" [selected]
+    - option "S3 · 2026-09-26T02:17:03."
+    - option "S2 · 2026-09-26T01:35:56."
+  - generic: 脚本资格：候选未批准
+  - text: 存在多个脚本，请明确选择版本 ·
+  - link "选择适用脚本":
+    - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&tab=scripts"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&batch_id=batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d&run_id=trial-92afa4a702a28a4270257bfa268aa4a11050e758&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&batch_id=batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d&run_id=trial-92afa4a702a28a4270257bfa268aa4a11050e758&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&batch_id=batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d&run_id=trial-92afa4a702a28a4270257bfa268aa4a11050e758&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/cases/case-9aa84871-f484-4062-8601-02502bda01dd?version=1&batch_id=batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d&run_id=trial-92afa4a702a28a4270257bfa268aa4a11050e758&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）"
+    - option "2026-09-26T02:21:57.827Z · Kimi-fixture-frozen-20260925; timing-runner-b8d31fc-20260926 · 执行结束" [selected]
+    - option "2026-09-26T01:40:57.678Z · Kimi-fixture-frozen-20260925; auth-guard-20260926 · 执行结束"
+  - paragraph:
+    - link "返回本批次":
+      - /url: "#/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8/batches?batch_id=batch-c54e8c72-1bd1-4965-b702-d6e6295f4d5d"
+    - text: · 执行结束 · 软件 Kimi-fixture-frozen-20260925; timing-runner-b8d31fc-20260926
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本批最近结果"
+    - option "2026-09-26T02:21:57.866Z · 批次技术试跑 · 通过" [selected]
+  - paragraph: 执行状态：执行结束 · 软件版本：Kimi-fixture-frozen-20260925; timing-runner-b8d31fc-20260926 · 脚本 S3 · 资格：未批准
+  - article:
+    - heading "CASE-02 · 运行结果" [level=3]
+    - paragraph: 来源 CASE-02 · 脚本 S3
+    - generic: 通过
+    - paragraph: 执行用例 v1 · 运行器 candidate-bundle-trial-v1
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - strong: 要求核查：待核对
+    - paragraph: 尚无绑定此用例版本和文件包的维护者核查；运行通过不代表要求完整。
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-13
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 在“名称筛选”输入框中输入“温控”，点击“查询”按钮"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。
+      - term: 实际
+      - definition: 未单独采集实际值 “正在加载设备列表…”：实测 515.2 ms；原要求 400–600 ms；时间要求满足
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-3
+      - button "2. 观察筛选结果第 1 页的行内容与顺序"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-5
+      - button "3. 点击“下一页”翻到第 2 页"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-7
+      - button "4. 点击 INV-104 所在行的“查看详情”按钮"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。
+      - term: 实际
+      - definition: 未单独采集实际值 “正在加载设备详情…”：实测 511.5 ms；原要求 400–600 ms；时间要求满足
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-9
+      - button "5. 点击抽屉内的“关闭详情”按钮"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-92afa4a702a28a4270257bfa268aa4a11050e758/media/media-11
+  - img "本次运行截图"
+- status

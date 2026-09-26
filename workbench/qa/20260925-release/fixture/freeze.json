@@ -1,0 +1,9 @@
+{
+  "scope": "Kimi synthetic fixture, not real business",
+  "files": {
+    "SPEC.md": "c8d05115aff257c7d699d79994a38d6990a2e8df60f9de06d0cf6387424cdaf6",
+    "server.mjs": "cdd74eb3e866de05fedb56abaae52c63d40f24b8943302449a40aff25154fd06",
+    "index.html": "3548a06474e57962a042dd2825f736a150caf5771b6b546a0052b66515d0d623",
+    "cases.json": "5eb39788803ad993282bdc3f021d585e1418a157014f5f73c079ba136980ce83"
+  }
+}

@@ -1,4 +1,5 @@
 import { parse } from 'acorn';
+import { checkCandidateTiming } from './timing-obligations.mjs';
 
 // Deliberately finite: named-button disabled predicates and explicit label+scalar
 // clauses. This is not a natural-language oracle or a proof of arbitrary JS.
@@ -14,6 +15,33 @@ export function extractObligations(frozenCase) {
     }
   }
   return obligations;
+}
+
+// A narrow, explainable warning for changed list state before the first case step.
+// It does not infer whether navigation to a required target is legitimate.
+export function inspectPreStepStateChanges(code, frozenCase) {
+  const ast = parse(code, { ecmaVersion: 'latest', sourceType: 'module', locations: true });
+  const nodes = [];
+  function visit(node) {
+    if (!node || typeof node !== 'object') return;
+    if (node.type === 'CallExpression') nodes.push(node);
+    for (const [key, child] of Object.entries(node)) if (key !== 'loc') {
+      if (Array.isArray(child)) child.forEach(visit);
+      else if (child && typeof child === 'object') visit(child);
+    }
+  }
+  visit(ast);
+  const testBodyStart = nodes.find(node => node.callee?.name === 'test' && node.arguments.at(-1)?.body?.type === 'BlockStatement')?.arguments.at(-1).body.start ?? 0;
+  const firstStep = nodes.filter(node => node.callee?.type === 'MemberExpression' && node.callee.object?.name === 'test' && node.callee.property?.name === 'step' && /^CASE_STEP_\d+/.test(node.arguments[0]?.value || '')).sort((a, b) => a.start - b.start)[0];
+  if (!firstStep) return [];
+  const first = frozenCase.steps[0] || {};
+  const stated = `${frozenCase.preconditions || ''} ${first.action || ''}`;
+  const defaultBound = /第[一1]页|初始|默认|重置后|排序/.test(`${frozenCase.title || ''} ${first.action || ''} ${first.expected || ''}`);
+  return nodes.filter(node => node.start >= testBodyStart && node.start < firstStep.end && node.callee?.type === 'MemberExpression' && ['check', 'uncheck', 'selectOption'].includes(node.callee.property?.name)
+      && /status|状态|空闲|使用中|维护|idle|busy|maint|filter/i.test(code.slice(node.callee.object.start, node.callee.object.end)))
+    .map(node => ({ line: node.loc.start.line, source: code.slice(node.start, node.end),
+      status: defaultBound && !/状态|筛选|勾选|过滤/.test(stated) ? 'BLOCKING_UNREQUESTED_PRE_STEP_STATE_CHANGE' : 'NEEDS_INDEPENDENT_REVIEW',
+      explanation: 'A list-state selection occurs in setup or the first step. Compare it with the frozen action and precondition before treating the measured set as unchanged.' }));
 }
 
 export function checkFidelity(code, frozenCase) {
@@ -117,8 +145,11 @@ export function checkFidelity(code, frozenCase) {
     return { ...obligation, status: results.every(p => p.satisfied) ? 'SUPPORTED' : results.some(p => p.unknown_syntax) ? 'NEEDS_REVIEW' : 'INSUFFICIENT', paths: results,
       explanation: obligation.kind === 'disabled' ? 'Each possible helper/branch path must assert the named target predicate. Hidden is permitted only by an explicit OR; toBeDisabled also requires a resolved element.' : 'Locate the field through its label/relationship independently of the expected value, then compare its text with the frozen value.' };
   });
-  return { version: 'finite-obligations-v1', semantic_pass: false, human_review_required: true,
+  const preStepStateChanges = inspectPreStepStateChanges(code, frozenCase);
+  const timing = checkCandidateTiming(code, frozenCase);
+  return { version: 'finite-obligations-v1', semantic_pass: false, human_review_required: true, pre_step_state_changes: preStepStateChanges,
+    timing_requirements: timing.obligations, timing_violations: timing.violations,
     scope: 'Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.',
-    status: obligations.some(o => o.status !== 'SUPPORTED') ? 'NEEDS_REVIEW' : obligations.length ? 'LIMITED_CHECKS_SATISFIED' : 'NO_SUPPORTED_OBLIGATIONS', obligations,
+    status: timing.obligations.length || obligations.some(o => o.status !== 'SUPPORTED') || preStepStateChanges.length ? 'NEEDS_REVIEW' : obligations.length ? 'LIMITED_CHECKS_SATISFIED' : 'NO_SUPPORTED_OBLIGATIONS', obligations,
     remaining_requirements: frozenCase.steps.map(s => ({ step: s.order, requirement: s.expected, review: 'Non-extracted clauses require human review; these checks do not approve a candidate.' })) };
 }

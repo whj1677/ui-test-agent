@@ -1,0 +1,54 @@
+TAP version 13
+# Subtest: entry write rejects candidate clock; a helper clock cannot bypass self-test or submission
+ok 1 - entry write rejects candidate clock; a helper clock cannot bypass self-test or submission
+  ---
+  duration_ms: 36.8709
+  type: 'test'
+  ...
+# Subtest: passing Playwright report without timing evidence cannot make a candidate ready
+ok 2 - passing Playwright report without timing evidence cannot make a candidate ready
+  ---
+  duration_ms: 22.8806
+  type: 'test'
+  ...
+# Subtest: timing validator rejects wrong identity, step, duplicates, bounds and cycle count
+not ok 3 - timing validator rejects wrong identity, step, duplicates, bounds and cycle count
+  ---
+  duration_ms: 1.514
+  type: 'test'
+  location: 'D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\tests\\timing-gates.test.mjs:110:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///D:/01_AI%E5%B7%A5%E7%A8%8B/01_%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE/ui-test-agent/workbench/tests/timing-gates.test.mjs:124:39)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: complete boundary evidence permits ready submission but never semantic approval
+ok 4 - complete boundary evidence permits ready submission but never semantic approval
+  ---
+  duration_ms: 26.291
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 483.6743

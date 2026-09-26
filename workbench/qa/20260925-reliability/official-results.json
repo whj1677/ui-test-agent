@@ -1,0 +1,344 @@
+{
+  "checked_at": "2026-09-25T13:54:02.940Z",
+  "entry": "http://127.0.0.1:4322/workspace/",
+  "batch_id": "batch-5afb5a5f-f217-4e34-9d03-4e6c9e45f1b6",
+  "failed_attempt": {
+    "batch_id": "batch-c3a1dd39-a4b7-4cee-94af-f871152db6e3",
+    "state": "INTERRUPTED",
+    "items": [
+      {
+        "case": "KC-02",
+        "state": "NOT_RUN",
+        "reason": "SERVICE_INTERRUPTED_NO_REPLAY"
+      },
+      {
+        "case": "KC-08",
+        "state": "NOT_RUN",
+        "reason": "SERVICE_INTERRUPTED_NO_REPLAY"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "case": "KC-02",
+      "status": "FAILED",
+      "evidence_status": "COMPLETE",
+      "error": {
+        "type": "LOCATOR_OR_TARGET",
+        "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+        "expected": null,
+        "actual": "共 5 条，第 1/2 页，每页3条",
+        "attribution": "PENDING_ANALYSIS"
+      },
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-be29751c-8c7f-4938-a714-91cde16f4a1f",
+        "captured_at": "2026-09-25T13:47:48.622Z",
+        "source_sha256": "035e0daeb5221c0b4b127c2769e8c6b356cead993f0645f9062a6da10fbb7db2",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": true,
+            "execution_status": "FAILED",
+            "attributed_errors": [
+              {
+                "step_id": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+                  "expected": null,
+                  "actual": "共 5 条，第 1/2 页，每页3条",
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1\\bundle\\candidate.spec.mjs",
+                    "line": 93,
+                    "column": 32
+                  },
+                  "snippet": "  91 |     // 输入小写 eq-10：立即筛选（无需提交），匹配 EQ-101 至 EQ-108 全部 8 条，回到第 1 页\n  92 |     await searchBox.fill(\"eq-10\");\n> 93 |     await expect.soft(summary).toHaveText(/共 8 条，第 1\\/\\d+ 页/);\n     |                                ^\n  94 |     const rows = await collectRowsAcrossAllPages(page);\n  95 |     step1Ids = rows.map((row) => row.id);\n  96 |     expect.soft(step1Ids.length).toBe(8);"
+                }
+              }
+            ]
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "case": "KC-08",
+      "status": "PASSED",
+      "evidence_status": "COMPLETE",
+      "error": null,
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-be29751c-8c7f-4938-a714-91cde16f4a1f",
+        "captured_at": "2026-09-25T13:47:48.622Z",
+        "source_sha256": "035e0daeb5221c0b4b127c2769e8c6b356cead993f0645f9062a6da10fbb7db2",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "step_coverage": {
+        "rule_version": "project-case-step-title-v2",
+        "complete": true,
+        "order_valid": true,
+        "expected_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "observed_sequence": [
+          "CASE_STEP_1",
+          "CASE_STEP_2",
+          "CASE_STEP_3"
+        ],
+        "duplicates": [],
+        "missing": [],
+        "unexpected": [],
+        "malformed_titles": [],
+        "unattributed_errors": [],
+        "items": [
+          {
+            "marker": "CASE_STEP_1",
+            "step_id": "CASE_STEP_1",
+            "order": 1,
+            "observed": true,
+            "raw_title": "CASE_STEP_1",
+            "report_path": [
+              0
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_2",
+            "step_id": "CASE_STEP_2",
+            "order": 2,
+            "observed": true,
+            "raw_title": "CASE_STEP_2",
+            "report_path": [
+              1
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          },
+          {
+            "marker": "CASE_STEP_3",
+            "step_id": "CASE_STEP_3",
+            "order": 3,
+            "observed": true,
+            "raw_title": "CASE_STEP_3",
+            "report_path": [
+              2
+            ],
+            "error_attributed": false,
+            "execution_status": "PASSED",
+            "attributed_errors": []
+          }
+        ]
+      }
+    }
+  ],
+  "media": [
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-1",
+      "bytes": 52772,
+      "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-2",
+      "bytes": 2235873,
+      "sha256": "1C3B7F82605AE6F5E28136829E1CD1EDBE7BF48DD1D037B300D6E01719AB3642"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-3",
+      "bytes": 492466,
+      "sha256": "35CA91F59CBB36E3DCCF3492007A0F3EC917501DE7F9954AFCE0A7AE4D3CACAA"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-4",
+      "bytes": 54306,
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-5",
+      "bytes": 52942,
+      "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-6",
+      "bytes": 46152,
+      "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-7",
+      "bytes": 52942,
+      "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-8",
+      "bytes": 52772,
+      "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-9",
+      "bytes": 46152,
+      "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097"
+    },
+    {
+      "run_id": "trial-2872ae40810b8a3ea8d87d0e2cf176bcd21dd2b1",
+      "file_id": "media-10",
+      "bytes": 817578,
+      "sha256": "49D5B22A4FC667C560BAB715E4FE688B8AE1B1C8ABF8B0A446BB3AEE2E23CE46"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-1",
+      "bytes": 50513,
+      "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-2",
+      "bytes": 1232397,
+      "sha256": "AE618AE29DE9FB4017C5A09D7003C9248EA0E3A424E2A91C86E87B09C67F6488"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-3",
+      "bytes": 93786,
+      "sha256": "A214E65E40021FD08B0BCD3972102C6FA43341274BA4446FB08B54CAA32A7C34"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-4",
+      "bytes": 54335,
+      "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-5",
+      "bytes": 54306,
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-6",
+      "bytes": 50558,
+      "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-7",
+      "bytes": 54335,
+      "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-8",
+      "bytes": 50513,
+      "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-9",
+      "bytes": 50558,
+      "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+    },
+    {
+      "run_id": "trial-a5f375db6576a0cce55ee5548130baf576293736",
+      "file_id": "media-10",
+      "bytes": 761694,
+      "sha256": "358F6BE3D00163E6CE4CDD950AEBEE9387B80A993C1EBD9BD6C84FB12A9E68E2"
+    }
+  ],
+  "report": {
+    "report_id": "report-ad0c0d10308ea57c6d0bc4d6e116e2ceb8d940fb",
+    "counts": {
+      "requested": 2,
+      "executed": 2,
+      "passed": 1,
+      "failed": 1,
+      "not_run": 0
+    },
+    "embedded_media": 20,
+    "html_bytes": 12340774
+  },
+  "terminal_stop": "IDEMPOTENT",
+  "model_calls": 0
+}

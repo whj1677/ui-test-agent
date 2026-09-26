@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-09-26T02:29:15.566983+00:00",
+  "scope": "history and package integrity; not business acceptance",
+  "old_json_count": 680,
+  "changed_old_json": [
+    "build-tasks/development-authorizations.json"
+  ],
+  "missing_old_json": [],
+  "new_authorization_entries": 1,
+  "new_task_ids": [
+    "build-20260926021703-79029f54"
+  ],
+  "old_ledger_matches_baseline": true,
+  "changed_frozen_fixture": [],
+  "package_source_count": 101,
+  "package_byte_drift": [],
+  "package_source_drift": [],
+  "zip_sha256": "28ad0485003fba314e25bc7f8b63835675d732a430d9cf5509015b13a87962e2"
+}

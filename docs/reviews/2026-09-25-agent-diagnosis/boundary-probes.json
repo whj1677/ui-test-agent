@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-09-25T13:01:30.676Z",
+  "scope": "Production function probes with in-memory/store/executor doubles; no business or end-to-end execution",
+  "recovery": {
+    "wrapper_rejection": "EXECUTE_ORIGINAL_RECOVERY_DRAFT_FIRST",
+    "native_edit_admitted": true,
+    "seed_sha256": "0258CCF62B4FB76D7D23E2AECCEF6C2046FBBE0F89F4F3DF60E65ECD330D78D3",
+    "modified_sha256": "E3DE570DA02E54D41BA2BDD3AF8FF7E20C0ED447DFF54AB797736AD31D3A39AE",
+    "first_self_test_snapshot_sha256": "E3DE570DA02E54D41BA2BDD3AF8FF7E20C0ED447DFF54AB797736AD31D3A39AE",
+    "observed_original": false,
+    "observed_modified": true,
+    "self_test_status": "EXECUTOR_ERROR"
+  },
+  "terminal_stop": {
+    "before": {
+      "run_id": "diagnostic-only",
+      "execution_status": "FINISHED",
+      "complete_pass": true
+    },
+    "after": {
+      "run_id": "diagnostic-only",
+      "execution_status": "STOPPING",
+      "complete_pass": true
+    },
+    "controller_aborted": true,
+    "active_after_settle": null,
+    "limit": "Injected finalization window, not a real concurrent browser run"
+  }
+}

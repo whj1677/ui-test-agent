@@ -1,0 +1,173 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-08
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-08 · 跨页选择保留" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本" [active]
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S1 · 2026-09-25T11:14:56." [selected]
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-9e0be1ee280daf1516938327f1f23dfdca29040a&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-9e0be1ee280daf1516938327f1f23dfdca29040a&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-9e0be1ee280daf1516938327f1f23dfdca29040a&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?version=1&batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9&run_id=trial-9e0be1ee280daf1516938327f1f23dfdca29040a&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）"
+    - option "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925 · 执行结束" [selected]
+    - option "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry · 执行结束"
+    - option "2026-09-25T13:44:02.079Z · reliability-20260925-4322 · 服务中断"
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 执行结束"
+  - paragraph:
+    - link "返回本批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9"
+    - text: · 执行结束 · 软件 independent-ui-round2-mixed-20260925
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本批最近结果"
+    - option "2026-09-25T14:22:57.789Z · 批次技术试跑 · 通过" [selected]
+  - paragraph: 执行状态：执行结束 · 软件版本：independent-ui-round2-mixed-20260925 · 脚本 S1 · 资格：未批准
+  - article:
+    - heading "KC-08 · 运行结果" [level=3]
+    - paragraph: 来源 KC-08 · 脚本 S1
+    - generic: 通过
+    - paragraph: 执行用例 v1 · 运行器 candidate-bundle-trial-v1
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - strong: 要求核查：本次核查完整（未批准）
+    - paragraph: 逐行核查101首选、翻页106新增后计数2、往返两页两行保持勾选，且103/108未误选；真实操作与计数/行复选框绑定，无额外状态条件，无修改原预期。自测及最终独立验证通过，最终文件与受审草稿同哈希；本轮结果仍由新批次决定。
+    - generic "核查来源（不等于正式批准）"
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/runs/trial-9e0be1ee280daf1516938327f1f23dfdca29040a/media/media-10
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/runs/trial-9e0be1ee280daf1516938327f1f23dfdca29040a/media/media-2
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 第1页勾选EQ-101"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 已选1项，批量预约可用
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-9e0be1ee280daf1516938327f1f23dfdca29040a/media/media-4
+      - button "2. 翻到第2页勾选EQ-106"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 翻页后EQ-101选择保留，已选2项
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-9e0be1ee280daf1516938327f1f23dfdca29040a/media/media-6
+      - button "3. 返回第1页和第2页核对"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: EQ-101与EQ-106均保持勾选，已选2项
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/runs/trial-9e0be1ee280daf1516938327f1f23dfdca29040a/media/media-8
+  - img "本次运行截图"
+- status
+- dialog "重新生成自动化脚本":
+  - banner:
+    - heading "重新生成自动化脚本" [level=2]
+    - button "关闭": ×
+  - paragraph: 此操作调用 Coding Agent，与“重新运行已有脚本”不同。
+  - generic: 项目：V2.1 真实模型全流程 · 20260925 · 已选 1 条，跨页选择按完整清单处理。不会修改原动作与预期。
+  - table:
+    - rowgroup:
+      - row "用例 内容版本 旧脚本（始终保留）":
+        - columnheader "用例"
+        - columnheader "内容版本"
+        - columnheader "旧脚本（始终保留）"
+    - rowgroup:
+      - row "KC-08 v1 S1":
+        - cell "KC-08"
+        - cell "v1"
+        - cell "S1"
+  - paragraph:
+    - strong: 从当前确认用例与环境重新观察、编写、自测和修复；不把旧候选作为起稿输入。
+  - text: 被测环境
+  - combobox "被测环境":
+    - option "请选择环境"
+    - option "本机被测应用 · 自动准备" [selected]
+  - paragraph: 环境指被测系统的地址、版本和登录条件。每次执行都会独立启动后台测试浏览器，不复用你正在操作的浏览器。
+  - paragraph: 本机被测应用 · 自动准备：运行时自动准备本机被测页面；每次独立启动测试浏览器（后台无窗口）。
+  - status:
+    - paragraph: 请求 1 条 · 可开始 1 · 待处理 0
+    - list:
+      - text: KC-08 v1：准备就绪
+      - text: 每条资源上限：20 分钟 / 开发会话 1 次 / 自测 3 次 / 工具 120 次
+  - checkbox "确认本次调用模型，按上方范围及每条资源上限串行执行；失败也可能消耗模型费用。"
+  - text: 确认本次调用模型，按上方范围及每条资源上限串行执行；失败也可能消耗模型费用。
+  - paragraph: 生成失败、取消或超时均保留旧脚本、历史结果与媒体；新候选不自动批准、不替换正在执行的批次。
+  - alert
+  - contentinfo:
+    - button "取消"
+    - button "检查准备条件"
+    - button "确认重新生成" [disabled]

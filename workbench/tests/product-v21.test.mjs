@@ -9,6 +9,17 @@ import { ScriptOperations } from '../server/script-operations.mjs';
 import { claimDevelopmentAuthorization } from '../server/build/development-authorization.mjs';
 import { developmentBundle } from '../server/build/development-bundle.mjs';
 
+const buildManagerContract = {
+  otherActive: () => false,
+  assertStorageWritable() {
+    if (this.shutdownRequested) throw Error('WORKBENCH_SHUTTING_DOWN');
+    if (this.storageFault) throw Error('BUILD_STORAGE_UNAVAILABLE');
+  },
+  reportStorageFault(error, operation) {
+    this.storageFault ||= { code: error.code || 'BUILD_STORAGE_FAILURE', operation };
+  },
+};
+
 async function fixture(t){
   const root=await fs.mkdtemp(path.join(os.tmpdir(),'workbench-v21-unit-'));
   t.after(()=>fs.rm(root,{recursive:true,force:true}));
@@ -49,7 +60,7 @@ test('report cancellation prevents snapshot commit and pending conflicting reque
 test('generation preflight has real authorization boundary, separates revision input, no task on rejection',async t=>{
   const f=await fixture(t);let starts=0;
   const source={project_id:f.project.project_id,case_id:'case-unit',case_version:1,source_task_id:'source',candidate_version:2,bundle_sha256:'B'.repeat(64)};
-  const m={store:{root:f.root},generationDisabled:true,developmentEnvironments:[],caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection:source}]}),submitDevelopment:()=>{starts++;throw Error('MODEL_MUST_NOT_START');}};
+  const m={...buildManagerContract,store:{root:f.root},generationDisabled:true,developmentEnvironments:[],caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection:source}]}),submitDevelopment:()=>{starts++;throw Error('MODEL_MUST_NOT_START');}};
   const operations=new ScriptOperations({root:path.join(f.root,'operations'),caseStore:f.caseStore,records:f.records,buildManager:m});
   const request={mode:'regenerate',environment_id:'not-ready',items:[{case_id:'case-unit',case_version:1}]};
   const preview=await operations.preflight(f.project.project_id,request);assert.equal(preview.items[0].reason,'GENERATION_NOT_AUTHORIZED');
@@ -70,7 +81,7 @@ test('invalid revision seed cannot consume an existing authorization',async t=>{
 test('generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)',async t=>{
   const f=await fixture(t);let starts=0;const calls=[];
   await fs.writeFile(path.join(f.root,'development-authorizations.json'),JSON.stringify({entries:[{logical_id:'unit-new',project_id:f.project.project_id,case_id:'case-unit',case_version:1,content_sha256:'A'.repeat(64),environment_id:'unit-env',mode:'new',limits:{wall_ms:100,self_tests:1,tool_calls:1},task_id:null}]}));
-  const manager={store:{root:f.root,getTask:async()=>({task_status:'FAILED',error:{code:'UNIT_NO_MODEL_EXECUTED'}})},generationDisabled:false,developmentEnvironments:[{id:'unit-env'}],caseAutomation:async()=>({candidates:[]}),otherActive:()=>false,completions:new Map(),
+  const manager={...buildManagerContract,store:{root:f.root,getTask:async()=>({task_status:'FAILED',error:{code:'UNIT_NO_MODEL_EXECUTED'}})},generationDisabled:false,developmentEnvironments:[{id:'unit-env'}],caseAutomation:async()=>({candidates:[]}),otherActive:()=>false,completions:new Map(),
     submitDevelopment:async request=>{calls.push(request);starts++;manager.completions.set('unit-task',Promise.resolve());return{task_id:'unit-task'};}};
   const operations=new ScriptOperations({root:path.join(f.root,'ops'),buildManager:manager,caseStore:f.caseStore,records:f.records});
   const input={mode:'regenerate',environment_id:'unit-env',items:[{case_id:'case-unit',case_version:1}],request_id:'unit-generation-idempotency'};
@@ -86,7 +97,7 @@ test('revision passes verified complete bundle and selected feedback; cancellati
   const selection={project_id:f.project.project_id,case_id:'case-unit',case_version:1,source_task_id:'source',candidate_version:2,bundle_sha256:manifest.sha256};
   await fs.writeFile(path.join(f.root,'development-authorizations.json'),JSON.stringify({entries:[{logical_id:'unit-revise',project_id:f.project.project_id,case_id:'case-unit',case_version:1,content_sha256:'A'.repeat(64),environment_id:'unit-env',mode:'recovery',task_id:null}]}));
   let release,submitted;const wait=new Promise(r=>release=r);
-  const m={store:{root:f.root,taskDirectory:()=>path.join(f.root,'source'),getTask:async id=>id==='source'?{task_id:id,candidates:[{version:2,bundle:manifest}]}:{task_status:'CANCELLED'}},generationDisabled:false,developmentEnvironments:[{id:'unit-env'}],caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection}]}),otherActive:()=>false,completions:new Map(),stop:async()=>release(),submitDevelopment:async request=>{submitted=request;m.active={taskId:'unit-task'};m.completions.set('unit-task',wait);return {task_id:'unit-task'};}};
+  const m={...buildManagerContract,store:{root:f.root,taskDirectory:()=>path.join(f.root,'source'),getTask:async id=>id==='source'?{task_id:id,candidates:[{version:2,bundle:manifest}]}:{task_status:'CANCELLED'}},generationDisabled:false,developmentEnvironments:[{id:'unit-env'}],caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection}]}),otherActive:()=>false,completions:new Map(),stop:async()=>release(),submitDevelopment:async request=>{submitted=request;m.active={taskId:'unit-task'};m.completions.set('unit-task',wait);return {task_id:'unit-task'};}};
   const op=new ScriptOperations({root:path.join(f.root,'ops'),caseStore:f.caseStore,records:f.records,buildManager:m});
   const v=await op.start(f.project.project_id,{mode:'revise',environment_id:'unit-env',request_id:'unit-revision-request',items:[{...selection,feedback:'保留原动作与预期，仅修复定位'}]});
   for(let i=0;i<100&&!submitted;i++)await new Promise(r=>setTimeout(r,5));
@@ -102,7 +113,7 @@ test('explicit user generation confirms bounded new receipt without resetting co
   const f=await fixture(t);let starts=0,acquires=0;
   const used={logical_id:'old-consumed',task_id:'old-task',project_id:f.project.project_id,case_id:'case-unit'};
   const ledger=path.join(f.root,'development-authorizations.json');await fs.writeFile(ledger,JSON.stringify({entries:[used]}));
-  const manager={store:{root:f.root,serial:fn=>fn(),getTask:async()=>({task_status:'FAILED',error:{code:'UNIT_NO_MODEL_EXECUTED'}})},
+  const manager={...buildManagerContract,store:{root:f.root,serial:fn=>fn(),getTask:async()=>({task_status:'FAILED',error:{code:'UNIT_NO_MODEL_EXECUTED'}})},
     userInitiatedOperations:true,modelConfiguration:{configured:true},generationDisabled:false,developmentEnvironments:[{id:'unit-env',validation_mode:'normal-only'}],
     candidateTrialEnvironments:[{id:'unit-env',configurationIdentity:{kind:'registered-static-html'},check:async()=>{},acquire:async()=>{acquires++;}}],
     caseAutomation:async()=>({candidates:[]}),otherActive:()=>false,completions:new Map(),
@@ -127,7 +138,7 @@ test('user-confirmed revision receipt persists UTF-8 seed and whole bundle witho
   await fs.writeFile(path.join(directory,'candidate.spec.mjs'),'// 原始动作');await fs.writeFile(path.join(directory,'helper.mjs'),'// helper');
   const {entries,...manifest}=await developmentBundle(directory,{validate:false});
   const selection={project_id:f.project.project_id,case_id:'case-unit',case_version:1,source_task_id:'source',candidate_version:1,bundle_sha256:manifest.sha256};let submitted;
-  const manager={store:{root:f.root,serial:fn=>fn(),taskDirectory:()=>path.join(f.root,'source'),getTask:async id=>id==='source'?{task_id:id,candidates:[{version:1,bundle:manifest}]}:{task_status:'FAILED'}},
+  const manager={...buildManagerContract,store:{root:f.root,serial:fn=>fn(),taskDirectory:()=>path.join(f.root,'source'),getTask:async id=>id==='source'?{task_id:id,candidates:[{version:1,bundle:manifest}]}:{task_status:'FAILED'}},
     userInitiatedOperations:true,modelConfiguration:{configured:true},developmentEnvironments:[{id:'unit-env',validation_mode:'normal-only'}],candidateTrialEnvironments:[{id:'unit-env',configurationIdentity:{kind:'registered-static-html'},check:async()=>{}}],
     caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection}]}),otherActive:()=>false,completions:new Map(),submitDevelopment:async r=>{submitted=r;manager.completions.set('unit-revision',Promise.resolve());return{task_id:'unit-revision'};}};
   const op=new ScriptOperations({root:path.join(f.root,'ops'),buildManager:manager,caseStore:f.caseStore,records:f.records});

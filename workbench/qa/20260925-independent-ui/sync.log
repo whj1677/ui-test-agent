@@ -1,0 +1,19 @@
+APPLIED: 6 status update(s) for REQ-0037-autonomous-candidate-development.
+- docs\requirements\REQ-0037-autonomous-candidate-development\current_state.md
+  before: missing or differs from source
+  after : rendered from explicit source values
+- docs\requirements\REQ-0037-autonomous-candidate-development\change_log.md
+  before: missing or differs from source
+  after : rendered from explicit source values
+- docs\requirements\REQ-0037-autonomous-candidate-development\00_user_requirement.md
+  before: missing or differs from source
+  after : rendered from explicit source values
+- docs\requirements\REQ-0037-autonomous-candidate-development\03_tasks.md
+  before: missing or differs from source
+  after : rendered from explicit source values
+- docs\requirements\REQ-0037-autonomous-candidate-development\04_verification.md
+  before: missing or differs from source
+  after : rendered from explicit source values
+- docs\requirements\REQ-0037-autonomous-candidate-development\05_trace.md
+  before: missing or differs from source
+  after : rendered from explicit source values

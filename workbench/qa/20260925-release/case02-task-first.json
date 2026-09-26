@@ -1,0 +1,298 @@
+{
+  "schema": "workbench/build-task-v1",
+  "task_id": "build-20260926011616-3465280c",
+  "created_at": "2026-09-26T01:16:16.079Z",
+  "started_at": "2026-09-26T01:16:16.079Z",
+  "finished_at": "2026-09-26T01:17:11.265Z",
+  "task_status": "AUTH_SESSION_BLOCKED",
+  "generation_status": "RUNNING",
+  "verification_status": "INCOMPLETE",
+  "human_review_status": "NOT_READY",
+  "active_attempt_id": null,
+  "revision_allowed": false,
+  "template": {
+    "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+    "template_id": "registered-development-v1"
+  },
+  "source": {
+    "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "project_name": "发布收口 · Kimi合成登录库存台",
+    "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+    "case_version": 1,
+    "external_id": "CASE-02",
+    "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A"
+  },
+  "environment_ref": {
+    "environment_id": "kimi-release-auth-20260925",
+    "validation_mode": "normal-only",
+    "preparation": null
+  },
+  "input_bundle": {
+    "snapshot": {
+      "content": {
+        "external_id": "CASE-02",
+        "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+        "module": "Kimi合成库存台",
+        "preconditions": "已通过“公开合成账号登录”按钮登录，处于 /workspace 工作台页面。",
+        "test_data": "合成固定数据，业务真值见Kimi SPEC.md；不是真实业务项目。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "在“名称筛选”输入框中输入“温控”，点击“查询”按钮",
+            "expected": "出现可见加载提示“正在加载设备列表…”，约 400-600ms 后提示消失且列表刷新；分页指示为“第 1 页 / 共 2 页（共 3 条）”。"
+          },
+          {
+            "order": 2,
+            "action": "观察筛选结果第 1 页的行内容与顺序",
+            "expected": "第 1 页按编号升序恰好显示 INV-101（温控采集器A）、INV-102（温控采集器B）两行，均展示编号、名称、库存状态与“可选”状态。"
+          },
+          {
+            "order": 3,
+            "action": "点击“下一页”翻到第 2 页",
+            "expected": "第 2 页仅显示 INV-104（温控采集器C）一行；分页指示为“第 2 页 / 共 2 页（共 3 条）”；整个筛选结果顺序为 INV-101、INV-102、INV-104。"
+          },
+          {
+            "order": 4,
+            "action": "点击 INV-104 所在行的“查看详情”按钮",
+            "expected": "右侧抽屉打开并先显示“正在加载设备详情…”，约 400-600ms 后显示：编号 INV-104、名称 温控采集器C、型号 TCA-100C、库位 A-01-03、库存状态 在库（充足）、权限提示“当前角色 inspector 可选择该设备”。"
+          },
+          {
+            "order": 5,
+            "action": "点击抽屉内的“关闭详情”按钮",
+            "expected": "抽屉关闭并返回列表；列表仍保持“温控”筛选结果与当前第 2 页，未发生任何数据修改。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "auth_requirement": {
+    "schema": "workbench/development-auth-requirement-v1",
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_requirement": "ROLE_MATCH"
+  },
+  "authorization": {
+    "logical_id": "user-31629ae102d176ecc76776368818ad9dc55ac0913e4ff210",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "maintenance": {
+    "mode": "generate",
+    "operation_id": "generation-51cd0590-6f72-4d0f-8148-0583aa94399c",
+    "feedback": null,
+    "run_id": null
+  },
+  "script_version": 1,
+  "attempts": [
+    {
+      "attempt_id": "attempt-01-initial",
+      "kind": "initial",
+      "status": "AUTH_SESSION_BLOCKED",
+      "started_at": "2026-09-26T01:16:16.079Z",
+      "finished_at": "2026-09-26T01:17:11.266Z"
+    }
+  ],
+  "candidates": [],
+  "files": [
+    {
+      "relative_path": "development/agent-input.txt",
+      "bytes": 6951,
+      "sha256": "7044BC82FA35D7F9957FBDAB11E57200D0C57C6DFE846AF9DE0F0AA7FCCF4E65",
+      "file_id": "build-file-1",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "agent-input.txt",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/console-2026-09-26T01-16-20-543Z.log",
+      "bytes": 142,
+      "sha256": "EDC201CB6168CE87BC98E0F0A5DD1C48D482AFE186C776CB3FE947704DD63B5B",
+      "file_id": "build-file-2",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "console-2026-09-26T01-16-20-543Z.log",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T01-16-20-668Z.yml",
+      "bytes": 1744,
+      "sha256": "4F6219A0E8E09BEAAF0D3A9DF1C01475848D6AD29F1EE4F74F92AA85BE2803FC",
+      "file_id": "build-file-3",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T01-16-20-668Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T01-16-39-698Z.yml",
+      "bytes": 2572,
+      "sha256": "519C714F103066AB3A6F1388C38C1922E1BB64A949A74D2C68988460F016F4A9",
+      "file_id": "build-file-4",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T01-16-39-698Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T01-16-46-159Z.yml",
+      "bytes": 2152,
+      "sha256": "6E189121E700A17DD607840324762B6094E02EBDD4F5999224C58E50A63D84F1",
+      "file_id": "build-file-5",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T01-16-46-159Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T01-16-48-796Z.yml",
+      "bytes": 2880,
+      "sha256": "36D1C60C0D9131C4A9FEB1EB5871AED3D1DE4241AD61EF8E531BFDADC0D7696B",
+      "file_id": "build-file-6",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T01-16-48-796Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/draft/.playwright-mcp/page-2026-09-26T01-16-55-159Z.yml",
+      "bytes": 2152,
+      "sha256": "6E189121E700A17DD607840324762B6094E02EBDD4F5999224C58E50A63D84F1",
+      "file_id": "build-file-7",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "page-2026-09-26T01-16-55-159Z.yml",
+      "web_visible": true
+    },
+    {
+      "relative_path": "development/harness-events.json",
+      "bytes": 70559,
+      "sha256": "F8B96358FCAC575E24A591F977FCB4EFF0C28276A51FB30CDFC288C71C63F411",
+      "file_id": "build-file-8",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-events.json",
+      "web_visible": false
+    },
+    {
+      "relative_path": "development/harness-summary.json",
+      "bytes": 283,
+      "sha256": "F3939DA13D07AFB0FA92F1A942B80688D106F0BE10A2483222D5F06B1DB9B20A",
+      "file_id": "build-file-9",
+      "attempt_id": "attempt-01-initial",
+      "kind": "development_evidence",
+      "content_type": "text/plain; charset=utf-8",
+      "file_name": "harness-summary.json",
+      "web_visible": true
+    },
+    {
+      "file_id": "build-file-10",
+      "attempt_id": "attempt-01-initial",
+      "kind": "lifecycle_log",
+      "relative_path": "attempts/attempt-01-initial/lifecycle.ndjson",
+      "file_name": "lifecycle.ndjson",
+      "bytes": 21192,
+      "sha256": "E90C283425C93F9C1C439D3506A76A2566942F6FD97F55FE5511D706B7EC4839",
+      "integrity_state": "FINALIZED",
+      "web_visible": false
+    }
+  ],
+  "error": {
+    "code": "AUTH_SESSION_BLOCKED",
+    "message": "AUTH_SESSION_BLOCKED"
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-08ce0762-2722-4c0e-bf37-9b837054fb4a",
+    "captured_at": "2026-09-25T15:17:44.132Z",
+    "source_sha256": "a280efc6f9f958859f6ff7cb69f654e0940eba37b7aec5f928f53bdb11bf14f7",
+    "source_file_count": 87,
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "auth": {
+    "environment_id": "kimi-release-auth-20260925",
+    "role": "inspector",
+    "account_id": "synthetic-inspector",
+    "session_version": "1dacd13e-3cd0-4d9c-ad96-ae7c063bc17a",
+    "bound_at": "2026-09-26T01:16:16.116Z"
+  },
+  "development": {
+    "started_at": 1790385376114,
+    "deadline_at": 1790386576114,
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "draft_sha256": null,
+    "self_tests": [],
+    "submission": null,
+    "tool_calls": 22,
+    "harness_starts": 1,
+    "recovery": false,
+    "rejections": [
+      {
+        "tool": "check_fidelity",
+        "at": 1790385379600,
+        "code": "DRAFT_NOT_CREATED",
+        "rule": "DRAFT_NOT_CREATED",
+        "node": null,
+        "identifier": null,
+        "location": null,
+        "message": "No draft has been saved. Use write_draft with ES module code and previous_sha256=null.",
+        "draft_saved": false,
+        "draft_exists": false,
+        "current_sha256": null,
+        "allowed_next_steps": [
+          "read_draft",
+          "read_evidence",
+          "correct the reported issue",
+          "write_draft",
+          "self_test",
+          "check_fidelity",
+          "submit_candidate"
+        ]
+      }
+    ],
+    "observation_epoch": 9
+  },
+  "failure": {
+    "category": "AUTH",
+    "reason": "AUTH_SESSION_BLOCKED"
+  },
+  "revalidations": [],
+  "supplemental_assessments": []
+}

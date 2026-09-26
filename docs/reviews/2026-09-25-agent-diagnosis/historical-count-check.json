@@ -1,0 +1,19 @@
+{
+  "source": "workbench/qa/20260925-kimi-workbench/evidence/summary.json",
+  "scope": "historical frozen 24-case cohort; not current product acceptance",
+  "tasks": 24,
+  "harness_starts": 24.0,
+  "tool_calls": 1402.0,
+  "development_executions": 49,
+  "independent_executions": 18,
+  "statuses": [
+    {
+      "Name": "CANDIDATE_VALIDATION_FAILED",
+      "Count": 6
+    },
+    {
+      "Name": "WAITING_HUMAN_REVIEW",
+      "Count": 18
+    }
+  ]
+}

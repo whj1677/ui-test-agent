@@ -1,0 +1,180 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: 测试批次
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "测试批次" [level=1]
+  - paragraph: 每次明确运行创建新批次；范围和三个版本分别记录。
+  - table:
+    - rowgroup:
+      - row "创建时间 / 软件版本 范围 请求数 状态":
+        - columnheader "创建时间 / 软件版本"
+        - columnheader "范围"
+        - columnheader "请求数"
+        - columnheader "状态"
+    - rowgroup:
+      - row "2026-09-26T00:47:53.842Z · release-20260926-fixed-round2 选中 2 执行中":
+        - cell "2026-09-26T00:47:53.842Z · release-20260926-fixed-round2":
+          - link "2026-09-26T00:47:53.842Z · release-20260926-fixed-round2":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-1fb540a7-1448-41df-89ce-8ec65e53d95e"
+        - cell "选中"
+        - cell "2"
+        - cell "执行中"
+      - row "2026-09-26T00:45:54.260Z · release-20260926-fixed-round1 选中 2 执行结束":
+        - cell "2026-09-26T00:45:54.260Z · release-20260926-fixed-round1":
+          - link "2026-09-26T00:45:54.260Z · release-20260926-fixed-round1":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-5b24efdd-e265-4474-807c-571c37763e32"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T14:31:05.296Z · independent-ui-round2-cancel-20260925 选中 2 已取消":
+        - cell "2026-09-25T14:31:05.296Z · independent-ui-round2-cancel-20260925":
+          - link "2026-09-25T14:31:05.296Z · independent-ui-round2-cancel-20260925":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-036f6471-e080-41be-a066-be03a8a7c5a2"
+        - cell "选中"
+        - cell "2"
+        - cell "已取消"
+      - row "2026-09-25T14:29:43.348Z · independent-ui-round2-kc08-s2-20260925 单条 1 执行结束":
+        - cell "2026-09-25T14:29:43.348Z · independent-ui-round2-kc08-s2-20260925":
+          - link "2026-09-25T14:29:43.348Z · independent-ui-round2-kc08-s2-20260925":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+      - row "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925 选中 2 执行结束":
+        - cell "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925":
+          - link "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T14:01:10.150Z · reliability-20260925-cancel 单条 1 已取消":
+        - cell "2026-09-25T14:01:10.150Z · reliability-20260925-cancel":
+          - link "2026-09-25T14:01:10.150Z · reliability-20260925-cancel":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-23e582cf-a897-4953-b13b-42694e49317e"
+        - cell "单条"
+        - cell "1"
+        - cell "已取消"
+      - row "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry 选中 2 执行结束":
+        - cell "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry":
+          - link "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-5afb5a5f-f217-4e34-9d03-4e6c9e45f1b6"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T13:44:02.079Z · reliability-20260925-4322 选中 2 服务中断":
+        - cell "2026-09-25T13:44:02.079Z · reliability-20260925-4322":
+          - link "2026-09-25T13:44:02.079Z · reliability-20260925-4322":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-c3a1dd39-a4b7-4cee-94af-f871152db6e3"
+        - cell "选中"
+        - cell "2"
+        - cell "服务中断"
+      - row "2026-09-25T12:59:09.568Z · v9-new-script-rerun-649508B8 单条 1 执行结束":
+        - cell "2026-09-25T12:59:09.568Z · v9-new-script-rerun-649508B8":
+          - link "2026-09-25T12:59:09.568Z · v9-new-script-rerun-649508B8":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-43655e65-217f-4a20-a4f1-158466571043"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+      - row "2026-09-25T12:54:43.230Z · v9-user-flow-649508B8 选中 2 执行结束":
+        - cell "2026-09-25T12:54:43.230Z · v9-user-flow-649508B8":
+          - link "2026-09-25T12:54:43.230Z · v9-user-flow-649508B8":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-e0565710-c438-4e8e-a668-050809873f15"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T12:17:13.590Z · 未提供 单条 1 执行结束":
+        - cell "2026-09-25T12:17:13.590Z · 未提供":
+          - link "2026-09-25T12:17:13.590Z · 未提供":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-df9d5e08-a9d8-4744-bb12-501e1397ad08"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+      - row "2026-09-25T11:57:34.152Z · caption-user-ready-20260925-649508B8 单条 1 执行结束":
+        - cell "2026-09-25T11:57:34.152Z · caption-user-ready-20260925-649508B8":
+          - link "2026-09-25T11:57:34.152Z · caption-user-ready-20260925-649508B8":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-627c6a20-f426-4461-81b5-899b73c36f34"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+      - row "2026-09-25T11:28:58.563Z · engineer-20260925-single 单条 1 执行结束":
+        - cell "2026-09-25T11:28:58.563Z · engineer-20260925-single":
+          - link "2026-09-25T11:28:58.563Z · engineer-20260925-single":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-c87014f0-daf0-4c78-b1e3-0386ccd790df"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+      - row "2026-09-25T11:27:22.504Z · engineer-20260925-selected-retry 选中 2 执行结束":
+        - cell "2026-09-25T11:27:22.504Z · engineer-20260925-selected-retry":
+          - link "2026-09-25T11:27:22.504Z · engineer-20260925-selected-retry":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-2f3cc2cd-2738-4c1e-a31c-5987d220eef8"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T11:26:43.941Z · engineer-20260925-selected-cancel 选中 2 已取消":
+        - cell "2026-09-25T11:26:43.941Z · engineer-20260925-selected-cancel":
+          - link "2026-09-25T11:26:43.941Z · engineer-20260925-selected-cancel":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-cd9c7b38-f389-4127-8772-459b70bcf828"
+        - cell "选中"
+        - cell "2"
+        - cell "已取消"
+      - row "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 全项目 12 执行结束":
+        - cell "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8":
+          - link "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-88258ad2-1b77-4a2d-849e-8d15f1fecda8"
+        - cell "全项目"
+        - cell "12"
+        - cell "执行结束"
+      - row "2026-09-25T09:53:03.953Z · model-round-20260925-project 全项目 12 执行结束":
+        - cell "2026-09-25T09:53:03.953Z · model-round-20260925-project":
+          - link "2026-09-25T09:53:03.953Z · model-round-20260925-project":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-a63f41b5-51ce-45fe-9109-73dea6943c46"
+        - cell "全项目"
+        - cell "12"
+        - cell "执行结束"
+      - row "2026-09-25T09:51:54.886Z · model-round-20260925-selected 选中 2 执行结束":
+        - cell "2026-09-25T09:51:54.886Z · model-round-20260925-selected":
+          - link "2026-09-25T09:51:54.886Z · model-round-20260925-selected":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-40a559c5-1fca-4249-a45a-1ae1fca894cc"
+        - cell "选中"
+        - cell "2"
+        - cell "执行结束"
+      - row "2026-09-25T09:51:01.809Z · model-round-20260925-single-S2 单条 1 执行结束":
+        - cell "2026-09-25T09:51:01.809Z · model-round-20260925-single-S2":
+          - link "2026-09-25T09:51:01.809Z · model-round-20260925-single-S2":
+            - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches?batch_id=batch-17507295-a02d-4b91-94ed-eb44afe119f4"
+        - cell "单条"
+        - cell "1"
+        - cell "执行结束"
+  - paragraph:
+    - link "历史结果 / 来源未分批":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/execution-records"
+- status

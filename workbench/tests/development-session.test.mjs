@@ -54,9 +54,12 @@ test('pinned DSH MCP client receives fixture executor failure, continues repair 
 test('self-test limit is cumulative and further edits cannot create an unverified final version', async () => {
   const f = await fixture({ seed: draft('bad') });
   try {
-    for (let i = 0; i < 3; i++) await f.session.invoke('self_test');
+    for (let i = 0; i < 3; i++) {
+      if (i) await f.session.invoke('write_draft', { code: draft(`bad-${i}`), previous_sha256: digest(draft(i === 1 ? 'bad' : `bad-${i - 1}`)) });
+      await f.session.invoke('self_test');
+    }
     await assert.rejects(f.session.invoke('self_test'), /BUDGET/);
-    await assert.rejects(f.session.invoke('write_draft', { code: draft('good'), previous_sha256: digest(draft('bad')) }), /BUDGET/);
+    await assert.rejects(f.session.invoke('write_draft', { code: draft('good'), previous_sha256: digest(draft('bad-2')) }), /BUDGET/);
     assert.equal(f.saved.at(-1).self_tests.length, 3);
   } finally { await f.close(); }
 });

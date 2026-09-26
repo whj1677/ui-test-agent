@@ -1,0 +1,479 @@
+ai-engineering-context verification-log-v1
+Started at: 2026-09-26T08:53:42+08:00
+Command: npm test
+Exit code: 0
+Parsed test count: 74
+Parsed failure count: 0
+Parsed skipped count: 0
+
+--- command output ---
+
+> deepseek-ui-test-agent@0.4.0-beta.1 test
+> npm --prefix workbench test
+
+
+> ui-test-approved-workbench@0.1.0 test
+> node scripts/run-unit-checks.mjs
+
+TAP version 13
+# Subtest: same-scope concurrent opens share one launch and one session
+ok 1 - same-scope concurrent opens share one launch and one session
+  ---
+  duration_ms: 33.6083
+  type: 'test'
+  ...
+# Subtest: clear and close wait for a preparing browser and leave no session
+ok 2 - clear and close wait for a preparing browser and leave no session
+  ---
+  duration_ms: 24.0928
+  type: 'test'
+  ...
+# Subtest: clear waits for identity check, notifies invalidation once, and prevents stale VALID state
+ok 3 - clear waits for identity check, notifies invalidation once, and prevents stale VALID state
+  ---
+  duration_ms: 11.2566
+  type: 'test'
+  ...
+# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
+ok 4 - Harness stderr diagnostic keeps error context and redacts credentials
+  ---
+  duration_ms: 5.7903
+  type: 'test'
+  ...
+# Subtest: stored DSH credential is redacted even without a sk prefix
+ok 5 - stored DSH credential is redacted even without a sk prefix
+  ---
+  duration_ms: 20.6384
+  type: 'test'
+  ...
+# Subtest: pre-registered generation cannot advertise an expired authenticated session as ready
+ok 6 - pre-registered generation cannot advertise an expired authenticated session as ready
+  ---
+  duration_ms: 21.0608
+  type: 'test'
+  ...
+# Subtest: explicit auth catalog accepts registered same-origin HTTPS and rejects unsafe targets
+ok 7 - explicit auth catalog accepts registered same-origin HTTPS and rejects unsafe targets
+  ---
+  duration_ms: 2.4894
+  type: 'test'
+  ...
+# Subtest: identity redirect fails closed without following a cross-origin or downgraded Location
+ok 8 - identity redirect fails closed without following a cross-origin or downgraded Location
+  ---
+  duration_ms: 3.2236
+  type: 'test'
+  ...
+# Subtest: development auth binds the registered target, fixed role and valid session without anonymous fetch
+ok 9 - development auth binds the registered target, fixed role and valid session without anonymous fetch
+  ---
+  duration_ms: 2.3369
+  type: 'test'
+  ...
+# Subtest: auth development patch retains MCP guard and switches browser to memory attachment
+ok 10 - auth development patch retains MCP guard and switches browser to memory attachment
+  ---
+  duration_ms: 0.9615
+  type: 'test'
+  ...
+# Subtest: self-test receives authentication only through verifier input and persists no state
+ok 11 - self-test receives authentication only through verifier input and persists no state
+  ---
+  duration_ms: 47.743
+  type: 'test'
+  ...
+# Subtest: registered auth trial target uses the existing target and has no negative lane
+ok 12 - registered auth trial target uses the existing target and has no negative lane
+  ---
+  duration_ms: 1.2227
+  type: 'test'
+  ...
+# Subtest: authenticated development evidence is complete without a network trace
+ok 13 - authenticated development evidence is complete without a network trace
+  ---
+  duration_ms: 1.6141
+  type: 'test'
+  ...
+# Subtest: authenticated candidate cannot be mapped to another project session
+ok 14 - authenticated candidate cannot be mapped to another project session
+  ---
+  duration_ms: 2.1902
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 15 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 3.6507
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 16 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.716
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 17 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 1.0892
+  type: 'test'
+  ...
+# Subtest: first recovery execution snapshots authorized complete package despite native file edits
+ok 18 - first recovery execution snapshots authorized complete package despite native file edits
+  ---
+  duration_ms: 101.9623
+  type: 'test'
+  ...
+# Subtest: same failed bundle needs a new observation or revision before another execution
+ok 19 - same failed bundle needs a new observation or revision before another execution
+  ---
+  duration_ms: 49.2931
+  type: 'test'
+  ...
+# Subtest: ready submission rejects a finite known obligation gap while review stays unapproved
+ok 20 - ready submission rejects a finite known obligation gap while review stays unapproved
+  ---
+  duration_ms: 51.2645
+  type: 'test'
+  ...
+# Subtest: submission persists hash-bound frozen-action review with observed execution
+ok 21 - submission persists hash-bound frozen-action review with observed execution
+  ---
+  duration_ms: 49.9894
+  type: 'test'
+  ...
+# Subtest: budget feedback and narrow DOM read capability remain bounded
+ok 22 - budget feedback and narrow DOM read capability remain bounded
+  ---
+  duration_ms: 3.1922
+  type: 'test'
+  ...
+# Subtest: DSH tool call/result projection keeps only correlation and success metadata
+ok 23 - DSH tool call/result projection keeps only correlation and success metadata
+  ---
+  duration_ms: 2.7608
+  type: 'test'
+  ...
+# Subtest: finite pre-step review catches historical changed-list examples without case-ID rules
+ok 24 - finite pre-step review catches historical changed-list examples without case-ID rules
+  ---
+  duration_ms: 56.4404
+  type: 'test'
+  ...
+# Subtest: pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+ok 25 - pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+  ---
+  duration_ms: 334.1
+  type: 'test'
+  ...
+# Subtest: self-test limit is cumulative and further edits cannot create an unverified final version
+ok 26 - self-test limit is cumulative and further edits cannot create an unverified final version
+  ---
+  duration_ms: 86.2848
+  type: 'test'
+  ...
+# Subtest: cancellation reaches an active execution and later tools stop
+ok 27 - cancellation reaches an active execution and later tools stop
+  ---
+  duration_ms: 18.0027
+  type: 'test'
+  ...
+# Subtest: wall budget terminates before another tool or executor admission
+ok 28 - wall budget terminates before another tool or executor admission
+  ---
+  duration_ms: 5.7778
+  type: 'test'
+  ...
+# Subtest: from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+ok 29 - from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+  ---
+  duration_ms: 47.9832
+  type: 'test'
+  ...
+# Subtest: task guard denies arbitrary commands, filesystem, code and alternate navigation
+ok 30 - task guard denies arbitrary commands, filesystem, code and alternate navigation
+  ---
+  duration_ms: 4.7325
+  type: 'test'
+  ...
+# Subtest: report snapshots freeze exact run, escape content, redact fields and embed verified media
+ok 31 - report snapshots freeze exact run, escape content, redact fields and embed verified media
+  ---
+  duration_ms: 52.9402
+  type: 'test'
+  ...
+# Subtest: report missing/tampered media remains missing and blocked batch items stay in denominator
+ok 32 - report missing/tampered media remains missing and blocked batch items stay in denominator
+  ---
+  duration_ms: 25.3563
+  type: 'test'
+  ...
+# Subtest: report cancellation prevents snapshot commit and pending conflicting request is rejected
+ok 33 - report cancellation prevents snapshot commit and pending conflicting request is rejected
+  ---
+  duration_ms: 11.212
+  type: 'test'
+  ...
+# Subtest: generation preflight has real authorization boundary, separates revision input, no task on rejection
+ok 34 - generation preflight has real authorization boundary, separates revision input, no task on rejection
+  ---
+  duration_ms: 12.6461
+  type: 'test'
+  ...
+# Subtest: invalid revision seed cannot consume an existing authorization
+ok 35 - invalid revision seed cannot consume an existing authorization
+  ---
+  duration_ms: 12.1586
+  type: 'test'
+  ...
+# Subtest: generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+ok 36 - generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+  ---
+  duration_ms: 44.3773
+  type: 'test'
+  ...
+# Subtest: revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+ok 37 - revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+  ---
+  duration_ms: 72.1207
+  type: 'test'
+  ...
+# Subtest: explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+ok 38 - explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+  ---
+  duration_ms: 47.3944
+  type: 'test'
+  ...
+# Subtest: user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+ok 39 - user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+  ---
+  duration_ms: 44.742
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 40 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 27.1368
+  type: 'test'
+  ...
+# Subtest: string
+ok 41 - string
+  ---
+  duration_ms: 1.9738
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 42 - ansi
+  ---
+  duration_ms: 1.2317
+  type: 'test'
+  ...
+# Subtest: missing
+ok 43 - missing
+  ---
+  duration_ms: 0.715
+  type: 'test'
+  ...
+# Subtest: strict
+ok 44 - strict
+  ---
+  duration_ms: 0.9056
+  type: 'test'
+  ...
+# Subtest: single side
+ok 45 - single side
+  ---
+  duration_ms: 1.1971
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 46 - timeout
+  ---
+  duration_ms: 2.2421
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 47 - truncated array
+  ---
+  duration_ms: 0.9944
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 48 - truncated diff
+  ---
+  duration_ms: 1.2436
+  type: 'test'
+  ...
+# Subtest: array
+ok 49 - array
+  ---
+  duration_ms: 1.4774
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 50 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.9236
+  type: 'test'
+  ...
+# Subtest: real KC-02 self-tests retain failure, continued steps and captured locator actual
+ok 51 - real KC-02 self-tests retain failure, continued steps and captured locator actual
+  ---
+  duration_ms: 22.8575
+  type: 'test'
+  ...
+# Subtest: only attributed evidence is displayed; zero and false are not missing
+ok 52 - only attributed evidence is displayed; zero and false are not missing
+  ---
+  duration_ms: 0.8161
+  type: 'test'
+  ...
+# Subtest: recorded replay steps remain authoritative and successful run has no failure notice
+ok 53 - recorded replay steps remain authoritative and successful run has no failure notice
+  ---
+  duration_ms: 0.403
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_update","at":"2026-09-26T00:53:48.788Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_read","at":"2026-09-26T00:53:48.791Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_update","at":"2026-09-26T00:53:48.792Z"}
+# Subtest: terminal candidate trial stop is idempotent while active cleanup is pending
+ok 54 - terminal candidate trial stop is idempotent while active cleanup is pending
+  ---
+  duration_ms: 3.7591
+  type: 'test'
+  ...
+# Subtest: queued stop updater cannot turn a concurrent terminal write back into STOPPING
+ok 55 - queued stop updater cannot turn a concurrent terminal write back into STOPPING
+  ---
+  duration_ms: 0.9374
+  type: 'test'
+  ...
+# Subtest: stop queued behind a pending terminal write preserves FINISHED
+ok 56 - stop queued behind a pending terminal write preserves FINISHED
+  ---
+  duration_ms: 1.0151
+  type: 'test'
+  ...
+# Subtest: candidate stop persistence failure degrades manager and rejects new work
+ok 57 - candidate stop persistence failure degrades manager and rejects new work
+  ---
+  duration_ms: 3.5844
+  type: 'test'
+  ...
+# Subtest: candidate stop read failure still aborts the captured owned task
+ok 58 - candidate stop read failure still aborts the captured owned task
+  ---
+  duration_ms: 0.7436
+  type: 'test'
+  ...
+# Subtest: candidate stop never aborts a replacement active task
+ok 59 - candidate stop never aborts a replacement active task
+  ---
+  duration_ms: 0.6326
+  type: 'test'
+  ...
+# Subtest: script and batch reserve mutually exclusive preparation windows
+ok 60 - script and batch reserve mutually exclusive preparation windows
+  ---
+  duration_ms: 40.2581
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EEXIST","operation":"generation_save","at":"2026-09-26T00:53:48.839Z"}
+# {"type":"build_storage_failure","code":"EEXIST","operation":"batch_save","at":"2026-09-26T00:53:48.840Z"}
+# Subtest: script and batch persistence failures report storage fault
+ok 61 - script and batch persistence failures report storage fault
+  ---
+  duration_ms: 12.3947
+  type: 'test'
+  ...
+# Subtest: batch and script save retry a transient Windows rename error without degrading
+ok 62 - batch and script save retry a transient Windows rename error without degrading
+  ---
+  duration_ms: 20.1694
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EPERM","operation":"batch_save","at":"2026-09-26T00:53:48.874Z"}
+# {"type":"build_storage_failure","code":"EPERM","operation":"generation_save","at":"2026-09-26T00:53:48.880Z"}
+# Subtest: batch and script save exhaust rename retries, preserve old JSON, and lock storage
+ok 63 - batch and script save exhaust rename retries, preserve old JSON, and lock storage
+  ---
+  duration_ms: 21.2464
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_result_update","at":"2026-09-26T00:53:48.904Z"}
+# Subtest: background terminal write failure remains visible as degraded without a false FINISHED state
+ok 64 - background terminal write failure remains visible as degraded without a false FINISHED state
+  ---
+  duration_ms: 22.3432
+  type: 'test'
+  ...
+# Subtest: health remains inspectable after storage read failure and rejects new writes
+ok 65 - health remains inspectable after storage read failure and rejects new writes
+  ---
+  duration_ms: 8.3624
+  type: 'test'
+  ...
+# Subtest: generation ownership blocks new work but allows owned candidate cancellation
+ok 66 - generation ownership blocks new work but allows owned candidate cancellation
+  ---
+  duration_ms: 1.5472
+  type: 'test'
+  ...
+# Subtest: preparing build prevents approved run entry before active is assigned
+ok 67 - preparing build prevents approved run entry before active is assigned
+  ---
+  duration_ms: 1.5525
+  type: 'test'
+  ...
+# Subtest: shutdown refuses admission first, stops both executors, drains and closes auth once
+ok 68 - shutdown refuses admission first, stops both executors, drains and closes auth once
+  ---
+  duration_ms: 3.6804
+  type: 'test'
+  ...
+# Subtest: service identity changes with source and new records retain captured identity
+ok 69 - service identity changes with source and new records retain captured identity
+  ---
+  duration_ms: 79.8878
+  type: 'test'
+  ...
+# Subtest: approved executor keeps ownership through failed finalization and rejects the completion
+ok 70 - approved executor keeps ownership through failed finalization and rejects the completion
+  ---
+  duration_ms: 6.8632
+  type: 'test'
+  ...
+# Subtest: approved executor start guard includes peer preparation and shutdown
+ok 71 - approved executor start guard includes peer preparation and shutdown
+  ---
+  duration_ms: 2.1872
+  type: 'test'
+  ...
+# Subtest: offline report carries the captured execution identity and escaped fidelity materials
+ok 72 - offline report carries the captured execution identity and escaped fidelity materials
+  ---
+  duration_ms: 1.6842
+  type: 'test'
+  ...
+# Subtest: failed STOPPING persistence still cancels owned child and latches fault
+ok 73 - failed STOPPING persistence still cancels owned child and latches fault
+  ---
+  duration_ms: 0.9095
+  type: 'test'
+  ...
+# Subtest: shutdown timeout is bounded, closes auth and never reports drained success
+ok 74 - shutdown timeout is bounded, closes auth and never reports drained success
+  ---
+  duration_ms: 49.3576
+  type: 'test'
+  ...
+1..74
+# tests 74
+# suites 0
+# pass 74
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2600.0592

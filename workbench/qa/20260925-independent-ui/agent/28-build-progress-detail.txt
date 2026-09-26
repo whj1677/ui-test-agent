@@ -1,0 +1,52 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "自主建例任务 · KC-08" [level=1]
+  - paragraph: 正在自主开发
+  - paragraph: 冻结业务预期不变；技术验证不代表人工批准。
+  - paragraph: 有限规则核查：0 项明确缺口，0 处初始化或首步骤内状态选择，需对照原动作；材料不代替人工核对。
+  - button "取消任务"
+  - generic "技术详情：开发过程、资源与覆盖核查" [active]
+  - paragraph: Harness 1 · 工具 49 · 开发执行 1/3
+  - paragraph: GENERATING · NOT_READY · 验证范围 normal-only
+  - article:
+    - heading "开发自测 1 · EXECUTED" [level=3]
+    - paragraph: 候选 SHA：E3ADEFB1A4F673F4F2A1F2D4844F1ABF20C57CE377DF5C1C227D5222DE913735
+    - generic: "null"
+    - list:
+      - listitem: CASE_STEP_1：PASSED
+      - listitem: CASE_STEP_2：PASSED
+      - listitem: CASE_STEP_3：PASSED
+  - heading "Agent提交的覆盖核查材料（不代替独立验收）" [level=2]
+  - generic: "[]"
+  - heading "有限规则与原要求核查" [level=2]
+  - paragraph: 有限规则只能指出已识别缺口；未识别的动作、前提与预期仍须人工核对。
+  - paragraph: 核查包与提交包：未能比对
+  - generic: "{ \"version\": \"finite-obligations-v1\", \"semantic_pass\": false, \"human_review_required\": true, \"pre_step_state_changes\": [], \"scope\": \"Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.\", \"status\": \"NO_SUPPORTED_OBLIGATIONS\", \"obligations\": [], \"remaining_requirements\": [ { \"step\": 1, \"requirement\": \"已选1项，批量预约可用\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" }, { \"step\": 2, \"requirement\": \"翻页后EQ-101选择保留，已选2项\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" }, { \"step\": 3, \"requirement\": \"EQ-101与EQ-106均保持勾选，已选2项\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" } ], \"bundle_sha256\": \"866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2\" }"
+  - heading "任务失败分类与服务身份" [level=2]
+  - generic: "{ \"failure\": null, \"service_identity\": { \"schema\": \"workbench/service-identity-v1\", \"service_instance_id\": \"service-8b0e06ae-037d-41f0-b4bd-786f25339a36\", \"captured_at\": \"2026-09-25T14:04:41.548Z\", \"source_sha256\": \"3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f\", \"source_file_count\": 87, \"configuration_sha256\": \"9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2\", \"data_root_sha256\": \"bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d\", \"entry\": \"http://127.0.0.1:4322/workspace/\" } }"
+  - generic "执行证据与文件"
+- status

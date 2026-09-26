@@ -2,6 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { checkDevelopmentCandidate } from './development-policy.mjs';
+import { checkCandidateTiming } from './timing-obligations.mjs';
+import { developmentError } from './development-feedback.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 export async function developmentBundle(root, { validate = true } = {}) {
   const entries = []; let total = 0;
@@ -37,4 +39,13 @@ export async function saveBundle(bundle, destination) {
 export async function verifyBundle(root, manifest) {
   for (const file of manifest.files) if (hash(await fs.readFile(path.join(root, file.path))) !== file.sha256) return false;
   return true;
+}
+
+export function assertBundleTiming(bundle, frozenCase) {
+  for (const file of bundle.entries.filter(item => /\.(mjs|js)$/.test(item.path))) {
+    const review = checkCandidateTiming(file.content.toString('utf8'), frozenCase);
+    if (review.violations.length) throw developmentError('TIMING_MUST_USE_RUNNER_OBSERVATION', {
+      file: file.path, violations: review.violations,
+      message: 'Remove candidate clocks and invented time bounds. Perform the original actions and loading visibility assertions; the runner measures visible duration against the frozen range and returns timing_validation.' });
+  }
 }

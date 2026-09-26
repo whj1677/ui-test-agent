@@ -3,16 +3,28 @@ import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { test } from '@playwright/test';
 import { parseProjectCaseStepTitle } from './report.mjs';
+import { sessionTerminationRequest } from '../auth/session-request-policy.mjs';
+import { startTimingObservation } from './timing-observer.mjs';
 
-export const STEP_OBSERVER_VERSION = 'e2e01-step-observer-v2';
+export const STEP_OBSERVER_VERSION = 'e2e01-step-observer-v3';
 
-export function installStepObserver({ directory, identity, capture = async (page, file) => page.screenshot({ path: file }) }) {
+export function installStepObserver({ directory, identity, allowedOrigin = null, sessionTerminationEndpoints = [], timingRequirements = [], capture = async (page, file) => page.screenshot({ path: file }) }) {
   if (!directory || !identity?.run_id || !identity?.candidate_sha256) throw new Error('STEP_OBSERVER_IDENTITY_REQUIRED');
   const originalStep = test.step;
   let page = null;
   let depth = 0;
   let ordinal = 0;
-  test.beforeEach(async ({ page: workerPage }) => { page = workerPage; });
+  test.beforeEach(async ({ page: workerPage }) => {
+    if (allowedOrigin) await workerPage.context().route('**/*', route => {
+      let target;
+      try { target = new URL(route.request().url()); } catch { return route.abort(); }
+      if (target.origin !== allowedOrigin) return route.abort();
+      if (sessionTerminationRequest(target.href, route.request().method(), allowedOrigin, sessionTerminationEndpoints))
+        return route.abort('blockedbyclient');
+      return route.continue();
+    });
+    page = workerPage;
+  });
   const evidencePath = path.join(directory, 'step-observations.ndjson');
   async function snapshot(stepId, phase) {
     const started = performance.now();
@@ -41,9 +53,18 @@ export function installStepObserver({ directory, identity, capture = async (page
       let after;
       let state = 'PASSED';
       let rawError = null;
+      let timingObserver = null;
+      let timingObservations = [];
       const initialErrors = test.info().errors.length;
       try {
+        const required = timingRequirements.filter(item => item.step === parsed.order);
+        if (required.length) timingObserver = await startTimingObservation(page, required);
         const value = await callback(...args);
+        if (timingObserver) {
+          timingObservations = await timingObserver.finish(); timingObserver = null;
+          if (timingObservations.some(item => item.status !== 'PASSED'))
+            throw new Error(`FROZEN_TIMING_REQUIREMENT_FAILED: ${JSON.stringify(timingObservations)}`);
+        }
         businessEndedAt = new Date().toISOString();
         // Soft assertions return normally but are real Playwright errors.
         const recorded = test.info().errors.slice(initialErrors);
@@ -55,6 +76,7 @@ export function installStepObserver({ directory, identity, capture = async (page
         rawError = { name: error?.name || 'Error', message: String(error?.message || error), stack: String(error?.stack || '') };
         throw error;
       } finally {
+        if (timingObserver) timingObservations = await timingObserver.finish();
         // This awaited capture is inside the original test.step callback. The
         // candidate cannot enter its next awaited business step until it ends.
         after = await snapshot(parsed.step_id, state === 'FAILED' ? 'failure-after' : 'after');
@@ -63,6 +85,7 @@ export function installStepObserver({ directory, identity, capture = async (page
           started_at: startedAt, ended_at: new Date().toISOString(),
           business_started_at: businessStartedAt, business_ended_at: businessEndedAt,
           status: state,
+          timing_observations: timingObservations,
           raw_error: rawError, captures: [before, after] };
         try { await fs.mkdir(directory, { recursive: true }); await fs.appendFile(evidencePath, `${JSON.stringify(entry)}\n`, 'utf8'); }
         catch (error) { /* Evidence failure must never replace a business assertion. */

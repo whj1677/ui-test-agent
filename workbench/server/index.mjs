@@ -15,13 +15,15 @@ import { BuildSupplementalAssessmentStore } from './build/assessments.mjs';
 import { CaseLibraryStore } from './cases/store.mjs';
 import { CaseLibraryManager } from './cases/manager.mjs';
 import { TargetAuthSessions } from './auth/session.mjs';
-import { localAuthEnvironments } from './auth/catalog.mjs';
+import { localAuthEnvironments, configuredAuthEnvironments } from './auth/catalog.mjs';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
+import { createServiceIdentity } from './service-identity.mjs';
+import { createServiceShutdown } from './service-shutdown.mjs';
 
 const host = '127.0.0.1';
-const port = Number(process.env.WORKBENCH_PORT || 4210);
-if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('INVALID_WORKBENCH_PORT');
+const port = Number(process.env.WORKBENCH_PORT || 4322);
+if (port !== 4322) throw new Error('OFFICIAL_WORKBENCH_PORT_MUST_BE_4322');
 
 const paths = createPaths();
 const serviceInstanceId = `service-${randomUUID()}`;
@@ -49,8 +51,12 @@ await buildAssessmentStore.init();
 const caseStore = new CaseLibraryStore(paths.caseLibraryRoot);
 await caseStore.init();
 const caseManager = new CaseLibraryManager(caseStore);
+const configuredAuthCatalog = process.env.WORKBENCH_AUTH_ENVIRONMENTS
+  ? JSON.parse(await fs.readFile(process.env.WORKBENCH_AUTH_ENVIRONMENTS, 'utf8')) : null;
 const authSessions = new TargetAuthSessions({
-  environments: localAuthEnvironments(process.env.WORKBENCH_AUTH_FIXTURE_BASE_URL),
+  environments: configuredAuthCatalog === null
+    ? localAuthEnvironments(process.env.WORKBENCH_AUTH_FIXTURE_BASE_URL)
+    : configuredAuthEnvironments(configuredAuthCatalog, process.env.WORKBENCH_AUTH_FIXTURE_BASE_URL),
   browserExecutable: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
 });
 const recoveredBuilds = await buildStore.recoverInterrupted(new Date().toISOString(), serviceInstanceId);
@@ -78,7 +84,7 @@ const buildManager = new BuildTaskManager({
   harnessPatchPath,
   useStoredDshCredentials,
   modelConfiguration,
-  otherActive: () => Boolean(manager.active),
+  otherActive: () => Boolean(manager.active || manager.starting || manager.shutdownRequested || manager.storageFault),
 });
 buildManager.requirementReviews = trialConfig.requirement_reviews || [];
 buildManager.userInitiatedOperations = trialConfig.user_initiated_operations === true;
@@ -88,30 +94,27 @@ const records = id => projectRecords({buildStore,caseStore,store,buildManager},i
 const scriptOperations = new ScriptOperations({root:path.join(paths.dataRoot,'script-operations'),buildManager,caseStore,records});
 await scriptOperations.init();
 const reportSnapshots = new ReportSnapshots({root:path.join(paths.dataRoot,'report-snapshots'),caseStore,batchManager,records,store,buildStore});
-const server = createWorkbenchServer({ scriptOperations, reportSnapshots, batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
+const serviceIdentity = await createServiceIdentity({repoRoot:paths.repoRoot,localRoot:paths.localRoot,instanceId:serviceInstanceId,
+  configuration:{port,model:modelConfiguration,development_environments:developmentEnvironments,trial:trialConfig,auth:authSessions.list(),
+    runtime_locations:{dsh:harnessDshHome||null,patch:harnessPatchPath||null,browser:manager.browserExecutable},authorization:buildAuthorizationId}});
+store.serviceIdentity = serviceIdentity;
+buildStore.serviceIdentity = serviceIdentity;
+reportSnapshots.serviceIdentity = serviceIdentity;
+manager.onStorageFault = (error,operation) => buildManager.reportStorageFault(error,operation);
+manager.otherActive = () => Boolean(buildManager.active||buildManager.starting||buildManager.storageFault||scriptOperations.active||scriptOperations.starting||batchManager.active||batchManager.starting);
+const serviceState = {accepting:true,shutting_down:false};
+const server = createWorkbenchServer({ serviceState, serviceIdentity, scriptOperations, reportSnapshots, batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
 server.listen(port, host, () => {
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);
   if (recoveredBuilds.length) console.log(`Recovered interrupted build tasks: ${recoveredBuilds.join(', ')}`);
 });
 
-let shutdownStarted = false;
-async function shutdown(signal) {
-  if (shutdownStarted) return;
-  shutdownStarted = true;
+const drain = createServiceShutdown({state:serviceState,server,runManager:manager,buildManager,batchManager,scriptOperations,authSessions,
+  onError:(error,operation)=>console.error(JSON.stringify({type:'shutdown_error',operation,code:error?.code||error?.message||'UNKNOWN'}))});
+function shutdown(signal) {
   console.log(JSON.stringify({ type: 'service_shutdown_requested', service_instance_id: serviceInstanceId, signal }));
-  if (scriptOperations.active) { await scriptOperations.stop(scriptOperations.active.operation.operation_id,scriptOperations.active.operation.project_id); await scriptOperations.completion; }
-  if (batchManager.active) { await batchManager.stop(batchManager.active.id); await batchManager.completion; }
-  if (buildManager.active) await buildManager.stop(buildManager.active.taskId).catch((error) => {
-    console.error(JSON.stringify({ type: 'build_stop_failed', code: error?.code || error?.message || 'UNKNOWN' }));
-  });
-  const drained = await Promise.race([
-    buildManager.settle().then(() => true),
-    new Promise((resolve) => setTimeout(() => resolve(false), 5_000)),
-  ]);
-  if (!drained) console.error(JSON.stringify({ type: 'build_settlement_timeout', service_instance_id: serviceInstanceId }));
-  await authSessions.close();
-  await new Promise((resolve) => server.close(resolve));
+  return drain();
 }
 process.once('SIGINT', () => void shutdown('SIGINT'));
 process.once('SIGTERM', () => void shutdown('SIGTERM'));

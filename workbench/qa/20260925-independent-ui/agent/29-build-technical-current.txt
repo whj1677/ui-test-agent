@@ -1,0 +1,52 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- generic: 服务就绪 · 真实后端
+- main:
+  - heading "自主建例任务 · KC-08" [level=1]
+  - paragraph: 正在独立验收
+  - paragraph: 冻结业务预期不变；技术验证不代表人工批准。
+  - paragraph: 有限规则核查：0 项明确缺口，0 处初始化或首步骤内状态选择，需对照原动作；材料不代替人工核对。
+  - button "取消任务"
+  - generic "技术详情：开发过程、资源与覆盖核查" [active]
+  - paragraph: Harness 1 · 工具 52 · 开发执行 1/3
+  - paragraph: VERIFYING · NOT_READY · 验证范围 normal-only
+  - article:
+    - heading "开发自测 1 · EXECUTED" [level=3]
+    - paragraph: 候选 SHA：E3ADEFB1A4F673F4F2A1F2D4844F1ABF20C57CE377DF5C1C227D5222DE913735
+    - generic: "null"
+    - list:
+      - listitem: CASE_STEP_1：PASSED
+      - listitem: CASE_STEP_2：PASSED
+      - listitem: CASE_STEP_3：PASSED
+  - heading "Agent提交的覆盖核查材料（不代替独立验收）" [level=2]
+  - generic: "[ { \"order\": 1, \"requirement\": \"已选1项，批量预约可用\", \"check_lines\": [ 52, 53, 54, 55, 57, 60, 61 ], \"execution\": 1, \"uncovered\": \"\" }, { \"order\": 2, \"requirement\": \"翻页后EQ-101选择保留，已选2项\", \"check_lines\": [ 66, 67, 68, 70, 72, 73, 75 ], \"execution\": 1, \"uncovered\": \"\" }, { \"order\": 3, \"requirement\": \"EQ-101与EQ-106均保持勾选，已选2项\", \"check_lines\": [ 80, 81, 82, 83, 84, 86, 87, 88, 89, 90 ], \"execution\": 1, \"uncovered\": \"\" } ]"
+  - heading "有限规则与原要求核查" [level=2]
+  - paragraph: 有限规则只能指出已识别缺口；未识别的动作、前提与预期仍须人工核对。
+  - paragraph: 核查包与提交包：哈希一致
+  - generic: "{ \"schema\": \"workbench/development-fidelity-review-v1\", \"bundle_sha256\": \"866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2\", \"candidate_sha256\": \"E3ADEFB1A4F673F4F2A1F2D4844F1ABF20C57CE377DF5C1C227D5222DE913735\", \"frozen_case_sha256\": \"BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53\", \"case_preconditions\": \"独立重置演示数据\", \"semantic_approval\": false, \"human_review_required\": true, \"finite_checks\": { \"version\": \"finite-obligations-v1\", \"semantic_pass\": false, \"human_review_required\": true, \"pre_step_state_changes\": [], \"scope\": \"Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.\", \"status\": \"NO_SUPPORTED_OBLIGATIONS\", \"obligations\": [], \"remaining_requirements\": [ { \"step\": 1, \"requirement\": \"已选1项，批量预约可用\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" }, { \"step\": 2, \"requirement\": \"翻页后EQ-101选择保留，已选2项\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" }, { \"step\": 3, \"requirement\": \"EQ-101与EQ-106均保持勾选，已选2项\", \"review\": \"Non-extracted clauses require human review; these checks do not approve a candidate.\" } ], \"bundle_sha256\": \"866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2\" }, \"steps\": [ { \"order\": 1, \"precondition\": \"独立重置演示数据\", \"action\": \"第1页勾选EQ-101\", \"expected\": \"已选1项，批量预约可用\", \"claimed_check_lines\": [ 52, 53, 54, 55, 57, 60, 61 ], \"claimed_check_source\": [ { \"line\": 52, \"code\": \" const eq101 = deviceCheckbox(page, \\\"EQ-101\\\");\" }, { \"line\": 53, \"code\": \" await expect(eq101).toBeVisible();\" }, { \"line\": 54, \"code\": \" await eq101.click();\" }, { \"line\": 55, \"code\": \" await expect(eq101).toBeChecked();\" }, { \"line\": 57, \"code\": \" await expect(selectionSummary(page)).toHaveText(/^已选 1 项/);\" }, { \"line\": 60, \"code\": \" await expect(batch).toBeVisible();\" }, { \"line\": 61, \"code\": \" await expect(batch).toBeEnabled();\" } ], \"self_test\": { \"execution\": 1, \"status\": \"EXECUTED\", \"result\": { \"report_status\": \"COMPLETE\", \"test_status\": \"PASSED\", \"test_count\": 1, \"error\": null, \"complete_pass\": true, \"stats\": { \"startTime\": \"2026-09-25T14:27:09.296Z\", \"duration\": 2920.488, \"expected\": 1, \"skipped\": 0, \"unexpected\": 0, \"flaky\": 0 }, \"process\": { \"exit_code\": 0, \"termination\": null, \"error\": null }, \"steps\": [ { \"title\": \"CASE_STEP_1\", \"raw_title\": \"CASE_STEP_1\", \"category\": null, \"duration\": 227, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_2\", \"raw_title\": \"CASE_STEP_2\", \"category\": null, \"duration\": 200, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_3\", \"raw_title\": \"CASE_STEP_3\", \"category\": null, \"duration\": 222, \"error\": null, \"raw_error\": null, \"steps\": [] } ] }, \"observed_step\": { \"marker\": \"CASE_STEP_1\", \"step_id\": \"CASE_STEP_1\", \"order\": 1, \"observed\": true, \"raw_title\": \"CASE_STEP_1\", \"report_path\": [ 0 ], \"error_attributed\": false, \"execution_status\": \"PASSED\", \"attributed_errors\": [] } }, \"action_precondition_review\": \"PENDING_INDEPENDENT_REVIEW\", \"uncovered\": \"\" }, { \"order\": 2, \"precondition\": \"独立重置演示数据\", \"action\": \"翻到第2页勾选EQ-106\", \"expected\": \"翻页后EQ-101选择保留，已选2项\", \"claimed_check_lines\": [ 66, 67, 68, 70, 72, 73, 75 ], \"claimed_check_source\": [ { \"line\": 66, \"code\": \" await nextPageButton(page).click();\" }, { \"line\": 67, \"code\": \" const eq106 = deviceCheckbox(page, \\\"EQ-106\\\");\" }, { \"line\": 68, \"code\": \" await expect(eq106).toBeVisible();\" }, { \"line\": 70, \"code\": \" await expect(selectionSummary(page)).toHaveText(/^已选 1 项/);\" }, { \"line\": 72, \"code\": \" await eq106.click();\" }, { \"line\": 73, \"code\": \" await expect(eq106).toBeChecked();\" }, { \"line\": 75, \"code\": \" await expect(selectionSummary(page)).toHaveText(/^已选 2 项/);\" } ], \"self_test\": { \"execution\": 1, \"status\": \"EXECUTED\", \"result\": { \"report_status\": \"COMPLETE\", \"test_status\": \"PASSED\", \"test_count\": 1, \"error\": null, \"complete_pass\": true, \"stats\": { \"startTime\": \"2026-09-25T14:27:09.296Z\", \"duration\": 2920.488, \"expected\": 1, \"skipped\": 0, \"unexpected\": 0, \"flaky\": 0 }, \"process\": { \"exit_code\": 0, \"termination\": null, \"error\": null }, \"steps\": [ { \"title\": \"CASE_STEP_1\", \"raw_title\": \"CASE_STEP_1\", \"category\": null, \"duration\": 227, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_2\", \"raw_title\": \"CASE_STEP_2\", \"category\": null, \"duration\": 200, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_3\", \"raw_title\": \"CASE_STEP_3\", \"category\": null, \"duration\": 222, \"error\": null, \"raw_error\": null, \"steps\": [] } ] }, \"observed_step\": { \"marker\": \"CASE_STEP_2\", \"step_id\": \"CASE_STEP_2\", \"order\": 2, \"observed\": true, \"raw_title\": \"CASE_STEP_2\", \"report_path\": [ 1 ], \"error_attributed\": false, \"execution_status\": \"PASSED\", \"attributed_errors\": [] } }, \"action_precondition_review\": \"PENDING_INDEPENDENT_REVIEW\", \"uncovered\": \"\" }, { \"order\": 3, \"precondition\": \"独立重置演示数据\", \"action\": \"返回第1页和第2页核对\", \"expected\": \"EQ-101与EQ-106均保持勾选，已选2项\", \"claimed_check_lines\": [ 80, 81, 82, 83, 84, 86, 87, 88, 89, 90 ], \"claimed_check_source\": [ { \"line\": 80, \"code\": \" await prevPageButton(page).click();\" }, { \"line\": 81, \"code\": \" const eq101 = deviceCheckbox(page, \\\"EQ-101\\\");\" }, { \"line\": 82, \"code\": \" await expect(eq101).toBeVisible();\" }, { \"line\": 83, \"code\": \" await expect(eq101).toBeChecked();\" }, { \"line\": 84, \"code\": \" await expect(selectionSummary(page)).toHaveText(/^已选 2 项/);\" }, { \"line\": 86, \"code\": \" await nextPageButton(page).click();\" }, { \"line\": 87, \"code\": \" const eq106 = deviceCheckbox(page, \\\"EQ-106\\\");\" }, { \"line\": 88, \"code\": \" await expect(eq106).toBeVisible();\" }, { \"line\": 89, \"code\": \" await expect(eq106).toBeChecked();\" }, { \"line\": 90, \"code\": \" await expect(selectionSummary(page)).toHaveText(/^已选 2 项/);\" } ], \"self_test\": { \"execution\": 1, \"status\": \"EXECUTED\", \"result\": { \"report_status\": \"COMPLETE\", \"test_status\": \"PASSED\", \"test_count\": 1, \"error\": null, \"complete_pass\": true, \"stats\": { \"startTime\": \"2026-09-25T14:27:09.296Z\", \"duration\": 2920.488, \"expected\": 1, \"skipped\": 0, \"unexpected\": 0, \"flaky\": 0 }, \"process\": { \"exit_code\": 0, \"termination\": null, \"error\": null }, \"steps\": [ { \"title\": \"CASE_STEP_1\", \"raw_title\": \"CASE_STEP_1\", \"category\": null, \"duration\": 227, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_2\", \"raw_title\": \"CASE_STEP_2\", \"category\": null, \"duration\": 200, \"error\": null, \"raw_error\": null, \"steps\": [] }, { \"title\": \"CASE_STEP_3\", \"raw_title\": \"CASE_STEP_3\", \"category\": null, \"duration\": 222, \"error\": null, \"raw_error\": null, \"steps\": [] } ] }, \"observed_step\": { \"marker\": \"CASE_STEP_3\", \"step_id\": \"CASE_STEP_3\", \"order\": 3, \"observed\": true, \"raw_title\": \"CASE_STEP_3\", \"report_path\": [ 2 ], \"error_attributed\": false, \"execution_status\": \"PASSED\", \"attributed_errors\": [] } }, \"action_precondition_review\": \"PENDING_INDEPENDENT_REVIEW\", \"uncovered\": \"\" } ] }"
+  - heading "任务失败分类与服务身份" [level=2]
+  - generic: "{ \"failure\": null, \"service_identity\": { \"schema\": \"workbench/service-identity-v1\", \"service_instance_id\": \"service-8b0e06ae-037d-41f0-b4bd-786f25339a36\", \"captured_at\": \"2026-09-25T14:04:41.548Z\", \"source_sha256\": \"3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f\", \"source_file_count\": 87, \"configuration_sha256\": \"9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2\", \"data_root_sha256\": \"bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d\", \"entry\": \"http://127.0.0.1:4322/workspace/\" } }"
+  - generic "执行证据与文件"
+- status

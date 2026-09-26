@@ -1,0 +1,1750 @@
+{
+  "task_id": "build-20260925135700-4097fd1b",
+  "source": {
+    "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+    "project_name": "V2.1 真实模型全流程 · 20260925",
+    "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+    "case_version": 1,
+    "external_id": "KC-05",
+    "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD"
+  },
+  "task_status": "WAITING_HUMAN_REVIEW",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-c3c3ba44-af3e-4e91-894a-0357118e1fa8",
+    "captured_at": "2026-09-25T13:55:32.574Z",
+    "source_sha256": "538c77a45cd0569bde344db9df3789a25ed079b2c8170780ea962b10247e2989",
+    "source_file_count": 87,
+    "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "authorization": {
+    "logical_id": "user-720bbc103d5f97ca43aed3d004488285c237b633362b954e",
+    "mode": "new",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "failure": null,
+  "development": {
+    "harness_starts": 1,
+    "tool_calls": 41,
+    "recovery": false,
+    "self_tests": [
+      {
+        "number": 1,
+        "bundle_sha256": "F3D08F0C711FDC6F69898255D8876E1E190D353BDDD4288AFB5287F6F4AE0C3F",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5256,
+            "sha256": "8AF74D1A459A3491DF77C088349B7B13024515C0E58BA476995537BCC9CF4E2C"
+          }
+        ],
+        "sha256": "8AF74D1A459A3491DF77C088349B7B13024515C0E58BA476995537BCC9CF4E2C",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790344747346,
+        "observation_epoch": 14,
+        "recovery_original": false,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "FAILED",
+          "test_count": 1,
+          "error": {
+            "type": "ASSERTION_MISMATCH",
+            "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\n    14 × locator resolved to 1 element\n",
+            "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+            "actual": "[\"共 7 条，第 1/3 页，每页3条\"]",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "complete_pass": false,
+          "stats": {
+            "startTime": "2026-09-25T13:59:07.935Z",
+            "duration": 7626.853,
+            "expected": 0,
+            "skipped": 0,
+            "unexpected": 1,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 1,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 5262,
+              "error": {
+                "type": "ASSERTION_MISMATCH",
+                "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\n    14 × locator resolved to 1 element\n",
+                "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+                "actual": "[\"共 7 条，第 1/3 页，每页3条\"]",
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "raw_error": {
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n",
+                "location": {
+                  "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs",
+                  "line": 62,
+                  "column": 35
+                },
+                "snippet": "  60 | // 断言结果总数与当前页码：形如「共 7 条，第 1/3 页，每页3条」。\n  61 | async function expectPager(page, total, pageNumber, pageCount) {\n> 62 |   await expect(pageSummary(page)).toContainText([\n     |                                   ^\n  63 |     `共 ${total} 条`,\n  64 |     `第 ${pageNumber}/${pageCount} 页`,\n  65 |   ]);"
+              },
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": false,
+          "order_valid": false,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1"
+          ],
+          "duplicates": [],
+          "missing": [
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "ASSERTION_MISMATCH",
+                    "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\n    14 × locator resolved to 1 element\n",
+                    "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+                    "actual": "[\"共 7 条，第 1/3 页，每页3条\"]",
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs",
+                      "line": 62,
+                      "column": 35
+                    },
+                    "snippet": "  60 | // 断言结果总数与当前页码：形如「共 7 条，第 1/3 页，每页3条」。\n  61 | async function expectPager(page, total, pageNumber, pageCount) {\n> 62 |   await expect(pageSummary(page)).toContainText([\n     |                                   ^\n  63 |     `共 ${total} 条`,\n  64 |     `第 ${pageNumber}/${pageCount} 页`,\n  65 |   ]);"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "step_replay": {
+          "schema": "workbench/step-evidence-replay-v1",
+          "status": "READY",
+          "run_id": "build-20260925135700-4097fd1b-dev-1",
+          "candidate_sha256": "8AF74D1A459A3491DF77C088349B7B13024515C0E58BA476995537BCC9CF4E2C",
+          "executed_external_id": "KC-05",
+          "executed_case_version": 1,
+          "observer_version": "e2e01-step-observer-v2",
+          "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+          "original_video_precise_seek": false,
+          "evidence_complete": true,
+          "missing_captures": [],
+          "steps": [
+            {
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "raw_title": "CASE_STEP_1",
+              "action": "状态勾选空闲和维护，取消使用中",
+              "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+              "execution_status": "FAILED",
+              "actual": "[\"共 7 条，第 1/3 页，每页3条\"]",
+              "assertion_expected": "[\"共 7 条\",\"第 1/3 页\"]",
+              "raw_error": {
+                "name": "Error",
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n",
+                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n\n    at expectPager (D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs:62:35)\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs:102:11\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs:92:3"
+              },
+              "executed_start": "2026-09-25T13:59:09.422Z",
+              "executed_end": "2026-09-25T13:59:14.539Z",
+              "observer_start": "2026-09-25T13:59:09.344Z",
+              "observer_end": "2026-09-25T13:59:14.604Z",
+              "screenshot_phase": "failure-after",
+              "screenshot_file_name": "case_step_1-failure-after.png",
+              "before_screenshot_file_name": "case_step_1-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 143.2239000000004
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "raw_title": null,
+              "action": "翻页浏览结果",
+              "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+              "execution_status": "NOT_EXECUTED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": null,
+              "executed_end": null,
+              "observer_start": null,
+              "observer_end": null,
+              "screenshot_phase": null,
+              "screenshot_file_name": null,
+              "before_screenshot_file_name": null,
+              "screenshot_error": null,
+              "capture_duration_ms": 0
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "raw_title": null,
+              "action": "取消维护仅留空闲",
+              "expected": "仅剩EQ-101/103/105/106/108共5条",
+              "execution_status": "NOT_EXECUTED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": null,
+              "executed_end": null,
+              "observer_start": null,
+              "observer_end": null,
+              "screenshot_phase": null,
+              "screenshot_file_name": null,
+              "before_screenshot_file_name": null,
+              "screenshot_error": null,
+              "capture_duration_ms": 0
+            }
+          ],
+          "chapters": [
+            {
+              "step_id": "CASE_STEP_1",
+              "start_seconds": 0,
+              "result_start_seconds": 1.2267999999523163,
+              "end_seconds": 3.0302999999523164,
+              "screenshot_phase": "failure-after"
+            }
+          ],
+          "duration_seconds": 3.150299,
+          "output_file_name": "step-replay-v1.webm",
+          "reading_holds": "1200ms action / 1800ms result"
+        },
+        "recording": {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "video_size": {
+            "width": 1280,
+            "height": 720
+          },
+          "device_scale_factor": 1,
+          "codec": "Playwright WebM",
+          "encoding_parameters": "Playwright defaults; bitrate not overridden"
+        },
+        "evidence_status": "STEPS_CAPTURED",
+        "evidence_error": null,
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 96,
+            "sha256": "03CEA0373D3ECA6346BC5A7836515C31CA5ACB18683D9FCE3F95EFB9DB500C9B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-05-状态多选空闲或维护/error-context.md",
+            "bytes": 11810,
+            "sha256": "1455DA6F8570012C4777CD1C6F502EDD1BDC3EB262B4005BCFA620CDA4FBB214"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-05-状态多选空闲或维护/test-failed-1.png",
+            "bytes": 54555,
+            "sha256": "29D426D93D524BD3C3D03B38319183048D0B73AC08D8DB147C20C8826E1B6F2A"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-05-状态多选空闲或维护/trace.zip",
+            "bytes": 644397,
+            "sha256": "27F1AF2CBD9269F5C5F098EF57A49D7CDA9025E8CCABE5C0F14266EA827FA5EB"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-05-状态多选空闲或维护/video.webm",
+            "bytes": 233145,
+            "sha256": "EDB80466F6A06FE731D0276BB94B98CB699598B910EEC0D2B291ED4C9F423EF8"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-before.png",
+            "bytes": 54306,
+            "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-failure-after.png",
+            "bytes": 54555,
+            "sha256": "29D426D93D524BD3C3D03B38319183048D0B73AC08D8DB147C20C8826E1B6F2A"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/step-observations.ndjson",
+            "bytes": 3317,
+            "sha256": "7C0630061CFA5016206CBB48793A40183E08B945F5D5C119FE1AB0343105835B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-replay-v1.webm",
+            "bytes": 322091,
+            "sha256": "20DDBE4A4B6904C2A8297891F59FDD7CE86E1E8681D17F9664B67DBE54D971DD"
+          },
+          {
+            "relative_path": "run-1/evidence/observer-entry/observed.spec.mjs",
+            "bytes": 998,
+            "sha256": "06ADF49C7AFA505CD70A821C5CFE7BFC0ADB4634D8CAAFF98A31EB393F56FED7"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 14091,
+            "sha256": "0AA4F105D01FEEF7EC7E3DC00BF768B309EC850A1682976EC058F43103DD3671"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/observed-KC-05-状态多选空闲或维护/trace.zip",
+              "bytes": 644397,
+              "sha256": "27F1AF2CBD9269F5C5F098EF57A49D7CDA9025E8CCABE5C0F14266EA827FA5EB"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "ASSERTION_MISMATCH",
+                    "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n- Expected  - 2\n+ Received  + 1\n\n  Array [\n-   \"共 7 条\",\n-   \"第 1/3 页\",\n+   \"共 7 条，第 1/3 页，每页3条\",\n  ]\n\nCall log:\n  - Expect \"toContainText\" with timeout 5000ms\n  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\n    14 × locator resolved to 1 element\n",
+                    "expected": "[\"共 7 条\",\"第 1/3 页\"]",
+                    "actual": "[\"共 7 条，第 1/3 页，每页3条\"]",
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: '设备资源' }).getByText('每页3条')\nTimeout: 5000ms\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 1\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"共 7 条\",\u001b[39m\n\u001b[32m-   \"第 1/3 页\",\u001b[39m\n\u001b[31m+   \"共 7 条，第 1/3 页，每页3条\",\u001b[39m\n\u001b[2m  ]\u001b[22m\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: '设备资源' }).getByText('每页3条')\u001b[22m\n\u001b[2m    14 × locator resolved to 1 element\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135700-4097fd1b\\development\\run-1\\candidate.spec.mjs",
+                      "line": 62,
+                      "column": 35
+                    },
+                    "snippet": "  60 | // 断言结果总数与当前页码：形如「共 7 条，第 1/3 页，每页3条」。\n  61 | async function expectPager(page, total, pageNumber, pageCount) {\n> 62 |   await expect(pageSummary(page)).toContainText([\n     |                                   ^\n  63 |     `共 ${total} 条`,\n  64 |     `第 ${pageNumber}/${pageCount} 页`,\n  65 |   ]);"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790344759567
+      },
+      {
+        "number": 2,
+        "bundle_sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5290,
+            "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A"
+          }
+        ],
+        "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+        "candidate_path": "run-2/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790344780849,
+        "observation_epoch": 14,
+        "recovery_original": false,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T13:59:41.468Z",
+            "duration": 2928.299,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 224,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 364,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 268,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "step_replay": {
+          "schema": "workbench/step-evidence-replay-v1",
+          "status": "READY",
+          "run_id": "build-20260925135700-4097fd1b-dev-2",
+          "candidate_sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+          "executed_external_id": "KC-05",
+          "executed_case_version": 1,
+          "observer_version": "e2e01-step-observer-v2",
+          "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+          "original_video_precise_seek": false,
+          "evidence_complete": true,
+          "missing_captures": [],
+          "steps": [
+            {
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "raw_title": "CASE_STEP_1",
+              "action": "状态勾选空闲和维护，取消使用中",
+              "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:59:42.951Z",
+              "executed_end": "2026-09-25T13:59:43.100Z",
+              "observer_start": "2026-09-25T13:59:42.911Z",
+              "observer_end": "2026-09-25T13:59:43.132Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_1-after.png",
+              "before_screenshot_file_name": "case_step_1-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 73.25849999999991
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "raw_title": "CASE_STEP_2",
+              "action": "翻页浏览结果",
+              "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:59:43.176Z",
+              "executed_end": "2026-09-25T13:59:43.445Z",
+              "observer_start": "2026-09-25T13:59:43.135Z",
+              "observer_end": "2026-09-25T13:59:43.498Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_2-after.png",
+              "before_screenshot_file_name": "case_step_2-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 93.96659999999974
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "raw_title": "CASE_STEP_3",
+              "action": "取消维护仅留空闲",
+              "expected": "仅剩EQ-101/103/105/106/108共5条",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:59:43.539Z",
+              "executed_end": "2026-09-25T13:59:43.731Z",
+              "observer_start": "2026-09-25T13:59:43.499Z",
+              "observer_end": "2026-09-25T13:59:43.766Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_3-after.png",
+              "before_screenshot_file_name": "case_step_3-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 76.20789999999988
+            }
+          ],
+          "chapters": [
+            {
+              "step_id": "CASE_STEP_1",
+              "start_seconds": 0,
+              "result_start_seconds": 1.2256000000238418,
+              "end_seconds": 3.031899999976158,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "start_seconds": 3.031899999976158,
+              "result_start_seconds": 4.236100000023842,
+              "end_seconds": 6.0505,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "start_seconds": 6.0505,
+              "result_start_seconds": 7.253,
+              "end_seconds": 9.055600000023842,
+              "screenshot_phase": "after"
+            }
+          ],
+          "duration_seconds": 9.1756,
+          "output_file_name": "step-replay-v1.webm",
+          "reading_holds": "1200ms action / 1800ms result"
+        },
+        "recording": {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "video_size": {
+            "width": 1280,
+            "height": 720
+          },
+          "device_scale_factor": 1,
+          "codec": "Playwright WebM",
+          "encoding_parameters": "Playwright defaults; bitrate not overridden"
+        },
+        "evidence_status": "STEPS_CAPTURED",
+        "evidence_error": null,
+        "changed_after_execution": false,
+        "report_path": "run-2/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-2/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-05-状态多选空闲或维护/test-finished-1.png",
+            "bytes": 50467,
+            "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-05-状态多选空闲或维护/trace.zip",
+            "bytes": 1323680,
+            "sha256": "8171BD23A260BAF9F48D3ECA3040476307D98C88EE467585255B29C016E99E20"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-05-状态多选空闲或维护/video.webm",
+            "bytes": 98107,
+            "sha256": "5F0B408AF827155A012BF1AAD02F89B44A9E6312DBD77A217BAE2D271DB47370"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_1-after.png",
+            "bytes": 54555,
+            "sha256": "29D426D93D524BD3C3D03B38319183048D0B73AC08D8DB147C20C8826E1B6F2A"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_1-before.png",
+            "bytes": 54306,
+            "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_2-after.png",
+            "bytes": 46388,
+            "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_2-before.png",
+            "bytes": 54555,
+            "sha256": "29D426D93D524BD3C3D03B38319183048D0B73AC08D8DB147C20C8826E1B6F2A"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_3-after.png",
+            "bytes": 50467,
+            "sha256": "32A78CA0D1042C07C88F9AA32862FC17B9BDB205297E140B0C5A1D37F99A1241"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_3-before.png",
+            "bytes": 46388,
+            "sha256": "0B609F1629561480E5F48D678B5B4DEC87A5A9917368AE3C34CC3EA4DC6BD1F4"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/step-observations.ndjson",
+            "bytes": 3121,
+            "sha256": "0D4109A1405B7387CDC3989C6AACCED7A5B51E9B595F5C868EB95E7D6D671146"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-replay-v1.webm",
+            "bytes": 760332,
+            "sha256": "C608D1961F1A773660A86189242B6931E8A90DC0D8DC4B63A4545F8E200ECEB7"
+          },
+          {
+            "relative_path": "run-2/evidence/observer-entry/observed.spec.mjs",
+            "bytes": 998,
+            "sha256": "7DC637DE7133CBBC289EEDFCCDD831C03AB6C24E8EB066A8AE0935C297FFE783"
+          },
+          {
+            "relative_path": "run-2/evidence/playwright-report.json",
+            "bytes": 5172,
+            "sha256": "DCD6B8F299E0DD1123596E05D3E5EA98F4A18176F93D4792C3F113BA0A9439D3"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-2/evidence/artifacts/observed-KC-05-状态多选空闲或维护/trace.zip",
+              "bytes": 1323680,
+              "sha256": "8171BD23A260BAF9F48D3ECA3040476307D98C88EE467585255B29C016E99E20"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790344794599
+      }
+    ],
+    "submission": {
+      "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+      "outcome": "ready",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+          "check_lines": [
+            92,
+            93,
+            94,
+            97,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            134
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+          "check_lines": [
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            128,
+            129,
+            130,
+            131,
+            134
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "仅剩EQ-101/103/105/106/108共5条",
+          "check_lines": [
+            147,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162
+          ],
+          "execution": 2,
+          "uncovered": ""
+        }
+      ],
+      "submitted_at": 1790344821759,
+      "file": "final/candidate.spec.mjs",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5290,
+            "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A"
+          }
+        ],
+        "sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D"
+      },
+      "fidelity_review": "fidelity-review.json",
+      "semantic_approval": false,
+      "requirements_review": "PENDING_INDEPENDENT_REVIEW"
+    },
+    "fidelity_review": {
+      "schema": "workbench/development-fidelity-review-v1",
+      "bundle_sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D",
+      "candidate_sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+      "frozen_case_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD",
+      "case_preconditions": "独立重置演示数据",
+      "semantic_approval": false,
+      "human_review_required": true,
+      "finite_checks": {
+        "version": "finite-obligations-v1",
+        "semantic_pass": false,
+        "human_review_required": true,
+        "pre_step_state_changes": [
+          {
+            "line": 92,
+            "source": "statusBox(page, FREE).check()",
+            "status": "NEEDS_INDEPENDENT_REVIEW",
+            "explanation": "A list-state selection occurs in setup or the first step. Compare it with the frozen action and precondition before treating the measured set as unchanged."
+          },
+          {
+            "line": 93,
+            "source": "statusBox(page, MAINTENANCE).check()",
+            "status": "NEEDS_INDEPENDENT_REVIEW",
+            "explanation": "A list-state selection occurs in setup or the first step. Compare it with the frozen action and precondition before treating the measured set as unchanged."
+          },
+          {
+            "line": 94,
+            "source": "statusBox(page, IN_USE).uncheck()",
+            "status": "NEEDS_INDEPENDENT_REVIEW",
+            "explanation": "A list-state selection occurs in setup or the first step. Compare it with the frozen action and precondition before treating the measured set as unchanged."
+          }
+        ],
+        "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+        "status": "NEEDS_REVIEW",
+        "obligations": [],
+        "remaining_requirements": [
+          {
+            "step": 1,
+            "requirement": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 2,
+            "requirement": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 3,
+            "requirement": "仅剩EQ-101/103/105/106/108共5条",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          }
+        ],
+        "bundle_sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D"
+      },
+      "steps": [
+        {
+          "order": 1,
+          "precondition": "独立重置演示数据",
+          "action": "状态勾选空闲和维护，取消使用中",
+          "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+          "claimed_check_lines": [
+            92,
+            93,
+            94,
+            97,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            134
+          ],
+          "claimed_check_source": [
+            {
+              "line": 92,
+              "code": "    await statusBox(page, FREE).check();"
+            },
+            {
+              "line": 93,
+              "code": "    await statusBox(page, MAINTENANCE).check();"
+            },
+            {
+              "line": 94,
+              "code": "    await statusBox(page, IN_USE).uncheck();"
+            },
+            {
+              "line": 97,
+              "code": "    await expectStatusSelection(page, [FREE, MAINTENANCE]);"
+            },
+            {
+              "line": 100,
+              "code": "    await expectPager(page, 7, 1, 3);"
+            },
+            {
+              "line": 101,
+              "code": "    await expectPageRows(page, ["
+            },
+            {
+              "line": 102,
+              "code": "      { code: \"EQ-101\", status: FREE },"
+            },
+            {
+              "line": 103,
+              "code": "      { code: \"EQ-102\", status: MAINTENANCE },"
+            },
+            {
+              "line": 104,
+              "code": "      { code: \"EQ-103\", status: FREE },"
+            },
+            {
+              "line": 105,
+              "code": "    ]);"
+            },
+            {
+              "line": 134,
+              "code": "    expect(visitedCodes).toEqual(["
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-25T13:59:41.468Z",
+                "duration": 2928.299,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 224,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 364,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 268,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "precondition": "独立重置演示数据",
+          "action": "翻页浏览结果",
+          "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+          "claimed_check_lines": [
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            128,
+            129,
+            130,
+            131,
+            134
+          ],
+          "claimed_check_source": [
+            {
+              "line": 111,
+              "code": "    await expectPager(page, 7, 1, 3);"
+            },
+            {
+              "line": 112,
+              "code": "    await expectPageRows(page, ["
+            },
+            {
+              "line": 113,
+              "code": "      { code: \"EQ-101\", status: FREE },"
+            },
+            {
+              "line": 114,
+              "code": "      { code: \"EQ-102\", status: MAINTENANCE },"
+            },
+            {
+              "line": 115,
+              "code": "      { code: \"EQ-103\", status: FREE },"
+            },
+            {
+              "line": 116,
+              "code": "    ]);"
+            },
+            {
+              "line": 117,
+              "code": "    visitedCodes.push(...(await readPageCodes(page)));"
+            },
+            {
+              "line": 119,
+              "code": "    await nextPageButton(page).click();"
+            },
+            {
+              "line": 120,
+              "code": "    await expectPager(page, 7, 2, 3);"
+            },
+            {
+              "line": 121,
+              "code": "    await expectPageRows(page, ["
+            },
+            {
+              "line": 122,
+              "code": "      { code: \"EQ-105\", status: FREE },"
+            },
+            {
+              "line": 123,
+              "code": "      { code: \"EQ-106\", status: FREE },"
+            },
+            {
+              "line": 124,
+              "code": "      { code: \"EQ-107\", status: MAINTENANCE },"
+            },
+            {
+              "line": 125,
+              "code": "    ]);"
+            },
+            {
+              "line": 126,
+              "code": "    visitedCodes.push(...(await readPageCodes(page)));"
+            },
+            {
+              "line": 128,
+              "code": "    await nextPageButton(page).click();"
+            },
+            {
+              "line": 129,
+              "code": "    await expectPager(page, 7, 3, 3);"
+            },
+            {
+              "line": 130,
+              "code": "    await expectPageRows(page, [{ code: \"EQ-108\", status: FREE }]);"
+            },
+            {
+              "line": 131,
+              "code": "    visitedCodes.push(...(await readPageCodes(page)));"
+            },
+            {
+              "line": 134,
+              "code": "    expect(visitedCodes).toEqual(["
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-25T13:59:41.468Z",
+                "duration": 2928.299,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 224,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 364,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 268,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "precondition": "独立重置演示数据",
+          "action": "取消维护仅留空闲",
+          "expected": "仅剩EQ-101/103/105/106/108共5条",
+          "claimed_check_lines": [
+            147,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162
+          ],
+          "claimed_check_source": [
+            {
+              "line": 147,
+              "code": "    await statusBox(page, MAINTENANCE).uncheck();"
+            },
+            {
+              "line": 149,
+              "code": "    await expectStatusSelection(page, [FREE]);"
+            },
+            {
+              "line": 150,
+              "code": "    await expectPager(page, 5, 1, 2);"
+            },
+            {
+              "line": 151,
+              "code": "    await expectPageRows(page, ["
+            },
+            {
+              "line": 152,
+              "code": "      { code: \"EQ-101\", status: FREE },"
+            },
+            {
+              "line": 153,
+              "code": "      { code: \"EQ-103\", status: FREE },"
+            },
+            {
+              "line": 154,
+              "code": "      { code: \"EQ-105\", status: FREE },"
+            },
+            {
+              "line": 155,
+              "code": "    ]);"
+            },
+            {
+              "line": 157,
+              "code": "    await nextPageButton(page).click();"
+            },
+            {
+              "line": 158,
+              "code": "    await expectPager(page, 5, 2, 2);"
+            },
+            {
+              "line": 159,
+              "code": "    await expectPageRows(page, ["
+            },
+            {
+              "line": 160,
+              "code": "      { code: \"EQ-106\", status: FREE },"
+            },
+            {
+              "line": 161,
+              "code": "      { code: \"EQ-108\", status: FREE },"
+            },
+            {
+              "line": 162,
+              "code": "    ]);"
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "PASSED",
+              "test_count": 1,
+              "error": null,
+              "complete_pass": true,
+              "stats": {
+                "startTime": "2026-09-25T13:59:41.468Z",
+                "duration": 2928.299,
+                "expected": 1,
+                "skipped": 0,
+                "unexpected": 0,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 0,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 224,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_2",
+                  "raw_title": "CASE_STEP_2",
+                  "category": null,
+                  "duration": 364,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                },
+                {
+                  "title": "CASE_STEP_3",
+                  "raw_title": "CASE_STEP_3",
+                  "category": null,
+                  "duration": 268,
+                  "error": null,
+                  "raw_error": null,
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": ""
+        }
+      ]
+    }
+  },
+  "candidates": [
+    {
+      "version": 2,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925135700-4097fd1b-normal",
+          "run_type": "normal",
+          "validation_scope": "normal-only",
+          "candidate_sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+          "candidate_version": 2,
+          "executed_case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+          "executed_external_id": "KC-05",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T14:00:27.821Z",
+          "finished_at": "2026-09-25T14:00:41.526Z",
+          "status": "PASSED",
+          "complete_pass": true,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": null,
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "PASSED",
+            "test_count": 1,
+            "error": null,
+            "complete_pass": true,
+            "stats": {
+              "startTime": "2026-09-25T14:00:28.425Z",
+              "duration": 2888.932,
+              "expected": 1,
+              "skipped": 0,
+              "unexpected": 0,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 0,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 255,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_2",
+                "raw_title": "CASE_STEP_2",
+                "category": null,
+                "duration": 335,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              },
+              {
+                "title": "CASE_STEP_3",
+                "raw_title": "CASE_STEP_3",
+                "category": null,
+                "duration": 270,
+                "error": null,
+                "raw_error": null,
+                "steps": []
+              }
+            ]
+          },
+          "step_replay": {
+            "schema": "workbench/step-evidence-replay-v1",
+            "status": "READY",
+            "run_id": "build-20260925135700-4097fd1b-normal",
+            "candidate_sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A",
+            "executed_external_id": "KC-05",
+            "executed_case_version": 1,
+            "observer_version": "e2e01-step-observer-v2",
+            "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+            "original_video_precise_seek": false,
+            "evidence_complete": true,
+            "missing_captures": [],
+            "steps": [
+              {
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "raw_title": "CASE_STEP_1",
+                "action": "状态勾选空闲和维护，取消使用中",
+                "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-25T14:00:29.877Z",
+                "executed_end": "2026-09-25T14:00:30.037Z",
+                "observer_start": "2026-09-25T14:00:29.825Z",
+                "observer_end": "2026-09-25T14:00:30.078Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_1-after.png",
+                "before_screenshot_file_name": "case_step_1-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 92.88869999999997
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "raw_title": "CASE_STEP_2",
+                "action": "翻页浏览结果",
+                "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-25T14:00:30.124Z",
+                "executed_end": "2026-09-25T14:00:30.375Z",
+                "observer_start": "2026-09-25T14:00:30.080Z",
+                "observer_end": "2026-09-25T14:00:30.414Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_2-after.png",
+                "before_screenshot_file_name": "case_step_2-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 83.00289999999995
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "raw_title": "CASE_STEP_3",
+                "action": "取消维护仅留空闲",
+                "expected": "仅剩EQ-101/103/105/106/108共5条",
+                "execution_status": "PASSED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": "2026-09-25T14:00:30.458Z",
+                "executed_end": "2026-09-25T14:00:30.643Z",
+                "observer_start": "2026-09-25T14:00:30.415Z",
+                "observer_end": "2026-09-25T14:00:30.684Z",
+                "screenshot_phase": "after",
+                "screenshot_file_name": "case_step_3-after.png",
+                "before_screenshot_file_name": "case_step_3-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 83.86149999999998
+              }
+            ],
+            "chapters": [
+              {
+                "step_id": "CASE_STEP_1",
+                "start_seconds": 0,
+                "result_start_seconds": 1.2255,
+                "end_seconds": 3.0292999999523165,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "start_seconds": 3.0292999999523165,
+                "result_start_seconds": 4.2406999999284745,
+                "end_seconds": 6.051199999928475,
+                "screenshot_phase": "after"
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "start_seconds": 6.051199999928475,
+                "result_start_seconds": 7.252299999952316,
+                "end_seconds": 9.055399999976158,
+                "screenshot_phase": "after"
+              }
+            ],
+            "duration_seconds": 9.175399,
+            "output_file_name": "step-replay-v1.webm",
+            "reading_holds": "1200ms action / 1800ms result"
+          },
+          "recording": {
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "video_size": {
+              "width": 1280,
+              "height": 720
+            },
+            "device_scale_factor": 1,
+            "codec": "Playwright WebM",
+            "encoding_parameters": "Playwright defaults; bitrate not overridden"
+          },
+          "evidence_status": "STEPS_CAPTURED",
+          "evidence_error": null
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "显示空闲5条加维护2条，共7条，排除EQ-104使用中",
+          "check_lines": [
+            92,
+            93,
+            94,
+            97,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            134
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 2,
+          "requirement": "第1页101/102/103，第2页105/106/107，第3页108，共3页",
+          "check_lines": [
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            128,
+            129,
+            130,
+            131,
+            134
+          ],
+          "execution": 2,
+          "uncovered": ""
+        },
+        {
+          "order": 3,
+          "requirement": "仅剩EQ-101/103/105/106/108共5条",
+          "check_lines": [
+            147,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162
+          ],
+          "execution": 2,
+          "uncovered": ""
+        }
+      ],
+      "fidelity_review": "fidelity-review.json",
+      "approval_status": "NOT_APPROVED",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 5290,
+            "sha256": "A7C601242A6A5FDFB16B03249AF0312731208E6B1F27129BC064649764ECE43A"
+          }
+        ],
+        "sha256": "0ADBA26F05EFCC39C9B79C97A08ACD5B53431820CA4370B311279C3E73FD105D"
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `�޷�����` / `δ����` / `����̬���` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `�޷�����` / `δ����` / `����̬���` / failure, and keep the original command output.
+3. docs
+   Problem: Code/test/config changes are linked to multiple or mixed governance records.
+   Fix: Keep one changed FIX or one changed real REQ for this delivery, or split the work. Changed records: REQ-0001-release-readiness, REQ-0037-autonomous-candidate-development

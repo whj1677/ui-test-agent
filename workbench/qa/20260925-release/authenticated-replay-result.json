@@ -1,0 +1,96 @@
+{
+  "schema": "workbench/test-batch-v1",
+  "batch_id": "batch-6448393a-3b57-437b-997e-f6dc8a49fed1",
+  "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+  "scope": "selected",
+  "mode": "technical",
+  "software_version": "Kimi-fixture-frozen-20260925; auth-guard-20260926",
+  "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+  "project_revision": 2,
+  "created_at": "2026-09-26T01:40:57.678Z",
+  "state": "FINISHED",
+  "items": [
+    {
+      "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+      "external_id": "CASE-02",
+      "title": "登录后按“温控”筛选、异步加载提示、结果顺序与详情抽屉",
+      "case_version": 1,
+      "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+      "selection": {
+        "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+        "case_id": "case-9aa84871-f484-4062-8601-02502bda01dd",
+        "case_version": 1,
+        "content_sha256": "92A92C974DE67B28A8EB95A906C5193C6A981EF4752277894482E6FDCD82876A",
+        "source_task_id": "build-20260926013556-3e1dd8a8",
+        "candidate_version": 2,
+        "bundle_sha256": "6DDD7FFCDAD628A4377455C8EF6B083AFD3A34825FBCFF46CACAF3BC47E7C101",
+        "environment_id": "kimi-release-auth-20260925"
+      },
+      "script_version": 2,
+      "available_versions": [
+        1
+      ],
+      "environment_identity": {
+        "id": "kimi-release-auth-20260925",
+        "kind": "registered-auth-target",
+        "normal_url": "http://127.0.0.1:4381/workspace"
+      },
+      "requirement_review": null,
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "FINISHED",
+      "reason": null,
+      "run_id": "trial-412754a6fefcff2cb3f6cb3caa6d26f18bed83d8",
+      "result": "PASSED",
+      "complete_pass": true
+    },
+    {
+      "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+      "external_id": "CASE-03",
+      "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+      "case_version": 1,
+      "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+      "selection": {
+        "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+        "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+        "case_version": 1,
+        "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+        "source_task_id": "build-20260926011026-be1ef079",
+        "candidate_version": 2,
+        "bundle_sha256": "92F93AE45518799D0022336BCB7FADFF6C0E9E54172EA74FF4C05C8AAF0B85E2",
+        "environment_id": "kimi-release-auth-20260925"
+      },
+      "script_version": 1,
+      "available_versions": [
+        1
+      ],
+      "environment_identity": {
+        "id": "kimi-release-auth-20260925",
+        "kind": "registered-auth-target",
+        "normal_url": "http://127.0.0.1:4381/workspace"
+      },
+      "requirement_review": null,
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "FINISHED",
+      "reason": null,
+      "run_id": "trial-c17f41c319910f85941c4602db0eea0467c737db",
+      "result": "PASSED",
+      "complete_pass": true
+    }
+  ],
+  "harness_starts": 0,
+  "model_calls": 0,
+  "request_id": "batch-request-8b5825b4-0f6f-426d-b74a-ea9772d8d9e6",
+  "allow_partial": false,
+  "started_at": "2026-09-26T01:40:57.694Z",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-0877612f-acf1-4c7b-ab4e-404d445f0a51",
+    "captured_at": "2026-09-26T01:33:16.158Z",
+    "source_sha256": "a398b91583c78a84a0ecc88be1120d7339424c5003edb9852eb0d48780ed8638",
+    "source_file_count": 88,
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "finished_at": "2026-09-26T01:41:49.729Z"
+}

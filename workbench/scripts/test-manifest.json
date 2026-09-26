@@ -1,0 +1,20 @@
+{
+  "unit": [
+    "tests/execution-media-timing.test.mjs",
+    "tests/timing-obligations.test.mjs",
+    "tests/timing-observer.test.mjs",
+    "tests/timing-gates.test.mjs",
+    "tests/auth-concurrency.test.mjs",
+    "tests/auth-session-request-policy.test.mjs",
+    "tests/runtime-reliability.test.mjs",
+    "tests/development-reliability.test.mjs",
+    "tests/development-session.test.mjs",
+    "tests/supervisor-reliability.test.mjs",
+    "tests/product-v21.test.mjs",
+    "tests/development-normal-only.test.mjs",
+    "tests/run-evidence.test.mjs",
+    "tests/qa-parser-regression.test.mjs",
+    "tests/build-diagnostic.test.mjs",
+    "tests/development-auth-binding.test.mjs"
+  ]
+}

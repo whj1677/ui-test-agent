@@ -3,9 +3,9 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "24条真实自主建例流程已执行；18独立技术通过、6失败保留；原要求核查分层，候选未批准",
+    "requirement_status": "v10第二轮独立真实UI与一次从头建例已验；取消展示问题已修复并同路径复测，候选未批准，验收限本轮范围",
     "governance_level": "G2",
-    "version": 8,
+    "version": 10,
     "last_updated": "2026-09-25"
   },
   "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
@@ -30,6 +30,20 @@
       "goal": "将24条Kimi用例导入工作台，由真实Coding Agent逐条自主建例执行；前台展示任务完成情况，Harness自主决定交付时机。",
       "constraints": "不改原用例/页面/旧账本；后台采用新任务显式探索档30分钟360工具10次执行，单次Harness；正常页独立验收，不伪造故障入口或自动批准。",
       "success_criteria": "真实UI导入与逐条生产任务启动；保留失败/修订/完整包和实际证据，区分Agent自报与独立核查。"
+    },
+    {
+      "id": "UN-0037-04",
+      "status": "已确认",
+      "goal": "主管分派及独立验收，在预算内完成诊断D01-D10涉及的现有功能修复。",
+      "constraints": "原业务语义、历史及人工批准不变；唯一4322；三名Sol子Agent；优先零模型，有界实际建例最多2逻辑任务，不自动扩额度或推送。",
+      "success_criteria": "恢复原稿/终态停止缺陷反转；异常/认证并发回归；正式入口构建可追溯及有限完整旅程验证。"
+    },
+    {
+      "id": "UN-0037-05",
+      "status": "已确认",
+      "goal": "新增独立子Agent真实浏览器测试，由主管第三方验收，发现问题后定向修复复测。",
+      "constraints": "唯一4322及原配置数据；复用复杂页面/用例；1名Sol high执行者；仅1新建例任务、1Harness/120工具/3自测/20分钟，不扩量或批准。",
+      "success_criteria": "真实UI有限旅程、KC08新建例及独立复跑、成功/原业务失败分开、主管逐义务审查和缺陷原路径复验。"
     }
   ],
   "confirmed_facts": [
@@ -47,7 +61,20 @@
     "原稿E8B05F...字节未改，工程驱动正常执行1次，发现1测试、六步通过。真实恢复任务build-20260925015614-6193f8f8由生产入口启动，运行源码66d3bde6faa6c4d81d57b6f69377660c5b620697，1Harness/30工具/3开发+3最终、255577ms。",
     "Agent开发结果通过→失败→通过；最终正常6步通过，原故障步骤5电压750 V/705 V，语义反例步骤4禁用断言失败，后续未执行。最终集合哈希23E806CF05C1F8846EA4288EC4CF6C1385D28D992D8ED2C41621D481FCCE86DF；候选未批准。",
     "v6固定运行源码cfb63a0cf77b252a46f53e4cc8562a9325067fa1，产品/政策/提示与8e2aad不变。陌生A build-20260925021311-a4ca71be、B build-20260925021610-943fbf86各1启动/24工具/1开发+2最终；首稿正常均5步通过、未改稿；故障分别步骤4数量3/1和步骤3工单WO-202/WO-201，后续未执行。A策略拒绝1，B零错误；非强隔离/非稳定性认证/未批准。",
-    "v7沿用原FRESH-B项目/用例v1/完整包B85AA8...与源任务build-20260925021610-943fbf86；新增run trial-6220468896555a695ecae5e1e73260af133bd6f3正常5步通过、trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002故障步骤3 WO-202/WO-201、后两步未执行；2产品执行、0Harness/0模型。原任务32登记文件与哈希不变，未批准。"
+    "v7沿用原FRESH-B项目/用例v1/完整包B85AA8...与源任务build-20260925021610-943fbf86；新增run trial-6220468896555a695ecae5e1e73260af133bd6f3正常5步通过、trial-f20a56c685f37c53cddffff8b7be9cbe1d1fc002故障步骤3 WO-202/WO-201、后两步未执行；2产品执行、0Harness/0模型。原任务32登记文件与哈希不变，未批准。",
+    "v9主管使用3名Sol子Agent实施并独立复核；原4322/fresh25-b重载生效，未commit/push，不改原用例、候选或审批状态。",
+    "v9默认工程回归65/65，失败0、跳过0；恢复原包native修改探针与终态停止竞态反转，认证并发、跨管理器准备互斥、存储故障和有界关机均有定向工程证据。",
+    "v9正式入口首次批次遇真实Windows EPERM，故障锁存拒接正确；补原子写有界重试后新批次KC-02失败/KC-08通过，失败尝试保留INTERRUPTED。运行中取消及终态重复停止均已在4322验证。",
+    "v9真实恢复KC-10：原完整包先执行，修订去掉额外筛选后失败，独立正常复核同样失败；归类BUSINESS_DIFFERENCE，不改原预期、不自动批准。",
+    "v9真实从头生成KC-05：首稿自测失败，同会话修订后自测及独立3步验证通过，仍待人工批准。两任务合计2次Harness、70工具、4次自测、2次独立复核；供应商token及费用未知。",
+    "v9正式AUTH-01仅验打开/检查/清除生命周期：并发open同版本、清除后未登录且无新增浏览器遗留。未填凭据、未验证真实登录过期或业务授权。",
+    "v9核对99个历史用例/任务/候选/报告文件和42条旧授权不变，仅追加2条本轮授权。正式复跑20个媒体、建例48个媒体均核对哈希；报告26个内嵌附件为重复核对，不与源媒体相加。",
+    "v9加载版本最终源码SHA256=3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f，有效配置摘要与本轮前序实例相同；npm start已验证复用原端口实例。",
+    "v10新增1名Sol high执行者完成13个有限真实UI场景；主管独立浏览器核查原用例/失败/媒体/报告/取消/不采纳门禁，原107文件和44授权不变，仅新增1建例授权。",
+    "v10唯一新任务build-20260925142505-0fc7ce0d：KC08从头生成，1Harness/52工具/1自测/1独立正常验证；新S2再经界面零模型复跑三步通过。主管逐义务审查无额外筛选/改预期/跳步，仍NOT_APPROVED。供应商token和费用未知。",
+    "v10混合批次KC02保留期望8/实际5失败、KC08成功；取消批次一条CANCELLED一条NOT_RUN，未伪造完成结果。固定报告只含原混合2条，截图附件核验。",
+    "v10独立测试发现取消项混入已执行汇总及MISSING/REPORT_MISSING展示缺口；仅修前端分类与文案，原后台状态不变。同一批次/run复测及完成批次展示回归符合；65工程回归失败0跳过0。",
+    "v10最终正式实例源码aa496e2e1610072cf559a7fe6fc9d52a095a52787d9fa8f6c905d503e50abbb6；保持原数据和配置摘要，空闲重载。新建例/运行原执行身份3667b3…保留；UI修复后不新增模型。证据workbench/qa/20260925-independent-ui/REPORT.md。"
   ],
   "inferences_and_open_questions": [
     "同会话MCP结果可反馈给Agent；先用零模型协议/控制器工程测试验证后才运行两个真实任务。当前不是操作系统强隔离，工具级约束不能冒称强沙箱。"
@@ -73,6 +100,27 @@
       "requirement": "显式仅正常入口验收和探索额度；自主任务状态展示",
       "acceptance_criteria": "原配对模式不变，normal-only显式注册不要求虚构故障；默认旧额度不变，新授权可选择探索档；计数与开发过程默认折叠；真实24条通过生产路径执行。",
       "constraints": "不修改工具守卫或模型依赖，不写用例编号特判；候选和业务预期不由维护者代写。"
+    },
+    {
+      "id": "DR-0037-04",
+      "status": "已确认",
+      "requirement": "开发保真、恢复完整种子及反馈/失败分层",
+      "acceptance_criteria": "原稿与helper首次自测前受完整包校验；提交自动记录有限审查而非自动审批；失败分类及可执行业务差异一次独立复核；耗尽反馈与重复尝试有界",
+      "constraints": "只修已诊断功能；不改原预期，不以替身回归替代正式入口验收。"
+    },
+    {
+      "id": "DR-0037-05",
+      "status": "已确认",
+      "requirement": "运行收口、存储故障、取消互斥和认证并发",
+      "acceptance_criteria": "终态不可倒退；后台错误锁存并拒绝新任务；准备/执行/收口互斥；关闭先拒接；同scope登录浏览器无泄漏",
+      "constraints": "只修已诊断功能；不改原预期，不以替身回归替代正式入口验收。"
+    },
+    {
+      "id": "DR-0037-06",
+      "status": "已确认",
+      "requirement": "唯一入口、测试命令和服务构建身份",
+      "acceptance_criteria": "默认工程测试不另起工作台/模型；正式功能仅4322；每次新run/task绑定已加载源码及脱敏配置身份；有限真实UI旅程及报告",
+      "constraints": "只修已诊断功能；不改原预期，不以替身回归替代正式入口验收。"
     }
   ],
   "design_decisions": [
@@ -102,6 +150,33 @@
       "status": "已确认",
       "summary": "normal-only环境只独立运行正常入口；exploratory注册独立预算，不修改旧receipt；同一4322服务和fresh-b数据内通过UI新建独立项目导入24例。",
       "rationale": "去掉为正常页面虚构故障的要求，让Agent自行迭代但保留独立验收和终止边界。"
+    },
+    {
+      "id": "DD-0037-04",
+      "dr_ids": [
+        "DR-0037-04"
+      ],
+      "status": "已确认",
+      "summary": "原稿与helper首次自测前受完整包校验；提交自动记录有限审查而非自动审批；失败分类及可执行业务差异一次独立复核；耗尽反馈与重复尝试有界",
+      "rationale": "复用已有管理器/执行器/事实源，以最小防线闭合已证实边界。"
+    },
+    {
+      "id": "DD-0037-05",
+      "dr_ids": [
+        "DR-0037-05"
+      ],
+      "status": "已确认",
+      "summary": "终态不可倒退；后台错误锁存并拒绝新任务；准备/执行/收口互斥；关闭先拒接；同scope登录浏览器无泄漏",
+      "rationale": "复用已有管理器/执行器/事实源，以最小防线闭合已证实边界。"
+    },
+    {
+      "id": "DD-0037-06",
+      "dr_ids": [
+        "DR-0037-06"
+      ],
+      "status": "已确认",
+      "summary": "默认工程测试不另起工作台/模型；正式功能仅4322；每次新run/task绑定已加载源码及脱敏配置身份；有限真实UI旅程及报告",
+      "rationale": "复用已有管理器/执行器/事实源，以最小防线闭合已证实边界。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -110,7 +185,8 @@
   ],
   "module_document_impact": [
     "更新docs/modules/test-workbench.md，build管理器/存储、工具桥、执行器复用、必要API与页面读回。",
-    "v8：development-task支持显式normal-only，authorization新增exploratory新授权档；web-v2仅把自主状态与技术计数分层；运行入口和证据见workbench/qa/20260925-kimi-workbench/REPORT.md。"
+    "v8：development-task支持显式normal-only，authorization新增exploratory新授权档；web-v2仅把自主状态与技术计数分层；运行入口和证据见workbench/qa/20260925-kimi-workbench/REPORT.md。",
+    "v9：补充诊断修复架构、唯一入口测试命令、加载身份和状态边界。"
   ],
   "risks_and_rollback": [
     "权限守卫和静态候选限制并非强OS沙箱；无法判清业务差异时报告待分析，不无限修绿。默认停在等待人工核对。"
@@ -172,6 +248,62 @@
       "task": "完成正常入口模式、探索档、状态展示、24条保真UI导入及真实自主建例；逐条独立核查和证据收口，业务失败保留",
       "verification_ids": [
         "VT-0037-06"
+      ]
+    },
+    {
+      "id": "TK-0037-05",
+      "dr_ids": [
+        "DR-0037-04"
+      ],
+      "dd_ids": [
+        "DD-0037-04"
+      ],
+      "status": "已实现",
+      "task": "开发保真、恢复完整种子及反馈/失败分层；职责：repair_development",
+      "verification_ids": [
+        "VT-0037-07"
+      ]
+    },
+    {
+      "id": "TK-0037-06",
+      "dr_ids": [
+        "DR-0037-05"
+      ],
+      "dd_ids": [
+        "DD-0037-05"
+      ],
+      "status": "已实现",
+      "task": "运行收口、存储故障、取消互斥和认证并发；职责：repair_runtime / repair_auth_tests / supervisor",
+      "verification_ids": [
+        "VT-0037-08"
+      ]
+    },
+    {
+      "id": "TK-0037-07",
+      "dr_ids": [
+        "DR-0037-06"
+      ],
+      "dd_ids": [
+        "DD-0037-06"
+      ],
+      "status": "已实现",
+      "task": "唯一入口、测试命令和服务构建身份；职责：repair_auth_tests / supervisor",
+      "verification_ids": [
+        "VT-0037-09"
+      ]
+    },
+    {
+      "id": "TK-0037-08",
+      "dr_ids": [
+        "DR-0037-06"
+      ],
+      "dd_ids": [
+        "DD-0037-06"
+      ],
+      "status": "已实现",
+      "task": "第二轮独立真实浏览器验收及取消状态展示定向修复；执行者browser_acceptance_round2，主管独立复核。",
+      "verification_ids": [
+        "VT-0037-10"
       ]
     }
   ],
@@ -276,21 +408,96 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20260925-kimi-workbench/engineering.log"
       }
+    },
+    {
+      "id": "VT-0037-07",
+      "dr_ids": [
+        "DR-0037-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "原稿与helper首次自测前受完整包校验；提交自动记录有限审查而非自动审批；失败分类及可执行业务差异一次独立复核；耗尽反馈与重复尝试有界",
+      "evidence_standard": "生产函数定向回归、正式4322证据、实际退出码与边界说明。2真实会话；原包恢复、失败一次独立复核、从头自测修订及哈希绑定材料验证。KC-10仍业务失败，KC-05独立技术通过，均未批准。",
+      "current_evidence": {
+        "command": "node workbench/qa/20260925-reliability/verify-model-results.mjs",
+        "exit_code": 0,
+        "test_count": 2,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-reliability/model-results.json"
+      }
+    },
+    {
+      "id": "VT-0037-08",
+      "dr_ids": [
+        "DR-0037-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "终态不可倒退；后台错误锁存并拒绝新任务；准备/执行/收口互斥；关闭先拒接；同scope登录浏览器无泄漏",
+      "evidence_standard": "生产函数定向回归、正式4322证据、实际退出码与边界说明。65项工程清单含故障/并发/收口替身回归；正式运行中取消、终态幂等、实际EPERM及AUTH-01打开清除验证。未验证生产磁盘满或真实登录。",
+      "current_evidence": {
+        "command": "node workbench/qa/20260925-reliability/verify-active-cancel.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-reliability/active-cancel.json"
+      }
+    },
+    {
+      "id": "VT-0037-09",
+      "dr_ids": [
+        "DR-0037-06"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "默认工程测试不另起工作台/模型；正式功能仅4322；每次新run/task绑定已加载源码及脱敏配置身份；有限真实UI旅程及报告",
+      "evidence_standard": "生产函数定向回归、正式4322证据、实际退出码与边界说明。已加载源码匹配；正式两条复跑、媒体播放/定位、API下载、固定报告及历史保留验证。外部客户业务覆盖与系统浏览器离线打开未验。",
+      "current_evidence": {
+        "command": "npm run test:official",
+        "exit_code": 0,
+        "test_count": 4,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-reliability/official-readiness-final.json"
+      }
+    },
+    {
+      "id": "VT-0037-10",
+      "dr_ids": [
+        "DR-0037-06"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "独立真实UI旅程、一次有界从头建例、主管语义核对与取消展示复验",
+      "evidence_standard": "13个UI场景及取消原路径复验见本轮REPORT和agent简报；主管5组对象核验是3批次/1建例/1报告，不是5业务用例通过。KC02仍业务失败，取消不计完成；65项工程回归/最终入口4项只读核对分别记账。真实客户、多平台、离线系统浏览器未验。",
+      "current_evidence": {
+        "command": "node workbench/qa/20260925-independent-ui/verify-round2.mjs batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9 batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411 batch-036f6471-e080-41be-a066-be03a8a7c5a2 report-52201e00c26f334a826ef5129d7f7e2214657f2c build-20260925142505-0fc7ce0d",
+        "exit_code": 0,
+        "test_count": 5,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-independent-ui/supervisor/verification.log"
+      }
     }
   ],
   "verification_environment": {
     "working_directory": "workbench/",
     "commands": [
       "npm test",
-      "npm --prefix ../harness-probe test"
+      "npm run test:official",
+      "node workbench/qa/20260925-reliability/verify-model-results.mjs"
     ],
     "environment": [
-      "Windows Node22、锁定Playwright1.62.1、DSH0.1.6-alpha.2；独立测试端口，日常4322不变。"
+      "Windows Node22、锁定Playwright1.62.1、DSH0.1.6-alpha.2；独立测试端口，日常4322不变。",
+      "v9本轮正式功能仅原4322/fresh25-b；辅助被测目标不属于工作台。工程回归不启动工作台或模型。"
     ],
     "conclusion": [
       "工作台最终collector回归见当前日志；Harness24/24退出0；锁定DSH零模型插件检查通过。",
       "真实逻辑任务2/2，Harness2次，工具57次，开发执行3次+最终验证4次。A恢复完成，B仍有缺口；不得自动批准。",
-      "旧核心108项失败未修复/未重跑；AUTH扩展、任意环境接入、自动恢复不在本批完成范围。"
+      "旧核心108项失败未修复/未重跑；AUTH扩展、任意环境接入、自动恢复不在本批完成范围。",
+      "v9工程65/65及限定正式功能验证完成，详见workbench/qa/20260925-reliability/REPORT.md。全库checker仍有REQ-0015两处历史宣称冲突；不宣称全库门禁通过。"
     ]
   },
   "trace_current": [
@@ -341,6 +548,38 @@
       "tk_id": "TK-0037-04",
       "vt_id": "VT-0037-06",
       "status": "已实现"
+    },
+    {
+      "un_id": "UN-0037-04",
+      "dr_id": "DR-0037-04",
+      "dd_id": "DD-0037-04",
+      "tk_id": "TK-0037-05",
+      "vt_id": "VT-0037-07",
+      "status": "已实现并完成限定验证"
+    },
+    {
+      "un_id": "UN-0037-04",
+      "dr_id": "DR-0037-05",
+      "dd_id": "DD-0037-05",
+      "tk_id": "TK-0037-06",
+      "vt_id": "VT-0037-08",
+      "status": "已实现并完成限定验证"
+    },
+    {
+      "un_id": "UN-0037-04",
+      "dr_id": "DR-0037-06",
+      "dd_id": "DD-0037-06",
+      "tk_id": "TK-0037-07",
+      "vt_id": "VT-0037-09",
+      "status": "已实现并完成限定验证"
+    },
+    {
+      "un_id": "UN-0037-05",
+      "dr_id": "DR-0037-06",
+      "dd_id": "DD-0037-06",
+      "tk_id": "TK-0037-08",
+      "vt_id": "VT-0037-10",
+      "status": "已实现并完成限定验证"
     }
   ],
   "trace_history": [
@@ -465,6 +704,22 @@
       "description": "用户明确选择工作台真实模型逐条建例，并要求Harness自主决定开发完成，不以3次自测限制前期探索；增加显式正常页模式和探索档，旧结果原样保留。",
       "impact": "development-task/authorization、局部状态展示与生产驱动；工具政策及旧账本不变",
       "confirmed_by": "当前用户明确回复可以继续"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 9,
+      "type": "诊断修复授权与实施",
+      "description": "完成诊断D01-D10有界修复及限定正式4322验收；真实Windows EPERM促成有界原子写重试；2开发会话/70工具/4自测，无额外扩量，历史与人工批准保留。",
+      "impact": "development/runtime/auth/test-entry/build-identity",
+      "confirmed_by": "当前用户明确指令"
+    },
+    {
+      "date": "2026-09-25",
+      "version": 10,
+      "type": "独立真实UI复验与定向修复",
+      "description": "新增1名独立执行Agent，完成13场景与1次真实从头建例；主管确认取消汇总及缺失证据展示问题并修复同路径复验。仅1Harness/52工具/1自测，保留原历史和审批。",
+      "impact": "web-v2 presentation and bounded independent acceptance",
+      "confirmed_by": "当前用户明确指令"
     }
   ]
 }

@@ -1,0 +1,136 @@
+diff --git a/workbench/web-v2/execution-media.js b/workbench/web-v2/execution-media.js
+--- a/workbench/web-v2/execution-media.js
++++ b/workbench/web-v2/execution-media.js
+@@ -1,3 +1,14 @@
+ // Presentation only: preserve recorded outcomes and never infer a missing value.
++const timingFailureReasons = {
++  TIMING_EVIDENCE_MISSING_OR_INVALID: '来源身份或记录完整性未通过核验',
++  TIMING_OBSERVATION_CONTEXT_LOST: '页面跳转导致观测上下文丢失',
++  TIMING_TARGET_NOT_UNIQUE: '目标提示缺失或重复',
++  TIMING_TARGET_ALREADY_VISIBLE: '步骤开始时提示已显示',
++  TIMING_TARGET_REPLACED: '观测期间提示元素被替换',
++  TIMING_INTERVAL_NOT_ENDED: '提示显示后未结束',
++  TIMING_REQUIRES_ONE_COMPLETE_CYCLE: '未取得唯一完整显示周期',
++  TIMING_OUT_OF_FROZEN_RANGE: '提示可见时长超出原范围',
++};
++
+ export function executionSteps(run) {
+   const steps = run.step_replay?.steps?.length ? run.step_replay.steps
+@@ -15,13 +26,27 @@ export function executionSteps(run) {
+   });
+   if (!run.timing_validation?.observations?.length) return steps;
+   return steps.map(step => {
+     const timing = (run.timing_validation?.observations || []).filter(item => item.step === step.order);
+     if (!timing.length) return step;
+-    const actual = timing.map(item => `“${item.target || '加载提示'}”：${Number.isFinite(item.observed_duration_ms)
+-      ? `实测 ${item.observed_duration_ms.toFixed(1)} ms` : '未取得完整时长'}；原要求 ${item.min_ms}–${item.max_ms} ms；${item.status === 'PASSED' ? '时间要求满足' : '时间要求未满足'}`).join('\n');
++    const actual = timing.map(item => {
++      const target = `“${item.target || '加载提示'}”`;
++      if (item.status !== 'PASSED' || !Number.isFinite(item.observed_duration_ms))
++        return `${target}：计时证据未通过核验；原因：${timingFailureReasons[item.reason] || item.reason || '缺少有效观测值'}`;
++      return `${target}：实测 ${item.observed_duration_ms.toFixed(1)} ms；原要求 ${item.min_ms}–${item.max_ms} ms；时间要求满足`;
++    }).join('\n');
+     return { ...step, actual: [step.actual, actual].filter(Boolean).join('\n'),
+       ...(timing.some(item => item.status !== 'PASSED') ? { execution_status: 'FAILED' } : {}) };
+   });
+ }
+ 
++// View-only fallback: the Playwright report can pass while independent timing
++// evidence fails. Keep the stored run and its business verdict unchanged.
++export function displayFailureStep(run) {
++  if (run.failure_step) return run.failure_step;
++  if (run.status !== 'FAILED') return null;
++  const timing = run.timing_validation?.observations?.find(item =>
++    item.status === 'FAILED' && Number.isInteger(item.step) && item.step > 0);
++  return timing ? `CASE_STEP_${timing.step}` : null;
++}
++
+ export function stepResultLabel(step, run) {
+diff --git a/workbench/web-v2/app.js b/workbench/web-v2/app.js
+--- a/workbench/web-v2/app.js
++++ b/workbench/web-v2/app.js
+@@ -3,4 +3,4 @@
+ import { renderHistory } from './history.js';
+ import { openBatch, automationState, remedyHtml, batchHtml, reviewHtml, reviewLabels, batchReasons, stateLabel } from '/workspace/workflow.js';
+-import { executionSteps, stepResultLabel, stepOutcomeNotice, executionMediaUrl, enhanceMedia } from '/workspace/execution-media.js';
++import { executionSteps, displayFailureStep, stepResultLabel, stepOutcomeNotice, executionMediaUrl, enhanceMedia } from '/workspace/execution-media.js';
+ import { ApiError, api, downloadPackage, uploadCaseFile } from '/workspace/api.js';
+@@ -453,3 +453,4 @@
+   setBreadcrumb([{label:'项目',href:'#/projects'},{label:project.name,href:`#/projects/${encodeURIComponent(project.project_id)}/cases`},{label:'建例任务',href:`#/projects/${encodeURIComponent(project.project_id)}/build-tasks`},{label:task.source?.external_id || task.task_id}]);
+-  const content=task.input_bundle?.snapshot?.content; const latest=task.candidates?.at(-1);
++  const content=task.input_bundle?.snapshot?.content; const originalLatest=task.candidates?.at(-1);
++  const latest=originalLatest?{...originalLatest,trial_runs:originalLatest.trial_runs?.map(run=>({...run,failure_step:displayFailureStep(run)}))}:null;
+   const steps=(content?.steps || []).map((step)=>`<article class="step-pair"><div class="step-number">${step.order}</div><div><small>动作</small><p>${esc(step.action)}</p></div><div><small>对应预期</small><p>${esc(step.expected)}</p></div></article>`).join('');
+@@ -487,3 +488,4 @@
+ async function renderExecutionRecords(project, context=null) {
+   let {records}=await api(`/api/case-library/projects/${encodeURIComponent(project.project_id)}/execution-records`);
++  records=records.map(run=>({...run,failure_step:displayFailureStep(run)}));
+   if(context)records=records.filter(r=>r.executed_case_id===context.item.case_id&&r.executed_case_version===context.version.version);
+diff --git a/workbench/tests/execution-media-timing.test.mjs b/workbench/tests/execution-media-timing.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/workbench/tests/execution-media-timing.test.mjs
+@@ -0,0 +1,47 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { displayFailureStep, executionSteps } from '../web-v2/execution-media.js';
++
++const base = observation => ({
++  status: observation.status === 'PASSED' ? 'PASSED' : 'FAILED',
++  failure_step: null,
++  step_coverage: { items: [{ marker: 'CASE_STEP_1', order: 1, execution_status: 'PASSED' }] },
++  frozen_case_content: { steps: [{ order: 1, action: '查询', expected: '原文 400-600ms' }] },
++  timing_validation: { required: true, complete: observation.status === 'PASSED', observations: [
++    { step: 1, target: '正在加载设备列表…', min_ms: 400, max_ms: 600, ...observation },
++  ] },
++});
++
++test('only verified timing is presented as measured against original bounds', () => {
++  const run = base({ status: 'PASSED', observed_duration_ms: 500, reason: null });
++  const [step] = executionSteps(run);
++  assert.equal(step.execution_status, 'PASSED');
++  assert.match(step.actual, /实测 500\.0 ms；原要求 400–600 ms；时间要求满足/);
++  assert.equal(displayFailureStep(run), null);
++});
++
++test('invalid identity cannot turn an untrusted 500 ms value into a measured result', () => {
++  const run = base({ status: 'FAILED', observed_duration_ms: 500, reason: 'TIMING_EVIDENCE_MISSING_OR_INVALID' });
++  const [step] = executionSteps(run);
++  assert.equal(step.execution_status, 'FAILED');
++  assert.match(step.actual, /计时证据未通过核验.*来源身份或记录完整性未通过核验/);
++  assert.doesNotMatch(step.actual, /实测|时间要求未满足|500\.0 ms/);
++  assert.equal(displayFailureStep(run), 'CASE_STEP_1');
++});
++
++test('out-of-range and missing intervals remain evidence failures without inventing values', () => {
++  for (const observation of [
++    { status: 'FAILED', observed_duration_ms: 700, reason: 'TIMING_OUT_OF_FROZEN_RANGE' },
++    { status: 'FAILED', observed_duration_ms: null, reason: 'TIMING_REQUIRES_ONE_COMPLETE_CYCLE' },
++  ]) {
++    const [step] = executionSteps(base(observation));
++    assert.equal(step.execution_status, 'FAILED');
++    assert.match(step.actual, /计时证据未通过核验/);
++    assert.doesNotMatch(step.actual, /实测|时间要求未满足/);
++  }
++});
++
++test('presentation fallback preserves an existing failure step and never rewrites a passing run', () => {
++  assert.equal(displayFailureStep({ ...base({ status: 'FAILED' }), failure_step: 'CASE_STEP_3' }), 'CASE_STEP_3');
++  assert.equal(displayFailureStep({ ...base({ status: 'FAILED' }), status: 'PASSED' }), null);
++});
+diff --git a/docs/modules/test-workbench.md b/docs/modules/test-workbench.md
+--- a/docs/modules/test-workbench.md
++++ b/docs/modules/test-workbench.md
+@@ -156,3 +156,3 @@
+ 
+-原文有限提取只支持唯一引号加载提示及明确双边时间范围；不能明确解析的时间要求保留 NEEDS_REVIEW。候选入口和本地 helper 的自设计时不能成为证据。执行器在原 CASE_STEP 回调前后监测唯一 live/status 元素的一个 DOM 可见周期，按原始范围判断，不增加容差；证据绑定 run_id、候选摘要、步骤、提示和原上下界。缺失、重复、已显示、节点替换、页面跳转、超界均失败。自测、提交 ready、最终验证及既有候选复跑统一使用该证据；技术通过仍不自动人工批准。UI 展示实测值和原范围。
++原文有限提取只支持唯一引号加载提示及明确双边时间范围；已检出但不能明确解析的数值时间表达保留 NEEDS_REVIEW。没有被提取的其他时间语义仍需人工核对，不能声称程序一律拒绝。候选入口和本地 helper 的自设计时不能成为证据。执行器在原 CASE_STEP 回调前后监测唯一 live/status 元素的一个 DOM 可见周期，按原始范围判断，不增加容差；证据绑定 run_id、候选摘要、步骤、提示和原上下界。缺失、重复、已显示、节点替换、页面跳转、超界均失败。自测、提交 ready、最终验证及既有候选复跑统一使用该证据；技术通过仍不自动人工批准。UI 仅对核验通过的时间证据展示实测值和原范围；核验失败显示原因。
+ 
+diff --git a/workbench/docs/release-candidate.md b/workbench/docs/release-candidate.md
+--- a/workbench/docs/release-candidate.md
++++ b/workbench/docs/release-candidate.md
+@@ -12,3 +12,3 @@
+ 
+-带加载时长的用例按原文范围验收，不附加时间容差。当前支持引号内的加载提示和明确双边毫秒/秒范围，由执行器在对应 CASE_STEP 内观测唯一 status/aria-live 元素的一次可见周期，并将实测值绑定到本次运行及候选文件。开始即已显示、节点替换、重复周期、缺失证据或超出范围均不能通过。候选脚本及 helper 不得自行使用时钟替代计时证据；不能明确解析的时间要求保留待评审状态。该检查覆盖 DOM 可见状态，不代表显示器像素计时或操作系统隔离，也不替代原步骤动作与业务断言的人工核对。
++带加载时长的用例按原文范围验收，不附加时间容差。当前支持引号内的加载提示和明确双边毫秒/秒范围，由执行器在对应 CASE_STEP 内观测唯一 status/aria-live 元素的一次可见周期，并将核验通过的实测值绑定到本次运行及候选文件。开始即已显示、节点替换、重复周期、缺失证据或超出范围均不能通过。候选脚本及 helper 不得自行使用时钟替代计时证据；已检出但不能明确解析的数值时间表达保留待评审状态，其他未提取的时间语义仍需人工核对。该检查覆盖 DOM 可见状态，不代表显示器像素计时或操作系统隔离，也不替代原步骤动作与业务断言的人工核对。
+ 

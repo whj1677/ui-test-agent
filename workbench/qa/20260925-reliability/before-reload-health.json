@@ -1,0 +1,23 @@
+{
+  "service": "approved-test-workbench",
+  "status": "ready",
+  "active_run_id": null,
+  "active_build_task_id": null,
+  "active_batch_id": null,
+  "active_script_operation_id": null,
+  "build_budget": {
+    "schema": "workbench/build-stage-budget-v1",
+    "phase": "M2-C",
+    "max_starts": 2,
+    "used_starts": 0,
+    "claims": []
+  },
+  "build_authorization": null,
+  "build_diagnostics": {
+    "service_instance_id": "service-b4e0a3d1-3981-44b5-969f-64f1d54ba80c",
+    "storage_status": "READY",
+    "storage_error": null,
+    "authorization_id": null,
+    "trial_runner_version": "e2e01-step-evidence-replay-v1"
+  }
+}

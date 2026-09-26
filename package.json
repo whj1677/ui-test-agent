@@ -7,14 +7,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node src/server.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "test:browser": "node tests/browser.integration.mjs",
-    "test:console": "node tests/console.integration.mjs",
-    "test:model-flow": "node tests/model-flow.integration.mjs",
-    "test:reliability": "node tests/reliability.integration.mjs",
-    "test:discovery": "node tests/discovery.integration.mjs",
-    "test:optimization": "node optimization/evaluate.mjs fixtures",
+    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File workbench/scripts/start-workbench.ps1",
+    "test": "npm --prefix workbench test",
+    "test:official": "node workbench/scripts/verify-official-workbench.mjs",
     "format": "prettier --write \"src/**/*.mjs\" \"public/*.js\" \"tests/*.mjs\" \"optimization/*.mjs\"",
     "format:check": "prettier --check \"src/**/*.mjs\" \"public/*.js\" \"tests/*.mjs\" \"optimization/*.mjs\""
   },

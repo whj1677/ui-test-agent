@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: pre-registered generation cannot advertise an expired authenticated session as ready
+ok 1 - pre-registered generation cannot advertise an expired authenticated session as ready
+  ---
+  duration_ms: 11.7415
+  type: 'test'
+  ...
+# Subtest: explicit auth catalog accepts registered same-origin HTTPS and rejects unsafe targets
+ok 2 - explicit auth catalog accepts registered same-origin HTTPS and rejects unsafe targets
+  ---
+  duration_ms: 0.8779
+  type: 'test'
+  ...
+# Subtest: identity redirect fails closed without following a cross-origin or downgraded Location
+ok 3 - identity redirect fails closed without following a cross-origin or downgraded Location
+  ---
+  duration_ms: 0.896
+  type: 'test'
+  ...
+# Subtest: development auth binds the registered target, fixed role and valid session without anonymous fetch
+ok 4 - development auth binds the registered target, fixed role and valid session without anonymous fetch
+  ---
+  duration_ms: 1.1857
+  type: 'test'
+  ...
+# Subtest: auth development patch retains MCP guard and switches browser to memory attachment
+ok 5 - auth development patch retains MCP guard and switches browser to memory attachment
+  ---
+  duration_ms: 0.483
+  type: 'test'
+  ...
+# Subtest: self-test receives authentication only through verifier input and persists no state
+ok 6 - self-test receives authentication only through verifier input and persists no state
+  ---
+  duration_ms: 18.8577
+  type: 'test'
+  ...
+# Subtest: registered auth trial target uses the existing target and has no negative lane
+ok 7 - registered auth trial target uses the existing target and has no negative lane
+  ---
+  duration_ms: 0.5517
+  type: 'test'
+  ...
+# Subtest: authenticated development evidence is complete without a network trace
+ok 8 - authenticated development evidence is complete without a network trace
+  ---
+  duration_ms: 0.6906
+  type: 'test'
+  ...
+# Subtest: authenticated candidate cannot be mapped to another project session
+ok 9 - authenticated candidate cannot be mapped to another project session
+  ---
+  duration_ms: 0.8628
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 764.515

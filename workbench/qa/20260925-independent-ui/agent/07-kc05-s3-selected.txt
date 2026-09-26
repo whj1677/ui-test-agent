@@ -1,0 +1,144 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases?q=KC-05&page=1"
+- generic: /
+- strong: KC-05
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases?q=KC-05&page=1"
+  - heading "KC-05 · 状态多选空闲或维护" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S3 · 2026-09-25T13:57:00." [selected]
+    - option "S2 · 2026-09-25T12:51:01."
+    - option "S1 · 2026-09-25T11:01:21."
+  - generic: 脚本资格：候选未批准
+  - text: 存在多个脚本，请明确选择版本 ·
+  - link "选择适用脚本":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?version=1&tab=scripts"
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fq%3DKC-05%26page%3D1&version=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fq%3DKC-05%26page%3D1&version=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fq%3DKC-05%26page%3D1&version=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases%3Fq%3DKC-05%26page%3D1&version=1&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）" [selected]
+    - option "2026-09-25T12:59:09.568Z · v9-new-script-rerun-649508B8 · 执行结束"
+    - option "2026-09-25T11:27:22.504Z · engineer-20260925-selected-retry · 执行结束"
+    - option "2026-09-25T11:26:43.941Z · engineer-20260925-selected-cancel · 已取消"
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 执行结束"
+  - paragraph: 历史结果 / 来源未分批；开发自测与独立验证分别保留。
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本版本最近历史结果"
+    - option "2026-09-25T11:03:26.555Z · 开发自测 · 失败"
+    - option "2026-09-25T11:03:51.970Z · 开发自测 · 通过"
+    - option "2026-09-25T11:04:12.980Z · 独立验证 · 通过"
+    - option "2026-09-25T12:52:35.255Z · 开发自测 · 通过"
+    - option "2026-09-25T12:54:03.227Z · 独立验证 · 通过"
+    - option "2026-09-25T12:59:09.586Z · 批次技术试跑 · 通过"
+    - option "2026-09-25T13:59:07.346Z · 开发自测 · 失败"
+    - option "2026-09-25T13:59:40.849Z · 开发自测 · 通过"
+    - option "2026-09-25T14:00:27.821Z · 独立验证 · 通过" [selected]
+  - paragraph: 执行状态：历史已执行 · 软件版本：未提供 · 脚本 S3 · 资格：未批准
+  - article:
+    - heading "KC-05 · 运行结果" [level=3]
+    - paragraph: 来源 KC-05 · 脚本 S3
+    - generic: 通过
+    - paragraph: 执行用例 v1 · 运行器 自主开发验证执行器
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - strong: 要求核查：待核对
+    - paragraph: 尚无绑定此用例版本和文件包的维护者核查；运行通过不代表要求完整。
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/build/tasks/build-20260925135700-4097fd1b/media/build-file-24
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/build/tasks/build-20260925135700-4097fd1b/media/build-file-15
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 状态勾选空闲和维护，取消使用中"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 显示空闲5条加维护2条，共7条，排除EQ-104使用中
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925135700-4097fd1b/media/build-file-17
+      - button "2. 翻页浏览结果"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 第1页101/102/103，第2页105/106/107，第3页108，共3页
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925135700-4097fd1b/media/build-file-19
+      - button "3. 取消维护仅留空闲"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 仅剩EQ-101/103/105/106/108共5条
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925135700-4097fd1b/media/build-file-21
+  - img "本次运行截图"
+- status

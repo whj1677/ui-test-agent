@@ -1,9 +1,11 @@
 ﻿[CmdletBinding()]
 param(
   [ValidateSet('e2e', 'auth', 'fresh-b')]
-  [string]$Data = 'e2e',
+  [string]$Data = 'fresh-b',
   # 本机启动配置文件（Git 忽略）。默认 scripts/start-workbench.local.json；模板见同目录 .example。
   [string]$ConfigPath,
+  # 浏览器可执行文件；也可使用 DSH_PROBE_BROWSER_EXECUTABLE，缺省时自动查找。
+  [string]$BrowserPath,
   # 显式加载 fresh-b 的真实模型配置；仍需逐用例既有授权，不创建或重置额度。
   [switch]$EnableModel,
   # 只加载并核对配置、输出安全摘要，不启动服务。
@@ -15,13 +17,73 @@ if ($EnableModel -and $Data -ne 'fresh-b') { throw '-EnableModel 仅适用于 fr
 $workbenchRoot = Split-Path -Parent $PSScriptRoot
 $repoRoot = Split-Path -Parent $workbenchRoot
 $port = 4322
+function Resolve-WorkbenchBrowser {
+  param([string]$ExplicitPath, [string]$WorkbenchRoot)
+  $configured = if ($ExplicitPath) { $ExplicitPath } else { $env:DSH_PROBE_BROWSER_EXECUTABLE }
+  if ($configured) {
+    if (-not [System.IO.Path]::IsPathRooted($configured) -or -not (Test-Path -LiteralPath $configured -PathType Leaf)) {
+      throw "浏览器可执行文件不可用：$configured。请传入 -BrowserPath 或设置 DSH_PROBE_BROWSER_EXECUTABLE 为绝对路径。"
+    }
+    return [System.IO.Path]::GetFullPath($configured)
+  }
+  $programFilesX86 = [Environment]::GetEnvironmentVariable('ProgramFiles(x86)')
+  $candidates = @(
+    $(if ($programFilesX86) { [System.IO.Path]::Combine($programFilesX86, 'Microsoft/Edge/Application/msedge.exe') }),
+    $(if ($env:ProgramFiles) { [System.IO.Path]::Combine($env:ProgramFiles, 'Microsoft/Edge/Application/msedge.exe') }),
+    $(if ($env:ProgramFiles) { [System.IO.Path]::Combine($env:ProgramFiles, 'Google/Chrome/Application/chrome.exe') }),
+    $(if ($env:LOCALAPPDATA) { [System.IO.Path]::Combine($env:LOCALAPPDATA, 'Google/Chrome/Application/chrome.exe') })
+  ) | Where-Object { $_ }
+  foreach ($candidate in $candidates) {
+    if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+  }
+  $playwrightPackage = Join-Path $WorkbenchRoot 'node_modules/playwright/package.json'
+  if (Test-Path -LiteralPath $playwrightPackage) {
+    $bundled = & node -p "require('./node_modules/playwright').chromium.executablePath()" 2>$null
+    if ($LASTEXITCODE -eq 0 -and $bundled -and (Test-Path -LiteralPath $bundled -PathType Leaf)) { return [string]$bundled }
+  }
+  throw '未找到可用浏览器。请运行 安装.cmd 安装 Chromium，或用 -BrowserPath 指定 Edge/Chrome 的绝对路径。'
+}
+# A normal launch reuses the one already owned instance. It never changes its
+# data/configuration, kills a process, or starts another workbench.
+$existingListener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+if ($existingListener -and -not $CheckOnly) {
+  $ownerId = $existingListener[0].OwningProcess
+  $ownerProcess = Get-CimInstance Win32_Process -Filter "ProcessId = $ownerId"
+  $expectedEntry = (Join-Path $workbenchRoot 'server/index.mjs').Replace('/','\')
+  $actualCommand = ([string]$ownerProcess.CommandLine).Replace('/','\')
+  $ownedHealth = Invoke-RestMethod -Uri "http://127.0.0.1:$port/api/health" -TimeoutSec 3
+  if (-not $actualCommand.Contains($expectedEntry) -or $ownedHealth.service -ne 'approved-test-workbench') {
+    throw '4322被非当前项目实例占用；不会结束进程或更换端口。'
+  }
+  if ($PSBoundParameters.ContainsKey('Data') -or $ConfigPath -or $BrowserPath -or $EnableModel) {
+    Write-Output '4322已有本项目实例；显式配置尚未重新加载。请空闲后按原配置正常重启，当前实例与数据保持不变。'
+    exit 2
+  }
+  Write-Output "已复用本项目4322实例（PID $ownerId），原数据和配置不变：http://127.0.0.1:4322/workspace/"
+  exit 0
+}
 $dataDirName = if ($Data -eq 'auth') { 'auth01-user-trial' } else { 'six-case-e2e' }
 $dataDir = Join-Path $workbenchRoot (Join-Path '.local' $dataDirName)
 
 # Existing autonomous sample data: zero-model default, explicit opt-in, same daily port.
 if ($Data -eq 'fresh-b') {
   $dataDir = Join-Path $workbenchRoot '.local/fresh25-b'
-  if (-not (Test-Path -LiteralPath (Join-Path $dataDir 'case-library/projects'))) { throw '原FRESH-B项目数据缺失；不会复制报告或生成替代项目。' }
+  $profileMarker = Join-Path $dataDir 'workspace-profile.json'
+  $emptyWorkspace = $false
+  $projectsDir = Join-Path $dataDir 'case-library/projects'
+  if (Test-Path -LiteralPath $profileMarker -PathType Leaf) {
+    $profile = Get-Content -LiteralPath $profileMarker -Raw | ConvertFrom-Json
+    if ($profile.schema -ne 'workbench/data-profile-v1' -or $profile.profile -ne 'empty') { throw '空工作区标记无效；不会覆盖已有数据。' }
+    $emptyWorkspace = $true
+  } elseif (-not (Test-Path -LiteralPath $projectsDir)) {
+    if ((Test-Path -LiteralPath $dataDir) -and @(Get-ChildItem -LiteralPath $dataDir -Force).Count -gt 0) {
+      throw 'fresh-b 数据目录已有内容但缺少项目库；请核对原数据，不会覆盖或生成替代项目。'
+    }
+    $emptyWorkspace = $true
+    Write-Output "首次空工作区：$dataDir（仅在正式启动时由服务初始化，不导入样例或授权）。"
+  }
+  $trialConfig = if ($emptyWorkspace) { Join-Path $workbenchRoot 'config/empty-trial.json' } else { Join-Path $workbenchRoot 'config/fresh-b-trial.json' }
+  if (-not (Test-Path -LiteralPath $trialConfig -PathType Leaf)) { throw "试跑配置不存在：$trialConfig" }
   $modelProfile = $null
   if ($EnableModel) {
     if (-not $ConfigPath) { $ConfigPath = Join-Path $PSScriptRoot 'start-workbench.local.json' }
@@ -32,24 +94,41 @@ if ($Data -eq 'fresh-b') {
       if (-not $value -or -not [System.IO.Path]::IsPathRooted($value) -or -not (Test-Path -LiteralPath $value)) { throw "真实模型配置缺失或路径不可用：$key" }
     }
     if ($modelProfile.WORKBENCH_USE_STORED_DSH_CREDENTIALS -ne '1') { throw '该入口仅复用已保存DSH凭据，不接受密钥正文。' }
+    if ($modelProfile.WORKBENCH_AUTH_ENVIRONMENTS) {
+      $authEnvironments = [string]$modelProfile.WORKBENCH_AUTH_ENVIRONMENTS
+      if (-not [System.IO.Path]::IsPathRooted($authEnvironments) -or -not (Test-Path -LiteralPath $authEnvironments -PathType Leaf)) {
+        throw 'WORKBENCH_AUTH_ENVIRONMENTS 必须是可用的绝对 JSON 文件路径。'
+      }
+    }
     $trialProfile = Get-Content -LiteralPath $modelProfile.WORKBENCH_CANDIDATE_TRIAL_CONFIG -Raw | ConvertFrom-Json
     if ($trialProfile.model_calls_allowed -ne $true) { throw '真实模型配置必须明确 model_calls_allowed=true。' }
     Write-Output '已核对 fresh-b 显式模型配置；逐用例授权和现有预算仍由服务端校验。'
   }
   $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
   if ($listener) { Write-Output '4322已占用；不结束未知进程、不换端口。'; exit 2 }
-  Write-Output "数据配置：$dataDir；4322空闲；模型模式：$([bool]$EnableModel)。"
+  $node = Get-Command node -ErrorAction SilentlyContinue
+  if (-not $node -or [int](& $node.Source -p 'parseInt(process.versions.node)') -lt 22) { throw '需要 Node.js 22 或更高版本。' }
+  Push-Location -LiteralPath $workbenchRoot
+  try { $browserExecutable = Resolve-WorkbenchBrowser -ExplicitPath $BrowserPath -WorkbenchRoot $workbenchRoot }
+  finally { Pop-Location }
+  Write-Output "浏览器：$browserExecutable"
+  Write-Output "数据配置：$dataDir；试跑配置：$trialConfig；4322空闲；模型模式：$([bool]$EnableModel)。"
   if ($CheckOnly) { exit 0 }
-  foreach ($key in @('WORKBENCH_BUILD_AUTHORIZATION_ID','M2C_BUILD_AUTHORIZATION_ID','WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS')) { Remove-Item -LiteralPath "Env:$key" -ErrorAction SilentlyContinue }
+  if ($emptyWorkspace -and -not (Test-Path -LiteralPath $profileMarker)) {
+    New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+    Set-Content -LiteralPath $profileMarker -Value '{"schema":"workbench/data-profile-v1","profile":"empty"}' -Encoding UTF8
+  }
+  foreach ($key in @('WORKBENCH_BUILD_AUTHORIZATION_ID','M2C_BUILD_AUTHORIZATION_ID','WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS','WORKBENCH_AUTH_ENVIRONMENTS')) { Remove-Item -LiteralPath "Env:$key" -ErrorAction SilentlyContinue }
   $env:WORKBENCH_PORT = [string]$port
   $env:WORKBENCH_DATA_DIR = $dataDir
-  $env:WORKBENCH_CANDIDATE_TRIAL_CONFIG = Join-Path $workbenchRoot 'config/fresh-b-trial.json'
+  $env:WORKBENCH_CANDIDATE_TRIAL_CONFIG = $trialConfig
   if ($modelProfile) {
     foreach ($key in @('WORKBENCH_DSH_HOME','WORKBENCH_HARNESS_PATCH','WORKBENCH_USE_STORED_DSH_CREDENTIALS','WORKBENCH_DEVELOPMENT_ENVIRONMENTS','WORKBENCH_CANDIDATE_TRIAL_CONFIG')) {
       Set-Item -LiteralPath "Env:$key" -Value ([string]$modelProfile.$key)
     }
+    if ($modelProfile.WORKBENCH_AUTH_ENVIRONMENTS) { $env:WORKBENCH_AUTH_ENVIRONMENTS = [string]$modelProfile.WORKBENCH_AUTH_ENVIRONMENTS }
   }
-  $env:DSH_PROBE_BROWSER_EXECUTABLE = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+  $env:DSH_PROBE_BROWSER_EXECUTABLE = $browserExecutable
   Write-Output '入口：http://127.0.0.1:4322/workspace/；前台运行，Ctrl+C停止工作台；已有脚本复跑不调用模型。'
   & node (Join-Path $workbenchRoot 'server/index.mjs')
   exit $LASTEXITCODE
@@ -245,10 +324,9 @@ if ($CheckOnly) { exit 0 }
 
 $env:WORKBENCH_PORT = [string]$port
 $env:WORKBENCH_DATA_DIR = $dataDir
-$edge = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-if (-not $env:DSH_PROBE_BROWSER_EXECUTABLE -and (Test-Path -LiteralPath $edge)) {
-  $env:DSH_PROBE_BROWSER_EXECUTABLE = $edge
-}
+Push-Location -LiteralPath $workbenchRoot
+try { $env:DSH_PROBE_BROWSER_EXECUTABLE = Resolve-WorkbenchBrowser -ExplicitPath $BrowserPath -WorkbenchRoot $workbenchRoot }
+finally { Pop-Location }
 Write-Output "工作台代码目录：$workbenchRoot"
 Write-Output "入口：http://127.0.0.1:$port/workspace/ （前台运行，关闭本窗口即停止）"
 Set-Location -LiteralPath $workbenchRoot

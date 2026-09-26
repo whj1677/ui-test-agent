@@ -1,0 +1,106 @@
+{
+  "schema": "workbench/test-batch-v1",
+  "batch_id": "batch-5b24efdd-e265-4474-807c-571c37763e32",
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "scope": "selected",
+  "mode": "technical",
+  "software_version": "release-20260926-fixed-round1",
+  "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+  "project_revision": 8,
+  "created_at": "2026-09-26T00:45:54.26Z",
+  "state": "PREVIEW",
+  "items": [
+    {
+      "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+      "external_id": "KC-02",
+      "title": "编号模糊搜索不区分大小写",
+      "case_version": 1,
+      "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+      "selection": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925104223-1281faca",
+        "candidate_version": 2,
+        "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+        "environment_id": "kimi-complex-20260925"
+      },
+      "script_version": 1,
+      "available_versions": [
+        1
+      ],
+      "environment_identity": {
+        "id": "kimi-complex-20260925",
+        "kind": "registered-static-html",
+        "file": "qa/20260925-kimi-complex/index.html",
+        "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+      },
+      "requirement_review": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+        "case_version": 1,
+        "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+        "source_task_id": "build-20260925104223-1281faca",
+        "candidate_version": 2,
+        "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+        "environment_id": "kimi-complex-20260925",
+        "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+        "finding": "最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。",
+        "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+        "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+        "approval_status": "NOT_APPROVED"
+      },
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "QUEUED",
+      "reason": null
+    },
+    {
+      "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+      "external_id": "KC-08",
+      "title": "跨页选择保留",
+      "case_version": 1,
+      "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+      "selection": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+        "case_version": 1,
+        "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+        "source_task_id": "build-20260925111456-1a5a2b10",
+        "candidate_version": 1,
+        "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+        "environment_id": "kimi-complex-20260925"
+      },
+      "script_version": 1,
+      "available_versions": [
+        1
+      ],
+      "environment_identity": {
+        "id": "kimi-complex-20260925",
+        "kind": "registered-static-html",
+        "file": "qa/20260925-kimi-complex/index.html",
+        "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+      },
+      "requirement_review": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+        "case_version": 1,
+        "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+        "source_task_id": "build-20260925111456-1a5a2b10",
+        "candidate_version": 1,
+        "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+        "environment_id": "kimi-complex-20260925",
+        "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+        "finding": "逐行核查101首选、翻页106新增后计数2、往返两页两行保持勾选，且103/108未误选；真实操作与计数/行复选框绑定，无额外状态条件，无修改原预期。自测及最终独立验证通过，最终文件与受审草稿同哈希；本轮结果仍由新批次决定。",
+        "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+        "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+        "approval_status": "NOT_APPROVED"
+      },
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "QUEUED",
+      "reason": null
+    }
+  ],
+  "harness_starts": 0,
+  "model_calls": 0
+}

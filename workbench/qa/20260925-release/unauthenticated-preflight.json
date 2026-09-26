@@ -1,0 +1,30 @@
+{
+  "mode": "generate",
+  "environment_id": "kimi-release-auth-20260925",
+  "items": [
+    {
+      "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+      "external_id": "CASE-03",
+      "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+      "case_version": 1,
+      "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "wall_ms": 1200000
+      },
+      "state": "BLOCKED",
+      "reason": "AUTH_SESSION_REQUIRED",
+      "input": {
+        "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+        "case_version": 1
+      }
+    }
+  ],
+  "model_calls_required": true
+}

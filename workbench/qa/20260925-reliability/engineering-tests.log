@@ -1,0 +1,396 @@
+
+> deepseek-ui-test-agent@0.4.0-beta.1 test
+> npm --prefix workbench test
+
+
+> ui-test-approved-workbench@0.1.0 test
+> node scripts/run-unit-checks.mjs
+
+TAP version 13
+# Subtest: same-scope concurrent opens share one launch and one session
+ok 1 - same-scope concurrent opens share one launch and one session
+  ---
+  duration_ms: 25.8033
+  type: 'test'
+  ...
+# Subtest: clear and close wait for a preparing browser and leave no session
+ok 2 - clear and close wait for a preparing browser and leave no session
+  ---
+  duration_ms: 14.5295
+  type: 'test'
+  ...
+# Subtest: clear waits for identity check, notifies invalidation once, and prevents stale VALID state
+ok 3 - clear waits for identity check, notifies invalidation once, and prevents stale VALID state
+  ---
+  duration_ms: 8.5994
+  type: 'test'
+  ...
+# Subtest: Harness stderr diagnostic keeps error context and redacts credentials
+ok 4 - Harness stderr diagnostic keeps error context and redacts credentials
+  ---
+  duration_ms: 1.925
+  type: 'test'
+  ...
+# Subtest: stored DSH credential is redacted even without a sk prefix
+ok 5 - stored DSH credential is redacted even without a sk prefix
+  ---
+  duration_ms: 11.6707
+  type: 'test'
+  ...
+# Subtest: normal-only requires explicit registration and never invents a fault lane
+ok 6 - normal-only requires explicit registration and never invents a fault lane
+  ---
+  duration_ms: 2.6334
+  type: 'test'
+  ...
+# Subtest: paired default still requires fault, and semantic remains explicit
+ok 7 - paired default still requires fault, and semantic remains explicit
+  ---
+  duration_ms: 0.4329
+  type: 'test'
+  ...
+# Subtest: exploratory budget is explicit, bounded and does not inflate standard receipts
+ok 8 - exploratory budget is explicit, bounded and does not inflate standard receipts
+  ---
+  duration_ms: 0.659
+  type: 'test'
+  ...
+# Subtest: first recovery execution snapshots authorized complete package despite native file edits
+ok 9 - first recovery execution snapshots authorized complete package despite native file edits
+  ---
+  duration_ms: 63.6562
+  type: 'test'
+  ...
+# Subtest: same failed bundle needs a new observation or revision before another execution
+ok 10 - same failed bundle needs a new observation or revision before another execution
+  ---
+  duration_ms: 21.8034
+  type: 'test'
+  ...
+# Subtest: ready submission rejects a finite known obligation gap while review stays unapproved
+ok 11 - ready submission rejects a finite known obligation gap while review stays unapproved
+  ---
+  duration_ms: 28.7599
+  type: 'test'
+  ...
+# Subtest: submission persists hash-bound frozen-action review with observed execution
+ok 12 - submission persists hash-bound frozen-action review with observed execution
+  ---
+  duration_ms: 34.261
+  type: 'test'
+  ...
+# Subtest: budget feedback and narrow DOM read capability remain bounded
+ok 13 - budget feedback and narrow DOM read capability remain bounded
+  ---
+  duration_ms: 2.6114
+  type: 'test'
+  ...
+# Subtest: DSH tool call/result projection keeps only correlation and success metadata
+ok 14 - DSH tool call/result projection keeps only correlation and success metadata
+  ---
+  duration_ms: 2.0234
+  type: 'test'
+  ...
+# Subtest: finite pre-step review catches historical changed-list examples without case-ID rules
+ok 15 - finite pre-step review catches historical changed-list examples without case-ID rules
+  ---
+  duration_ms: 38.4034
+  type: 'test'
+  ...
+# Subtest: pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+ok 16 - pinned DSH MCP client receives fixture executor failure, continues repair and freezes only newly tested bytes
+  ---
+  duration_ms: 204.952
+  type: 'test'
+  ...
+# Subtest: self-test limit is cumulative and further edits cannot create an unverified final version
+ok 17 - self-test limit is cumulative and further edits cannot create an unverified final version
+  ---
+  duration_ms: 49.5926
+  type: 'test'
+  ...
+# Subtest: cancellation reaches an active execution and later tools stop
+ok 18 - cancellation reaches an active execution and later tools stop
+  ---
+  duration_ms: 10.4798
+  type: 'test'
+  ...
+# Subtest: wall budget terminates before another tool or executor admission
+ok 19 - wall budget terminates before another tool or executor admission
+  ---
+  duration_ms: 3.833
+  type: 'test'
+  ...
+# Subtest: from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+ok 20 - from-scratch null CAS accepts ESM draft; rejected require does not create or execute a candidate
+  ---
+  duration_ms: 33.7107
+  type: 'test'
+  ...
+# Subtest: task guard denies arbitrary commands, filesystem, code and alternate navigation
+ok 21 - task guard denies arbitrary commands, filesystem, code and alternate navigation
+  ---
+  duration_ms: 2.3593
+  type: 'test'
+  ...
+# Subtest: report snapshots freeze exact run, escape content, redact fields and embed verified media
+ok 22 - report snapshots freeze exact run, escape content, redact fields and embed verified media
+  ---
+  duration_ms: 31.8622
+  type: 'test'
+  ...
+# Subtest: report missing/tampered media remains missing and blocked batch items stay in denominator
+ok 23 - report missing/tampered media remains missing and blocked batch items stay in denominator
+  ---
+  duration_ms: 16.4005
+  type: 'test'
+  ...
+# Subtest: report cancellation prevents snapshot commit and pending conflicting request is rejected
+ok 24 - report cancellation prevents snapshot commit and pending conflicting request is rejected
+  ---
+  duration_ms: 9.8683
+  type: 'test'
+  ...
+# Subtest: generation preflight has real authorization boundary, separates revision input, no task on rejection
+ok 25 - generation preflight has real authorization boundary, separates revision input, no task on rejection
+  ---
+  duration_ms: 9.7034
+  type: 'test'
+  ...
+# Subtest: invalid revision seed cannot consume an existing authorization
+ok 26 - invalid revision seed cannot consume an existing authorization
+  ---
+  duration_ms: 7.7471
+  type: 'test'
+  ...
+# Subtest: generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+ok 27 - generation queue freezes each input, preserves mode, is idempotent and does not create grants (coordinator unit double)
+  ---
+  duration_ms: 19.47
+  type: 'test'
+  ...
+# Subtest: revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+ok 28 - revision passes verified complete bundle and selected feedback; cancellation is durable and restart does not replay (unit double)
+  ---
+  duration_ms: 54.6476
+  type: 'test'
+  ...
+# Subtest: explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+ok 29 - explicit user generation confirms bounded new receipt without resetting consumed grants; preflight is read-only
+  ---
+  duration_ms: 32.2427
+  type: 'test'
+  ...
+# Subtest: user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+ok 30 - user-confirmed revision receipt persists UTF-8 seed and whole bundle without approving script
+  ---
+  duration_ms: 30.582
+  type: 'test'
+  ...
+# Subtest: original TC-005 raw report maps multiline values and the same failed step offline
+ok 31 - original TC-005 raw report maps multiline values and the same failed step offline
+  ---
+  duration_ms: 19.5712
+  type: 'test'
+  ...
+# Subtest: string
+ok 32 - string
+  ---
+  duration_ms: 0.8537
+  type: 'test'
+  ...
+# Subtest: ansi
+ok 33 - ansi
+  ---
+  duration_ms: 0.2402
+  type: 'test'
+  ...
+# Subtest: missing
+ok 34 - missing
+  ---
+  duration_ms: 0.3508
+  type: 'test'
+  ...
+# Subtest: strict
+ok 35 - strict
+  ---
+  duration_ms: 0.5195
+  type: 'test'
+  ...
+# Subtest: single side
+ok 36 - single side
+  ---
+  duration_ms: 0.229
+  type: 'test'
+  ...
+# Subtest: timeout
+ok 37 - timeout
+  ---
+  duration_ms: 0.5451
+  type: 'test'
+  ...
+# Subtest: truncated array
+ok 38 - truncated array
+  ---
+  duration_ms: 0.8074
+  type: 'test'
+  ...
+# Subtest: truncated diff
+ok 39 - truncated diff
+  ---
+  duration_ms: 0.7472
+  type: 'test'
+  ...
+# Subtest: array
+ok 40 - array
+  ---
+  duration_ms: 1.5273
+  type: 'test'
+  ...
+# Subtest: structured matcher data precedes text without inventing single-sided actual
+ok 41 - structured matcher data precedes text without inventing single-sided actual
+  ---
+  duration_ms: 0.8512
+  type: 'test'
+  ...
+# Subtest: real KC-02 self-tests retain failure, continued steps and captured locator actual
+ok 42 - real KC-02 self-tests retain failure, continued steps and captured locator actual
+  ---
+  duration_ms: 13.0335
+  type: 'test'
+  ...
+# Subtest: only attributed evidence is displayed; zero and false are not missing
+ok 43 - only attributed evidence is displayed; zero and false are not missing
+  ---
+  duration_ms: 0.553
+  type: 'test'
+  ...
+# Subtest: recorded replay steps remain authoritative and successful run has no failure notice
+ok 44 - recorded replay steps remain authoritative and successful run has no failure notice
+  ---
+  duration_ms: 0.2243
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_update","at":"2026-09-25T13:43:24.452Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_read","at":"2026-09-25T13:43:24.453Z"}
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_stop_update","at":"2026-09-25T13:43:24.454Z"}
+# Subtest: terminal candidate trial stop is idempotent while active cleanup is pending
+ok 45 - terminal candidate trial stop is idempotent while active cleanup is pending
+  ---
+  duration_ms: 1.5502
+  type: 'test'
+  ...
+# Subtest: queued stop updater cannot turn a concurrent terminal write back into STOPPING
+ok 46 - queued stop updater cannot turn a concurrent terminal write back into STOPPING
+  ---
+  duration_ms: 0.3668
+  type: 'test'
+  ...
+# Subtest: stop queued behind a pending terminal write preserves FINISHED
+ok 47 - stop queued behind a pending terminal write preserves FINISHED
+  ---
+  duration_ms: 0.4672
+  type: 'test'
+  ...
+# Subtest: candidate stop persistence failure degrades manager and rejects new work
+ok 48 - candidate stop persistence failure degrades manager and rejects new work
+  ---
+  duration_ms: 1.3448
+  type: 'test'
+  ...
+# Subtest: candidate stop read failure still aborts the captured owned task
+ok 49 - candidate stop read failure still aborts the captured owned task
+  ---
+  duration_ms: 0.4763
+  type: 'test'
+  ...
+# Subtest: candidate stop never aborts a replacement active task
+ok 50 - candidate stop never aborts a replacement active task
+  ---
+  duration_ms: 0.4664
+  type: 'test'
+  ...
+# Subtest: script and batch reserve mutually exclusive preparation windows
+ok 51 - script and batch reserve mutually exclusive preparation windows
+  ---
+  duration_ms: 21.416
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EEXIST","operation":"generation_save","at":"2026-09-25T13:43:24.479Z"}
+# {"type":"build_storage_failure","code":"EEXIST","operation":"batch_save","at":"2026-09-25T13:43:24.479Z"}
+# Subtest: script and batch persistence failures report storage fault
+ok 52 - script and batch persistence failures report storage fault
+  ---
+  duration_ms: 7.1938
+  type: 'test'
+  ...
+# {"type":"build_storage_failure","code":"EIO","operation":"trial_result_update","at":"2026-09-25T13:43:24.496Z"}
+# Subtest: background terminal write failure remains visible as degraded without a false FINISHED state
+ok 53 - background terminal write failure remains visible as degraded without a false FINISHED state
+  ---
+  duration_ms: 17.8003
+  type: 'test'
+  ...
+# Subtest: health remains inspectable after storage read failure and rejects new writes
+ok 54 - health remains inspectable after storage read failure and rejects new writes
+  ---
+  duration_ms: 3.2114
+  type: 'test'
+  ...
+# Subtest: generation ownership blocks new work but allows owned candidate cancellation
+ok 55 - generation ownership blocks new work but allows owned candidate cancellation
+  ---
+  duration_ms: 2.6472
+  type: 'test'
+  ...
+# Subtest: preparing build prevents approved run entry before active is assigned
+ok 56 - preparing build prevents approved run entry before active is assigned
+  ---
+  duration_ms: 0.765
+  type: 'test'
+  ...
+# Subtest: shutdown refuses admission first, stops both executors, drains and closes auth once
+ok 57 - shutdown refuses admission first, stops both executors, drains and closes auth once
+  ---
+  duration_ms: 1.8225
+  type: 'test'
+  ...
+# Subtest: service identity changes with source and new records retain captured identity
+ok 58 - service identity changes with source and new records retain captured identity
+  ---
+  duration_ms: 41.9692
+  type: 'test'
+  ...
+# Subtest: approved executor keeps ownership through failed finalization and rejects the completion
+ok 59 - approved executor keeps ownership through failed finalization and rejects the completion
+  ---
+  duration_ms: 4.0323
+  type: 'test'
+  ...
+# Subtest: approved executor start guard includes peer preparation and shutdown
+ok 60 - approved executor start guard includes peer preparation and shutdown
+  ---
+  duration_ms: 0.9319
+  type: 'test'
+  ...
+# Subtest: failed STOPPING persistence still cancels owned child and latches fault
+ok 61 - failed STOPPING persistence still cancels owned child and latches fault
+  ---
+  duration_ms: 0.5177
+  type: 'test'
+  ...
+# Subtest: shutdown timeout is bounded, closes auth and never reports drained success
+ok 62 - shutdown timeout is bounded, closes auth and never reports drained success
+  ---
+  duration_ms: 41.9311
+  type: 'test'
+  ...
+1..62
+# tests 62
+# suites 0
+# pass 62
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1714.277

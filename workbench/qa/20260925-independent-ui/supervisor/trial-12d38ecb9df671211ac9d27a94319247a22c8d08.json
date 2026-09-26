@@ -1,0 +1,268 @@
+{
+  "schema": "workbench/candidate-trial-v1",
+  "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+  "batch_id": "batch-036f6471-e080-41be-a066-be03a8a7c5a2",
+  "requirement_review": {
+    "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+    "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+    "case_version": 1,
+    "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+    "source_task_id": "build-20260925104223-1281faca",
+    "candidate_version": 2,
+    "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+    "environment_id": "kimi-complex-20260925",
+    "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+    "finding": "最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。",
+    "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+    "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+    "approval_status": "NOT_APPROVED"
+  },
+  "diagnostic": false,
+  "request_id": "batch-036f6471-e080-41be-a066-be03a8a7c5a2-0",
+  "request_fingerprint": "6EF52E107A4FA08C0CF9CEA3424EB291778D4F46E98E4ADF95CAEBFED089F435",
+  "selection": {
+    "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+    "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+    "case_version": 1,
+    "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+    "source_task_id": "build-20260925104223-1281faca",
+    "candidate_version": 2,
+    "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+    "environment_id": "kimi-complex-20260925"
+  },
+  "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+  "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+  "case_version": 1,
+  "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+  "source_task_id": "build-20260925104223-1281faca",
+  "candidate_version": 2,
+  "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+  "environment_id": "kimi-complex-20260925",
+  "source_build_task_id": "build-20260925104223-1281faca",
+  "source_case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+  "source_external_id": "KC-02",
+  "source_case_version": 1,
+  "executed_case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+  "executed_case_version": 1,
+  "executed_external_id": "KC-02",
+  "executed_content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+  "frozen_case_content": {
+    "external_id": "KC-02",
+    "title": "编号模糊搜索不区分大小写",
+    "module": "设备预约调度",
+    "preconditions": "独立重置演示数据",
+    "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "在搜索框输入小写eq-10",
+        "expected": "立即筛选，匹配EQ-101至EQ-108全部8条，回到第1页"
+      },
+      {
+        "order": 2,
+        "action": "清空后输入大写EQ-106",
+        "expected": "仅显示EQ-106，共1条，第1/1页"
+      },
+      {
+        "order": 3,
+        "action": "输入eq-1并查看边界",
+        "expected": "匹配编号含eq-1的设备，搜索不区分大小写且组合筛选立即生效"
+      }
+    ],
+    "status": "CONFIRMED"
+  },
+  "script_version": 1,
+  "candidate_sha256": "5C9CD2F4F1BB50E393883FAF6DC2338EEC9EF5CFE76959ED4D60AADDFD85D88C",
+  "bundle": {
+    "files": [
+      {
+        "path": "candidate.spec.mjs",
+        "bytes": 4889,
+        "sha256": "5C9CD2F4F1BB50E393883FAF6DC2338EEC9EF5CFE76959ED4D60AADDFD85D88C"
+      }
+    ],
+    "sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F"
+  },
+  "recording": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "video_size": {
+      "width": 1280,
+      "height": 720
+    },
+    "device_scale_factor": 1,
+    "codec": "Playwright WebM",
+    "encoding_parameters": "Playwright defaults; bitrate not overridden"
+  },
+  "run_type": "normal",
+  "origin": "EXPLICIT_CANDIDATE_TRIAL",
+  "created_at": "2026-09-25T14:31:05.317Z",
+  "started_at": "2026-09-25T14:31:05.317Z",
+  "execution_status": "CANCELLED",
+  "status": "NOT_RUN",
+  "complete_pass": false,
+  "approval_status": "NOT_APPROVED",
+  "harness_starts": 0,
+  "model_calls": 0,
+  "media": [
+    {
+      "relative_path": "execution/artifacts/.playwright-artifacts-0/page@172293d0674ad9beedf999944f669a18.webm",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "kind": "video",
+      "content_type": "video/webm",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+      "file_name": "page@172293d0674ad9beedf999944f669a18.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 54306,
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+      "kind": "screenshot",
+      "content_type": "image/png",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+      "file_name": "case_step_1-before.png"
+    }
+  ],
+  "files": [
+    {
+      "relative_path": "execution/artifacts/.playwright-artifacts-0/page@172293d0674ad9beedf999944f669a18.webm",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "kind": "trial_video",
+      "content_type": "video/webm",
+      "media_id": "media-1",
+      "file_id": "media-1",
+      "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+      "file_name": "page@172293d0674ad9beedf999944f669a18.webm"
+    },
+    {
+      "relative_path": "execution/artifacts/step-evidence/case_step_1-before.png",
+      "bytes": 54306,
+      "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B",
+      "kind": "trial_screenshot",
+      "content_type": "image/png",
+      "media_id": "media-2",
+      "file_id": "media-2",
+      "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+      "file_name": "case_step_1-before.png"
+    }
+  ],
+  "evidence_status": "INCOMPLETE",
+  "runner_version": "candidate-bundle-trial-v1",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+    "captured_at": "2026-09-25T14:04:41.548Z",
+    "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+    "source_file_count": 87,
+    "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "software_version": "independent-ui-round2-cancel-20260925",
+  "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+  "environment_binding": {
+    "environment_id": "kimi-complex-20260925",
+    "url": "http://127.0.0.1:60654/",
+    "site_sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0",
+    "configuration": {
+      "id": "kimi-complex-20260925",
+      "kind": "registered-static-html",
+      "file": "qa/20260925-kimi-complex/index.html",
+      "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+    },
+    "ownership": "THIS_RUN_TARGET_SITE"
+  },
+  "entry_route": "http://127.0.0.1:60654/",
+  "result": {
+    "report_status": "MISSING",
+    "test_status": "NOT_RUN",
+    "test_count": 0,
+    "error": {
+      "type": "REPORT_MISSING",
+      "message": "结构化报告缺失。",
+      "expected": null,
+      "actual": null,
+      "attribution": "PENDING_ANALYSIS"
+    },
+    "complete_pass": false
+  },
+  "step_coverage": {
+    "rule_version": "project-case-step-title-v2",
+    "complete": false,
+    "order_valid": false,
+    "expected_sequence": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3"
+    ],
+    "observed_sequence": [],
+    "duplicates": [],
+    "missing": [
+      "CASE_STEP_1",
+      "CASE_STEP_2",
+      "CASE_STEP_3"
+    ],
+    "unexpected": [],
+    "malformed_titles": [],
+    "unattributed_errors": [],
+    "items": [
+      {
+        "marker": "CASE_STEP_1",
+        "step_id": "CASE_STEP_1",
+        "order": 1,
+        "observed": false,
+        "raw_title": null,
+        "report_path": null,
+        "error_attributed": false,
+        "execution_status": "MISSING",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_2",
+        "step_id": "CASE_STEP_2",
+        "order": 2,
+        "observed": false,
+        "raw_title": null,
+        "report_path": null,
+        "error_attributed": false,
+        "execution_status": "MISSING",
+        "attributed_errors": []
+      },
+      {
+        "marker": "CASE_STEP_3",
+        "step_id": "CASE_STEP_3",
+        "order": 3,
+        "observed": false,
+        "raw_title": null,
+        "report_path": null,
+        "error_attributed": false,
+        "execution_status": "MISSING",
+        "attributed_errors": []
+      }
+    ]
+  },
+  "failure_step": null,
+  "error": {
+    "type": "REPORT_MISSING",
+    "message": "结构化报告缺失。",
+    "expected": null,
+    "actual": null,
+    "attribution": "PENDING_ANALYSIS"
+  },
+  "same_candidate_hash": true,
+  "specified_defect_detected": false,
+  "step_replay": {
+    "status": "UNAVAILABLE",
+    "reason": "CANCELLED"
+  },
+  "evidence_error": "CANCELLED",
+  "finished_at": "2026-09-25T14:31:12.038Z"
+}

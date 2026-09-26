@@ -4,6 +4,13 @@ const post = body => ({method:'POST',headers:{'content-type':'application/json'}
 const environmentName=e=>e.preparation==='AUTO_START_ISOLATED_TARGET'?'本机被测应用 · 自动准备':e.name||e.id;
 const labels={generate:'生成自动化脚本',revise:'基于问题修订脚本',regenerate:'重新生成自动化脚本'};
 const reasons={GENERATION_TARGET_UNREACHABLE:'被测系统地址无法访问，请在环境与登录中核对目标地址',GENERATION_MODEL_CONFIRMATION_REQUIRED:'请确认本次模型使用和资源上限',GENERATION_NOT_AUTHORIZED:'当前服务尚未开放用户发起生成，且没有本次可用授权',GENERATION_ENVIRONMENT_NOT_READY:'尚未登记可供建例的环境',MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE:'当前配置禁止模型调用',REVISION_SCRIPT_AND_FEEDBACK_REQUIRED:'需明确选定旧脚本并填写问题反馈',SCRIPT_ALREADY_EXISTS:'已有脚本，请选择修订或从头重新生成',CASE_CONTENT_NOT_CONFIRMED:'用例正文尚未确认',GENERATION_AUTHORIZATION_AMBIGUOUS:'存在多条授权，请先核对授权范围'};
+Object.assign(reasons, {
+  AUTH_SESSION_REQUIRED:'请到“环境与登录”完成对应角色登录并检查有效，再重新检查准备条件',
+  AUTH_SESSION_NOT_VALID:'登录会话已失效或变化，请重新登录并检查有效',
+  AUTH_SESSION_BLOCKED:'登录会话失效，运行已停止；重新登录后可显式复跑',
+  DEVELOPMENT_AUTH_ENVIRONMENT_INVALID:'被测地址与登记的登录环境不匹配，请核对环境配置',
+  DEVELOPMENT_ENVIRONMENT_NOT_LOCAL:'该目标尚未按受控登录环境登记',
+});
 export async function openScriptOperation({project,items,mode,go,onError}){
   const root=document.querySelector('#modal-root');
   try{

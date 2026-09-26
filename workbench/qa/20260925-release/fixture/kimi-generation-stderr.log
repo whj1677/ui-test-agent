@@ -1,0 +1,788 @@
+kimi version 2.0.2
+• The user wants me to generate four files: SPEC.md, server.mjs, index.html, cases.json, with exclusive boundary lines === FILE: X ===, no markdown fences, no preamble, no truncation. Output complete files. The working directory is empty. Should I just output text, or also write files? The user says "只输出四个文件的完整原文，按顺序使用独占边界行" — only output the four files' full text with boundary lines. So I should respond with text only, not write files. But my instructions say tool outputs etc. The user explicitly wants the final message to contain the files. I'll produce them directly.
+
+  Let me design carefully.
+
+  Server: Node native http, binds 127.0.0.1:4381, --port arg. Routes:
+  - GET /login → serves index.html (login page view) — actually index.html is a single page app? The requirement: GET /login, protected GET /workspace. Serve index.html for both routes; client JS decides view based on location.pathname. Simpler: one HTML file served at both /login and /workspace, client-side checks path and identity.
+
+  - POST /api/login → creates session, cookie HttpOnly, SameSite=Strict, Path=/. Fixed account synthetic-inspector, role inspector.
+  - GET /api/identity → 401 if not logged in; else {authenticated:true, account_id:'synthetic-inspector', role:'inspector', expires_at: ISO string}.
+  - POST /api/logout → end session, clear cookie.
+  - POST /api/expire → simulate session expiry, clear session (button visible on page).
+  - GET /workspace unauthenticated → redirect /login (302). Business APIs unauthenticated → 401.
+  - Business API: GET /api/devices?page=&pageSize=2&nameFilter= → list with ~400-600ms delay. GET /api/devices/:id → detail with delay.
+  - Devices fixed:
+    - INV-101 温控采集器A 可选 selectable
+    - INV-102 温控采集器B 可选
+    - INV-103 电池巡检仪 受限不可选 restricted
+    - INV-104 温控采集器C 可选
+    - INV-105 电源模块 可选
+  - Details: 型号， 库位， 库存状态， 权限提示.
+
+  Fixed truth in SPEC.md: 
+  - INV-101 温控采集器A, model TCA-100, location A-01-01, stock 在库充足， selectable.
+  - INV-102 温控采集器B, TCA-100B, A-01-02, 在库紧张.
+  - INV-103 电池巡检仪， BPI-200, B-02-01, 在库充足， restricted (only maintainer role can select; inspector cannot), reason: "该设备为受限资产，当前角色无权选择".
+  - INV-104 温控采集器C, TCA-100C, A-01-03, 在库充足.
+  - INV-105 电源模块， PSU-500, C-03-01, 在库紧张.
+
+  Stock statuses: use 库存状态 field: e.g. "在库（充足）"/"在库（紧张）".
+
+  Selection state: client-side only (memory, local JS), cross-page retained, selected count/list visible. INV-103 checkbox disabled with reason visible.
+
+  Pagination: pageSize 2, sorted by id ascending. Filter name contains "温控" → 101,102,104 → page1: 101,102; page2: 104.
+
+  No filter: page1=101,102; page2=103,104; page3=105.
+
+  Cases.json: exactly 3 read-only manual cases, fields case_id,title,preconditions,steps, each step has action & expected in Chinese.
+
+  Case 1: unauthenticated /workspace protection (redirect /login), public synthetic login button (label "公开合成账号登录"), identity check, visible simulate-expiry button, re-access protection after expiry.
+  Case 2: login, filter 温控， async loading indicator, result order 101,102,104, detail drawer content & close.
+  Case 3: no filter cross-page select INV-101 and INV-104, INV-103 disabled and reason, selected count/list maintained, page 3 verify.
+
+  Session: in-memory Map; token random. expires_at: e.g., now + 30 min. Cookie: sid=...; HttpOnly; SameSite=Strict; Path=/. On logout/expire: Set-Cookie with Max-Age=0.
+
+  Client index.html: served at /login and /workspace. Client logic: fetch /api/identity; on /workspace view shows workspace; if 401 redirect (server already redirects, but client also handles). Actually server redirects /workspace when unauthenticated, so the HTML is only served there when authenticated. But GET /login serves the HTML; if already authenticated, /login could redirect to /workspace or the client shows. Keep server: /login always serves HTML; client checks identity and shows appropriate view (if authenticated, show link/button to go workspace). Simpler: client-side routing: on load, fetch /api/identity. If authenticated and path is /login, show "已登录，进入工作台" button linking to /workspace. If not authenticated and path /workspace — can't happen since server redirects.
+
+  Workspace UI: 
+  - header with identity info (account_id, role, expires_at), buttons: "模拟会话到期", "退出登录".
+  - filter input + "查询" button, "清除筛选" maybe. Loading indicator "正在加载列表…" visible during fetch.
+  - table: 编号， 名称， 库存状态， 可选状态， 选择 checkbox, "查看详情" button.
+  - INV-103 row: checkbox disabled, reason text visible (e.g., cell shows "受限：当前角色无权选择", button title/disabled).
+  - pagination: 上一页/下一页 buttons, page indicator "第 X 页 / 共 Y 页".
+  - selected panel: "已选 N 台：INV-101, INV-104".
+  - detail drawer: fixed-position panel with fields, close button "关闭详情".
+  - loading indicator for detail: "正在加载详情…".
+
+  After expire: identity becomes 401; show notice "会话已到期" and redirect to /login or show login view.
+
+  Delay: server-side setTimeout 400-600ms (e.g., 450 + something deterministic; use fixed 500? Spec says "稳定的约400-600ms延迟" — use fixed 500ms for both list and detail for determinism. Spec: 列表 500ms, 详情 500ms.)
+
+  Path security: only serve explicit routes; no file path traversal — we only serve the embedded HTML string for /login and /workspace, everything else 404 JSON or text.
+
+  API JSON errors: e.g., {error:'unauthenticated', message:'未登录或会话已失效'} with 401; 404 {error:'not_found'}; device detail not found 404.
+
+  Method not allowed → 405.
+
+  Now write the files.
+
+  SPEC.md content — must be standalone, precise to case assertions. Write in Chinese.
+
+  cases.json: exactly three cases. steps arrays.
+
+  Let me carefully write server.mjs.
+
+  ```js
+  import http from 'node:http';
+  import crypto from 'node:crypto';
+  import { readFileSync } from 'node:fs';
+  import { fileURLToPath } from 'node:url';
+  import path from 'node:path';
+
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const INDEX_HTML = readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  ```
+
+  Port parsing: --port arg.
+
+  Devices data:
+
+  ```js
+  const DEVICES = [
+    { id:'INV-101', name:'温控采集器A', model:'TCA-100', location:'A-01-01', stock:'在库（充足）', selectable:true },
+    ...
+  ];
+  ```
+
+  Restriction reason for INV-103: '受限设备：当前角色 inspector 无权选择该资产'.
+
+  Sessions: Map token → {account_id, role, expires_at(ms)}.
+
+  Cookie parse helper.
+
+  Routes:
+  - GET /login → 200 HTML (always).
+  - GET /workspace → if session valid: 200 HTML; else 302 Location /login.
+  - GET /api/identity → JSON.
+  - POST /api/login → create session, Set-Cookie, JSON identity.
+  - POST /api/logout, POST /api/expire.
+  - GET /api/devices (query page, filter) with 500ms delay.
+  - GET /api/devices/{id} with 500ms delay.
+  - else 404.
+
+  Session expiry check: Date.now() > expires → delete, treat unauthenticated.
+
+  expires_at: ISO string.
+
+  Set-Cookie for login: `sid=${token}; HttpOnly; SameSite=Strict; Path=/` — also maybe Max-Age=1800.
+
+  Clear: `sid=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`.
+
+  Client JS in index.html: 
+
+  - On DOMContentLoaded, determine path.
+  - loginView and workspaceView sections; toggle display.
+  - If path === '/login': check identity; if authenticated show "已进入工作台" link; else show login button "公开合成账号登录" (id=loginBtn). On click POST /api/login then location='/workspace'.
+  - If path === '/workspace': load identity; display; load device list.
+
+  Filter: input id=filterInput, button "查询" id=searchBtn; clearing filter = empty input + query.
+
+  List load: show loading element "正在加载设备列表…", fetch, render rows, hide.
+
+  State: currentPage, totalPages, selection = Map id → device summary. Persist across pages in JS memory. Also maybe localStorage? "多页勾选跨页保留" — JS memory suffices while page not reloaded. But after session expire, page reloads anyway. Keep in-memory Map. Spec says local selection only.
+
+  Render checkbox: checked if selection has id; disabled if !selectable. Reason cell: if !selectable show reason text. Toggle updates selection panel: "已选 N 台" + list of ids joined.
+
+  Detail drawer: button "查看详情" per row → show drawer with loading "正在加载设备详情…", fetch, fill fields, show. Close button "关闭详情" hides drawer.
+
+  Expire button: POST /api/expire → show notice "会话已到期，即将返回登录页" then redirect to /login after short delay.
+
+  Logout button: POST /api/logout → redirect /login.
+
+  Accessible semantics: buttons with text labels, aria-labels, role="dialog" aria-modal for drawer, table semantics, aria-live for loading/status.
+
+  Now cases.json steps:
+
+  Case 1 (CASE-01 未登录保护与公开合成登录与模拟到期）:
+  preconditions: "服务已在本机启动（默认 127.0.0.1:4381），浏览器未持有本站有效会话 Cookie（或已先退出登录/清空 Cookie）。"
+  steps:
+  1. action: 浏览器直接访问 http://127.0.0.1:4381/workspace expected: 页面被重定向到 /login，地址栏显示登录页地址，页面可见“公开合成账号登录”按钮，无业务数据展示。
+  2. action: 点击“公开合成账号登录”按钮 expected: 页面跳转至 /workspace，顶部可见账号 synthetic-inspector、角色 inspector 及有效 ISO 格式的到期时间。
+  3. action: 直接调用 GET /api/identity（如新开标签访问该地址） — hmm, identity returns JSON; expected: 返回 JSON 精确包含 authenticated:true、account_id:'synthetic-inspector'、role:'inspector'，expires_at 为有效 ISO 时间字符串。
+  4. action: 点击“模拟会话到期”按钮 expected: 页面出现“会话已到期”的可见提示并返回 /login；再次调用 /api/identity 返回 401。
+  5. action: 再次直接访问 /workspace expected: 再次被重定向到 /login，无法查看业务数据。
+
+  Case 2 (CASE-02 筛选与异步详情）:
+  preconditions: 已通过“公开合成账号登录”登录，处于 /workspace。
+  1. action: 在筛选输入框输入“温控”，点击“查询”按钮 expected: 出现可见加载提示（如“正在加载设备列表…”），约400-600ms后列表刷新。
+  2. action: 观察列表结果与顺序 expected: 列表恰好显示3条... wait — filter 温控 gives 101,102,104 total 3, page 1 shows 101,102 page 2 shows 104. Case should cover pagination? Spec says "筛选名称包含"温控"得101、102、104". Case 2: observe result order: page1 = 101,102 ascending; page2 = 104. Steps:
+  2. 结果第1页按编号升序为 INV-101、INV-102，分页显示“共3条/共2页”。
+  3. action: 翻到第2页 expected: 仅显示 INV-104。
+  4. action: 点击 INV-101 所在行的“查看详情”按钮 expected: 抽屉先显示“正在加载设备详情…”，约400-600ms后显示详情：编号 INV-101、名称 温控采集器A、型号 TCA-100、库位 A-01-01、库存状态 在库（充足）、权限提示可见。
+  5. action: 点击“关闭详情” expected: 抽屉关闭，列表仍保持筛选“温控”结果与当前页。
+
+  Case 3 (CASE-03 跨页选择与受限设备）:
+  preconditions: 已登录，/workspace，筛选为空。
+  1. action: 清空筛选并点击“查询”，确认无筛选第1页 expected: 加载提示后第1页显示 INV-101、INV-102，分页“第1页/共3页”。
+  2. action: 勾选 INV-101 的复选框 expected: 已选区域显示“已选 1 台”，列表包含 INV-101。
+  3. action: 点击“下一页”至第2页 expected: 显示 INV-103、INV-104；INV-103 复选框为禁用状态，并可见受限原因文案。
+  4. action: 尝试点击 INV-103 复选框，并勾选 INV-104 expected: INV-103 无法勾选、不计入已选；已选变为“已选 2 台”，列表含 INV-101、INV-104。
+  5. action: 点击“下一页”至第3页 expected: 显示 INV-105；已选区域仍显示“已选 2 台”且含 INV-101、INV-104。
+  6. action: 返回第1页查看 INV-101 复选框状态 expected: INV-101 仍为勾选状态，选择跨页保留。
+
+  SPEC.md must be independent source of truth, precise. Include: ports, routes table, cookie attributes, identity exact fields, fixed data table, filter/pagination truth, latency, selection rules, UI labels, delay values, expiry, error formats, forbidden things (no real writes etc).
+
+  Let me now write everything. Be careful: no markdown code fences in output. Boundaries as specified. Also they said "=== END ===" at the end.
+
+  Latency: fixed 500ms. In SPEC say 500ms fixed, within 400-600ms.
+
+  expires duration: 30 minutes (1800s), Max-Age=1800.
+
+  Detail fields: 编号， 名称， 型号， 库位， 库存状态， 权限提示. 权限提示： for selectable: "当前角色 inspector 可选择该设备"; for INV-103: "该设备为受限资产，当前角色 inspector 无权选择". Also 可选状态 in list: "可选" / "受限不可选".
+
+  Pagination info: "第 X 页 / 共 Y 页（共 Z 条）".
+
+  Selected list display: "已选 2 台：INV-101、INV-104".
+
+  JSON responses:
+  - list: { items: [...], page, page_size:2, total, total_pages } items include id,name,stock_status,selectable,selectable_label/reason.
+  - detail: { id,name,model,location,stock_status,selectable,permission_note }.
+
+  Errors: { error: 'unauthenticated', message: '未登录或会话已失效' } 401; { error:'not_found', message:'资源不存在' } 404; device not found { error:'device_not_found', message:'设备不存在' } 404; { error:'method_not_allowed' } 405.
+
+  Client fetch error handling: on 401 for business API → show notice and redirect to /login.
+
+  Now write index.html fully. Vanilla JS. Careful with template strings inside HTML — fine.
+
+  Let me write the code.
+
+  server.mjs:
+
+  ```js
+  import http from 'node:http';
+  import crypto from 'node:crypto';
+  import { readFileSync } from 'node:fs';
+  import path from 'node:path';
+  import { fileURLToPath } from 'node:url';
+
+  const HERE = path.dirname(fileURLToPath(import.meta.url));
+  const INDEX_HTML = readFileSync(path.join(HERE, 'index.html'), 'utf8');
+
+  function parsePort(argv) {
+    const idx = argv.indexOf('--port');
+    if (idx !== -1 && argv[idx + 1]) {
+      const p = Number(argv[idx + 1]);
+      if (Number.isInteger(p) && p > 0 && p < 65536) return p;
+      console.error('无效端口，使用默认 4381');
+    }
+    return 4381;
+  }
+  const PORT = parsePort(process.argv.slice(2));
+  const HOST = '127.0.0.1';
+
+  const ACCOUNT = { account_id: 'synthetic-inspector', role: 'inspector' };
+  const SESSION_TTL_MS = 30 * 60 * 1000;
+  const COOKIE_NAME = 'sid';
+  const PAGE_SIZE = 2;
+  const LIST_DELAY_MS = 500;
+  const DETAIL_DELAY_MS = 500;
+  const RESTRICT_REASON = '该设备为受限资产，当前角色 inspector 无权选择';
+
+  const DEVICES = [...];
+
+  const sessions = new Map();
+
+  function parseCookies(req) {...}
+  function getSession(req) { token → session; check expiry; delete if expired }
+  function sendJson(res, status, obj) {...}
+  function setSessionCookie(res, token) { 'Set-Cookie': `${COOKIE_NAME}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=1800` }
+  function clearSessionCookie(res) { ... Max-Age=0 }
+
+  const server = http.createServer((req, res) => {
+    const url = new URL(req.url, `http://${HOST}:${PORT}`);
+    const pathname = url.pathname;
+    const method = req.method;
+
+    if (method === 'GET' && pathname === '/login') { html }
+    else if (method === 'GET' && pathname === '/') redirect to /login maybe. Keep: '/' → 302 /login.
+    else if (method === 'GET' && pathname === '/workspace') {
+      const s = getSession(req);
+      if (!s) { res.writeHead(302, { Location: '/login' }); res.end(); return; }
+      html
+    }
+    else if (pathname === '/api/login' && method === 'POST') {...}
+    else if (pathname === '/api/identity' && method === 'GET') {...}
+    else if (pathname === '/api/logout' && method === 'POST') {...}
+    else if (pathname === '/api/expire' && method === 'POST') {...}
+    else if (pathname === '/api/devices' && method === 'GET') {...}
+    else if (pathname.match(/^\/api\/devices\/[\w-]+$/) && method === 'GET') {...}
+    else if (pathname.startsWith('/api/')) {
+      // known path wrong method → 405; unknown → 404
+    }
+    else 404 text/json.
+  });
+  ```
+
+  Method handling: for API paths with wrong method → 405 JSON. For non-API paths wrong method → 404.
+
+  List handler: require session (401 JSON). filter param name_filter (contains, trim). filtered = DEVICES.filter(d => !f || d.name.includes(f)). sort by id asc (already). total, total_pages = ceil(total/2) (at least 1?). page clamp: page param integer default 1; clamp to [1, total_pages] where total_pages = max(1, ceil). items slice. Delay 500ms then respond. Items: { id, name, stock_status, selectable, selectable_label: '可选'|'受限不可选', restriction_reason: null|string }.
+
+  Detail: id param; find; 404 if missing; delay; respond with detail fields including model, location, permission_note.
+
+  permission_note: selectable ? '当前角色 inspector 可选择该设备' : RESTRICT_REASON.
+
+  Client JS sketch:
+
+  ```js
+  const state = { page: 1, totalPages: 1, total: 0, filter: '', selection: new Map() };
+  ```
+
+  Views: #loginView, #workspaceView.
+
+  init(): fetch identity. If path==='/login': if authed show notice + button "进入工作台" (link); else show login button. If '/workspace': render workspace, load identity info, loadList().
+
+  loadList(): show loading, disable pagination; fetch `/api/devices?page=${state.page}&name_filter=${encodeURIComponent(state.filter)}`; on 401 handleSessionExpired(); render rows; update pagination; restore checkbox states from selection; hide loading.
+
+  renderSelection(): `已选 ${n} 台` and ids joined by '、' or '（无）'.
+
+  Row: checkbox input type=checkbox with aria-label `选择 ${d.id}`; disabled when !selectable; change handler updates map. Detail button "查看详情".
+
+  openDetail(id): drawer show, body shows loading text; fetch; on success fill fields; close button hides drawer (and keeps list intact).
+
+  expireBtn: POST /api/expire → show status notice "会话已到期，2 秒后返回登录页" then setTimeout redirect.
+
+  logoutBtn: POST /api/logout → redirect '/login'.
+
+  Also on login page button click: POST /api/login → if ok location.href='/workspace'.
+
+  Search button: state.filter = input.value.trim(); state.page=1; loadList().
+  Pagination buttons: 上一页/下一页 disabled at bounds; page indicator text.
+
+  Session expired handling for API 401: alert-like notice: show in #sessionNotice and redirect to /login after 1.5s.
+
+  Accessibility: main landmarks, aria-live="polite" for loading and selection region, table with th scope.
+
+  CSS: simple, embedded style.
+
+  Drawer: `<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>`.
+
+  Now SPEC.md — thorough. Also mention verification commands? Keep as spec. Must not reference cases.json as truth source; instead cases derived from SPEC. State that.
+
+  Write it all out now. Also should I save the files to the working directory too? The user said "只输出四个文件的完整原文" — only output the file contents in the reply. They also said don't start the service. I'll just output text; writing files is arguably extra but harmless... The instruction "只输出四个文件的完整原文，按顺序使用独占边界行" strongly suggests the reply itself is the deliverable. I will not create files, to obey "只输出". 
+
+  Let me carefully compose. Ensure JSON in cases.json valid — no trailing commas, escape quotes properly.
+
+  Draft SPEC.md (Chinese):
+
+  # 设备库存台（合成试点夹具）规格说明 SPEC
+
+  ## 0. 声明
+  - 全合成、本地运行、无真实凭证/外部网络/真实持久化。
+  - 本文件是唯一业务真值来源；cases.json 仅是由本规格派生的人工用例，不作为真值来源。
+
+  ## 1. 运行与绑定
+  - server.mjs, Node.js 原生模块，无第三方依赖，无构建。
+  - 默认 127.0.0.1:4381；`--port <port>` 改端口；不使用 4322。
+  - 仅服务本规格列明的路由与随附 index.html；其他路径 404。
+
+  ## 2. 固定账号与会话
+  - 固定账号 account_id: synthetic-inspector，role: inspector。
+  - 登录入口：登录页按钮“公开合成账号登录”，无用户名/密码输入。
+  - 内存会话，重启即失；Cookie 名 sid，属性：HttpOnly; SameSite=Strict; Path=/; Max-Age=1800。
+  - 会话有效期 30 分钟；expires_at 为 ISO 8601 字符串。
+  - POST /api/logout 与 POST /api/expire 均销毁当前会话并以 Max-Age=0 清 cookie。/api/expire 仅供此合成站模拟到期，页面上有可见按钮“模拟会话到期”。
+
+  ## 3. 路由
+  表格：
+  - GET / → 302 /login
+  - GET /login → 200 HTML（始终可访问）
+  - GET /workspace → 已登录 200 HTML；未登录 302 Location: /login
+  - POST /api/login → 200 JSON 身份 + 种 cookie
+  - GET /api/identity → 未登录 401；已登录 200 JSON 精确包含 authenticated:true, account_id:'synthetic-inspector', role:'inspector', expires_at:<有效ISO字符串>
+  - POST /api/logout → 200 JSON，销毁会话清 cookie
+  - POST /api/expire → 200 JSON，销毁会话清 cookie（模拟到期）
+  - GET /api/devices?page=&name_filter= → 401 未登录；200 JSON 列表，固定延迟 500ms
+  - GET /api/devices/{id} → 401 未登录；404 不存在；200 JSON 详情，固定延迟 500ms
+  - 其余 API 路径 404；已知 API 路径错误方法 405。错误统一 JSON：{"error": "...", "message": "..."}
+
+  ## 4. 固定业务数据（真值表）
+  | 编号 | 名称 | 型号 | 库位 | 库存状态 | 可选状态 |
+  INV-101 温控采集器A TCA-100 A-01-01 在库（充足） 可选
+  INV-102 温控采集器B TCA-100B A-01-02 在库（紧张） 可选
+  INV-103 电池巡检仪 BPI-200 B-02-01 在库（充足） 受限不可选
+  INV-104 温控采集器C TCA-100C A-01-03 在库（充足） 可选
+  INV-105 电源模块 PSU-500 C-03-01 在库（紧张） 可选
+  - 受限原因固定文案：「该设备为受限资产，当前角色 inspector 无权选择」。
+  - 权限提示：可选设备「当前角色 inspector 可选择该设备」；INV-103 使用受限原因文案。
+
+  ## 5. 列表、筛选与分页真值
+  - 排序固定按编号升序；每页 2 条。
+  - 无筛选：共5条，第1页=INV-101, INV-102；第2页=INV-103, INV-104；第3页=INV-105。
+  - 筛选语义：名称包含筛选子串（如「温控」）。筛选「温控」→ INV-101, INV-102, INV-104，共3条：第1页=101,102，第2页=104。
+  - 列表行展示：编号、名称、库存状态、可选状态；每行有选择复选框与“查看详情”按钮。
+  - 分页指示文案：「第 X 页 / 共 Y 页（共 Z 条）」。
+
+  ## 6. 异步与加载提示
+  - 列表查询与详情加载各有固定约 500ms 延迟（在 400–600ms 区间内稳定）。
+  - 列表加载期间可见提示「正在加载设备列表…」；详情加载期间抽屉内可见「正在加载设备详情…」。
+
+  ## 7. 详情抽屉
+  - 点击行内“查看详情”打开抽屉，内容：编号、名称、型号、库位、库存状态、权限提示。
+  - “关闭详情”关闭抽屉并返回列表，列表筛选/分页/勾选状态不变。
+
+  ## 8. 选择规则
+  - 选择仅存于浏览器内存，跨页保留；无保存/提交/审批/任何真实修改。
+  - INV-103 复选框 disabled，且行内可见受限原因文案。
+  - 已选区域文案：「已选 N 台：编号以、分隔」，0 台时显示「已选 0 台」。
+  - 取消勾选即从已选中移除。
+
+  ## 9. 会话到期的可见提示
+  - 点击“模拟会话到期”后页面出现「会话已到期」可见提示并自动返回 /login；此后 /api/identity 返回 401，/workspace 再次被重定向。
+
+  ## 10. 案例断言锚点（摘要，供 cases.json 对照）
+  - A1 未登录 /workspace → 302 /login
+  - A2 登录后 identity 精确字段
+  - A3 expire 后 identity 401、/workspace 再受保护
+  - A4 筛选温控顺序与分页
+  - A5 详情字段与关闭
+  - A6 跨页选择、INV-103 禁用、已选计数保持
+
+  That's SPEC. Now server.mjs code, complete.
+
+  Careful: JSON body responses and Chinese content — set charset utf-8.
+
+  Write server.mjs:
+
+  ```js
+  import http from 'node:http';
+  import crypto from 'node:crypto';
+  import { readFileSync } from 'node:fs';
+  import path from 'node:path';
+  import { fileURLToPath } from 'node:url';
+
+  const HERE = path.dirname(fileURLToPath(import.meta.url));
+  const INDEX_HTML = readFileSync(path.join(HERE, 'index.html'), 'utf8');
+
+  const HOST = '127.0.0.1';
+  const DEFAULT_PORT = 4381;
+  const COOKIE_NAME = 'sid';
+  const SESSION_TTL_MS = 30 * 60 * 1000;
+  const PAGE_SIZE = 2;
+  const LIST_DELAY_MS = 500;
+  const DETAIL_DELAY_MS = 500;
+  const ACCOUNT_ID = 'synthetic-inspector';
+  const ROLE = 'inspector';
+  const RESTRICT_REASON = '该设备为受限资产，当前角色 inspector 无权选择';
+  const ALLOW_NOTE = '当前角色 inspector 可选择该设备';
+
+  const DEVICES = [
+    { id: 'INV-101', name: '温控采集器A', model: 'TCA-100', location: 'A-01-01', stock_status: '在库（充足）', selectable: true },
+    { id: 'INV-102', name: '温控采集器B', model: 'TCA-100B', location: 'A-01-02', stock_status: '在库（紧张）', selectable: true },
+    { id: 'INV-103', name: '电池巡检仪', model: 'BPI-200', location: 'B-02-01', stock_status: '在库（充足）', selectable: false },
+    { id: 'INV-104', name: '温控采集器C', model: 'TCA-100C', location: 'A-01-03', stock_status: '在库（充足）', selectable: true },
+    { id: 'INV-105', name: '电源模块', model: 'PSU-500', location: 'C-03-01', stock_status: '在库（紧张）', selectable: true },
+  ];
+
+  const sessions = new Map();
+  ```
+
+  parsePort, parseCookies, getSession, sendJson, handle API.
+
+  Then request handler.
+
+  Now index.html. Full markup:
+
+  ```html
+  <!doctype html>
+  <html lang="zh-CN">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>设备库存台（合成试点）</title>
+  <style>...</style>
+  </head>
+  <body>
+  <header><h1>设备库存台（合成试点夹具）</h1><p class="badge">完全合成数据 · 仅供本地测试</p></header>
+  <main>
+  <section id="loginView" hidden>
+    <h2>登录</h2>
+    <p id="loginHint">本站为合成测试站，仅提供公开合成账号，无需用户名或密码。</p>
+    <button id="loginBtn" type="button">公开合成账号登录</button>
+    <p id="alreadyBox" hidden>当前已登录（账号 synthetic-inspector）。<a href="/workspace">进入工作台</a></p>
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="workspaceView" hidden>
+    <div id="whoami">
+      <span>账号：<strong id="whoAccount"></strong></span>
+      <span>角色：<strong id="whoRole"></strong></span>
+      <span>会话到期：<time id="whoExpires"></time></span>
+      <button id="expireBtn" type="button">模拟会话到期</button>
+      <button id="logoutBtn" type="button">退出登录</button>
+    </div>
+    <p id="sessionNotice" role="status" aria-live="polite"></p>
+
+    <div id="filterBar">
+      <label for="filterInput">名称筛选</label>
+      <input id="filterInput" type="text" placeholder="例如：温控">
+      <button id="searchBtn" type="button">查询</button>
+    </div>
+
+    <p id="listLoading" role="status" aria-live="polite" hidden>正在加载设备列表…</p>
+    <table id="deviceTable">
+      <thead><tr><th scope="col">选择</th><th scope="col">编号</th><th scope="col">名称</th><th scope="col">库存状态</th><th scope="col">可选状态</th><th scope="col">操作</th></tr></thead>
+      <tbody id="deviceTbody"></tbody>
+    </table>
+
+    <div id="pager">
+      <button id="prevBtn" type="button">上一页</button>
+      <span id="pageInfo">第 1 页 / 共 1 页（共 0 条）</span>
+      <button id="nextBtn" type="button">下一页</button>
+    </div>
+
+    <p id="selectedInfo" aria-live="polite">已选 0 台</p>
+
+    <aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+      <h2 id="drawerTitle">设备详情</h2>
+      <p id="detailLoading" role="status" aria-live="polite" hidden>正在加载设备详情…</p>
+      <dl id="detailBody" hidden>
+        <dt>编号</dt><dd id="dId"></dd>
+        <dt>名称</dt><dd id="dName"></dd>
+        <dt>型号</dt><dd id="dModel"></dd>
+        <dt>库位</dt><dd id="dLocation"></dd>
+        <dt>库存状态</dt><dd id="dStock"></dd>
+        <dt>权限提示</dt><dd id="dNote"></dd>
+      </dl>
+      <button id="closeDrawerBtn" type="button">关闭详情</button>
+    </aside>
+  </section>
+  </main>
+  <script>...</script>
+  </body>
+  </html>
+  ```
+
+  JS:
+
+  ```js
+  const $ = (id) => document.getElementById(id);
+  const state = { page: 1, totalPages: 1, filter: '', selection: new Map() };
+
+  async function api(path, options = {}) {
+    const res = await fetch(path, { headers: { 'Accept': 'application/json' }, ...options });
+    let data = null;
+    try { data = await res.json(); } catch {}
+    return { status: res.status, data };
+  }
+
+  function showSessionExpired() {
+    const n = $('sessionNotice');
+    if (n) n.textContent = '会话已到期，即将返回登录页…';
+    setTimeout(() => { location.href = '/login'; }, 1500);
+  }
+
+  async function init() {
+    const path = location.pathname;
+    const { status } = await api('/api/identity');
+    if (path === '/login') {
+      $('loginView').hidden = false;
+      if (status === 200) {
+        $('alreadyBox').hidden = false;
+        $('loginBtn').hidden = true; // maybe keep but disable? spec: login page shows button; if already authed, show link. Fine.
+      }
+    } else {
+      $('workspaceView').hidden = false;
+      const { status: s2, data } = await api('/api/identity');
+      if (s2 !== 200) { location.href = '/login'; return; }
+      $('whoAccount').textContent = data.account_id;
+      $('whoRole').textContent = data.role;
+      $('whoExpires').textContent = data.expires_at;
+      loadList();
+    }
+  }
+  ```
+
+  Wait — identity fetched twice; simplify: fetch once.
+
+  loginBtn handler:
+  ```js
+  $('loginBtn').addEventListener('click', async () => {
+    $('loginStatus').textContent = '正在登录…';
+    const { status } = await api('/api/login', { method: 'POST' });
+    if (status === 200) { location.href = '/workspace'; }
+    else { $('loginStatus').textContent = '登录失败，请重试。'; }
+  });
+  ```
+
+  logoutBtn: await api('/api/logout', {method:'POST'}); location.href='/login';
+  expireBtn: await api('/api/expire', {method:'POST'}); notice '会话已到期（模拟），即将返回登录页…'; setTimeout redirect.
+
+  loadList:
+  ```js
+  async function loadList() {
+    $('listLoading').hidden = false;
+    setPagerDisabled(true);
+    const q = new URLSearchParams({ page: String(state.page), name_filter: state.filter });
+    const { status, data } = await api('/api/devices?' + q.toString());
+    $('listLoading').hidden = true;
+    setPagerDisabled(false);
+    if (status === 401) { showSessionExpired(); return; }
+    if (status !== 200) { $('deviceTbody').innerHTML = ''; $('pageInfo').textContent = '加载失败'; return; }
+    state.page = data.page; state.totalPages = data.total_pages;
+    renderRows(data.items);
+    updatePager(data.total);
+    renderSelection();
+  }
+  ```
+
+  renderRows: build rows with checkbox etc. Use DOM creation to avoid HTML injection (all data is fixed anyway, but fine to use textContent).
+
+  ```js
+  function renderRows(items) {
+    const tbody = $('deviceTbody');
+    tbody.innerHTML = '';
+    for (const d of items) {
+      const tr = document.createElement('tr');
+      const tdSel = document.createElement('td');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.setAttribute('aria-label', '选择 ' + d.id);
+      cb.checked = state.selection.has(d.id);
+      cb.disabled = !d.selectable;
+      cb.dataset.id = d.id;
+      if (!d.selectable) cb.title = d.restriction_reason;
+      cb.addEventListener('change', () => {
+        if (cb.checked) state.selection.set(d.id, d);
+        else state.selection.delete(d.id);
+        renderSelection();
+      });
+      tdSel.appendChild(cb);
+      ...
+      const tdStatus = td(d.selectable_label);
+      if (!d.selectable) {
+        const reason = document.createElement('div');
+        reason.className = 'reason';
+        reason.textContent = '原因：' + d.restriction_reason;
+        tdStatus.appendChild(reason);
+      }
+      const tdOp = ...button '查看详情' → openDetail(d.id)
+    }
+  }
+  ```
+
+  renderSelection:
+  ```js
+  function renderSelection() {
+    const ids = [...state.selection.keys()];
+    $('selectedInfo').textContent = ids.length ? `已选 ${ids.length} 台：${ids.join('、')}` : '已选 0 台';
+  }
+  ```
+
+  openDetail:
+  ```js
+  async function openDetail(id) {
+    $('drawer').hidden = false;
+    $('detailBody').hidden = true;
+    $('detailLoading').hidden = false;
+    const { status, data } = await api('/api/devices/' + encodeURIComponent(id));
+    $('detailLoading').hidden = true;
+    if (status === 401) { $('drawer').hidden = true; showSessionExpired(); return; }
+    if (status !== 200) { $('detailLoading').hidden = false; $('detailLoading').textContent = '详情加载失败。'; return; }
+    $('dId').textContent = data.id; ... $('dNote').textContent = data.permission_note;
+    $('detailBody').hidden = false;
+  }
+  ```
+
+  closeDrawerBtn → drawer.hidden = true.
+
+  searchBtn → state.filter = filterInput.value.trim(); state.page = 1; loadList();
+  prev/next adjust page within bounds.
+
+  CSS: modest styling.
+
+  Escape note: index.html contains `</script>`? No.
+
+  One concern: SPEC said the expire button visible — yes "模拟会话到期". Login button exact label "公开合成账号登录" — yes.
+
+  cases.json — write carefully valid JSON array with 3 objects.
+
+  Now assemble final output. Must be long but fine.
+
+  Server code details — full:
+
+  ```js
+  function parsePort(argv) {
+    const i = argv.indexOf('--port');
+    if (i === -1) return DEFAULT_PORT;
+    const p = Number(argv[i + 1]);
+    if (Number.isInteger(p) && p > 0 && p < 65536) return p;
+    return DEFAULT_PORT;
+  }
+
+  function parseCookies(req) {
+    const header = req.headers.cookie || '';
+    const out = {};
+    for (const part of header.split(';')) {
+      const eq = part.indexOf('=');
+      if (eq === -1) continue;
+      out[part.slice(0, eq).trim()] = part.slice(eq + 1).trim();
+    }
+    return out;
+  }
+
+  function getSession(req) {
+    const token = parseCookies(req)[COOKIE_NAME];
+    if (!token) return null;
+    const s = sessions.get(token);
+    if (!s) return null;
+    if (Date.now() >= s.expiresAtMs) { sessions.delete(token); return null; }
+    return s;
+  }
+
+  function identityPayload() {
+    // per session
+  }
+  ```
+
+  Session object: { accountId, role, expiresAtMs }. identity JSON: { authenticated: true, account_id, role, expires_at: new Date(expiresAtMs).toISOString() }.
+
+  sendJson(res, status, obj, extraHeaders = {}).
+
+  Login handler:
+  ```js
+  const token = crypto.randomBytes(24).toString('hex');
+  const expiresAtMs = Date.now() + SESSION_TTL_MS;
+  sessions.set(token, { accountId: ACCOUNT_ID, role: ROLE, expiresAtMs });
+  sendJson(res, 200, { authenticated: true, account_id: ACCOUNT_ID, role: ROLE, expires_at: new Date(expiresAtMs).toISOString() }, {
+    'Set-Cookie': `${COOKIE_NAME}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${SESSION_TTL_MS / 1000}`
+  });
+  ```
+
+  Logout/expire: need token from cookie, delete session; respond with cleared cookie:
+  `'Set-Cookie': `${COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0``
+  Body: { ok: true } / for expire { expired: true }. Keep simple: logout → {"logged_out": true}; expire → {"expired": true}.
+
+  Devices list handler:
+
+  ```js
+  function handleDeviceList(req, res, url) {
+    if (!getSession(req)) return sendJson(res, 401, { error: 'unauthenticated', message: '未登录或会话已失效' });
+    const filter = (url.searchParams.get('name_filter') || '').trim();
+    let page = parseInt(url.searchParams.get('page') || '1', 10);
+    if (!Number.isInteger(page) || page < 1) page = 1;
+    const filtered = DEVICES.filter((d) => !filter || d.name.includes(filter));
+    const total = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (page > totalPages) page = totalPages;
+    const items = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map((d) => ({
+      id: d.id, name: d.name, stock_status: d.stock_status,
+      selectable: d.selectable,
+      selectable_label: d.selectable ? '可选' : '受限不可选',
+      restriction_reason: d.selectable ? null : RESTRICT_REASON,
+    }));
+    setTimeout(() => {
+      sendJson(res, 200, { items, page, page_size: PAGE_SIZE, total, total_pages: totalPages, name_filter: filter });
+    }, LIST_DELAY_MS);
+  }
+  ```
+
+  Detail:
+
+  ```js
+  function handleDeviceDetail(req, res, id) {
+    if (!getSession(req)) return 401...
+    const d = DEVICES.find((x) => x.id === id);
+    if (!d) return sendJson(res, 404, { error: 'device_not_found', message: '设备不存在' });
+    setTimeout(() => {
+      sendJson(res, 200, { id, name, model, location, stock_status, selectable, selectable_label, permission_note: selectable?ALLOW_NOTE:RESTRICT_REASON });
+    }, DETAIL_DELAY_MS);
+  }
+  ```
+
+  Main router with method checks:
+
+  ```js
+  const server = http.createServer((req, res) => {
+    const url = new URL(req.url, 'http://' + HOST + ':' + PORT);
+    const p = url.pathname;
+    const m = req.method;
+    try {
+      if (p === '/' && m === 'GET') { redirect(res, '/login'); return; }
+      if (p === '/login') {
+        if (m !== 'GET') return sendJson(res, 405, {...});
+        sendHtml(res, INDEX_HTML); return;
+      }
+      if (p === '/workspace') {
+        if (m !== 'GET') return 405;
+        if (!getSession(req)) { res.writeHead(302, { Location: '/login' }); res.end(); return; }
+        sendHtml(res, INDEX_HTML); return;
+      }
+      if (p === '/api/login') {
+        if (m !== 'POST') return 405;
+        ...
+      }
+      ... etc
+      const detailMatch = p.match(/^\/api\/devices\/([A-Za-z0-9-]+)$/);
+      if (detailMatch) { if (m!=='GET') 405; handleDeviceDetail(req,res,detailMatch[1]); return; }
+      if (p === '/api/devices') { ... }
+      if (p.startsWith('/api/')) return sendJson(res, 404, { error: 'not_found', message: '资源不存在' });
+      sendJson(res, 404, { error: 'not_found', message: '资源不存在' });
+    } catch (err) { sendJson(res, 500, { error:'internal_error', message:'服务器内部错误' }); }
+  });
+  server.listen(PORT, HOST, () => console.log(...));
+  ```
+
+  Good. Now write final answer. It's long; be precise and complete.
+
+  For index.html, also add noscript? Not needed.
+
+  Also identity endpoint: include exactly those four fields.
+
+  Let me also double check case2 spec: case2 covers 登录后筛选"温控"、异步提示、结果顺序、详情抽屉内容与关闭. My steps cover.
+
+  Case3 covers page navigation including page3, INV-103 disabled & reason, selection count/list kept.
+
+  Now produce output. Watch out: no code fences. Use the exact boundary lines.
+
+To resume this session: kimi -r session_c50f882d-c81c-4eed-a81a-2d529fa781e1

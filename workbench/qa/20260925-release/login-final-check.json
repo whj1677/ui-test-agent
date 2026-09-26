@@ -1,0 +1,10 @@
+{
+  "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+  "environment_id": "kimi-release-auth-20260925",
+  "role": "inspector",
+  "session_version": "1dacd13e-3cd0-4d9c-ad96-ae7c063bc17a",
+  "status": "AWAITING_LOGIN",
+  "account_id": null,
+  "expires_at": null,
+  "reason": "LOGIN_REQUIRED"
+}

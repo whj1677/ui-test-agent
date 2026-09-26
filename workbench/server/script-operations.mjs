@@ -5,13 +5,14 @@ import path from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
 import { developmentAuthorizations, registerDevelopmentAuthorization } from './build/development-authorization.mjs';
 import { loadCandidateBundle } from './build/candidate-trials.mjs';
+import { writeAtomicJson } from './atomic-json.mjs';
 
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 export class ScriptOperations {
-  constructor({root, buildManager, caseStore, records}) { Object.assign(this,{root,buildManager,caseStore,records});this.queue=Promise.resolve();this.writeQueue=Promise.resolve();this.active=null; }
+  constructor({root, buildManager, caseStore, records, atomicJson = writeAtomicJson}) { Object.assign(this,{root,buildManager,caseStore,records,atomicJson});this.queue=Promise.resolve();this.writeQueue=Promise.resolve();this.active=null;this.starting=false; }
   serial(fn) { const p=this.queue.then(fn,fn);this.queue=p.catch(()=>{});return p; }
   file(id) { if(!/^generation-[a-f0-9-]{36}$/.test(id))throw Error('GENERATION_ID_INVALID');return path.join(this.root,id+'.json'); }
-  save(value) { const write=async()=>{await fs.mkdir(this.root,{recursive:true});const file=this.file(value.operation_id),tmp=file+'.'+randomUUID()+'.tmp';await fs.writeFile(tmp,JSON.stringify(value,null,2));await fs.rename(tmp,file);return value;};const next=this.writeQueue.then(write,write);this.writeQueue=next.catch(()=>{});return next; }
+  save(value) { const write=async()=>{await this.atomicJson(this.file(value.operation_id),value);return value;};const next=this.writeQueue.then(write,write).catch(error=>{this.buildManager.reportStorageFault(error,'generation_save');throw error;});this.writeQueue=next.catch(()=>{});return next; }
   async get(id,project) { const v=JSON.parse(await fs.readFile(this.file(id),'utf8'));if(v.project_id!==project)throw Error('GENERATION_PROJECT_MISMATCH');return v; }
   async list(project) { await fs.mkdir(this.root,{recursive:true});const rows=await Promise.all((await fs.readdir(this.root)).filter(f=>/^generation-[a-f0-9-]{36}\.json$/.test(f)).map(async f=>JSON.parse(await fs.readFile(path.join(this.root,f),'utf8'))));return rows.filter(v=>!project||v.project_id===project).sort((a,b)=>b.created_at.localeCompare(a.created_at)); }
   async init() { for(const v of await this.list()) if(['QUEUED','RUNNING'].includes(v.state)) { v.state='INTERRUPTED';for(const i of v.items)if(['QUEUED','RUNNING'].includes(i.state)){i.state='NOT_RUN';i.reason='SERVICE_INTERRUPTED_NO_REPLAY';}await this.save(v); } }
@@ -21,7 +22,7 @@ export class ScriptOperations {
     const m=this.buildManager, grants=await developmentAuthorizations(m.store), rows=[];
     const environment=m.developmentEnvironments.find(e=>e.id===request.environment_id);
     let environmentError=null;
-    if(m.userInitiatedOperations)try{await checkDevelopmentEnvironment(m,environment);}catch(e){environmentError=e.message;}
+    if(m.userInitiatedOperations || environment?.auth_requirement)try{await checkDevelopmentEnvironment(m,environment,projectId);}catch(e){environmentError=e.message;}
     for(const input of request.items){
       const item=project.cases.find(c=>c.case_id===input.case_id),version=item?.versions.find(v=>v.version===input.case_version);
       if(!version)throw Error('GENERATION_CASE_VERSION_INVALID');
@@ -47,17 +48,24 @@ export class ScriptOperations {
     return {mode:request.mode,environment_id:request.environment_id,items:rows,model_calls_required:true};
   }
   async start(projectId, request) { return this.serial(async()=>{
+    const m=this.buildManager;
+    // Reserve the preparation window before reading or writing authorization.
+    const preparing=!this.active;
+    if(preparing){m.assertStorageWritable();if(this.starting||m.batchStarting||m.batchOwner||m.active||m.starting||m.otherActive())throw Error('BUILD_TASK_ALREADY_ACTIVE');this.starting=true;m.generationStarting=true;}
+    try {
     if(!/^[-\w]{8,100}$/.test(request.request_id||''))throw Error('GENERATION_REQUEST_ID_REQUIRED');
     const fingerprint=hash(request),prior=(await this.list(projectId)).find(v=>v.request_id===request.request_id);
     if(prior){if(prior.fingerprint!==fingerprint)throw Error('GENERATION_REQUEST_CONFLICT');return prior;}
     let plan=await this.preflight(projectId,request);
     if(plan.items.some(i=>i.reason))throw Error('GENERATION_BLOCKED:'+plan.items.filter(i=>i.reason).map(i=>i.external_id+':'+i.reason).join(';'));
-    const m=this.buildManager;if(this.active||m.generationOwner||m.batchOwner||m.active||m.starting||m.otherActive())throw Error('BUILD_TASK_ALREADY_ACTIVE');
+    if(this.active||m.generationOwner||m.batchOwner||m.batchStarting||m.active||m.starting||m.otherActive())throw Error('BUILD_TASK_ALREADY_ACTIVE');
+    m.assertStorageWritable();
     if(plan.items.some(i=>i.requires_model_confirmation)){
       if(request.confirm_model_use!==true)throw Error('GENERATION_MODEL_CONFIRMATION_REQUIRED');
       // A receipt belongs to this explicit operation, never a reusable blanket
       // permission or a reset of an earlier consumed authorization.
       for(const item of plan.items.filter(i=>i.requires_model_confirmation)){
+        m.assertStorageWritable();
         let seed={};
         if(request.mode==='revise'){
           const t=await m.store.getTask(item.input.source_task_id),c=t.candidates.find(c=>c.version===item.input.candidate_version);
@@ -76,14 +84,20 @@ export class ScriptOperations {
       plan=await this.preflight(projectId,request);
       if(plan.items.some(i=>i.reason||!i.logical_id))throw Error('GENERATION_AUTHORIZATION_NOT_READY');
     }
-    const operation=await this.save({...plan,operation_id:'generation-'+randomUUID(),project_id:projectId,request_id:request.request_id,fingerprint,state:'QUEUED',created_at:new Date().toISOString()});
+    m.assertStorageWritable();
+    const operation=await this.save({...plan,operation_id:'generation-'+randomUUID(),project_id:projectId,request_id:request.request_id,fingerprint,state:'QUEUED',created_at:new Date().toISOString(),service_identity:m.store.serviceIdentity||null});
+    m.assertStorageWritable();
     this.active={operation,cancelled:false};m.generationOwner=operation.operation_id;
-    this.completion=this.execute(operation).finally(()=>{m.generationOwner=null;this.active=null;});return operation;
+    this.completion=this.execute(operation).finally(()=>{m.generationOwner=null;this.active=null;});
+    void this.completion.catch(error=>m.reportStorageFault(error,'generation_background_completion'));
+    return operation;
+    } finally {if(preparing){this.starting=false;m.generationStarting=false;}}
   }); }
   async execute(v) {
     const m=this.buildManager;
     try {v.state='RUNNING';await this.save(v);
       for(const item of v.items){
+        m.assertStorageWritable();
         if(this.active.cancelled){item.state='NOT_RUN';item.reason='GENERATION_CANCELLED';continue;}
         try{
           const checked=await this.preflight(v.project_id,{mode:v.mode,environment_id:v.environment_id,request_id:v.request_id,items:[item.input]});
@@ -99,10 +113,10 @@ export class ScriptOperations {
           item.task_id=task.task_id;item.state='RUNNING';await this.save(v);
           if(this.active.cancelled)await m.stop(task.task_id);
           await m.completions.get(task.task_id);const done=await m.store.getTask(task.task_id);item.state=done.task_status;item.reason=done.error?.code||null;
-        }catch(e){item.state='BLOCKED';item.reason=e.message;}
+        }catch(e){if(m.storageFault)throw e;item.state='BLOCKED';item.reason=e.message;}
         await this.save(v);
       }v.state=this.active.cancelled?'CANCELLED':'FINISHED';
-    }catch(e){v.state='INTERRUPTED';v.error=e.message;}
+    }catch(e){v.state='INTERRUPTED';v.error=e.message;if(m.storageFault)throw e;}
     v.finished_at=new Date().toISOString();await this.save(v);
   }
   async stop(id,project){const v=await this.get(id,project);if(this.active?.operation.operation_id!==id)return v;this.active.cancelled=true;this.active.operation.cancel_requested=true;await this.save(this.active.operation);const m=this.buildManager;if(m.active?.taskId)await m.stop(m.active.taskId);return {...this.active?.operation||v,cancel_requested:true};}

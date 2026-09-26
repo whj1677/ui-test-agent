@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-09-25T21:03:05.8663061+08:00",
+  "head": "5288974180a71eabbeead1a000adb14806f59106",
+  "branch": "codex/qa-real-model-20260924",
+  "service_pid": 19764,
+  "service_process_started_at": "2026-09-25T20:46:30+08:00",
+  "source_files": [
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\development-session.mjs",
+      "Hash": "9DBC7DD5BC5EDE33465BFC3556556324E5FD77845FB75BF1A8BEFFD20C92CB05"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\development-tool-guard.mjs",
+      "Hash": "BAE4AE52083D9FF81F13709E050B1FC740D91D65C644C39536E4028D95EE5448"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\development-task.mjs",
+      "Hash": "458445F6D262EC1CEB3932CC1D4133B8F363D2BE48DB893BBB95C100B1D9BCD7"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\candidate-trials.mjs",
+      "Hash": "1C17134198CC1AD036FE5177E98EACC996B166DE5479FBA5F3EB5BDC13E33BBF"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\script-operations.mjs",
+      "Hash": "D7E89DFFD5965DAC9B6C0AA081EF658A48269A64AC9155EEB3566F4979B7038A"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\index.mjs",
+      "Hash": "7FF581059FB67E2CAEE944AAE259DA498763E4FF80F7F5BFB690152650FD42B7"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\auth\\session.mjs",
+      "Hash": "0B98FDDA364FC63096C2372533E86841938E573692193177BFE03709721585CF"
+    },
+    {
+      "Path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\adapter.mjs",
+      "Hash": "ED60A5D79FEF540891737434E43EE2CD83917C513DAD9ACE008BF03CCE8EC9E9"
+    }
+  ],
+  "scope": "working tree snapshot, not proof of loaded backend bytes"
+}

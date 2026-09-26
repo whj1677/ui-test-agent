@@ -2,14 +2,17 @@ import { reviewFor, rejectedReview } from '../batches.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { digest, evidenceFiles } from './development-session.mjs';
-import { saveBundle, developmentBundle } from './development-bundle.mjs';
+import { saveBundle, developmentBundle, assertBundleTiming } from './development-bundle.mjs';
 import { contentHash } from '../cases/excel.mjs';
 import { parseCandidateReport, projectCaseStepCoverage, counterexampleDetected } from './report.mjs';
 import { renderStepReplay } from './step-replay.mjs';
+import { extractTimingObligations } from './timing-obligations.mjs';
+import { applyTimingVerdict } from './timing-evidence.mjs';
 
 const identityKeys = ['project_id', 'case_id', 'case_version', 'content_sha256', 'source_task_id', 'candidate_version', 'bundle_sha256', 'environment_id'];
 const identity = value => Object.fromEntries(identityKeys.map(key => [key, value[key]]));
 const same = (a, b) => identityKeys.every(key => a[key] === b[key]);
+const terminalExecution = new Set(['FINISHED', 'CANCELLED', 'INTERRUPTED']);
 
 // Read the already-frozen manifest. Never re-collect final/normal or final/negative
 // as executable inputs; those are historical outputs, not candidate dependencies.
@@ -38,6 +41,7 @@ export function mediaType(file) {
 
 export async function resolveTrialCandidate(manager, request, checkEnvironment = true) {
   const task = await manager.store.getTask(request.source_task_id);
+  if (task?.auth_requirement && request.project_id !== task.source?.project_id) throw new Error('TRIAL_AUTH_PROJECT_MISMATCH');
   const candidate = task?.candidates?.find(c => c.version === request.candidate_version);
   const authorization = manager.candidateTrialAuthorizations.find(a => same(a, request));
   const mapped = authorization?.source_binding;
@@ -56,7 +60,24 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
   if (checkEnvironment && rejectedReview(review) && request.diagnostic !== true) throw new Error('REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY');
   const environment = manager.candidateTrialEnvironments.find(e => e.id === request.environment_id);
   if (checkEnvironment) {
-    const ownedNormalRun = manager.userInitiatedOperations === true && !mapped && task.source.project_id === request.project_id && request.lane === 'normal' && environment?.configurationIdentity?.kind === 'registered-static-html';
+    const authTarget = environment?.configurationIdentity?.kind === 'registered-auth-target';
+    const registeredDevelopment = manager.developmentEnvironments.find(e => e.id === request.environment_id);
+    if (task.auth_requirement && (!authTarget ||
+        registeredDevelopment?.normal_url !== environment.configurationIdentity.normal_url ||
+        registeredDevelopment?.auth_requirement?.role !== task.auth_requirement.role ||
+        registeredDevelopment?.auth_requirement?.environment_id !== task.auth_requirement.environment_id ||
+        manager.authSessions.environment({ project_id: request.project_id,
+          environment_id: task.auth_requirement.environment_id, role: task.auth_requirement.role }).origin !== new URL(environment.configurationIdentity.normal_url).origin)) {
+      throw new Error('TRIAL_AUTH_TARGET_MISMATCH');
+    }
+    if (!task.auth_requirement && authTarget) throw new Error('TRIAL_AUTH_TARGET_MISMATCH');
+    if (task.auth_requirement) {
+      const status = await manager.authSessions.check({ project_id: request.project_id,
+        environment_id: task.auth_requirement.environment_id, role: task.auth_requirement.role });
+      if (status.status !== 'VALID') throw new Error('AUTH_SESSION_REQUIRED');
+    }
+    const ownedNormalRun = manager.userInitiatedOperations === true && !mapped && task.source.project_id === request.project_id && request.lane === 'normal' &&
+      ['registered-static-html', 'registered-auth-target'].includes(environment?.configurationIdentity?.kind);
     if ((!authorization || !authorization.lanes?.includes(request.lane)) && !ownedNormalRun) throw new Error('TRIAL_NOT_AUTHORIZED');
     if (!environment) throw new Error('TRIAL_ENVIRONMENT_UNAVAILABLE');
     await environment.check(); // identity check only: viewing never starts a service or run
@@ -87,13 +108,17 @@ export async function submitCandidateTrial(manager, request) {
   const fingerprint = digest(JSON.stringify({ ...identity(request), lane: request.lane, batch_id: request.batch_id || null, diagnostic: request.diagnostic === true }));
   const runId = `trial-${digest(request.project_id + ':' + request.request_id).slice(0, 40).toLowerCase()}`;
   // The request receipt is the durable run itself; replay works after restart.
-  const previous = await manager.runStore.getRun(runId);
+  let previous;
+  try { previous = await manager.runStore.getRun(runId); }
+  catch (error) { manager.reportStorageFault(error, 'trial_receipt_read'); throw error; }
   if (previous) { if (previous.request_fingerprint !== fingerprint) throw new Error('TRIAL_REQUEST_CONFLICT'); return previous; }
+  manager.assertStorageWritable();
   if (manager.starting || manager.active || manager.otherActive()) throw new Error('BUILD_TASK_ALREADY_ACTIVE');
   manager.starting = true;
   try {
     const { task, candidate, version, bundle, environment } = await resolveTrialCandidate(manager, request);
     const controller = new AbortController();
+    manager.assertStorageWritable();
     const run = await manager.runStore.createRun({ schema: 'workbench/candidate-trial-v1', run_id: runId,
       batch_id: request.batch_id || null, requirement_review: reviewFor(manager,request), diagnostic: request.diagnostic === true,
       request_id: request.request_id, request_fingerprint: fingerprint, selection: identity(request),
@@ -105,33 +130,61 @@ export async function submitCandidateTrial(manager, request) {
       recording: { viewport: {width:1280,height:720}, video_size: {width:1280,height:720}, device_scale_factor: 1, codec: 'Playwright WebM', encoding_parameters: 'Playwright defaults; bitrate not overridden' },
       run_type: request.lane, origin: 'EXPLICIT_CANDIDATE_TRIAL', created_at: manager.now().toISOString(), started_at: manager.now().toISOString(),
       execution_status: 'QUEUED', status: 'NOT_RUN', complete_pass: false, approval_status: 'NOT_APPROVED',
-      harness_starts: 0, model_calls: 0, media: [], files: [], evidence_status: 'PENDING', runner_version: 'candidate-bundle-trial-v1' });
+      harness_starts: 0, model_calls: 0, media: [], files: [], evidence_status: 'PENDING', runner_version: 'candidate-bundle-trial-v1' })
+      .catch(error => { manager.reportStorageFault(error, 'trial_receipt_create'); throw error; });
+    if (manager.shutdownRequested) {
+      await manager.runStore.updateRun(runId, r => ({ ...r, execution_status: 'INTERRUPTED',
+        technical_error: { code: 'WORKBENCH_SHUTTING_DOWN' }, finished_at: manager.now().toISOString() }))
+        .catch(error => { manager.reportStorageFault(error, 'trial_shutdown_record'); throw error; });
+      throw new Error('WORKBENCH_SHUTTING_DOWN');
+    }
+    manager.assertStorageWritable();
     manager.active = { taskId: task.task_id, runId, attemptId: runId, controller, phase: 'CANDIDATE_TRIAL' };
-    const promise = executeTrial(manager, run, bundle, environment, controller).finally(() => { if (manager.active?.runId === runId) manager.active = null; });
+    const promise = executeTrial(manager, run, bundle, environment, controller, task).finally(() => { if (manager.active?.runId === runId) manager.active = null; });
     manager.completions.set(runId, promise);
+    void promise.catch(error => manager.reportStorageFault(error, 'trial_background_completion'));
     return run;
   } finally { manager.starting = false; }
 }
 
-async function executeTrial(manager, run, bundle, environment, controller) {
+async function executeTrial(manager, run, bundle, environment, controller, task) {
   const directory = manager.runStore.runDirectory(run.run_id), snapshot = path.join(directory, 'bundle'), output = path.join(directory, 'execution');
-  const update = patch => manager.runStore.updateRun(run.run_id, r => ({ ...r, ...patch }));
-  let lease;
+  const update = patch => manager.runStore.updateRun(run.run_id, r => ({ ...r, ...patch }))
+    .catch(error => { manager.reportStorageFault(error, 'trial_result_update'); throw error; });
+  let lease; let authWatch; let authBlock = null; let releaseAuthProtection = null;
   try {
-    await saveBundle(bundle, snapshot);
+    assertBundleTiming(bundle, run.frozen_case_content);
+    let authBinding = null;
+    if (task.auth_requirement) {
+      authBinding = await manager.bindDevelopmentAuth(task);
+      releaseAuthProtection = manager.authSessions.beginTaskProtection(authBinding.scope, authBinding.session_version);
+      authWatch = manager.startDevelopmentAuthWatch(authBinding.scope, authBinding.session_version, controller);
+      await update({ auth: { environment_id: authBinding.scope.environment_id, role: authBinding.role,
+        account_id: authBinding.account_id, session_version: authBinding.session_version, bound_at: authBinding.bound_at } });
+    }
+    await saveBundle(bundle, snapshot)
+      .catch(error => { manager.reportStorageFault(error, 'trial_snapshot_write'); throw error; });
     if ((await developmentBundle(snapshot, { validate: false })).sha256 !== bundle.sha256) throw new Error('TRIAL_SNAPSHOT_CHANGED');
     lease = await environment.acquire(run.run_type);
     if (controller.signal.aborted) throw new Error('TRIAL_CANCELLED');
+    manager.assertStorageWritable();
     await update({ execution_status: 'RUNNING', environment_binding: lease.identity, entry_route: lease.url });
+    const authStorageState = authBinding
+      ? await manager.authSessions.stateForExecution(authBinding.scope, authBinding.session_version) : null;
     const raw = await manager.adapter.verifyCandidate({ candidatePath: path.join(snapshot,'candidate.spec.mjs'), runDirectory: output,
-      fixtureUrl: lease.url, signal: controller.signal, browserExecutable: manager.browserExecutable,
+      fixtureUrl: lease.url, signal: controller.signal, browserExecutable: manager.browserExecutable, authStorageState,
+      sessionTerminationEndpoints: authBinding ? manager.authSessions.environment(authBinding.scope).session_termination_endpoints || [] : [],
+      timingRequirements: extractTimingObligations(run.frozen_case_content),
       stepObservation: { run_id: run.run_id, candidate_sha256: run.candidate_sha256, executed_external_id: run.executed_external_id,
         executed_case_id: run.case_id, executed_case_version: run.case_version, executed_content_sha256: run.content_sha256 } });
-    const result = await parseCandidateReport(raw.reportPath, raw.process);
+    const timingRequirements = extractTimingObligations(run.frozen_case_content);
+    const timing = raw.timing || { required: timingRequirements.length > 0, complete: timingRequirements.length === 0, observations: [] };
+    const result = applyTimingVerdict(await parseCandidateReport(raw.reportPath, raw.process), timing);
     const contract = { required_step_markers: run.frozen_case_content.steps.map(s => `CASE_STEP_${s.order}`), detection: lease.detection };
     const coverage = projectCaseStepCoverage(result, contract);
     const unchanged = (await developmentBundle(snapshot, { validate: false })).sha256 === bundle.sha256;
-    await update({ result, status: result.test_status, complete_pass: result.complete_pass && coverage.complete && unchanged && !controller.signal.aborted,
+    authBlock = authWatch?.detected || null;
+    await update({ result, timing_validation: timing, status: authBlock ? 'AUTH_SESSION_BLOCKED' : result.test_status, complete_pass: result.complete_pass && coverage.complete && unchanged && !controller.signal.aborted && !authBlock,
       step_coverage: coverage, failure_step: coverage.items.find(s => s.error_attributed)?.marker || null, error: result.error,
       same_candidate_hash: unchanged, specified_defect_detected: run.run_type === 'negative' && unchanged && counterexampleDetected(result, contract),
       process: result.process });
@@ -141,20 +194,46 @@ async function executeTrial(manager, run, bundle, environment, controller) {
         executedExternalId: run.executed_external_id, executedCaseVersion: run.case_version, caseContent: run.frozen_case_content, coverage, browserExecutable: manager.browserExecutable });
     const media = (await evidenceFiles(output, directory)).filter(f => mediaType(f)).map((f,i) => ({ ...f, ...mediaType(f),
       media_id: `media-${i+1}`, file_id: `media-${i+1}`, run_id: run.run_id, file_name: path.basename(f.relative_path) }));
-    const complete = replay.replay.status === 'READY' && replay.replay.evidence_complete && ['video','screenshot','trace'].every(k => media.some(f => f.kind === k));
+    const requiredMedia = task.auth_requirement ? ['video', 'screenshot'] : ['video', 'screenshot', 'trace'];
+    const complete = replay.replay.status === 'READY' && replay.replay.evidence_complete && requiredMedia.every(k => media.some(f => f.kind === k));
     await update({ step_replay: replay.replay, media, files: media.map(f => ({ ...f, kind: f.file_name === 'step-replay-v1.webm' ? 'trial_step_replay_video' : `trial_${f.kind}` })),
-      evidence_status: complete ? 'COMPLETE' : 'INCOMPLETE', evidence_error: complete ? null : (replay.replay.reason || 'STEP_OR_MEDIA_MISSING') });
-  } catch (error) { const saved = await manager.runStore.getRun(run.run_id); await update({ technical_error: { code: error.code || error.message }, evidence_status: 'INCOMPLETE', complete_pass: saved.result && !String(error.message).includes('SNAPSHOT') && !controller.signal.aborted ? saved.complete_pass : false }); }
+      evidence_status: complete ? 'COMPLETE' : 'INCOMPLETE', evidence_error: complete ? null : (replay.replay.reason || 'STEP_OR_MEDIA_MISSING'),
+      trace_policy: task.auth_requirement ? 'DISABLED_FOR_AUTH_PRIVACY' : 'ON' });
+  } catch (error) {
+    if (manager.storageFault) throw error;
+    authBlock ||= authWatch?.detected || (task.auth_requirement && ['AUTH_SESSION_REQUIRED', 'AUTH_SESSION_NOT_VALID'].includes(error.message)
+      ? { reason: error.message, trigger: 'execution_preflight', detected_at: manager.now().toISOString() } : null);
+    const saved = await manager.runStore.getRun(run.run_id)
+      .catch(readError => { manager.reportStorageFault(readError, 'trial_error_read'); throw readError; });
+    await update({ technical_error: { code: authBlock ? 'AUTH_SESSION_BLOCKED' : error.code || error.message },
+      status: authBlock ? 'AUTH_SESSION_BLOCKED' : saved?.status || 'NOT_RUN', evidence_status: 'INCOMPLETE',
+      complete_pass: authBlock ? false : saved?.result && !String(error.message).includes('SNAPSHOT') && !controller.signal.aborted ? saved.complete_pass : false });
+  }
   finally {
-    try { await lease?.release(); } catch (error) { await update({ environment_cleanup_error: error.message }); }
-    await update({ execution_status: controller.signal.aborted ? 'CANCELLED' : 'FINISHED', ...(controller.signal.aborted ? { complete_pass: false } : {}), finished_at: manager.now().toISOString() });
+    releaseAuthProtection?.();
+    if (authWatch) { authBlock ||= authWatch.detected; manager.stopDevelopmentAuthWatch(); }
+    try { await lease?.release(); } catch (error) { if (!manager.storageFault) await update({ environment_cleanup_error: error.message }); }
+    if (!manager.storageFault) await update({ execution_status: controller.signal.aborted ? 'CANCELLED' : manager.shutdownRequested ? 'INTERRUPTED' : 'FINISHED',
+      ...(authBlock ? { status: 'AUTH_SESSION_BLOCKED', technical_error: { code: 'AUTH_SESSION_BLOCKED' }, complete_pass: false, evidence_status: 'INCOMPLETE' }
+        : controller.signal.aborted ? { complete_pass: false } : {}), finished_at: manager.now().toISOString() });
   }
 }
 
 export async function stopCandidateTrial(manager, runId) {
-  if (manager.active?.runId !== runId) throw new Error('TRIAL_NOT_ACTIVE');
-  manager.active.controller.abort('cancelled');
-  return manager.runStore.updateRun(runId, r => ({ ...r, execution_status: 'STOPPING' }));
+  const owned = manager.active?.runId === runId ? manager.active : null;
+  const abortOwned = () => {
+    if (owned && manager.active === owned && owned.runId === runId) owned.controller.abort('cancelled');
+  };
+  const current = await manager.runStore.getRun(runId)
+    .catch(error => { manager.reportStorageFault(error, 'trial_stop_read'); abortOwned(); throw error; });
+  if (current && terminalExecution.has(current.execution_status)) return current;
+  if (!owned || manager.active !== owned) throw new Error('TRIAL_NOT_ACTIVE');
+  const updated = await manager.runStore.updateRun(runId, r => terminalExecution.has(r.execution_status) || r.execution_status === 'STOPPING'
+    ? r : manager.active === owned ? { ...r, execution_status: 'STOPPING' } : r)
+    .catch(error => { manager.reportStorageFault(error, 'trial_stop_update'); abortOwned(); throw error; });
+  if (updated.execution_status === 'STOPPING') abortOwned();
+  else if (!terminalExecution.has(updated.execution_status)) throw new Error('TRIAL_NOT_ACTIVE');
+  return updated;
 }
 
 // View-only adaptation of old records. No task JSON is rewritten or re-approved.
@@ -171,9 +250,11 @@ export function developmentRecords(task) {
     const files = task.files.filter(f => f.relative_path.startsWith(r.prefix) && mediaType(f)).map(f => ({ ...f, ...mediaType(f),
       run_id: r.run_id, kind: r.step_replay?.status === 'READY' && path.basename(f.relative_path) === r.step_replay.output_file_name
         ? 'development_step_replay_video' : `${r.step_replay ? 'development' : 'legacy'}_${mediaType(f).kind}` }));
+    const requiredMedia = task.auth_requirement ? ['video', 'screenshot'] : ['video', 'screenshot', 'trace'];
     const complete = r.step_replay?.status === 'READY' && r.step_replay.evidence_complete &&
-      files.some(f => f.kind === 'development_step_replay_video') && ['video', 'screenshot', 'trace'].every(kind => files.some(f => f.kind === `development_${kind}`));
+      files.some(f => f.kind === 'development_step_replay_video') && requiredMedia.every(kind => files.some(f => f.kind === `development_${kind}`));
     return { ...shared, ...r, error: r.error || r.result?.error, failure_step: r.step_coverage?.items.find(s => s.error_attributed)?.marker || null,
-      files, evidence_status: r.step_replay ? complete ? 'COMPLETE' : 'INCOMPLETE' : 'LEGACY_STEP_CAPTURES_UNAVAILABLE' };
+      files, evidence_status: r.step_replay ? complete ? 'COMPLETE' : 'INCOMPLETE' : 'LEGACY_STEP_CAPTURES_UNAVAILABLE',
+      trace_policy: task.auth_requirement ? 'DISABLED_FOR_AUTH_PRIVACY' : r.trace_policy || 'ON' };
   });
 }

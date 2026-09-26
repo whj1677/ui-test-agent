@@ -1,0 +1,36 @@
+{
+  "service": "approved-test-workbench",
+  "status": "ready",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-3925ab9d-eaef-410f-b3c9-409279f8d962",
+    "captured_at": "2026-09-25T14:37:46.656Z",
+    "source_sha256": "aa496e2e1610072cf559a7fe6fc9d52a095a52787d9fa8f6c905d503e50abbb6",
+    "source_file_count": 87,
+    "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "accepting": true,
+  "preparing": false,
+  "active_run_id": null,
+  "active_build_task_id": null,
+  "active_batch_id": null,
+  "active_script_operation_id": null,
+  "build_budget": {
+    "schema": "workbench/build-stage-budget-v1",
+    "phase": "M2-C",
+    "max_starts": 2,
+    "used_starts": 0,
+    "claims": []
+  },
+  "build_authorization": null,
+  "build_diagnostics": {
+    "service_instance_id": "service-3925ab9d-eaef-410f-b3c9-409279f8d962",
+    "storage_status": "READY",
+    "storage_error": null,
+    "authorization_id": null,
+    "trial_runner_version": "e2e01-step-evidence-replay-v1"
+  },
+  "run_storage_error": null
+}

@@ -38,3 +38,15 @@ harness-probe/playwright-report/
 /.t1.txt
 /.t2.txt
 /.verify_out.txt
+
+# Local derived release archives, extracted copies and embedded-media reports.
+# Keep the reviewed source, frozen fixtures and text evidence under Git.
+workbench/qa/**/package-extract-*/
+workbench/qa/**/*.zip
+workbench/qa/20260925-reliability/official-batch-report.html
+workbench/qa/20260925-reliability/recovery-report.html
+workbench/qa/20260925-v21/engineer-batch-evidence.html
+workbench/qa/20260925-v21/user-trial-kit/KC-11-本次批次报告.html
+workbench/qa/20260925-v21/user-trial-kit/本轮复测报告-KC02与KC11.html
+workbench/qa/20260925-v21/user-trial-kit/*.webm
+workbench/qa/20260925-independent-ui/supervisor/mixed-report.html

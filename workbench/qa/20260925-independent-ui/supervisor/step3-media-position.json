@@ -1,0 +1,19 @@
+{
+  "action": "主管点击第3步骤定位",
+  "videos": [
+    {
+      "currentTime": 6.2001,
+      "duration": 9.177399,
+      "error": null,
+      "readyState": 4,
+      "src": "/api/runs/trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d/media/media-10"
+    },
+    {
+      "currentTime": 0,
+      "duration": 6.8,
+      "error": null,
+      "readyState": 4,
+      "src": "/api/runs/trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d/media/media-3"
+    }
+  ]
+}

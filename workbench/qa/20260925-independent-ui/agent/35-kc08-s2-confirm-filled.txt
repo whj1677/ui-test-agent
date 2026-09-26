@@ -1,0 +1,155 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: V2.1 真实模型全流程 · 20260925
+    - generic: 项目空间 · 12 条用例
+    - link "用例库":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+    - link "测试批次":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/batches"
+    - link "报告":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/reports"
+    - link "环境与登录":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "V2.1 真实模型全流程 · 20260925":
+  - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+- generic: /
+- strong: KC-08
+- generic: 服务就绪 · 真实后端
+- main:
+  - link "← 返回用例库":
+    - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases"
+  - heading "KC-08 · 跨页选择保留" [level=1]
+  - paragraph: 设备预约调度 · 用例 v1
+  - button "运行此用例"
+  - button "重新生成脚本"
+  - generic "更多"
+  - text: 用例版本
+  - combobox "用例版本":
+    - option "v1 · 当前" [selected]
+  - text: 脚本版本
+  - combobox "脚本版本":
+    - option "请选择"
+    - option "S2 · 2026-09-25T14:25:05." [selected]
+    - option "S1 · 2026-09-25T11:14:56."
+  - generic: 脚本资格：候选未批准
+  - navigation "用例详情页签":
+    - link "结果与证据":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&script_task=build-20260925142505-0fc7ce0d&candidate=1&tab=results"
+    - link "用例内容":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&script_task=build-20260925142505-0fc7ce0d&candidate=1&tab=content"
+    - link "自动化脚本":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&script_task=build-20260925142505-0fc7ce0d&candidate=1&tab=scripts"
+    - link "历史结果":
+      - /url: "#/projects/project-80875248-3e14-4055-b077-b890dead1a9e/cases/case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411?return=%23%2Fprojects%2Fproject-80875248-3e14-4055-b077-b890dead1a9e%2Fcases&version=1&script_task=build-20260925142505-0fc7ce0d&candidate=1&tab=history"
+  - heading "本版本结果与媒体" [level=2]
+  - text: 选择测试批次
+  - combobox "选择测试批次":
+    - option "全部历史（来源分别标识）" [selected]
+    - option "2026-09-25T14:22:38.441Z · independent-ui-round2-mixed-20260925 · 执行结束"
+    - option "2026-09-25T13:49:23.331Z · reliability-20260925-4322-retry · 执行结束"
+    - option "2026-09-25T13:44:02.079Z · reliability-20260925-4322 · 服务中断"
+    - option "2026-09-25T11:25:57.956Z · engineer-20260925-649508B8 · 执行结束"
+    - option "2026-09-25T09:53:03.953Z · model-round-20260925-project · 执行结束"
+  - paragraph: 历史结果 / 来源未分批；开发自测与独立验证分别保留。
+  - text: 选择本版本具体结果
+  - combobox "选择本版本具体结果":
+    - option "本版本最近历史结果"
+    - option "2026-09-25T11:17:01.686Z · 开发自测 · 通过"
+    - option "2026-09-25T11:17:31.853Z · 独立验证 · 通过"
+    - option "2026-09-25T13:49:42.335Z · 批次技术试跑 · 通过"
+    - option "2026-09-25T14:22:57.789Z · 批次技术试跑 · 通过"
+    - option "2026-09-25T14:27:08.686Z · 开发自测 · 通过"
+    - option "2026-09-25T14:27:47.078Z · 独立验证 · 通过" [selected]
+  - paragraph: 执行状态：历史已执行 · 软件版本：未提供 · 脚本 S2 · 资格：未批准
+  - article:
+    - heading "KC-08 · 运行结果" [level=3]
+    - paragraph: 来源 KC-08 · 脚本 S2
+    - generic: 通过
+    - paragraph: 执行用例 v1 · 运行器 自主开发验证执行器
+    - generic "技术详情：运行身份与原始记录"
+    - paragraph: 步骤证据回放由本次运行的步骤截图和实际结果合成，不是原始连续录像。原始录像尚不支持精确步骤定位。
+    - strong: 要求核查：待核对
+    - paragraph: 尚无绑定此用例版本和文件包的维护者核查；运行通过不代表要求完整。
+    - button "步骤回放" [pressed]
+    - button "原始录像"
+    - button "截图"
+    - link "下载带中文字幕的步骤证据回放":
+      - /url: /api/build/tasks/build-20260925142505-0fc7ce0d/media/build-file-25
+    - button "播放 / 暂停"
+    - slider "视频播放进度": "0"
+    - combobox "播放速度":
+      - option "1×" [selected]
+      - option "1.5×"
+      - option "2×"
+    - generic: 未播放
+    - link "下载本次 Trace":
+      - /url: /api/build/tasks/build-20260925142505-0fc7ce0d/media/build-file-16
+    - paragraph: 中文字幕步骤证据回放（非原始连续录像）
+    - heading "本次运行步骤" [level=4]
+    - paragraph: 播放位置：尚未播放
+    - list:
+      - button "1. 第1页勾选EQ-101"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 已选1项，批量预约可用
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925142505-0fc7ce0d/media/build-file-18
+      - button "2. 翻到第2页勾选EQ-106"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: 翻页后EQ-101选择保留，已选2项
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925142505-0fc7ce0d/media/build-file-20
+      - button "3. 返回第1页和第2页核对"
+      - generic: 本步骤通过
+      - term: 预期
+      - definition: EQ-101与EQ-106均保持勾选，已选2项
+      - term: 实际
+      - definition: 未单独采集实际值
+      - term: 采集
+      - definition: after · 步骤结束后截图，未录得连续动作片段
+      - link "打开本步骤原始截图":
+        - /url: /api/build/tasks/build-20260925142505-0fc7ce0d/media/build-file-22
+  - img "本次运行截图"
+- status
+- dialog "运行确认":
+  - banner:
+    - heading "运行此用例" [level=2]
+    - button "关闭运行确认": ×
+  - paragraph: 复用已有脚本，不调用 Coding Agent。确认运行后形成新测试批次，保留历史结果。
+  - paragraph: 环境指脚本绑定的被测系统与登录条件。执行器每次独立启动后台测试浏览器；已登记的本机测试页面会自动准备，无需你另开浏览器。
+  - paragraph: 本次范围：1 条；脚本仍为限定技术试跑，未批准。
+  - text: 被测软件版本 / 构建标识
+  - textbox "被测软件版本 / 构建标识" [active]:
+    - /placeholder: 未提供（最多160字符）
+    - text: independent-ui-round2-kc08-s2-20260925
+  - status: 正在检查准备条件…
+  - generic "高级：诊断试跑"
+  - alert
+  - contentinfo:
+    - button "取消"
+    - button "重新检查" [disabled]
+    - button "确认运行已有脚本" [disabled]

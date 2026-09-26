@@ -1,8 +1,19 @@
 // Presentation only: preserve recorded outcomes and never infer a missing value.
+const timingFailureReasons = {
+  TIMING_EVIDENCE_MISSING_OR_INVALID: '来源身份或记录完整性未通过核验',
+  TIMING_OBSERVATION_CONTEXT_LOST: '页面跳转导致观测上下文丢失',
+  TIMING_TARGET_NOT_UNIQUE: '目标提示缺失或重复',
+  TIMING_TARGET_ALREADY_VISIBLE: '步骤开始时提示已显示',
+  TIMING_TARGET_REPLACED: '观测期间提示元素被替换',
+  TIMING_INTERVAL_NOT_ENDED: '提示显示后未结束',
+  TIMING_REQUIRES_ONE_COMPLETE_CYCLE: '未取得唯一完整显示周期',
+  TIMING_OUT_OF_FROZEN_RANGE: '提示可见时长超出原范围',
+};
+
 export function executionSteps(run) {
-  if (run.step_replay?.steps?.length) return run.step_replay.steps;
-  if (run.caption_timeline?.steps?.length) return run.caption_timeline.steps;
-  return (run.step_coverage?.items || []).map(item => {
+  const steps = run.step_replay?.steps?.length ? run.step_replay.steps
+    : run.caption_timeline?.steps?.length ? run.caption_timeline.steps
+    : (run.step_coverage?.items || []).map(item => {
     const source = run.frozen_case_content?.steps?.find(step => step.order === item.order);
     // Locator assertions also carry actual values; their coarse error category
     // must not hide a value that was captured for this particular step.
@@ -13,12 +24,36 @@ export function executionSteps(run) {
       execution_status: item.execution_status,
       actual: evidence?.actual ?? '未单独采集实际值', assertion_expected: evidence?.expected ?? null };
   });
+  if (!run.timing_validation?.observations?.length) return steps;
+  return steps.map(step => {
+    const timing = (run.timing_validation?.observations || []).filter(item => item.step === step.order);
+    if (!timing.length) return step;
+    const actual = timing.map(item => {
+      const target = `“${item.target || '加载提示'}”`;
+      if (item.status !== 'PASSED' || !Number.isFinite(item.observed_duration_ms))
+        return `${target}：计时证据未通过核验；原因：${timingFailureReasons[item.reason] || item.reason || '缺少有效观测值'}`;
+      return `${target}：实测 ${item.observed_duration_ms.toFixed(1)} ms；原要求 ${item.min_ms}–${item.max_ms} ms；时间要求满足`;
+    }).join('\n');
+    return { ...step, actual: [step.actual, actual].filter(Boolean).join('\n'),
+      ...(timing.some(item => item.status !== 'PASSED') ? { execution_status: 'FAILED' } : {}) };
+  });
+}
+
+// View-only fallback: the Playwright report can pass while independent timing
+// evidence fails. Keep the stored run and its business verdict unchanged.
+export function displayFailureStep(run) {
+  if (run.failure_step) return run.failure_step;
+  if (run.status !== 'FAILED') return null;
+  const timing = run.timing_validation?.observations?.find(item =>
+    item.status === 'FAILED' && Number.isInteger(item.step) && item.step > 0);
+  return timing ? `CASE_STEP_${timing.step}` : null;
 }
 
 export function stepResultLabel(step, run) {
   if (step.execution_status === 'PASSED') return run.status === 'FAILED' ? '本步骤通过（整例仍失败）' : '本步骤通过';
   if (step.execution_status === 'FAILED') return '本步骤失败';
   if (step.execution_status === 'NOT_EXECUTED') return '未执行';
+  if (step.execution_status === 'MISSING') return '未采集执行证据';
   return null;
 }
 

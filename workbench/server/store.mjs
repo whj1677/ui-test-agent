@@ -98,6 +98,7 @@ export class WorkbenchStore {
   }
 
   async createRun(run) {
+    if (this.serviceIdentity) run = { ...run, service_identity: this.serviceIdentity };
     return this.serial(async () => {
       const directory = this.runDirectory(run.run_id);
       await fs.mkdir(directory, { recursive: false });

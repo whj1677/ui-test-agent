@@ -1,0 +1,124 @@
+[
+  {
+    "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+    "external_id": "KC-05",
+    "title": "状态多选空闲或维护",
+    "module": "设备预约调度",
+    "status": "CONFIRMED",
+    "current_version": 1,
+    "root_source": {
+      "type": "xlsx",
+      "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:6",
+      "file_name": "cases.xlsx",
+      "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+      "sheet": "原用例副本",
+      "row": 6
+    },
+    "lineage": [
+      {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-116154ce-b07d-4bb4-8fb0-8a0ead2c36c7",
+        "version": 1,
+        "imported_from": "xlsx",
+        "at": "2026-09-25T09:23:15.879Z"
+      }
+    ],
+    "import_batch_id": "preview-20ce0873-250f-4b87-9ed7-f9e91238fc14",
+    "created_at": "2026-09-25T09:23:15.879Z",
+    "updated_at": "2026-09-25T09:23:15.879Z",
+    "versions": [
+      {
+        "version": 1,
+        "content": {
+          "external_id": "KC-05",
+          "title": "状态多选空闲或维护",
+          "module": "设备预约调度",
+          "preconditions": "独立重置演示数据",
+          "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+          "steps": [
+            {
+              "order": 1,
+              "action": "状态勾选空闲和维护，取消使用中",
+              "expected": "显示空闲5条加维护2条，共7条，排除EQ-104使用中"
+            },
+            {
+              "order": 2,
+              "action": "翻页浏览结果",
+              "expected": "第1页101/102/103，第2页105/106/107，第3页108，共3页"
+            },
+            {
+              "order": 3,
+              "action": "取消维护仅留空闲",
+              "expected": "仅剩EQ-101/103/105/106/108共5条"
+            }
+          ],
+          "status": "CONFIRMED"
+        },
+        "content_sha256": "E52A2B69879E3272DC0DBEEDC87714E8B478FECDCFE5A0B7D19627D4E9EFE5DD",
+        "created_at": "2026-09-25T09:23:15.879Z",
+        "source": "IMPORT"
+      }
+    ]
+  },
+  {
+    "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+    "external_id": "KC-08",
+    "title": "跨页选择保留",
+    "module": "设备预约调度",
+    "status": "CONFIRMED",
+    "current_version": 1,
+    "root_source": {
+      "type": "xlsx",
+      "stable_id": "xlsx:5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A:原用例副本:9",
+      "file_name": "cases.xlsx",
+      "file_sha256": "5CE0E2C2654571DF0D6BD821FE0DA82781D3F96A1752F2AA8A7E82BD7203739A",
+      "sheet": "原用例副本",
+      "row": 9
+    },
+    "lineage": [
+      {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+        "version": 1,
+        "imported_from": "xlsx",
+        "at": "2026-09-25T09:23:15.879Z"
+      }
+    ],
+    "import_batch_id": "preview-20ce0873-250f-4b87-9ed7-f9e91238fc14",
+    "created_at": "2026-09-25T09:23:15.879Z",
+    "updated_at": "2026-09-25T09:23:15.879Z",
+    "versions": [
+      {
+        "version": 1,
+        "content": {
+          "external_id": "KC-08",
+          "title": "跨页选择保留",
+          "module": "设备预约调度",
+          "preconditions": "独立重置演示数据",
+          "test_data": "正常入口由任务绑定；本机合成数据；保留原始用例输入。",
+          "steps": [
+            {
+              "order": 1,
+              "action": "第1页勾选EQ-101",
+              "expected": "已选1项，批量预约可用"
+            },
+            {
+              "order": 2,
+              "action": "翻到第2页勾选EQ-106",
+              "expected": "翻页后EQ-101选择保留，已选2项"
+            },
+            {
+              "order": 3,
+              "action": "返回第1页和第2页核对",
+              "expected": "EQ-101与EQ-106均保持勾选，已选2项"
+            }
+          ],
+          "status": "CONFIRMED"
+        },
+        "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+        "created_at": "2026-09-25T09:23:15.879Z",
+        "source": "IMPORT"
+      }
+    ]
+  }
+]

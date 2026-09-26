@@ -1,0 +1,1586 @@
+{
+  "task_id": "build-20260925135104-907921c7",
+  "source": {
+    "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+    "project_name": "V2.1 真实模型全流程 · 20260925",
+    "case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+    "case_version": 1,
+    "external_id": "KC-10",
+    "content_sha256": "72D3D68252026E5C8691158D9CB0B33FDF6313F8B0BF026620BCF329029331DB"
+  },
+  "task_status": "CANDIDATE_VALIDATION_FAILED",
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-be29751c-8c7f-4938-a714-91cde16f4a1f",
+    "captured_at": "2026-09-25T13:47:48.622Z",
+    "source_sha256": "035e0daeb5221c0b4b127c2769e8c6b356cead993f0645f9062a6da10fbb7db2",
+    "source_file_count": 87,
+    "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "authorization": {
+    "logical_id": "user-267ce8eb32ae68975d12b36119324268ea424697147a2302",
+    "mode": "recovery",
+    "limits": {
+      "self_tests": 3,
+      "revisions": 2,
+      "tool_calls": 120,
+      "harness_starts": 1,
+      "wall_ms": 1200000
+    },
+    "recovery_origin": null
+  },
+  "runtime": {
+    "os_file_isolation": false,
+    "os_network_isolation": false,
+    "scope": "tool-policy-and-executor-allowlist",
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "profile": "headless",
+      "protocol": "official",
+      "credential_source": "saved-dsh-home",
+      "dsh_version": "0.1.6-alpha.2"
+    }
+  },
+  "failure": {
+    "category": "BUSINESS_DIFFERENCE",
+    "reason": "business_difference"
+  },
+  "development": {
+    "harness_starts": 1,
+    "tool_calls": 29,
+    "recovery": true,
+    "recovery_seed_bundle_sha256": "67B4A31A3735A496BDB14033545693A169FE0FEB52DE536EF861B0C6D1470827",
+    "self_tests": [
+      {
+        "number": 1,
+        "bundle_sha256": "67B4A31A3735A496BDB14033545693A169FE0FEB52DE536EF861B0C6D1470827",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 3075,
+            "sha256": "AF0619EC79FE42A5FA4C5E65FE51602EB08A23D2C68164A1E081BDE0AC2778AE"
+          }
+        ],
+        "sha256": "AF0619EC79FE42A5FA4C5E65FE51602EB08A23D2C68164A1E081BDE0AC2778AE",
+        "candidate_path": "run-1/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790344269788,
+        "observation_epoch": 0,
+        "recovery_original": true,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "PASSED",
+          "test_count": 1,
+          "error": null,
+          "complete_pass": true,
+          "stats": {
+            "startTime": "2026-09-25T13:51:10.399Z",
+            "duration": 2954.829,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 0,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 194,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_2",
+              "raw_title": "CASE_STEP_2",
+              "category": null,
+              "duration": 273,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            },
+            {
+              "title": "CASE_STEP_3",
+              "raw_title": "CASE_STEP_3",
+              "category": null,
+              "duration": 218,
+              "error": null,
+              "raw_error": null,
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": true,
+          "order_valid": true,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "duplicates": [],
+          "missing": [],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "step_replay": {
+          "schema": "workbench/step-evidence-replay-v1",
+          "status": "READY",
+          "run_id": "build-20260925135104-907921c7-dev-1",
+          "candidate_sha256": "AF0619EC79FE42A5FA4C5E65FE51602EB08A23D2C68164A1E081BDE0AC2778AE",
+          "executed_external_id": "KC-10",
+          "executed_case_version": 1,
+          "observer_version": "e2e01-step-observer-v2",
+          "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+          "original_video_precise_seek": false,
+          "evidence_complete": true,
+          "missing_captures": [],
+          "steps": [
+            {
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "raw_title": "CASE_STEP_1",
+              "action": "第1页点击当前页全选",
+              "expected": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:51:12.099Z",
+              "executed_end": "2026-09-25T13:51:12.174Z",
+              "observer_start": "2026-09-25T13:51:12.043Z",
+              "observer_end": "2026-09-25T13:51:12.235Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_1-after.png",
+              "before_screenshot_file_name": "case_step_1-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 117.5177000000001
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "raw_title": "CASE_STEP_2",
+              "action": "取消全选再单选EQ-103",
+              "expected": "仅EQ-103选中，EQ-102复选框仍禁用",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:51:12.297Z",
+              "executed_end": "2026-09-25T13:51:12.455Z",
+              "observer_start": "2026-09-25T13:51:12.237Z",
+              "observer_end": "2026-09-25T13:51:12.509Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_2-after.png",
+              "before_screenshot_file_name": "case_step_2-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 114.35549999999989
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "raw_title": "CASE_STEP_3",
+              "action": "确认批量预约状态",
+              "expected": "存在可预约选择时批量预约可用，清空后禁用",
+              "execution_status": "PASSED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": "2026-09-25T13:51:12.562Z",
+              "executed_end": "2026-09-25T13:51:12.677Z",
+              "observer_start": "2026-09-25T13:51:12.510Z",
+              "observer_end": "2026-09-25T13:51:12.727Z",
+              "screenshot_phase": "after",
+              "screenshot_file_name": "case_step_3-after.png",
+              "before_screenshot_file_name": "case_step_3-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 100.75549999999976
+            }
+          ],
+          "chapters": [
+            {
+              "step_id": "CASE_STEP_1",
+              "start_seconds": 0,
+              "result_start_seconds": 1.2252999999523162,
+              "end_seconds": 3.0305999999046325,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "start_seconds": 3.0305999999046325,
+              "result_start_seconds": 4.237299999952317,
+              "end_seconds": 6.051199999928475,
+              "screenshot_phase": "after"
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "start_seconds": 6.051199999928475,
+              "result_start_seconds": 7.254299999952316,
+              "end_seconds": 9.0565,
+              "screenshot_phase": "after"
+            }
+          ],
+          "duration_seconds": 9.176499,
+          "output_file_name": "step-replay-v1.webm",
+          "reading_holds": "1200ms action / 1800ms result"
+        },
+        "recording": {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "video_size": {
+            "width": 1280,
+            "height": 720
+          },
+          "device_scale_factor": 1,
+          "codec": "Playwright WebM",
+          "encoding_parameters": "Playwright defaults; bitrate not overridden"
+        },
+        "evidence_status": "STEPS_CAPTURED",
+        "evidence_error": null,
+        "changed_after_execution": false,
+        "report_path": "run-1/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-1/evidence/artifacts/.last-run.json",
+            "bytes": 45,
+            "sha256": "91D1C43004802CD49950D78EB11C8FA7D05DA8FFFFE219A8B13B2F561BC00903"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/test-finished-1.png",
+            "bytes": 54307,
+            "sha256": "8344EF8F66C43D596E8648979604A6810453482D994237A4AE41D3795520349D"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/trace.zip",
+            "bytes": 1421065,
+            "sha256": "D04BF5EA500FAC46C7A254A833AA2C50B22906AE99D897D4C3AF2144DF475759"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/video.webm",
+            "bytes": 185602,
+            "sha256": "F244EAF9DABB7BB67F2C453CDB1A0375317DF95E0B71747216776E35103B8317"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-after.png",
+            "bytes": 54721,
+            "sha256": "3A4E5845B9DB29554FBF9EFAE73498C0EA4C66C0D4FAB2E803F3FAD1485F6324"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_1-before.png",
+            "bytes": 54555,
+            "sha256": "29D426D93D524BD3C3D03B38319183048D0B73AC08D8DB147C20C8826E1B6F2A"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_2-after.png",
+            "bytes": 54378,
+            "sha256": "B627C5A9CA5BF0F0D7CC11F46FA374DF74491EE2D9CD3A3C5C48731092F3D88B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_2-before.png",
+            "bytes": 54721,
+            "sha256": "3A4E5845B9DB29554FBF9EFAE73498C0EA4C66C0D4FAB2E803F3FAD1485F6324"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_3-after.png",
+            "bytes": 54307,
+            "sha256": "8344EF8F66C43D596E8648979604A6810453482D994237A4AE41D3795520349D"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/case_step_3-before.png",
+            "bytes": 54378,
+            "sha256": "B627C5A9CA5BF0F0D7CC11F46FA374DF74491EE2D9CD3A3C5C48731092F3D88B"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-evidence/step-observations.ndjson",
+            "bytes": 3107,
+            "sha256": "BDF18B6DC36BB8E4EC733E6FB43BDBE10AE07488DFEE2281F745E09576615D11"
+          },
+          {
+            "relative_path": "run-1/evidence/artifacts/step-replay-v1.webm",
+            "bytes": 778967,
+            "sha256": "22B2362BAFA8D5A33C3041B9CF10FE3E454805863B724E19794E010836C87E17"
+          },
+          {
+            "relative_path": "run-1/evidence/observer-entry/observed.spec.mjs",
+            "bytes": 998,
+            "sha256": "0916C03005A7D31BBCDA0474D74F13DC8E6D301D9B1076571D290F27F8D6DF9E"
+          },
+          {
+            "relative_path": "run-1/evidence/playwright-report.json",
+            "bytes": 5195,
+            "sha256": "8000E0368B01B76CA67ED1B570C0CA022658626BDA94B353A43A2E3BE5A56968"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-1/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/trace.zip",
+              "bytes": 1421065,
+              "sha256": "D04BF5EA500FAC46C7A254A833AA2C50B22906AE99D897D4C3AF2144DF475759"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": true,
+              "raw_title": "CASE_STEP_2",
+              "report_path": [
+                1
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": true,
+              "raw_title": "CASE_STEP_3",
+              "report_path": [
+                2
+              ],
+              "error_attributed": false,
+              "execution_status": "PASSED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790344283563
+      },
+      {
+        "number": 2,
+        "bundle_sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0",
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 2007,
+            "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF"
+          }
+        ],
+        "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+        "candidate_path": "run-2/candidate.spec.mjs",
+        "status": "EXECUTED",
+        "started_at": 1790344418466,
+        "observation_epoch": 7,
+        "recovery_original": false,
+        "result": {
+          "report_status": "COMPLETE",
+          "test_status": "FAILED",
+          "test_count": 1,
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "complete_pass": false,
+          "stats": {
+            "startTime": "2026-09-25T13:53:39.242Z",
+            "duration": 8129.016,
+            "expected": 0,
+            "skipped": 0,
+            "unexpected": 1,
+            "flaky": 0
+          },
+          "process": {
+            "exit_code": 1,
+            "termination": null,
+            "error": null
+          },
+          "steps": [
+            {
+              "title": "CASE_STEP_1",
+              "raw_title": "CASE_STEP_1",
+              "category": null,
+              "duration": 5230,
+              "error": {
+                "type": "LOCATOR_OR_TARGET",
+                "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                "expected": null,
+                "actual": null,
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "raw_error": {
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                "location": {
+                  "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                  "line": 23,
+                  "column": 26
+                },
+                "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+              },
+              "steps": []
+            }
+          ]
+        },
+        "coverage": {
+          "rule_version": "project-case-step-title-v2",
+          "complete": false,
+          "order_valid": false,
+          "expected_sequence": [
+            "CASE_STEP_1",
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "observed_sequence": [
+            "CASE_STEP_1"
+          ],
+          "duplicates": [],
+          "missing": [
+            "CASE_STEP_2",
+            "CASE_STEP_3"
+          ],
+          "unexpected": [],
+          "malformed_titles": [],
+          "unattributed_errors": [],
+          "items": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "step_replay": {
+          "schema": "workbench/step-evidence-replay-v1",
+          "status": "READY",
+          "run_id": "build-20260925135104-907921c7-dev-2",
+          "candidate_sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+          "executed_external_id": "KC-10",
+          "executed_case_version": 1,
+          "observer_version": "e2e01-step-observer-v2",
+          "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+          "original_video_precise_seek": false,
+          "evidence_complete": true,
+          "missing_captures": [],
+          "steps": [
+            {
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "raw_title": "CASE_STEP_1",
+              "action": "第1页点击当前页全选",
+              "expected": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+              "execution_status": "FAILED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": {
+                "name": "Error",
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs:23:26\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs:19:3"
+              },
+              "executed_start": "2026-09-25T13:53:41.064Z",
+              "executed_end": "2026-09-25T13:53:46.161Z",
+              "observer_start": "2026-09-25T13:53:40.979Z",
+              "observer_end": "2026-09-25T13:53:46.206Z",
+              "screenshot_phase": "failure-after",
+              "screenshot_file_name": "case_step_1-failure-after.png",
+              "before_screenshot_file_name": "case_step_1-before.png",
+              "screenshot_error": null,
+              "capture_duration_ms": 130.20309999999995
+            },
+            {
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "raw_title": null,
+              "action": "取消全选再单选EQ-103",
+              "expected": "仅EQ-103选中，EQ-102复选框仍禁用",
+              "execution_status": "NOT_EXECUTED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": null,
+              "executed_end": null,
+              "observer_start": null,
+              "observer_end": null,
+              "screenshot_phase": null,
+              "screenshot_file_name": null,
+              "before_screenshot_file_name": null,
+              "screenshot_error": null,
+              "capture_duration_ms": 0
+            },
+            {
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "raw_title": null,
+              "action": "确认批量预约状态",
+              "expected": "存在可预约选择时批量预约可用，清空后禁用",
+              "execution_status": "NOT_EXECUTED",
+              "actual": "未单独采集实际值",
+              "assertion_expected": null,
+              "raw_error": null,
+              "executed_start": null,
+              "executed_end": null,
+              "observer_start": null,
+              "observer_end": null,
+              "screenshot_phase": null,
+              "screenshot_file_name": null,
+              "before_screenshot_file_name": null,
+              "screenshot_error": null,
+              "capture_duration_ms": 0
+            }
+          ],
+          "chapters": [
+            {
+              "step_id": "CASE_STEP_1",
+              "start_seconds": 0,
+              "result_start_seconds": 1.2257999999523164,
+              "end_seconds": 3.028299999952316,
+              "screenshot_phase": "failure-after"
+            }
+          ],
+          "duration_seconds": 3.148299,
+          "output_file_name": "step-replay-v1.webm",
+          "reading_holds": "1200ms action / 1800ms result"
+        },
+        "recording": {
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "video_size": {
+            "width": 1280,
+            "height": 720
+          },
+          "device_scale_factor": 1,
+          "codec": "Playwright WebM",
+          "encoding_parameters": "Playwright defaults; bitrate not overridden"
+        },
+        "evidence_status": "STEPS_CAPTURED",
+        "evidence_error": null,
+        "changed_after_execution": false,
+        "report_path": "run-2/evidence/playwright-report.json",
+        "media": [
+          {
+            "relative_path": "run-2/evidence/artifacts/.last-run.json",
+            "bytes": 96,
+            "sha256": "8A3C7618512E43B0E81F9E896921CE9DB1BD9FBA7317FE97FBCC55910CAB12E3"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/error-context.md",
+            "bytes": 5902,
+            "sha256": "569D8B1F64FA6B5C88CAFF49146A230626D194ED8C41738D305BBD32936247FF"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/test-failed-1.png",
+            "bytes": 54847,
+            "sha256": "BD6AC0E6908F6E83FB7C4BB8805569358FA8DABC777504820BB08470AF86746C"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/trace.zip",
+            "bytes": 838217,
+            "sha256": "6409F1545B8756AC834646A2EDA9B63CD18C3B9307E316F92B2D48BBF82DEF87"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/video.webm",
+            "bytes": 442460,
+            "sha256": "EFEE18162BF7F3A5208BEBCA25A036092573DE60A1850E5DB51B9F56C593CFDE"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_1-before.png",
+            "bytes": 54306,
+            "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/case_step_1-failure-after.png",
+            "bytes": 54847,
+            "sha256": "BD6AC0E6908F6E83FB7C4BB8805569358FA8DABC777504820BB08470AF86746C"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-evidence/step-observations.ndjson",
+            "bytes": 2577,
+            "sha256": "3C5343ECF2C3335AAF824E47880F61AE6058FBABB82FCC8E13BF8E885B20C3A1"
+          },
+          {
+            "relative_path": "run-2/evidence/artifacts/step-replay-v1.webm",
+            "bytes": 309983,
+            "sha256": "7F258A9B3B45E2FD077434A90AE537AFA89ECDB327BC7E512E4C653B517FC2EB"
+          },
+          {
+            "relative_path": "run-2/evidence/observer-entry/observed.spec.mjs",
+            "bytes": 998,
+            "sha256": "D51EE1AD855777536078FC9C4340C13DE7F932FC748A6CC63C024760A0890C45"
+          },
+          {
+            "relative_path": "run-2/evidence/playwright-report.json",
+            "bytes": 12053,
+            "sha256": "0070399866B69A0B575F2FCAC543EC52E3FC127E62EA965351699C0A1DE34271"
+          }
+        ],
+        "trace_summary": {
+          "interpretation": "metadata and reporter steps; no synthetic trace verdict",
+          "archives": [
+            {
+              "relative_path": "run-2/evidence/artifacts/observed-KC-10-当前页全选只选可预约行/trace.zip",
+              "bytes": 838217,
+              "sha256": "6409F1545B8756AC834646A2EDA9B63CD18C3B9307E316F92B2D48BBF82DEF87"
+            }
+          ],
+          "observed_steps": [
+            {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  }
+                }
+              ]
+            },
+            {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            },
+            {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          ]
+        },
+        "finished_at": 1790344431689
+      }
+    ],
+    "submission": {
+      "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+      "outcome": "business_difference",
+      "coverage": [
+        {
+          "order": 1,
+          "requirement": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+          "check_lines": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "execution": 2,
+          "uncovered": "CASE_STEP_1 executed and FAILED at line 23 (expect(row102).toBeVisible(), element not found). On the bound normal entry the default 状态多选 checks only 空闲, so page 1 is 共5条, 第1/2页 with EQ-101/EQ-103/EQ-105 (all 空闲); the maintenance row EQ-102 is not on page 1. Line 20 select-all was performed and lines 21-22 passed (EQ-101/EQ-103 checked), but the app selected 已选 3 项, so lines 24 (EQ-102 not checked) and 25 (已选 2 项) were not reached and remain unverified. The frozen premise (维护 EQ-102 出现在第 1 页) is unreachable on the default path without a status-filter action that the frozen case does not contain."
+        },
+        {
+          "order": 2,
+          "requirement": "仅EQ-103选中，EQ-102复选框仍禁用",
+          "check_lines": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "execution": 2,
+          "uncovered": "NOT_EXECUTED — CASE_STEP_2 was never run because CASE_STEP_1 failed at line 23 and the test terminated. No assertion on 仅EQ-103选中 or EQ-102 复选框禁用 could be evaluated. Retained unverified by design; not skipped or weakened."
+        },
+        {
+          "order": 3,
+          "requirement": "存在可预约选择时批量预约可用，清空后禁用",
+          "check_lines": [
+            39,
+            40,
+            41,
+            42
+          ],
+          "execution": 2,
+          "uncovered": "NOT_EXECUTED — CASE_STEP_3 was never run because CASE_STEP_1 failed at line 23 and the test terminated. The batch-button enabled/disabled transition could not be evaluated. Retained unverified by design; not skipped or weakened."
+        }
+      ],
+      "submitted_at": 1790344446501,
+      "file": "final/candidate.spec.mjs",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 2007,
+            "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF"
+          }
+        ],
+        "sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0"
+      },
+      "fidelity_review": "fidelity-review.json",
+      "semantic_approval": false,
+      "requirements_review": "PENDING_INDEPENDENT_REVIEW"
+    },
+    "fidelity_review": {
+      "schema": "workbench/development-fidelity-review-v1",
+      "bundle_sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0",
+      "candidate_sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+      "frozen_case_sha256": "72D3D68252026E5C8691158D9CB0B33FDF6313F8B0BF026620BCF329029331DB",
+      "case_preconditions": "独立重置演示数据",
+      "semantic_approval": false,
+      "human_review_required": true,
+      "finite_checks": {
+        "version": "finite-obligations-v1",
+        "semantic_pass": false,
+        "human_review_required": true,
+        "pre_step_state_changes": [],
+        "scope": "Literal named-button disabled/hidden predicates and label-bound scalar text equality; bounded direct helpers and if branches only. Other requirements and unsupported syntax are not proved.",
+        "status": "NO_SUPPORTED_OBLIGATIONS",
+        "obligations": [],
+        "remaining_requirements": [
+          {
+            "step": 1,
+            "requirement": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 2,
+            "requirement": "仅EQ-103选中，EQ-102复选框仍禁用",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          },
+          {
+            "step": 3,
+            "requirement": "存在可预约选择时批量预约可用，清空后禁用",
+            "review": "Non-extracted clauses require human review; these checks do not approve a candidate."
+          }
+        ],
+        "bundle_sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0"
+      },
+      "steps": [
+        {
+          "order": 1,
+          "precondition": "独立重置演示数据",
+          "action": "第1页点击当前页全选",
+          "expected": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+          "claimed_check_lines": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "claimed_check_source": [
+            {
+              "line": 20,
+              "code": "    await selectAll.click();"
+            },
+            {
+              "line": 21,
+              "code": "    await expect(checkbox101).toBeChecked();"
+            },
+            {
+              "line": 22,
+              "code": "    await expect(checkbox103).toBeChecked();"
+            },
+            {
+              "line": 23,
+              "code": "    await expect(row102).toBeVisible();"
+            },
+            {
+              "line": 24,
+              "code": "    await expect(checkbox102).not.toBeChecked();"
+            },
+            {
+              "line": 25,
+              "code": "    await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);"
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "FAILED",
+              "test_count": 1,
+              "error": {
+                "type": "LOCATOR_OR_TARGET",
+                "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                "expected": null,
+                "actual": null,
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "complete_pass": false,
+              "stats": {
+                "startTime": "2026-09-25T13:53:39.242Z",
+                "duration": 8129.016,
+                "expected": 0,
+                "skipped": 0,
+                "unexpected": 1,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 1,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 5230,
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  },
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_1",
+              "step_id": "CASE_STEP_1",
+              "order": 1,
+              "observed": true,
+              "raw_title": "CASE_STEP_1",
+              "report_path": [
+                0
+              ],
+              "error_attributed": true,
+              "execution_status": "FAILED",
+              "attributed_errors": [
+                {
+                  "step_id": "CASE_STEP_1",
+                  "report_path": [
+                    0
+                  ],
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  }
+                }
+              ]
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": "CASE_STEP_1 executed and FAILED at line 23 (expect(row102).toBeVisible(), element not found). On the bound normal entry the default 状态多选 checks only 空闲, so page 1 is 共5条, 第1/2页 with EQ-101/EQ-103/EQ-105 (all 空闲); the maintenance row EQ-102 is not on page 1. Line 20 select-all was performed and lines 21-22 passed (EQ-101/EQ-103 checked), but the app selected 已选 3 项, so lines 24 (EQ-102 not checked) and 25 (已选 2 项) were not reached and remain unverified. The frozen premise (维护 EQ-102 出现在第 1 页) is unreachable on the default path without a status-filter action that the frozen case does not contain."
+        },
+        {
+          "order": 2,
+          "precondition": "独立重置演示数据",
+          "action": "取消全选再单选EQ-103",
+          "expected": "仅EQ-103选中，EQ-102复选框仍禁用",
+          "claimed_check_lines": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "claimed_check_source": [
+            {
+              "line": 29,
+              "code": "    await selectAll.uncheck();"
+            },
+            {
+              "line": 30,
+              "code": "    await checkbox103.check();"
+            },
+            {
+              "line": 31,
+              "code": "    await expect(checkbox103).toBeChecked();"
+            },
+            {
+              "line": 32,
+              "code": "    await expect(checkbox101).not.toBeChecked();"
+            },
+            {
+              "line": 33,
+              "code": "    await expect(checkbox102).not.toBeChecked();"
+            },
+            {
+              "line": 34,
+              "code": "    await expect(checkbox102).toBeDisabled();"
+            },
+            {
+              "line": 35,
+              "code": "    await expect(selectionSummary).toHaveText(/已选\\s*1\\s*项/);"
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "FAILED",
+              "test_count": 1,
+              "error": {
+                "type": "LOCATOR_OR_TARGET",
+                "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                "expected": null,
+                "actual": null,
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "complete_pass": false,
+              "stats": {
+                "startTime": "2026-09-25T13:53:39.242Z",
+                "duration": 8129.016,
+                "expected": 0,
+                "skipped": 0,
+                "unexpected": 1,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 1,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 5230,
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  },
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_2",
+              "step_id": "CASE_STEP_2",
+              "order": 2,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": "NOT_EXECUTED — CASE_STEP_2 was never run because CASE_STEP_1 failed at line 23 and the test terminated. No assertion on 仅EQ-103选中 or EQ-102 复选框禁用 could be evaluated. Retained unverified by design; not skipped or weakened."
+        },
+        {
+          "order": 3,
+          "precondition": "独立重置演示数据",
+          "action": "确认批量预约状态",
+          "expected": "存在可预约选择时批量预约可用，清空后禁用",
+          "claimed_check_lines": [
+            39,
+            40,
+            41,
+            42
+          ],
+          "claimed_check_source": [
+            {
+              "line": 39,
+              "code": "    await expect(batchButton).toBeEnabled();"
+            },
+            {
+              "line": 40,
+              "code": "    await checkbox103.uncheck();"
+            },
+            {
+              "line": 41,
+              "code": "    await expect(selectionSummary).toHaveText(/已选\\s*0\\s*项/);"
+            },
+            {
+              "line": 42,
+              "code": "    await expect(batchButton).toBeDisabled();"
+            }
+          ],
+          "self_test": {
+            "execution": 2,
+            "status": "EXECUTED",
+            "result": {
+              "report_status": "COMPLETE",
+              "test_status": "FAILED",
+              "test_count": 1,
+              "error": {
+                "type": "LOCATOR_OR_TARGET",
+                "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                "expected": null,
+                "actual": null,
+                "attribution": "PENDING_ANALYSIS"
+              },
+              "complete_pass": false,
+              "stats": {
+                "startTime": "2026-09-25T13:53:39.242Z",
+                "duration": 8129.016,
+                "expected": 0,
+                "skipped": 0,
+                "unexpected": 1,
+                "flaky": 0
+              },
+              "process": {
+                "exit_code": 1,
+                "termination": null,
+                "error": null
+              },
+              "steps": [
+                {
+                  "title": "CASE_STEP_1",
+                  "raw_title": "CASE_STEP_1",
+                  "category": null,
+                  "duration": 5230,
+                  "error": {
+                    "type": "LOCATOR_OR_TARGET",
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                    "expected": null,
+                    "actual": null,
+                    "attribution": "PENDING_ANALYSIS"
+                  },
+                  "raw_error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                    "location": {
+                      "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\run-2\\candidate.spec.mjs",
+                      "line": 23,
+                      "column": 26
+                    },
+                    "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                  },
+                  "steps": []
+                }
+              ]
+            },
+            "observed_step": {
+              "marker": "CASE_STEP_3",
+              "step_id": "CASE_STEP_3",
+              "order": 3,
+              "observed": false,
+              "raw_title": null,
+              "report_path": null,
+              "error_attributed": false,
+              "execution_status": "NOT_EXECUTED",
+              "attributed_errors": []
+            }
+          },
+          "action_precondition_review": "PENDING_INDEPENDENT_REVIEW",
+          "uncovered": "NOT_EXECUTED — CASE_STEP_3 was never run because CASE_STEP_1 failed at line 23 and the test terminated. The batch-button enabled/disabled transition could not be evaluated. Retained unverified by design; not skipped or weakened."
+        }
+      ]
+    }
+  },
+  "candidates": [
+    {
+      "version": 2,
+      "attempt_id": "attempt-01-initial",
+      "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+      "trial_runs": [
+        {
+          "run_id": "build-20260925135104-907921c7-normal",
+          "run_type": "normal",
+          "validation_scope": "normal-only",
+          "candidate_sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+          "candidate_version": 2,
+          "executed_case_id": "case-c5b5e60a-bde6-42d3-89b2-35e98399624d",
+          "executed_external_id": "KC-10",
+          "executed_case_version": 1,
+          "started_at": "2026-09-25T13:54:11.351Z",
+          "finished_at": "2026-09-25T13:54:24.336Z",
+          "status": "FAILED",
+          "complete_pass": false,
+          "step_coverage": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1"
+            ],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                      "expected": null,
+                      "actual": null,
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\final\\candidate.spec.mjs",
+                        "line": 23,
+                        "column": 26
+                      },
+                      "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "NOT_EXECUTED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "same_candidate_hash": true,
+          "specified_defect_detected": false,
+          "result": {
+            "report_status": "COMPLETE",
+            "test_status": "FAILED",
+            "test_count": 1,
+            "error": {
+              "type": "LOCATOR_OR_TARGET",
+              "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+              "expected": null,
+              "actual": null,
+              "attribution": "PENDING_ANALYSIS"
+            },
+            "complete_pass": false,
+            "stats": {
+              "startTime": "2026-09-25T13:54:12.067Z",
+              "duration": 8224.92,
+              "expected": 0,
+              "skipped": 0,
+              "unexpected": 1,
+              "flaky": 0
+            },
+            "process": {
+              "exit_code": 1,
+              "termination": null,
+              "error": null
+            },
+            "steps": [
+              {
+                "title": "CASE_STEP_1",
+                "raw_title": "CASE_STEP_1",
+                "category": null,
+                "duration": 5284,
+                "error": {
+                  "type": "LOCATOR_OR_TARGET",
+                  "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" with timeout 5000ms\n  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\n",
+                  "expected": null,
+                  "actual": null,
+                  "attribution": "PENDING_ANALYSIS"
+                },
+                "raw_error": {
+                  "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                  "location": {
+                    "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\final\\candidate.spec.mjs",
+                    "line": 23,
+                    "column": 26
+                  },
+                  "snippet": "  21 |     await expect(checkbox101).toBeChecked();\n  22 |     await expect(checkbox103).toBeChecked();\n> 23 |     await expect(row102).toBeVisible();\n     |                          ^\n  24 |     await expect(checkbox102).not.toBeChecked();\n  25 |     await expect(selectionSummary).toHaveText(/已选\\s*2\\s*项/);\n  26 |   });"
+                },
+                "steps": []
+              }
+            ]
+          },
+          "step_replay": {
+            "schema": "workbench/step-evidence-replay-v1",
+            "status": "READY",
+            "run_id": "build-20260925135104-907921c7-normal",
+            "candidate_sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF",
+            "executed_external_id": "KC-10",
+            "executed_case_version": 1,
+            "observer_version": "e2e01-step-observer-v2",
+            "source_kind": "EXECUTION_TIME_STEP_SCREENSHOTS",
+            "original_video_precise_seek": false,
+            "evidence_complete": true,
+            "missing_captures": [],
+            "steps": [
+              {
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "raw_title": "CASE_STEP_1",
+                "action": "第1页点击当前页全选",
+                "expected": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+                "execution_status": "FAILED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": {
+                  "name": "Error",
+                  "message": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n",
+                  "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: '设备列表' }).getByRole('row').filter({ hasText: 'EQ-102' })\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\final\\candidate.spec.mjs:23:26\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\server\\build\\step-observer.mjs:46:23\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\build-tasks\\build-20260925135104-907921c7\\development\\final\\candidate.spec.mjs:19:3"
+                },
+                "executed_start": "2026-09-25T13:54:14.016Z",
+                "executed_end": "2026-09-25T13:54:19.130Z",
+                "observer_start": "2026-09-25T13:54:13.893Z",
+                "observer_end": "2026-09-25T13:54:19.175Z",
+                "screenshot_phase": "failure-after",
+                "screenshot_file_name": "case_step_1-failure-after.png",
+                "before_screenshot_file_name": "case_step_1-before.png",
+                "screenshot_error": null,
+                "capture_duration_ms": 168.03659999999945
+              },
+              {
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "raw_title": null,
+                "action": "取消全选再单选EQ-103",
+                "expected": "仅EQ-103选中，EQ-102复选框仍禁用",
+                "execution_status": "NOT_EXECUTED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": null,
+                "executed_end": null,
+                "observer_start": null,
+                "observer_end": null,
+                "screenshot_phase": null,
+                "screenshot_file_name": null,
+                "before_screenshot_file_name": null,
+                "screenshot_error": null,
+                "capture_duration_ms": 0
+              },
+              {
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "raw_title": null,
+                "action": "确认批量预约状态",
+                "expected": "存在可预约选择时批量预约可用，清空后禁用",
+                "execution_status": "NOT_EXECUTED",
+                "actual": "未单独采集实际值",
+                "assertion_expected": null,
+                "raw_error": null,
+                "executed_start": null,
+                "executed_end": null,
+                "observer_start": null,
+                "observer_end": null,
+                "screenshot_phase": null,
+                "screenshot_file_name": null,
+                "before_screenshot_file_name": null,
+                "screenshot_error": null,
+                "capture_duration_ms": 0
+              }
+            ],
+            "chapters": [
+              {
+                "step_id": "CASE_STEP_1",
+                "start_seconds": 0,
+                "result_start_seconds": 1.2262000000476838,
+                "end_seconds": 3.0409000000953674,
+                "screenshot_phase": "failure-after"
+              }
+            ],
+            "duration_seconds": 3.1609,
+            "output_file_name": "step-replay-v1.webm",
+            "reading_holds": "1200ms action / 1800ms result"
+          },
+          "recording": {
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "video_size": {
+              "width": 1280,
+              "height": 720
+            },
+            "device_scale_factor": 1,
+            "codec": "Playwright WebM",
+            "encoding_parameters": "Playwright defaults; bitrate not overridden"
+          },
+          "evidence_status": "STEPS_CAPTURED",
+          "evidence_error": null
+        }
+      ],
+      "coverage_review": [
+        {
+          "order": 1,
+          "requirement": "只勾选可预约EQ-101和EQ-103，维护EQ-102不勾选，已选2项",
+          "check_lines": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "execution": 2,
+          "uncovered": "CASE_STEP_1 executed and FAILED at line 23 (expect(row102).toBeVisible(), element not found). On the bound normal entry the default 状态多选 checks only 空闲, so page 1 is 共5条, 第1/2页 with EQ-101/EQ-103/EQ-105 (all 空闲); the maintenance row EQ-102 is not on page 1. Line 20 select-all was performed and lines 21-22 passed (EQ-101/EQ-103 checked), but the app selected 已选 3 项, so lines 24 (EQ-102 not checked) and 25 (已选 2 项) were not reached and remain unverified. The frozen premise (维护 EQ-102 出现在第 1 页) is unreachable on the default path without a status-filter action that the frozen case does not contain."
+        },
+        {
+          "order": 2,
+          "requirement": "仅EQ-103选中，EQ-102复选框仍禁用",
+          "check_lines": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "execution": 2,
+          "uncovered": "NOT_EXECUTED — CASE_STEP_2 was never run because CASE_STEP_1 failed at line 23 and the test terminated. No assertion on 仅EQ-103选中 or EQ-102 复选框禁用 could be evaluated. Retained unverified by design; not skipped or weakened."
+        },
+        {
+          "order": 3,
+          "requirement": "存在可预约选择时批量预约可用，清空后禁用",
+          "check_lines": [
+            39,
+            40,
+            41,
+            42
+          ],
+          "execution": 2,
+          "uncovered": "NOT_EXECUTED — CASE_STEP_3 was never run because CASE_STEP_1 failed at line 23 and the test terminated. The batch-button enabled/disabled transition could not be evaluated. Retained unverified by design; not skipped or weakened."
+        }
+      ],
+      "fidelity_review": "fidelity-review.json",
+      "approval_status": "NOT_APPROVED",
+      "bundle": {
+        "files": [
+          {
+            "path": "candidate.spec.mjs",
+            "bytes": 2007,
+            "sha256": "76904E3C72250005739121CB6E2DD1775D53089E738A9873895A16767E71D0FF"
+          }
+        ],
+        "sha256": "E9287A98889DACEE515568E9D9D7313788D1E28CBAE9B11C07F9AB9C6C899ED0"
+      },
+      "failure": {
+        "category": "BUSINESS_DIFFERENCE",
+        "reason": "business_difference"
+      }
+    }
+  ]
+}

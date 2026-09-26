@@ -233,6 +233,7 @@ export class BuildTaskManager {
     this.serviceInstanceId = options.serviceInstanceId || `service-${randomUUID()}`;
     this.lifecycleSequences = new Map();
     this.storageFault = null;
+    this.shutdownRequested = false;
     this.authorizationId = options.authorizationId || null;
     this.harnessDshHome = options.harnessDshHome || path.join(this.paths.buildRuntimeRoot, 'dsh');
     const configuredPatch = options.harnessPatchPath || path.join(this.paths.repoRoot, 'harness-probe', 'config', 'browser.cordis.yml');
@@ -323,7 +324,16 @@ export class BuildTaskManager {
   }
 
   #assertWritable() {
+    if (this.shutdownRequested) throw new Error('WORKBENCH_SHUTTING_DOWN');
     if (this.storageFault) throw new Error('BUILD_STORAGE_UNAVAILABLE');
+  }
+
+  async bindDevelopmentAuth(task) { return this.#bindAuthSession(task); }
+  startDevelopmentAuthWatch(scope, version, controller) { return this.#startAuthWatch(scope, version, controller); }
+  stopDevelopmentAuthWatch() { this.#stopAuthWatch(); }
+
+  assertStorageWritable() {
+    this.#assertWritable();
   }
 
   #tripStorageFault(error, operation) {
@@ -335,6 +345,10 @@ export class BuildTaskManager {
       };
       console.error(JSON.stringify({ type: 'build_storage_failure', ...this.storageFault }));
     }
+  }
+
+  reportStorageFault(error, operation) {
+    this.#tripStorageFault(error, operation);
   }
 
   async #recordLifecycle(taskIdValue, attemptId, event) {
@@ -705,14 +719,17 @@ export class BuildTaskManager {
       const runDirectory = path.join(attemptRoot, 'verification', 'auth', 'runs', runId);
       const controller = new AbortController();
       this.active = { taskId, attemptId: runId, controller, phase: 'TRIAL_RUNNING' };
-      const watch = this.#startAuthWatch(authBinding.scope, authBinding.session_version, controller);
+      const releaseAuthProtection = this.authSessions.beginTaskProtection(authBinding.scope, authBinding.session_version);
+      let watch;
       const startedAt = this.now().toISOString();
       try {
+        watch = this.#startAuthWatch(authBinding.scope, authBinding.session_version, controller);
         let raw = null;
         try {
           raw = await this.adapter.verifyCandidate({
             candidatePath, browserExecutable: this.browserExecutable, fixtureUrl: template.internal.normalUrl,
             runDirectory, signal: controller.signal, authStorageState,
+            sessionTerminationEndpoints: this.authSessions.environment(authBinding.scope).session_termination_endpoints || [],
             stepObservation: {
               run_id: runId, candidate_sha256: candidate.sha256,
               executed_external_id: task.source.external_id, executed_case_id: task.source.case_id,
@@ -779,6 +796,7 @@ export class BuildTaskManager {
           files: [...current.files, ...files],
         }));
       } finally {
+        releaseAuthProtection();
         this.#stopAuthWatch();
       }
     } finally {
@@ -938,8 +956,12 @@ export class BuildTaskManager {
     let normalServer;
     let negativeServer;
     let authWatch = null;
+    let releaseAuthProtection = null;
     try {
-      if (authBinding) authWatch = this.#startAuthWatch(authBinding.scope, authBinding.session_version, controller);
+      if (authBinding) {
+        releaseAuthProtection = this.authSessions.beginTaskProtection(authBinding.scope, authBinding.session_version);
+        authWatch = this.#startAuthWatch(authBinding.scope, authBinding.session_version, controller);
+      }
       await this.#recordLifecycle(task.task_id, attemptId, { type: 'phase', phase: 'fixture_starting', partial_observation: true });
       normalServer = template.internal.e2e01 || template.internal.auth01
         ? { url: template.internal.normalUrl, close: async () => {} }
@@ -1065,6 +1087,7 @@ export class BuildTaskManager {
           authRaw = await this.adapter.verifyCandidate({
             candidatePath, browserExecutable: this.browserExecutable, fixtureUrl: normalServer.url,
             runDirectory: authRunDirectory, signal: controller.signal, authStorageState,
+            sessionTerminationEndpoints: this.authSessions.environment(authBinding.scope).session_termination_endpoints || [],
             stepObservation: {
               run_id: authRunId, candidate_sha256: candidateSha,
               executed_external_id: task.source.external_id, executed_case_id: task.source.case_id,
@@ -1298,6 +1321,7 @@ export class BuildTaskManager {
         ...(authBlock ? { auth_block: authBlock } : {}),
       }, null, (authBlocked || controller.signal.aborted) ? 'CANCELLED' : 'FAILED', attemptRoot, candidatePath);
     } finally {
+      releaseAuthProtection?.();
       if (authWatch) this.#stopAuthWatch();
       await normalServer?.close().catch(() => {});
       await negativeServer?.close().catch(() => {});

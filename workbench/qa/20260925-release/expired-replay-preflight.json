@@ -1,0 +1,46 @@
+{
+  "schema": "workbench/test-batch-v1",
+  "batch_id": null,
+  "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+  "scope": "single",
+  "mode": "technical",
+  "software_version": "release-auth-expired-preflight",
+  "software_version_source": "USER_LABEL_NOT_DEPLOYMENT_PROOF",
+  "project_revision": 2,
+  "created_at": "2026-09-26T01:23:34.244Z",
+  "state": "PREVIEW",
+  "items": [
+    {
+      "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+      "external_id": "CASE-03",
+      "title": "无筛选跨页勾选 INV-101 与 INV-104、受限 INV-103 禁用、已选计数保持至第 3 页",
+      "case_version": 1,
+      "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+      "selection": {
+        "project_id": "project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+        "case_id": "case-e79c5ee3-0668-459b-967e-2c22acd1244d",
+        "case_version": 1,
+        "content_sha256": "C26BB8ED372F7739BE248D74C4889ED5B47F6E1E433426B1587FD01904429521",
+        "source_task_id": "build-20260926011026-be1ef079",
+        "candidate_version": 2,
+        "bundle_sha256": "92F93AE45518799D0022336BCB7FADFF6C0E9E54172EA74FF4C05C8AAF0B85E2",
+        "environment_id": "kimi-release-auth-20260925"
+      },
+      "script_version": 1,
+      "available_versions": [
+        1
+      ],
+      "environment_identity": {
+        "id": "kimi-release-auth-20260925",
+        "kind": "registered-auth-target",
+        "normal_url": "http://127.0.0.1:4381/workspace"
+      },
+      "requirement_review": null,
+      "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+      "state": "BLOCKED",
+      "reason": "AUTH_SESSION_REQUIRED"
+    }
+  ],
+  "harness_starts": 0,
+  "model_calls": 0
+}

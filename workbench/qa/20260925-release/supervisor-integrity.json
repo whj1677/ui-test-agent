@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-26T00:51:17.910822+00:00",
+  "old_json_count": 629,
+  "changed_old_json": [],
+  "missing_old_json": [],
+  "changed_frozen_fixture": [],
+  "package_source_drift": [],
+  "package": {
+    "status": "PACKAGE_BYTES_VERIFIED_NOT_PRODUCT_ACCEPTANCE",
+    "file_count": 97,
+    "content_sha256": "4ba8fb0a0fce8d40f9d255a4a83acd76ac5aee17048979e57d2ca862853df447",
+    "zip_sha256": "785bcf10b2c20efe1110edd1b38e08489fe5d56cd9aece12587a5a68469ce3ad",
+    "archive": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\qa\\20260925-release\\package-candidate-20260926-01.zip"
+  }
+}

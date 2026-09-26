@@ -1,0 +1,936 @@
+{
+  "checked_at": "2026-09-25T14:42:15.970Z",
+  "entry": "http://127.0.0.1:4322/workspace/",
+  "results": [
+    {
+      "kind": "batch",
+      "id": "batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9",
+      "state": "FINISHED",
+      "software_version": "independent-ui-round2-mixed-20260925",
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+        "captured_at": "2026-09-25T14:04:41.548Z",
+        "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "items": [
+        {
+          "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+          "external_id": "KC-02",
+          "title": "编号模糊搜索不区分大小写",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925104223-1281faca",
+            "candidate_version": 2,
+            "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925104223-1281faca",
+            "candidate_version": 2,
+            "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+            "finding": "最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。",
+            "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+            "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d",
+          "result": "FAILED",
+          "complete_pass": false
+        },
+        {
+          "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+          "external_id": "KC-08",
+          "title": "跨页选择保留",
+          "case_version": 1,
+          "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+            "case_version": 1,
+            "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+            "source_task_id": "build-20260925111456-1a5a2b10",
+            "candidate_version": 1,
+            "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+            "case_version": 1,
+            "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+            "source_task_id": "build-20260925111456-1a5a2b10",
+            "candidate_version": 1,
+            "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "REVIEWED_COMPLETE_FOR_THIS_CASE",
+            "finding": "逐行核查101首选、翻页106新增后计数2、往返两页两行保持勾选，且103/108未误选；真实操作与计数/行复选框绑定，无额外状态条件，无修改原预期。自测及最终独立验证通过，最终文件与受审草稿同哈希；本轮结果仍由新批次决定。",
+            "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+            "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-9e0be1ee280daf1516938327f1f23dfdca29040a",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ],
+      "runs": [
+        {
+          "run_id": "trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d",
+          "case": "KC-02",
+          "execution_status": "FINISHED",
+          "status": "FAILED",
+          "complete_pass": false,
+          "script_version": 1,
+          "source_task_id": "build-20260925104223-1281faca",
+          "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+          "approval_status": "NOT_APPROVED",
+          "error": {
+            "type": "LOCATOR_OR_TARGET",
+            "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+            "expected": null,
+            "actual": "共 5 条，第 1/2 页，每页3条",
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "steps": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": true,
+                "execution_status": "FAILED",
+                "attributed_errors": [
+                  {
+                    "step_id": "CASE_STEP_1",
+                    "report_path": [
+                      0
+                    ],
+                    "error": {
+                      "type": "LOCATOR_OR_TARGET",
+                      "message": "Error: expect(locator).toHaveText(expected) failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: /共 8 条，第 1\\/\\d+ 页/\nReceived string:  \"共 5 条，第 1/2 页，每页3条\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"soft toHaveText\" with timeout 5000ms\n  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\n    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\n       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\n",
+                      "expected": null,
+                      "actual": "共 5 条，第 1/2 页，每页3条",
+                      "attribution": "PENDING_ANALYSIS"
+                    },
+                    "raw_error": {
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\nExpected pattern: \u001b[32m/共 8 条，第 1\\/\\d+ 页/\u001b[39m\nReceived string:  \u001b[31m\"共 5 条，第 1/2 页，每页3条\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/共 \\d+ 条，第 \\d+\\/\\d+ 页/)\u001b[22m\n\u001b[2m    14 × locator resolved to <span id=\"pageInfo\" aria-live=\"polite\">共 5 条，第 1/2 页，每页3条</span>\u001b[22m\n\u001b[2m       - unexpected value \"共 5 条，第 1/2 页，每页3条\"\u001b[22m\n",
+                      "location": {
+                        "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\runs\\trial-6d7ab6a079f6252583c53ff1c0968a927f2e860d\\bundle\\candidate.spec.mjs",
+                        "line": 93,
+                        "column": 32
+                      },
+                      "snippet": "  91 |     // 输入小写 eq-10：立即筛选（无需提交），匹配 EQ-101 至 EQ-108 全部 8 条，回到第 1 页\n  92 |     await searchBox.fill(\"eq-10\");\n> 93 |     await expect.soft(summary).toHaveText(/共 8 条，第 1\\/\\d+ 页/);\n     |                                ^\n  94 |     const rows = await collectRowsAcrossAllPages(page);\n  95 |     step1Ids = rows.map((row) => row.id);\n  96 |     expect.soft(step1Ids.length).toBe(8);"
+                    }
+                  }
+                ]
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media": [
+            {
+              "file_id": "media-1",
+              "bytes": 52772,
+              "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37"
+            },
+            {
+              "file_id": "media-2",
+              "bytes": 2089676,
+              "sha256": "50FA75EE8F26FAE5D5226B04C7DFDB03AD9CEEBB767B9A6336A12FFE28136653"
+            },
+            {
+              "file_id": "media-3",
+              "bytes": 314105,
+              "sha256": "DD18BB73401F680808BA17E0CB1370F456DEED2DD7CBADA6A43158F66B161ADF"
+            },
+            {
+              "file_id": "media-4",
+              "bytes": 54306,
+              "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+            },
+            {
+              "file_id": "media-5",
+              "bytes": 52942,
+              "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1"
+            },
+            {
+              "file_id": "media-6",
+              "bytes": 46152,
+              "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097"
+            },
+            {
+              "file_id": "media-7",
+              "bytes": 52942,
+              "sha256": "15ADBF15F4583E2DB054A1A75E061E9B3AC2CDBECB6AB08E0B3B9F485966D7D1"
+            },
+            {
+              "file_id": "media-8",
+              "bytes": 52772,
+              "sha256": "378712479FDDCB88F94B0278EF7F186DD347031DD94A3B9A62936C081B184B37"
+            },
+            {
+              "file_id": "media-9",
+              "bytes": 46152,
+              "sha256": "E51B8A0EA51A4544868C074117E6F94F9B451E7A1976B1BCFE938F56D6902097"
+            },
+            {
+              "file_id": "media-10",
+              "bytes": 812810,
+              "sha256": "D35E0FF7DAEB2483CA93E48B54B37FFFF8664D4980BACDA262BF88D853BBF34F"
+            }
+          ]
+        },
+        {
+          "run_id": "trial-9e0be1ee280daf1516938327f1f23dfdca29040a",
+          "case": "KC-08",
+          "execution_status": "FINISHED",
+          "status": "PASSED",
+          "complete_pass": true,
+          "script_version": 1,
+          "source_task_id": "build-20260925111456-1a5a2b10",
+          "bundle_sha256": "D87D2209125092BA2B785612BB55F6CF6B749519BE966377E1043BC9C876062F",
+          "approval_status": "NOT_APPROVED",
+          "error": null,
+          "steps": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media": [
+            {
+              "file_id": "media-1",
+              "bytes": 50513,
+              "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+            },
+            {
+              "file_id": "media-2",
+              "bytes": 1313033,
+              "sha256": "F308D1CF387AB1C43F9C2E462C01E6FC5A8FBF3B520758065A696CE7DAACF1D5"
+            },
+            {
+              "file_id": "media-3",
+              "bytes": 175563,
+              "sha256": "BA449D44240817BC05AA04C55806FEC2873B17499119D3DEABA301ECE39B5650"
+            },
+            {
+              "file_id": "media-4",
+              "bytes": 54335,
+              "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+            },
+            {
+              "file_id": "media-5",
+              "bytes": 54306,
+              "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+            },
+            {
+              "file_id": "media-6",
+              "bytes": 50558,
+              "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+            },
+            {
+              "file_id": "media-7",
+              "bytes": 54335,
+              "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+            },
+            {
+              "file_id": "media-8",
+              "bytes": 50513,
+              "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+            },
+            {
+              "file_id": "media-9",
+              "bytes": 50558,
+              "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+            },
+            {
+              "file_id": "media-10",
+              "bytes": 771116,
+              "sha256": "2554473DD526A1D23A95DBEE47CB6AE5DC2CC42D36C4AA9FEC9E6BBC8CA978CF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "batch",
+      "id": "batch-c5bfa41e-131e-444e-b4ff-c13aa4f62411",
+      "state": "FINISHED",
+      "software_version": "independent-ui-round2-kc08-s2-20260925",
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+        "captured_at": "2026-09-25T14:04:41.548Z",
+        "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "items": [
+        {
+          "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+          "external_id": "KC-08",
+          "title": "跨页选择保留",
+          "case_version": 1,
+          "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+            "case_version": 1,
+            "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53",
+            "source_task_id": "build-20260925142505-0fc7ce0d",
+            "candidate_version": 1,
+            "bundle_sha256": "866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 2,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": null,
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "FINISHED",
+          "reason": null,
+          "run_id": "trial-32533f98868dd9c09674ff3a53baa0051d60f625",
+          "result": "PASSED",
+          "complete_pass": true
+        }
+      ],
+      "runs": [
+        {
+          "run_id": "trial-32533f98868dd9c09674ff3a53baa0051d60f625",
+          "case": "KC-08",
+          "execution_status": "FINISHED",
+          "status": "PASSED",
+          "complete_pass": true,
+          "script_version": 2,
+          "source_task_id": "build-20260925142505-0fc7ce0d",
+          "bundle_sha256": "866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2",
+          "approval_status": "NOT_APPROVED",
+          "error": null,
+          "steps": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media": [
+            {
+              "file_id": "media-1",
+              "bytes": 50513,
+              "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+            },
+            {
+              "file_id": "media-2",
+              "bytes": 1312790,
+              "sha256": "D16AEAEC516B1EF5DE4C9D198566E2F1A1E3D6AC068F9A36A67D0727E06B9719"
+            },
+            {
+              "file_id": "media-3",
+              "bytes": 171919,
+              "sha256": "BB349D6F212D0104863152A8DE1007926D1D187C653C022C3ECC5AFAC996187D"
+            },
+            {
+              "file_id": "media-4",
+              "bytes": 54335,
+              "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+            },
+            {
+              "file_id": "media-5",
+              "bytes": 54306,
+              "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+            },
+            {
+              "file_id": "media-6",
+              "bytes": 50558,
+              "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+            },
+            {
+              "file_id": "media-7",
+              "bytes": 54335,
+              "sha256": "852FAC7837C3261F2EB8B0A9C7D1CC481918904168C2FA702033663457485EF5"
+            },
+            {
+              "file_id": "media-8",
+              "bytes": 50513,
+              "sha256": "43BB654583E7342D3327A8C3EF3178BC184DE2CC35D7D5F1C9C82A1BAC4A9D49"
+            },
+            {
+              "file_id": "media-9",
+              "bytes": 50558,
+              "sha256": "9C8E33FCC23C24CFC4E140E147F32E075932F820AF2D502C28291249319849DC"
+            },
+            {
+              "file_id": "media-10",
+              "bytes": 739712,
+              "sha256": "8A8F626B68E8EC45F37C8D44046D5D4F04C6DDB4D3F5FB0420807E7A10D34E65"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "batch",
+      "id": "batch-036f6471-e080-41be-a066-be03a8a7c5a2",
+      "state": "CANCELLED",
+      "software_version": "independent-ui-round2-cancel-20260925",
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+        "captured_at": "2026-09-25T14:04:41.548Z",
+        "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "items": [
+        {
+          "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+          "external_id": "KC-02",
+          "title": "编号模糊搜索不区分大小写",
+          "case_version": 1,
+          "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925104223-1281faca",
+            "candidate_version": 2,
+            "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-e5653d1c-84f2-4114-b487-5d59e2025f9a",
+            "case_version": 1,
+            "content_sha256": "95A98E113FFCE44202A8CC85A723ED981F26054129AA3B6EEE9EAA0E6D5F0058",
+            "source_task_id": "build-20260925104223-1281faca",
+            "candidate_version": 2,
+            "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+            "finding": "最终脚本保留小写eq-10匹配全部8条的原断言；实际5条与缺失的102/104/107使软断言失败，整例仍FAILED。未通过额外状态选择凑绿。软断言允许后两步继续：EQ-106唯一结果、eq-1不区分大小写及组合过滤均有真实断言；自测2为第1步失败、第2/3步通过。",
+            "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+            "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "CANCELLED",
+          "reason": null,
+          "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+          "result": "NOT_RUN",
+          "complete_pass": false
+        },
+        {
+          "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+          "external_id": "KC-03",
+          "title": "同名温循箱搜索",
+          "case_version": 1,
+          "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6",
+          "selection": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+            "case_version": 1,
+            "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6",
+            "source_task_id": "build-20260925105201-7798322c",
+            "candidate_version": 1,
+            "bundle_sha256": "176C7C7C89F99FD622F19E8FCE88567FD6FD34DC97AC04D3C4B82BA6F03F9F9E",
+            "environment_id": "kimi-complex-20260925"
+          },
+          "script_version": 1,
+          "available_versions": [
+            1
+          ],
+          "environment_identity": {
+            "id": "kimi-complex-20260925",
+            "kind": "registered-static-html",
+            "file": "qa/20260925-kimi-complex/index.html",
+            "sha256": "649508B83110076A267D4BD99C9424508E06408DDA060B6BA87D6B1FC715CCF0"
+          },
+          "requirement_review": {
+            "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+            "case_id": "case-5e437e3c-1ff5-445b-895c-24adc6353f6a",
+            "case_version": 1,
+            "content_sha256": "A5414E5BD3428FE9DD11C366E685253761FE208275460A428FA0F2A158293DA6",
+            "source_task_id": "build-20260925105201-7798322c",
+            "candidate_version": 1,
+            "bundle_sha256": "176C7C7C89F99FD622F19E8FCE88567FD6FD34DC97AC04D3C4B82BA6F03F9F9E",
+            "environment_id": "kimi-complex-20260925",
+            "requirements_status": "BUSINESS_DIFFERENCE_RETAINED",
+            "finding": "脚本原样搜索温循箱并要求2行、101北站与104南站按各自行字段区分，清空后仍断言8条和选择清空。未补状态筛选。实际仅1行，首步toHaveCount(2)失败，后两步未执行；失败归因与人工页面复核一致。最终文件与已逐行检查草稿哈希相同。",
+            "source_record": "workbench/qa/20260925-v21/engineer-reviews.json",
+            "source_sha256": "3B0F7A83563036043D168BA767729B4CD1A69F58DC8B8184A653E1A2ED818040",
+            "approval_status": "NOT_APPROVED"
+          },
+          "qualification": "LIMITED_TECHNICAL_TRIAL_NOT_APPROVED",
+          "state": "NOT_RUN",
+          "reason": "BATCH_CANCELLED"
+        }
+      ],
+      "runs": [
+        {
+          "run_id": "trial-12d38ecb9df671211ac9d27a94319247a22c8d08",
+          "case": "KC-02",
+          "execution_status": "CANCELLED",
+          "status": "NOT_RUN",
+          "complete_pass": false,
+          "script_version": 1,
+          "source_task_id": "build-20260925104223-1281faca",
+          "bundle_sha256": "A5FC1AD402A505B1BC5BA6378CF443D282EB53B67C3AC5ED3B02583383716E1F",
+          "approval_status": "NOT_APPROVED",
+          "error": {
+            "type": "REPORT_MISSING",
+            "message": "结构化报告缺失。",
+            "expected": null,
+            "actual": null,
+            "attribution": "PENDING_ANALYSIS"
+          },
+          "steps": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": false,
+            "order_valid": false,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [],
+            "duplicates": [],
+            "missing": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": false,
+                "raw_title": null,
+                "report_path": null,
+                "error_attributed": false,
+                "execution_status": "MISSING",
+                "attributed_errors": []
+              }
+            ]
+          },
+          "media": [
+            {
+              "file_id": "media-1",
+              "bytes": 0,
+              "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+            },
+            {
+              "file_id": "media-2",
+              "bytes": 54306,
+              "sha256": "17E8216A8F07DD66E6B6FD6E7F5D2AD5CEABAD39BA57B09B3F496D0EF8F6AA4B"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "report",
+      "id": "report-52201e00c26f334a826ef5129d7f7e2214657f2c",
+      "batch_id": "batch-ef21886d-a9b2-4bf4-97b1-cbde23f3b1f9",
+      "counts": {
+        "requested": 2,
+        "executed": 2,
+        "passed": 1,
+        "failed": 1,
+        "not_run": 0
+      },
+      "embedded_media": 14,
+      "omitted": [
+        {
+          "name": "trace.zip",
+          "reason": "未选择随报告携带"
+        },
+        {
+          "name": "video.webm",
+          "reason": "未选择随报告携带"
+        },
+        {
+          "name": "step-replay-v1.webm",
+          "reason": "未选择随报告携带"
+        },
+        {
+          "name": "trace.zip",
+          "reason": "未选择随报告携带"
+        },
+        {
+          "name": "video.webm",
+          "reason": "未选择随报告携带"
+        },
+        {
+          "name": "step-replay-v1.webm",
+          "reason": "未选择随报告携带"
+        }
+      ],
+      "html_sha256": "AC24B28877E6029AF524B908DCB950DDB812E553F9091C6F23E1BD23DDF97CD9",
+      "html_bytes": 1943266,
+      "report_service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+        "captured_at": "2026-09-25T14:04:41.548Z",
+        "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      }
+    },
+    {
+      "kind": "build",
+      "id": "build-20260925142505-0fc7ce0d",
+      "status": "WAITING_HUMAN_REVIEW",
+      "source": {
+        "project_id": "project-80875248-3e14-4055-b077-b890dead1a9e",
+        "project_name": "V2.1 真实模型全流程 · 20260925",
+        "case_id": "case-6e1f2472-69cb-4a0a-8aa1-4dea521ac411",
+        "case_version": 1,
+        "external_id": "KC-08",
+        "content_sha256": "BEC21119ED22DF46C0B698C5399F199259BFBBF75A102DFF0BB69B04EF5C0B53"
+      },
+      "failure": null,
+      "outcome": "ready",
+      "harness": 1,
+      "tools": 52,
+      "self_tests": [
+        {
+          "number": 1,
+          "status": "PASSED",
+          "bundle_sha256": "866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2"
+        }
+      ],
+      "independent_runs": [
+        {
+          "run_id": "build-20260925142505-0fc7ce0d-normal",
+          "status": "PASSED",
+          "complete_pass": true,
+          "steps": {
+            "rule_version": "project-case-step-title-v2",
+            "complete": true,
+            "order_valid": true,
+            "expected_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "observed_sequence": [
+              "CASE_STEP_1",
+              "CASE_STEP_2",
+              "CASE_STEP_3"
+            ],
+            "duplicates": [],
+            "missing": [],
+            "unexpected": [],
+            "malformed_titles": [],
+            "unattributed_errors": [],
+            "items": [
+              {
+                "marker": "CASE_STEP_1",
+                "step_id": "CASE_STEP_1",
+                "order": 1,
+                "observed": true,
+                "raw_title": "CASE_STEP_1",
+                "report_path": [
+                  0
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_2",
+                "step_id": "CASE_STEP_2",
+                "order": 2,
+                "observed": true,
+                "raw_title": "CASE_STEP_2",
+                "report_path": [
+                  1
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              },
+              {
+                "marker": "CASE_STEP_3",
+                "step_id": "CASE_STEP_3",
+                "order": 3,
+                "observed": true,
+                "raw_title": "CASE_STEP_3",
+                "report_path": [
+                  2
+                ],
+                "error_attributed": false,
+                "execution_status": "PASSED",
+                "attributed_errors": []
+              }
+            ]
+          }
+        }
+      ],
+      "media_files_verified": 20,
+      "bundle_sha256": "866B97CD16F893D3A078427458B14DE17686119A7B9941AEDDC817F9E302FCB2",
+      "service_identity": {
+        "schema": "workbench/service-identity-v1",
+        "service_instance_id": "service-8b0e06ae-037d-41f0-b4bd-786f25339a36",
+        "captured_at": "2026-09-25T14:04:41.548Z",
+        "source_sha256": "3667b3f724de7fff95027f23188a922097d07b4d19c970c5f91ebf73f9b29f9f",
+        "source_file_count": 87,
+        "configuration_sha256": "9190739ff4fae5f0e208201267b7f742ead59886d7c0c58decc3f2c0667c9bb2",
+        "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+        "entry": "http://127.0.0.1:4322/workspace/"
+      },
+      "approval": "NOT_APPROVED"
+    }
+  ],
+  "supplier_tokens": null,
+  "supplier_cost": null
+}
