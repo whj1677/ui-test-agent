@@ -1,5 +1,7 @@
 # 需求索引
 
+- [REQ-0038-requirements-and-protocol-test-input](REQ-0038-requirements-and-protocol-test-input/current_state.md)：以pm-req的PRD/MRD文档为主输入（原型截图可选）生成测试用例，并规划协议驱动的后端功能测试；本轮完成资料约定与设计，全部实现待开发，协议类型待提供。[给资料提供方的提交要求](REQ-0038-requirements-and-protocol-test-input/输入资料与验收约定.md)。
+
 - **V2.1正常生成/复跑/环境返修**：[REQ-0036](REQ-0036-ui-ux-01-workbench-usability-review/current_state.md)正式4322已实测1条真实重新生成、2批3次复跑及50媒体；核心修复已加载，仅最后后端原因优先级重载被自动审批拒绝；用户体验材料已更新，实际范围见[原交付报告](../../workbench/qa/20260925-v21/REPORT.md)。
 
 - [REQ-0037-autonomous-candidate-development](REQ-0037-autonomous-candidate-development/current_state.md)：任务内Agent自主自测与有界修订；v10 完成第二轮独立真实UI、1次从头建例及取消展示修复复验；原业务、历史和候选待批准边界保留。
