@@ -1,0 +1,1 @@
+{"document_predicates": [true, true, true, true], "required_file_counts": {"ABSENT_FROM_HEAD": 161, "IN_HEAD_IDENTICAL": 308, "TRACKED_MODIFIED": 195}, "models_called": 0, "new_workbench_started": false}

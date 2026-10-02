@@ -1,0 +1,23 @@
+FAIL ai-engineering-context checks
+
+1. docs\requirements\REQ-0015-manual-complex-lab\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+2. docs\requirements\REQ-0015-manual-complex-lab\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+3. docs\requirements\REQ-0038-requirements-and-protocol-test-input\04_verification.md
+   Problem: Verification state `部分验收；多目标界面已核，单目标分支仅代码核对` is not allowed.
+   Fix: Use one of: 人工待确认、仅静态检查、单元测试通过、无法运行、未运行、编译通过、集成测试通过
+4. docs\requirements\REQ-0038-requirements-and-protocol-test-input\04_verification.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+5. docs\requirements\REQ-0038-requirements-and-protocol-test-input\current_state.md
+   Problem: Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.
+   Fix: Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.
+6. docs
+   Problem: Untracked files exist but are not recorded in delivery evidence.
+   Fix: Regenerate evidence for the one changed FIX/REQ record and include all untracked files before delivery. Missing: workbench/qa/20261002-release-engineering-closeout/REQ0038-v39-to-v40.patch, workbench/qa/20261002-release-engineering-closeout/audit-engineering.py, workbench/qa/20261002-release-engineering-closeout/audit-final.log, workbench/qa/20261002-release-engineering-closeout/audit-first.log, workbench/qa/20261002-release-engineering-closeout/audit-second.log, workbench/qa/20261002-release-engineering-closeout/clean-checkout-create.log, workbench/qa/20261002-release-engineering-closeout/clean-owned-module.log, workbench/qa/20261002-release-engineering-closeout/clean-runtime-import-failure.log 等 19 个文件
+7. docs
+   Problem: Code/test/config changes are linked to multiple or mixed governance records.
+   Fix: Keep one changed FIX or one changed real REQ for this delivery, or split the work. Changed records: REQ-0037-autonomous-candidate-development, REQ-0038-requirements-and-protocol-test-input, REQ-0039-windows-device-license, REQ-0040-managed-workbench-restart

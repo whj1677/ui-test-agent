@@ -1,0 +1,32 @@
+{
+  "scope": "existing dependency read-only, no edits/build/install/keys",
+  "name": "@offline/device-license",
+  "version": "0.2.0",
+  "component_version": "1.0.0-rsa",
+  "git_version": "UNAVAILABLE_NOT_A_GIT_REPOSITORY",
+  "inputs": [
+    {
+      "path": "D:\\01_AI工程\\01_工程项目\\device-license\\package.json",
+      "sha256": "f53c9cd696d57841fcb5299b6ed51ac90e7790d4ce0938f3cf72a847e5c0f570",
+      "bytes": 496
+    },
+    {
+      "path": "D:\\01_AI工程\\01_工程项目\\device-license\\build.ps1",
+      "sha256": "190f90dd5ad9d200592766c3fd9f93542089e050d3f80cf2e2194fa11acee34c",
+      "bytes": 1615
+    },
+    {
+      "path": "D:\\01_AI工程\\01_工程项目\\device-license\\native\\DeviceLicense.cs",
+      "sha256": "7da7e7bfb6ea3a0a7253b73b913ff69c99078b0e84e784766dbc562cf0c6b447",
+      "bytes": 14595
+    },
+    {
+      "path": "D:\\01_AI工程\\01_工程项目\\device-license\\native\\Bridge.cs",
+      "sha256": "502c167c2750c65d66a8e7ead6c905a5fadcf8ba8aa923e67421e9dc5e195bbf",
+      "bytes": 897
+    }
+  ],
+  "root_lock_link": "file:../device-license",
+  "complete_component_release": "NOT_PROVEN_BY_THIS_PROJECT_GIT",
+  "issuer_private_key": "EXCLUDED"
+}

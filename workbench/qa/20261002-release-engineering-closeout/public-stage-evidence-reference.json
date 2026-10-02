@@ -1,0 +1,102 @@
+{
+  "original_path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-30\\task-2\\public-stage-reproduction-20261002.json",
+  "original_sha256": "9278b7a420811aa8f830f29c33e0be44cf49c894320381161cdaff3af0294295",
+  "script_path": "C:\\Users\\20240082\\Documents\\Codex\\2026-09-30\\task-2\\reproduce-public-stage-readers.py",
+  "script_sha256": "54e4419ea6d533dbdafdcfbedaae83fd1826123d2f3aab22af3a0d94dfae03c0",
+  "reuse_only_no_reexecution": true,
+  "observation": {
+    "observed_utc": "2026-10-02T10:15:18.515470+00:00",
+    "scope": "Only the public DeepSeek-Harness-MIT dependency license in existing source/stage/ZIP; no modifications",
+    "readers": [
+      {
+        "reader": "Python pathlib.Path.read_bytes / os.stat",
+        "version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+        "executable": "D:\\01_AI工程\\01_工程项目\\pm-req\\.venv\\Scripts\\python.exe",
+        "base_executable": "C:\\Users\\20240082\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "executable_hashes": [
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\pm-req\\.venv\\Scripts\\python.exe",
+            "sha256": "21bb438c0d4a6f1f164b9a646f6ee000340185e5871180aec06db8d3f07c0082"
+          },
+          {
+            "path": "C:\\Users\\20240082\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec"
+          }
+        ],
+        "files": [
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 1797,
+            "read_bytes": 1797,
+            "sha256": "69393380a3ec85c465dd4b22497a5de04c3408435126d8f50930d46de3886034"
+          },
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\pkg-release-20261002-r4e\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 1797,
+            "read_bytes": 1797,
+            "sha256": "69393380a3ec85c465dd4b22497a5de04c3408435126d8f50930d46de3886034"
+          }
+        ]
+      },
+      {
+        "reader": "Node fs.readFileSync / fs.statSync",
+        "version": "v22.19.0",
+        "executable": "C:\\Program Files\\nodejs\\node.EXE",
+        "executable_sha256": "995a3fb3cefad590cd3f4b321532a4b9582fb9c6575320ed2e3e894caac3e362",
+        "files": [
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 1797,
+            "read_bytes": 1797,
+            "sha256": "69393380a3ec85c465dd4b22497a5de04c3408435126d8f50930d46de3886034"
+          },
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\pkg-release-20261002-r4e\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 2821,
+            "read_bytes": 2821,
+            "sha256": "f6c308092d15a86fff8a5cba9653597bf253f653aed43d6624cff90e5829c12e"
+          }
+        ]
+      },
+      {
+        "reader": "PowerShell/.NET File.ReadAllBytes",
+        "pid": 23252,
+        "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.EXE",
+        "executable_sha256": "8737aa78bdbe2941083c2c3674da3a9c3ab4cabd2cac040d39d1d0c19f9fc20d",
+        "powershell_version": "7.6.3",
+        "dotnet_version": "10.0.9",
+        "observed_utc": "2026-10-02T10:15:18.3595266Z",
+        "files": [
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 1797,
+            "read_bytes": 1797,
+            "sha256": "69393380a3ec85c465dd4b22497a5de04c3408435126d8f50930d46de3886034",
+            "attributes": "Archive",
+            "last_write_utc": "2026-09-24T07:58:08.2712665Z"
+          },
+          {
+            "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\pkg-release-20261002-r4e\\harness-probe\\node_modules\\@deepseek-ai\\libreoffice-kit-win32-x64\\licenses\\DeepSeek-Harness-MIT.txt",
+            "stat_bytes": 2821,
+            "read_bytes": 2821,
+            "sha256": "f6c308092d15a86fff8a5cba9653597bf253f653aed43d6624cff90e5829c12e",
+            "attributes": "Archive",
+            "last_write_utc": "2026-10-01T16:11:48.9472474Z"
+          }
+        ],
+        "read_only": true
+      }
+    ],
+    "zip": {
+      "path": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\qa\\20261001-release-goal-round4\\closeout\\portable-release-r4e.zip",
+      "member": "harness-probe/node_modules/@deepseek-ai/libreoffice-kit-win32-x64/licenses/DeepSeek-Harness-MIT.txt",
+      "read_bytes": 1797,
+      "sha256": "69393380a3ec85c465dd4b22497a5de04c3408435126d8f50930d46de3886034"
+    },
+    "root_cause": "UNKNOWN; process-dependent views observed, no security-product attribution",
+    "limitations": [
+      "Raw stage remains unverified.",
+      "No safety software, proxy, permissions, credentials, files or configurations changed."
+    ]
+  }
+}

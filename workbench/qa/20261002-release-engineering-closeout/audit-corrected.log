@@ -1,0 +1,1 @@
+{"document_predicates": [true, true, true, true], "required_file_counts": {"ABSENT_FROM_HEAD": 153, "TRACKED_MODIFIED": 67, "IN_HEAD_CHECKOUT_EOL_DIFFERENCE": 57, "IN_HEAD_IDENTICAL": 124}, "models_called": 0, "new_workbench_started": false}

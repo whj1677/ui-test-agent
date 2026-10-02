@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\01_AI工程\01_工程项目\ui-test-agent\workbench\qa\20261002-release-engineering-closeout\audit-engineering.py", line 264, in <module>
+    main()
+  File "D:\01_AI工程\01_工程项目\ui-test-agent\workbench\qa\20261002-release-engineering-closeout\audit-engineering.py", line 253, in main
+    file_inventory()
+  File "D:\01_AI工程\01_工程项目\ui-test-agent\workbench\qa\20261002-release-engineering-closeout\audit-engineering.py", line 215, in file_inventory
+    before = committed.decode('utf-8-sig', errors='replace').splitlines(keepends=True)
+             ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'decode'

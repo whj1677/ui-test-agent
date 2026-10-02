@@ -1,0 +1,39 @@
+{
+  "original_299_attempts": [
+    {
+      "path": "workbench/qa/20260927-kimi-remediation/backend-dsh-config-response-recheck.log",
+      "sha256": "2168b3b464c6e0d6dac6561e084f8d858f8e6016ad22d6fc3ee21c7217b8b844",
+      "totals": {
+        "tests": "299",
+        "pass": "299",
+        "fail": "0",
+        "skipped": "0"
+      }
+    },
+    {
+      "path": "workbench/qa/20260927-kimi-remediation/backend-dsh-config-response-unit.log",
+      "sha256": "817df03ce23615b32776843b2b5dffbb0df0cb32832f27688e9caf2eb0331cc1",
+      "totals": {
+        "tests": "299",
+        "pass": "298",
+        "fail": "1",
+        "skipped": "0"
+      }
+    }
+  ],
+  "original_900_timeout": {
+    "path": "workbench/qa/20261001-full-remediation/namespace-skills13-current.json",
+    "sha256": "2b9720895ef312fb19ee0d9edd783eb3464c5eaeac461b12ec48e057f5891589",
+    "session_status": "FAILED",
+    "session_error": "BACKEND_HARNESS_TIMED_OUT",
+    "started_at": "2026-10-01T07:54:21.864Z",
+    "finished_at": "2026-10-01T08:09:22.626Z",
+    "elapsed_seconds": 900.762,
+    "self_test_statuses": [
+      "PASSED",
+      "PASSED"
+    ],
+    "independent_validation_count": 0,
+    "raw_record_preserved": true
+  }
+}

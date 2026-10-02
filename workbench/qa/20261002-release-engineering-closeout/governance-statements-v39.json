@@ -1,0 +1,1453 @@
+{
+  "checker": {
+    "path": "scripts/check_ai_context.py",
+    "bytes": 74194,
+    "sha256": "e724702141a40f8d8593497e421d4cd4ec86f88b12ad85eba5fa7a08d01226c1"
+  },
+  "checker_functions": {
+    "has_asserted_pass_claim": 1253,
+    "check_pass_claim_text": 1278,
+    "actual_verification_text": 1299
+  },
+  "original_final_log": {
+    "path": ".git/trim-contains-governance-final.log",
+    "bytes": 1720,
+    "sha256": "22ab10f492367294df2fe8cb276b5c7527084207d466862a9dbc9e3715f26fa4",
+    "tap_totals": {}
+  },
+  "documents": [
+    {
+      "path": "docs/requirements/REQ-0015-manual-complex-lab/04_verification.md",
+      "sha256": "4e094598205e0c7f54a24e1deeba44261b700682ef8d3ff99a96572b5e62c139",
+      "source_version": 2,
+      "asserted_pass_rows": [
+        {
+          "line": 12,
+          "text": "| VT-0015-01 | DR-0015-01 | 已确认 | 集成测试通过 | 多级导航、同名行分页、异步抽屉、嵌套弹窗、筛选日期与多步工单；可重复重置合成状态。 | 实际浏览器、原生导入器、只服务白名单与旧基线检查；非Agent实测结果。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log | node --test --test-reporter=tap manual-lab/verify.test.mjs | 0 | 26 | 0 | 0 | validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-01",
+          "source_field": "verification_items[0]",
+          "execution_status": "集成测试通过",
+          "item": "多级导航、同名行分页、异步抽屉、嵌套弹窗、筛选日期与多步工单；可重复重置合成状态。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 13,
+          "text": "| VT-0015-02 | DR-0015-02 | 已确认 | 集成测试通过 | 18条有效、4条输入审查、2条已知UI缺陷；JSON可原生导入，步骤及预期对应冻结规格。 | 实际浏览器、原生导入器、只服务白名单与旧基线检查；非Agent实测结果。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log | node --test --test-reporter=tap manual-lab/verify.test.mjs | 0 | 26 | 0 | 0 | validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-02",
+          "source_field": "verification_items[1]",
+          "execution_status": "集成测试通过",
+          "item": "18条有效、4条输入审查、2条已知UI缺陷；JSON可原生导入，步骤及预期对应冻结规格。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 14,
+          "text": "| VT-0015-03 | DR-0015-03 | 已确认 | 集成测试通过 | 实际浏览器逐场景核验站点、导入与安全自检，提供启动及分组操作步骤。 | 实际浏览器、原生导入器、只服务白名单与旧基线检查；非Agent实测结果。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log | node --test --test-reporter=tap manual-lab/verify.test.mjs | 0 | 26 | 0 | 0 | validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-03",
+          "source_field": "verification_items[2]",
+          "execution_status": "集成测试通过",
+          "item": "实际浏览器逐场景核验站点、导入与安全自检，提供启动及分组操作步骤。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 32,
+          "text": "- 正式检查仍有2项：历史26项集成测试通过与本轮12项失败同文时，现有检查器按全文混判；已保留最小复现，未修改检查器或旧成绩。",
+          "verification_id": null,
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                19
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                17
+              ]
+            }
+          ]
+        }
+      ],
+      "failure_term_rows": [
+        {
+          "line": 15,
+          "text": "| VT-0015-04 | DR-0015-04 | 已确认 | 人工待确认 | 已实际执行24例：12通过12失败；分类为页面缺陷11例、用例自身错误1例，首次失败保留，非页面验收通过 | 真实Chromium操作与业务断言、逐例错误和媒体、Kimi来源哈希；非工作台Agent通过率。 | 命令：node workbench/qa/20260925-kimi-complex/verify.mjs；退出码：1；测试数量：24；失败数量：12；跳过数量：0；证据：workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json | node workbench/qa/20260925-kimi-complex/verify.mjs | 1 | 24 | 12 | 0 | workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json |",
+          "verification_id": "VT-0015-04",
+          "source_field": "verification_items[3]",
+          "execution_status": "人工待确认",
+          "item": "已实际执行24例：12通过12失败；分类为页面缺陷11例、用例自身错误1例，首次失败保留，非页面验收通过",
+          "original_evidence": {
+            "command": "node workbench/qa/20260925-kimi-complex/verify.mjs",
+            "exit_code": 1,
+            "test_count": 24,
+            "failure_count": 12,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json"
+          },
+          "matches": [
+            {
+              "term": "退出码：1",
+              "columns_1_based": [
+                203
+              ]
+            }
+          ]
+        }
+      ],
+      "predicate_reproduced": true,
+      "scope_rule": "Any asserted pass anywhere AND any failure term anywhere in effective document; no VT/version/run join."
+    },
+    {
+      "path": "docs/requirements/REQ-0015-manual-complex-lab/current_state.md",
+      "sha256": "c89910438343750bbe9f7d7c83d86c66c8165986215f1f04d2e1995445d91281",
+      "source_version": 2,
+      "asserted_pass_rows": [
+        {
+          "line": 51,
+          "text": "| VT-0015-01 | DR-0015-01 | 集成测试通过 | 多级导航、同名行分页、异步抽屉、嵌套弹窗、筛选日期与多步工单；可重复重置合成状态。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-01",
+          "source_field": "verification_items[0]",
+          "execution_status": "集成测试通过",
+          "item": "多级导航、同名行分页、异步抽屉、嵌套弹窗、筛选日期与多步工单；可重复重置合成状态。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 52,
+          "text": "| VT-0015-02 | DR-0015-02 | 集成测试通过 | 18条有效、4条输入审查、2条已知UI缺陷；JSON可原生导入，步骤及预期对应冻结规格。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-02",
+          "source_field": "verification_items[1]",
+          "execution_status": "集成测试通过",
+          "item": "18条有效、4条输入审查、2条已知UI缺陷；JSON可原生导入，步骤及预期对应冻结规格。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 53,
+          "text": "| VT-0015-03 | DR-0015-03 | 集成测试通过 | 实际浏览器逐场景核验站点、导入与安全自检，提供启动及分组操作步骤。 | 命令：node --test --test-reporter=tap manual-lab/verify.test.mjs；退出码：0；测试数量：26；失败数量：0；跳过数量：0；证据：validation/REQ-0015-lab-second.log |",
+          "verification_id": "VT-0015-03",
+          "source_field": "verification_items[2]",
+          "execution_status": "集成测试通过",
+          "item": "实际浏览器逐场景核验站点、导入与安全自检，提供启动及分组操作步骤。",
+          "original_evidence": {
+            "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+            "exit_code": 0,
+            "test_count": 26,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "validation/REQ-0015-lab-second.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        }
+      ],
+      "failure_term_rows": [
+        {
+          "line": 54,
+          "text": "| VT-0015-04 | DR-0015-04 | 人工待确认 | 已实际执行24例：12通过12失败；分类为页面缺陷11例、用例自身错误1例，首次失败保留，非页面验收通过 | 命令：node workbench/qa/20260925-kimi-complex/verify.mjs；退出码：1；测试数量：24；失败数量：12；跳过数量：0；证据：workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json |",
+          "verification_id": "VT-0015-04",
+          "source_field": "verification_items[3]",
+          "execution_status": "人工待确认",
+          "item": "已实际执行24例：12通过12失败；分类为页面缺陷11例、用例自身错误1例，首次失败保留，非页面验收通过",
+          "original_evidence": {
+            "command": "node workbench/qa/20260925-kimi-complex/verify.mjs",
+            "exit_code": 1,
+            "test_count": 24,
+            "failure_count": 12,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json"
+          },
+          "matches": [
+            {
+              "term": "退出码：1",
+              "columns_1_based": [
+                146
+              ]
+            }
+          ]
+        }
+      ],
+      "predicate_reproduced": true,
+      "scope_rule": "Any asserted pass anywhere AND any failure term anywhere in effective document; no VT/version/run join."
+    },
+    {
+      "path": "docs/requirements/REQ-0038-requirements-and-protocol-test-input/04_verification.md",
+      "sha256": "056a917b8661fd650c0f733fad347aaefbe599eb5c315a5ff49de2a824c2fd54",
+      "source_version": 39,
+      "asserted_pass_rows": [
+        {
+          "line": 17,
+          "text": "| VT-0038-06 | DR-0038-06 | 已确认 | 集成测试通过 | 按项目汇总各当前用例版本的最新正式执行结果并导出固定离线HTML报告，跨批次重试保留历史。 | 最新失败不被历史成功遮盖；未测/新版本未测/运行中/取消/阻塞可见；配置、角色和软件版本分组；步骤与媒体同run，快照冻结。 工程反例与正式4322浏览器/实际文件核验分开记录。 | 2026-09-29 v29：项目报告默认每条当前用例版本最新一次正式记录，分实际目标/配置/角色/软件版本，保留缺测、最新失败与执行中；旧单次/批次快照保持。正式4322浏览器生成并下载云平台8例（6原始通过2未执行）和库存3例（2原始通过1未执行），11例选取独立交叉核对一致，61个截图附件逐项同run及SHA/字节校验。15项目、302原运行ID、27旧报告JSON/HTML摘要不变，新增3报告含1迭代快照。配置界面解释被测系统及来源/归属/地址/登录要求；当前多配置实际选取已验，单配置隐藏分支仅代码核对。最终核心14/14及原报告5/5成功，与首轮38项有重叠不相加；既有修订测试REVISION_RUN_NOT_FINISHED及历史治理问题保留，不作全工程或发布结论。0产品模型调用/业务新执行，证据workbench/qa/20260929-project-latest/REPORT.md。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-06",
+          "source_field": "verification_items[5]",
+          "execution_status": "集成测试通过",
+          "item": "按项目汇总各当前用例版本的最新正式执行结果并导出固定离线HTML报告，跨批次重试保留历史。",
+          "original_evidence": "2026-09-29 v29：项目报告默认每条当前用例版本最新一次正式记录，分实际目标/配置/角色/软件版本，保留缺测、最新失败与执行中；旧单次/批次快照保持。正式4322浏览器生成并下载云平台8例（6原始通过2未执行）和库存3例（2原始通过1未执行），11例选取独立交叉核对一致，61个截图附件逐项同run及SHA/字节校验。15项目、302原运行ID、27旧报告JSON/HTML摘要不变，新增3报告含1迭代快照。配置界面解释被测系统及来源/归属/地址/登录要求；当前多配置实际选取已验，单配置隐藏分支仅代码核对。最终核心14/14及原报告5/5成功，与首轮38项有重叠不相加；既有修订测试REVISION_RUN_NOT_FINISHED及历史治理问题保留，不作全工程或发布结论。0产品模型调用/业务新执行，证据workbench/qa/20260929-project-latest/REPORT.md。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 18,
+          "text": "| VT-0038-07 | DR-0038-07 | 已确认 | 集成测试通过 | 将环境选择解释为被测系统配置，明确目标地址、来源、登录要求及登记人信息；单目标简化选择，多目标保留切换。 | 不改变目标/授权绑定；历史来源不猜创建人；免登录自助登记限制清楚；旧数据和工作流程兼容。 工程反例与正式4322浏览器/实际文件核验分开记录。 | 正式4322项目设置与登录页呈现来源、时间、自填登记人、目标地址、项目/本机共享归属；脚本弹窗选择四目标之一后显示实际地址并取消，0模型任务。前后端配置投影测试2项包含在14项中。未修改配置与授权；单配置自动选择/隐藏仅代码核对，未强造正式单配置场景；任意SSO不支持。见workbench/qa/20260929-project-latest/REPORT.md、settings-final-ui.txt、multi-target-script-selected-ui.txt。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-07",
+          "source_field": "verification_items[6]",
+          "execution_status": "集成测试通过",
+          "item": "将环境选择解释为被测系统配置，明确目标地址、来源、登录要求及登记人信息；单目标简化选择，多目标保留切换。",
+          "original_evidence": "正式4322项目设置与登录页呈现来源、时间、自填登记人、目标地址、项目/本机共享归属；脚本弹窗选择四目标之一后显示实际地址并取消，0模型任务。前后端配置投影测试2项包含在14项中。未修改配置与授权；单配置自动选择/隐藏仅代码核对，未强造正式单配置场景；任意SSO不支持。见workbench/qa/20260929-project-latest/REPORT.md、settings-final-ui.txt、multi-target-script-selected-ui.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 19,
+          "text": "| VT-0038-08 | DR-0038-02 / DR-0038-03 / DR-0038-08 | 已确认 | 集成测试通过 | 用例质量和生成状态：明确数据、分页与可达前置，旧坏用例修订建议，候选问题和生成进度可读。 | 实际命令、退出码、统计和日志；正式4322真实浏览器/执行身份与代表性产物。缺测明确，不以模拟代替产品验收。 | 受控来源用例修订及审阅已实现。正式旧项目3条同case形成v2，v1正文和摘要保留；37项修订相关工程检查以及连续v2修订验证已执行。正式STANDARD仅1请求、20,483 tokens生成4 UI/4 BE，29引用有效；主管逐条审阅8条后6次受控PATCH修正数据/前置/过宽标题，最终r9、PENDING_REVIEW、确认0。真实界面无需人工刷新展示终态；最终生成按钮相关31/31 exit0。协议缺失仍待补，不能保证通用可达性或完整PRD覆盖。证据：workbench/qa/20260930-human-remediation/case-quality/formal-old-case-v2.md、candidate-patches-applied.json、generation-active-targeted-tests.log；workbench/qa/20260930-human-remediation/generation-terminal-auto.dom.txt、generation-reviewed-draft-final.dom.txt。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-08",
+          "source_field": "verification_items[7]",
+          "execution_status": "集成测试通过",
+          "item": "用例质量和生成状态：明确数据、分页与可达前置，旧坏用例修订建议，候选问题和生成进度可读。",
+          "original_evidence": "受控来源用例修订及审阅已实现。正式旧项目3条同case形成v2，v1正文和摘要保留；37项修订相关工程检查以及连续v2修订验证已执行。正式STANDARD仅1请求、20,483 tokens生成4 UI/4 BE，29引用有效；主管逐条审阅8条后6次受控PATCH修正数据/前置/过宽标题，最终r9、PENDING_REVIEW、确认0。真实界面无需人工刷新展示终态；最终生成按钮相关31/31 exit0。协议缺失仍待补，不能保证通用可达性或完整PRD覆盖。证据：workbench/qa/20260930-human-remediation/case-quality/formal-old-case-v2.md、candidate-patches-applied.json、generation-active-targeted-tests.log；workbench/qa/20260930-human-remediation/generation-terminal-auto.dom.txt、generation-reviewed-draft-final.dom.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                63
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "line": 20,
+          "text": "| VT-0038-09 | DR-0038-05 / DR-0038-08 | 已确认 | 集成测试通过 | 执行选择和失败证据：适用版本的就绪资格、中文原因和反馈适用范围；可信实际值采集/未知；修正终结记录测试夹具。 | 实际命令、退出码、统计和日志；正式4322真实浏览器/执行身份与代表性产物。缺测明确，不以模拟代替产品验收。 | 版本资格、中文阻塞原因、失败证据与反馈适用范围已实现。正式混合批次3条零模型运行：UI分页通过，UI与BE小写搜索保留真实失败；UI actual=[]与soft matcher采集来源可追溯，BE只发1GET、第二业务步骤NOT_RUN。主管在真实界面核验列表、失败细节和冻结反馈绑定后取消，未假称执行反馈模型修复。终结记录夹具修正；最新完整工程529/529 exit0。未知或歧义实际值仍标未知。证据：workbench/qa/20260930-human-remediation/execution-ux/OFFICIAL-ORIGINAL-RESULT.md、workbench/qa/20260930-human-remediation/mixed-execution-list-fixed.dom.txt、feedback-confirmation-fixed.dom.txt、backend-feedback-boundary-fixed.dom.txt、unit-tests-revision-final.log。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-09",
+          "source_field": "verification_items[8]",
+          "execution_status": "集成测试通过",
+          "item": "执行选择和失败证据：适用版本的就绪资格、中文原因和反馈适用范围；可信实际值采集/未知；修正终结记录测试夹具。",
+          "original_evidence": "版本资格、中文阻塞原因、失败证据与反馈适用范围已实现。正式混合批次3条零模型运行：UI分页通过，UI与BE小写搜索保留真实失败；UI actual=[]与soft matcher采集来源可追溯，BE只发1GET、第二业务步骤NOT_RUN。主管在真实界面核验列表、失败细节和冻结反馈绑定后取消，未假称执行反馈模型修复。终结记录夹具修正；最新完整工程529/529 exit0。未知或歧义实际值仍标未知。证据：workbench/qa/20260930-human-remediation/execution-ux/OFFICIAL-ORIGINAL-RESULT.md、workbench/qa/20260930-human-remediation/mixed-execution-list-fixed.dom.txt、feedback-confirmation-fixed.dom.txt、backend-feedback-boundary-fixed.dom.txt、unit-tests-revision-final.log。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                50
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                48
+              ]
+            }
+          ]
+        },
+        {
+          "line": 21,
+          "text": "| VT-0038-10 | DR-0038-04 / DR-0038-05 / DR-0038-08 | 已确认 | 集成测试通过 | 后端Content-Type断言与独立反例；协议/HTTP计划可读审阅，保持旧计划兼容和明确技术确认。 | 实际命令、退出码、统计和日志；正式4322真实浏览器/执行身份与代表性产物。缺测明确，不以模拟代替产品验收。 | Content-Type媒体类型断言、请求/业务断言审阅卡片及backend Skill1.2.0已实现。真实DSH仅1会话生成P2，自测、静态审查、独立复验各1次、同执行SHA，主管查看并确认技术计划。正式4个零模型批次复用P2：正确JSON头和合法charset各2GET/48项通过；错误/缺失头各首GET仅header失败、另20项业务断言通过，后续请求未发送。固定正文不改，目标已恢复correct。原P1及确切旧Skill兼容校验保留。本轮未发生DSH失败后修复，不声称验证自修复或量化Skills收益；HTTP计划技术确认不等于产品批准。证据：workbench/qa/20260930-human-remediation/backend/OFFICIAL-DSH-RUN.md、HEADER-BATCH-RESULT.md、p2-confirmed.json；workbench/qa/20260930-human-remediation/backend-p2-review.dom.txt、header-missing-detail.dom.txt。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-10",
+          "source_field": "verification_items[9]",
+          "execution_status": "集成测试通过",
+          "item": "后端Content-Type断言与独立反例；协议/HTTP计划可读审阅，保持旧计划兼容和明确技术确认。",
+          "original_evidence": "Content-Type媒体类型断言、请求/业务断言审阅卡片及backend Skill1.2.0已实现。真实DSH仅1会话生成P2，自测、静态审查、独立复验各1次、同执行SHA，主管查看并确认技术计划。正式4个零模型批次复用P2：正确JSON头和合法charset各2GET/48项通过；错误/缺失头各首GET仅header失败、另20项业务断言通过，后续请求未发送。固定正文不改，目标已恢复correct。原P1及确切旧Skill兼容校验保留。本轮未发生DSH失败后修复，不声称验证自修复或量化Skills收益；HTTP计划技术确认不等于产品批准。证据：workbench/qa/20260930-human-remediation/backend/OFFICIAL-DSH-RUN.md、HEADER-BATCH-RESULT.md、p2-confirmed.json；workbench/qa/20260930-human-remediation/backend-p2-review.dom.txt、header-missing-detail.dom.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                63
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "line": 22,
+          "text": "| VT-0038-11 | DR-0038-06 / DR-0038-07 / DR-0038-08 | 已确认 | 集成测试通过 | 人工示范入口与名称、报告范围区分、资格说明；保留固定历史与同范围来源身份。 | 实际命令、退出码、统计和日志；正式4322真实浏览器/执行身份与代表性产物。缺测明确，不以模拟代替产品验收。 | 示范入口/冻结名称/真实步骤数量、报告范围和资格说明已修复。最后示范相关26/26 exit0，正式界面确认既有5步19事件示范及可读列表；本轮未重做真人登录、原生悬浮或录制。主管真实操作保存并下载2份项目最新报告，每条当前用例版本仅1行：混合项目2通过2失败；新图书项目最新头缺失失败1、未执行3，不回退旧通过。JSON/HTML与正式下载摘要一致，媒体内嵌且资格/产品未批准分开。独立离线文件渲染未验。证据：workbench/qa/20260930-human-remediation/demonstration-final-tests.log、demonstration-history-fixed.dom.txt、demonstration-confirmed-fixed.dom.txt、mixed-latest-report.json/.html、header-latest-report.json/.html。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-11",
+          "source_field": "verification_items[10]",
+          "execution_status": "集成测试通过",
+          "item": "人工示范入口与名称、报告范围区分、资格说明；保留固定历史与同范围来源身份。",
+          "original_evidence": "示范入口/冻结名称/真实步骤数量、报告范围和资格说明已修复。最后示范相关26/26 exit0，正式界面确认既有5步19事件示范及可读列表；本轮未重做真人登录、原生悬浮或录制。主管真实操作保存并下载2份项目最新报告，每条当前用例版本仅1行：混合项目2通过2失败；新图书项目最新头缺失失败1、未执行3，不回退旧通过。JSON/HTML与正式下载摘要一致，媒体内嵌且资格/产品未批准分开。独立离线文件渲染未验。证据：workbench/qa/20260930-human-remediation/demonstration-final-tests.log、demonstration-history-fixed.dom.txt、demonstration-confirmed-fixed.dom.txt、mixed-latest-report.json/.html、header-latest-report.json/.html。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                63
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "line": 23,
+          "text": "| VT-0038-12 | DR-0038-02 / DR-0038-05 / DR-0038-06 / DR-0038-08 | 已确认 | 集成测试通过 | 主管核验实际改动并运行受影响/完整工程清单；同一正式实例加载、真实模型/正常/缺陷/协议反例及报告复验，版本化修订并确认数据保留。 | 实际命令、退出码、统计和日志；正式4322真实浏览器/执行身份与代表性产物。缺测明确，不以模拟代替产品验收。 | 主管已检查实际diff、关键源码、冻结执行体和正式界面。最新完整工程529/529、最后受影响31/31和26/26均exit0，存在重叠不相加。独立正式只读收口408/408 exit0：16旧项目/307旧记录ID可读，32旧报告JSON和HTML摘要不变，3旧用例v1正文相等、v1/v2摘要与P1/P2执行摘要重算一致，7新正式运行与2最新报告的选择/实际结果独立核对。当前同一4322已加载258源码、SHA ff9d5ff642536e25e379d5fbc445f04058b435de7d082b8a6e50aeea3b8ea905，service-b3afb1a5-3d28-42a5-a458-b3af5208ec23，原config489efb5f/data bf511e89保持，服务空闲。307记录只核对ID保留，不声称逐字节全数据不变。通用语义保证、真实云平台全链路、鉴权/写接口、干净机器、第二设备及发布未验。证据：workbench/qa/20260930-human-remediation/final-readonly-facts.log、demonstration-source-loaded.json、REPORT.md。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-12",
+          "source_field": "verification_items[11]",
+          "execution_status": "集成测试通过",
+          "item": "主管核验实际改动并运行受影响/完整工程清单；同一正式实例加载、真实模型/正常/缺陷/协议反例及报告复验，版本化修订并确认数据保留。",
+          "original_evidence": "主管已检查实际diff、关键源码、冻结执行体和正式界面。最新完整工程529/529、最后受影响31/31和26/26均exit0，存在重叠不相加。独立正式只读收口408/408 exit0：16旧项目/307旧记录ID可读，32旧报告JSON和HTML摘要不变，3旧用例v1正文相等、v1/v2摘要与P1/P2执行摘要重算一致，7新正式运行与2最新报告的选择/实际结果独立核对。当前同一4322已加载258源码、SHA ff9d5ff642536e25e379d5fbc445f04058b435de7d082b8a6e50aeea3b8ea905，service-b3afb1a5-3d28-42a5-a458-b3af5208ec23，原config489efb5f/data bf511e89保持，服务空闲。307记录只核对ID保留，不声称逐字节全数据不变。通用语义保证、真实云平台全链路、鉴权/写接口、干净机器、第二设备及发布未验。证据：workbench/qa/20260930-human-remediation/final-readonly-facts.log、demonstration-source-loaded.json、REPORT.md。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                76
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                74
+              ]
+            }
+          ]
+        },
+        {
+          "line": 29,
+          "text": "| VT-0038-18 | DR-0038-08 | 已确认 | 集成测试通过 | F01/F05：严格增强审查契约及诊断、固定业务值与独立数据表述、真实普通和增强模型复验 | 修复目录中的实际正式4322 GUI/API/模型/媒体/归档与工程日志；原生和物理缺测分别列出。 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；同来源增强4阶段真实DeepSeek请求完成、6候选保持冲突待审；普通1请求10候选由主管逐项核对固定8记录、来源与独立数据。不能解释为任意资料语义通过。checked-current.json、checked-semantic-review.json、standard-current.json、standard-root-review.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-18",
+          "source_field": "verification_items[17]",
+          "execution_status": "集成测试通过",
+          "item": "F01/F05：严格增强审查契约及诊断、固定业务值与独立数据表述、真实普通和增强模型复验",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；同来源增强4阶段真实DeepSeek请求完成、6候选保持冲突待审；普通1请求10候选由主管逐项核对固定8记录、来源与独立数据。不能解释为任意资料语义通过。checked-current.json、checked-semantic-review.json、standard-current.json、standard-root-review.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 31,
+          "text": "| VT-0038-20 | DR-0038-08 | 已确认 | 集成测试通过 | F02/F04：独立验证媒体按不可变清单关联，DOM重排高亮及真实分页录像复验 | 修复目录中的实际正式4322 GUI/API/模型/媒体/归档与工程日志；原生和物理缺测分别列出。 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；独立验证和原正式运行20媒体逐项SHA/字节核对，GUI原视频及回放可播；新正式3步分页零模型运行成功，另10媒体核对一致。24原始Trace帧中11→12、18→19橙框随5→3→5行正确移动到翻页按钮，无错框还书。原始视频readyState4/error null并实际播放。media-byte-verification.json、highlight-media-verification.json、highlight-frames/、highlight-original-video.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-20",
+          "source_field": "verification_items[19]",
+          "execution_status": "集成测试通过",
+          "item": "F02/F04：独立验证媒体按不可变清单关联，DOM重排高亮及真实分页录像复验",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；独立验证和原正式运行20媒体逐项SHA/字节核对，GUI原视频及回放可播；新正式3步分页零模型运行成功，另10媒体核对一致。24原始Trace帧中11→12、18→19橙框随5→3→5行正确移动到翻页按钮，无错框还书。原始视频readyState4/error null并实际播放。media-byte-verification.json、highlight-media-verification.json、highlight-frames/、highlight-original-video.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 32,
+          "text": "| VT-0038-21 | DR-0038-08 | 已确认 | 集成测试通过 | F08–F12：来源导入限制、取消状态、720px鼠标键盘导航、空搜索恢复及后端候选默认分组 | 修复目录中的实际正式4322 GUI/API/模型/媒体/归档与工程日志；原生和物理缺测分别列出。 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；正式GUI核对最新取消记录/720高侧栏鼠标与Tab-Enter设置入口/搜索无结果清空恢复/后端唯一候选默认分组并保持人工切换。跨项目来源导入实际公共API400拒绝且项目字节不变，错误文案核对原项目限制；GUI文件重传NOT_RUN，不能冒充界面上传验收。sidebar-keyboard-navigation.json、search-keyboard-restored.dom.txt、cancelled-detail.dom.txt、backend-only-default.dom.txt、cross-project-rejection.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-21",
+          "source_field": "verification_items[20]",
+          "execution_status": "集成测试通过",
+          "item": "F08–F12：来源导入限制、取消状态、720px鼠标键盘导航、空搜索恢复及后端候选默认分组",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；正式GUI核对最新取消记录/720高侧栏鼠标与Tab-Enter设置入口/搜索无结果清空恢复/后端唯一候选默认分组并保持人工切换。跨项目来源导入实际公共API400拒绝且项目字节不变，错误文案核对原项目限制；GUI文件重传NOT_RUN，不能冒充界面上传验收。sidebar-keyboard-navigation.json、search-keyboard-restored.dom.txt、cancelled-detail.dom.txt、backend-only-default.dom.txt、cross-project-rejection.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 34,
+          "text": "| VT-0038-23 | DR-0038-08 | 已确认 | 集成测试通过 | 后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 40工程测试；P4真实DSH生成/自测/B工具审查/独立复验同SHA，主管固定字段核对17项。旧P3超时保留；不主张统计成功率。 | 命令：node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs；退出码：0；测试数量：40；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-remediation-round2/backend-targeted.log | node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs | 0 | 40 | 0 | 0 | workbench/qa/20261001-remediation-round2/backend-targeted.log |",
+          "verification_id": "VT-0038-23",
+          "source_field": "verification_items[22]",
+          "execution_status": "集成测试通过",
+          "item": "后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段",
+          "original_evidence": {
+            "command": "node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs",
+            "exit_code": 0,
+            "test_count": 40,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-remediation-round2/backend-targeted.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 35,
+          "text": "| VT-0038-24 | DR-0038-08 | 已确认 | 集成测试通过 | 包内Node私有运行时/诊断/启动与当前用户DPAPI兼容桥，保持已有配置凭据 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 20工程测试与原生加密读回/错误凭据/已有文件不覆盖/受管链接迁移。旧PS读取器的普通策略执行被系统拒绝，互读缺测单列，不绕过策略。 | 命令：node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs；退出码：0；测试数量：20；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-remediation-round2/native-targeted-fixed.log | node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs | 0 | 20 | 0 | 0 | workbench/qa/20261001-remediation-round2/native-targeted-fixed.log |",
+          "verification_id": "VT-0038-24",
+          "source_field": "verification_items[23]",
+          "execution_status": "集成测试通过",
+          "item": "包内Node私有运行时/诊断/启动与当前用户DPAPI兼容桥，保持已有配置凭据",
+          "original_evidence": {
+            "command": "node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs",
+            "exit_code": 0,
+            "test_count": 20,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-remediation-round2/native-targeted-fixed.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 36,
+          "text": "| VT-0038-25 | DR-0038-08 | 已确认 | 集成测试通过 | 新冻结便携包的完整性与路径/依赖/浏览器/凭据运行复验 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 新ZIP30629文件独立/包内Node完整性检查；227源码项对照226一致+1客户策略。602依赖、包内浏览器和插件、无全局PATH、DPAPI实际运行；仅工程准备，无第二工作台/真实用户授权/模型请求，独立干净PC与第二主板未验。 | 实际命令：node workbench/qa/20261001-remediation-round2/portable-runtime-probe.mjs；退出码0；无TAP计数，数量未解析。日志workbench/qa/20261001-remediation-round2/portable-r1-runtime-probe.log。新ZIP30629文件独立/包内Node完整性检查；227源码项对照226一致+1客户策略。602依赖、包内浏览器和插件、无全局PATH、DPAPI实际运行；仅工程准备，无第二工作台/真实用户授权/模型请求，独立干净PC与第二主板未验。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-25",
+          "source_field": "verification_items[24]",
+          "execution_status": "集成测试通过",
+          "item": "新冻结便携包的完整性与路径/依赖/浏览器/凭据运行复验",
+          "original_evidence": "实际命令：node workbench/qa/20261001-remediation-round2/portable-runtime-probe.mjs；退出码0；无TAP计数，数量未解析。日志workbench/qa/20261001-remediation-round2/portable-r1-runtime-probe.log。新ZIP30629文件独立/包内Node完整性检查；227源码项对照226一致+1客户策略。602依赖、包内浏览器和插件、无全局PATH、DPAPI实际运行；仅工程准备，无第二工作台/真实用户授权/模型请求，独立干净PC与第二主板未验。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        },
+        {
+          "line": 37,
+          "text": "| VT-0038-26 | DR-0038-08 | 已确认 | 集成测试通过 | 原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 唯一正式4322；P4 GUI正式96断言通过，500/超时/取消与延迟后精确清理通过；原S1 GUI三步复跑与录像，项目最新固定快照。全量工程/历史保全/最终治理在最终报告分别记录；不称全功能产品批准。 | 正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-26",
+          "source_field": "verification_items[25]",
+          "execution_status": "集成测试通过",
+          "item": "原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口",
+          "original_evidence": "正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                37
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                35
+              ]
+            }
+          ]
+        }
+      ],
+      "failure_term_rows": [
+        {
+          "line": 15,
+          "text": "| VT-0038-04 | DR-0038-04 | 已确认 | 人工待确认 | 协议设计与准备条件 | 无协议但业务依据充分的后端用例确认导出且待绑定；后补协议逐步映射原用例，纯技术映射新binding不改旧用例/导出，业务冲突产生待核对新候选；部分映射不使整条可运行；绑定完整仍核对执行器/环境/数据/脚本，版本变化重检适用。 列表摘要与当前批次/筛选范围一致，失败/阻塞/未执行分开；同报错仅候选同因，选中失败集合批量反馈/复跑保留逐项结果和历史，原脚本复跑零模型并核对版本/条件。 当前项目ID/名称持续可见，统计/筛选/批量动作限本项目；切换项目清空选择与旧筛选，跨项目数据不隐式合并。 | B后补新合成协议并完整绑定原case版本，原冲突及旧binding保留；后端HTTP计划进入原单条/项目批次、结果列表和下载报告。错误断言/500/超时/取消及异常筛选、反馈带入有正式证据。后端多计划模型修订未实现，批量零模型运行已验。 v22对该后端case v1补原合成协议，真实UI草稿v1及完整确认v2、HTTP201；原case版本/hash及旧导出不变，GET execution_ready=false。协议确认不是执行通过。见case-design/round-binding/final.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-04",
+          "source_field": "verification_items[3]",
+          "execution_status": "人工待确认",
+          "item": "协议设计与准备条件",
+          "original_evidence": "B后补新合成协议并完整绑定原case版本，原冲突及旧binding保留；后端HTTP计划进入原单条/项目批次、结果列表和下载报告。错误断言/500/超时/取消及异常筛选、反馈带入有正式证据。后端多计划模型修订未实现，批量零模型运行已验。 v22对该后端case v1补原合成协议，真实UI草稿v1及完整确认v2、HTTP201；原case版本/hash及旧导出不变，GET execution_ready=false。协议确认不是执行通过。见case-design/round-binding/final.json。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                377
+              ]
+            }
+          ]
+        },
+        {
+          "line": 16,
+          "text": "| VT-0038-05 | DR-0038-05 | 已确认 | 人工待确认 | 首种协议运行 | 在同一工作台验收已有用例直接进入、单条/选中/项目执行、修订与从头重生成的输入差异、零模型复跑、用例/脚本版本适用性、部分执行与逐项阻塞、旧历史保留；正常/业务错误/权限/状态变化/协议定义的异步超时/清理另有工程反例与授权非生产证据。 | 命令：npm test；退出码：0；测试数量：342；失败数量：0；跳过数量：0；证据：workbench/qa/20260927-kimi-remediation/dsh-skills-1.1-engineering.log | npm test | 0 | 342 | 0 | 0 | workbench/qa/20260927-kimi-remediation/dsh-skills-1.1-engineering.log |",
+          "verification_id": "VT-0038-05",
+          "source_field": "verification_items[4]",
+          "execution_status": "人工待确认",
+          "item": "首种协议运行",
+          "original_evidence": {
+            "command": "npm test",
+            "exit_code": 0,
+            "test_count": 342,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20260927-kimi-remediation/dsh-skills-1.1-engineering.log"
+          },
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                150
+              ]
+            }
+          ]
+        },
+        {
+          "line": 30,
+          "text": "| VT-0038-19 | DR-0038-08 | 已确认 | 人工待确认 | F06/F07：Skills逐记录锚定/独立查询和后端原运行反馈绑定，真实DSH及正式HTTP复跑 | 修复目录中的实际正式4322 GUI/API/模型/媒体/归档与工程日志；原生和物理缺测分别列出。 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；Skills1.3逐记录锚定/独立查询与真实反例工程检查已执行；后端失败GUI冻结原run反馈→真实DSH自测/B审查/独立验证→P4人工确认→正式2HTTP/62断言运行成功、模型0，原失败保留。另一隔离写入P3两次自测成功后改了计划，900秒超时，未完成同hash复审/独立验证；不确认、不借旧审查。backend-rework-confirmed-final.json、main-runs-after-highlight.json、namespace-skills13-current.json、namespace-skills13-terminal.dom.txt。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-19",
+          "source_field": "verification_items[18]",
+          "execution_status": "人工待确认",
+          "item": "F06/F07：Skills逐记录锚定/独立查询和后端原运行反馈绑定，真实DSH及正式HTTP复跑",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；Skills1.3逐记录锚定/独立查询与真实反例工程检查已执行；后端失败GUI冻结原run反馈→真实DSH自测/B审查/独立验证→P4人工确认→正式2HTTP/62断言运行成功、模型0，原失败保留。另一隔离写入P3两次自测成功后改了计划，900秒超时，未完成同hash复审/独立验证；不确认、不借旧审查。backend-rework-confirmed-final.json、main-runs-after-highlight.json、namespace-skills13-current.json、namespace-skills13-terminal.dom.txt。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                328
+              ]
+            }
+          ]
+        },
+        {
+          "line": 34,
+          "text": "| VT-0038-23 | DR-0038-08 | 已确认 | 集成测试通过 | 后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 40工程测试；P4真实DSH生成/自测/B工具审查/独立复验同SHA，主管固定字段核对17项。旧P3超时保留；不主张统计成功率。 | 命令：node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs；退出码：0；测试数量：40；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-remediation-round2/backend-targeted.log | node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs | 0 | 40 | 0 | 0 | workbench/qa/20261001-remediation-round2/backend-targeted.log |",
+          "verification_id": "VT-0038-23",
+          "source_field": "verification_items[22]",
+          "execution_status": "集成测试通过",
+          "item": "后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段",
+          "original_evidence": {
+            "command": "node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs",
+            "exit_code": 0,
+            "test_count": 40,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-remediation-round2/backend-targeted.log"
+          },
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                206
+              ]
+            }
+          ]
+        },
+        {
+          "line": 37,
+          "text": "| VT-0038-26 | DR-0038-08 | 已确认 | 集成测试通过 | 原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口 | workbench/qa/20261001-remediation-round2实际命令、正式GUI/模型/HTTP、包和历史证据；没有物理条件不计通过。 唯一正式4322；P4 GUI正式96断言通过，500/超时/取消与延迟后精确清理通过；原S1 GUI三步复跑与录像，项目最新固定快照。全量工程/历史保全/最终治理在最终报告分别记录；不称全功能产品批准。 | 正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。 | - | - | - | - | - | - |",
+          "verification_id": "VT-0038-26",
+          "source_field": "verification_items[25]",
+          "execution_status": "集成测试通过",
+          "item": "原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口",
+          "original_evidence": "正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                191,
+                325
+              ]
+            }
+          ]
+        },
+        {
+          "line": 38,
+          "text": "| VT-0038-27 | DR-0038-08 | 已确认 | 人工待确认 | 第三轮51组逐项真实全功能验收 | 第三轮51组台账与真实证据已收口：限定验证23、部分21、有问题6、原生物理未验1。PRD/MRD生成全量截断、CHECKED复审契约及范围漂移、UI空筛选清空验证遗漏、目标名称报告丢失、可变包stage字节异常保留。6主DSH/7审查DSH会话；7个已知usage请求189911tokens，DSH请求及总费用未知。正式10运行5正常通过/3注入故障失败/1超时/1主动取消，运行模型0。后台反馈P2真实修订成功、UI反馈识别待分析，未伪造独立复验或自动批准。14原始媒体与同一14报告附件SHA匹配。自动同4322重启旧19项目346运行身份42报告JSON/HTML保全489核验0失败；新3项目16运行身份6报告恢复。current_evidence仅记本轮真实545项工程回归，不代表51组或产品通过。全表、模型账本、问题和限制见workbench/qa/20261001-full-acceptance-round3。 | 命令：npm --prefix workbench test；退出码：0；测试数量：545；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-full-acceptance-round3/unit-round3.log | npm --prefix workbench test | 0 | 545 | 0 | 0 | workbench/qa/20261001-full-acceptance-round3/unit-round3.log |",
+          "verification_id": "VT-0038-27",
+          "source_field": "verification_items[26]",
+          "execution_status": "人工待确认",
+          "item": "第三轮51组逐项真实全功能验收",
+          "original_evidence": {
+            "command": "npm --prefix workbench test",
+            "exit_code": 0,
+            "test_count": 545,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-full-acceptance-round3/unit-round3.log"
+          },
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                242
+              ]
+            }
+          ]
+        },
+        {
+          "line": 64,
+          "text": "- 2026-09-27本轮最终源码已冻结：DSH专用Messages地址投影、前后端共享代理过滤、进程有限诊断先持久化再返回、页面预算与诊断、原步骤response_ref。主管首次统一299项为298成功和1项等待超时，保留原日志；该失败项单独复验成功，随后保持代码/预期/等待上限不变、不并行DSH探针重跑原清单，299项成功、0失败、0跳过，退出0。主管另用真实DSH和本机provider替身独立跑通read_context，exit0、工具1、仅本机请求3，未读真实Key或访问官方provider。原4322仍加载5c903c...，待加载源码30297d4becff2d25f3211eb75eb22cf73152b0d37bfe821286cca6bd397ed3e3、231文件；保留3个UI patch独立摘要，原数据/配置/SUT不变且服务空闲。真实DSH生成、正常分页/搜索缺陷执行、零模型复跑及报告一致性仍待完成，不作发布结论。证据kimi-remediation/REPORT.md、backend-dsh-config-response-recheck.log及backend-local-provider-supervisor-probe.json。",
+          "verification_id": null,
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                110
+              ]
+            }
+          ]
+        },
+        {
+          "line": 80,
+          "text": "- 2026-10-01 v34：主窗口独立执行，无子Agent派发；仅正式4322/原fresh25-b与配置，source ff9d5ff...保持。5个需求provider完成请求186031已知tokens，另1取消usage未知；9个真实产物DSH任务（4UI/5BE）底层调用与费用未知。GUI单例/混合/项目部分运行与取消、UI冻结反馈真实修订、BE手工反馈真实修订、后补协议及故意冲突阻断、新版本保存历史、同源冲突副本/幂等、每例最新报告三快照、实际托管重启、SDK/DLL坏签名拒绝均分别取得证据。隔离写入3步16HTTP/105断言及500/超时/执行中取消精确清理均实际验证，延迟后namespace404与原基线不变。工程531项0失败0跳过；原16项目响应/314记录ID/34旧报告对及配置根保全432检查0失败。51组覆盖为25所述范围符合、10有发现、12部分、2实际失败、2未执行；不等于全功能通过。3P1：增强复审失败、独立验证媒体关联缺失、旧portable校验失败。原生录制/框选/浮窗因桌面工具URL核验限制缺测，浏览器最终下载、Key分支、主板及干净PC亦未验。本轮不修产品源码、不发布，详见workbench/qa/20261001-full-acceptance/全功能验收报告.md与coverage.json。",
+          "verification_id": null,
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                282
+              ]
+            }
+          ]
+        },
+        {
+          "line": 81,
+          "text": "- 2026-10-01 v35修复轮：主管直接执行，子Agent0。F01/F05真实DeepSeek新4阶段增强和1普通请求均完成，已知222468 tokens；6增强候选仍有资料冲突、10普通候选有限语义核查不替代任意输入人审。F07原run反馈P4真实DSH/B审查/独立验证完成、GUI确认后正式2HTTP/62断言成功，模型0；F06新Skills1.3复杂隔离写入生成两次自测成功但900秒超时，最新hash未审、独立未验、候选未冻结，保留失败。F02媒体关联/F04实时几何/F08–F12交互已分别修复且正式有限复验；F08来源拒绝为API/源码文案证据，GUI重传未做。r4 ZIP独立SHA/完整文件集和原生Windows解压后30625文件严格校验成功，source effa7ff7...；安装运行被WindowsPowerShell执行策略阻断，不绕过策略，干净PC/第二主板/原生录制仍未验。原16项目响应/314旧运行ID/34报告对和数据配置保全432检查失败0。最终工程与治理状态依实际日志另记，不把真实模型部分成功写成全产品/发布批准。有限交付见workbench/qa/20261001-full-remediation/修复验收报告.md。 最终collector实际npm回归536项，失败0、跳过0、退出0；整体collector/checker退出1，保留治理失败，未改无关历史需求。 当前正式实例source6a037f45...；包摘要effa7ff7...为另一内容集合/摘要算法并有客户策略替换。223源码项对照222字节相同、1项策略有意替换，不能直接比较两种摘要。",
+          "verification_id": null,
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                204
+              ]
+            }
+          ]
+        }
+      ],
+      "predicate_reproduced": true,
+      "scope_rule": "Any asserted pass anywhere AND any failure term anywhere in effective document; no VT/version/run join."
+    },
+    {
+      "path": "docs/requirements/REQ-0038-requirements-and-protocol-test-input/current_state.md",
+      "sha256": "f5951a2d46227038f6bfbad5b566055b1cf9ebc097849fe48d746b1af61003d2",
+      "source_version": 39,
+      "asserted_pass_rows": [
+        {
+          "line": 91,
+          "text": "| VT-0038-06 | DR-0038-06 | 集成测试通过 | 按项目汇总各当前用例版本的最新正式执行结果并导出固定离线HTML报告，跨批次重试保留历史。 | 2026-09-29 v29：项目报告默认每条当前用例版本最新一次正式记录，分实际目标/配置/角色/软件版本，保留缺测、最新失败与执行中；旧单次/批次快照保持。正式4322浏览器生成并下载云平台8例（6原始通过2未执行）和库存3例（2原始通过1未执行），11例选取独立交叉核对一致，61个截图附件逐项同run及SHA/字节校验。15项目、302原运行ID、27旧报告JSON/HTML摘要不变，新增3报告含1迭代快照。配置界面解释被测系统及来源/归属/地址/登录要求；当前多配置实际选取已验，单配置隐藏分支仅代码核对。最终核心14/14及原报告5/5成功，与首轮38项有重叠不相加；既有修订测试REVISION_RUN_NOT_FINISHED及历史治理问题保留，不作全工程或发布结论。0产品模型调用/业务新执行，证据workbench/qa/20260929-project-latest/REPORT.md。 |",
+          "verification_id": "VT-0038-06",
+          "source_field": "verification_items[5]",
+          "execution_status": "集成测试通过",
+          "item": "按项目汇总各当前用例版本的最新正式执行结果并导出固定离线HTML报告，跨批次重试保留历史。",
+          "original_evidence": "2026-09-29 v29：项目报告默认每条当前用例版本最新一次正式记录，分实际目标/配置/角色/软件版本，保留缺测、最新失败与执行中；旧单次/批次快照保持。正式4322浏览器生成并下载云平台8例（6原始通过2未执行）和库存3例（2原始通过1未执行），11例选取独立交叉核对一致，61个截图附件逐项同run及SHA/字节校验。15项目、302原运行ID、27旧报告JSON/HTML摘要不变，新增3报告含1迭代快照。配置界面解释被测系统及来源/归属/地址/登录要求；当前多配置实际选取已验，单配置隐藏分支仅代码核对。最终核心14/14及原报告5/5成功，与首轮38项有重叠不相加；既有修订测试REVISION_RUN_NOT_FINISHED及历史治理问题保留，不作全工程或发布结论。0产品模型调用/业务新执行，证据workbench/qa/20260929-project-latest/REPORT.md。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 92,
+          "text": "| VT-0038-07 | DR-0038-07 | 集成测试通过 | 将环境选择解释为被测系统配置，明确目标地址、来源、登录要求及登记人信息；单目标简化选择，多目标保留切换。 | 正式4322项目设置与登录页呈现来源、时间、自填登记人、目标地址、项目/本机共享归属；脚本弹窗选择四目标之一后显示实际地址并取消，0模型任务。前后端配置投影测试2项包含在14项中。未修改配置与授权；单配置自动选择/隐藏仅代码核对，未强造正式单配置场景；任意SSO不支持。见workbench/qa/20260929-project-latest/REPORT.md、settings-final-ui.txt、multi-target-script-selected-ui.txt。 |",
+          "verification_id": "VT-0038-07",
+          "source_field": "verification_items[6]",
+          "execution_status": "集成测试通过",
+          "item": "将环境选择解释为被测系统配置，明确目标地址、来源、登录要求及登记人信息；单目标简化选择，多目标保留切换。",
+          "original_evidence": "正式4322项目设置与登录页呈现来源、时间、自填登记人、目标地址、项目/本机共享归属；脚本弹窗选择四目标之一后显示实际地址并取消，0模型任务。前后端配置投影测试2项包含在14项中。未修改配置与授权；单配置自动选择/隐藏仅代码核对，未强造正式单配置场景；任意SSO不支持。见workbench/qa/20260929-project-latest/REPORT.md、settings-final-ui.txt、multi-target-script-selected-ui.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 93,
+          "text": "| VT-0038-08 | DR-0038-02 / DR-0038-03 / DR-0038-08 | 集成测试通过 | 用例质量和生成状态：明确数据、分页与可达前置，旧坏用例修订建议，候选问题和生成进度可读。 | 受控来源用例修订及审阅已实现。正式旧项目3条同case形成v2，v1正文和摘要保留；37项修订相关工程检查以及连续v2修订验证已执行。正式STANDARD仅1请求、20,483 tokens生成4 UI/4 BE，29引用有效；主管逐条审阅8条后6次受控PATCH修正数据/前置/过宽标题，最终r9、PENDING_REVIEW、确认0。真实界面无需人工刷新展示终态；最终生成按钮相关31/31 exit0。协议缺失仍待补，不能保证通用可达性或完整PRD覆盖。证据：workbench/qa/20260930-human-remediation/case-quality/formal-old-case-v2.md、candidate-patches-applied.json、generation-active-targeted-tests.log；workbench/qa/20260930-human-remediation/generation-terminal-auto.dom.txt、generation-reviewed-draft-final.dom.txt。 |",
+          "verification_id": "VT-0038-08",
+          "source_field": "verification_items[7]",
+          "execution_status": "集成测试通过",
+          "item": "用例质量和生成状态：明确数据、分页与可达前置，旧坏用例修订建议，候选问题和生成进度可读。",
+          "original_evidence": "受控来源用例修订及审阅已实现。正式旧项目3条同case形成v2，v1正文和摘要保留；37项修订相关工程检查以及连续v2修订验证已执行。正式STANDARD仅1请求、20,483 tokens生成4 UI/4 BE，29引用有效；主管逐条审阅8条后6次受控PATCH修正数据/前置/过宽标题，最终r9、PENDING_REVIEW、确认0。真实界面无需人工刷新展示终态；最终生成按钮相关31/31 exit0。协议缺失仍待补，不能保证通用可达性或完整PRD覆盖。证据：workbench/qa/20260930-human-remediation/case-quality/formal-old-case-v2.md、candidate-patches-applied.json、generation-active-targeted-tests.log；workbench/qa/20260930-human-remediation/generation-terminal-auto.dom.txt、generation-reviewed-draft-final.dom.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                57
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                55
+              ]
+            }
+          ]
+        },
+        {
+          "line": 94,
+          "text": "| VT-0038-09 | DR-0038-05 / DR-0038-08 | 集成测试通过 | 执行选择和失败证据：适用版本的就绪资格、中文原因和反馈适用范围；可信实际值采集/未知；修正终结记录测试夹具。 | 版本资格、中文阻塞原因、失败证据与反馈适用范围已实现。正式混合批次3条零模型运行：UI分页通过，UI与BE小写搜索保留真实失败；UI actual=[]与soft matcher采集来源可追溯，BE只发1GET、第二业务步骤NOT_RUN。主管在真实界面核验列表、失败细节和冻结反馈绑定后取消，未假称执行反馈模型修复。终结记录夹具修正；最新完整工程529/529 exit0。未知或歧义实际值仍标未知。证据：workbench/qa/20260930-human-remediation/execution-ux/OFFICIAL-ORIGINAL-RESULT.md、workbench/qa/20260930-human-remediation/mixed-execution-list-fixed.dom.txt、feedback-confirmation-fixed.dom.txt、backend-feedback-boundary-fixed.dom.txt、unit-tests-revision-final.log。 |",
+          "verification_id": "VT-0038-09",
+          "source_field": "verification_items[8]",
+          "execution_status": "集成测试通过",
+          "item": "执行选择和失败证据：适用版本的就绪资格、中文原因和反馈适用范围；可信实际值采集/未知；修正终结记录测试夹具。",
+          "original_evidence": "版本资格、中文阻塞原因、失败证据与反馈适用范围已实现。正式混合批次3条零模型运行：UI分页通过，UI与BE小写搜索保留真实失败；UI actual=[]与soft matcher采集来源可追溯，BE只发1GET、第二业务步骤NOT_RUN。主管在真实界面核验列表、失败细节和冻结反馈绑定后取消，未假称执行反馈模型修复。终结记录夹具修正；最新完整工程529/529 exit0。未知或歧义实际值仍标未知。证据：workbench/qa/20260930-human-remediation/execution-ux/OFFICIAL-ORIGINAL-RESULT.md、workbench/qa/20260930-human-remediation/mixed-execution-list-fixed.dom.txt、feedback-confirmation-fixed.dom.txt、backend-feedback-boundary-fixed.dom.txt、unit-tests-revision-final.log。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                44
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                42
+              ]
+            }
+          ]
+        },
+        {
+          "line": 95,
+          "text": "| VT-0038-10 | DR-0038-04 / DR-0038-05 / DR-0038-08 | 集成测试通过 | 后端Content-Type断言与独立反例；协议/HTTP计划可读审阅，保持旧计划兼容和明确技术确认。 | Content-Type媒体类型断言、请求/业务断言审阅卡片及backend Skill1.2.0已实现。真实DSH仅1会话生成P2，自测、静态审查、独立复验各1次、同执行SHA，主管查看并确认技术计划。正式4个零模型批次复用P2：正确JSON头和合法charset各2GET/48项通过；错误/缺失头各首GET仅header失败、另20项业务断言通过，后续请求未发送。固定正文不改，目标已恢复correct。原P1及确切旧Skill兼容校验保留。本轮未发生DSH失败后修复，不声称验证自修复或量化Skills收益；HTTP计划技术确认不等于产品批准。证据：workbench/qa/20260930-human-remediation/backend/OFFICIAL-DSH-RUN.md、HEADER-BATCH-RESULT.md、p2-confirmed.json；workbench/qa/20260930-human-remediation/backend-p2-review.dom.txt、header-missing-detail.dom.txt。 |",
+          "verification_id": "VT-0038-10",
+          "source_field": "verification_items[9]",
+          "execution_status": "集成测试通过",
+          "item": "后端Content-Type断言与独立反例；协议/HTTP计划可读审阅，保持旧计划兼容和明确技术确认。",
+          "original_evidence": "Content-Type媒体类型断言、请求/业务断言审阅卡片及backend Skill1.2.0已实现。真实DSH仅1会话生成P2，自测、静态审查、独立复验各1次、同执行SHA，主管查看并确认技术计划。正式4个零模型批次复用P2：正确JSON头和合法charset各2GET/48项通过；错误/缺失头各首GET仅header失败、另20项业务断言通过，后续请求未发送。固定正文不改，目标已恢复correct。原P1及确切旧Skill兼容校验保留。本轮未发生DSH失败后修复，不声称验证自修复或量化Skills收益；HTTP计划技术确认不等于产品批准。证据：workbench/qa/20260930-human-remediation/backend/OFFICIAL-DSH-RUN.md、HEADER-BATCH-RESULT.md、p2-confirmed.json；workbench/qa/20260930-human-remediation/backend-p2-review.dom.txt、header-missing-detail.dom.txt。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                57
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                55
+              ]
+            }
+          ]
+        },
+        {
+          "line": 96,
+          "text": "| VT-0038-11 | DR-0038-06 / DR-0038-07 / DR-0038-08 | 集成测试通过 | 人工示范入口与名称、报告范围区分、资格说明；保留固定历史与同范围来源身份。 | 示范入口/冻结名称/真实步骤数量、报告范围和资格说明已修复。最后示范相关26/26 exit0，正式界面确认既有5步19事件示范及可读列表；本轮未重做真人登录、原生悬浮或录制。主管真实操作保存并下载2份项目最新报告，每条当前用例版本仅1行：混合项目2通过2失败；新图书项目最新头缺失失败1、未执行3，不回退旧通过。JSON/HTML与正式下载摘要一致，媒体内嵌且资格/产品未批准分开。独立离线文件渲染未验。证据：workbench/qa/20260930-human-remediation/demonstration-final-tests.log、demonstration-history-fixed.dom.txt、demonstration-confirmed-fixed.dom.txt、mixed-latest-report.json/.html、header-latest-report.json/.html。 |",
+          "verification_id": "VT-0038-11",
+          "source_field": "verification_items[10]",
+          "execution_status": "集成测试通过",
+          "item": "人工示范入口与名称、报告范围区分、资格说明；保留固定历史与同范围来源身份。",
+          "original_evidence": "示范入口/冻结名称/真实步骤数量、报告范围和资格说明已修复。最后示范相关26/26 exit0，正式界面确认既有5步19事件示范及可读列表；本轮未重做真人登录、原生悬浮或录制。主管真实操作保存并下载2份项目最新报告，每条当前用例版本仅1行：混合项目2通过2失败；新图书项目最新头缺失失败1、未执行3，不回退旧通过。JSON/HTML与正式下载摘要一致，媒体内嵌且资格/产品未批准分开。独立离线文件渲染未验。证据：workbench/qa/20260930-human-remediation/demonstration-final-tests.log、demonstration-history-fixed.dom.txt、demonstration-confirmed-fixed.dom.txt、mixed-latest-report.json/.html、header-latest-report.json/.html。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                57
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                55
+              ]
+            }
+          ]
+        },
+        {
+          "line": 97,
+          "text": "| VT-0038-12 | DR-0038-02 / DR-0038-05 / DR-0038-06 / DR-0038-08 | 集成测试通过 | 主管核验实际改动并运行受影响/完整工程清单；同一正式实例加载、真实模型/正常/缺陷/协议反例及报告复验，版本化修订并确认数据保留。 | 主管已检查实际diff、关键源码、冻结执行体和正式界面。最新完整工程529/529、最后受影响31/31和26/26均exit0，存在重叠不相加。独立正式只读收口408/408 exit0：16旧项目/307旧记录ID可读，32旧报告JSON和HTML摘要不变，3旧用例v1正文相等、v1/v2摘要与P1/P2执行摘要重算一致，7新正式运行与2最新报告的选择/实际结果独立核对。当前同一4322已加载258源码、SHA ff9d5ff642536e25e379d5fbc445f04058b435de7d082b8a6e50aeea3b8ea905，service-b3afb1a5-3d28-42a5-a458-b3af5208ec23，原config489efb5f/data bf511e89保持，服务空闲。307记录只核对ID保留，不声称逐字节全数据不变。通用语义保证、真实云平台全链路、鉴权/写接口、干净机器、第二设备及发布未验。证据：workbench/qa/20260930-human-remediation/final-readonly-facts.log、demonstration-source-loaded.json、REPORT.md。 |",
+          "verification_id": "VT-0038-12",
+          "source_field": "verification_items[11]",
+          "execution_status": "集成测试通过",
+          "item": "主管核验实际改动并运行受影响/完整工程清单；同一正式实例加载、真实模型/正常/缺陷/协议反例及报告复验，版本化修订并确认数据保留。",
+          "original_evidence": "主管已检查实际diff、关键源码、冻结执行体和正式界面。最新完整工程529/529、最后受影响31/31和26/26均exit0，存在重叠不相加。独立正式只读收口408/408 exit0：16旧项目/307旧记录ID可读，32旧报告JSON和HTML摘要不变，3旧用例v1正文相等、v1/v2摘要与P1/P2执行摘要重算一致，7新正式运行与2最新报告的选择/实际结果独立核对。当前同一4322已加载258源码、SHA ff9d5ff642536e25e379d5fbc445f04058b435de7d082b8a6e50aeea3b8ea905，service-b3afb1a5-3d28-42a5-a458-b3af5208ec23，原config489efb5f/data bf511e89保持，服务空闲。307记录只核对ID保留，不声称逐字节全数据不变。通用语义保证、真实云平台全链路、鉴权/写接口、干净机器、第二设备及发布未验。证据：workbench/qa/20260930-human-remediation/final-readonly-facts.log、demonstration-source-loaded.json、REPORT.md。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                70
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                68
+              ]
+            }
+          ]
+        },
+        {
+          "line": 103,
+          "text": "| VT-0038-18 | DR-0038-08 | 集成测试通过 | F01/F05：严格增强审查契约及诊断、固定业务值与独立数据表述、真实普通和增强模型复验 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；同来源增强4阶段真实DeepSeek请求完成、6候选保持冲突待审；普通1请求10候选由主管逐项核对固定8记录、来源与独立数据。不能解释为任意资料语义通过。checked-current.json、checked-semantic-review.json、standard-current.json、standard-root-review.json。 |",
+          "verification_id": "VT-0038-18",
+          "source_field": "verification_items[17]",
+          "execution_status": "集成测试通过",
+          "item": "F01/F05：严格增强审查契约及诊断、固定业务值与独立数据表述、真实普通和增强模型复验",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；同来源增强4阶段真实DeepSeek请求完成、6候选保持冲突待审；普通1请求10候选由主管逐项核对固定8记录、来源与独立数据。不能解释为任意资料语义通过。checked-current.json、checked-semantic-review.json、standard-current.json、standard-root-review.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 105,
+          "text": "| VT-0038-20 | DR-0038-08 | 集成测试通过 | F02/F04：独立验证媒体按不可变清单关联，DOM重排高亮及真实分页录像复验 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；独立验证和原正式运行20媒体逐项SHA/字节核对，GUI原视频及回放可播；新正式3步分页零模型运行成功，另10媒体核对一致。24原始Trace帧中11→12、18→19橙框随5→3→5行正确移动到翻页按钮，无错框还书。原始视频readyState4/error null并实际播放。media-byte-verification.json、highlight-media-verification.json、highlight-frames/、highlight-original-video.json。 |",
+          "verification_id": "VT-0038-20",
+          "source_field": "verification_items[19]",
+          "execution_status": "集成测试通过",
+          "item": "F02/F04：独立验证媒体按不可变清单关联，DOM重排高亮及真实分页录像复验",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；独立验证和原正式运行20媒体逐项SHA/字节核对，GUI原视频及回放可播；新正式3步分页零模型运行成功，另10媒体核对一致。24原始Trace帧中11→12、18→19橙框随5→3→5行正确移动到翻页按钮，无错框还书。原始视频readyState4/error null并实际播放。media-byte-verification.json、highlight-media-verification.json、highlight-frames/、highlight-original-video.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 106,
+          "text": "| VT-0038-21 | DR-0038-08 | 集成测试通过 | F08–F12：来源导入限制、取消状态、720px鼠标键盘导航、空搜索恢复及后端候选默认分组 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；正式GUI核对最新取消记录/720高侧栏鼠标与Tab-Enter设置入口/搜索无结果清空恢复/后端唯一候选默认分组并保持人工切换。跨项目来源导入实际公共API400拒绝且项目字节不变，错误文案核对原项目限制；GUI文件重传NOT_RUN，不能冒充界面上传验收。sidebar-keyboard-navigation.json、search-keyboard-restored.dom.txt、cancelled-detail.dom.txt、backend-only-default.dom.txt、cross-project-rejection.json。 |",
+          "verification_id": "VT-0038-21",
+          "source_field": "verification_items[20]",
+          "execution_status": "集成测试通过",
+          "item": "F08–F12：来源导入限制、取消状态、720px鼠标键盘导航、空搜索恢复及后端候选默认分组",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；正式GUI核对最新取消记录/720高侧栏鼠标与Tab-Enter设置入口/搜索无结果清空恢复/后端唯一候选默认分组并保持人工切换。跨项目来源导入实际公共API400拒绝且项目字节不变，错误文案核对原项目限制；GUI文件重传NOT_RUN，不能冒充界面上传验收。sidebar-keyboard-navigation.json、search-keyboard-restored.dom.txt、cancelled-detail.dom.txt、backend-only-default.dom.txt、cross-project-rejection.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 108,
+          "text": "| VT-0038-23 | DR-0038-08 | 集成测试通过 | 后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段 | 命令：node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs；退出码：0；测试数量：40；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-remediation-round2/backend-targeted.log |",
+          "verification_id": "VT-0038-23",
+          "source_field": "verification_items[22]",
+          "execution_status": "集成测试通过",
+          "item": "后端受控提交编排、当前SHA与覆盖契约、脱敏工具诊断和界面阶段",
+          "original_evidence": {
+            "command": "node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs",
+            "exit_code": 0,
+            "test_count": 40,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-remediation-round2/backend-targeted.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 109,
+          "text": "| VT-0038-24 | DR-0038-08 | 集成测试通过 | 包内Node私有运行时/诊断/启动与当前用户DPAPI兼容桥，保持已有配置凭据 | 命令：node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs；退出码：0；测试数量：20；失败数量：0；跳过数量：0；证据：workbench/qa/20261001-remediation-round2/native-targeted-fixed.log |",
+          "verification_id": "VT-0038-24",
+          "source_field": "verification_items[23]",
+          "execution_status": "集成测试通过",
+          "item": "包内Node私有运行时/诊断/启动与当前用户DPAPI兼容桥，保持已有配置凭据",
+          "original_evidence": {
+            "command": "node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs",
+            "exit_code": 0,
+            "test_count": 20,
+            "failure_count": 0,
+            "skipped_count": 0,
+            "log_path": "workbench/qa/20261001-remediation-round2/native-targeted-fixed.log"
+          },
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 110,
+          "text": "| VT-0038-25 | DR-0038-08 | 集成测试通过 | 新冻结便携包的完整性与路径/依赖/浏览器/凭据运行复验 | 实际命令：node workbench/qa/20261001-remediation-round2/portable-runtime-probe.mjs；退出码0；无TAP计数，数量未解析。日志workbench/qa/20261001-remediation-round2/portable-r1-runtime-probe.log。新ZIP30629文件独立/包内Node完整性检查；227源码项对照226一致+1客户策略。602依赖、包内浏览器和插件、无全局PATH、DPAPI实际运行；仅工程准备，无第二工作台/真实用户授权/模型请求，独立干净PC与第二主板未验。 |",
+          "verification_id": "VT-0038-25",
+          "source_field": "verification_items[24]",
+          "execution_status": "集成测试通过",
+          "item": "新冻结便携包的完整性与路径/依赖/浏览器/凭据运行复验",
+          "original_evidence": "实际命令：node workbench/qa/20261001-remediation-round2/portable-runtime-probe.mjs；退出码0；无TAP计数，数量未解析。日志workbench/qa/20261001-remediation-round2/portable-r1-runtime-probe.log。新ZIP30629文件独立/包内Node完整性检查；227源码项对照226一致+1客户策略。602依赖、包内浏览器和插件、无全局PATH、DPAPI实际运行；仅工程准备，无第二工作台/真实用户授权/模型请求，独立干净PC与第二主板未验。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "line": 111,
+          "text": "| VT-0038-26 | DR-0038-08 | 集成测试通过 | 原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口 | 正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。 |",
+          "verification_id": "VT-0038-26",
+          "source_field": "verification_items[25]",
+          "execution_status": "集成测试通过",
+          "item": "原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口",
+          "original_evidence": "正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。",
+          "matches": [
+            {
+              "term": "测试通过",
+              "columns_1_based": [
+                31
+              ]
+            },
+            {
+              "term": "集成测试通过",
+              "columns_1_based": [
+                29
+              ]
+            }
+          ]
+        }
+      ],
+      "failure_term_rows": [
+        {
+          "line": 71,
+          "text": "| TK-0038-19 | DR-0038-08 / DD-0038-08 | 已实现，部分验收；复杂写入生成超时 | F06/F07：Skills逐记录锚定/独立查询和后端原运行反馈绑定，真实DSH及正式HTTP复跑 |",
+          "verification_id": null,
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                57
+              ]
+            }
+          ]
+        },
+        {
+          "line": 89,
+          "text": "| VT-0038-04 | DR-0038-04 | 人工待确认 | 协议设计与准备条件 | B后补新合成协议并完整绑定原case版本，原冲突及旧binding保留；后端HTTP计划进入原单条/项目批次、结果列表和下载报告。错误断言/500/超时/取消及异常筛选、反馈带入有正式证据。后端多计划模型修订未实现，批量零模型运行已验。 v22对该后端case v1补原合成协议，真实UI草稿v1及完整确认v2、HTTP201；原case版本/hash及旧导出不变，GET execution_ready=false。协议确认不是执行通过。见case-design/round-binding/final.json。 |",
+          "verification_id": "VT-0038-04",
+          "source_field": "verification_items[3]",
+          "execution_status": "人工待确认",
+          "item": "协议设计与准备条件",
+          "original_evidence": "B后补新合成协议并完整绑定原case版本，原冲突及旧binding保留；后端HTTP计划进入原单条/项目批次、结果列表和下载报告。错误断言/500/超时/取消及异常筛选、反馈带入有正式证据。后端多计划模型修订未实现，批量零模型运行已验。 v22对该后端case v1补原合成协议，真实UI草稿v1及完整确认v2、HTTP201；原case版本/hash及旧导出不变，GET execution_ready=false。协议确认不是执行通过。见case-design/round-binding/final.json。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                123
+              ]
+            }
+          ]
+        },
+        {
+          "line": 104,
+          "text": "| VT-0038-19 | DR-0038-08 | 人工待确认 | F06/F07：Skills逐记录锚定/独立查询和后端原运行反馈绑定，真实DSH及正式HTTP复跑 | ../../../workbench/qa/20261001-full-remediation/修复验收报告.md；Skills1.3逐记录锚定/独立查询与真实反例工程检查已执行；后端失败GUI冻结原run反馈→真实DSH自测/B审查/独立验证→P4人工确认→正式2HTTP/62断言运行成功、模型0，原失败保留。另一隔离写入P3两次自测成功后改了计划，900秒超时，未完成同hash复审/独立验证；不确认、不借旧审查。backend-rework-confirmed-final.json、main-runs-after-highlight.json、namespace-skills13-current.json、namespace-skills13-terminal.dom.txt。 |",
+          "verification_id": "VT-0038-19",
+          "source_field": "verification_items[18]",
+          "execution_status": "人工待确认",
+          "item": "F06/F07：Skills逐记录锚定/独立查询和后端原运行反馈绑定，真实DSH及正式HTTP复跑",
+          "original_evidence": "../../../workbench/qa/20261001-full-remediation/修复验收报告.md；Skills1.3逐记录锚定/独立查询与真实反例工程检查已执行；后端失败GUI冻结原run反馈→真实DSH自测/B审查/独立验证→P4人工确认→正式2HTTP/62断言运行成功、模型0，原失败保留。另一隔离写入P3两次自测成功后改了计划，900秒超时，未完成同hash复审/独立验证；不确认、不借旧审查。backend-rework-confirmed-final.json、main-runs-after-highlight.json、namespace-skills13-current.json、namespace-skills13-terminal.dom.txt。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                270
+              ]
+            }
+          ]
+        },
+        {
+          "line": 111,
+          "text": "| VT-0038-26 | DR-0038-08 | 集成测试通过 | 原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口 | 正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。 |",
+          "verification_id": "VT-0038-26",
+          "source_field": "verification_items[25]",
+          "execution_status": "集成测试通过",
+          "item": "原4322复杂后端真实DSH、正式执行与UI/报告/工程回归、历史保全和收口",
+          "original_evidence": "正式4322 GUI新P4生成/主管确认/两次限定正常复跑；96业务及清理断言、16HTTP，模型复跑0；500/超时/执行中取消按实际状态且精确清理。UI原S1三步复跑与原始录像实际播放；项目最新取消和最新成功固定快照分开保存。npm --prefix workbench test实际545成功、0失败/跳过，unit-final-r2.log与delivery-evidence-unit-run.md；首轮543/545和未复现的策略测试异常保留。仅本轮范围，非全功能产品/发布批准。详见workbench/qa/20261001-remediation-round2/修复验收报告.md及round2-evidence-ledger.json。",
+          "matches": [
+            {
+              "term": "超时",
+              "columns_1_based": [
+                136
+              ]
+            }
+          ]
+        }
+      ],
+      "predicate_reproduced": true,
+      "scope_rule": "Any asserted pass anywhere AND any failure term anywhere in effective document; no VT/version/run join."
+    }
+  ],
+  "structured_verification_log_proofs": [
+    {
+      "verification_id": "VT-0015-01",
+      "recorded_evidence": {
+        "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 26,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0015-lab-second.log"
+      },
+      "actual_file": {
+        "path": "validation/REQ-0015-lab-second.log",
+        "bytes": 5708,
+        "sha256": "25e1566869e4d3272756e6139a2ba9a716968a180b0e5b1098bc3d434b6ef261",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0015-02",
+      "recorded_evidence": {
+        "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 26,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0015-lab-second.log"
+      },
+      "actual_file": {
+        "path": "validation/REQ-0015-lab-second.log",
+        "bytes": 5708,
+        "sha256": "25e1566869e4d3272756e6139a2ba9a716968a180b0e5b1098bc3d434b6ef261",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0015-03",
+      "recorded_evidence": {
+        "command": "node --test --test-reporter=tap manual-lab/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 26,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "validation/REQ-0015-lab-second.log"
+      },
+      "actual_file": {
+        "path": "validation/REQ-0015-lab-second.log",
+        "bytes": 5708,
+        "sha256": "25e1566869e4d3272756e6139a2ba9a716968a180b0e5b1098bc3d434b6ef261",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0015-04",
+      "recorded_evidence": {
+        "command": "node workbench/qa/20260925-kimi-complex/verify.mjs",
+        "exit_code": 1,
+        "test_count": 24,
+        "failure_count": 12,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json",
+        "bytes": 24132,
+        "sha256": "291d44d1bf822ba7abd23852602831768ddf3dd0e784bc773073a691f49dc355"
+      }
+    },
+    {
+      "verification_id": "VT-0038-02",
+      "recorded_evidence": {
+        "command": "node --test tests/model-transport.test.mjs tests/diagnostic-profile.test.mjs workbench/tests/requirements-documents.test.mjs workbench/tests/requirements-domain.test.mjs workbench/tests/requirements-export.test.mjs workbench/tests/requirements-integration.test.mjs workbench/tests/requirements-model.test.mjs workbench/tests/requirements-design-quality.test.mjs workbench/tests/requirements-view.test.mjs workbench/tests/requirements-images.test.mjs workbench/tests/requirements-embedded-images.test.mjs workbench/tests/requirements-quality.test.mjs workbench/tests/requirements-quality-workflow.test.mjs",
+        "exit_code": 0,
+        "test_count": 103,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260928-case-quality-gate/engineering-final-code.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20260928-case-quality-gate/engineering-final-code.log",
+        "bytes": 25598,
+        "sha256": "0935dcbd1c4d15a98d7f41adee0c16f55abbb7d712bd7e3861589eda8d091fd4",
+        "tap_totals": {
+          "tests": "103",
+          "pass": "103",
+          "fail": "0",
+          "cancelled": "0",
+          "skipped": "0"
+        }
+      }
+    },
+    {
+      "verification_id": "VT-0038-05",
+      "recorded_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 342,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260927-kimi-remediation/dsh-skills-1.1-engineering.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20260927-kimi-remediation/dsh-skills-1.1-engineering.log",
+        "bytes": 81420,
+        "sha256": "634ca8ecc18dfbf2c87cd3f7c0bf0f829cc2748f5c322ef4f68309df9086de63",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0038-23",
+      "recorded_evidence": {
+        "command": "node --test workbench/tests/backend-quality-loop.test.mjs workbench/tests/backend-harness-protocol.test.mjs workbench/tests/backend-harness-acceptance.test.mjs workbench/tests/backend-harness-diagnostic.test.mjs",
+        "exit_code": 0,
+        "test_count": 40,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261001-remediation-round2/backend-targeted.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20261001-remediation-round2/backend-targeted.log",
+        "bytes": 9408,
+        "sha256": "3c402365af7eb393b027a63138ad1623e74cd749791da10cbf56ed31569648a4",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0038-24",
+      "recorded_evidence": {
+        "command": "node --test workbench/tests/native-runtime.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/portable-package.test.mjs",
+        "exit_code": 0,
+        "test_count": 20,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261001-remediation-round2/native-targeted-fixed.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20261001-remediation-round2/native-targeted-fixed.log",
+        "bytes": 5040,
+        "sha256": "a13774168ab406fa866f2636429cb82e774f56584dd6a798370391eb4bb7493b",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0038-27",
+      "recorded_evidence": {
+        "command": "npm --prefix workbench test",
+        "exit_code": 0,
+        "test_count": 545,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261001-full-acceptance-round3/unit-round3.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20261001-full-acceptance-round3/unit-round3.log",
+        "bytes": 131812,
+        "sha256": "68c476d114ce875a3a6b08c7bb232929a713791da70c8ba1af7318de2e3b94e5",
+        "tap_totals": {}
+      }
+    },
+    {
+      "verification_id": "VT-0038-28",
+      "recorded_evidence": {
+        "command": "npm --prefix workbench test",
+        "exit_code": 0,
+        "test_count": 558,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261001-release-goal-round4/closeout/unit-delivery-closeout.log"
+      },
+      "actual_file": {
+        "path": "workbench/qa/20261001-release-goal-round4/closeout/unit-delivery-closeout.log",
+        "bytes": 132116,
+        "sha256": "abe1c610e1768cc7185a28f48d43a6f68f5b3767cbd58f8d36ad4a0faf256109",
+        "tap_totals": {
+          "tests": "558",
+          "pass": "558",
+          "fail": "0",
+          "cancelled": "0",
+          "skipped": "0"
+        }
+      }
+    }
+  ],
+  "extra_original_evidence": [
+    {
+      "path": "workbench/qa/20260929-project-latest/REPORT.md",
+      "bytes": 6630,
+      "sha256": "7f05b3b7c04f49458296827dfe9e1c91a8489f442026819f93022d82fcf8567b"
+    },
+    {
+      "path": "workbench/qa/20260929-project-latest/supervisor-final-core.log",
+      "bytes": 3597,
+      "sha256": "eacdbde72cc0e7667d98f6b69bf96036e94bf3c6ab7b50b1e4e4474d2bec5612",
+      "tap_totals": {}
+    },
+    {
+      "path": "workbench/qa/20261001-full-remediation/修复验收报告.md",
+      "bytes": 13858,
+      "sha256": "2f1017e1c2dae0b99c36c0cb0b708850502cf286e8672cad168ca69d4775771e"
+    },
+    {
+      "path": "workbench/qa/20261001-release-goal-round4/closeout/unit-delivery-closeout.log",
+      "bytes": 132116,
+      "sha256": "abe1c610e1768cc7185a28f48d43a6f68f5b3767cbd58f8d36ad4a0faf256109",
+      "tap_totals": {
+        "tests": "558",
+        "pass": "558",
+        "fail": "0",
+        "cancelled": "0",
+        "skipped": "0"
+      }
+    },
+    {
+      "path": "workbench/qa/20261001-release-goal-round4/closeout/governance-closeout.log",
+      "state": "MISSING"
+    }
+  ],
+  "REQ0015_actual_24_results": {
+    "count": 24,
+    "by_status": {
+      "FAILED": 12,
+      "PASSED": 12
+    },
+    "proof": {
+      "path": "workbench/qa/20260925-kimi-complex/evidence/2026-09-25T03-04-13-091Z/results.json",
+      "bytes": 24132,
+      "sha256": "291d44d1bf822ba7abd23852602831768ddf3dd0e784bc773073a691f49dc355"
+    }
+  },
+  "fifth_issue": {
+    "original_50_file_inventory": {
+      "path": "workbench/qa/20261002-trim-contains-closeout/mixed-governance-differences.json",
+      "bytes": 21171,
+      "sha256": "c608d9100b6cb21cdbdc07489689322bac6f03c1932ab1090c80c3f6b7be3760"
+    },
+    "records": [
+      "REQ-0037",
+      "REQ-0038",
+      "REQ-0039",
+      "REQ-0040"
+    ],
+    "ownership": "MIXED_UNCONFIRMED; runtime hashes do not establish authorship"
+  }
+}

@@ -1,0 +1,7 @@
+ok 1 - ordinary scope returns the exact existing input without partition
+ok 2 - ALL_CURRENT produces precisely two fixed UI/backend partitions
+ok 3 - both partitions retain the complete evidence source
+ok 4 - both partitions retain already-authorized image inputs
+ok 5 - both partitions retain the original scope and prompt
+ok 6 - input is unchanged
+{"status":"OWNED_MODULE_OFFLINE_CONTRACT_VERIFIED","checks":6,"models_called":0,"service_started":false,"semantic_model_effect":"NOT_RUN"}

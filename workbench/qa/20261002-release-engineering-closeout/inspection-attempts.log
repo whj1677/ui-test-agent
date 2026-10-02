@@ -1,0 +1,7 @@
+Read-only inspection failures retained as observations; no writes to existing product inputs.
+1. PowerShell parser rejected Bash-style braced file globs before execution; replaced with rg directory plus -g patterns.
+2. rg ../device-license/scripts reported directory missing; actual package.json declares ../device-license/build.ps1, subsequently read directly.
+3. git -C ../device-license rev-parse HEAD returned exit 128 (not a Git repository); component Git version remains unavailable.
+4. audit-second.log retains NoneType decode error caused by CJK Git path quoting; corrected ls-tree to -z and require tracked blob before classifying modifications.
+5. governance-before-archive.log retains invalid verification-state enum rejection; corrected canonical state to existing 人工待确认 and preserved scope in evidence.
+6. Git diff --cached --check exit2 retained in .git/release-engineering-20261002/diff-check-first.log. First double-CR log and context diff preserved there. Archived log now writes exact captured stderr bytes; review diff uses valid zero-context hunks (apply only with explicit base check and --unidiff-zero), avoiding trailing blank context prefixes. No failure outcome, original product log or checker changed.
