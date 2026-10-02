@@ -1,0 +1,85 @@
+{
+  "status": "BOUNDED_SYNTHETIC_ORACLE_MATRIX_EXECUTED_NOT_PRODUCT_RELEASE",
+  "rows": [
+    {
+      "implementation": "contains-trim",
+      "candidate": "raw-partial",
+      "actual_status": "PASSED",
+      "expected_status": "PASSED",
+      "evidence": "contains-trim__raw-partial.json",
+      "interpretation": "SYNTHETIC_LITERAL_ORACLE_SATISFIED"
+    },
+    {
+      "implementation": "equals-trim",
+      "candidate": "raw-partial",
+      "actual_status": "FAILED",
+      "expected_status": "FAILED",
+      "evidence": "equals-trim__raw-partial.json",
+      "interpretation": "EXPECTED_MUTANT_BUSINESS_FAILURE"
+    },
+    {
+      "implementation": "contains-no-trim",
+      "candidate": "raw-partial",
+      "actual_status": "FAILED",
+      "expected_status": "FAILED",
+      "evidence": "contains-no-trim__raw-partial.json",
+      "interpretation": "EXPECTED_MUTANT_BUSINESS_FAILURE"
+    },
+    {
+      "implementation": "contains-no-trim",
+      "candidate": "caller-trim",
+      "actual_status": "PASSED",
+      "expected_status": "PASSED",
+      "evidence": "contains-no-trim__caller-trim.json",
+      "interpretation": "FALSE_GREEN_MASKS_MISSING_SERVER_TRIM_NOT_ACCEPTED"
+    },
+    {
+      "implementation": "contains-trim",
+      "candidate": "complete-id",
+      "actual_status": "FAILED",
+      "expected_status": "FAILED",
+      "evidence": "contains-trim__complete-id.json",
+      "interpretation": "UNAUTHORIZED_INPUT_REWRITE_REJECTED"
+    }
+  ],
+  "diagnostic": {
+    "raw_complete_id": " BK-006 ",
+    "correct": [
+      {
+        "code": "BK-006",
+        "title": "深入浅出Node.js",
+        "category": "科技",
+        "status": "在架"
+      }
+    ],
+    "wrong_equals": [
+      {
+        "code": "BK-006",
+        "title": "深入浅出Node.js",
+        "category": "科技",
+        "status": "在架"
+      }
+    ],
+    "partial_input": " K-00 ",
+    "matches": [
+      {
+        "code": "BK-001",
+        "title": "围城",
+        "category": "小说",
+        "status": "在架"
+      },
+      {
+        "code": "BK-006",
+        "title": "深入浅出Node.js",
+        "category": "科技",
+        "status": "在架"
+      }
+    ],
+    "note": "Complete-ID input cannot distinguish contains from equals; old expectations and records unchanged."
+  },
+  "provider_requests": 0,
+  "paid_model_tokens": 0,
+  "model_response_replay": "saved B and explicitly authored test doubles only",
+  "empty_result_pages": "UNSPECIFIED_IN_SOURCE_NOT_ASSERTED",
+  "ui_pagination_reset": "NOT_EXECUTED_BACKEND_GET_DOES_NOT_PROVE_UI_STATE_RESET"
+}

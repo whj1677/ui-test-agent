@@ -1,0 +1,158 @@
+{
+  "schema": "workbench/requirement-source-snapshot-v1",
+  "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+  "project_id": "project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+  "kind": "PRD",
+  "file_name": "PRD-图书查询.md",
+  "extension": ".md",
+  "sha256": "05f3e72c534616a80fc17bfa20d65a0ae797469c39990697aa29c32b69de6298",
+  "bytes": 2435,
+  "read_status": "READ",
+  "sections": {
+    "body": "READ",
+    "tables": "READ",
+    "images": "NOT_PRESENT"
+  },
+  "segments": [
+    {
+      "segment_id": "segment-1",
+      "kind": "paragraph",
+      "location": {
+        "line": 1
+      },
+      "text": "# PRD：图书查询验收",
+      "quote_sha256": "87c86828fa5baf8aa1f68feae2f79aa1bb0c91d33ade4738fca61a0aa50976bd"
+    },
+    {
+      "segment_id": "segment-2",
+      "kind": "paragraph",
+      "location": {
+        "line": 3
+      },
+      "text": "版本1.0，已确认，2026-10-01。本轮完全合成资料，可发送给当前DeepSeek/DSH；无真实客户、账号或凭据。页面仅验证只读查询；被测实现可能有缺陷，实际结果不能替代下述规则。",
+      "quote_sha256": "51609fda1dbe68918409d5f05cf3c38f707d60bc9dc99406dcec48d6e049ed0e"
+    },
+    {
+      "segment_id": "segment-3",
+      "kind": "paragraph",
+      "location": {
+        "line": 5
+      },
+      "text": "## F1 固定基线和分页",
+      "quote_sha256": "1c215bbf0999a97ee02c773fa9b4ae3618b1ffa852e5caa819545175f762960b"
+    },
+    {
+      "segment_id": "segment-4",
+      "kind": "paragraph",
+      "location": {
+        "line": 7
+      },
+      "text": "固定8条，不通过新增或删除造数据：BK-001 围城/小说/在架；BK-002 时间简史/科技/在架；BK-003 人类简史/历史/借出；BK-004 活着/小说/在架；BK-005 三体/小说/借出；BK-006 深入浅出Node.js/科技/在架；BK-007 小王子/少儿/在架；BK-008 明朝那些事儿/历史/在架。",
+      "quote_sha256": "584a5b31142eb0adda83ca600a1edcaabe1c84e48a9832f4f28070a0c98b9476"
+    },
+    {
+      "segment_id": "segment-5",
+      "kind": "paragraph",
+      "location": {
+        "line": 9
+      },
+      "text": "按编号升序，每页5条。默认第1页，行编号依次BK-001至BK-005，总数8、共2页，上一页禁用；下一页显示第2页BK-006至BK-008，共3条，下一页禁用、上一页可用。上一页返回第1页原5条。",
+      "quote_sha256": "a50f4cdc2a911754149f013d6533e2bc1828875cf45ecdb1acdd2d5feb673123"
+    },
+    {
+      "segment_id": "segment-6",
+      "kind": "paragraph",
+      "location": {
+        "line": 11
+      },
+      "text": "重置清空关键词、分类和状态，回到无过滤第1页，8条全集和前5条仍保持。必须先达到第2页，再测试从第2页重置，不能在单页过滤结果里要求翻至第2页。",
+      "quote_sha256": "6ee11de764dacef2c2c7b0a142b1f63914249e1373e6695416884b58f052ee6b"
+    },
+    {
+      "segment_id": "segment-7",
+      "kind": "paragraph",
+      "location": {
+        "line": 13
+      },
+      "text": "## F2 搜索",
+      "quote_sha256": "a37da315fd6538ca0358e4d20c835845b7c41bbe1189a59bf717a54df8dfeeec"
+    },
+    {
+      "segment_id": "segment-8",
+      "kind": "paragraph",
+      "location": {
+        "line": 15
+      },
+      "text": "编号或书名包含匹配，不区分大小写，去输入两端空格。UI在关键词输入变化时自动查询，从第1页展示，不需要“查询”按钮。后端业务语义相同；在通讯协议提供前不猜方法/地址/字段/响应码。",
+      "quote_sha256": "43aa94536fbb6982c1cff4d9092976527635e17feb3acca99a82f444cc83840f"
+    },
+    {
+      "segment_id": "segment-9",
+      "kind": "paragraph",
+      "location": {
+        "line": 17
+      },
+      "text": "独立输入“ BK-006 ”应只有BK-006（深入浅出Node.js），总数1、1页，两个翻页按钮均禁用。另独立输入“bk-006”预期仍同一条；该项是大小写检查，不能用只有大写的输入宣称测过大小写。",
+      "quote_sha256": "7e8e68872f77a2f20a1ea866008812a6cf4ad6d766a2ed2e0235da0f0a2631fa"
+    },
+    {
+      "segment_id": "segment-10",
+      "kind": "paragraph",
+      "location": {
+        "line": 19
+      },
+      "text": "输入“简史”匹配BK-002和BK-003，按编号顺序，总数2。输入“NOBOOK-1001”无匹配，总数0、当前页1、共1页，无数据提示而非网络错误。清空关键词恢复默认第一页。",
+      "quote_sha256": "87198e35532d3b7df8a1e4cc1cf7f35482bfb83d20aee7dabf3f340782e5cf9d"
+    },
+    {
+      "segment_id": "segment-11",
+      "kind": "paragraph",
+      "location": {
+        "line": 21
+      },
+      "text": "## F3 联合筛选",
+      "quote_sha256": "035e65b80fec558ea662ded2337c75615da6a82f0ea6c111cec03d5a82b742e5"
+    },
+    {
+      "segment_id": "segment-12",
+      "kind": "paragraph",
+      "location": {
+        "line": 23
+      },
+      "text": "分类单选与关键词、状态同时按AND应用。状态可以选在架/借出，取消所有状态不限制状态。默认不限制分类和状态。",
+      "quote_sha256": "c727f1f8567ac4b2649d4a0a236700c5763959c14680460e31fe1a1f846d4569"
+    },
+    {
+      "segment_id": "segment-13",
+      "kind": "paragraph",
+      "location": {
+        "line": 25
+      },
+      "text": "从无筛选开始选择分类“小说”、仅状态“在架”，应为BK-001与BK-004，共2条，1页、不能翻第2页。重置应回默认第1页8条全集。用例前置和固定数据必须独立写全，不能写“沿用上例”。",
+      "quote_sha256": "f843d25b20ec13ad8b504308febf8e86dd8b81a0fe3494c052257fbf3f33fa37"
+    },
+    {
+      "segment_id": "segment-14",
+      "kind": "paragraph",
+      "location": {
+        "line": 27
+      },
+      "text": "## 范围",
+      "quote_sha256": "3ff7a8f8b408b306017854d9ea68ae6ce37b86982628e6e561782c5da9239815"
+    },
+    {
+      "segment_id": "segment-15",
+      "kind": "paragraph",
+      "location": {
+        "line": 29
+      },
+      "text": "只设计前端和后端业务测试用例；通讯协议后补。无登录、创建、借还、删除、详情、性能秒数或像素样式验收义务；无原型时不猜定位或页面结构。",
+      "quote_sha256": "cfe220c2c290d0ea223a9b2fe2d9f24a25d92edad314064d3fd946b2ed77fc39"
+    }
+  ],
+  "issues": [],
+  "document_version": "R3-1.0",
+  "document_status": "CONFIRMED",
+  "created_at": "2026-10-01T13:31:42.670Z",
+  "model_analysis_status": "NOT_RUN"
+}

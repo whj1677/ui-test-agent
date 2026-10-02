@@ -1,0 +1,1022 @@
+{
+  "implementation": "equals-trim",
+  "candidate": "raw-partial",
+  "scope": "independent synthetic HTTP target; actual production executor; not formal workbench product run",
+  "case_sha256": "7981F3BF9D1BA98BEA8170528CF4B20E8B73C4CAFA5E86316B7BFD7B8D3725C5",
+  "execution_sha256": "8bc4d6dcd7838a9d02cc7654233592cde2c437a230142feea9b0cdca0aeec339",
+  "frozenCase": {
+    "case_type": "BACKEND",
+    "status": "CONFIRMED",
+    "title": "独立合成：原样含空格部分编号与空关键词边界",
+    "preconditions": "独立只读合成数据集恰含BK-001、BK-006、BK-106、XY-006；不读取或修改旧项目数据。查询无分类/状态筛选，从page=1发起，每页5条，编号升序。",
+    "test_data": "固定四条记录见dataset；原始输入依次为空串、一个空格+K-00+一个空格、一个空格+K-999+一个空格、空格+Tab+空格。编号或书名包含匹配，不区分大小写，去输入两端空格；空关键词不筛选。",
+    "steps": [
+      {
+        "order": 1,
+        "action": "GET查询空关键词page=1，建立字面基线。",
+        "expected": "返回四条固定记录BK-001、BK-006、BK-106、XY-006，编号升序；逐记录code/title/category/status符合固定数据；total=4、page=1、page_size=5、pages=1。"
+      },
+      {
+        "order": 2,
+        "action": "GET以原样“ K-00 ”查询page=1，不在调用侧trim。",
+        "expected": "去除两端空格后按编号包含匹配；只返回BK-001与BK-006，按编号升序且四字段符合固定数据，排除BK-106和XY-006；total=2、page=1、page_size=5、pages=1。"
+      },
+      {
+        "order": 3,
+        "action": "GET以原样“ K-999 ”查询page=1，不在调用侧trim。",
+        "expected": "HTTP200且可解析JSON，items为空数组、total=0、page=1、page_size=5；无命中是正常业务结果。原来源未定义零结果pages，不能补造其预期。"
+      },
+      {
+        "order": 4,
+        "action": "GET以原样空格+Tab+空格查询page=1，独立读回全部数据。",
+        "expected": "全空白去除后为空关键词，不筛选；返回原四条记录及原四字段和顺序，数据未变；total=4、page=1、page_size=5、pages=1。"
+      }
+    ]
+  },
+  "dataset": [
+    {
+      "code": "BK-001",
+      "title": "围城",
+      "category": "小说",
+      "status": "在架"
+    },
+    {
+      "code": "BK-006",
+      "title": "深入浅出Node.js",
+      "category": "科技",
+      "status": "在架"
+    },
+    {
+      "code": "BK-106",
+      "title": "合成测试记录106",
+      "category": "科技",
+      "status": "在架"
+    },
+    {
+      "code": "XY-006",
+      "title": "合成测试记录XY",
+      "category": "历史",
+      "status": "借出"
+    }
+  ],
+  "execution": {
+    "schema": "workbench/backend-execution-v1",
+    "environment_id": "synthetic-trim-contains",
+    "setup": [],
+    "cleanup": [],
+    "steps": [
+      {
+        "order": 1,
+        "requests": [
+          {
+            "id": "query-1",
+            "method": "GET",
+            "path": "/api/books?page=1&keyword=&category=&status=",
+            "assertions": [
+              {
+                "target": "status",
+                "op": "equals",
+                "value": 200
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "value": "application/json"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "value": 4
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "value": 4
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "value": 5
+              },
+              {
+                "target": "json",
+                "pointer": "/pages",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/code",
+                "op": "equals",
+                "value": "BK-001"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/title",
+                "op": "equals",
+                "value": "围城"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/category",
+                "op": "equals",
+                "value": "小说"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/code",
+                "op": "equals",
+                "value": "BK-006"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/title",
+                "op": "equals",
+                "value": "深入浅出Node.js"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/category",
+                "op": "equals",
+                "value": "科技"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/code",
+                "op": "equals",
+                "value": "BK-106"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/title",
+                "op": "equals",
+                "value": "合成测试记录106"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/category",
+                "op": "equals",
+                "value": "科技"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/code",
+                "op": "equals",
+                "value": "XY-006"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/title",
+                "op": "equals",
+                "value": "合成测试记录XY"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/category",
+                "op": "equals",
+                "value": "历史"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/status",
+                "op": "equals",
+                "value": "借出"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "order": 2,
+        "requests": [
+          {
+            "id": "query-2",
+            "method": "GET",
+            "path": "/api/books?page=1&keyword=%20K-00%20&category=&status=",
+            "assertions": [
+              {
+                "target": "status",
+                "op": "equals",
+                "value": 200
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "value": "application/json"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "value": 2
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "value": 2
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "value": 5
+              },
+              {
+                "target": "json",
+                "pointer": "/pages",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/code",
+                "op": "equals",
+                "value": "BK-001"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/title",
+                "op": "equals",
+                "value": "围城"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/category",
+                "op": "equals",
+                "value": "小说"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/code",
+                "op": "equals",
+                "value": "BK-006"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/title",
+                "op": "equals",
+                "value": "深入浅出Node.js"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/category",
+                "op": "equals",
+                "value": "科技"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/status",
+                "op": "equals",
+                "value": "在架"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "requests": [
+          {
+            "id": "query-3",
+            "method": "GET",
+            "path": "/api/books?page=1&keyword=%20K-999%20&category=&status=",
+            "assertions": [
+              {
+                "target": "status",
+                "op": "equals",
+                "value": 200
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "value": "application/json"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "value": 0
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "value": 0
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "value": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "order": 4,
+        "requests": [
+          {
+            "id": "query-4",
+            "method": "GET",
+            "path": "/api/books?page=1&keyword=%20%09%20&category=&status=",
+            "assertions": [
+              {
+                "target": "status",
+                "op": "equals",
+                "value": 200
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "value": "application/json"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "value": 4
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "value": 4
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "value": 5
+              },
+              {
+                "target": "json",
+                "pointer": "/pages",
+                "op": "equals",
+                "value": 1
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/code",
+                "op": "equals",
+                "value": "BK-001"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/title",
+                "op": "equals",
+                "value": "围城"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/category",
+                "op": "equals",
+                "value": "小说"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/code",
+                "op": "equals",
+                "value": "BK-006"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/title",
+                "op": "equals",
+                "value": "深入浅出Node.js"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/category",
+                "op": "equals",
+                "value": "科技"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/code",
+                "op": "equals",
+                "value": "BK-106"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/title",
+                "op": "equals",
+                "value": "合成测试记录106"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/category",
+                "op": "equals",
+                "value": "科技"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/status",
+                "op": "equals",
+                "value": "在架"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/code",
+                "op": "equals",
+                "value": "XY-006"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/title",
+                "op": "equals",
+                "value": "合成测试记录XY"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/category",
+                "op": "equals",
+                "value": "历史"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/status",
+                "op": "equals",
+                "value": "借出"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "request_timeout_ms": 1000,
+    "timeout_ms": 5000
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "raw_keyword": "",
+      "path": "/api/books?page=1&keyword=&category=&status="
+    },
+    {
+      "method": "GET",
+      "raw_keyword": " K-00 ",
+      "path": "/api/books?page=1&keyword=%20K-00%20&category=&status="
+    }
+  ],
+  "result": {
+    "schema": "workbench/backend-result-v1",
+    "runner_kind": "HTTP_JSON",
+    "run_id": "backend-run-68bccb72-301f-40cb-82c8-81b3e0178a5e",
+    "case_version": 1,
+    "case_content_sha256": "7981F3BF9D1BA98BEA8170528CF4B20E8B73C4CAFA5E86316B7BFD7B8D3725C5",
+    "binding_id": "synthetic-binding",
+    "binding_version": 1,
+    "protocol_source_id": "synthetic-protocol-v1",
+    "protocol_sha256": "5f45c6322cf37f292f15d2c641546a5d37ed30b63b362f4044c2056f405d1d5a",
+    "execution_sha256": "8bc4d6dcd7838a9d02cc7654233592cde2c437a230142feea9b0cdca0aeec339",
+    "environment_id": "synthetic-trim-contains",
+    "environment_identity": "48d143561fd1f3773d2a23e98a8eac067610d8ddfaa45947ce4c5645e82aed7c",
+    "started_at": "2026-10-02T10:04:48.166Z",
+    "finished_at": "2026-10-02T10:04:48.174Z",
+    "execution_status": "FINISHED",
+    "status": "FAILED",
+    "complete_pass": false,
+    "model_calls": 0,
+    "requests_sent": 2,
+    "request_count_semantics": "HTTP_DISPATCH_ATTEMPTS",
+    "setup": [],
+    "steps": [
+      {
+        "order": 1,
+        "action": "GET查询空关键词page=1，建立字面基线。",
+        "expected": "返回四条固定记录BK-001、BK-006、BK-106、XY-006，编号升序；逐记录code/title/category/status符合固定数据；total=4、page=1、page_size=5、pages=1。",
+        "status": "PASSED",
+        "started_at": "2026-10-02T10:04:48.166Z",
+        "finished_at": "2026-10-02T10:04:48.171Z",
+        "requests": [
+          {
+            "request_id": "query-1",
+            "phase": "step",
+            "started_at": "2026-10-02T10:04:48.166Z",
+            "finished_at": "2026-10-02T10:04:48.171Z",
+            "status": "PASSED",
+            "request": {
+              "method": "GET",
+              "url": "http://127.0.0.1:64295/api/books?page=1&keyword=&category=&status=",
+              "headers": {
+                "accept": "application/json"
+              }
+            },
+            "response": {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-8"
+              },
+              "json": {
+                "items": [
+                  {
+                    "code": "BK-001",
+                    "title": "围城",
+                    "category": "小说",
+                    "status": "在架"
+                  },
+                  {
+                    "code": "BK-006",
+                    "title": "深入浅出Node.js",
+                    "category": "科技",
+                    "status": "在架"
+                  },
+                  {
+                    "code": "BK-106",
+                    "title": "合成测试记录106",
+                    "category": "科技",
+                    "status": "在架"
+                  },
+                  {
+                    "code": "XY-006",
+                    "title": "合成测试记录XY",
+                    "category": "历史",
+                    "status": "借出"
+                  }
+                ],
+                "total": 4,
+                "page": 1,
+                "page_size": 5,
+                "pages": 1
+              }
+            },
+            "assertions": [
+              {
+                "target": "status",
+                "pointer": null,
+                "op": "equals",
+                "expected": 200,
+                "actual": 200,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "expected": "application/json",
+                "actual": "application/json; charset=utf-8",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "expected": 4,
+                "actual": 4,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "expected": 4,
+                "actual": 4,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "expected": 1,
+                "actual": 1,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "expected": 5,
+                "actual": 5,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/pages",
+                "op": "equals",
+                "expected": 1,
+                "actual": 1,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/code",
+                "op": "equals",
+                "expected": "BK-001",
+                "actual": "BK-001",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/title",
+                "op": "equals",
+                "expected": "围城",
+                "actual": "围城",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/category",
+                "op": "equals",
+                "expected": "小说",
+                "actual": "小说",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/status",
+                "op": "equals",
+                "expected": "在架",
+                "actual": "在架",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/code",
+                "op": "equals",
+                "expected": "BK-006",
+                "actual": "BK-006",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/title",
+                "op": "equals",
+                "expected": "深入浅出Node.js",
+                "actual": "深入浅出Node.js",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/category",
+                "op": "equals",
+                "expected": "科技",
+                "actual": "科技",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/status",
+                "op": "equals",
+                "expected": "在架",
+                "actual": "在架",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/code",
+                "op": "equals",
+                "expected": "BK-106",
+                "actual": "BK-106",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/title",
+                "op": "equals",
+                "expected": "合成测试记录106",
+                "actual": "合成测试记录106",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/category",
+                "op": "equals",
+                "expected": "科技",
+                "actual": "科技",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/2/status",
+                "op": "equals",
+                "expected": "在架",
+                "actual": "在架",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/code",
+                "op": "equals",
+                "expected": "XY-006",
+                "actual": "XY-006",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/title",
+                "op": "equals",
+                "expected": "合成测试记录XY",
+                "actual": "合成测试记录XY",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/category",
+                "op": "equals",
+                "expected": "历史",
+                "actual": "历史",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/3/status",
+                "op": "equals",
+                "expected": "借出",
+                "actual": "借出",
+                "actual_exists": true,
+                "status": "PASSED"
+              }
+            ],
+            "error": null
+          }
+        ]
+      },
+      {
+        "order": 2,
+        "action": "GET以原样“ K-00 ”查询page=1，不在调用侧trim。",
+        "expected": "去除两端空格后按编号包含匹配；只返回BK-001与BK-006，按编号升序且四字段符合固定数据，排除BK-106和XY-006；total=2、page=1、page_size=5、pages=1。",
+        "status": "FAILED",
+        "started_at": "2026-10-02T10:04:48.171Z",
+        "finished_at": "2026-10-02T10:04:48.174Z",
+        "requests": [
+          {
+            "request_id": "query-2",
+            "phase": "step",
+            "started_at": "2026-10-02T10:04:48.171Z",
+            "finished_at": "2026-10-02T10:04:48.174Z",
+            "status": "FAILED",
+            "request": {
+              "method": "GET",
+              "url": "http://127.0.0.1:64295/api/books?page=1&keyword=%20K-00%20&category=&status=",
+              "headers": {
+                "accept": "application/json"
+              }
+            },
+            "response": {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-8"
+              },
+              "json": {
+                "items": [],
+                "total": 0,
+                "page": 1,
+                "page_size": 5,
+                "pages": 1
+              }
+            },
+            "assertions": [
+              {
+                "target": "status",
+                "pointer": null,
+                "op": "equals",
+                "expected": 200,
+                "actual": 200,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "header",
+                "pointer": "/content-type",
+                "op": "media_type_equals",
+                "expected": "application/json",
+                "actual": "application/json; charset=utf-8",
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items",
+                "op": "length",
+                "expected": 2,
+                "actual": 0,
+                "actual_exists": true,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/total",
+                "op": "equals",
+                "expected": 2,
+                "actual": 0,
+                "actual_exists": true,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/page",
+                "op": "equals",
+                "expected": 1,
+                "actual": 1,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/page_size",
+                "op": "equals",
+                "expected": 5,
+                "actual": 5,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/pages",
+                "op": "equals",
+                "expected": 1,
+                "actual": 1,
+                "actual_exists": true,
+                "status": "PASSED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/code",
+                "op": "equals",
+                "expected": "BK-001",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/title",
+                "op": "equals",
+                "expected": "围城",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/category",
+                "op": "equals",
+                "expected": "小说",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/0/status",
+                "op": "equals",
+                "expected": "在架",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/code",
+                "op": "equals",
+                "expected": "BK-006",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/title",
+                "op": "equals",
+                "expected": "深入浅出Node.js",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/category",
+                "op": "equals",
+                "expected": "科技",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              },
+              {
+                "target": "json",
+                "pointer": "/items/1/status",
+                "op": "equals",
+                "expected": "在架",
+                "actual": null,
+                "actual_exists": false,
+                "status": "FAILED"
+              }
+            ],
+            "error": null
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "action": "GET以原样“ K-999 ”查询page=1，不在调用侧trim。",
+        "expected": "HTTP200且可解析JSON，items为空数组、total=0、page=1、page_size=5；无命中是正常业务结果。原来源未定义零结果pages，不能补造其预期。",
+        "status": "NOT_RUN",
+        "started_at": null,
+        "finished_at": null,
+        "requests": []
+      },
+      {
+        "order": 4,
+        "action": "GET以原样空格+Tab+空格查询page=1，独立读回全部数据。",
+        "expected": "全空白去除后为空关键词，不筛选；返回原四条记录及原四字段和顺序，数据未变；total=4、page=1、page_size=5、pages=1。",
+        "status": "NOT_RUN",
+        "started_at": null,
+        "finished_at": null,
+        "requests": []
+      }
+    ],
+    "cleanup": [],
+    "technical_error": null
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "case_id": "case-d6507f77-62a4-4619-b110-1f496632b8e6",
+  "external_id": "BE-F2-01",
+  "title": "后端搜索“ BK-006 ”去除两端空格后按编号包含匹配",
+  "module": "F2 搜索",
+  "status": "CONFIRMED",
+  "current_version": 1,
+  "root_source": {
+    "type": "requirements-design",
+    "stable_id": "requirements:design-0df66e6a-b86d-48fd-9bcb-1037d181ebae:candidate-a139aae7-74d3-4ae7-981d-633dd5a60d55",
+    "project_id": "project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+    "design_id": "design-0df66e6a-b86d-48fd-9bcb-1037d181ebae",
+    "design_revision": 8,
+    "source_snapshots": [
+      {
+        "snapshot_id": "source-c2edd308-bd96-4e6e-b7e4-0606a3f4960b",
+        "sha256": "04323c6ee044d34648eaf2f46606ef2f2964dbba2c76063a586270f62e845e03"
+      },
+      {
+        "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+        "sha256": "05f3e72c534616a80fc17bfa20d65a0ae797469c39990697aa29c32b69de6298"
+      }
+    ]
+  },
+  "lineage": [
+    {
+      "project_id": "project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+      "case_id": "case-d6507f77-62a4-4619-b110-1f496632b8e6",
+      "version": 1,
+      "change": "REQUIREMENTS_CONFIRMED",
+      "at": "2026-10-01T14:03:44.829Z"
+    }
+  ],
+  "import_batch_id": "design-0df66e6a-b86d-48fd-9bcb-1037d181ebae",
+  "created_at": "2026-10-01T14:03:44.829Z",
+  "updated_at": "2026-10-01T14:03:44.829Z",
+  "versions": [
+    {
+      "version": 1,
+      "content": {
+        "external_id": "BE-F2-01",
+        "title": "后端搜索“ BK-006 ”去除两端空格后按编号包含匹配",
+        "module": "F2 搜索",
+        "preconditions": "固定8条图书记录已按来源初始化；默认无筛选；从第1页发起查询；关键词输入为“ BK-006 ”（含首尾空格）。",
+        "test_data": "固定记录：BK-001 围城/小说/在架；BK-002 时间简史/科技/在架；BK-003 人类简史/历史/借出；BK-004 活着/小说/在架；BK-005 三体/小说/借出；BK-006 深入浅出Node.js/科技/在架；BK-007 小王子/少儿/在架；BK-008 明朝那些事儿/历史/在架。关键词：“ BK-006 ”；分类和状态不限制；页码：第1页。",
+        "case_type": "BACKEND",
+        "steps": [
+          {
+            "order": 1,
+            "action": "后端接收关键词“ BK-006 ”并从第1页查询。",
+            "expected": "去除输入两端空格后按编号包含匹配，仅返回BK-006（深入浅出Node.js），总数1、共1页；当前页1条；上一页和下一页均不可用。",
+            "source_refs": [
+              {
+                "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+                "segment_id": "segment-8",
+                "quote_sha256": "43aa94536fbb6982c1cff4d9092976527635e17feb3acca99a82f444cc83840f",
+                "location": {
+                  "line": 15
+                }
+              },
+              {
+                "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+                "segment_id": "segment-9",
+                "quote_sha256": "7e8e68872f77a2f20a1ea866008812a6cf4ad6d766a2ed2e0235da0f0a2631fa",
+                "location": {
+                  "line": 17
+                }
+              },
+              {
+                "snapshot_id": "source-c2edd308-bd96-4e6e-b7e4-0606a3f4960b",
+                "segment_id": "segment-4",
+                "quote_sha256": "5846e0d2d981f13004124a00b4a337736b6bba003e9dbc9e89f9a67f2979f005",
+                "location": {
+                  "line": 7
+                }
+              }
+            ]
+          }
+        ],
+        "status": "CONFIRMED",
+        "requirements_review": {
+          "design_revision": 8,
+          "human_decisions": [],
+          "coverage_decision": null,
+          "candidate_issues": [],
+          "global_issue_reviews": []
+        },
+        "source_refs": [
+          {
+            "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+            "segment_id": "segment-8",
+            "quote_sha256": "43aa94536fbb6982c1cff4d9092976527635e17feb3acca99a82f444cc83840f",
+            "location": {
+              "line": 15
+            }
+          },
+          {
+            "snapshot_id": "source-8ee46739-eef6-4f28-96be-5856ff7a9973",
+            "segment_id": "segment-9",
+            "quote_sha256": "7e8e68872f77a2f20a1ea866008812a6cf4ad6d766a2ed2e0235da0f0a2631fa",
+            "location": {
+              "line": 17
+            }
+          },
+          {
+            "snapshot_id": "source-c2edd308-bd96-4e6e-b7e4-0606a3f4960b",
+            "segment_id": "segment-4",
+            "quote_sha256": "5846e0d2d981f13004124a00b4a337736b6bba003e9dbc9e89f9a67f2979f005",
+            "location": {
+              "line": 7
+            }
+          }
+        ],
+        "requirements_origin": {
+          "project_id": "project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+          "design_id": "design-0df66e6a-b86d-48fd-9bcb-1037d181ebae",
+          "candidate_id": "candidate-a139aae7-74d3-4ae7-981d-633dd5a60d55"
+        }
+      },
+      "content_sha256": "E03744371012758041695B51A7E19B13253E2CD20B0AB82EB0E3B91E5D44E043",
+      "created_at": "2026-10-01T14:03:44.829Z",
+      "source": "REQUIREMENTS_CONFIRMED"
+    }
+  ]
+}

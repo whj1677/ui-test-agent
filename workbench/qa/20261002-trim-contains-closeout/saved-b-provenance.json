@@ -1,0 +1,113 @@
+{
+  "file": "workbench/qa/20261001-release-goal-round4/closeout/b-persisted-final.json",
+  "sha256": "4c5fb36f3b244ce155e5d4ed1571bb626f8fbb63427eb6242ead542e0686fe15",
+  "status": "REPAIR_REQUIRED",
+  "findings": [
+    {
+      "kind": "WEAK_ASSERTION",
+      "step_order": 1,
+      "source": {
+        "field": "expected",
+        "quote": "去除输入两端空格后按编号包含匹配"
+      },
+      "message": "请求以原样关键词（keyword=%20BK-006%20）发起，配合 /total=1、/items length=1、/items/0/code=BK-006 只能证明首尾空格被消除（若未去除则按编号匹配为空）。但该关键词去除空格后恰等于完整编号 BK-006，因此“编号包含匹配”与“去空格后的精确等值匹配”对本冻结输入产生完全相同的可观察结果；候选的全部断言在两种实现下都会通过，未提供任何可区分“包含”语义的证据。",
+      "suggestion": "不在候选内自行新增未授权的部分关键词输入来“变绿”；将“包含匹配”标注为按当前冻结输入不可判别。若确需独立验收包含语义，应由原用例提供可区分的部分编号关键词，并对该输入补相应结果集断言。",
+      "location": {
+        "pointer": "/steps/0/requests/0/assertions/8"
+      }
+    }
+  ],
+  "persisted_mcp_boundary": {
+    "schema": "workbench/quality-review-mcp-boundary-v1",
+    "received": 9,
+    "retained": 9,
+    "truncated": false,
+    "requests": [
+      {
+        "number": 1,
+        "bytes": 280,
+        "sha256": "2d6e560663b30185c0680e157110159805f2f628045dd515a6a0557bcd66916f",
+        "method": "server/discover",
+        "tool": null,
+        "outcome": "PROTOCOL_RESPONSE",
+        "http_status": 200
+      },
+      {
+        "number": 2,
+        "bytes": 163,
+        "sha256": "40902c765afca2b3658a4c98787806ed8b1a716cf4a4874b273eadce48a9ffb8",
+        "method": "initialize",
+        "tool": null,
+        "outcome": "PROTOCOL_RESPONSE",
+        "http_status": 200
+      },
+      {
+        "number": 3,
+        "bytes": 54,
+        "sha256": "59951ca0b212b103876fa23a9e58bcbbc8fbcc0120e3f5ee7214461e2bd1cd5e",
+        "method": "OTHER",
+        "tool": null,
+        "outcome": "PROTOCOL_RESPONSE",
+        "http_status": 202
+      },
+      {
+        "number": 4,
+        "bytes": 46,
+        "sha256": "75f0c7627a35c7e96a0a88482622a0d1ec7e81c0eb5414a88ba7aab9450cf73b",
+        "method": "tools/list",
+        "tool": null,
+        "outcome": "PROTOCOL_RESPONSE",
+        "http_status": 200
+      },
+      {
+        "number": 5,
+        "bytes": 91,
+        "sha256": "4ab76c1ca0c4a31f459c099e8004aa0f626257846f85c2c9a408159a36bb39c2",
+        "method": "tools/call",
+        "tool": "read_case",
+        "outcome": "INVOKED",
+        "http_status": 200
+      },
+      {
+        "number": 6,
+        "bytes": 1198,
+        "sha256": "9c99427177a5e4c19d37f6b21436f1ff20e1cde512b71416f9f21ccdb4ead014",
+        "method": "tools/call",
+        "tool": "submit_obligations",
+        "outcome": "INVOKED",
+        "http_status": 200
+      },
+      {
+        "number": 7,
+        "bytes": 96,
+        "sha256": "db8d84bc44e34239f81044a5a2d49b996275a9a9c5caa0b12e279baa09bda84d",
+        "method": "tools/call",
+        "tool": "read_candidate",
+        "outcome": "INVOKED",
+        "http_status": 200
+      },
+      {
+        "number": 8,
+        "bytes": 95,
+        "sha256": "78b14e86bc4967348cef6ae529355a2a5f2f123a1b30c70a9c1d505199bf7cda",
+        "method": "tools/call",
+        "tool": "read_evidence",
+        "outcome": "INVOKED",
+        "http_status": 200
+      },
+      {
+        "number": 9,
+        "bytes": 3024,
+        "sha256": "dbfe40bb682295b89c12ba558347086ba826ac43e7df6f7a4ffbf72359013ab2",
+        "method": "tools/call",
+        "tool": "submit_review",
+        "outcome": "INVOKED",
+        "http_status": 200
+      }
+    ]
+  },
+  "original_decoder_failure_file": "workbench/qa/20261001-release-goal-round4/closeout/original-b-plan-before.json",
+  "original_SSE": null,
+  "provider_or_SDK_origin": "UNKNOWN_NOT_REPRODUCED_OR_RETRIED_THIS_TASK",
+  "new_provider_requests": 0
+}
