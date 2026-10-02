@@ -1,0 +1,26 @@
+{
+  "HEAD": "a037e784aafaf137d667afe68936c85f7fe59475",
+  "groups": {
+    "KNOWN_PROJECT_IMPLEMENTATION": 174,
+    "CROSS_REQ_SHARED_OR_UNKNOWN_FULL_DIFF": 42,
+    "NON_SOURCE_INPUT": 4
+  },
+  "audited_files": 220,
+  "missing_at_HEAD": 153,
+  "modified_at_HEAD": 67,
+  "has_current_content_reachable_in_Git": 102,
+  "has_current_content_in_r4e_ZIP": 139,
+  "no_current_content_Git_or_ZIP": 54,
+  "model_calls": 0,
+  "product_files_changed": 0,
+  "audited_files_staged": 0,
+  "stage_experiments": 0,
+  "reachable_raw_Git_bytes": 74,
+  "remaining_project_source_build_test_inputs_without_Git_or_ZIP_content": 53,
+  "source_candidate_rows_excluding_four_non_source": 216,
+  "exact_raw_current_bytes_in_Git_or_ZIP": 164,
+  "EOL_only_recovery_without_exact_raw_archive": [
+    "workbench/tests/backend-manager.test.mjs",
+    "workbench/tests/development-session.test.mjs"
+  ]
+}

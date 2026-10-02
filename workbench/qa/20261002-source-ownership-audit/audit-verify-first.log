@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\01_AI工程\01_工程项目\ui-test-agent\workbench\qa\20261002-source-ownership-audit\verify_audit.py", line 82, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\01_AI工程\01_工程项目\ui-test-agent\workbench\qa\20261002-source-ownership-audit\verify_audit.py", line 46, in main
+    assert (ROOT/r['exact_private_patch']).is_file(),r['path']
+            ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for /: 'WindowsPath' and 'NoneType'

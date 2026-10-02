@@ -1,0 +1,1 @@
+{"groups": {"KNOWN_PROJECT_IMPLEMENTATION": 174, "CROSS_REQ_SHARED_OR_UNKNOWN_FULL_DIFF": 42, "NON_SOURCE_INPUT": 4}, "decision_groups": {"0039": 32, "SHARED_INTEGRATION": 42, "0037+0038+0039": 2, "NON_SOURCE": 4, "0037": 52, "0038": 64, "0037+0038": 17, "0040": 6, "0037+0039": 1}, "external_lock_entries": 674, "new_models": 0}

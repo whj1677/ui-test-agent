@@ -1,0 +1,75 @@
+{
+  "status": "AUDIT_INPUT_AND_REPORT_CONSISTENCY_VERIFIED_NOT_PRODUCT_OR_RELEASE_ACCEPTANCE",
+  "HEAD": "a037e784aafaf137d667afe68936c85f7fe59475",
+  "branch": "codex/req0038-project-testing",
+  "protected_original_files": 4754,
+  "protected_original_matches_previous_authorized_state": true,
+  "required_inventory_files_unchanged": 401,
+  "audited_files_unchanged": 220,
+  "complete_private_diff_files_sha_verified": 216,
+  "mixed_50_hashes_and_complete_diff_or_whole_file_references_verified": true,
+  "service_identity": {
+    "schema": "workbench/service-identity-v1",
+    "service_instance_id": "service-870f98b2-8271-4cb6-8cca-d69176f68e33",
+    "captured_at": "2026-10-01T16:10:40.463Z",
+    "source_sha256": "2433849236c5d65c234ad5a7cfc43f44401b1be0cd240fe540b0e08d364b1801",
+    "source_file_count": 259,
+    "license_runtime": {
+      "package_version": "0.2.0",
+      "component_version": "1.0.0-rsa",
+      "files": [
+        {
+          "path": "@offline/device-license/package.json",
+          "sha256": "f53c9cd696d57841fcb5299b6ed51ac90e7790d4ce0938f3cf72a847e5c0f570"
+        },
+        {
+          "path": "@offline/device-license/index.mjs",
+          "sha256": "915e77b74e2899525d5bef508874f8694c72ea8328b23fb079570b9b5083da55"
+        },
+        {
+          "path": "@offline/device-license/hardware.mjs",
+          "sha256": "fbeb56c469b12a6d63cf7ef9beece8d601e06fbc1a9b29cdfe60b42aa2159b38"
+        },
+        {
+          "path": "@offline/device-license/core/bridge.mjs",
+          "sha256": "82d167c9228238633dca1840d3c1fb6986fdd060481d0dbcee01607d6388b8f6"
+        },
+        {
+          "path": "@offline/device-license/core/schema.mjs",
+          "sha256": "d892acee24465cf57756125ff6459f2086eaa354decce873c0e4ebe176fcf7f2"
+        },
+        {
+          "path": "@offline/device-license/core/verify.mjs",
+          "sha256": "138b6ffc201e40311940314a734f95a1975e9fc43fb02080fe90b21a88c44baa"
+        },
+        {
+          "path": "@offline/device-license/core/storage.mjs",
+          "sha256": "3f04d021785c5f85af00e91b1b99b882b6563e1614306866fcbb709b53b58830"
+        },
+        {
+          "path": "@offline/device-license/bin/build-manifest.json",
+          "sha256": "acfbd9f458c537cccc1ff84a8d0f1ea5398c58b2b1e70365d92fd41087a26cc1"
+        },
+        {
+          "path": "@offline/device-license/bin/DeviceLicense.dll",
+          "sha256": "28d98ade39cf079b065861ae56e8150d1f2054a5cccdcda75211e5e6e06643bd"
+        },
+        {
+          "path": "@offline/device-license/bin/DeviceLicense.Bridge.exe",
+          "sha256": "606ad1ce435bf0e67dbb17849435a1d22f6ea95ac869dc51421f62078651c6f1"
+        }
+      ]
+    },
+    "configuration_sha256": "489efb5f9d4b8a95bf4dc4799c6a6c979c070290c381d944b56c64ad9ceb0dfa",
+    "data_root_sha256": "bf511e89bdd92323987b5c5400517a536d756e8a2290902477df4fe6e5fe053d",
+    "entry": "http://127.0.0.1:4322/workspace/"
+  },
+  "active_tasks": {},
+  "primary_index_empty_before_this_audit_archive": true,
+  "new_audit_secret_shape_scan_findings": [],
+  "source_REQ_checker_data_configuration_edits": 0,
+  "model_calls": 0,
+  "product_tests": 0,
+  "stage_experiments": 0,
+  "last_gate_result_reused_only": "EXIT_1_FIVE_REFUSALS_PRESERVED; checker not rerun in this read-only audit"
+}
