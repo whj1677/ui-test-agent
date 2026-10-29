@@ -215,6 +215,8 @@ export class BuildTaskManager {
     this.generationDisabled = options.generationDisabled === true;
     this.candidateTrialAuthorizations = options.candidateTrialAuthorizations || [];
     this.candidateTrialEnvironments = options.candidateTrialEnvironments || [];
+    this.projectTargetAccess = options.projectTargetAccess || null;
+    this.projectTrialAuthorization = options.projectTrialAuthorization || null;
     this.trialRequests = new Map();
     this.paths = options.paths;
     this.adapter = options.adapter || buildAdapter;
@@ -223,6 +225,7 @@ export class BuildTaskManager {
       apiKey: process.env.DEEPSEEK_API_KEY,
       baseUrl: process.env.DEEPSEEK_BASE_URL,
     }));
+    this.storedCredentialProvider = options.storedCredentialProvider || null;
     this.now = options.now || (() => new Date());
     this.idFactory = options.idFactory || (() => taskId(this.now()));
     this.otherActive = options.otherActive || (() => false);
@@ -254,7 +257,7 @@ export class BuildTaskManager {
     });
   }
 
-  // 认证会话看守：活动 attempt/run 期间推送监听 + 每秒只读身份复核。
+  // 运行中页面认证仅被动观察，避免在 Agent 的上下文内反复开关页面。
   // 只中止绑定了同一 scope 与 session_version 的本服务活动，不影响其他项目会话。
   #startAuthWatch(scope, version, controller) {
     this.#stopAuthWatch();
@@ -263,7 +266,7 @@ export class BuildTaskManager {
       if (watch.detected || watch.probing || controller.signal.aborted) return;
       watch.probing = true;
       try {
-        const status = await this.authSessions.check(scope);
+        const status = await this.authSessions.check(scope, { passive: true });
         if (status.status !== 'VALID' || status.session_version !== version) {
           this.#tripAuthInvalid(watch, status.reason || status.status || 'AUTH_SESSION_INVALIDATED', 'identity_check');
         }
@@ -326,6 +329,13 @@ export class BuildTaskManager {
   #assertWritable() {
     if (this.shutdownRequested) throw new Error('WORKBENCH_SHUTTING_DOWN');
     if (this.storageFault) throw new Error('BUILD_STORAGE_UNAVAILABLE');
+  }
+
+  async modelCredentials() {
+    if (this.useStoredDshCredentials && !this.storedCredentialProvider) return { apiKey: null, baseUrl: null };
+    const credentials = await (this.useStoredDshCredentials ? this.storedCredentialProvider : this.credentialProvider)();
+    if (!credentials?.apiKey || !credentials?.baseUrl) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
+    return { apiKey: credentials.apiKey, baseUrl: credentials.baseUrl };
   }
 
   async bindDevelopmentAuth(task) { return this.#bindAuthSession(task); }
@@ -442,6 +452,7 @@ export class BuildTaskManager {
 
   async #submitProjectCase(request, identity, fingerprint) {
     if (!this.caseStore) throw new Error('CASE_BUILD_STORE_UNAVAILABLE');
+    const projectEnvironment = await this.projectEnvironments?.assert(identity.project_id, 'ui', identity.environment_id);
     const existing = (await this.store.listTasks()).filter((task) => task.source?.creation_request_id === request.request_id);
     if (existing.length) {
       if (existing.some((task) => persistedRequestFingerprint(task) !== fingerprint)) {
@@ -449,7 +460,8 @@ export class BuildTaskManager {
       }
       return existing[0];
     }
-    const environmentDefinition = await loadProjectCaseEnvironment(this.paths, identity.environment_id);
+    const environmentDefinition = await this.projectTargetAccess?.environmentDefinition(identity.environment_id, identity.project_id) ||
+      await loadProjectCaseEnvironment(this.paths, identity.environment_id);
     const authEnvironment = Boolean(environmentDefinition.internal.auth01);
     if (authEnvironment) {
       if (!this.authSessions) throw new Error('AUTH_BUILD_UNAVAILABLE');
@@ -497,7 +509,7 @@ export class BuildTaskManager {
 
     const now = this.now().toISOString();
     const assembled = assembleProjectCaseInput({
-      project, item, versionRecord, environmentDefinition, frozenAt: now,
+      project, item, versionRecord, environmentDefinition, frozenAt: now, projectEnvironmentIdentity: projectEnvironment?.ui_identity,
     });
     const budget = await this.store.getBudget();
     let authorization = this.authorizationId ? await this.store.getRevalidationAuthorization() : null;
@@ -600,6 +612,7 @@ export class BuildTaskManager {
     this.starting = true;
     try {
       const task = await this.store.getTask(taskId);
+      if (task?.source?.project_id) await this.projectEnvironments?.assertTask(task);
       if (!task?.trial_binding || task.source?.kind !== 'project-case' || task.authorization?.authorization_id !== E2E01_PROJECT_CASE_AUTHORIZATION_ID || this.authorizationId !== E2E01_PROJECT_CASE_AUTHORIZATION_ID) throw new Error('E2E01_TRIAL_NOT_ALLOWED');
       const authorization = await this.store.getRevalidationAuthorization();
       if (!e2eAuthorizationMatches(authorization, task.authorization.scope)) throw new Error('E2E01_TRIAL_AUTHORIZATION_INVALID');
@@ -630,7 +643,10 @@ export class BuildTaskManager {
         stepObservation: { run_id: runId, candidate_sha256: candidate.sha256, executed_external_id: allowedCase.external_id,
           executed_case_id: allowedCase.case_id, executed_case_version: allowedCase.case_version,
           executed_content_sha256: allowedCase.content_sha256 } });
-      const verification = await parseCandidateReport(raw.reportPath, raw.process);
+      const verification = await parseCandidateReport(raw.reportPath, raw.process, {
+        run_id: runId, candidate_sha256: candidate.sha256, executed_external_id: allowedCase.external_id,
+        executed_case_id: allowedCase.case_id, executed_case_version: allowedCase.case_version,
+        executed_content_sha256: allowedCase.content_sha256 });
       const hashAfter = await sha256File(candidatePath);
       const stepCoverage = projectCaseStepCoverage(verification, task.input_bundle.verification_contract);
       const detected = runType === 'negative' && counterexampleDetected(verification, task.input_bundle.verification_contract);
@@ -643,7 +659,6 @@ export class BuildTaskManager {
         alreadyIndexed: task.files.map((file) => file.relative_path),
       });
       const files = indexed.files.filter((file) => file.run_id === runId);
-      const failure = verification.error?.type === 'ASSERTION_MISMATCH' ? verification.error : null;
       const failureMap = stepCoverage.items.find((item) => item.error_attributed);
       const storedAuthorization = await this.store.getRevalidationAuthorization();
       const revisionAllowed = runType === 'normal' && (!verification.complete_pass || !stepCoverage.complete) &&
@@ -703,6 +718,7 @@ export class BuildTaskManager {
     this.starting = true;
     try {
       const task = await this.store.getTask(taskId);
+      if (task?.source?.project_id) await this.projectEnvironments?.assertTask(task);
       if (!task?.auth_requirement || task.source?.kind !== 'project-case' ||
           task.authorization?.authorization_id !== AUTH01_PROJECT_CASE_AUTHORIZATION_ID ||
           this.authorizationId !== AUTH01_PROJECT_CASE_AUTHORIZATION_ID) throw new Error('AUTH01_TRIAL_NOT_ALLOWED');
@@ -740,7 +756,10 @@ export class BuildTaskManager {
           if (!watch.detected) throw error;
         }
         const verification = await parseCandidateReport(path.join(runDirectory, 'playwright-report.json'),
-          raw?.process || { exitCode: null, termination: 'auth_session_blocked' });
+          raw?.process || { exitCode: null, termination: 'auth_session_blocked' }, {
+            run_id: runId, candidate_sha256: candidate.sha256, executed_external_id: task.source.external_id,
+            executed_case_id: task.source.case_id, executed_case_version: task.source.case_version,
+            executed_content_sha256: task.source.content_sha256 });
         const hashAfter = await sha256File(candidatePath);
         const stepCoverage = projectCaseStepCoverage(verification, task.input_bundle.verification_contract);
         const replay = await renderStepReplay({
@@ -831,6 +850,7 @@ export class BuildTaskManager {
     try {
       const task = await this.store.getTask(taskIdValue);
       if (!task) throw new Error('BUILD_TASK_NOT_FOUND');
+      if (task.source?.project_id) await this.projectEnvironments?.assertTask(task);
       if (task.execution_policy?.launch_enabled === false) throw new Error('BUILD_INPUT_ONLY_TASK_NOT_STARTABLE');
       if (kind === 'initial' && (task.task_status !== 'SUBMITTED' || task.attempts.length)) throw new Error('BUILD_INITIAL_NOT_ALLOWED');
       if (kind === 'revision' && (!task.revision_allowed || task.attempts.some((item) => item.kind === 'revision'))) throw new Error('BUILD_REVISION_NOT_ALLOWED');
@@ -856,8 +876,7 @@ export class BuildTaskManager {
       // 认证任务在消耗任何预算/授权之前做启动前只读身份复核：
       // 未登录、身份不符或检查不可用时拒绝启动业务进程（不记为业务失败）。
       const authBinding = await this.#bindAuthSession(task);
-      const credentials = this.useStoredDshCredentials ? { apiKey: null, baseUrl: null } : this.credentialProvider();
-      if (!this.useStoredDshCredentials && (!credentials?.apiKey || !credentials?.baseUrl)) throw new Error('BUILD_MODEL_CONFIGURATION_REQUIRED');
+      const credentials = await this.modelCredentials();
       await this.prepareRuntime();
 
       const attemptNumber = task.attempts.length + 1;
@@ -1098,7 +1117,10 @@ export class BuildTaskManager {
           if (!authWatch?.detected) throw error;
         }
         const authResult = await parseCandidateReport(path.join(authRunDirectory, 'playwright-report.json'),
-          authRaw?.process || { exitCode: null, termination: 'auth_session_blocked' });
+          authRaw?.process || { exitCode: null, termination: 'auth_session_blocked' }, {
+            run_id: authRunId, candidate_sha256: candidateSha, executed_external_id: task.source.external_id,
+            executed_case_id: task.source.case_id, executed_case_version: task.source.case_version,
+            executed_content_sha256: task.source.content_sha256 });
         const afterAuth = await sha256File(candidatePath);
         await normalServer.close();
         normalServer = null;
@@ -1354,7 +1376,7 @@ export class BuildTaskManager {
     }));
   }
 
-  caseAutomation(projectId, caseId, version) { return caseAutomation(this, projectId, caseId, version); }
+  caseAutomation(projectId, caseId, version, context) { return caseAutomation(this, projectId, caseId, version, context); }
   startCandidateTrial(request) {
     const key = JSON.stringify([request?.project_id, request?.request_id]);
     const serialized = JSON.stringify(Object.fromEntries(Object.keys(request || {}).sort().map(k => [k, request[k]])));

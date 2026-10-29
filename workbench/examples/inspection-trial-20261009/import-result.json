@@ -1,0 +1,800 @@
+{
+  "project": {
+    "schema": "workbench/case-project-v1",
+    "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+    "name": "手动体验 · 储能站巡检工单 · 20261009",
+    "description": "全新公开合成练习：前端6条、后端6条，覆盖新增、重复编号、只读权限、组合查询与状态流转。环境4460；用例和协议已准备。脚本生成及执行由用户亲自操作。",
+    "revision": 2,
+    "created_at": "2026-10-09T01:25:38.152Z",
+    "updated_at": "2026-10-09T01:25:38.187Z",
+    "cases": [
+      {
+        "case_id": "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+        "external_id": "UI-WO-01",
+        "title": "新增工单并独立读回",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-01",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.186Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.186Z",
+        "updated_at": "2026-10-09T01:25:38.186Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-01",
+              "title": "新增工单并独立读回",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 editor，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "在新增工单区域填写编号 WO-2001、标题 储能舱温控巡检、站点 西站（WEST）、优先级 高（HIGH），点击“新增工单”。",
+                  "expected": "显示新增成功提示；新增记录可见，状态待处理（PENDING）。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "总数 4；WO-2001 恰好一条，五字段为 {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}；原有三条完整对象 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "EF23985784CD873573CAA209FFED0B4C6353D62F2FF9F70E7E223119CED931C1",
+            "created_at": "2026-10-09T01:25:38.186Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+        "external_id": "UI-WO-02",
+        "title": "重复编号被拒绝且原记录不被覆盖",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-02",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-02",
+              "title": "重复编号被拒绝且原记录不被覆盖",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 editor，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "在新增工单区域填写编号 WO-1001、标题 不得覆盖的工单、站点 西站（WEST）、优先级 普通（NORMAL），点击“新增工单”。",
+                  "expected": "显示非空重复编号拒绝说明，不得显示新增成功。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "D386AB34F8940F59CD639A57DFB1C73A537177E3981400364F15F375845749CA",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+        "external_id": "UI-WO-03",
+        "title": "只读角色新增被拒绝且数据不变",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-03",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-03",
+              "title": "只读角色新增被拒绝且数据不变",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=viewer；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 viewer，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "保持公开角色为 viewer，在新增工单区域填写编号 WO-2002、标题 只读角色提交、站点 西站（WEST）、优先级 高（HIGH），点击“新增工单”。",
+                  "expected": "显示非空只读角色拒绝说明，不得显示新增成功。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。不存在 WO-2002。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "D5181FADD84DE7C38B4461DE5716F0C5C198AA849558F95CB07C7604FD2C3320",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+        "external_id": "UI-WO-04",
+        "title": "按东站与待处理组合查询",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-04",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-04",
+              "title": "按东站与待处理组合查询",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"station\":\"EAST\",\"status\":\"PENDING\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 editor，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "在列表筛选区域选择站点 东站（EAST）、状态 待处理（PENDING），编号筛选留空，点击“查询”。",
+                  "expected": "列表仅一条 WO-1001 / PCS月度巡检 / 东站 / 高 / 待处理，总数1。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "0FB293379B758DC3A5AB875F47675FEE4A253FC642AB7A76BA85E861DF25C36E",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+        "external_id": "UI-WO-05",
+        "title": "待处理工单完成并持久化",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-05",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-05",
+              "title": "待处理工单完成并持久化",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"code\":\"WO-1001\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 editor，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "定位工单编号为 WO-1001 的行，点击该行“完成工单”。",
+                  "expected": "显示完成成功提示；WO-1001 状态变为已完成（DONE）。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "总数 3；WO-1001 五字段为 {\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}；其余两条完整对象 [{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "986202BFC8E9EE692523D3CB0009CC9E8D786ACB16EB6066FB56BC50AA355D39",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+        "external_id": "UI-WO-06",
+        "title": "已完成工单禁止重复完成",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-UI-WO-06",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "UI-WO-06",
+              "title": "已完成工单禁止重复完成",
+              "case_type": "UI",
+              "module": "储能站巡检工单",
+              "preconditions": "本地公开合成站点可访问，无需登录。每条独立使用新运行编号，不共享其他用例数据。EAST/东站、WEST/西站，HIGH/高、NORMAL/普通，PENDING/待处理、DONE/已完成。",
+              "test_data": "{\"code\":\"WO-1003\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "打开 http://127.0.0.1:4460/inspection/，填写本条全新运行编号，公开角色选择 editor，点击“初始化本次数据”。",
+                  "expected": "初始化新空间成功。未使用任何筛选时表格恰好包含三条基线，五字段为 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]，总数3。若提示已有空间则换新编号，不能重用。"
+                },
+                {
+                  "order": 2,
+                  "action": "定位初始已完成的工单 WO-1003，点击该行“完成工单”。",
+                  "expected": "显示非空已完成拒绝说明；不得把本次操作显示为完成成功。"
+                },
+                {
+                  "order": 3,
+                  "action": "将编号筛选清空，站点和状态筛选恢复“全部”，点击“查询”；再点击“刷新列表”，从页面独立读回最新完整列表。",
+                  "expected": "整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                },
+                {
+                  "order": 4,
+                  "action": "点击“清理本次数据”，仅清理当前运行编号。",
+                  "expected": "提示清理完成，表格清空且不可继续操作已删除空间；不得清理其他运行编号。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "2833264B43A5ACB0473ABA3D7736C26F5025E5261EA0C18364EF7BD07CBB4A27",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-b4aec78c-00c2-4ef4-857f-544587de6d93",
+        "external_id": "API-WO-01",
+        "title": "新增工单并独立读回",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-01",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-b4aec78c-00c2-4ef4-857f-544587de6d93",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-01",
+              "title": "新增工单并独立读回",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+                  "expected": "HTTP 201；created=true；item={\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；总数 4；WO-2001 恰好一条，五字段为 {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}；原有三条完整对象 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "4416C91C1101F38FA6F07EA86EBACB3594E470C2594B6C3856DCBB0BD6BAD4A2",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-cf9fd627-9b33-45f9-a58a-edada1430c39",
+        "external_id": "API-WO-02",
+        "title": "重复编号被拒绝且原记录不被覆盖",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-02",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-cf9fd627-9b33-45f9-a58a-edada1430c39",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-02",
+              "title": "重复编号被拒绝且原记录不被覆盖",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}。",
+                  "expected": "HTTP 409；error.code=DUPLICATE_CODE；error.message 为非空重复说明。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "99B9A45C3C1D731447DDA174D425F66955B6DE159EA39C9061A4761FF69EC9D1",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-16dd9683-964f-4b2f-9792-7b68d537d891",
+        "external_id": "API-WO-03",
+        "title": "只读角色新增被拒绝且数据不变",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-03",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-16dd9683-964f-4b2f-9792-7b68d537d891",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-03",
+              "title": "只读角色新增被拒绝且数据不变",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=viewer；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=viewer；JSON {\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+                  "expected": "HTTP 403；error.code=FORBIDDEN；error.message 为非空权限拒绝说明。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。不存在 WO-2002。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "F7694BEA4B5071D0EA9C72FB6C9601FFD513F0D2FCA2F90EC6AEFC6C0C747BAF",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-e2a3c00e-2456-442d-880e-a7421b3ecf89",
+        "external_id": "API-WO-04",
+        "title": "按东站与待处理组合查询",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-04",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-e2a3c00e-2456-442d-880e-a7421b3ecf89",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-04",
+              "title": "按东站与待处理组合查询",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"station\":\"EAST\",\"status\":\"PENDING\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders?station=EAST&status=PENDING。",
+                  "expected": "HTTP 200；total=1；items 恰好等于 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}]。不得包含 WO-1002 或 WO-1003。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "6674BCDA662F9B966B57BF1243738373D26A270ADE2A935C484BDC2DF813DD78",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-aede2e24-6a77-4f5b-93ce-d9bbac82beb9",
+        "external_id": "API-WO-05",
+        "title": "待处理工单完成并持久化",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-05",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-aede2e24-6a77-4f5b-93ce-d9bbac82beb9",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-05",
+              "title": "待处理工单完成并持久化",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"code\":\"WO-1001\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "POST /api/v1/namespaces/{{runId}}/orders/WO-1001/complete；请求头 x-synthetic-role=editor；不发送正文。",
+                  "expected": "HTTP 200；updated=true；item={\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；总数 3；WO-1001 五字段为 {\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}；其余两条完整对象 [{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "4E5573176A70F904CB9CC2D987F43CB14F37447E1C58E9033933EEC83BCD387D",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      },
+      {
+        "case_id": "case-5fb2a4a5-4cfe-41de-8a4f-e298a7b5924c",
+        "external_id": "API-WO-06",
+        "title": "已完成工单禁止重复完成",
+        "module": "储能站巡检工单",
+        "status": "CONFIRMED",
+        "current_version": 1,
+        "root_source": {
+          "type": "public-synthetic",
+          "stable_id": "inspection-20261009-API-WO-06",
+          "file_name": "01-PRD.md"
+        },
+        "lineage": [
+          {
+            "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+            "case_id": "case-5fb2a4a5-4cfe-41de-8a4f-e298a7b5924c",
+            "version": 1,
+            "imported_from": "case-package",
+            "at": "2026-10-09T01:25:38.187Z"
+          }
+        ],
+        "import_batch_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "created_at": "2026-10-09T01:25:38.187Z",
+        "updated_at": "2026-10-09T01:25:38.187Z",
+        "versions": [
+          {
+            "version": 1,
+            "content": {
+              "external_id": "API-WO-06",
+              "title": "已完成工单禁止重复完成",
+              "case_type": "BACKEND",
+              "module": "储能站巡检工单",
+              "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+              "test_data": "{\"code\":\"WO-1003\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+                  "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+                },
+                {
+                  "order": 2,
+                  "action": "POST /api/v1/namespaces/{{runId}}/orders/WO-1003/complete；请求头 x-synthetic-role=editor；不发送正文。",
+                  "expected": "HTTP 409；error.code=ALREADY_COMPLETED；error.message 为非空已完成说明。"
+                },
+                {
+                  "order": 3,
+                  "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+                  "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+                }
+              ],
+              "status": "CONFIRMED"
+            },
+            "content_sha256": "19464E8AE1E2035C1248A22A84935B68E76D1C9B7270944A20B12B07E343532D",
+            "created_at": "2026-10-09T01:25:38.187Z",
+            "source": "IMPORT"
+          }
+        ]
+      }
+    ],
+    "imports": [
+      {
+        "preview_id": "preview-b22a1261-ac18-4e7b-9e76-17897c035c9e",
+        "upload_id": "upload-8ed57cc9-3483-42c1-890b-0162e5254370",
+        "source_type": "case-package",
+        "confirmed_at": "2026-10-09T01:25:38.187Z",
+        "result": {
+          "added": 12,
+          "skipped_duplicate": 0,
+          "skipped_conflict": 0,
+          "skipped_unimportable": 0,
+          "imported_case_ids": [
+            "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+            "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+            "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+            "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+            "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+            "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+            "case-b4aec78c-00c2-4ef4-857f-544587de6d93",
+            "case-cf9fd627-9b33-45f9-a58a-edada1430c39",
+            "case-16dd9683-964f-4b2f-9792-7b68d537d891",
+            "case-e2a3c00e-2456-442d-880e-a7421b3ecf89",
+            "case-aede2e24-6a77-4f5b-93ce-d9bbac82beb9",
+            "case-5fb2a4a5-4cfe-41de-8a4f-e298a7b5924c"
+          ]
+        }
+      }
+    ]
+  },
+  "result": {
+    "added": 12,
+    "skipped_duplicate": 0,
+    "skipped_conflict": 0,
+    "skipped_unimportable": 0,
+    "imported_case_ids": [
+      "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+      "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+      "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+      "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+      "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+      "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+      "case-b4aec78c-00c2-4ef4-857f-544587de6d93",
+      "case-cf9fd627-9b33-45f9-a58a-edada1430c39",
+      "case-16dd9683-964f-4b2f-9792-7b68d537d891",
+      "case-e2a3c00e-2456-442d-880e-a7421b3ecf89",
+      "case-aede2e24-6a77-4f5b-93ce-d9bbac82beb9",
+      "case-5fb2a4a5-4cfe-41de-8a4f-e298a7b5924c"
+    ]
+  },
+  "idempotent": false
+}

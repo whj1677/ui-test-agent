@@ -3,12 +3,12 @@
   "req_id": "REQ-0037",
   "title": "Coding Agent任务内自主自测与有界修订",
   "metadata": {
-    "requirement_status": "v10第二轮独立真实UI与一次从头建例已验；取消展示问题已修复并同路径复测，候选未批准，验收限本轮范围",
+    "requirement_status": "v16原生悬浮控制条正式加载；CASE-02真人示范经恢复DSH自测、审查、独立复验及正式技术试跑，候选待人工批准；首轮传输失败保留",
     "governance_level": "G2",
-    "version": 10,
-    "last_updated": "2026-09-25"
+    "version": 16,
+    "last_updated": "2026-09-29"
   },
-  "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。",
+  "original_input": "用户2026-09-25任务：让Coding Agent在一次建例任务内自主观察、运行和修复；完整原文保留在当前任务。\n2026-09-28用户要求：Agent反复无法写好自动化时，允许人在特定浏览器操作一遍记录步骤，解决断言点问题，可行即实施并设定目标，完成后整理代码。\n2026-09-29用户确认：人工登录好再录制；支持小弹窗开始/暂停；多个断言位置可考虑画框，按此方案实施。\n2026-09-29用户：弹窗能不能悬浮；站在测试工程师角度，别做大家不好用的功能。",
   "user_requirements": [
     {
       "id": "UN-0037-01",
@@ -44,6 +44,48 @@
       "goal": "新增独立子Agent真实浏览器测试，由主管第三方验收，发现问题后定向修复复测。",
       "constraints": "唯一4322及原配置数据；复用复杂页面/用例；1名Sol high执行者；仅1新建例任务、1Harness/120工具/3自测/20分钟，不扩量或批准。",
       "success_criteria": "真实UI有限旅程、KC08新建例及独立复跑、成功/原业务失败分开、主管逐义务审查和缺陷原路径复验。"
+    },
+    {
+      "id": "UN-0037-06",
+      "status": "已确认",
+      "goal": "提高用例脚本质量，补齐编写、自测、独立覆盖/预期审查、修复、再测及独立复验反馈闭环。",
+      "constraints": "同一4322与原配置数据；不改原用例/SUT；不自动批准。沿用用户较轻子Agent执行及周额度累计50%暂停约束；本轮从31%开始。",
+      "success_criteria": "可修复实现缺口在同一会话被发现并改稿重测；漏测/放宽预期受阻；正常行为与真实缺陷分别保留真实执行结果。"
+    },
+    {
+      "id": "UN-0037-07",
+      "status": "已确认",
+      "goal": "在仅使用DeepSeek产品接入的前提下，对比无工具审查和独立DSH受控工具审查的脚本质量、人工介入与消耗。",
+      "constraints": "原4322、原数据配置、原确认用例和历史候选不变；用户确认DeepSeek额度覆盖；主管在正式运行期间不给诊断或答案；Codex共享周用量50%暂停，本轮起点36%。",
+      "success_criteria": "四个既有样本成对真实执行，冻结同源输入/构建/可控上限；保留全部失败、误漏报和未知用量，结束后主管逐义务核对，不声称未见样本或普遍收益。"
+    },
+    {
+      "id": "UN-0037-08",
+      "status": "已确认",
+      "goal": "完善现有自动故障反馈、带证据定向修订和独立复验，人工反馈为补充。",
+      "constraints": "唯一4322、原数据配置；不修改原用例/SUT/旧脚本/历史结果，不增加默认第二DSH；共享周额度50%停止。",
+      "success_criteria": "前后端修订绑定精确原运行并持久化；展示失败分类、原步骤及证据；真实验收脚本错误修复、业务缺陷保留失败、环境故障不误改业务断言。"
+    },
+    {
+      "id": "UN-0037-09",
+      "status": "已确认",
+      "goal": "人工在特定浏览器演示操作，帮助DSH编写与修复自动化脚本，明确原断言，真实验收后整理无用代码。",
+      "constraints": "正式4322，保留数据与原expected；先已确认UI用例及无登录登记目标，输入值不录制。用户已取消原50%停止线。",
+      "success_criteria": "浏览器真实动作生成可审查提示，冻结版本传入DSH且自测/独立复验有证据，不将录制成功视为业务通过。"
+    },
+    {
+      "id": "UN-0037-10",
+      "status": "已确认",
+      "goal": "支持人工登录后录制、独立控制窗和一步多个断言检查对象，复用登录态生成和测试。",
+      "constraints": "仅已配置同源认证环境，原expected不变；框选只生成定位提示；登录与输入值不录制，凭据仅内存。",
+      "success_criteria": "待登录不能采集；真实身份验证后由人开始；过期停录、换账号拒绝混用；控制窗可暂停，多个对象逐项审查后冻结进入既有DSH链路。"
+    },
+    {
+      "id": "UN-0037-11",
+      "status": "已确认",
+      "goal": "在业务浏览器前保持可拖动、可收起的置顶控制条，减少切窗和逐步指导，核对对象能辨认。",
+      "constraints": "保留现有录制、身份、原预期和DSH链；不注入可访问控制API的业务页面，不新增运行时依赖。",
+      "success_criteria": "Windows实际置顶显示；当前动作、状态、下一步、暂停和标记可用；关闭录制窗口先暂停；停止后原示范可核对。"
     }
   ],
   "confirmed_facts": [
@@ -74,7 +116,21 @@
     "v10唯一新任务build-20260925142505-0fc7ce0d：KC08从头生成，1Harness/52工具/1自测/1独立正常验证；新S2再经界面零模型复跑三步通过。主管逐义务审查无额外筛选/改预期/跳步，仍NOT_APPROVED。供应商token和费用未知。",
     "v10混合批次KC02保留期望8/实际5失败、KC08成功；取消批次一条CANCELLED一条NOT_RUN，未伪造完成结果。固定报告只含原混合2条，截图附件核验。",
     "v10独立测试发现取消项混入已执行汇总及MISSING/REPORT_MISSING展示缺口；仅修前端分类与文案，原后台状态不变。同一批次/run复测及完成批次展示回归符合；65工程回归失败0跳过0。",
-    "v10最终正式实例源码aa496e2e1610072cf559a7fe6fc9d52a095a52787d9fa8f6c905d503e50abbb6；保持原数据和配置摘要，空闲重载。新建例/运行原执行身份3667b3…保留；UI修复后不新增模型。证据workbench/qa/20260925-independent-ui/REPORT.md。"
+    "v10最终正式实例源码aa496e2e1610072cf559a7fe6fc9d52a095a52787d9fa8f6c905d503e50abbb6；保持原数据和配置摘要，空闲重载。新建例/运行原执行身份3667b3…保留；UI修复后不新增模型。证据workbench/qa/20260925-independent-ui/REPORT.md。",
+    "2026-09-28用户确认继续完善Coding Agent闭环，重点提高用例脚本质量；独立审查与提交前复验是新增实现范围，前轮Skills验收不覆盖该范围。",
+    "v13正式4322反馈闭环：9文件77项工程检查；前后端真实浏览器展示原失败分类/步骤并取消，UI只读预检携带完整run身份，后端表单请求拦截未提交；另以正式API持久化带run的新DRAFT并拒绝错配。",
+    "v13一次有人工诊断的真实DSH旧稿修订：1启动、9工具、1自测、1无工具审查、1同稿独立复验，91.075秒。第一步成员断言归位，第二步包含与结果集比较保留；同SHA 3b897a25f579d3d40d8111b267223c217a336bf753f225292884d7f2a5424a21 两次均FAILED/NOT_RUN，新稿未批准。",
+    "v13原配置/数据/SUT及4个冻结用例/4个seed保持；最后补齐self_test反馈已知身份字段后再次自主重启4322，源码5bf442600859bf38fb7174513c1e0067559382031d6f9baf6b452f6582eb30ee，元数据补齐仅工程及服务检查；真实模型/浏览器证据为先前源码7570aa044c0bd10e5b951fb78456ddbf08e4b2d3b0ce777c5769a57ed3f15a2b。",
+    "用户已授权人工示范辅助、真实验收和确认为无用代码清理；本轮先绑定确认用例与无登录登记目标，原expected不由录制实际值替代。",
+    "v14复验边界：仅受影响工程证据。正式4322确认空草稿不能确认、运行互斥和自动重启；两次专用Edge打开但CUA URL识别中止，均0事件已停止，未提供给DSH。完整链路待验；详见workbench/qa/20260928-human-demonstration/REPORT.md。",
+    "v14最终故障修复：主管独立复验16项内核/输入/HTTP集成，0失败跳过；打开及到期写失败回收活跃句柄，保留存储故障门。原4322已加载source b3436a1d467a015eaffb75bfbc23112399382009cad2b06f8ca536d18d1d64b7，配置/数据根保持。工程46项与16项有重叠不相加，真人整链路仍待验。",
+    "2026-09-29用户同意人工登录后开始录制和多个断言对象；本轮扩展覆盖v14无登录首版的范围限制，历史证据不升级。",
+    "2026-09-29正式入口发现历史UI缺case_type被拒，按现有兼容语义允许缺字段但拒绝BACKEND/null/未知值，原内容与sha不变。正式登录前门槛、控制页停止同步、空记录不可确认已执行；真人非空录制及DSH链仍待验。",
+    "v16真人demo-b5da2944-65e2-4cb3-a68d-64e60ca14ca9已录19个事件并CONFIRMED；主管核对原5步、event-6/12/18及原expected不变。DSH任务build-20260929020612-68ae3cb6实际write_draft，但TRANSPORT/DeepSeek Messages transport failed；1 Harness、36工具，0自测、0质量审查、0独立复验、无候选。见workbench/qa/20260929-demonstration-controls/human-recording-confirmed.json与dsh-task-result.json。",
+    "v16 Windows C#原生悬浮控制条取代未部署PowerShell脚本；系统.NET Framework编译，无执行策略绕过。主管工程日志floating-core 29项、visible-fix 5项、native-errors 2项、login-preflight 25项均失败0，集合重叠不相加。用户实际确认窗口可见、可拖动/收起，切回业务窗仍置顶；工具未识别原生窗，关闭及完整录制流程仍待验。",
+    "v16登录窗闪退定位为合成SUT端口4381未运行；原fixture恢复到PID26820并读回HTTP200。登录preflight先探测再清旧会话/启动，原生错误显示中文且持久。唯一正式4322空闲托管重启后service-943b0f10-3cc1-4318-b8ff-4dff1aa66621、source ee424a2414ff8c155cb1717cbbcaef82fa552d8fcb99a42d3cad7b8323615f84，原配置/数据不变。正式入口启动native PID22996并创建demo-b9a50bab-2e15-40e7-8d78-65699808c9ff；用户人工登录、检查并继续录制后，最终STOPPED/19事件/未CONFIRMED，helper已退出。它与首个已确认demo-b5da独立，不能重复计作已确认示范。用户发现录制中隐藏断言标记入口；原生窗和网页备用控制修复代码已完成，主管10项定向工程检查失败0，已于后续同入口托管重启加载。",
+    "v16断言入口修复经主管10项工程复验后，在用户第二段录制已STOPPED时托管重启原4322。service-bddcae65-d51f-4507-81d8-47821691a86a，源码f3169dc499d855b55e63ea89cab598ccc5a2ec39f8a7b0017657d6765afe2321与磁盘一致；原配置及数据根不变，见assertion-entry-official-source.json。正式界面启动新native PID15108，编译缓存CS摘要c33954d49fd87e55c20a2314d2a2e278a19cce74cf9dd2bc98a56b707c496f55。用户回报可直接进入框选、取消后保持暂停；第三次demo-f3e7a0f2-828c-4c53-8720-b5cb32b07413正式读回STOPPED/18事件/未CONFIRMED，步骤1有框选事件，见formal-native-assertion-user-trial.json。该证据只支持新版入口及取消后暂停的有限真人确认，不等于原用例确认示范；窗口X暂停未单独人工验证。首个确认示范仍是唯一DSH输入。",
+    "v16恢复DSH任务build-20260929024532-42e1d469基于首次已确认demo-b5da，原case v1与expected不变；WAITING_HUMAN_REVIEW/GENERATED/TECHNICAL_VALIDATION_PASSED。1 Harness、40工具、2自测、2质量审查、1独立复验；审查1指出抽屉位置及关闭前后整行字段缺口，DSH自主修稿，selftest2 PASSED、审查2 NO_FINDINGS、独立五步PASSED。最终S5 v2脚本SHA D49532F3060495B898B4E846894BD836A9AA59506F6572139BD775BF3D127025、bundle SHA 02F683767F4C401B7CE15AA32EC5C3C795C24159DA48BDD12902916009343969，同字节核对。正式零模型技术试跑batch-05806e27-115d-4633-bf6a-865a647c36b2/run trial-f116fd481ec434b2bf911d598ff5b65bb58c8fed五步PASSED；候选未批准。首次任务TRANSPORT失败仍保留；两次作者会话合计2 Harness、76工具，模型费用未知。仅CASE-02合成场景，非全产品/真实云平台/跨域SSO验收。见workbench/qa/20260929-demonstration-controls/REPORT.md。"
   ],
   "inferences_and_open_questions": [
     "同会话MCP结果可反馈给Agent；先用零模型协议/控制器工程测试验证后才运行两个真实任务。当前不是操作系统强隔离，工具级约束不能冒称强沙箱。"
@@ -121,6 +177,62 @@
       "requirement": "唯一入口、测试命令和服务构建身份",
       "acceptance_criteria": "默认工程测试不另起工作台/模型；正式功能仅4322；每次新run/task绑定已加载源码及脱敏配置身份；有限真实UI旅程及报告",
       "constraints": "只修已诊断功能；不改原预期，不以替身回归替代正式入口验收。"
+    },
+    {
+      "id": "DR-0037-07",
+      "status": "已实现",
+      "requirement": "绑定精确候选与原用例的独立质量审查、共享预算的修复反馈及提交前独立复验。",
+      "acceptance_criteria": "审查新上下文无工具、原文与候选位置可核对；新稿必重测；审查异常/未知不能就绪；正常单入口UI及后端独立复验失败可反馈同会话，旧已完成稿零模型兼容；正式4322实际验收。",
+      "constraints": "质量审查不是业务oracle或人工批准；不向作者泄漏paired故障/语义答案；最多3次付费质量审查及2次独立复验，原时间/工具/自测预算不重置，确认页面显示。"
+    },
+    {
+      "id": "DR-0037-08",
+      "status": "已实现",
+      "requirement": "显式实验审查模式、独立DSH只读审查工具、共享资源预算及可追溯成对比较。",
+      "acceptance_criteria": "默认A和旧记录兼容；B先提交来源义务再读候选，受控证据读取及复验，禁止修改原用例或候选；取消/漂移/超额阻止就绪；原4322四对真实比较如实结论。",
+      "constraints": "B审查工具和回放消耗原任务总工具和独立验证额度，最多3次审查，每次1审查Harness/12工具/1回放/180秒，原总截止不变；无额外模型供应商/自动批准/无限重试。"
+    },
+    {
+      "id": "DR-0037-09",
+      "status": "已实现并完成限定验证",
+      "requirement": "服务端冻结运行反馈证据，前后端自测返回结构化诊断；界面按失败来源展示修订或恢复建议。",
+      "acceptance_criteria": "伪造/跨项目/版本环境不符/运行中证据被拒；已知技术错误、疑似业务差异和未知原因分开；修订不替换旧版本，实际执行而非Agent自报判定。",
+      "constraints": "仅复用现有授权和修订执行器；网络/定位超时不能直接判定业务缺陷。反馈文字不改变已确认原预期。"
+    },
+    {
+      "id": "DR-0037-10",
+      "status": "已实现；真人示范经恢复DSH自测、审查、独立复验和正式技术试跑，候选待人工批准",
+      "requirement": "专用浏览器人工示范录制、步骤与原断言核对、冻结示范接入DSH生成修订并保留原验证链。",
+      "acceptance_criteria": "正式4322真实录制及一次DSH消费验证；身份/摘要/敏感输入/越界/中断反例；不把录制成功当测试通过。",
+      "constraints": "原用例和预期不变，单页无登录已登记非生产目标，不记录输入值或凭据，不将观察值作为新业务断言。"
+    },
+    {
+      "id": "DR-0037-11",
+      "status": "已实现；正式登录恢复已复验，过期与换账号真人验收待验",
+      "requirement": "认证示范与会话复用",
+      "acceptance_criteria": "未登录不能录制，登录后PAUSED；同账号续录、换账号拒绝；生成和自测保持既有认证检查。",
+      "constraints": "不改原用例与预期，不扩跨域SSO或任意动态认证，不持久化storageState。"
+    },
+    {
+      "id": "DR-0037-12",
+      "status": "已实现；正式窗口交互有限验证",
+      "requirement": "独立录制控制窗",
+      "acceptance_criteria": "弹窗被阻止时仍能使用主界面；状态与动作一致，停止后不能重录；无长期置顶承诺。",
+      "constraints": "不改原用例与预期，不扩跨域SSO或任意动态认证，不持久化storageState。"
+    },
+    {
+      "id": "DR-0037-13",
+      "status": "已实现；真人多目标示范已确认",
+      "requirement": "多目标断言点选与框选",
+      "acceptance_criteria": "不把像素方框或页面观察值作为新业务expected；错步/重复/超限关联拒绝，冻结摘要覆盖所有关联。",
+      "constraints": "不改原用例与预期，不扩跨域SSO或任意动态认证，不持久化storageState。"
+    },
+    {
+      "id": "DR-0037-14",
+      "status": "工程已实现并正式加载；置顶/拖动/收起及直接框选取消后暂停获用户有限实操确认；CASE-02 DSH技术验证通过，候选未批准",
+      "requirement": "原生置顶控制条及可辨认的核对对象",
+      "acceptance_criteria": "实际Windows窗口可拖动和收起，切业务窗口仍可见；单个受控进程、关闭先暂停、精确清理；网页备用不冒充置顶。",
+      "constraints": "固定正式4322，同project/demo；无密钥持久化、不改原预期、不自动批准。"
     }
   ],
   "design_decisions": [
@@ -177,16 +289,91 @@
       "status": "已确认",
       "summary": "默认工程测试不另起工作台/模型；正式功能仅4322；每次新run/task绑定已加载源码及脱敏配置身份；有限真实UI旅程及报告",
       "rationale": "复用已有管理器/执行器/事实源，以最小防线闭合已证实边界。"
+    },
+    {
+      "id": "DD-0037-07",
+      "dr_ids": [
+        "DR-0037-07"
+      ],
+      "status": "已确认",
+      "summary": "共享无工具独立DeepSeek审查器读取原用例、完整候选及可信证据，不接受作者coverage自证；校验结构、原文引用与位置，NO_FINDINGS/REPAIR_REQUIRED/NEEDS_ANALYSIS均非批准。submit冻结前把缺口送回同一DSH；正常单入口UI/后端独立复验亦位于可编辑期。记录每次调用与哈希、同输入缓存、预算预占；修改后重测重审。",
+      "rationale": "真实Skills对照证明仅执行自测会漏字段、放宽预期或缺可靠等待；独立第二意见与执行器证据分层，保留未知和真实业务失败。"
+    },
+    {
+      "id": "DD-0037-08",
+      "dr_ids": [
+        "DR-0037-08"
+      ],
+      "status": "已确认",
+      "summary": "A为现有fresh-context无工具DeepSeek审查；B为工具白名单约束的独立DSH，读取冻结数据并经原执行器申请同稿复验，输出仍经原schema/引用/位置校验。显式选择随准备、确认和任务身份冻结，缺省A。通过同步审查及统一MCP等待上限接入，总任务截止不延长。",
+      "rationale": "现有无工具审查有漏报反例，单纯增加相同模型角色未证明收益；通过受控调查差异和结束后独立验收检验。只按可计量上限比较，不冒称等token或等费用。"
+    },
+    {
+      "id": "DD-0037-09",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "status": "已确认",
+      "summary": "共享failure-feedback投影现有受信执行记录，保守分类并保留逐步预期/实际；UI和后端分别保存由服务端生成的revision_evidence快照。既有同会话自测与独立复验继续生效，现有列表和反馈表单展示证据而不新增页面体系。",
+      "rationale": "已有反馈入口但后端缺少精确run绑定，原生DSH试验也显示错误诊断会持续误导；先提高反馈可信度而非增加模型角色。"
+    },
+    {
+      "id": "DD-0037-10",
+      "dr_ids": [
+        "DR-0037-10"
+      ],
+      "status": "已确认实施边界",
+      "summary": "独立有界示范会话、受控浏览器与不可变人工核对快照，仅以不可信动作定位提示进入既有Coding Agent输入。沿用原业务断言、授权、资源、自测及独立验证。",
+      "rationale": "人工路径能补定位与页面状态信息，不能证明业务正确；复用生成链避免另建执行器和批准逻辑。"
+    },
+    {
+      "id": "DD-0037-11",
+      "dr_ids": [
+        "DR-0037-11"
+      ],
+      "status": "已确认实施边界",
+      "summary": "已有环境目录解析为稳定公开配置摘要，验证角色和账号摘要；登录态仅内存，失效停录，再登录显式恢复。",
+      "rationale": "复用既有环境和DSH执行链，录制提示与业务判定分离，避免录制成功代替测试通过。"
+    },
+    {
+      "id": "DD-0037-12",
+      "dr_ids": [
+        "DR-0037-12"
+      ],
+      "status": "已确认实施边界",
+      "summary": "正式4322同源小窗口，显式打开，开始/暂停/选步/选断言/停止；主窗口保持所有权，弹窗关闭尽力暂停并轮询补偿。",
+      "rationale": "复用既有环境和DSH执行链，录制提示与业务判定分离，避免录制成功代替测试通过。"
+    },
+    {
+      "id": "DD-0037-13",
+      "dr_ids": [
+        "DR-0037-13"
+      ],
+      "status": "已确认实施边界",
+      "summary": "同一步多个DOM定位提示，框选1至20个候选原子接收；过大/画布/跨框架范围提示重选；逐项核对可剔除，旧单目标快照仍可读。",
+      "rationale": "复用既有环境和DSH执行链，录制提示与业务判定分离，避免录制成功代替测试通过。"
+    },
+    {
+      "id": "DD-0037-14",
+      "dr_ids": [
+        "DR-0037-14"
+      ],
+      "status": "已确认实施边界",
+      "summary": "独立C# WinForms原生TopMost控制条，由工作台用系统.NET编译器构建并管理自己的子进程；固定本地HTTP仅当前示范，前端显式打开，保留网页备用。",
+      "rationale": "浏览器popup不能保证置顶且宿主可转标签；本机PowerShell文件执行被策略禁止，不修改或绕过执行策略。采用原生程序并保持控制面与业务页面隔离。"
     }
   ],
   "interfaces_and_data_flow": [
     "已登记项目/用例版本/环境授权→生产建例API→同一Harness会话→任务MCP工具→锁定Playwright执行快照→原始错误及步骤反馈→最终哈希冻结→正常/故障独立验证。",
-    "用例详情GET automation→已登记manifest与身份→POST candidate-trials（持久request_id）→完整包独立快照→现有verify与步骤现场采集→WorkbenchStore新run→项目执行记录/媒体GET；旧自主task不写回。"
+    "用例详情GET automation→已登记manifest与身份→POST candidate-trials（持久request_id）→完整包独立快照→现有verify与步骤现场采集→WorkbenchStore新run→项目执行记录/媒体GET；旧自主task不写回。",
+    "v12：显式quality_review_mode随预检/授权/任务或计划冻结；A保持无工具；B经独立DSH→只读MCP→冻结义务/候选/受信证据→可选原执行器复验→结构/来源/位置校验→同一作者会话反馈。审查工具与复验分别占原任务总额度。",
+    "v13：终态原run→服务端身份核验→revision_evidence及failure_feedback冻结→DSH原稿修订/自测→同稿独立复验→新候选和人工确认；旧数据不迁移。"
   ],
   "module_document_impact": [
     "更新docs/modules/test-workbench.md，build管理器/存储、工具桥、执行器复用、必要API与页面读回。",
     "v8：development-task支持显式normal-only，authorization新增exploratory新授权档；web-v2仅把自主状态与技术计数分层；运行入口和证据见workbench/qa/20260925-kimi-workbench/REPORT.md。",
-    "v9：补充诊断修复架构、唯一入口测试命令、加载身份和状态边界。"
+    "v9：补充诊断修复架构、唯一入口测试命令、加载身份和状态边界。",
+    "v12：quality-review-harness及MCP/guard/patch、UI/后端会话预算、显式模式与调查显示；实验代码不改变既有默认A或人工批准，真实比较证据在workbench/qa/20260928-reviewer-ab。"
   ],
   "risks_and_rollback": [
     "权限守卫和静态候选限制并非强OS沙箱；无法判清业务差异时报告待分析，不无限修绿。默认停在等待人工核对。"
@@ -304,6 +491,155 @@
       "task": "第二轮独立真实浏览器验收及取消状态展示定向修复；执行者browser_acceptance_round2，主管独立复核。",
       "verification_ids": [
         "VT-0037-10"
+      ]
+    },
+    {
+      "id": "TK-0037-09",
+      "dr_ids": [
+        "DR-0037-07"
+      ],
+      "dd_ids": [
+        "DD-0037-07"
+      ],
+      "status": "已实现并完成限定验证",
+      "task": "共享质量审查+UI/后端同会话反馈+预算及状态展示；工程反例与唯一4322真实验收，由主管独立收口。",
+      "verification_ids": [
+        "VT-0037-11",
+        "VT-0037-12",
+        "VT-0037-13"
+      ]
+    },
+    {
+      "id": "TK-0037-10",
+      "dr_ids": [
+        "DR-0037-08"
+      ],
+      "dd_ids": [
+        "DD-0037-08"
+      ],
+      "status": "已实现并完成限定比较",
+      "task": "实现实验审查器和UI/后端选择接线；冻结四对输入，在原4322运行并独立比较，不中途调参。",
+      "verification_ids": [
+        "VT-0037-14",
+        "VT-0037-15"
+      ]
+    },
+    {
+      "id": "TK-0037-11",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "dd_ids": [
+        "DD-0037-09"
+      ],
+      "status": "已实现并完成限定验证",
+      "task": "UI与后端服务端运行绑定、共享失败反馈和DSH上下文接线",
+      "verification_ids": [
+        "VT-0037-16",
+        "VT-0037-17",
+        "VT-0037-18"
+      ]
+    },
+    {
+      "id": "TK-0037-12",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "dd_ids": [
+        "DD-0037-09"
+      ],
+      "status": "已实现并完成限定验证",
+      "task": "原执行列表与反馈表单的证据展示、分组和恢复建议",
+      "verification_ids": [
+        "VT-0037-16",
+        "VT-0037-17",
+        "VT-0037-18"
+      ]
+    },
+    {
+      "id": "TK-0037-13",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "dd_ids": [
+        "DD-0037-09"
+      ],
+      "status": "限定验收已执行；运行级环境阻塞未验证",
+      "task": "定向回归、原4322真实修订/复跑/环境分支验收及主管独立核对",
+      "verification_ids": [
+        "VT-0037-16",
+        "VT-0037-17",
+        "VT-0037-18"
+      ]
+    },
+    {
+      "id": "TK-0037-14",
+      "dr_ids": [
+        "DR-0037-10"
+      ],
+      "dd_ids": [
+        "DD-0037-10"
+      ],
+      "status": "已实现；19事件真人示范经恢复DSH自测、审查、独立复验及正式技术试跑，候选待人工批准；首轮传输失败保留",
+      "task": "人工示范录制内核、工作台入口、冻结输入集成与有限真实验收，末尾清理本轮无消费者代码。",
+      "verification_ids": [
+        "VT-0037-19"
+      ]
+    },
+    {
+      "id": "TK-0037-15",
+      "dr_ids": [
+        "DR-0037-11"
+      ],
+      "dd_ids": [
+        "DD-0037-11"
+      ],
+      "status": "已实现，正式登录恢复至VALID/PAUSED；过期、换号和后续DSH认证链待验",
+      "task": "认证示范与会话复用及必要反例、正式入口验证",
+      "verification_ids": [
+        "VT-0037-20"
+      ]
+    },
+    {
+      "id": "TK-0037-16",
+      "dr_ids": [
+        "DR-0037-12"
+      ],
+      "dd_ids": [
+        "DD-0037-12"
+      ],
+      "status": "已实现，工程与部分正式界面已复验；真人整链路待验",
+      "task": "独立录制控制窗及必要反例、正式入口验证",
+      "verification_ids": [
+        "VT-0037-21"
+      ]
+    },
+    {
+      "id": "TK-0037-17",
+      "dr_ids": [
+        "DR-0037-13"
+      ],
+      "dd_ids": [
+        "DD-0037-13"
+      ],
+      "status": "已实现；19事件真人多目标示范经主管核对，恢复DSH独立复验及正式技术试跑已执行，候选未批准",
+      "task": "多目标断言点选与框选及必要反例、正式入口验证",
+      "verification_ids": [
+        "VT-0037-22"
+      ]
+    },
+    {
+      "id": "TK-0037-18",
+      "dr_ids": [
+        "DR-0037-14"
+      ],
+      "dd_ids": [
+        "DD-0037-14"
+      ],
+      "status": "工程已实现并正式加载；用户确认可见/拖动/收起/切回仍置顶及直接框选取消后暂停；CASE-02技术试跑已执行",
+      "task": "原生控制条、进程生命周期和入口接线，集中核对对象可读；定向工程及正式验证",
+      "verification_ids": [
+        "VT-0037-23"
       ]
     }
   ],
@@ -480,6 +816,205 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20260925-independent-ui/supervisor/verification.log"
       }
+    },
+    {
+      "id": "VT-0037-11",
+      "dr_ids": [
+        "DR-0037-07"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "质量审查来源/身份与预算反例",
+      "evidence_standard": "完整原用例/候选输入、错引用/漏步骤/不确定/取消/超限拒绝；无隐式重试，使用量留痕。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 374,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260928-script-quality/unit-release-check.log"
+      }
+    },
+    {
+      "id": "VT-0037-12",
+      "dr_ids": [
+        "DR-0037-07"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "同会话修复与真实缺陷保留",
+      "evidence_standard": "已测稿漏检反馈→修复→重测→独立复验；旧SHA/并发改稿/预算耗尽反例；真实业务失败不改绿；旧完成稿兼容。",
+      "current_evidence": "原4322：后端分页P9同一Harness内2自测、审查REPAIR_REQUIRED→NO_FINDINGS及1次独立复验（三步均成功、2HTTP）；UI/后端搜索保持真实业务断言失败与后步未执行。早期P6/P7漏报及P8格式错误均原样保留、未确认。详见workbench/qa/20260928-script-quality/acceptance.md与session-summary.json。"
+    },
+    {
+      "id": "VT-0037-13",
+      "dr_ids": [
+        "DR-0037-07"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "正式4322有限真实验收",
+      "evidence_standard": "沿原数据配置，在已授权合成目标通过页面发起UI/后端正常、故障、带原缺口候选的修订；同一Harness有修复反馈证据，主管核对原预期与最终候选；未执行明确标记。",
+      "current_evidence": "7次真实DSH会话、120工具、12自测、12付费质量审查、6独立复验；四种UI/后端正常与故障场景通过原4322页面发起。主管读取完整最终候选/计划、原要求、失败实值和媒体；4条原用例/SUT/环境保持。新候选不自动批准；合成样本不代表客户或发布验收。见workbench/qa/20260928-script-quality/acceptance.md。"
+    },
+    {
+      "id": "VT-0037-14",
+      "dr_ids": [
+        "DR-0037-08"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "实验模式、独立审查工具和总预算工程验证",
+      "evidence_standard": "默认兼容、无效模式、先义务后候选、受控工具、调用预算、取消与已花用量、原稿不可写、输出校验等反例；测试不启动其他工作台。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 385,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260928-reviewer-ab/engineering.log"
+      }
+    },
+    {
+      "id": "VT-0037-15",
+      "dr_ids": [
+        "DR-0037-08"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "原4322四对自主运行及主管独立比较",
+      "evidence_standard": "同构建/seed/通用反馈/Skills off；原环境和数据不变；包含UI/后端、已知漏测、正常完整与真实业务失败；记录误漏报、耗时、干预及已知/未知用量，结果不得拼接或隐去失败。",
+      "current_evidence": "8次真实工作流已执行，主管独立比较完成；A/B各3/4最终稿通过原用例义务核对且有同稿独立证据，包含正确保留的业务失败，不是业务通过率。A UI搜索作者错误终止和B后端搜索错误改稿均保留。所有候选未自动批准；人工待确认指候选批准边界，不表示本轮比较未执行。证据：workbench/qa/20260928-reviewer-ab/acceptance.md、adjudication.json、result-summary.json及raw目录。"
+    },
+    {
+      "id": "VT-0037-16",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "服务端身份反例与反馈保真工程验证",
+      "evidence_standard": "正确身份持久化；错误run/环境/版本/伪造/进行中拒绝；敏感字段脱敏、后步未执行、未知归因保留",
+      "current_evidence": {
+        "command": "node --test workbench/tests/failure-feedback.test.mjs workbench/tests/backend-feedback.test.mjs workbench/tests/feedback-view.test.mjs workbench/tests/execution-list.test.mjs workbench/tests/backend-view.test.mjs workbench/tests/backend-manager.test.mjs workbench/tests/backend-quality-loop.test.mjs workbench/tests/development-session.test.mjs workbench/tests/candidate-quality-review.test.mjs",
+        "exit_code": 0,
+        "test_count": 77,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260928-feedback-loop/engineering-final.log"
+      }
+    },
+    {
+      "id": "VT-0037-17",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "原4322前后端反馈界面及版本绑定",
+      "evidence_standard": "真实浏览器展示分类与步骤证据，提交绑定原run，原输入/数据配置保持",
+      "current_evidence": "正式4322真实浏览器UI/后端原失败反馈及取消；UI预检携带run和完整包身份，后端表单POST正确但拦截未提交。另经正式API新建带原run证据的唯一DRAFT、持久哈希重算一致；错配请求422拒绝。见workbench/qa/20260928-feedback-loop/ui-acceptance*.json、bound-draft-result.json、rejected-mismatch-result.json。未批准或执行新DRAFT。"
+    },
+    {
+      "id": "VT-0037-18",
+      "dr_ids": [
+        "DR-0037-09"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "真实修订及三类失败有限验收",
+      "evidence_standard": "错误脚本由真实DSH定向修订并独立复验；业务差异保留原断言；真实环境故障不冒充业务通过，未执行如实记录",
+      "current_evidence": "一次真实DSH plan-d6693ec6-a38d-4d27-92a3-30d87ce94c66，1启动/9工具/1自测/1审查/1独立复验，91.075秒。人工给定断言跨步诊断，新稿归回第一步并保留第二步原义务；同SHA自测/复验第一步FAILED、第二步NOT_RUN。原用例、旧稿和SUT未改，新稿DRAFT未批准。源稿无正式run，因此此会话不带run_id，与正式run绑定持久化分别验收。环境仅实际不可达目标预检422，非运行级环境分类E2E。主管核对见workbench/qa/20260928-feedback-loop/adjudication.json、REPORT.md。最终补身份元数据的源码5bf4426仅工程与正式服务重启核验，没有重开模型。"
+    },
+    {
+      "id": "VT-0037-19",
+      "dr_ids": [
+        "DR-0037-10"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "人工示范辅助自动化有限验收",
+      "evidence_standard": "正式4322专用浏览器操作录制→原断言核对→DSH输入→真实自测/独立复验；拒绝越界/错版本/篡改，输入秘密未持久化；原业务失败不得改预期刷绿。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/demonstrations.test.mjs workbench/tests/demonstration-generation.test.mjs workbench/tests/demonstration-integration.test.mjs",
+        "exit_code": 0,
+        "test_count": 16,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260928-human-demonstration/supervisor-final-core-regression.log"
+      }
+    },
+    {
+      "id": "VT-0037-20",
+      "dr_ids": [
+        "DR-0037-11"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "认证示范与会话复用",
+      "evidence_standard": "未登录不能录制，登录后PAUSED；同账号续录、换账号拒绝；生成和自测保持既有认证检查。；工程验证和正式4322真实操作证据分别记录。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/demonstrations.test.mjs workbench/tests/demonstration-auth.test.mjs workbench/tests/demonstration-generation.test.mjs workbench/tests/development-auth-binding.test.mjs workbench/tests/auth-session-request-policy.test.mjs workbench/tests/project-target-access.test.mjs",
+        "exit_code": 0,
+        "test_count": 41,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260929-demonstration-controls/supervisor-core-auth.log"
+      }
+    },
+    {
+      "id": "VT-0037-21",
+      "dr_ids": [
+        "DR-0037-12"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "独立录制控制窗",
+      "evidence_standard": "弹窗被阻止时仍能使用主界面；状态与动作一致，停止后不能重录；无长期置顶承诺。；工程验证和正式4322真实操作证据分别记录。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/demonstrations.test.mjs workbench/tests/demonstration-view.test.mjs",
+        "exit_code": 0,
+        "test_count": 18,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260929-demonstration-controls/supervisor-legacy-regression.log"
+      }
+    },
+    {
+      "id": "VT-0037-22",
+      "dr_ids": [
+        "DR-0037-13"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "多目标断言点选与框选",
+      "evidence_standard": "不把像素方框或页面观察值作为新业务expected；错步/重复/超限关联拒绝，冻结摘要覆盖所有关联。；工程验证和正式4322真实操作证据分别记录。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/demonstration-browser.test.mjs workbench/tests/demonstration-selection.test.mjs workbench/tests/demonstration-integration.test.mjs",
+        "exit_code": 0,
+        "test_count": 13,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260929-demonstration-controls/supervisor-browser-router.log"
+      }
+    },
+    {
+      "id": "VT-0037-23",
+      "dr_ids": [
+        "DR-0037-14"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "原生悬浮控制条完整任务流",
+      "evidence_standard": "工程反例、真实Windows可见置顶及正式4322状态同步分别记录；真人录制与DSH独立记录，不合并宣称。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/demonstration-floating-native.test.mjs workbench/tests/demonstration-view.test.mjs",
+        "exit_code": 0,
+        "test_count": 10,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260929-demonstration-controls/supervisor-assertion-entry.log"
+      }
     }
   ],
   "verification_environment": {
@@ -497,7 +1032,9 @@
       "工作台最终collector回归见当前日志；Harness24/24退出0；锁定DSH零模型插件检查通过。",
       "真实逻辑任务2/2，Harness2次，工具57次，开发执行3次+最终验证4次。A恢复完成，B仍有缺口；不得自动批准。",
       "旧核心108项失败未修复/未重跑；AUTH扩展、任意环境接入、自动恢复不在本批完成范围。",
-      "v9工程65/65及限定正式功能验证完成，详见workbench/qa/20260925-reliability/REPORT.md。全库checker仍有REQ-0015两处历史宣称冲突；不宣称全库门禁通过。"
+      "v9工程65/65及限定正式功能验证完成，详见workbench/qa/20260925-reliability/REPORT.md。全库checker仍有REQ-0015两处历史宣称冲突；不宣称全库门禁通过。",
+      "v11：完整工程374/374，随后仅后端提示澄清的定向7/7；原4322共7个真实会话，来源/历史保持。实际模型存在误漏报，不用NO_FINDINGS替代人工核对。本轮未重打包或发布。",
+      "v13限定工程77项及正式反馈/修订证据见workbench/qa/20260928-feedback-loop/REPORT.md；不计发布验收，不追加模型或自动批准。"
     ]
   },
   "trace_current": [
@@ -580,6 +1117,110 @@
       "tk_id": "TK-0037-08",
       "vt_id": "VT-0037-10",
       "status": "已实现并完成限定验证"
+    },
+    {
+      "un_id": "UN-0037-06",
+      "dr_id": "DR-0037-07",
+      "dd_id": "DD-0037-07",
+      "tk_id": "TK-0037-09",
+      "vt_id": "VT-0037-11",
+      "status": "已实现并完成限定技术验证；语义与人工批准边界保留"
+    },
+    {
+      "un_id": "UN-0037-06",
+      "dr_id": "DR-0037-07",
+      "dd_id": "DD-0037-07",
+      "tk_id": "TK-0037-09",
+      "vt_id": "VT-0037-12",
+      "status": "已实现并完成限定技术验证；语义与人工批准边界保留"
+    },
+    {
+      "un_id": "UN-0037-06",
+      "dr_id": "DR-0037-07",
+      "dd_id": "DD-0037-07",
+      "tk_id": "TK-0037-09",
+      "vt_id": "VT-0037-13",
+      "status": "已实现并完成限定技术验证；语义与人工批准边界保留"
+    },
+    {
+      "un_id": "UN-0037-07",
+      "dr_id": "DR-0037-08",
+      "dd_id": "DD-0037-08",
+      "tk_id": "TK-0037-10",
+      "vt_id": "VT-0037-15",
+      "status": "实验实现及限定工程/真实比较完成；不构成候选批准或发布"
+    },
+    {
+      "un_id": "UN-0037-07",
+      "dr_id": "DR-0037-08",
+      "dd_id": "DD-0037-08",
+      "tk_id": "TK-0037-10",
+      "vt_id": "VT-0037-14",
+      "status": "实验实现及限定工程/真实比较完成；不构成候选批准或发布"
+    },
+    {
+      "un_id": "UN-0037-08",
+      "dr_id": "DR-0037-09",
+      "dd_id": "DD-0037-09",
+      "tk_id": "TK-0037-11",
+      "vt_id": "VT-0037-16",
+      "status": "实现及限定证据已记录；环境运行级E2E未执行，新稿未批准，非发布"
+    },
+    {
+      "un_id": "UN-0037-08",
+      "dr_id": "DR-0037-09",
+      "dd_id": "DD-0037-09",
+      "tk_id": "TK-0037-12",
+      "vt_id": "VT-0037-17",
+      "status": "实现及限定证据已记录；环境运行级E2E未执行，新稿未批准，非发布"
+    },
+    {
+      "un_id": "UN-0037-08",
+      "dr_id": "DR-0037-09",
+      "dd_id": "DD-0037-09",
+      "tk_id": "TK-0037-13",
+      "vt_id": "VT-0037-18",
+      "status": "实现及限定证据已记录；环境运行级E2E未执行，新稿未批准，非发布"
+    },
+    {
+      "un_id": "UN-0037-09",
+      "dr_id": "DR-0037-10",
+      "dd_id": "DD-0037-10",
+      "tk_id": "TK-0037-14",
+      "vt_id": "VT-0037-19",
+      "status": "19事件真人示范已确认；首轮传输失败保留，恢复DSH及正式技术试跑五步通过，候选未批准"
+    },
+    {
+      "un_id": "UN-0037-10",
+      "dr_id": "DR-0037-11",
+      "dd_id": "DD-0037-11",
+      "tk_id": "TK-0037-15",
+      "vt_id": "VT-0037-20",
+      "status": "已实现；正式登录恢复至VALID/PAUSED，其余认证场景待验"
+    },
+    {
+      "un_id": "UN-0037-10",
+      "dr_id": "DR-0037-12",
+      "dd_id": "DD-0037-12",
+      "tk_id": "TK-0037-16",
+      "vt_id": "VT-0037-21",
+      "status": "已实现；真人原生窗有限验证及CASE-02技术试跑已执行，窗口X暂停未单独真人验证"
+    },
+    {
+      "un_id": "UN-0037-10",
+      "dr_id": "DR-0037-13",
+      "dd_id": "DD-0037-13",
+      "tk_id": "TK-0037-17",
+      "vt_id": "VT-0037-22",
+      "status": "已实现；真人19事件及多目标核对、恢复DSH独立复验和正式技术试跑已执行，候选未批准"
+    },
+    {
+      "un_id": "UN-0037-11",
+      "dr_id": "DR-0037-14",
+      "dd_id": "DD-0037-14",
+      "tk_id": "TK-0037-18",
+      "vt_id": "VT-0037-23",
+      "status": "工程已实现并正式加载；用户确认置顶/拖动/收起及直接框选取消后暂停，CASE-02技术试跑已执行"
     }
   ],
   "trace_history": [
@@ -630,12 +1271,28 @@
       "link": "workbench/qa/20260925-kimi-workbench/REPORT.md",
       "status": "24条真实流程已执行，候选未批准",
       "notes": "24 Harness/49开发执行/18独立执行/1402工具；正常页不等于保真，通过后的修改/重复/诊断分开记录，原失败不改写。"
+    },
+    {
+      "version": 11,
+      "link": "workbench/qa/20260928-script-quality/acceptance.md",
+      "status": "限定工程与真实闭环已验，候选未批准",
+      "notes": "正常UI/后端及真实失败保留；后端已绿但漏字段候选在同会话检出、修复和复验。7 Harness/120工具/12自测/12审查/6独立复验，早期不合格版本原样保留。"
+    },
+    {
+      "version": 12,
+      "link": "workbench/qa/20260928-reviewer-ab/acceptance.md",
+      "status": "四对比较与独立验收完成，默认A保持",
+      "notes": "8作者会话；B另9审查会话；A71工具/6自测/4审查/3独立复验，B160工具/11自测/9审查/4独立复验。各3/4最终稿可核对，失败不改写；已知单一脚本缺口均检出修复。"
     }
   ],
   "open_questions": [
     "当前有限DOM读取仍拒绝forEach/push、JSON.stringify等合理表达式；站点脚本读取尝试也被拒，未扩展白名单。",
     "原稿已通过后Agent自行改稿引入失败，不能把所有修改称为必要修复；有限核查只是提示，不是语义证明。",
-    "状态等待未单独验证严格450/650毫秒期限；本次不等于通用稳定性或候选人工批准。"
+    "状态等待未单独验证严格450/650毫秒期限；本次不等于通用稳定性或候选人工批准。",
+    "v11模型第二意见仍会误漏报或过度推断原文；程序断言清单有助检出集合漏检但不是语义证明。干净Windows、客户真实协议及通用复杂场景未由本轮新增验证，便携包仍是此前版本。",
+    "v12限定比较：B没有提高本批最终稿可核对数量；UI搜索的新增多页分支未动态验证。后端B出现断言跨步移动及中间审查漏检；UI A错误终止根因未定位且generation_status残留RUNNING。保留A默认，按需B路由和人工反馈页面为后续事项。",
+    "v13边界：环境不可达仅正式目标登记预检422，当前无环境阻塞正式运行样本，运行列表分组只有工程验证。单例定向修订含主管诊断，不能推断普遍通过率或完全自主诊断收益。最后身份元数据小修未追加真实模型会话。",
+    "v14当前阻塞：两次专用Edge的Windows控制均无法可信识别URL而停止，2份空草稿已STOPPED/0事件/未确认。正式界面空草稿禁用、互斥、托管重启及工程反例已验证，非空真人录制→冻结确认→真实DSH→正式批次仍未验。等待真人按USER-GUIDE示范或受支持控制恢复；不绕过限制，不伪造录制，不将云平台6条独立批次结果替代此链路。"
   ],
   "prohibited_implementation": [
     "不代写产品候选、不改预期、不读故障答案修正常脚本、不按新task_id重置预算、不自动批准。"
@@ -720,6 +1377,54 @@
       "description": "新增1名独立执行Agent，完成13场景与1次真实从头建例；主管确认取消汇总及缺失证据展示问题并修复同路径复验。仅1Harness/52工具/1自测，保留原历史和审批。",
       "impact": "web-v2 presentation and bounded independent acceptance",
       "confirmed_by": "当前用户明确指令"
+    },
+    {
+      "date": "2026-09-28",
+      "version": 11,
+      "type": "脚本质量闭环续作",
+      "description": "完成来源绑定独立审查、同会话修复/复验与预算接线；真实漏报促成后端断言清单和格式诊断。7次真实会话有限验收，保留原失败和未批准边界。",
+      "impact": "UI development、backend harness、共享只读审查、前端授权/证据展示；不变更业务用例或扩大执行权限。",
+      "confirmed_by": "当前用户同意继续，并明确重点提高脚本质量。"
+    },
+    {
+      "date": "2026-09-28",
+      "version": 12,
+      "type": "受控双DSH对比实验",
+      "description": "完成受控B审查器、UI/后端实验选择及385项工程检查；原4322八次真实运行后主管核对，保留A默认。原始输入/SUT/失败及未批准状态保留，不中途调参或加跑。",
+      "impact": "仅本次审查模式及实验；旧用例、历史、被测系统和人工批准不变。",
+      "confirmed_by": "当前用户：这个覆盖了的。你做对比吧。"
+    },
+    {
+      "date": "2026-09-28",
+      "version": 13,
+      "type": "反馈闭环实施",
+      "description": "实现运行证据绑定、保守分类与人工补充；工程77项及原4322前后端真实反馈/接口核验，一次DSH断言归属修订保留真实业务失败。主管补齐自测身份字段并自行重启；环境运行级E2E仍未执行。",
+      "impact": "现有UI/后端修订接口及反馈展示，不扩展模型供应商/测试目标/业务语义。",
+      "confirmed_by": "用户：可以，按这个来把。"
+    },
+    {
+      "date": "2026-09-28",
+      "version": 14,
+      "type": "人工示范辅助自动化",
+      "description": "用户授权后启动示范操作、明确断言来源、既有DSH链接入及最后无用代码清理。",
+      "impact": "录制生命周期与生成可选输入，不改变旧用例/脚本/业务判定。",
+      "confirmed_by": "用户：可行的话就做，设定个目标把这个事情给做了。"
+    },
+    {
+      "date": "2026-09-29",
+      "version": 15,
+      "type": "人工录制扩展",
+      "description": "已配置认证环境人工登录后录制，独立控制窗，多个断言对象点选及框选辅助。",
+      "impact": "认证示范生命周期、定位提示和人工核对；旧快照与业务预期保留。",
+      "confirmed_by": "用户：可以。按这个方案做把。如果断言要多个地方是不是可以考虑画框的方案？"
+    },
+    {
+      "date": "2026-09-29",
+      "version": 16,
+      "type": "实际试用反馈修订",
+      "description": "根据真人试用切窗困难、核对对象不直观反馈，接入置顶控制条和可读定位提示。",
+      "impact": "Windows录制控制及UI易用性，业务预期与DSH原流程不变。",
+      "confirmed_by": "用户明确要求悬浮并从测试工程师角度验证可用性。"
     }
   ]
 }

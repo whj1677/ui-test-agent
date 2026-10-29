@@ -3,12 +3,12 @@
   "req_id": "REQ-0001",
   "title": "多界面真实链路发布就绪",
   "metadata": {
-    "requirement_status": "已确认",
+    "requirement_status": "v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。",
     "governance_level": "G2",
-    "version": 2,
-    "last_updated": "2026-09-26"
+    "version": 18,
+    "last_updated": "2026-10-29"
   },
-  "original_input": "用户设定持续目标：把Agent优化到可以发布，不能只口头宣布；通过大量界面测试发现并修复问题，每修复一个问题Git同步，修改前创建需求包。用户授权本机操作、官方DeepSeek测试和现有GitHub项目同步。凭据原文省略，不写入文件。\n2026-09-25用户在发布差距评估后明确授权主管完成安装启动、有限真实业务接入、可信回归及执行边界收口。当前不自动commit/push/tag/发布，保留已有未提交修复。",
+  "original_input": "用户设定持续目标：把Agent优化到可以发布，不能只口头宣布；通过大量界面测试发现并修复问题，每修复一个问题Git同步，修改前创建需求包。用户授权本机操作、官方DeepSeek测试和现有GitHub项目同步。凭据原文省略，不写入文件。\n2026-09-25用户在发布差距评估后明确授权主管完成安装启动、有限真实业务接入、可信回归及执行边界收口。当前不自动commit/push/tag/发布，保留已有未提交修复。\n2026-10-28用户反馈另一台电脑使用测试Agent-工程师试用交付包-免激活-20261026.zip：密钥配置成功后AI用例助手仍不可用，点击添加/导入文档无反应；另反馈保存前端环境时报GENERATION_TARGET_UNREACHABLE。修复已有试用链路，不改变显式模型授权与测试范围。\n2026-10-28用户明确要求：接入需求Agent已有的本机Office只读后备，然后做升级包；不打包旧环境，用户选择之前安装的路径，只升级本次功能。",
   "user_requirements": [
     {
       "id": "UN-0001-01",
@@ -16,6 +16,97 @@
       "goal": "Windows本地团队内部试用达到可复验发布标准，日常不依赖外部code agent临时导航、手写定位或候选计划。",
       "constraints": "继承原内部试用正确性、权限/清理、敏感出口、安装与独立人员门槛；不扩展生产/任意网站，不恢复暂停训练平台。",
       "success_criteria": "多种不同复杂界面、冻结同版两轮真实重规划执行、正确终态、安全回归、安装/独立操作证据及可追溯候选齐备。"
+    },
+    {
+      "id": "UN-0001-02",
+      "goal": "推进测试Agent可交付，补完整安装器与独立安装范围的实际证据",
+      "constraints": "保留原改动、配置、脚本、失败和证据；仅原4322作为正式工作台；无云平台/模型调用、无自动提交发布",
+      "success_criteria": "完整真实安装入口、锁定依赖和首次浏览器下载有证据，独立目录不误写原配置；恢复原4322并如实保留干净Windows缺口",
+      "status": "已确认"
+    },
+    {
+      "id": "UN-0001-03",
+      "status": "已确认",
+      "goal": "推进可交付：测试工程师能在主工作台直接找到和读懂既有DSH公开回复",
+      "constraints": "内容只读，保留输入原文及完整公开历史，不改变业务脚本、模型会话或成绩；云平台继续暂停",
+      "success_criteria": "最新公开回复优先可见，完整历史可回看；真实表格、列表和代码可读，不执行对话中的HTML或自动外链请求"
+    },
+    {
+      "id": "UN-0001-04",
+      "status": "已确认",
+      "goal": "将当前测试Agent打包给测试工程师试用，附试用手册、测试用例模板和代码归档",
+      "constraints": "沿用当前功能；不含开发机密钥、许可证、登录态、业务数据；不覆盖旧包、旧脚本和历史证据；不自动对外发布",
+      "success_criteria": "完整便携程序及精确摘要可核对；安装准备和诊断实际验证；手册覆盖首次使用至导出复跑及限制；模板与导入器兼容；当前源码含未提交修改的归档可还原"
+    },
+    {
+      "id": "UN-0001-05",
+      "status": "已确认",
+      "goal": "本次工程师试用先去掉设备许可证，不要求申请或激活",
+      "constraints": "明确覆盖上一试用包的设备许可前置条件；不删除原许可证、不移除模型密钥/业务授权/来源检查；保留旧包和证据",
+      "success_criteria": "源程序及本次便携包无许可证也能进入正常工作台；手册不再要求设备激活；提供新的交付包和源码归档"
+    },
+    {
+      "id": "UN-0001-06",
+      "status": "已确认",
+      "goal": "模拟新电脑完整解压、安装及真实模型功能测试，发现问题修复后重打包复验",
+      "constraints": "使用用户单独输入的新凭据和独立合成目标；保留原数据与失败，测试后恢复原4322；报告内嵌空白此前暂缓",
+      "success_criteria": "记录实际解压、安装、前后端与AI助手真实模型、复跑和报告结果，明确未覆盖范围"
+    },
+    {
+      "id": "UN-0001-07",
+      "status": "已确认",
+      "goal": "修复报告预览空白和交付门禁，重新打包并验证",
+      "constraints": "保留原项目、历史报告、旧范围和既有未提交修改；使用唯一4322工作台",
+      "success_criteria": "预览可见或给出可用恢复入口；新包核验；门禁实际运行并如实记录"
+    },
+    {
+      "id": "UN-0001-08",
+      "status": "已确认",
+      "goal": "继续排查并修复 Edge 报告预览空白，重新打包、解压并验证后恢复原工作台",
+      "constraints": "保留历史报告、数据及既有修改；使用唯一4322入口",
+      "success_criteria": "Edge 报告内容、目录、媒体可用；新包安装验证并恢复原工作台"
+    },
+    {
+      "id": "UN-0001-09",
+      "status": "已确认",
+      "goal": "排查 Edge 子框导航停滞并修复报告预览，重新打包解压验证并恢复原工作台",
+      "constraints": "保留原项目、报告、配置与凭据；唯一4322入口",
+      "success_criteria": "报告预览不依赖可能停滞的子框网络导航；新包验证并恢复原工作台"
+    },
+    {
+      "id": "UN-0001-10",
+      "status": "已确认",
+      "goal": "修复工程师跨电脑试用时的模型启用、资料选择和环境保存错误提示",
+      "constraints": "保留原数据、配置、历史交付与失败；零付费模型；未取得远端证据不宣称干净电脑验收",
+      "success_criteria": "显式启用模型后普通重启保持启用，未启用仍默认关闭；助手不可用时仍可选择本地资料并明确等待启用；环境不可达给出可操作提示"
+    },
+    {
+      "id": "UN-0001-11",
+      "status": "已确认",
+      "goal": "安装版在网页保存密钥后可直接启用模型，不再操作CMD；重启保持并验证真实DSH和AI用例助手",
+      "constraints": "保留原凭据与数据，测试只用用户本次提供的独立密钥；唯一4322，结束恢复原工作台",
+      "success_criteria": "网页明确保存并启用或启用已保存密钥，受管重启后助手和脚本生成可用，多次重启保持"
+    },
+    {
+      "id": "UN-0001-12",
+      "status": "已确认",
+      "goal": "接入企业保护DOCX的本机Word只读后备，并交付选择旧安装目录的轻量增量升级包",
+      "constraints": "不重装或打包Node/浏览器/依赖；保留原密钥/配置/项目/历史；只用获准Office读取，不移除保护；无付费模型调用",
+      "success_criteria": "标准DOCX沿用旧解析；标准解析无法识别的DOCX可交本机Word提取并标注未覆盖内容；升级、重复运行、失败回退均有验证"
+    },
+    {
+      "id": "UN-0001-13",
+      "status": "已确认",
+      "goal": "把Word/WPS读取后备直接打进新的完整Windows安装器，取消增量升级包交付",
+      "constraints": "沿用需求Agent式的助手资料入口；不修改企业保护策略、原文档或原D安装。v16交付阶段不调用模型；v18按UN-0001-14用户明确续验授权实际生成。Word与真实WPS的验证状态分别记录。",
+      "success_criteria": "交付可选择新安装目录的完整EXE，含Node/浏览器/依赖及现有网页模型配置；普通上传、文件完整性、实际安装有证据；加密文档与WPS未验如实披露"
+    },
+    {
+      "id": "UN-0001-14",
+      "status": "已确认",
+      "goal": "继续使用同一受保护需求文档，在AI用例助手真实生成一次并下载Excel，验证读取到下载的整个流程",
+      "constraints": "本轮用户明确授权使用已配置模型实际生成；沿用正式4322、同一原件与既有配置。只验证草稿生成和下载，业务仍待核对。",
+      "success_criteria": "实际模型生成任务完成；本轮选取前端6/后端6条代表性草稿，两份XLSX经网页按钮下载，字段、步骤、来源引用和待确认/未执行状态核对通过；失败与未覆盖项保留。"
     }
   ],
   "confirmed_facts": [
@@ -86,7 +177,9 @@
     "本轮只读复核4179/api/config：仍build653a95ecb090d96f8e25e1e61c5d0f9ef4fef58921b1010cb45128809c838d94、configured=false、active=null。未调用模型、未访问凭据；Get-VM/WindowsSandbox.exe/VBoxManage.exe/vmrun.exe命令均未发现，只表明本机这些入口不可用，不等于证明所有干净环境都不存在。REQ-0008的A/B选择尚未收到，再次向用户清楚呈现业务差异，不暗设默认。",
     "2026-09-18当前9b7f132246fa候选已生成到validation/REQ-0001-candidate-20260918-9b7f1322；ZIP为validation/ui-test-agent-0.4.0-beta.1-9b7f132246fa-pending.zip，345888字节，SHA256=8026bae30da2c97e78bf32e2b3674caf7eaf46655cc0717e721cebad39b2f6be。归档内83个清单项加清单本身共84文件逐项SHA一致，无未知/缺失/重复文件；全新目录解包成功，日志validation/REQ-0001-candidate-zip.log。",
     "解包后使用包内verifyCandidate、readBuildInfo和server.start核验：包/源代码/HTTP构建均9b7f132246fa，随机端口和新数据目录，首页/JS/CSS均HTTP200，JS/CSS字节摘要与包相同，未配置模型、无任务；关闭后监听器与写锁释放。已使用禁联网注入fetch且调用计数0，不是Agent业务运行；实际日志validation/REQ-0001-candidate-runtime.log。",
-    "解包精确文件清单和敏感文件名排除检查未发现用户数据/依赖目录/凭据文件；指定Key/token/私钥正则扫描0命中，仅限所列模式，不证明所有敏感内容不存在。该HTTP验证共享工作区node_modules，未运行新包安装器/Chromium/Python导入，不是干净Windows；PENDING_ACCEPTANCE不变，完整证据及限制见candidate-check.md。"
+    "解包精确文件清单和敏感文件名排除检查未发现用户数据/依赖目录/凭据文件；指定Key/token/私钥正则扫描0命中，仅限所列模式，不证明所有敏感内容不存在。该HTTP验证共享工作区node_modules，未运行新包安装器/Chromium/Python导入，不是干净Windows；PENDING_ACCEPTANCE不变，完整证据及限制见candidate-check.md。",
+    "2026-10-28：用户反馈目标地址问题已恢复；用例助手曾可用后又不可用，并反馈启动窗口很快关闭。原包普通启动固定model=false与页面禁用资料框均有源码证据；远端启动窗口关闭原因尚无日志。正式4322配置/数据指纹保持，本轮1个合成QA项目，DOCX/Markdown上传201/READ，浏览器available=false故障注入验证资料选择与禁用发送；49项定向通过，模型POST为0。",
+    "用户提供的受企业保护DOCX在当前Python视角为552045字节且ZIP有效，在Node视角为553069字节且文件头非ZIP；Node上传长度与用户截图一致。只检查容器、摘要和解析返回码，未运行Office、未解密/导出文档正文或发送模型。pm-req源码提供标准解析失败后的本机Office只读后备，测试Agent当前没有此能力。"
   ],
   "inferences_and_open_questions": [
     "本轮默认最多两轮固定零模型回归；真实模型验证仅在明确所需目标和预算后有限执行，工具调用与供应商费用分列。无操作系统级隔离时不可宣称可安全运行任意页面/代码。",
@@ -135,6 +228,190 @@
       "requirement": "冻结源码/服务/包身份，披露成本/范围/限制，所有硬门槛有证据才判内部试用就绪。",
       "acceptance_criteria": "同版两轮报告及包/服务SHA对应；Git/包无秘密和真实业务资料，请求/重试/tokens/耗时可追踪。",
       "constraints": "普通代码GitHub同步已授权；不自动创建公开Release或向团队分发。"
+    },
+    {
+      "id": "DR-0001-06",
+      "status": "已确认",
+      "requirement": "根PowerShell安装器提供可选RuntimeHome并保持默认路径、运行中保护和失败退出",
+      "acceptance_criteria": [
+        "显式RuntimeHome必须是非空绝对路径，失败发生于依赖安装及配置写入之前",
+        "源码与直接PowerShell便携分支均传递该路径到既有setup-runtime.ps1；未传参数时原默认行为保持",
+        "完整源码安装在新目录、独立RuntimeHome与空Playwright缓存完成四锁ci/浏览器下载/初始化/诊断，不启动新工作台或调用模型",
+        "记录原配置保全、安装失败/未覆盖项及恢复原4322结果，不把新目录认作干净Windows"
+      ],
+      "constraints": [
+        "不能跳过4322运行中保护或必要依赖/许可校验",
+        "不写入原配置、试跑开关、密钥或历史业务数据来通过验收"
+      ]
+    },
+    {
+      "id": "DR-0001-07",
+      "status": "已确认",
+      "requirement": "公开对话默认定位本次读取的最新回复，并提供保留原文的安全排版",
+      "acceptance_criteria": [
+        "加载后直接展示最新可读assistant回复、时间及对应最近用户输入，完整公开历史保持原顺序；缺失、截断和无回复分别如实说明",
+        "公开assistant文字按有限Markdown规则展示表格、段落、标题、列表和代码，保留原文查看；所有原始HTML与不支持语法按文字保留，无远程资源自动请求",
+        "只用原GET接口和页面内导航，不新建模型会话、业务任务或改结果；跨项目重载继续使用现有隔离边界",
+        "正式4322真实浏览器用既有公开回复核对最新定位、表格、原文、历史和旧成绩；候选绑定确切当前文件，旧失败和证据保持"
+      ],
+      "constraints": [
+        "不新增Markdown依赖或业务脚本",
+        "工程渲染/安全检查不能替代正式浏览器或整体发布验收"
+      ]
+    },
+    {
+      "id": "DR-0001-08",
+      "status": "已确认",
+      "requirement": "生成现有.4代码的工程师内部试用交付物",
+      "acceptance_criteria": [
+        "完整Windows x64便携包附Node、依赖和浏览器，使用原公开许可信任配置，默认模型关闭，包内不含个人配置/业务数据",
+        "手册与实际按钮和操作顺序一致，说明激活、密钥、登录、生成与同稿复跑、证据与历史失败保留",
+        "Excel沿用正式导入模板，源码归档包含当前源码、测试和文档及文件摘要，排除运行数据、凭据、依赖和本轮产物",
+        "实际核对归档所有文件及本机独立目录准备/诊断，正式4322使用原数据验证可读；不冒充干净设备/业务全验收"
+      ],
+      "constraints": [
+        "不修改业务脚本和运行结果",
+        "不签发新许可证或私自关闭授权",
+        "不自动公开发布、提交、推送或覆盖当前数据"
+      ]
+    },
+    {
+      "id": "DR-0001-09",
+      "status": "已确认",
+      "requirement": "当前试用关闭设备许可门禁并显式打包，更新交付物",
+      "acceptance_criteria": [
+        "当前部署策略required=false/trust=null；没有本机许可目录仍可通过启动许可检查，不采集硬件或要求签名",
+        "便携构建增加显式无设备许可选项，与公开信任文件互斥；旧有有许可构建仍需验证公钥，不能由参数遗漏静默关闭",
+        "正式原4322受控加载新版本，原配置/数据及旧失败保留；真实浏览器可进入用例结果和脚本入口",
+        "新试用包、PDF/HTML手册、Excel模板及当前源码归档一致；旧交付包保留"
+      ],
+      "constraints": [
+        "保留API Key及Windows加密凭据组件",
+        "不运行云平台或业务脚本，不新建付费模型任务",
+        "不自动提交推送或公开发布"
+      ]
+    },
+    {
+      "id": "DR-0001-10",
+      "status": "已确认",
+      "requirement": "修复解压版运行缺陷并以新包复验",
+      "acceptance_criteria": [
+        "包内包含前端证据运行所需文件；新建受管工作区可在受限沙箱运行",
+        "新包解压校验与离线安装通过，前后端合成用例和AI用例助手实际验证",
+        "恢复原4322与原配置数据，准确记录剩余缺口"
+      ],
+      "constraints": [
+        "不复制既有凭据，不关闭沙箱",
+        "不覆盖旧包、历史失败或原业务数据"
+      ]
+    },
+    {
+      "id": "DR-0001-11",
+      "status": "已确认",
+      "requirement": "修复预览无反馈并重建可追溯交付范围",
+      "acceptance_criteria": [
+        "显示加载、超时及重试状态，并提供同一快照的直接打开入口",
+        "冻结现有工作树并保留旧范围，只声明本轮真实改动；运行交付门禁",
+        "新包与解压后程序核验，原数据和配置不变"
+      ],
+      "constraints": [
+        "不放宽门禁或覆盖历史快照",
+        "不自动提交推送或发布"
+      ]
+    },
+    {
+      "id": "DR-0001-12",
+      "status": "已确认",
+      "requirement": "报告子框导航受阻时自动恢复预览",
+      "acceptance_criteria": [
+        "保留原始固定快照与直接下载，受阻后自动读取并安全显示报告内容",
+        "报告样式、内部定位及内嵌媒体可用；失败时仍可重试",
+        "新包解压、安装并验证，最后恢复原4322服务"
+      ],
+      "constraints": [
+        "不修改历史快照、结果或用户凭据",
+        "不声称其他电脑已经验收"
+      ]
+    },
+    {
+      "id": "DR-0001-13",
+      "status": "已确认",
+      "requirement": "移除报告预览对子框文档导航的依赖",
+      "acceptance_criteria": [
+        "直接读取固定HTML，在禁脚本的受限子框中显示，保留目录、媒体与原始下载",
+        "超时和错误可重试，离开页面后停止旧请求",
+        "真实Edge模拟文档响应暂停并验证，便携包重新解压安装，恢复原4322"
+      ],
+      "constraints": [
+        "不修改历史快照或模型凭据",
+        "不能声称已经修复外部浏览器控制组件"
+      ]
+    },
+    {
+      "id": "DR-0001-14",
+      "status": "已确认",
+      "requirement": "修复当前便携试用包的启动模式恢复、资料选择阻断和环境保存错误提示",
+      "acceptance_criteria": [
+        "仅恢复既有明确启用的模型配置；配置Key本身不自动授权调用，运行中不切换实例",
+        "模型不可用时本地资料选择/移除可用，发送保持禁用；真实上传仅在用户发送后触发",
+        "Windows CMD交付入口以无BOM CRLF输出，独立于工作区换行格式",
+        "环境保存将GENERATION_TARGET_UNREACHABLE显示为中文检查说明，不放宽目标检查"
+      ],
+      "constraints": [
+        "不静默更换4322端口或数据目录",
+        "不新增付费调用、不自动发布",
+        "不能以本机成功替代另一台电脑的复验"
+      ]
+    },
+    {
+      "id": "DR-0001-15",
+      "status": "已确认",
+      "requirement": "网页显式启用模型及安全重新加载保存密钥",
+      "acceptance_criteria": [
+        "保存并启用明确提示重启及按任务调用；保存本身不发模型请求",
+        "同源和当前实例检查，任务或并发写入时拒绝；不接受任意路径或环境",
+        "受管启动器仅对显式启用允许一次模型配置变化，始终核对原数据根，普通重启仍严格保持配置",
+        "网页选择的DPAPI密钥明确优先于旧DSH凭据，不读取或覆盖旧凭据；普通启动保持已启用状态",
+        "新安装包实际安装并完成网页启用、真实模型调用、重复重启，恢复原工作台"
+      ],
+      "constraints": [
+        "不使用原有模型凭据",
+        "不修改历史结果",
+        "不宣称其他电脑或完整产品验收"
+      ]
+    },
+    {
+      "id": "DR-0001-16",
+      "status": "已确认",
+      "requirement": "加入DOCX本机Word只读后备和离线增量升级/回退",
+      "acceptance_criteria": [
+        "保留原字节与SHA，正文/表格按位置提取，图片和其它未覆盖对象明确标为部分读取",
+        "禁用宏和外链更新，只管理本次创建的Word实例；缺少Office、无权限、超时给出明确错误",
+        "升级GUI选择旧安装目录，复用旧包Node，仅编辑经匹配的目标程序文件并更新完整性清单",
+        "运行中拒绝升级；备份、重复升级、异常自动恢复及显式回退；原环境/配置/密钥/数据不变",
+        "正式4322验证功能；升级包不包含runtime/node_modules/用户内容，真实受保护文件只在本机读取、不发模型"
+      ],
+      "constraints": [
+        "不扩展PDF/Excel/PPT等格式",
+        "不自动升级或退出用户正在运行的实例",
+        "不提交、推送或公开发布"
+      ]
+    },
+    {
+      "id": "DR-0001-17",
+      "status": "已确认",
+      "requirement": "完整安装器包含Word/WPS后备并验证程序/环境完整性",
+      "acceptance_criteria": [
+        "原AI用例助手上传/粘贴/拖入，标准解析失败后尝试本机Word/WPS；不新增必经独立配置窗口",
+        "完整EXE内置现有Node、浏览器和锁定依赖，不含凭据或项目数据",
+        "实际新目录安装、程序清单/帮助组件摘要及原4322普通上传验证",
+        "保留旧安装与数据；受保护文件/真实WPS及新付费模型未验单列"
+      ],
+      "constraints": [
+        "本轮不再交付增量包",
+        "不为本机测试修复或调整企业加密策略",
+        "不自动提交、推送或公开发布"
+      ]
     }
   ],
   "design_decisions": [
@@ -191,6 +468,141 @@
       "status": "已确认",
       "summary": "时间义务由原文绑定的可信执行观察器测量，候选不自设时钟或容差。",
       "rationale": "旧候选把400–600ms放宽为300–2000ms，点击/轮询总耗时也不是提示可见时长。 有限提取精确加载提示、步骤和单位区间；在原动作执行中使用同页单调时钟观察可见状态跃迁并留证，自测、提交、最终验证和复跑共享义务。未知语法、缺测、重复/提前出现或越界不升级ready。"
+    },
+    {
+      "id": "DD-0001-07",
+      "dr_ids": [
+        "DR-0001-06"
+      ],
+      "status": "已确认",
+      "summary": "仅向根安装器增加可选RuntimeHome，先校验非空绝对路径，再向原初始化脚本转发；默认空参数列表保持既有行为。",
+      "rationale": "避免完整安装验收误写当前环境，保留运行中保护并取得实际安装证据。"
+    },
+    {
+      "id": "DD-0001-08",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "status": "已确认",
+      "summary": "版本化新待验源码包；完整安装在独立解压目录/运行时/浏览器缓存执行，正式工作台停机前确认空闲和归属，恢复只使用原启动器/配置/数据。",
+      "rationale": "避免完整安装验收误写当前环境，保留运行中保护并取得实际安装证据。"
+    },
+    {
+      "id": "DD-0001-09",
+      "dr_ids": [
+        "DR-0001-07"
+      ],
+      "status": "已确认",
+      "summary": "在既有只读视图优先呈现最新公开回复和对应输入，完整历史折叠保留；有限安全排版先转义后构造固定标签，原文与失败/截断提示可查看。",
+      "rationale": "直接解决长会话找结果与表格阅读问题，避免新增解析依赖或模型/业务判定耦合。"
+    },
+    {
+      "id": "DD-0001-10",
+      "dr_ids": [
+        "DR-0001-08"
+      ],
+      "status": "已确认",
+      "summary": "复用现有便携打包器和当前.4版本；附独立PDF/HTML手册、同格式模板和源码快照，分开工程师交付物与维护归档。",
+      "rationale": "交付已实现功能并降低安装负担，不因打包扩大业务或更改已验版本。"
+    },
+    {
+      "id": "DD-0001-11",
+      "dr_ids": [
+        "DR-0001-09"
+      ],
+      "status": "已确认",
+      "summary": "复用已有无设备许可策略分支，并为便携包增加显式互斥构建参数；保留既有有许可构建和签名验证代码，源程序与当前试用包均关闭门禁。",
+      "rationale": "去掉本次试用的激活障碍，同时避免构建器遗漏公钥时悄悄切换模式。"
+    },
+    {
+      "id": "DD-0001-12",
+      "dr_ids": [
+        "DR-0001-10"
+      ],
+      "status": "已确认",
+      "summary": "显式收录两个证据插件并覆盖 cjs；仅在新建且为空的受管运行时根目录授予当前用户权限；解压入口限定短路径、拒绝覆盖并校验。",
+      "rationale": "修复真实缺失文件和受限沙箱授权失败，保留既有目录权限与隔离策略。"
+    },
+    {
+      "id": "DD-0001-13",
+      "dr_ids": [
+        "DR-0001-11"
+      ],
+      "status": "已确认",
+      "summary": "保留同源报告框，增加明确的超时恢复和直接打开；以本轮修改前工作树建立新范围并保存旧声明。",
+      "rationale": "报告本体在内置浏览器正常，后台 Edge 未触发子框导航；避免把浏览器状态问题误称为报告损坏。"
+    },
+    {
+      "id": "DD-0001-14",
+      "dr_ids": [
+        "DR-0001-12"
+      ],
+      "status": "已确认",
+      "summary": "导航超时后同源读取固定HTML，在禁止脚本的受限文档中加载；采用构造样式表和安全目录定位，允许内嵌数据媒体。",
+      "rationale": "受控Edge环境中同源子框也不导航，而真实Edge普通导航可用；自动恢复避免依赖浏览器子框导航。"
+    },
+    {
+      "id": "DD-0001-15",
+      "dr_ids": [
+        "DR-0001-13"
+      ],
+      "status": "已确认",
+      "summary": "使用同源 fetch 读取报告，直接写入受限子框；30秒超时和取消机制，不再使用 iframe src 导航。",
+      "rationale": "文档响应暂停时同源子框停于 about:blank；直接读取不产生该文档导航。外部控制工具是否发生漏放行尚未实证。"
+    },
+    {
+      "id": "DD-0001-16",
+      "dr_ids": [
+        "DR-0001-14"
+      ],
+      "status": "已确认",
+      "summary": "普通启动只读取已保存的显式model_calls_allowed和user_initiated_operations；模型不可用只阻止发送，保留资料准备；修正CMD打包换行和环境错误映射。",
+      "rationale": "让用户明确启用的模式在重启后保持，同时避免密钥保存被当成付费调用授权。"
+    },
+    {
+      "id": "DD-0001-17",
+      "dr_ids": [
+        "DR-0001-15"
+      ],
+      "status": "已确认",
+      "summary": "新增受管模型启用IPC模式；旧服务排空和端口释放后，由父进程以固定运行目录准备模型环境，同数据根启动替代子进程。显式网页操作持久化DPAPI来源；普通重启仍保持指纹。",
+      "rationale": "现有服务缓存模型客户端，必须受控重建；不能把单纯保存密钥误作调用或静默切换数据。"
+    },
+    {
+      "id": "DD-0001-18",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "status": "已确认",
+      "summary": "现有DOCX解析失败后对非标准容器调用受限Word COM，冻结原文件摘要与部分读取段落；升级器用旧包Node执行带摘要、精确文本补丁和备份的事务，仅携带新增组件。",
+      "rationale": "复用安装环境，不覆盖其它已安装功能和用户状态；Office权限判断交由本机Office。"
+    },
+    {
+      "id": "DD-0001-19",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "status": "已确认",
+      "summary": "复用已验证完整安装包的同锁依赖与运行时，覆盖当前受控运行代码并重建完整摘要，Inno Setup生成新EXE；模板仅复用上一完整包中可解析的公开工程模板，不修改本机加密原件。",
+      "rationale": "完整交付所有运行组件；当前本机企业加密异常不作为接收电脑兼容结论。"
+    },
+    {
+      "id": "DD-0001-20",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "status": "已确认",
+      "summary": "Office结果先校验段落/单元格位置与类型，再省略空白文字；有效原文不改，重新连续分配segment_id并保留原位置与quote_sha256。",
+      "rationale": "受保护真实Word的103段含一个制表符空段落，原校验错误地拒绝整份已读取资料。"
+    },
+    {
+      "id": "DD-0001-21",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "status": "已确认",
+      "summary": "生成会话只对local-office/PARTIAL、图片UNANALYZED且嵌图清单为空的DOCX使用已冻结文字，不重开原件ZIP；原字节摘要仍核验，普通DOCX插图继续解析及校验，MCP清单保留读取方式和图片缺口。",
+      "rationale": "原件可被Word读取不代表原字节为普通ZIP；真实生成必须沿用冻结正文并暴露未覆盖图片。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -199,7 +611,8 @@
     "本次无需设计变更，原因：仅补既有查询/范围定位/阅读能力的组合回归；产品协议、候选规则、权限、审批和运行数据流均未修改。REQ-0008仅设计待选，未进入产品实现。",
     "本次无需设计变更，原因：仅新增既定升级说明的端到端存储/服务回归；真实Git旧运行时生成合成历史→停止→现有备份→新空目录→当前服务核验→新版结果独立归档→用升级前备份在旧运行时回退。不把新版数据反向迁移到旧版本。",
     "本次无需设计变更，原因：报告媒体验证只通过现有BrowserSession、Store和report生成隔离合成产物，再用浏览器检查；固定计划故障夹具明确标注，不传入模型，不代表业务验收。",
-    "本次无需设计变更，原因：仅运行既有createCandidate/verifyCandidate并检查归档与解包后程序，应用/依赖/协议未修改；运行时依赖明确复用本工作区，不冒充干净安装。"
+    "本次无需设计变更，原因：仅运行既有createCandidate/verifyCandidate并检查归档与解包后程序，应用/依赖/协议未修改；运行时依赖明确复用本工作区，不冒充干净安装。",
+    "v16：原资料上传→标准解析→非标准DOCX调用本机Word/WPS只读后备→PARTIAL来源快照；同源sources/office接口只接收provider与原件路径，不在资料快照保存本机完整路径，不触发模型。"
   ],
   "module_document_impact": [
     "2026-09-26本轮实际修改安装启动、workbench认证/生成/复跑与harness运行链路；已同步docs/modules/test-workbench.md、docs/ai_engineering/03_interfaces.md、04_build_test.md、workbench/README.md。此前无模块变更说明均为历史阶段，不用于本次。",
@@ -209,7 +622,11 @@
     "本次无需模块文档变更，原因：此次仅新增tests/release-discovery-chains.test.mjs及验证记录，未改变现有产品模块能力或配置；模块仍由已完成REQ-0005/0006/0007说明约束。",
     "本次无需模块文档变更，原因：仅增加tests/release-upgrade.integration.mjs，既有Store、服务与备份协议不变；如实测发现缺陷，另建子需求后修改产品。",
     "本次无需模块文档变更，原因：报告验证阶段只新增tests/release-report.integration.mjs；现有报告模块行为保持。发现产品缺陷时转关联子包，不能通过修改验收夹具隐藏问题。",
-    "本次无需模块文档变更，原因：现有打包白名单和PENDING_ACCEPTANCE状态不变，只生成当前代码的新候选及证据。"
+    "本次无需模块文档变更，原因：现有打包白名单和PENDING_ACCEPTANCE状态不变，只生成当前代码的新候选及证据。",
+    "本轮只制作交付物与操作手册，当前.4运行时代码、依赖、接口及数据语义不变，无需修改模块事实。",
+    "本轮设备许可策略和便携打包模式有变，根试用说明及Windows便携包说明同步更新；业务脚本、数据、接口和模型密钥语义不变。",
+    "v11更新试用说明和工作台模块的显式模型模式恢复/只读诊断说明；不改变业务范围、原授权和用户数据。",
+    "v16助手DOCX自动Office只读后备、同输入区原件路径和完整安装器边界已写入docs/modules/workbench-case-library.md；不修改企业加密策略或原D安装。"
   ],
   "risks_and_rollback": [
     "工具拒绝是执行环境阻塞，用户业务授权不能替代环境许可；不修改工具安全配置。",
@@ -370,6 +787,300 @@
       "verification_ids": [
         "VT-0001-11"
       ]
+    },
+    {
+      "id": "TK-0001-12",
+      "dr_ids": [
+        "DR-0001-06"
+      ],
+      "dd_ids": [
+        "DD-0001-07"
+      ],
+      "status": "已完成本机限定验收；非整体发布批准",
+      "task": "安装器独立RuntimeHome、默认兼容和失败边界验证",
+      "verification_ids": [
+        "VT-0001-12"
+      ]
+    },
+    {
+      "id": "TK-0001-13",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "dd_ids": [
+        "DD-0001-08"
+      ],
+      "status": "已完成本机限定验收；非整体发布批准",
+      "task": "新候选完整安装、首次浏览器下载及原4322恢复保全",
+      "verification_ids": [
+        "VT-0001-13"
+      ]
+    },
+    {
+      "id": "TK-0001-14",
+      "dr_ids": [
+        "DR-0001-07"
+      ],
+      "dd_ids": [
+        "DD-0001-09"
+      ],
+      "status": "已完成本轮阅读体验限定验收；非整体发布批准",
+      "task": "公开对话最新定位、安全排版及原4322既有记录验收",
+      "verification_ids": [
+        "VT-0001-14"
+      ]
+    },
+    {
+      "id": "TK-0001-15",
+      "dr_ids": [
+        "DR-0001-08"
+      ],
+      "dd_ids": [
+        "DD-0001-10"
+      ],
+      "status": "已完成内部试用打包交付；非整体发布批准",
+      "task": "完整便携包、手册、模板和源码归档；包字节、诊断及原4322只读验收",
+      "verification_ids": [
+        "VT-0001-15"
+      ]
+    },
+    {
+      "id": "TK-0001-16",
+      "dr_ids": [
+        "DR-0001-09"
+      ],
+      "dd_ids": [
+        "DD-0001-11"
+      ],
+      "status": "已完成免设备许可试用交付；非整体发布批准",
+      "task": "源策略、便携构建、手册与归档同步取消设备激活并验证",
+      "verification_ids": [
+        "VT-0001-16"
+      ]
+    },
+    {
+      "id": "TK-0001-17",
+      "dr_ids": [
+        "DR-0001-10"
+      ],
+      "dd_ids": [
+        "DD-0001-12"
+      ],
+      "status": "已完成限定本机验证，完整产品验收未完成",
+      "task": "修复、构建、解压、安装并验证新用户工作流",
+      "verification_ids": [
+        "VT-0001-17"
+      ]
+    },
+    {
+      "id": "TK-0001-18",
+      "dr_ids": [
+        "DR-0001-11"
+      ],
+      "dd_ids": [
+        "DD-0001-13"
+      ],
+      "status": "已实现，按本轮证据验收",
+      "task": "预览恢复交互、范围冻结、打包与验证",
+      "verification_ids": [
+        "VT-0001-18"
+      ]
+    },
+    {
+      "id": "TK-0001-19",
+      "dr_ids": [
+        "DR-0001-12"
+      ],
+      "dd_ids": [
+        "DD-0001-14"
+      ],
+      "status": "已实现，按本轮证据验收",
+      "task": "实现自动兼容恢复、回归和便携包验收",
+      "verification_ids": [
+        "VT-0001-19"
+      ]
+    },
+    {
+      "id": "TK-0001-20",
+      "dr_ids": [
+        "DR-0001-13"
+      ],
+      "dd_ids": [
+        "DD-0001-15"
+      ],
+      "status": "已实现，按本轮证据验收",
+      "task": "根因对照、报告直载、回归与便携包验证",
+      "verification_ids": [
+        "VT-0001-20"
+      ]
+    },
+    {
+      "id": "TK-0001-21",
+      "dr_ids": [
+        "DR-0001-14"
+      ],
+      "dd_ids": [
+        "DD-0001-16"
+      ],
+      "status": "已实现并完成本机限定验证；远端与整体交付待验",
+      "task": "修复显式模型启用后的普通启动恢复与CMD交付入口",
+      "verification_ids": [
+        "VT-0001-21"
+      ]
+    },
+    {
+      "id": "TK-0001-22",
+      "dr_ids": [
+        "DR-0001-14"
+      ],
+      "dd_ids": [
+        "DD-0001-16"
+      ],
+      "status": "已实现并完成本机限定验证；远端与整体交付待验",
+      "task": "修复模型不可用时资料选择无反应及环境保存错误文案",
+      "verification_ids": [
+        "VT-0001-22"
+      ]
+    },
+    {
+      "id": "TK-0001-23",
+      "dr_ids": [
+        "DR-0001-15"
+      ],
+      "dd_ids": [
+        "DD-0001-17"
+      ],
+      "status": "已实现，按本轮证据验收",
+      "task": "实现网页首次启用、安全重启及重新打包安装验收",
+      "verification_ids": [
+        "VT-0001-23"
+      ]
+    },
+    {
+      "id": "TK-0001-24",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "dd_ids": [
+        "DD-0001-18"
+      ],
+      "status": "已实现；真实受保护DOCX/WPS兼容待接收电脑验证",
+      "task": "DOCX只读Office后备与错误提示",
+      "verification_ids": [
+        "VT-0001-24"
+      ]
+    },
+    {
+      "id": "TK-0001-25",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "dd_ids": [
+        "DD-0001-18"
+      ],
+      "status": "已实现；历史限定验证保留，本轮改交完整安装器",
+      "task": "选择旧目录的增量升级、备份与回退",
+      "verification_ids": [
+        "VT-0001-25"
+      ]
+    },
+    {
+      "id": "TK-0001-26",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "dd_ids": [
+        "DD-0001-18"
+      ],
+      "status": "已实现；历史限定验证保留，本轮改交完整安装器",
+      "task": "正式4322、旧包升级/回退及轻量归档验证",
+      "verification_ids": [
+        "VT-0001-26"
+      ]
+    },
+    {
+      "id": "TK-0001-27",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-19"
+      ],
+      "status": "已实现并完成限定工程/安装验证；整体待验",
+      "task": "新完整安装器组装与实际安装校验",
+      "verification_ids": [
+        "VT-0001-27"
+      ]
+    },
+    {
+      "id": "TK-0001-28",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-19"
+      ],
+      "status": "已实现并完成限定工程/安装验证；整体待验",
+      "task": "正式助手普通资料入口及限定交付验证",
+      "verification_ids": [
+        "VT-0001-28"
+      ]
+    },
+    {
+      "id": "TK-0001-29",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-20"
+      ],
+      "status": "已实现并完成限定工程、正式助手和安装验证；真实WPS未验",
+      "task": "修复Office空段落误报并复验正式助手受保护资料读取",
+      "verification_ids": [
+        "VT-0001-29"
+      ]
+    },
+    {
+      "id": "TK-0001-30",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-19"
+      ],
+      "status": "已实现并完成限定工程、正式助手和安装验证；真实WPS未验",
+      "task": "重建并验证含修复的完整安装器",
+      "verification_ids": [
+        "VT-0001-30"
+      ]
+    },
+    {
+      "id": "TK-0001-31",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-21"
+      ],
+      "status": "已实现；真实生成与网页Excel下载及内容/引用核对通过",
+      "task": "修复受保护资料生成准备并完成真实生成和Excel下载",
+      "verification_ids": [
+        "VT-0001-31"
+      ]
+    },
+    {
+      "id": "TK-0001-32",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "dd_ids": [
+        "DD-0001-19"
+      ],
+      "status": "已实现；完整程序字节与编译核对通过，安装向导未重复执行",
+      "task": "完整安装包包含受保护资料生成修复",
+      "verification_ids": [
+        "VT-0001-32"
+      ]
     }
   ],
   "verification_items": [
@@ -507,6 +1218,384 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20260926-timing/engineering-presentation-final.log"
       }
+    },
+    {
+      "id": "VT-0001-12",
+      "dr_ids": [
+        "DR-0001-06"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "安装器独立RuntimeHome、默认兼容和失败边界验证",
+      "evidence_standard": "实际安装与正式Edge证据见REPORT；该命令核对5组已采集证据（共用不累加）。首轮下载后安装失败保留，r2复用该缓存。工程夹具不替代实际安装；本机新目录不替代干净Windows/新设备授权/完整业务验收。",
+      "current_evidence": {
+        "command": "node --test workbench/qa/20261022-full-installer/verify-final.mjs",
+        "exit_code": 0,
+        "test_count": 5,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261022-full-installer/delivery-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-13",
+      "dr_ids": [
+        "DR-0001-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "新候选完整安装、首次浏览器下载及原4322恢复保全",
+      "evidence_standard": "实际安装与正式Edge证据见REPORT；该命令核对5组已采集证据（共用不累加）。首轮下载后安装失败保留，r2复用该缓存。工程夹具不替代实际安装；本机新目录不替代干净Windows/新设备授权/完整业务验收。",
+      "current_evidence": {
+        "command": "node --test workbench/qa/20261022-full-installer/verify-final.mjs",
+        "exit_code": 0,
+        "test_count": 5,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261022-full-installer/delivery-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-14",
+      "dr_ids": [
+        "DR-0001-07"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "最新定位、完整历史、原文与安全排版；既有记录正式浏览器及数据保全",
+      "evidence_standard": "本轮真实Edge与现有GET内容核对见REPORT；5项产物核对不替代模型/业务或整体发布验收。不执行HTML和远程资源，有限Markdown不声称支持所有语法。",
+      "current_evidence": {
+        "command": "node --test workbench/qa/20261022-conversation-readability/verify-final.mjs",
+        "exit_code": 0,
+        "test_count": 5,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261022-conversation-readability/delivery-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-15",
+      "dr_ids": [
+        "DR-0001-08"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "本次试用交付物精确核对、实际包内准备诊断、手册与模板检查及正式工作台只读验收",
+      "evidence_standard": "逐文件摘要和实际命令/结果留档；PDF逐页渲染；不以程序启动/工程检查替代完整业务或干净Windows验收",
+      "current_evidence": {
+        "command": "node --test workbench/qa/20261026-engineer-release/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 6,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261026-engineer-release/delivery-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-16",
+      "dr_ids": [
+        "DR-0001-09"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "无许可启动检查、构建模式互斥与原有签名拒绝、原4322浏览器及精确交付物核对",
+      "evidence_standard": "实际空许可目录CLI和包内准备检查、定向/固定回归、原4322新源码身份与真实浏览器、归档摘要和PDF渲染；旧15项验证不变",
+      "current_evidence": {
+        "command": "node --test workbench/qa/20261026-no-device-license/verify.test.mjs",
+        "exit_code": 0,
+        "test_count": 5,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261026-no-device-license/delivery-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-17",
+      "dr_ids": [
+        "DR-0001-10"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "本机解压安装、前后端真实模型及助手与原工作台恢复",
+      "evidence_standard": "记录实际新包身份、失败、真实模型生成与运行、零模型复跑、工程清单和未验范围",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 1296,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-portable-functional/engineering-final.log"
+      }
+    },
+    {
+      "id": "VT-0001-18",
+      "dr_ids": [
+        "DR-0001-11"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "报告预览和恢复交互及打包门禁",
+      "evidence_standard": "正式4322原快照、后台浏览器恢复入口、定向工程测试和新包校验",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/report-navigation.test.mjs workbench/tests/report.test.mjs workbench/tests/report-project-latest.test.mjs workbench/tests/portable-package.test.mjs",
+        "exit_code": 0,
+        "test_count": 43,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-report-delivery/tests.log"
+      }
+    },
+    {
+      "id": "VT-0001-19",
+      "dr_ids": [
+        "DR-0001-12"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "Edge报告预览自动恢复和相关回归",
+      "evidence_standard": "真实Edge强制子框故障、报告内容、目录与视频，定向工程测试",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/report-navigation.test.mjs workbench/tests/report.test.mjs workbench/tests/report-project-latest.test.mjs workbench/tests/portable-package.test.mjs",
+        "exit_code": 0,
+        "test_count": 44,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-edge-preview/tests.log"
+      }
+    },
+    {
+      "id": "VT-0001-20",
+      "dr_ids": [
+        "DR-0001-13"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "Edge文档响应暂停对照、报告直载与相关工程回归",
+      "evidence_standard": "真实Edge暂停和放行对照、响应拦截下的真实报告、媒体、目录及工程测试",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/report-navigation.test.mjs workbench/tests/report.test.mjs workbench/tests/report-project-latest.test.mjs workbench/tests/portable-package.test.mjs",
+        "exit_code": 0,
+        "test_count": 44,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-edge-root-cause/tests.log"
+      }
+    },
+    {
+      "id": "VT-0001-21",
+      "dr_ids": [
+        "DR-0001-14"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "修复显式模型启用后的普通启动恢复与CMD交付入口",
+      "evidence_standard": "定向回归、正式4322功能验证及包内字节检查；远端Windows与真实模型另列",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 1302,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-portable-assistant/full-unit.log"
+      }
+    },
+    {
+      "id": "VT-0001-22",
+      "dr_ids": [
+        "DR-0001-14"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "修复模型不可用时资料选择无反应及环境保存错误文案",
+      "evidence_standard": "定向回归、正式4322功能验证及包内字节检查；远端Windows与真实模型另列",
+      "current_evidence": {
+        "command": "node workbench/qa/20261028-portable-assistant/verify-official.mjs",
+        "exit_code": 0,
+        "test_count": 0,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-portable-assistant/official.log"
+      }
+    },
+    {
+      "id": "VT-0001-23",
+      "dr_ids": [
+        "DR-0001-15"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "网页首次启用、旧凭据隔离、真实模型及重复重启",
+      "evidence_standard": "无监听服务替身回归与真实安装版4322网页操作、模型结果和重复重启证据；原工作台恢复",
+      "current_evidence": {
+        "command": "node --test workbench/tests/model-activation.test.mjs workbench/tests/model-settings.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/service-restart.test.mjs workbench/tests/service-restart-ui.test.mjs workbench/tests/native-runtime.test.mjs workbench/tests/desktop-launch.test.mjs workbench/tests/supervisor-reliability.test.mjs workbench/tests/native-install-delivery.test.mjs workbench/tests/model-credential-paths.test.mjs",
+        "exit_code": 0,
+        "test_count": 68,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-web-model-activation/collector-tests.log"
+      }
+    },
+    {
+      "id": "VT-0001-24",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "DOCX只读Office后备与错误提示",
+      "evidence_standard": "定向正反例、真实Office只读提取、原4322以及旧包复制上的升级/回退摘要验证；无付费调用；本轮边界：定向49通过；原生Word早期普通合成样例成功和受保护原件随后失败均保留，当前受保护文档与真实WPS不记通过。",
+      "current_evidence": {
+        "command": "node --test workbench/tests/office-reader.test.mjs workbench/tests/incremental-upgrade.test.mjs workbench/tests/requirements-documents.test.mjs workbench/tests/requirements-integration.test.mjs workbench/tests/case-assistant-view.test.mjs",
+        "exit_code": 0,
+        "test_count": 49,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-office-upgrade/targeted-delivery.log"
+      }
+    },
+    {
+      "id": "VT-0001-25",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "选择旧目录的增量升级、备份与回退",
+      "evidence_standard": "定向正反例、真实Office只读提取、原4322以及旧包复制上的升级/回退摘要验证；无付费调用；本轮边界：两旧来源CLI升级/重复/回退通过，57350未触碰文件同字节；该交付方式后被用户取消，GUI完整点击流程未验。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261028-office-upgrade/verify-delivery-package.mjs",
+        "exit_code": 0,
+        "test_count": 2,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-office-upgrade/delivery-package.log"
+      }
+    },
+    {
+      "id": "VT-0001-26",
+      "dr_ids": [
+        "DR-0001-16"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "正式4322、旧包升级/回退及轻量归档验证",
+      "evidence_standard": "定向正反例、真实Office只读提取、原4322以及旧包复制上的升级/回退摘要验证；无付费调用；本轮边界：唯一原4322普通DOCX上传与66原项目保全通过，模型请求被拦截；受保护Word和真实WPS、付费模型与全产品验收NOT_RUN。正式门禁另见collector/context日志。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261028-office-upgrade/verify-delivery-ui.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-office-upgrade/delivery-ui.log"
+      }
+    },
+    {
+      "id": "VT-0001-27",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "新完整安装器组装与实际安装校验",
+      "evidence_standard": "实际安装/摘要校验和正式4322普通上传；受保护DOCX与真实WPS明确NOT_RUN，不调用模型；本轮边界：完整EXE真实安装新目录、57367文件字节校验，旧安装数据/配置、注册信息与快捷方式保全；不是干净Windows或人工向导验收。",
+      "current_evidence": {
+        "command": "pwsh.exe -NoProfile -File workbench/qa/20261028-office-upgrade/verify-full-install.ps1",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-office-upgrade/full-install-r2.log"
+      }
+    },
+    {
+      "id": "VT-0001-28",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "正式助手普通资料入口及限定交付验证",
+      "evidence_standard": "实际安装/摘要校验和正式4322普通上传；受保护DOCX与真实WPS明确NOT_RUN，不调用模型；本轮边界：唯一原4322普通DOCX上传与66原项目保全通过，模型请求被拦截；受保护Word和真实WPS、付费模型与全产品验收NOT_RUN。正式门禁另见collector/context日志。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261028-office-upgrade/verify-delivery-ui.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261028-office-upgrade/delivery-ui.log"
+      }
+    },
+    {
+      "id": "VT-0001-29",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "修复Office空段落误报并复验正式助手受保护资料读取",
+      "evidence_standard": "限定集成通过：正式4322原助手输入区读取受保护原件102段，来源/引用/原件摘要及73项目保持；普通和受保护上传接口HTTP201；43工程正反例通过。真实WPS、图片内容、新模型调用和全产品发布未验收。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261029-protected-document-retest/verify-persisted.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-protected-document-retest/persisted.log"
+      }
+    },
+    {
+      "id": "VT-0001-30",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "重建并验证含修复的完整安装器",
+      "evidence_standard": "限定集成通过：完整EXE新目录实际安装和57367文件逐项字节校验，安装版原生Word读取102段，117原安装/配置文件及原注册/快捷方式恢复。真实WPS、图片内容、新模型调用和全产品发布未验收。",
+      "current_evidence": {
+        "command": "pwsh -File workbench/qa/20261029-protected-document-retest/verify-full-install.ps1",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-protected-document-retest/install.log"
+      }
+    },
+    {
+      "id": "VT-0001-31",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "修复受保护资料生成准备并完成真实生成和Excel下载",
+      "evidence_standard": "实际边界：首轮在模型进程启动前失败，修复后一个真实DSH生成任务完成、18工具调用、102段阅读、12格式合格草稿。网页真实下载两份XLSX；每份6条，55步骤/75来源引用、原文102片段、待确认/未执行状态和文件完整性核对通过。94内容提示属于34条业务待澄清+60条全局问题重复显示，未抹除或当作业务已验收。真实WPS和未读取图片仍未验证。",
+      "current_evidence": {
+        "command": "C:/Users/20240082/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -X utf8 workbench/.local/protected-e2e-20261029/verify-xlsx.py",
+        "exit_code": 0,
+        "test_count": 2,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-protected-document-retest/generation-verify.log"
+      }
+    },
+    {
+      "id": "VT-0001-32",
+      "dr_ids": [
+        "DR-0001-17"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "完整安装包包含受保护资料生成修复",
+      "evidence_standard": "实际边界：完整源程序57367文件与333当前运行源核验通过，打包mcp-session和release与实测源码同字节，新EXE编译和摘要通过；无依赖或安装器逻辑变更，本轮未重复新EXE安装向导，不借用v2安装结果冒充v3已安装。真实WPS和未读取图片仍未验证。",
+      "current_evidence": {
+        "command": "pwsh -File workbench/scripts/build-windows-installer.ps1 -ProgramRoot D:/UAOF3Build -OutputDirectory D:/UAOF3Setup -Iscc D:/01_AI工程/01_工程项目/pm-req/evidence/build-tools/InnoSetup-6.7.3/ISCC.exe",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-protected-document-retest/generation-build-v3.log"
+      }
     }
   ],
   "verification_environment": {
@@ -626,6 +1715,174 @@
       "tk_id": "TK-0001-11",
       "vt_id": "VT-0001-11",
       "status": "已实现"
+    },
+    {
+      "un_id": "UN-0001-02",
+      "dr_id": "DR-0001-06",
+      "dd_id": "DD-0001-07",
+      "tk_id": "TK-0001-12",
+      "vt_id": "VT-0001-12",
+      "status": "已完成本机限定验收；非整体发布批准"
+    },
+    {
+      "un_id": "UN-0001-02",
+      "dr_id": "DR-0001-05",
+      "dd_id": "DD-0001-08",
+      "tk_id": "TK-0001-13",
+      "vt_id": "VT-0001-13",
+      "status": "已完成本机限定验收；非整体发布批准"
+    },
+    {
+      "un_id": "UN-0001-03",
+      "dr_id": "DR-0001-07",
+      "dd_id": "DD-0001-09",
+      "tk_id": "TK-0001-14",
+      "vt_id": "VT-0001-14",
+      "status": "已完成本轮阅读体验限定验收；非整体发布批准"
+    },
+    {
+      "un_id": "UN-0001-04",
+      "dr_id": "DR-0001-08",
+      "dd_id": "DD-0001-10",
+      "tk_id": "TK-0001-15",
+      "vt_id": "VT-0001-15",
+      "status": "已完成内部试用打包交付；非整体发布批准"
+    },
+    {
+      "un_id": "UN-0001-05",
+      "dr_id": "DR-0001-09",
+      "dd_id": "DD-0001-11",
+      "tk_id": "TK-0001-16",
+      "vt_id": "VT-0001-16",
+      "status": "已完成免设备许可试用交付；非整体发布批准"
+    },
+    {
+      "un_id": "UN-0001-06",
+      "dr_id": "DR-0001-10",
+      "dd_id": "DD-0001-12",
+      "tk_id": "TK-0001-17",
+      "vt_id": "VT-0001-17",
+      "status": "限定本机验证通过；独立设备与完整验收未完成"
+    },
+    {
+      "un_id": "UN-0001-07",
+      "dr_id": "DR-0001-11",
+      "dd_id": "DD-0001-13",
+      "tk_id": "TK-0001-18",
+      "vt_id": "VT-0001-18",
+      "status": "限定范围验证；以本轮证据及门禁为准"
+    },
+    {
+      "un_id": "UN-0001-08",
+      "dr_id": "DR-0001-12",
+      "dd_id": "DD-0001-14",
+      "tk_id": "TK-0001-19",
+      "vt_id": "VT-0001-19",
+      "status": "限定范围验证，详见本轮证据"
+    },
+    {
+      "un_id": "UN-0001-09",
+      "dr_id": "DR-0001-13",
+      "dd_id": "DD-0001-15",
+      "tk_id": "TK-0001-20",
+      "vt_id": "VT-0001-20",
+      "status": "限定范围验证，以本轮证据为准"
+    },
+    {
+      "un_id": "UN-0001-10",
+      "dr_id": "DR-0001-14",
+      "dd_id": "DD-0001-16",
+      "tk_id": "TK-0001-21",
+      "vt_id": "VT-0001-21",
+      "status": "本机限定通过；非整体发布"
+    },
+    {
+      "un_id": "UN-0001-10",
+      "dr_id": "DR-0001-14",
+      "dd_id": "DD-0001-16",
+      "tk_id": "TK-0001-22",
+      "vt_id": "VT-0001-22",
+      "status": "本机限定通过；非整体发布"
+    },
+    {
+      "un_id": "UN-0001-11",
+      "dr_id": "DR-0001-15",
+      "dd_id": "DD-0001-17",
+      "tk_id": "TK-0001-23",
+      "vt_id": "VT-0001-23",
+      "status": "已实现，按本轮证据验收"
+    },
+    {
+      "un_id": "UN-0001-12",
+      "dr_id": "DR-0001-16",
+      "dd_id": "DD-0001-18",
+      "tk_id": "TK-0001-24",
+      "vt_id": "VT-0001-24",
+      "status": "限定实现/验证完成，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0001-12",
+      "dr_id": "DR-0001-16",
+      "dd_id": "DD-0001-18",
+      "tk_id": "TK-0001-25",
+      "vt_id": "VT-0001-25",
+      "status": "限定实现/验证完成，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0001-12",
+      "dr_id": "DR-0001-16",
+      "dd_id": "DD-0001-18",
+      "tk_id": "TK-0001-26",
+      "vt_id": "VT-0001-26",
+      "status": "限定实现/验证完成，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0001-13",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-19",
+      "tk_id": "TK-0001-27",
+      "vt_id": "VT-0001-27",
+      "status": "限定实现/验证完成，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0001-13",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-19",
+      "tk_id": "TK-0001-28",
+      "vt_id": "VT-0001-28",
+      "status": "限定实现/验证完成，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0001-13",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-20",
+      "tk_id": "TK-0001-29",
+      "vt_id": "VT-0001-29",
+      "status": "限定实现与集成验证完成；真实WPS及整体发布待验"
+    },
+    {
+      "un_id": "UN-0001-13",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-19",
+      "tk_id": "TK-0001-30",
+      "vt_id": "VT-0001-30",
+      "status": "限定实现与集成验证完成；真实WPS及整体发布待验"
+    },
+    {
+      "un_id": "UN-0001-14",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-21",
+      "tk_id": "TK-0001-31",
+      "vt_id": "VT-0001-31",
+      "status": "限定实现与集成通过；业务确认及真实WPS待验"
+    },
+    {
+      "un_id": "UN-0001-14",
+      "dr_id": "DR-0001-17",
+      "dd_id": "DD-0001-19",
+      "tk_id": "TK-0001-32",
+      "vt_id": "VT-0001-32",
+      "status": "限定实现与集成通过；业务确认及真实WPS待验"
     }
   ],
   "trace_history": [
@@ -870,6 +2127,134 @@
       "description": "REQ-0011/d4da0f7已独立同步，570工程/10重叠专项/6报告检查无失败；真实浏览器新录像字幕完整可读。保留初始及中间失败、file直开拒绝限制。",
       "impact": "有限呈现补丁与发布验证证据；真实模型/KB/最终包与独立验收未完成。",
       "confirmed_by": "实际程序日志、视频DOM及截图、冻结摘要、正式检查与GitHub SHA。"
+    },
+    {
+      "date": "2026-10-22",
+      "version": 3,
+      "type": "活动交付目标：补完整安装器证据",
+      "description": "v3本机限定安装验收完成：根安装器显式绝对RuntimeHome传递、默认兼容及运行中保护；完整首轮实际发现PS5初始化脚本UTF8缺少BOM解析失败，保留失败包/日志。修复编码标识与驱动器相对路径边界；20项PS5/PS7定向回归及1263项固定工程检查通过。新r2包321文件在全新解压/独立RuntimeHome真实四锁ci、浏览器检查、初始化及诊断完成；首轮已从空缓存下载Chromium/Headless/FFmpeg，修复重试明确复用该新缓存。恢复原桌面快捷方式4322冷启动19.214秒，单实例、原配置/数据同指纹、DSH RUNNING；真实Edge复核窗口放大/150%/退出、旧脚本/结果/证据及诊断未执行排除；本次系统全屏被Edge拒绝并回退，不记全屏通过，与v95成功记录同时保留。无业务执行/生成、无新增模型调用；真实模型已在前阶段v95完成。用户确认暂无干净Windows，干净设备/新许可激活、独立人工首审、当前电价反例及完整业务验收仍未完成；非发布批准。",
+      "impact": "仅根安装参数、相应测试及候选包/安装证据；不改变业务脚本与历史判定",
+      "confirmed_by": "用户活动目标：模板与推进测试Agent可交付；本轮自主补P1安装验收缺口"
+    },
+    {
+      "date": "2026-10-22",
+      "version": 4,
+      "type": "交付阅读体验修复",
+      "description": "v4阅读体验限定验收完成：原4322加载.4最终源码、原配置/数据同指纹、DSH RUNNING。既有217条公开记录352/352帧不变，默认先展示本次读取最新回复及对应输入，2张真实表格分别4/6行，完整历史217项/180工具记录可展开；原文及输入逐字等于原GET结果。定位按钮处理固定工具栏遮挡并聚焦可见最新标题，原始HTML/链接/图片仅文字、无远程资源元素。18项定向及1270项固定工程全通过，5组产物核对通过；新.4-r2包321文件同当前字节，旧.3安装失败/包/日志和旧成绩不变。13个DSH工作区文件及原配置同字节，27625旧资产中仅Host锁变化，旧13+99VT不变。本轮0模型调用/0业务运行/0业务稿生成，无云平台。干净Windows/新设备许可、当前电价首审/独立反例及完整业务验收仍未完成；系统全屏沿用上轮拒绝/窗口放大可用的限制，未宣称发布通过。",
+      "impact": "仅公开对话展示、相关测试/样式、候选及证据；不改业务脚本与历史成绩",
+      "confirmed_by": "持续目标：模板与推进测试Agent可交付；本轮处理已列P2阅读问题"
+    },
+    {
+      "date": "2026-10-26",
+      "version": 5,
+      "type": "工程师试用打包与归档",
+      "description": "v5工程师内部试用交付已制作：当前.4代码不变，完整Windows便携包57355文件及ZIP独立字节校验；新目录实际解压、包内离线诊断和独立私有配置准备通过，默认模型关闭，原4322实例/源码/配置/数据身份保持。7页PDF及离线HTML手册含本轮真实合成UI截图，原Excel12列/50空白行模板同字节；源码快照含当前未提交修改，排除依赖/凭据/业务数据与证据。6组交付物核对通过，旧14VT和历史失败保持。本轮0模型/0业务执行，未停服重跑完整安装器；干净Windows、新设备激活、独立工程师首用、当前电价完整业务/首审/反例及系统全屏限制仍未验，不据此宣称整体发布验收通过。 最终本机就绪核查发现原实例启动时保留NATIVE_DSH_HOME_BUSY；旧锁父51376/Host50524均已死亡，由原4322同源受控重启10.107秒恢复RUNNING，旧锁自动归档，源码/原配置/数据身份一致，0模型对话/0业务执行。首轮后置日志未登记导致范围检查失败，保留失败并按实际新增文件补齐后复验，不改规则。",
+      "impact": "新增交付与归档文件；现有运行时代码和历史保持",
+      "confirmed_by": "用户明确要求打包给测试工程师、试用手册、代码归档及模板"
+    },
+    {
+      "date": "2026-10-26",
+      "version": 6,
+      "type": "试用移除设备许可",
+      "description": "v6工程师免设备许可试用已实现并验证：源策略和新便携包required=false/trust=null，显式--no-device-license构建与公钥文件互斥，原有有许可构建的公钥/签名拒绝保持；实际空许可目录CLI可通过。17项定向包含在1272项固定工程全通过中，0失败/跳过。原4322受控加载0.1.0-native.20261026.1，DSH RUNNING，原配置/数据身份及已有许可文件不变，真实浏览器正常工作台无激活页。新完整包、7页PDF/HTML手册、原Excel模板和源码归档同步；旧包、历史失败及15个旧VT不变。干净Windows和完整业务验收仍未完成，0模型/0业务执行；非整体发布批准。",
+      "impact": "明确撤销当前试用设备激活前置条件；模型和业务授权保持",
+      "confirmed_by": "用户：许可证先去掉"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 7,
+      "type": "解压版新用户验证",
+      "description": "v7 解压版新用户本机验证：修复证据插件漏打包和新工作区权限，最终包解压安装、真实模型前后端合成用例、助手草稿及零模型复跑通过，1296 项工程通过；报告内嵌空白暂缓，独立电脑及完整产品验收未完成。",
+      "impact": "修复新包插件缺失和新建工作区权限；不变更沙箱或旧数据",
+      "confirmed_by": "用户要求以新电脑方式实测并修复"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 8,
+      "type": "报告预览与交付范围",
+      "description": "v8 报告预览与交付范围修复：同一报告在内置浏览器可嵌入；后台最小化 Edge 子框未导航，新增加载状态、重试与直接打开，历史快照不变。新包、解压安装及交付检查以本轮证据为准；不声称独立电脑或全部业务验收。",
+      "impact": "新增报告恢复入口并保留历史范围；不修改快照及业务结果",
+      "confirmed_by": "用户要求修复并重新打包验证"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 9,
+      "type": "Edge报告预览自动恢复",
+      "description": "v9 Edge 报告空白修复：导航受阻时自动读取同一快照并在受限文档显示，保留目录、样式和媒体；原快照不变，验收以本轮证据为准。",
+      "impact": "保持历史报告和下载字节不变",
+      "confirmed_by": "用户要求修复、重新打包及验证"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 10,
+      "type": "Edge 预览直载",
+      "description": "v10 Edge 预览直载：诊断子框文档响应暂停机制，移除预览对子框网络导航的依赖；直接读取同一固定报告并保持受限显示，打包和验证按本轮证据。",
+      "impact": "不改变报告快照与下载，保留既有数据",
+      "confirmed_by": "用户要求继续排查修复并打包验证"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 11,
+      "type": "跨电脑试用问题修复",
+      "description": "v11跨电脑助手问题已实现，收口验证进行中：49项定向及正式4322资料选择/真实DOCX与Markdown上传通过，原配置/数据和旧项目保留。修复显式模型模式恢复、启动输出保留与只读诊断、CMD打包换行；目标地址问题用户已确认恢复，网络检查未放宽。完整工程、打包与门禁结果待本轮收口，另一台电脑和新的真实模型生成未验。",
+      "confirmed_by": "用户2026-10-28跨电脑试用故障反馈",
+      "impact": "仅本次模型启动与资料准备、环境错误提示；旧验收与历史交付保持"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 12,
+      "type": "网页密钥及图形安装",
+      "description": "用户要求网页配置密钥和可选择位置、快捷方式的安装器；网页加密保存及14项回归已实现，首次模型启用和安装验收尚未完成。",
+      "impact": "保留既有凭据、数据和未提交修改",
+      "confirmed_by": "用户明确要求"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 13,
+      "type": "标准Windows安装",
+      "description": "按用户要求采用现有已签名Inno Setup工具；选择安装位置，默认桌面快捷方式，复用已有Node启动入口并自动打开浏览器。验证中，未发布。",
+      "impact": "不覆盖既有安装目录或客户数据；网页保存密钥不等于首次模型启用完成",
+      "confirmed_by": "用户明确要求使用其他安装工具并创建快捷方式"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 14,
+      "type": "网页首次模型启用",
+      "description": "v11本机限定修复已实现：49项定向及1302项固定工程通过，原4322代码身份、配置/数据根保持，正常DOCX/Markdown上传及不可用状态资料选择已验。候选ZIP57361文件独立归档校验通过，原始stage许可证文本字节检查失败保留，不宣称安装验收；远端电脑与新付费模型生成未验。另确认企业保护Word在Python/Node视角字节不同，当前测试Agent缺少需求Agent已有的本机Office只读后备，未扩实现。",
+      "impact": "仅显式网页启用允许受管模型配置切换，普通重启约束保持",
+      "confirmed_by": "用户：那就修复这个问题"
+    },
+    {
+      "date": "2026-10-28",
+      "version": 15,
+      "type": "Office读取与增量升级",
+      "description": "v15 Office只读后备与增量升级包实施中：仅支持当前DOCX读取兼容，选择旧安装路径，复用旧环境并保留配置/数据，备份及失败回退，不调用付费模型。",
+      "impact": "仅DOCX读取兼容与可回退增量更新，不替换已装环境或改动数据",
+      "confirmed_by": "用户明确要求接入并制作选择原安装路径的升级包"
+    },
+    {
+      "date": "2026-10-29",
+      "version": 16,
+      "type": "改为完整安装器",
+      "description": "v16完整Windows EXE已生成并完成新目录实际安装和57367文件字节校验，72项相关工程、原4322普通DOCX上传及66原项目保全通过；当前本机加密环境异常，受保护DOCX/真实WPS待接收电脑验证，正式门禁以本轮日志为准，非全产品发布批准。",
+      "impact": "完整安装包取代增量交付，读取实现延续；旧包及失败证据保留",
+      "confirmed_by": "用户明确要求打一个新的安装包，不再用升级包方式"
+    },
+    {
+      "date": "2026-10-29",
+      "version": 17,
+      "type": "受保护Word真实复验与空段落修复",
+      "description": "v17修复制表符空段落导致的Office读取误报；43项工程、正式4322助手受保护原件102有效段和两种DOCX上传通过；新版完整EXE实际安装、57367文件及安装版原生Word读取通过，原安装/配置117文件保持。真实WPS、图片读取、新模型生成及完整发布门禁未判通过。",
+      "impact": "修正读取结果校验并重建完整安装包；保留v16包及此前失败，原安装和企业保护策略不改。",
+      "confirmed_by": "用户确认电脑恢复并可测试，手工可看到同一原件正文"
+    },
+    {
+      "date": "2026-10-29",
+      "version": 18,
+      "type": "受保护Word真实生成与Excel下载",
+      "description": "v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。",
+      "impact": "修复生成准备对受保护原件的ZIP重解析；更新完整安装包，不改变原件与加密策略。",
+      "confirmed_by": "用户明确要求继续同一加密文档，在AI用例助手实际生成一次用例并下载Excel验证整个流程"
     }
   ]
 }

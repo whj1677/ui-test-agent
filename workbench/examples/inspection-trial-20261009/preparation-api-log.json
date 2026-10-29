@@ -1,0 +1,467 @@
+[
+  {
+    "method": "GET",
+    "route": "/api/health",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-07a00a83-f3fa-4689-a81d-87d1c63cc0b0",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6f7743d6-a1d0-4069-a582-5a6bac3c29d3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b603bf0a-975f-4f2c-bf0b-b8163025c76d",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6984c8cd-0859-48b0-a82d-5d67559a7d30",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-7550f424-491a-4afa-b73e-a81da81cf095",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-df656dff-7714-4fb6-ac13-941c8d46bf08",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5ba59c69-b44b-4d57-84b1-a398f0530f5f",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-358e4789-3995-4d6c-a0e3-2c6142d133c5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-f3998d26-9acf-4ac0-8189-a10aef036e44",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-27e64c7d-c0c7-4d8c-ae15-6696d3a96712",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-8a99c530-46ac-4b15-a5df-b29060f8e7e1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-9bbfec1f-3485-4c7f-bccd-69962d3a08d6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-cd91614a-1b91-49df-bf49-30c1493fcd8c",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-a1d83add-7302-4b6a-93b4-1e9083d56103",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5829c56e-456c-4cef-9800-57354ba5f23e",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-88732799-b0ef-4cbc-94b3-c1b9e3101dc6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-87b6dd0d-b34b-4012-84c7-0d5697936a71",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-fbaed33d-2d00-42d5-978d-62fdb722f806",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b5dab9e6-f836-4e34-b54a-ede1dee6d9fa",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b705d9dd-e30b-47f0-bff0-ab65d65b6fa9",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-2a2d84d7-d01f-4025-834d-e613e546c440",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-4c05c8a1-d976-4ac9-97fd-50460a6292e1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-929998d0-4b18-47af-a49f-eefcf7cb2678",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-7222abae-43d0-4f41-a0db-beb6cbef3f16",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-50bd3993-391a-4bfc-9286-469ba2b45fac",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-849b567d-a4f4-4397-a4db-903d03806010",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-80875248-3e14-4055-b077-b890dead1a9e",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b2698965-755a-44ba-8535-dd36758c6941",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-2564e684-1dbb-460a-b644-bc344f847a48",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects",
+    "status": 201
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/uploads",
+    "status": 201
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/imports/preview",
+    "status": 201
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/imports/preview-b22a1261-ac18-4e7b-9e76-17897c035c9e/confirm",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/requirements/sources",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/requirements/sources",
+    "status": 201
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/requirements/sources",
+    "status": 201
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/requirements/sources",
+    "status": 201
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/environment",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/targets",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/targets",
+    "status": 201
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/targets",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/backend/environments",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/environment",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/backend/preparation",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/script-operations/preflight",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/execution-records",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/script-operations",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae/backend",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-07a00a83-f3fa-4689-a81d-87d1c63cc0b0",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6f7743d6-a1d0-4069-a582-5a6bac3c29d3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b603bf0a-975f-4f2c-bf0b-b8163025c76d",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6984c8cd-0859-48b0-a82d-5d67559a7d30",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-7550f424-491a-4afa-b73e-a81da81cf095",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-df656dff-7714-4fb6-ac13-941c8d46bf08",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5ba59c69-b44b-4d57-84b1-a398f0530f5f",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-358e4789-3995-4d6c-a0e3-2c6142d133c5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-f3998d26-9acf-4ac0-8189-a10aef036e44",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-27e64c7d-c0c7-4d8c-ae15-6696d3a96712",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-8a99c530-46ac-4b15-a5df-b29060f8e7e1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-e2ed5a80-4450-46cd-838b-b43603f566a5",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-9bbfec1f-3485-4c7f-bccd-69962d3a08d6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-cd91614a-1b91-49df-bf49-30c1493fcd8c",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-a1d83add-7302-4b6a-93b4-1e9083d56103",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5829c56e-456c-4cef-9800-57354ba5f23e",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-88732799-b0ef-4cbc-94b3-c1b9e3101dc6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-87b6dd0d-b34b-4012-84c7-0d5697936a71",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-fbaed33d-2d00-42d5-978d-62fdb722f806",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b5dab9e6-f836-4e34-b54a-ede1dee6d9fa",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b705d9dd-e30b-47f0-bff0-ab65d65b6fa9",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-2a2d84d7-d01f-4025-834d-e613e546c440",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-4c05c8a1-d976-4ac9-97fd-50460a6292e1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-929998d0-4b18-47af-a49f-eefcf7cb2678",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-7222abae-43d0-4f41-a0db-beb6cbef3f16",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-50bd3993-391a-4bfc-9286-469ba2b45fac",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-849b567d-a4f4-4397-a4db-903d03806010",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-93d8424d-0576-4c76-b18e-2157f823d8f8",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-80875248-3e14-4055-b077-b890dead1a9e",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-6f4c682c-590c-4d65-a23c-120835e00e0c",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-5fb015d9-a47d-4e14-9444-449a997692f7",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-b2698965-755a-44ba-8535-dd36758c6941",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-4ea92d3d-7c94-4aef-b610-4552742e95ca",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "route": "/api/case-library/projects/project-2564e684-1dbb-460a-b644-bc344f847a48",
+    "status": 200
+  }
+]

@@ -1,0 +1,395 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0040",
+  "title": "正式工作台托管重启与配置保留",
+  "metadata": {
+    "requirement_status": "已确认",
+    "governance_level": "G2",
+    "version": 5,
+    "last_updated": "2026-09-27"
+  },
+  "original_input": "重启了，你也解决一下这个问题，别老要我给你重启。继续。",
+  "user_requirements": [
+    {
+      "id": "UN-0040-01",
+      "status": "已确认",
+      "goal": "由原启动器托管正式工作台，空闲时自主或通过界面加载代码更新，避免反复要求用户手工重启。",
+      "constraints": "唯一4322，原数据配置和预算不变，不接管未知进程，不绕过环境自动审批拒绝。",
+      "success_criteria": "托管实例可受控重启；忙碌/并发/旧身份拒绝；新实例身份与原数据配置可核验；失败不重放任务。"
+    }
+  ],
+  "confirmed_facts": [
+    "任务状态卡：当前实现阶段；唯一目标为同实例配置的托管重启；输入是原launcher与既有shutdown；交付限supervisor、入口、必要工程与正式4322验收；不做热替换、自动崩溃重试、升级安装、第二工作台、提交发布。",
+    "2026-09-27用户手动重启已加载REQ0038修复，readonly证据restarted-dsh-config-official.json；原进程由launcher直接启动，无法安全被新supervisor追认。",
+    "历史自动审批两次拒绝停止/重启命令，仅返回blocked by policy；不得通过新端点或其他工具绕过。当前未托管实例转换保留为外部启动条件。",
+    "主管负责架构和独立验收；本轮新派gpt-6-sol/medium实现托管后端，gpt-6-luna/medium实现界面。没有用户数字硬预算，费用未知；不重复做已充分的验证。",
+    "2026-09-27原4322正式托管主路径实测：用户经原配置包装器启动后，托管实例service-dafc2dbb-edac-46b7-9861-bc2225474f46经真实浏览器空闲重启切换为service-22f6c1c3-bed3-4210-960e-d6528d57eb65；数据根与配置摘要相同，12项目摘要逐一未变，ready=true且无运行任务。证据workbench/qa/20260927-kimi-remediation/managed-restart-supervisor-review.json及managed-restart-restored.png。忙碌和并发拒绝反例仍只有工程测试证据。",
+    "2026-09-27一次复跑后通过-Restart请求未恢复，service-22f6c1c3-bed3-4210-960e-d6528d57eb65及父子进程消失；原stdout不可用，根因未定。主管在确认4322无listener后经原wrapper隐藏恢复同一数据根并捕获日志，不要求用户再次操作。",
+    "2026-09-27恢复实例service-53ab02d5-b5fa-4b62-bf28-772e9a780303在同一supervisor下连续两次CLI重启成功，实例链service-53ab02d5-b5fa-4b62-bf28-772e9a780303 → service-82b1fddc-fc9e-4db5-b6f9-56f12c136b77 → service-fafd6841-33d5-4b00-97e9-9e7dc0dc2522；日志managed-recovery.stdout.log，最终健康快照managed-after-run-restart-health.json。中间运行了UI零模型复跑批次，health.available=false期间的重启结果已等待实例确认；这两次CLI成功不抹除此前service-22f6...退出后重启未恢复这一真实异常，也未证明UI复跑后重启稳定性。",
+    "跨wrapper恢复前后配置摘要从e5f25db8d0217d35fb8a342555e2874a9facad572a77e91c1d355b6434316b0d变为39d733d602da1b8ab1fffb862eba552b2666088e3576954988f5cb5a5df5a1a7；同一恢复后的supervisor内连续重启身份检查显示配置保持。跨恢复变化原因未在本次收口说明中判断。",
+    "2026-09-27根因复核证据workbench/qa/20260927-kimi-remediation/managed-config-root-cause-evidence.json精确复算跨wrapper摘要e5f25db8...→39d733d6...与污染配置相符：index将trialConfig.authorizations和developmentEnvironments原数组传入manager；ProjectTrialAuthorization.install及TargetAccess.install随后push，启动身份因此被持久授权/目标污染。",
+    "managed_restart修复service-identity.mjs：新增isolateStartupRegistries并以structuredClone隔离启动注册表，再由index接入。主管读代码；工程回归project-trial-authorization 4/4，日志workbench/qa/20260927-kimi-remediation/config-isolation-root-test.log。",
+    "历史状态（health刷新补丁加载前）：实例service-fafd6841/source e41，转接命令曾被自动审批拒绝，未绕过；当时修复后正式重启为NOT_RUN。随后已由service-0e80c9c1加载source f17，详见后续正式加载事实。此前service-22f6...重启未恢复及恢复后同supervisor两次CLI成功均保留为历史。",
+    "2026-09-27正式4322首次配置隔离修复加载及第二目标恢复验证：用户转接实例service-9edc3d10，source e189/config 489，原12项目保全；主管在真实界面新增第二目标b5da6df4后重启成功至service-d252，source/config/data摘要保持，两目标恢复且原grant current=true。相关详细证据由主管QA归档。此结果独立证明当次正式配置隔离与多目标保留路径成功。",
+    "随后原授权零模型批次batch-1f4b4e8b（run trial-76e08...）真实状态FAILED、model_calls=0、NOT_APPROVED，原bundle不变；运行期间health不可用且UI重启按钮disabled。",
+    "磁盘后续app.js健康刷新修复版本source f17cb79a70741505494d607fd36a6443553be03dfed37cc147b157fc58c7c684，统一4秒health刷新、请求单飞与4秒abort、重启pause及generation丢弃旧响应。此修复尚未加载正式实例：正式仍service-d252/source e189/config489；原生重启确认框控制工具超时，尚未提交POST。修复后同页自动刷新真实复验NOT_RUN。",
+    "后续readonly边界核验确认新实例service-0e80c9c1-d2e4-4407-9bda-ec6c26008f95已加载source f17cb79a70741505494d607fd36a6443553be03dfed37cc147b157fc58c7c684，config489/data bf51保持，浏览器工作台显示恢复；证据workbench/qa/20260927-kimi-remediation/health-refresh-loaded-health.json。无法精确归因此前原生确认框由哪次键入/人工操作完成确认。busy→idle后按钮自动恢复的最后同页复验仍未取得终态，暂记NOT_RUN。",
+    "2026-09-27正式浏览器同页busy→idle复验完成：新页同一4322提交原候选零模型batch-705b40ec-4f24-4912-b58f-da4abcfbe81b/trial-a8c18dc365f36bd2ac487b44252a890890b1eb35；提交后重启按钮disabled且health.available=false，页面不手动刷新不切路由，应用自动转结果页后终态FINISHED/FAILED，按钮自行enabled且health.available=true。model_calls=0、原bundle不变、未批准。证据health-refresh-final-busy.txt/png、busy-health.json、health-refresh-final-idle.txt/png、idle-health.json、batch.json、run.json。UI报告ASSERTION_UNRESOLVED且两步未单采实际值，不据此宣称业务语义已完整证明。"
+  ],
+  "inferences_and_open_questions": [
+    "配置隔离修复的正式第二目标重启及后续health刷新修复加载均有正式4322证据，source/config/data保全情况分别按记录保留。",
+    "health刷新修复的正式同页busy→idle行为已验证：health unavailable与按钮disabled自动恢复至available/enabled，过程中没有手动刷新或路由切换。候选未批准、model_calls=0，且UI报告ASSERTION_UNRESOLVED、两步未单采实际值，因此本次运行不证明业务断言语义。",
+    "忙碌/并发拒绝反例仍只有工程证据；产品整体验收仍人工待确认。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0040-01",
+      "status": "已确认",
+      "requirement": "原启动器以owned supervisor启动同一Node工作台；保留cwd/env/data/config/proxy，只在明确请求后单次重启。",
+      "acceptance_criteria": "不同实例ID且数据/配置摘要相同；仅旧子进程真正退出后启动新子进程。",
+      "constraints": "原4322、原配置数据、不读取或输出密钥、无任务自动重放"
+    },
+    {
+      "id": "DR-0040-02",
+      "status": "已确认",
+      "requirement": "同源JSON重启入口校验实例ID、managed握手、空闲及其他在途写请求；同步关闭新请求接收。",
+      "acceptance_criteria": "活动任务、准备期、旧身份、异源、无握手均拒绝且不改变任务；在途请求与重启无竞态。",
+      "constraints": "原4322、原配置数据、不读取或输出密钥、无任务自动重放"
+    },
+    {
+      "id": "DR-0040-03",
+      "status": "已确认",
+      "requirement": "界面和原launcher可发起重启并有界确认恢复；未托管实例明确提示。",
+      "acceptance_criteria": "仅新身份、同配置数据且ready才报成功；不自动重发POST、不重放任务。",
+      "constraints": "原4322、原配置数据、不读取或输出密钥、无任务自动重放"
+    },
+    {
+      "id": "DR-0040-04",
+      "status": "已确认",
+      "requirement": "保留正常停止、错误与证据；失败有界终止重启流程。",
+      "acceptance_criteria": "Ctrl+C退出不重启；drain失败/子进程未退出/启动失败不宣称完成，不终止未知进程。",
+      "constraints": "原4322、原配置数据、不读取或输出密钥、无任务自动重放"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0040-01",
+      "dr_ids": [
+        "DR-0040-01"
+      ],
+      "status": "已确认",
+      "summary": "原launcher派生Node supervisor，父子私有IPC握手；supervisor保存原环境并持有自己派生的child。",
+      "rationale": "无需新端口、命名管道或持久控制令牌，不依赖用户机器固定路径。"
+    },
+    {
+      "id": "DD-0040-02",
+      "dr_ids": [
+        "DR-0040-02"
+      ],
+      "status": "已确认",
+      "summary": "现有4322的POST /api/service/restart；同源JSON、实例身份、mutation在途计数与manager忙碌同步判定并锁住入场。",
+      "rationale": "复用本地安全边界，同时封闭请求已进入await而manager尚未starting的并发空隙。"
+    },
+    {
+      "id": "DD-0040-03",
+      "dr_ids": [
+        "DR-0040-03"
+      ],
+      "status": "已确认",
+      "summary": "产品入口显示托管能力；用户确认后单次POST，有界轮询实例及数据/配置身份。",
+      "rationale": "断线和旧健康响应不能算恢复成功。"
+    },
+    {
+      "id": "DD-0040-04",
+      "dr_ids": [
+        "DR-0040-04"
+      ],
+      "status": "已确认",
+      "summary": "仅明确重启且drain成功、child退出后启动一次；正常关闭或异常退出不触发自动重试。",
+      "rationale": "避免重复模型消费、重复业务写入与未知进程影响。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "原launcher → supervisor → owned child → GET health托管状态；同源POST携带实例ID → 原子空闲锁 → IPC安排 → 202完成 → drain → child退出 → 新child → 新身份且原数据配置核验。"
+  ],
+  "module_document_impact": [
+    "workbench-case-library模块补充托管启动/重启行为；不更改用例、DSH预算或业务预期。"
+  ],
+  "risks_and_rollback": [
+    "内存认证会话会随重启关闭，需要重新连接；持久数据和凭据配置不迁移。",
+    "旧实例无法追认为owned child；当前policy拒绝不以新机制绕过。",
+    "失败保留终态诊断，不自动杀进程或重复启动；源码可回退原launcher直启方式。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0040-01",
+      "dr_ids": [
+        "DR-0040-01"
+      ],
+      "dd_ids": [
+        "DD-0040-01"
+      ],
+      "status": "已实现",
+      "task": "原启动器以owned supervisor启动同一Node工作台；保留cwd/env/data/config/proxy，只在明确请求后单次重启。",
+      "verification_ids": [
+        "VT-0040-01"
+      ]
+    },
+    {
+      "id": "TK-0040-02",
+      "dr_ids": [
+        "DR-0040-02"
+      ],
+      "dd_ids": [
+        "DD-0040-02"
+      ],
+      "status": "已实现",
+      "task": "同源JSON重启入口校验实例ID、managed握手、空闲及其他在途写请求；同步关闭新请求接收。",
+      "verification_ids": [
+        "VT-0040-02"
+      ]
+    },
+    {
+      "id": "TK-0040-03",
+      "dr_ids": [
+        "DR-0040-03"
+      ],
+      "dd_ids": [
+        "DD-0040-03"
+      ],
+      "status": "已实现",
+      "task": "界面和原launcher可发起重启并有界确认恢复；未托管实例明确提示。",
+      "verification_ids": [
+        "VT-0040-03"
+      ]
+    },
+    {
+      "id": "TK-0040-04",
+      "dr_ids": [
+        "DR-0040-04"
+      ],
+      "dd_ids": [
+        "DD-0040-04"
+      ],
+      "status": "已实现",
+      "task": "保留正常停止、错误与证据；失败有界终止重启流程。",
+      "verification_ids": [
+        "VT-0040-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0040-01",
+      "dr_ids": [
+        "DR-0040-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "不同实例ID且数据/配置摘要相同；仅旧子进程真正退出后启动新子进程。",
+      "evidence_standard": "工程测试独立留痕；正式功能仅使用原4322，记录新旧实例及数据配置摘要；不以fake child替代正式验收。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 322,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260927-kimi-remediation/health-refresh-final-engineering.log"
+      }
+    },
+    {
+      "id": "VT-0040-02",
+      "dr_ids": [
+        "DR-0040-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "活动任务、准备期、旧身份、异源、无握手均拒绝且不改变任务；在途请求与重启无竞态。",
+      "evidence_standard": "工程测试独立留痕；正式功能仅使用原4322，记录新旧实例及数据配置摘要；不以fake child替代正式验收。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 322,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260927-kimi-remediation/health-refresh-final-engineering.log"
+      }
+    },
+    {
+      "id": "VT-0040-03",
+      "dr_ids": [
+        "DR-0040-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "仅新身份、同配置数据且ready才报成功；不自动重发POST、不重放任务。",
+      "evidence_standard": "工程测试独立留痕；正式功能仅使用原4322，记录新旧实例及数据配置摘要；不以fake child替代正式验收。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 322,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260927-kimi-remediation/health-refresh-final-engineering.log"
+      }
+    },
+    {
+      "id": "VT-0040-04",
+      "dr_ids": [
+        "DR-0040-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "Ctrl+C退出不重启；drain失败/子进程未退出/启动失败不宣称完成，不终止未知进程。",
+      "evidence_standard": "工程测试独立留痕；正式功能仅使用原4322，记录新旧实例及数据配置摘要；不以fake child替代正式验收。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 322,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20260927-kimi-remediation/health-refresh-final-engineering.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:/01_AI工程/01_工程项目/ui-test-agent",
+    "commands": [
+      "npm test（工程runner文件并发4）"
+    ],
+    "environment": [
+      "Windows PowerShell，原fresh-b数据及release-20260925/start.local.json配置。"
+    ],
+    "conclusion": [
+      "315项工程测试、0失败、0跳过，SHA A1A24A57D7347D342F8A31B01337DBC00ED6C14AABD34E13CC653548A6EA9862。",
+      "真实fake-child延迟IPC监听、相同配置重启、失败清理及防忙等工程边界已验证；不代表正式4322重启产品验收。",
+      "此前未限制并发的两轮分别有异步等待超时，未改oracle和等待期限；限制文件并发为4后的结果支持调度竞争解释，不证明唯一根因。",
+      "正式4322主管真实浏览器验证空闲托管重启成功：实例service-dafc2dbb-edac-46b7-9861-bc2225474f46切换为service-22f6c1c3-bed3-4210-960e-d6528d57eb65，data/config摘要一致、12项目文件摘要逐一不变，恢复ready且无活动任务。忙碌/并发反例仍仅有工程证据。",
+      "随后真实观察：UI零模型复跑结束后的-Restart未恢复且父子进程消失；原stdout不可用，不判断根因。主管经原wrapper恢复原数据/配置后CLI重启一次成功，第二次重启正在复现。",
+      "后续根因复核精确关联跨wrapper配置摘要变化与启动注册表共享引用污染；index传入原数组，install阶段push改变原配置。根因证据managed-config-root-cause-evidence.json。",
+      "代码已用structuredClone隔离启动注册表并在index接入；主管读代码，project-trial-authorization工程回归4/4（config-isolation-root-test.log）。修复尚未加载正式4322；当前service-fafd6841.../source e41...，转接命令被自动审批拒绝，未绕过。修复后正式工作台重启NOT_RUN。",
+      "先前service-22f6...后一次-Restart未恢复为历史失败，恢复后同一supervisor的两次CLI重启成功亦为历史事实；忙碌/并发拒绝仍仅工程证据。正式产品稳定性/整体验收未判通过。",
+      "修复后的最终工程回归由主管实际collector执行：npm test exit 0，用时17.493s，319 tests/pass，fail 0、skipped 0、cancelled 0；日志workbench/qa/20260927-kimi-remediation/config-isolation-final-engineering.log。",
+      "REQ-0040托管重启专项工程日志config-isolation-restart-engineering.log为21 tests/pass，fail 0、skipped 0、cancelled 0；属于上述319项全量结果的子集，不重复相加。",
+      "collector整体exit 1由历史REQ-0015两处文本状态问题及REQ-0038/0039/0040混合记录门禁引起；不影响npm test exit 0，但治理门禁未通过。正式4322仍运行e41源码，修复代码未加载，修复后正式重启NOT_RUN；产品验收仍人工待确认。",
+      "正式4322配置隔离修复路径实测：service-9edc3d10/source e189/config489，原12项目保全；新增目标b5da6df4后重启至service-d252，source/config/data一致，两目标恢复、原grant current=true。",
+      "同页零模型批次batch-1f4b4e8b/run trial-76e08...失败且未批准，model_calls=0、bundle不变；执行中health不可用、UI重启按钮disabled。",
+      "app.js自动刷新修复source SHA f17cb79a...工程collector 322/322成功。正式实例service-0e80c9c1已加载source f17，config489/data bf51保持且工作台恢复。正式同页busy→idle复验batch-705b40ec/trial-a8c18...期间health unavailable/按钮disabled，页面自动转结果页后health available/按钮enabled；无手动刷新/路由切换。model_calls=0、候选未批准、bundle不变；UI ASSERTION_UNRESOLVED且两步未单采实际值，不证明业务语义完整。证据health-refresh-final-{busy,idle}文件及batch/run JSON。",
+      "最终全量工程回归为322/322成功，日志health-refresh-final-engineering.log；属于工程证据，不将各VT视为分别完成正式产品验收。正式主路径配置隔离重启和health刷新busy→idle交互已分别有正式4322实测。忙碌/并发拒绝仍仅工程反例；零模型候选未批准且ASSERTION_UNRESOLVED，REQ整体仍人工待确认。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0040-01",
+      "dr_id": "DR-0040-01",
+      "dd_id": "DD-0040-01",
+      "tk_id": "TK-0040-01",
+      "vt_id": "VT-0040-01",
+      "status": "正式配置隔离修复后新增目标重启成功；health刷新source f17已加载，正式busy→idle按钮与health自动恢复已验证；零模型候选业务ASSERTION_UNRESOLVED，整体人工待确认"
+    },
+    {
+      "un_id": "UN-0040-01",
+      "dr_id": "DR-0040-02",
+      "dd_id": "DD-0040-02",
+      "tk_id": "TK-0040-02",
+      "vt_id": "VT-0040-02",
+      "status": "人工待确认；工程并发/忙碌反例通过，正式反例未执行"
+    },
+    {
+      "un_id": "UN-0040-01",
+      "dr_id": "DR-0040-03",
+      "dd_id": "DD-0040-03",
+      "tk_id": "TK-0040-03",
+      "vt_id": "VT-0040-03",
+      "status": "正式实例已加载health刷新修复；同页busy→idle后health与重启按钮自动恢复已验证；该次候选未批准、业务断言ASSERTION_UNRESOLVED，REQ整体仍人工待确认"
+    },
+    {
+      "un_id": "UN-0040-01",
+      "dr_id": "DR-0040-04",
+      "dd_id": "DD-0040-04",
+      "tk_id": "TK-0040-04",
+      "vt_id": "VT-0040-04",
+      "status": "人工待确认；工程错误/停止反例有测试证据，正式反例未执行"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "无待用户决定的业务语义；正式配置隔离重启和health刷新同页busy→idle恢复已有对应范围的实测。完整产品验收仍人工待确认；忙碌/并发拒绝反例尚无正式界面实测。"
+  ],
+  "prohibited_implementation": [
+    "禁止接管/杀未知进程、旁路审批、改端口/数据、自动重放任务、宣称工程模拟即正式验收。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-27",
+      "version": 1,
+      "type": "新建",
+      "description": "按用户授权确定托管重启架构并进入有限实现。",
+      "impact": "原launcher、生命周期、工作台入口",
+      "confirmed_by": "用户授权，主管设计"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 2,
+      "type": "实现与工程验证",
+      "description": "托管后端、受控入口、UI有界等待及兼容处理完成；315项工程测试成功，真实转换待验证。",
+      "impact": "启动与重启、工程runner并发控制",
+      "confirmed_by": "主管独立代码审查和执行"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 3,
+      "type": "正式4322托管空闲重启主路径验收",
+      "description": "补录真实4322空闲主路径成功、随后一次重启未恢复且根因未定、wrapper恢复后同一supervisor连续两次CLI重启成功；不把恢复后成功外推为稳定性或整体验收通过。",
+      "impact": "REQ-0040空闲主路径从工程实现进入正式工作台实测；不宣称全矩阵产品验收通过。",
+      "confirmed_by": "workbench/qa/20260927-kimi-remediation/managed-restart-supervisor-review.json与managed-restart-restored.png。"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 4,
+      "type": "配置污染根因修复与正式验证待执行",
+      "description": "根因证据确认启动注册表数组共享引用被install阶段push污染；代码以structuredClone隔离并接入，工程回归4/4。自动审批阻止正式4322转接，未绕过；修复后正式加载与重启验证NOT_RUN。",
+      "impact": "启动身份配置隔离；正式工作台验证仍待执行，忙碌/并发仍只有工程证据。",
+      "confirmed_by": "workbench/qa/20260927-kimi-remediation/managed-config-root-cause-evidence.json、config-isolation-root-test.log及主管代码审查；正式实例状态由主管观察"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 4,
+      "type": "最终工程回归结果补录",
+      "description": "补记配置隔离修复后319项全量工程回归成功及REQ-0040专项21项成功（为319子集，不相加）；治理collector整体因历史/混合记录门禁exit 1。正式4322仍未加载修复，正式重启NOT_RUN。",
+      "impact": "仅工程证据更新；产品验证与最终验收状态不变。",
+      "confirmed_by": "workbench/qa/20260927-kimi-remediation/config-isolation-final-engineering.log、config-isolation-restart-engineering.log及主管collector结果"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 5,
+      "type": "正式配置隔离复验及UI刷新缺口记录",
+      "description": "记录正式4322在隔离修复后新增第二目标并重启成功、原配置数据和grant保持；同时记录零模型未批准批次期间health不可用及重启按钮禁用。app.js自动刷新修复通过322项工程回归，但尚未加载正式4322，同页复验NOT_RUN。",
+      "impact": "配置隔离主路径已有正式证据；页面自动刷新恢复行为仍未正式验证，产品整体验收未完成。",
+      "confirmed_by": "主管真实界面观察、实例/source/config标识及workbench/qa/20260927-kimi-remediation/health-refresh-final-engineering.log"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 5,
+      "type": "正式加载边界更新",
+      "description": "补记新实例0e80c9c1已加载health刷新source f17，config489/data bf51保持且工作台恢复。具体弹窗确认动作无法归因；busy→idle按钮自动恢复同页复验仍待终态。",
+      "impact": "代码正式加载已确认，特定交互稳定性及整体验收未确认。",
+      "confirmed_by": "workbench/qa/20260927-kimi-remediation/health-refresh-loaded-health.json及主管只读浏览器观察"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 5,
+      "type": "正式同页健康刷新复验",
+      "description": "同一4322页面不手动刷新/切路由，真实复验busy期间health unavailable、按钮disabled，自动转终态结果页后health available、按钮enabled。零模型候选未批准且ASSERTION_UNRESOLVED，不据此宣称业务语义通过。",
+      "impact": "确认加载后的UI健康刷新与按钮恢复行为；业务候选及产品整体验收仍未批准。",
+      "confirmed_by": "health-refresh-final-busy/idle证据及batch/run JSON"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import { writeAtomicJson } from './atomic-json.mjs';
 export const reviewFor = (manager, selection) => (manager.requirementReviews || []).find(r =>
   ['project_id','case_id','case_version','content_sha256','source_task_id','bundle_sha256'].every(k => r[k] === selection[k])) || null;
 export const rejectedReview = review => ['NOT_ACCEPTED_ACTION_CHANGED','BUSINESS_DIFFERENCE_WITH_COVERAGE_GAP','FROZEN_CASE_INPUT_CONFLICT'].includes(review?.requirements_status);
+const failedScript = candidate => candidate?.technical_status === 'INCOMPLETE' && candidate?.human_review_status === 'NOT_READY';
 const terminal = new Set(['FINISHED','CANCELLED','INTERRUPTED']);
 const now = () => new Date().toISOString();
 
@@ -27,17 +28,37 @@ export class BatchManager {
     if(!Array.isArray(ids)||!ids.length||new Set(ids).size!==ids.length||(scope==='single'&&ids.length!==1))throw Error('BATCH_SELECTION_INVALID');
     if(selections.some(s=>!ids.includes(s.case_id))||new Set(selections.map(s=>s.case_id)).size!==selections.length)throw Error('BATCH_SELECTION_INVALID');
     const items=[];
+    let automationContext;
     for(const id of ids){
       const item=project.cases.find(c=>c.case_id===id);if(!item)throw Error('BATCH_CROSS_PROJECT_CASE');
       const explicit=selections.find(s=>s.case_id===id),v=item.versions.find(v=>v.version===(explicit?.case_version??item.current_version));if(!v)throw Error('BATCH_CASE_VERSION_INVALID');
-      const candidates=(await this.buildManager.caseAutomation(project_id,id,v.version)).candidates;
+      if(v.content.case_type==='BACKEND'){
+        const candidates=this.backendManager?(await this.backendManager.automation(project_id,id,v.version)).candidates:[];
+        const matches=candidates.filter(c=>c.applies_to_selected_version);
+        const chosen=explicit?matches.find(c=>Object.keys(c.selection).every(k=>c.selection[k]===explicit[k])):matches.length===1?matches[0]:null;
+        const reason=chosen?.reason||(!chosen?(matches.length>1?'SCRIPT_SELECTION_REQUIRED':this.backendManager?'BACKEND_CONFIRMED_PLAN_REQUIRED':'BACKEND_EXECUTOR_NOT_CONFIGURED'):null);
+        const env=chosen&&!reason?await this.backendManager.get(project_id,chosen.selection.environment_id):null;
+        items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,
+          selection:chosen?.selection||null,script_version:chosen?.script_version||null,available_versions:[...new Set(candidates.map(c=>c.selection.case_version))],
+          environment_identity:env?{environment_id:env.environment_id,configuration_sha256:env.configuration_sha256}:null,
+          environment_name:env?.name || null,
+          state:reason?'BLOCKED':'QUEUED',reason,qualification:chosen?'CONFIRMED_HTTP_PLAN_NOT_PRODUCT_APPROVAL':'NO_APPLICABLE_SCRIPT'});
+        continue;
+      }
+      if (!automationContext) automationContext = typeof this.buildManager.store?.listTasks === 'function'
+        ? { allTasks: await this.buildManager.store.listTasks() } : {};
+      const candidates=(await this.buildManager.caseAutomation(project_id,id,v.version,automationContext)).candidates;
       const matches=candidates.filter(c=>c.applies_to_selected_version);
-      const chosen=explicit?matches.find(c=>JSON.stringify(c.selection)===JSON.stringify(explicit)):matches.length===1?matches[0]:null;
-      let reason=chosen?.reason||(!chosen?(matches.length>1?'SCRIPT_SELECTION_REQUIRED':candidates.length?'CASE_VERSION_NOT_APPLICABLE':'SCRIPT_MISSING'):null);
+      const selectable=mode==='diagnostic'?matches:matches.filter(c=>!failedScript(c));
+      const runnable=mode==='diagnostic'?[]:selectable.filter(c=>!c.reason && c.technical_status==='TECHNICAL_VALIDATION_PASSED' && !rejectedReview(reviewFor(this.buildManager,c.selection)));
+      const chosen=explicit?matches.find(c=>JSON.stringify(c.selection)===JSON.stringify(explicit)):selectable.length===1?selectable[0]:runnable.length===1?runnable[0]:null;
+      let reason=mode!=='diagnostic' && (failedScript(chosen) || !chosen && matches.length && !selectable.length)
+        ? 'SCRIPT_GENERATION_FAILED'
+        : chosen?.reason||(!chosen?(selectable.length>1?'SCRIPT_SELECTION_REQUIRED':candidates.length?'CASE_VERSION_NOT_APPLICABLE':'SCRIPT_MISSING'):null);
       const review=chosen?reviewFor(this.buildManager,chosen.selection):null;
       if(rejectedReview(review)&&mode!=='diagnostic')reason='REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY';
       const env=chosen&&this.buildManager.candidateTrialEnvironments.find(e=>e.id===chosen.selection.environment_id);
-      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,script_version:chosen?.script_version||null,available_versions:[...new Set(candidates.map(c=>c.selection.case_version))],environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED':'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
+      items.push({case_id:id,external_id:v.content.external_id,title:v.content.title,case_version:v.version,content_sha256:v.content_sha256,selection:chosen?.selection||null,script_version:chosen?.script_version||null,available_versions:[...new Set(candidates.map(c=>c.selection.case_version))],environment_identity:env?.configurationIdentity||null,requirement_review:review,qualification:chosen?(chosen.human_review_status==='NOT_REQUIRED' && chosen.validation_source==='SELF_TEST'?'SELF_TEST_PASSED':'LIMITED_TECHNICAL_TRIAL_NOT_APPROVED'):'NO_APPLICABLE_SCRIPT',state:reason?'BLOCKED':'QUEUED',reason});
     }
     const result={schema:'workbench/test-batch-v1',batch_id:persist?'batch-'+randomUUID():null,project_id,scope,mode,software_version:software_version.trim()||null,software_version_source:software_version.trim()?'USER_LABEL_NOT_DEPLOYMENT_PROOF':'NOT_PROVIDED',project_revision:project.revision,created_at:now(),state:'PREVIEW',items,harness_starts:0,model_calls:0};
     return persist?this.save(result):result;
@@ -57,8 +78,7 @@ export class BatchManager {
     // Revalidate the frozen selection before recording admission, as well as at execution.
     for(const item of b.items.filter(i=>i.state==='QUEUED')){
       m.assertStorageWritable();
-      const {environment}=await resolveTrialCandidate(m,{...item.selection,lane:'normal',diagnostic:b.mode==='diagnostic'});
-      if(JSON.stringify(environment?.configurationIdentity||null)!==JSON.stringify(item.environment_identity))throw Error('BATCH_ENVIRONMENT_CONFIGURATION_CHANGED');
+      await this.validateEnvironment(item,b);
     }
     if(this.active||m.generationOwner||m.active||m.starting||m.otherActive())throw Error('BATCH_EXECUTOR_BUSY');
     m.assertStorageWritable();
@@ -69,6 +89,13 @@ export class BatchManager {
     return b;
     } finally {if(preparing){this.starting=false;m.batchStarting=false;}}
   }); }
+  async validateEnvironment(item,b) {
+    const backend=item.selection.kind==='HTTP_JSON';
+    const {environment}=backend?await this.backendManager.resolveSelection(item.selection)
+      :await resolveTrialCandidate(this.buildManager,{...item.selection,lane:'normal',diagnostic:b.mode==='diagnostic'});
+    const identity=backend?{environment_id:environment.environment_id,configuration_sha256:environment.configuration_sha256}:environment?.configurationIdentity||null;
+    if(JSON.stringify(identity)!==JSON.stringify(item.environment_identity))throw Error('BATCH_ENVIRONMENT_CONFIGURATION_CHANGED');
+  }
   async execute(b) {
     try {
       b.state='RUNNING';await this.save(b);
@@ -79,13 +106,14 @@ export class BatchManager {
         if(this.active.cancelled){item.state='NOT_RUN';item.reason='BATCH_CANCELLED';continue;}
         if(blockedEnvironments.has(item.selection.environment_id)){item.state='BLOCKED';item.reason='SHARED_ENVIRONMENT_UNAVAILABLE';continue;}
         try {
-          const env=this.buildManager.candidateTrialEnvironments.find(e=>e.id===item.selection.environment_id);
-          if(JSON.stringify(env?.configurationIdentity||null)!==JSON.stringify(item.environment_identity))throw Error('BATCH_ENVIRONMENT_CONFIGURATION_CHANGED');
-          const run=await this.buildManager.startCandidateTrial({...item.selection,lane:'normal',request_id:b.batch_id+'-'+b.items.indexOf(item),batch_id:b.batch_id,batch_token:this.active.token,diagnostic:b.mode==='diagnostic'});
+          await this.validateEnvironment(item,b);
+          const backend=item.selection.kind==='HTTP_JSON';
+          const run=backend?await this.backendManager.start(item.selection,{batch_id:b.batch_id,software_version:b.software_version})
+            :await this.buildManager.startCandidateTrial({...item.selection,lane:'normal',request_id:b.batch_id+'-'+b.items.indexOf(item),batch_id:b.batch_id,batch_token:this.active.token,diagnostic:b.mode==='diagnostic'});
           item.run_id=run.run_id;item.state='RUNNING';await this.save(b);
           await this.runStore.updateRun(run.run_id,r=>({...r,batch_id:b.batch_id,software_version:b.software_version,requirement_review:item.requirement_review,qualification:item.qualification}));
-          if(this.active.cancelled)await this.buildManager.stopCandidateTrial(run.run_id).catch(()=>{});
-          await this.buildManager.completions.get(run.run_id);
+          if(this.active.cancelled)await (backend?this.backendManager.cancel(b.project_id,run.run_id):this.buildManager.stopCandidateTrial(run.run_id)).catch(()=>{});
+          await (backend?this.backendManager:this.buildManager).completions.get(run.run_id);
           const done=await this.runStore.getRun(run.run_id);item.state=done.execution_status==='CANCELLED'?'CANCELLED':done.result?'FINISHED':'BLOCKED';item.result=done.status;item.complete_pass=done.complete_pass;item.reason=done.technical_error?.code||null;
           if(item.reason&&/ENVIRONMENT|SITE_|ECONN|AUTH_SESSION/.test(item.reason))blockedEnvironments.add(item.selection.environment_id);
         }catch(e){if(this.buildManager.storageFault)throw e;item.state='BLOCKED';item.reason=e.message;if(/ENVIRONMENT|SITE_|AUTH_SESSION/.test(e.message))blockedEnvironments.add(item.selection.environment_id);}
@@ -95,5 +123,5 @@ export class BatchManager {
     }catch(e){b.state='INTERRUPTED';b.error=e.message;for(const i of b.items)if(['RUNNING','QUEUED'].includes(i.state)){i.state='NOT_RUN';i.reason='BATCH_ENGINEERING_INTERRUPTED';}if(this.buildManager.storageFault)throw e;}
     b.finished_at=now();await this.save(b);
   }
-  async stop(id,project) {return this.serial(async()=>{const b=await this.get(id,project);if(terminal.has(b.state))return b;if(this.active?.id!==id)throw Error('BATCH_NOT_ACTIVE');this.active.cancelled=true;this.active.batch.state='STOPPING';this.active.batch.cancel_requested_at=now();await this.save(this.active.batch);if(this.buildManager.active?.runId)await this.buildManager.stopCandidateTrial(this.buildManager.active.runId);return this.get(id,project);});}
+  async stop(id,project) {return this.serial(async()=>{const b=await this.get(id,project);if(terminal.has(b.state))return b;if(this.active?.id!==id)throw Error('BATCH_NOT_ACTIVE');this.active.cancelled=true;this.active.batch.state='STOPPING';this.active.batch.cancel_requested_at=now();await this.save(this.active.batch);if(this.backendManager?.active?.run_id)await this.backendManager.cancel(project,this.backendManager.active.run_id);if(this.buildManager.active?.runId)await this.buildManager.stopCandidateTrial(this.buildManager.active.runId);return this.get(id,project);});}
 }

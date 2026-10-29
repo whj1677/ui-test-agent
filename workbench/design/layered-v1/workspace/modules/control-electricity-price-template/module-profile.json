@@ -1,0 +1,99 @@
+{
+  "schema": "ui-automation/module-profile-v1",
+  "module_id": "control-electricity-price/template",
+  "title": "电价管理 · 电价模板",
+  "entry": {
+    "url": "http://192.168.1.249:18081/control-electricity-price/config",
+    "navigation": [
+      { "action": "click", "pointer": "menu_price_management" },
+      { "action": "click", "pointer": "menu_price_template" },
+      { "expect": "url", "value": "/control-electricity-price/template" }
+    ],
+    "note": "必须真实点击菜单导航；不得用 page.goto 直接跳到目标路由。"
+  },
+  "fingerprint": {
+    "value": null,
+    "note": "由 probe-module 任务写入：目标页关键 DOM 结构摘要（不含业务数据）。为 null 表示尚未标定。",
+    "captured_at": null
+  },
+  "calibration": {
+    "web.visibility": null,
+    "web.overlay": null,
+    "web.virtualSelect": null,
+    "web.dragTrack": null
+  },
+  "assumes": ["antd", "antd-modal", "antd-select", "virtual-list", "custom-timeline"],
+  "targets_note": "pointer 是给人看的定位表达式，预检不执行它；需要真实页面复核的目标另外提供 verify（纯 CSS 选择器）。",
+  "targets": {
+    "menu_price_management": {
+      "assumes": ["antd"],
+      "pointer": "page.getByText('电价管理', {exact: true}).first()",
+      "verify": ".ant-menu-item:has-text('电价管理'), .ant-menu-submenu-title:has-text('电价管理')",
+      "verified": { "matched": 1, "rendered": true, "box": [88, 640, 96, 20], "at": "2026-10-15T09:00:00Z" }
+    },
+    "add_button": {
+      "assumes": ["antd"],
+      "pointer": "page.getByRole('button', {name: '新增'}).first()",
+      "verify": "button:has-text('新增')",
+      "verified": { "matched": 1, "rendered": true, "box": [1470, 214, 72, 32], "at": "2026-10-15T09:00:00Z" }
+    },
+    "modal_root": {
+      "assumes": ["antd-modal"],
+      "pointer": "web.overlay.topmost(page)",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal",
+      "verified": { "matched": 1, "rendered": true, "box": [130, 90, 1660, 880], "at": "2026-10-15T09:00:00Z" },
+      "known_trap": "页面可能同时存在多个 .ant-modal-wrap（列表筛选表单与新增弹窗），必须取最上层渲染中的那个；不得用 offsetParent 判定。"
+    },
+    "name_input_in_modal": {
+      "assumes": ["antd-modal"],
+      "pointer": "modal.locator('input[placeholder=\"请输入电价模板名称\"]')",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal input[placeholder=\"请输入电价模板名称\"]",
+      "verified": { "matched": 1, "rendered": true, "box": [316, 210, 560, 32], "at": "2026-10-15T09:00:00Z" },
+      "known_trap": "全页存在两个 placeholder 完全相同的输入框（列表页筛选框 + 弹窗内输入框），两者 id 均为 form_item_name。全页 .first() 会命中背景筛选框并因被弹窗遮挡而超时——实际造成过两次连续失败。必须在 modal 范围内解析。",
+      "unscoped_verify": "input[placeholder=\"请输入电价模板名称\"]"
+    },
+    "province_select": {
+      "assumes": ["antd-select"],
+      "pointer": "modal.locator('.ant-form-item').filter({has: page.locator('.ant-form-item-label label', {hasText: '归属地'})}).first().locator('.ant-select').first()",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal .ant-form-item:has(label:has-text('归属地')) .ant-select",
+      "verified": { "matched": 1, "rendered": true, "box": [1355, 210, 360, 32], "at": "2026-10-15T09:00:00Z" },
+      "known_trap": "弹窗内不是页面上唯一的 .ant-select（列表页筛选表单也有），必须按表单项标签限定。",
+      "interaction": "web.virtualSelect"
+    },
+    "timeline_track": {
+      "assumes": ["custom-timeline"],
+      "pointer": "modal.locator('.tariff-timeline-row .tariff-timeline-track').first()",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal .tariff-timeline-row .tariff-timeline-track",
+      "verified": { "matched": 5, "rendered": true, "box": [130, 241, 1020, 44], "at": "2026-10-15T09:00:00Z" },
+      "known_trap": "五档各有一条轨道（尖/峰/平/谷/深谷），所以 CSS 计数天然为 5；.first() 只用于取共用几何。",
+      "scoped": "取首个轨道作为共用几何基准，逐行 y 由各行自己取。"
+    },
+    "timeline_row": {
+      "assumes": ["custom-timeline"],
+      "pointer": "modal.locator('.tariff-timeline-row[data-type=\"<TYPE>\"] .tariff-timeline-track').first()",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal .tariff-timeline-row[data-type=\"valley\"]",
+      "verified": { "matched": 1, "rendered": true, "at": "2026-10-15T09:00:00Z" },
+      "enum": { "sharp": "尖", "peak": "峰", "flat": "平", "valley": "谷", "deepValley": "深谷" },
+      "known_trap": "data-type 是英文键，不是中文档位名；中文 -> 键的映射固定为 enum 所示。"
+    },
+    "validation_errors": {
+      "assumes": ["antd-modal"],
+      "pointer": "modal.locator('.ant-form-item-explain-error')",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal .ant-form-item-explain-error",
+      "conditional": true,
+      "verified": { "matched": 0, "rendered": false, "at": "2026-10-15T09:00:00Z" },
+      "scoped": "只在出现校验错误后存在，静止态天然为 0；使用时读 allInnerTexts，不要断言数量。"
+    },
+    "coverage_hint": {
+      "assumes": ["custom-timeline"],
+      "pointer": "modal.locator('span').filter({hasText: /完整覆盖|覆盖完整|至少添加/}).first()",
+      "verify": ".ant-modal-wrap.edit-normal-price-modal .pl-2",
+      "verified": { "matched": 1, "rendered": true, "at": "2026-10-15T09:00:00Z" },
+      "known_trap": "正向提示「24 小时时段已完整覆盖」与反向提示「时段必须覆盖完整 24 小时」都能被宽松正则命中；断言必须区分正/反，不能用 /完整覆盖|24\\s*小时/ 这种双向正则。"
+    }
+  },
+  "cleanup": {
+    "note": "本模块的删除接口（POST /zhny-business/api/electricPriceTemplate/delete?ids=）在实测中一律返回业务 code=500「查询模板引用关系失败」，界面删除整体不可用。清理方案必须先确认该接口可用，否则不得创建持久化测试数据。",
+    "unverified_at": "2026-10-15T09:40:00Z"
+  }
+}

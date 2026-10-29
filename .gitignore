@@ -42,6 +42,9 @@ harness-probe/playwright-report/
 # Local derived release archives, extracted copies and embedded-media reports.
 # Keep the reviewed source, frozen fixtures and text evidence under Git.
 workbench/qa/**/package-extract-*/
+# Local installation outputs; source ZIP and top-level validation logs retain provenance.
+workbench/qa/20261022-delivery-readiness/extracted-source/
+workbench/qa/20261022-delivery-readiness/isolated-runtime/
 workbench/qa/**/*.zip
 workbench/qa/20260925-reliability/official-batch-report.html
 workbench/qa/20260925-reliability/recovery-report.html

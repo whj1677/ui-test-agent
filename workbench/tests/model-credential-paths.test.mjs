@@ -1,0 +1,44 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+import {modelCredentialPaths,modelCredentialWritePath} from '../server/model-credential-storage.mjs';
+
+const exec=promisify(execFile),helper=fileURLToPath(new URL('../scripts/credential-paths.ps1',import.meta.url));
+const quote=value=>`'${String(value).replaceAll("'","''")}'`;
+const shells=process.platform==='win32'?['pwsh',path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe')]:['pwsh'];
+for(const shell of shells) test(`${path.basename(shell)}: save and enable paths match JS priority without reading credential bytes`,async t=>{
+  const root=await fs.mkdtemp(path.join(os.tmpdir(),'credential-paths-'));
+  t.after(async()=>{
+    assert.equal(path.dirname(path.resolve(root)),path.resolve(os.tmpdir()));assert.ok(path.basename(root).startsWith('credential-paths-'));
+    await fs.rm(root,{recursive:true,force:true});
+  });
+  const environment={USERPROFILE:path.join(root,'profile'),LOCALAPPDATA:path.join(root,'local')};
+  const [canonical,legacy]=modelCredentialPaths(environment);
+  for(const candidate of [canonical,legacy])await fs.mkdir(path.dirname(candidate.file),{recursive:true});
+  await fs.writeFile(legacy.file,'legacy-presence-only-not-dpapi');
+  const command=`$ErrorActionPreference='Stop';$ProgressPreference='SilentlyContinue';$env:PSModulePath=Join-Path $PSHOME 'Modules'; . ${quote(helper)};
+    $fixtureProfile=${quote(environment.USERPROFILE)};$fixtureLocal=${quote(environment.LOCALAPPDATA)};
+    $write=Get-WorkbenchCredentialWritePath -UserProfile $fixtureProfile -LocalAppData $fixtureLocal;
+    $fallback=Find-WorkbenchCredentialFile -UserProfile $fixtureProfile -LocalAppData $fixtureLocal;
+    [IO.File]::WriteAllText($write,'canonical-presence-only-not-dpapi');
+    $selected=Find-WorkbenchCredentialFile -UserProfile $fixtureProfile -LocalAppData $fixtureLocal;
+    $withoutProfile=Find-WorkbenchCredentialFile -UserProfile '' -LocalAppData $fixtureLocal;
+    $relativeProfile=Get-WorkbenchCredentialWritePath -UserProfile 'relative-profile' -LocalAppData $fixtureLocal;
+    [IO.File]::WriteAllText($write,'');$blocked=$null;
+    try { $null=Find-WorkbenchCredentialFile -UserProfile $fixtureProfile -LocalAppData $fixtureLocal } catch { $blocked=$_.Exception.Message };
+    @{write=$write;fallback=$fallback;selected=$selected;without_profile=$withoutProfile;relative_profile=$relativeProfile;blocked=$blocked}|ConvertTo-Json -Compress`;
+  const result=await exec(shell,['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',Buffer.from(command,'utf16le').toString('base64')],{windowsHide:true,timeout:15000});
+  const parsed=JSON.parse(result.stdout.trim());
+  assert.equal(path.normalize(parsed.write),modelCredentialWritePath(environment));
+  assert.equal(path.normalize(parsed.fallback),legacy.file);
+  assert.equal(path.normalize(parsed.selected),canonical.file);
+  assert.equal(path.normalize(parsed.without_profile),legacy.file);
+  assert.equal(path.normalize(parsed.relative_profile),legacy.file);
+  assert.equal(parsed.blocked,'MODEL_CREDENTIAL_DPAPI_INVALID');
+  assert.equal(await fs.readFile(legacy.file,'utf8'),'legacy-presence-only-not-dpapi');
+});

@@ -1,5 +1,6 @@
 import { reviewFor, rejectedReview } from '../batches.mjs';
 import fs from 'node:fs/promises';
+import { applyBrowserAssertionVerdict } from './browser-assertion-records.mjs';
 import path from 'node:path';
 import { digest, evidenceFiles } from './development-session.mjs';
 import { saveBundle, developmentBundle, assertBundleTiming } from './development-bundle.mjs';
@@ -40,10 +41,12 @@ export function mediaType(file) {
 }
 
 export async function resolveTrialCandidate(manager, request, checkEnvironment = true) {
+  await manager.projectEnvironments?.assert(request.project_id, 'ui', request.environment_id);
   const task = await manager.store.getTask(request.source_task_id);
+  if (task) await manager.projectEnvironments?.assertTask(task, request.project_id, request.environment_id);
   if (task?.auth_requirement && request.project_id !== task.source?.project_id) throw new Error('TRIAL_AUTH_PROJECT_MISMATCH');
   const candidate = task?.candidates?.find(c => c.version === request.candidate_version);
-  const authorization = manager.candidateTrialAuthorizations.find(a => same(a, request));
+  let authorization = manager.candidateTrialAuthorizations.find(a => same(a, request));
   const mapped = authorization?.source_binding;
   if (!task?.development?.submission || task.active_attempt_id || !candidate || !same(mapped ? {...request,...mapped} : request, {
     ...task.source, source_task_id: task.task_id, candidate_version: candidate.version,
@@ -60,6 +63,12 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
   if (checkEnvironment && rejectedReview(review) && request.diagnostic !== true) throw new Error('REQUIREMENTS_REJECTED_DIAGNOSTIC_ONLY');
   const environment = manager.candidateTrialEnvironments.find(e => e.id === request.environment_id);
   if (checkEnvironment) {
+    if (environment?.configurationIdentity?.kind === 'registered-user-target') {
+      if (environment.configurationIdentity.project_id !== request.project_id) throw new Error('TRIAL_PROJECT_MISMATCH');
+      const grant = await manager.projectTrialAuthorization?.match(request, environment.configurationIdentity.configuration_sha256);
+      if (!grant) throw new Error('TRIAL_NOT_AUTHORIZED');
+      authorization = manager.candidateTrialAuthorizations.find(item => item.user_authorization_id === grant.authorization_id);
+    }
     const authTarget = environment?.configurationIdentity?.kind === 'registered-auth-target';
     const registeredDevelopment = manager.developmentEnvironments.find(e => e.id === request.environment_id);
     if (task.auth_requirement && (!authTarget ||
@@ -85,19 +94,24 @@ export async function resolveTrialCandidate(manager, request, checkEnvironment =
   return { task, candidate, version, bundle, authorization, environment };
 }
 
-export async function caseAutomation(manager, projectId, caseId, versionNumber) {
+export async function caseAutomation(manager, projectId, caseId, versionNumber, { allTasks } = {}) {
   const mappings=manager.candidateTrialAuthorizations.filter(a=>a.project_id===projectId&&a.case_id===caseId&&a.source_binding);
-  const tasks = (await manager.store.listTasks()).filter(t => t.development && ((t.source?.project_id === projectId && t.source?.case_id === caseId)||mappings.some(a=>a.source_task_id===t.task_id)));
+  // A batch preview may reuse its own task listing. Candidate identity, bundle,
+  // environment and authentication checks below still read their current facts.
+  const tasks = (allTasks ?? await manager.store.listTasks()).filter(t => t.development && ((t.source?.project_id === projectId && t.source?.case_id === caseId)||mappings.some(a=>a.source_task_id===t.task_id)));
   const output = [];
   for (const task of tasks) for (const candidate of task.candidates || []) {
     const mapped=mappings.find(a=>a.source_task_id===task.task_id&&a.candidate_version===candidate.version);
     const selection = mapped ? identity(mapped) : identity({ ...task.source, source_task_id: task.task_id, candidate_version: candidate.version, bundle_sha256: candidate.bundle?.sha256, environment_id: task.environment_ref?.environment_id });
     let reason = null;
-    try { await resolveTrialCandidate(manager, { ...selection, lane: 'normal', diagnostic: true }); } catch (error) { reason = error.code === 'ENOENT' ? 'TRIAL_BUNDLE_MISSING' : error.message; }
+    if (manager.candidateTrialEnvironments.find(e => e.id === selection.environment_id)?.configurationIdentity?.kind === 'registered-user-target' &&
+        task.candidates.at(-1)?.version !== candidate.version) reason = 'PROJECT_TRIAL_CANDIDATE_EXPIRED';
+    else try { await resolveTrialCandidate(manager, { ...selection, lane: 'normal', diagnostic: true }); } catch (error) { reason = error.code === 'ENOENT' ? 'TRIAL_BUNDLE_MISSING' : error.message; }
     output.push({ selection, applies_to_selected_version: selection.case_version === versionNumber,
       files: (candidate.bundle?.files || []).map(f => ({ ...f, file_id: task.files.find(item => item.relative_path === `development/final/${f.path}`)?.file_id })), human_review_status: task.human_review_status,
       script_version: task.script_version || null, created_at: task.created_at, maintenance_mode: task.maintenance?.mode || null,
-      technical_status: task.verification_status, requirement_review: reviewFor(manager,selection), reason, source_task_id: task.task_id });
+      technical_status: task.verification_status, validation_source: candidate.validation_source || null, quality_policy: task.quality_policy,
+      requirement_review: reviewFor(manager,selection), reason, source_task_id: task.task_id });
   }
   return { candidates: output };
 }
@@ -129,7 +143,7 @@ export async function submitCandidateTrial(manager, request) {
       frozen_case_content: version.content, script_version: task.script_version || null, candidate_sha256: candidate.sha256, bundle: { files: bundle.files, sha256: bundle.sha256 },
       recording: { viewport: {width:1280,height:720}, video_size: {width:1280,height:720}, device_scale_factor: 1, codec: 'Playwright WebM', encoding_parameters: 'Playwright defaults; bitrate not overridden' },
       run_type: request.lane, origin: 'EXPLICIT_CANDIDATE_TRIAL', created_at: manager.now().toISOString(), started_at: manager.now().toISOString(),
-      execution_status: 'QUEUED', status: 'NOT_RUN', complete_pass: false, approval_status: 'NOT_APPROVED',
+      execution_status: 'QUEUED', status: 'NOT_RUN', complete_pass: false, approval_status: task.quality_policy?.quality_review_mode === 'self-test-v1' ? 'NOT_REQUIRED' : 'NOT_APPROVED',
       harness_starts: 0, model_calls: 0, media: [], files: [], evidence_status: 'PENDING', runner_version: 'candidate-bundle-trial-v1' })
       .catch(error => { manager.reportStorageFault(error, 'trial_receipt_create'); throw error; });
     if (manager.shutdownRequested) {
@@ -145,6 +159,12 @@ export async function submitCandidateTrial(manager, request) {
     void promise.catch(error => manager.reportStorageFault(error, 'trial_background_completion'));
     return run;
   } finally { manager.starting = false; }
+}
+
+export function trialNetworkPolicy(environment) {
+  const config = environment.configurationIdentity;
+  return config?.kind === 'registered-user-target' || config?.kind === 'registered-auth-target' && config.project_id
+    ? { origin: config.origin, path_prefix: config.path_prefix } : null;
 }
 
 async function executeTrial(manager, run, bundle, environment, controller, task) {
@@ -173,18 +193,28 @@ async function executeTrial(manager, run, bundle, environment, controller, task)
       ? await manager.authSessions.stateForExecution(authBinding.scope, authBinding.session_version) : null;
     const raw = await manager.adapter.verifyCandidate({ candidatePath: path.join(snapshot,'candidate.spec.mjs'), runDirectory: output,
       fixtureUrl: lease.url, signal: controller.signal, browserExecutable: manager.browserExecutable, authStorageState,
+      windowRecording: process.platform === 'win32',
       sessionTerminationEndpoints: authBinding ? manager.authSessions.environment(authBinding.scope).session_termination_endpoints || [] : [],
+      networkPolicy: trialNetworkPolicy(environment),
       timingRequirements: extractTimingObligations(run.frozen_case_content),
-      stepObservation: { run_id: run.run_id, candidate_sha256: run.candidate_sha256, executed_external_id: run.executed_external_id,
+      browserAssertionCase: run.frozen_case_content,
+      stepObservation: { run_id: run.run_id, candidate_sha256: run.candidate_sha256, candidate_bundle_sha256: bundle.sha256, executed_external_id: run.executed_external_id,
         executed_case_id: run.case_id, executed_case_version: run.case_version, executed_content_sha256: run.content_sha256 } });
+    const windowRecording = raw.windowRecording || (process.platform === 'win32' ? { status: 'UNAVAILABLE', reason: 'WINDOW_RECORDING_MANIFEST_MISSING' } : null);
+    await update({ window_recording: windowRecording,
+      ...(windowRecording ? { recording: { ...run.recording, viewport: windowRecording.viewport || null,
+        viewport_source: windowRecording.viewport ? 'ACTUAL_BROWSER_WINDOW' : 'UNAVAILABLE' } } : {}) });
+    if (raw.networkPolicyViolation) throw Object.assign(new Error('TARGET_SCOPE_REQUEST_BLOCKED'), { code: 'TARGET_SCOPE_REQUEST_BLOCKED' });
     const timingRequirements = extractTimingObligations(run.frozen_case_content);
     const timing = raw.timing || { required: timingRequirements.length > 0, complete: timingRequirements.length === 0, observations: [] };
-    const result = applyTimingVerdict(await parseCandidateReport(raw.reportPath, raw.process), timing);
+    const result = applyBrowserAssertionVerdict(applyTimingVerdict(await parseCandidateReport(raw.reportPath, raw.process, {
+      run_id: run.run_id, candidate_sha256: run.candidate_sha256, executed_external_id: run.executed_external_id,
+      executed_case_id: run.case_id, executed_case_version: run.case_version, executed_content_sha256: run.content_sha256 }), timing), raw.browserAssertions, run.frozen_case_content);
     const contract = { required_step_markers: run.frozen_case_content.steps.map(s => `CASE_STEP_${s.order}`), detection: lease.detection };
     const coverage = projectCaseStepCoverage(result, contract);
     const unchanged = (await developmentBundle(snapshot, { validate: false })).sha256 === bundle.sha256;
     authBlock = authWatch?.detected || null;
-    await update({ result, timing_validation: timing, status: authBlock ? 'AUTH_SESSION_BLOCKED' : result.test_status, complete_pass: result.complete_pass && coverage.complete && unchanged && !controller.signal.aborted && !authBlock,
+    await update({ result, timing_validation: timing, browser_assertions: raw.browserAssertions || null, status: authBlock ? 'AUTH_SESSION_BLOCKED' : result.test_status, complete_pass: result.complete_pass && coverage.complete && unchanged && !controller.signal.aborted && !authBlock,
       step_coverage: coverage, failure_step: coverage.items.find(s => s.error_attributed)?.marker || null, error: result.error,
       same_candidate_hash: unchanged, specified_defect_detected: run.run_type === 'negative' && unchanged && counterexampleDetected(result, contract),
       process: result.process });
@@ -195,9 +225,10 @@ async function executeTrial(manager, run, bundle, environment, controller, task)
     const media = (await evidenceFiles(output, directory)).filter(f => mediaType(f)).map((f,i) => ({ ...f, ...mediaType(f),
       media_id: `media-${i+1}`, file_id: `media-${i+1}`, run_id: run.run_id, file_name: path.basename(f.relative_path) }));
     const requiredMedia = task.auth_requirement ? ['video', 'screenshot'] : ['video', 'screenshot', 'trace'];
-    const complete = replay.replay.status === 'READY' && replay.replay.evidence_complete && requiredMedia.every(k => media.some(f => f.kind === k));
-    await update({ step_replay: replay.replay, media, files: media.map(f => ({ ...f, kind: f.file_name === 'step-replay-v1.webm' ? 'trial_step_replay_video' : `trial_${f.kind}` })),
-      evidence_status: complete ? 'COMPLETE' : 'INCOMPLETE', evidence_error: complete ? null : (replay.replay.reason || 'STEP_OR_MEDIA_MISSING'),
+    const complete = replay.replay.status === 'READY' && replay.replay.evidence_complete && requiredMedia.every(k => media.some(f => f.kind === k)) &&
+      (!windowRecording || windowRecording.status === 'COMPLETE' && media.some(f => f.relative_path === 'execution/artifacts/window-recording/browser-window.webm'));
+    await update({ step_replay: replay.replay, media, files: media.map(f => ({ ...f, kind: f.file_name === 'step-replay-v1.webm' ? 'trial_step_replay_video' : f.relative_path === 'execution/artifacts/window-recording/browser-window.webm' && windowRecording?.reason !== 'WINDOW_RECORDING_IDENTITY_MISMATCH' ? 'trial_window_video' : `trial_${f.kind}` })),
+      evidence_status: complete ? 'COMPLETE' : 'INCOMPLETE', evidence_error: complete ? null : (windowRecording && windowRecording.status !== 'COMPLETE' ? windowRecording.reason || 'WINDOW_RECORDING_INCOMPLETE' : replay.replay.reason || 'STEP_OR_MEDIA_MISSING'),
       trace_policy: task.auth_requirement ? 'DISABLED_FOR_AUTH_PRIVACY' : 'ON' });
   } catch (error) {
     if (manager.storageFault) throw error;
@@ -242,12 +273,28 @@ export function developmentRecords(task) {
   const shared = { project_id: task.source.project_id, source_build_task_id: task.task_id, source_external_id: task.source.external_id,
     source_case_version: task.source.case_version, executed_case_id: task.source.case_id, executed_case_version: task.source.case_version,
     executed_external_id: task.source.external_id, frozen_case_content: task.input_bundle.snapshot.content };
-  const records = [...task.development.self_tests.map(r => ({ ...r, run_id: `${task.task_id}-dev-${r.number}`, run_type: 'development',
+  const selfTestCandidates = new Map((task.candidates || []).flatMap(c => (c.trial_runs || [])
+    .filter(r => r.validation_source === 'SELF_TEST' && r.bundle_sha256 === c.bundle?.sha256)
+    .map(r => [r.run_id, c])));
+  const records = [...task.development.self_tests.map(r => {
+    const runId = `${task.task_id}-dev-${r.number}`, candidate = selfTestCandidates.get(runId);
+    const binding = candidate && candidate.bundle.sha256 === (r.bundle_sha256 || r.bundle?.sha256)
+      ? { candidate_version: candidate.version, validation_source: 'SELF_TEST' } : {};
+    return { ...r, ...binding, run_id: runId, run_type: 'development',
     bundle_sha256:r.bundle_sha256 || r.bundle?.sha256, origin: 'DEVELOPMENT_SELF_TEST', status: r.result?.test_status || 'NOT_RUN', step_coverage: r.coverage, candidate_sha256: r.sha256,
-    prefix: `development/run-${r.number}/`, started_at: new Date(r.started_at).toISOString() })),
-  ...(task.candidates || []).flatMap(c => (c.trial_runs || []).map(r => ({ ...r, bundle_sha256: c.bundle.sha256, candidate_version:c.version, origin: 'INITIAL_INDEPENDENT_VALIDATION', prefix: `development/final/${r.run_type}/` })))];
+    prefix: `development/run-${r.number}/`, started_at: new Date(r.started_at).toISOString() }; }),
+  ...(task.candidates || []).flatMap(c => (c.trial_runs || []).filter(r => r.validation_source !== 'SELF_TEST')
+    .map(r => ({ ...r, bundle_sha256: c.bundle.sha256, candidate_version:c.version, origin: 'INITIAL_INDEPENDENT_VALIDATION', prefix: `development/final/${r.run_type}/` })))];
   return records.map(r => {
-    const files = task.files.filter(f => f.relative_path.startsWith(r.prefix) && mediaType(f)).map(f => ({ ...f, ...mediaType(f),
+    // Independent verification owns its frozen media manifest. Do not borrow
+    // another validation's files merely because the task/candidate is the same.
+    const manifest = Array.isArray(r.media) ? new Map(r.media.map(f => [`development/${f.relative_path}`, f])) : null;
+    const files = task.files.filter(f => {
+      if (!mediaType(f)) return false;
+      if (!manifest) return f.relative_path.startsWith(r.prefix);
+      const owned = manifest.get(f.relative_path);
+      return owned && owned.bytes === f.bytes && owned.sha256 === f.sha256;
+    }).map(f => ({ ...f, ...mediaType(f),
       run_id: r.run_id, kind: r.step_replay?.status === 'READY' && path.basename(f.relative_path) === r.step_replay.output_file_name
         ? 'development_step_replay_video' : `${r.step_replay ? 'development' : 'legacy'}_${mediaType(f).kind}` }));
     const requiredMedia = task.auth_requirement ? ['video', 'screenshot'] : ['video', 'screenshot', 'trace'];

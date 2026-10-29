@@ -1,5 +1,8 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { reportInternals } from '../report.mjs';
+import { stripAnsi } from '../integrity.mjs';
 
 export const PROJECT_CASE_STEP_TITLE_RULE_VERSION = 'project-case-step-title-v2';
 
@@ -43,17 +46,54 @@ function rawStepError(error) {
   };
 }
 
-function publicStep(step) {
+function publicStep(step, observations = new Map(), identity = null) {
   const rawTitle = String(step?.title ?? '');
+  const parsed = parseProjectCaseStepTitle(rawTitle);
+  const candidateObservation = parsed ? observations.get(parsed.step_id) : null;
+  const sameError = candidateObservation?.raw_error?.message && step?.error?.message &&
+    stripAnsi(candidateObservation.raw_error.message).replace(/^Error: /, '') ===
+      stripAnsi(step.error.message).replace(/^Error: /, '');
+  const observation = candidateObservation?.raw_title === rawTitle && candidateObservation?.status === 'FAILED' && sameError
+    ? candidateObservation : null;
+  const observedAssertion = identity ? observation?.assertions?.[0] ?? null : undefined;
   return {
     title: rawTitle,
     raw_title: rawTitle,
     category: step?.category ?? null,
     duration: step?.duration ?? null,
-    error: step?.error ? reportInternals.errorFacts(step.error) : null,
+    error: step?.error ? reportInternals.errorFacts(step.error, observedAssertion) : null,
     raw_error: rawStepError(step?.error),
-    steps: (step?.steps || []).map(publicStep),
+    steps: (step?.steps || []).map(child => publicStep(child, observations, identity)),
   };
+}
+
+async function readStepObservations(reportPath, identity) {
+  if (!identity?.run_id || !identity?.candidate_sha256 || identity.executed_case_version == null) return new Map();
+  const file = path.join(path.dirname(reportPath instanceof URL ? fileURLToPath(reportPath) : reportPath),
+    'artifacts', 'step-evidence', 'step-observations.ndjson');
+  let raw;
+  try { raw = await fs.readFile(file, 'utf8'); }
+  catch (error) { if (error.code === 'ENOENT') return new Map(); throw error; }
+  const observations = new Map();
+  const duplicates = new Set();
+  for (const line of raw.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    let item;
+    try { item = JSON.parse(line); } catch { continue; }
+    if (item?.schema !== 'workbench/step-observation-v1' ||
+        !/^CASE_STEP_[1-9]\d*$/.test(item.step_id)) continue;
+    const trusted = item.run_id === identity.run_id && item.candidate_sha256 === identity.candidate_sha256 &&
+      item.executed_case_version === identity.executed_case_version &&
+      (!identity.executed_case_id || item.executed_case_id === identity.executed_case_id) &&
+      (!identity.executed_external_id || item.executed_external_id === identity.executed_external_id) &&
+      (!identity.executed_content_sha256 || item.executed_content_sha256 === identity.executed_content_sha256) &&
+      Array.isArray(item.assertions);
+    // Duplicate observations cannot identify one authoritative execution.
+    if (observations.has(item.step_id)) { observations.set(item.step_id, null); duplicates.add(item.step_id); }
+    else if (duplicates.has(item.step_id)) continue;
+    else observations.set(item.step_id, trusted ? item : null);
+  }
+  return observations;
 }
 
 function flattenStepNodes(steps, output = [], parentPath = [], owningStepId = null) {
@@ -141,7 +181,7 @@ export function mapProjectCaseSteps(verification, contract) {
   };
 }
 
-export async function parseCandidateReport(reportPath, processResult) {
+export async function parseCandidateReport(reportPath, processResult, identity = null) {
   let raw;
   try { raw = await fs.readFile(reportPath, 'utf8'); }
   catch (error) {
@@ -161,9 +201,14 @@ export async function parseCandidateReport(reportPath, processResult) {
   }
   const test = tests[0];
   const result = test.results?.at(-1) || null;
-  const steps = (result?.steps || []).map(publicStep);
+  const observations = await readStepObservations(reportPath, identity);
+  const steps = (result?.steps || []).map(step => publicStep(step, observations, identity));
   const status = result?.status || (test.expectedStatus === 'skipped' ? 'skipped' : 'notRun');
-  const error = reportInternals.errorFacts(result?.error || result?.errors?.[0] || test.errors?.[0]);
+  const rawError = result?.error || result?.errors?.[0] || test.errors?.[0];
+  const rawFacts = reportInternals.errorFacts(rawError, identity ? null : undefined);
+  const matchingStep = flattenStepNodes(steps).find(node => node.step.error?.message === rawFacts?.message);
+  const error = matchingStep?.step.error?.value_source === 'PLAYWRIGHT_MATCHER_RESULT'
+    ? matchingStep.step.error : rawFacts;
   const skipped = status === 'skipped' || Number(report.stats?.skipped || 0) > 0;
   const completePass = processResult.exitCode === 0 && processResult.termination === null && status === 'passed' && !skipped && Number(report.stats?.expected) === 1 && Number(report.stats?.unexpected || 0) === 0;
   return {

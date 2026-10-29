@@ -1,0 +1,4 @@
+export function qualityReviewHarnessPatch() {
+  const guard = new URL('./quality-review-harness-guard.mjs', import.meta.url);
+  return `- id: agent-default-model\n  config:\n    provider: deepseek-official\n    model: deepseek-flash\n- id: llm-deepseek\n  config:\n    protocol: messages\n- id: llm-retry\n  disabled: true\n- id: skill-filesystem\n  disabled: true\n- id: tool-skill\n  disabled: true\n- insert:\n    - id: quality-review-tool-guard\n      name: ${JSON.stringify(guard.href)}\n    - id: quality-review-mcp\n      name: '@deepseek-ai/dsh-mcp-client'\n      config:\n        serverName: workbench-quality-review\n        transport: streamable-http\n        url: !!js process.env.WORKBENCH_QUALITY_REVIEW_ENDPOINT\n        toolCallTimeoutMs: 240000\n        failOnStartupError: true\n`;
+}

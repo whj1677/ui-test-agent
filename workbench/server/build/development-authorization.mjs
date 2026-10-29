@@ -5,7 +5,7 @@ import { DEVELOPMENT_LIMITS, digest } from './development-session.mjs';
 
 const fileOf = store => path.join(store.root, 'development-authorizations.json');
 // Explicit opt-in for new exploratory work. Existing receipts and defaults remain unchanged.
-export const EXPLORATORY_LIMITS = Object.freeze({ self_tests: 10, revisions: 9, tool_calls: 360, harness_starts: 3, wall_ms: 30 * 60_000 });
+export const EXPLORATORY_LIMITS = Object.freeze({ self_tests: 10, revisions: 9, tool_calls: 360, harness_starts: 3, quality_reviews: 3, independent_validations: 2, wall_ms: 30 * 60_000 });
 export function authorizationLimits(entry) {
   if (entry.budget_profile && !['standard', 'exploratory'].includes(entry.budget_profile)) throw new Error('DEVELOPMENT_BUDGET_PROFILE_INVALID');
   const ceiling = entry.budget_profile === 'exploratory' ? EXPLORATORY_LIMITS : DEVELOPMENT_LIMITS;
@@ -21,6 +21,7 @@ async function write(store, value) {
 }
 export async function registerDevelopmentAuthorization(store, entry) {
   return store.serial(async () => {
+    if (!['self-test-v1', 'static-v1', 'dsh-tools-v1'].includes(entry.quality_review_mode ?? 'static-v1')) throw new Error('QUALITY_REVIEW_MODE_INVALID');
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(entry.logical_id) || !entry.project_id || !entry.case_id || !Number.isInteger(entry.case_version) || !/^[A-F0-9]{64}$/.test(entry.content_sha256) || !entry.environment_id || !['recovery', 'new'].includes(entry.mode)) throw new Error('DEVELOPMENT_AUTHORIZATION_INVALID');
     if (entry.mode === 'recovery' && (!entry.seed_code || digest(entry.seed_code) !== entry.seed_sha256)) throw new Error('RECOVERY_SEED_REQUIRED');
     const current = await read(store);

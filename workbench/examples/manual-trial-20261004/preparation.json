@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-04T13:02:17.291Z",
+  "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+  "project_url": "http://127.0.0.1:4322/workspace/#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/requirements",
+  "target_url": "http://127.0.0.1:4401/ledger/",
+  "prepared_sources": [
+    {
+      "snapshot_id": "source-d115a860-d970-4158-b8c7-afad17c996f2",
+      "kind": "PRD",
+      "file_name": "01-PRD.md",
+      "sha256": "d95d1f1e77471a811e19b12e2d62ce941e0e877f4bdccef64934624b5733dfc3",
+      "read_status": "READ",
+      "document_status": "REVIEW_DRAFT",
+      "model_analysis_status": "NOT_RUN"
+    },
+    {
+      "snapshot_id": "source-fb6e119a-f8d2-409f-8351-6f411a7eca5b",
+      "kind": "MRD",
+      "file_name": "02-MRD.md",
+      "sha256": "807f7b442325af3a5a0f076a50c8bdc7e348d73fe0548d6a22d70fe2a655eedf",
+      "read_status": "READ",
+      "document_status": "REVIEW_DRAFT",
+      "model_analysis_status": "NOT_RUN"
+    },
+    {
+      "snapshot_id": "source-726e0efd-00d8-4b4f-a8eb-7fd21a31affd",
+      "kind": "PROTOCOL",
+      "file_name": "03-PROTOCOL.md",
+      "sha256": "d6a3f835bf7b0fe9d2440f429c0f0af581d2db981ad940d6e6ca3014386c656f",
+      "read_status": "READ",
+      "document_status": "REVIEW_DRAFT",
+      "model_analysis_status": "NOT_RUN"
+    }
+  ],
+  "offline_parse": [
+    {
+      "kind": "PRD",
+      "file_name": "01-PRD.md",
+      "segments": 16
+    },
+    {
+      "kind": "MRD",
+      "file_name": "02-MRD.md",
+      "segments": 4
+    },
+    {
+      "kind": "PROTOCOL",
+      "file_name": "03-PROTOCOL.md",
+      "segments": 24
+    }
+  ],
+  "cases": 0,
+  "designs": 0,
+  "runs": 0,
+  "previous_project_count": 24,
+  "previous_projects_changed": [],
+  "business_model_calls": 0,
+  "business_executions": 0,
+  "boundary": "Preparation only; no cases approved, model generation or business execution."
+}

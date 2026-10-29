@@ -10,12 +10,36 @@ import { test } from 'node:test';
 const exec = promisify(execFile);
 const scripts = fileURLToPath(new URL('../scripts/', import.meta.url));
 
+test('desktop and canonical entrypoints parse in both supported PowerShell hosts',async()=>{
+  const files=['start-workbench.ps1','open-workbench.ps1'].map(file=>path.join(scripts,file));
+  for(const host of ['pwsh',...(process.platform==='win32'?['powershell.exe']:[])]){
+    for(const file of files){
+      const command=`$tokens=$null; $errors=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('${file.replaceAll("'","''")}',[ref]$tokens,[ref]$errors); if($errors.Count){$errors | ForEach-Object {$_.ToString()}; exit 1}`;
+      await exec(host,['-NoProfile','-ExecutionPolicy','Bypass','-Command',command]);
+    }
+  }
+});
+
+test('model configuration digest works in Windows PowerShell without the optional Get-FileHash command',async()=>{
+  const script=path.join(scripts,'model-config.ps1').replaceAll("'","''");
+  for(const host of ['pwsh',...(process.platform==='win32'?['powershell.exe']:[])]){
+    const command=`. '${script}'; function Get-FileHash { throw 'Get-FileHash must not be used' }; Get-WorkbenchConfigSha256 -Bytes ([Text.Encoding]::UTF8.GetBytes('configuration-bytes'))`;
+    const result=await exec(host,['-NoProfile','-ExecutionPolicy','Bypass','-Command',command]);
+    const expected=(await import('node:crypto')).createHash('sha256').update('configuration-bytes').digest('hex').toUpperCase();
+    assert.equal(result.stdout.trim(),expected);
+  }
+  const source=await fs.readFile(path.join(scripts,'start-workbench.ps1'),'utf8');
+  assert.match(source,/config_sha256\s*=\s*Get-WorkbenchConfigSha256/);
+});
+
 test('startup template isolates inherited authorization and rejects missing runtime without private data', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'workbench-start-config-'));
   try {
     const target = path.join(root, 'workbench', 'scripts');
     await fs.mkdir(target, { recursive: true });
-    await fs.copyFile(path.join(scripts, 'start-workbench.ps1'), path.join(target, 'start-workbench.ps1'));
+    for (const file of ['start-workbench.ps1', 'runtime-paths.ps1', 'model-config.ps1']) {
+      await fs.copyFile(path.join(scripts, file), path.join(target, file));
+    }
     const runtime = path.join(root, 'empty-runtime');
     await fs.mkdir(runtime);
     const patch = path.join(root, 'fixture-patch.yml');

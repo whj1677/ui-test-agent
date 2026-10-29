@@ -1,0 +1,45 @@
+- main:
+  - generic: 公开合成验收目标
+  - heading "设备台账" [level=1]
+  - paragraph: 设备唯一编号管理 · 独立读取验证 · 本次运行隔离
+  - paragraph: 此页面为 B 场景被测系统。角色是公开模拟身份，不使用真实账号。正式工作台仍位于 4322。
+  - region "本次运行":
+    - heading "本次运行" [level=2]
+    - generic: 运行命名空间
+    - textbox "运行命名空间":
+      - /placeholder: completion-ui-001
+    - generic: 公开合成角色
+    - combobox "公开合成角色":
+      - option "editor · 可新增" [selected]
+      - option "viewer · 只读"
+    - button "初始化本次台账"
+    - paragraph: 尚未初始化。输入独立的本次运行编号后开始。
+  - region "新增设备":
+    - heading "新增设备" [level=2]
+    - generic: 设备编号
+    - textbox "设备编号": DEV-007
+    - generic: 设备名称
+    - textbox "设备名称": 冷却泵二号
+    - generic: 所属站点
+    - textbox "所属站点": 西站
+    - generic: 额定功率（kW）
+    - spinbutton "额定功率（kW）": "110"
+    - button "提交新增" [disabled]
+    - status: 提交后将重新读取台账，请以列表持久化结果核对业务预期。
+  - region "台账列表 0 条":
+    - heading "台账列表 0 条" [level=2]:
+      - text: 台账列表
+      - generic: 0 条
+    - button "重新读取台账" [disabled]
+    - paragraph: 尚未读取本次台账。
+    - table "设备台账列表":
+      - rowgroup:
+        - row "设备编号 设备名称 所属站点 额定功率（kW）":
+          - columnheader "设备编号"
+          - columnheader "设备名称"
+          - columnheader "所属站点"
+          - columnheader "额定功率（kW）"
+      - rowgroup
+  - heading "运行结束清理" [level=2]
+  - paragraph: 只清理当前运行命名空间的新增数据、审计和故障状态。公共 DEV-001 初始记录保持不变。
+  - button "清理本次运行" [disabled]

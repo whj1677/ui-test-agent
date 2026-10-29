@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人工示范 · 独立控制窗</title>
+  <link rel="stylesheet" href="/workspace/demonstration-control.css">
+  <script type="module" src="/workspace/demonstration-control.js"></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">人工示范</p><h1>独立控制窗</h1></header>
+    <p class="note">仅控制录制；步骤预期与检查对象关联请返回工作台主窗口核对。登录与密码不录制。</p>
+    <div class="status" id="status" role="status" tabindex="-1">正在读取状态…</div>
+    <label for="step">当前步骤</label><select id="step" disabled></select>
+    <details id="step-detail" open><summary>当前步骤的原动作与原预期</summary><div class="step-detail"><strong>原动作</strong><p id="step-action"></p><strong>原预期（只读）</strong><p id="step-expected"></p></div></details>
+    <p id="next-step" class="next-step"></p>
+    <div id="actions" class="actions"></div>
+    <p id="notice" role="status"></p>
+    <p id="error" role="alert"></p>
+    <button id="pause-close" class="close-button" type="button">暂停并关闭</button>
+  </main>
+</body>
+</html>

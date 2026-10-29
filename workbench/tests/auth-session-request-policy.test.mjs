@@ -39,7 +39,7 @@ test('active scope and version lease blocks termination requests, then releases 
   };
   const browser = { isConnected: () => true, on: () => {}, close: async () => {}, newContext: async () => context };
   const sessions = new TargetAuthSessions({ environments: [declared], browserExecutable: 'fake',
-    browserType: { launch: async () => browser }, headless: true });
+    browserType: { launch: async () => browser }, loginPageProbe: async () => {}, headless: true });
   const opened = await sessions.open(scope);
   const actions = [];
   const send = async (path, method = 'POST') => routeHandler({

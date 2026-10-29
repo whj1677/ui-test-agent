@@ -1,4 +1,11 @@
 @echo off
 chcp 65001 >nul
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0启动.ps1" %*
-if errorlevel 1 pause
+set "AGENT_NODE=node"
+if exist "%~dp0portable-manifest.json" (
+  if not exist "%~dp0runtime\node\node.exe" exit /b 1
+  set "AGENT_NODE=%~dp0runtime\node\node.exe"
+)
+"%AGENT_NODE%" "%~dp0workbench\scripts\native-entry.mjs" launch %*
+set "START_EXIT=%ERRORLEVEL%"
+pause
+exit /b %START_EXIT%

@@ -102,9 +102,11 @@ test('development auth binds the registered target, fixed role and valid session
 });
 
 test('auth development patch retains MCP guard and switches browser to memory attachment', () => {
-  const base = `- insert:\n    - id: dsh-browser-use-playwright-mcp\n      config:\n        mode: launch\n        headless: true\n        executablePath: !!js process.env.DSH_PROBE_BROWSER_EXECUTABLE\n`;
+  const base = `- id: llm-deepseek\n  config:\n    protocol: messages\n- id: llm-retry\n  disabled: true\n- insert:\n    - id: dsh-browser-use-playwright-mcp\n      config:\n        mode: launch\n        headless: true\n        executablePath: !!js process.env.DSH_PROBE_BROWSER_EXECUTABLE\n`;
   const patch = developmentPatch(base, path.resolve('workbench'), { authAttach: true });
   assert.match(patch, /mode: attach/);
+  assert.match(patch, /retryPolicy:/);
+  assert.match(patch, /- id: llm-retry\n  disabled: false/);
   assert.match(patch, /WORKBENCH_AUTH_CDP_ENDPOINT/);
   assert.match(patch, /workbench-development-guard/);
   assert.match(patch, /workbench-development-mcp/);

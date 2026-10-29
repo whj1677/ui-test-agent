@@ -1,0 +1,67 @@
+{
+  "scope": "Preparation and synthetic target verification, not Test Agent generation/execution acceptance",
+  "at": "2026-10-09T01:27:03.433Z",
+  "checks": [
+    {
+      "name": "API-WO-01",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 201,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "API-WO-02",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 409,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "API-WO-03",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 403,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "API-WO-04",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 200,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "API-WO-05",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 200,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "API-WO-06",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "status": 409,
+        "whole_list_verified": true
+      }
+    },
+    {
+      "name": "Fixture isolation and concurrent persistence",
+      "status": "EXECUTED_EXPECTED",
+      "details": {
+        "concurrent_created": 2,
+        "invalid_type_rejected": true
+      }
+    }
+  ],
+  "browserErrors": [],
+  "workbench_model_requests": 0,
+  "workbench_business_executions": 0,
+  "status": "PREPARATION_FAILED",
+  "error": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('公开角色', { exact: true })\u001b[22m\n\n    at D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\examples\\inspection-trial-20261009\\verify-preparation.mjs:68:101"
+}

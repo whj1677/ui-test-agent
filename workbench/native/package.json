@@ -1,0 +1,16 @@
+{
+  "name": "ui-test-agent-native-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.2.0-rc.2"
+  },
+  "overrides": {
+    "@modelcontextprotocol/client": "2.3.0",
+    "fflate": "0.8.3"
+  }
+}

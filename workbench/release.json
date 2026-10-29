@@ -1,0 +1,39 @@
+{
+  "schema": "workbench/release-v1",
+  "version": "0.1.0-native.20261029.office3",
+  "status": "PENDING_ACCEPTANCE",
+  "requirement": "REQ-0001/v18",
+  "entry": "http://127.0.0.1:4322/workspace/",
+  "native_dsh": {
+    "version": "0.2.0-rc.2",
+    "dependency_scope": "workbench/native"
+  },
+  "dependency_scopes": [
+    ".",
+    "workbench",
+    "harness-probe",
+    "workbench/native"
+  ],
+  "delivery_scope": {
+    "includes": [
+      "Current runtime baseline plus listed P1 changes, with local import closure",
+      "Locked dependency declarations for the four scopes",
+      "Windows entry, installation and diagnostic scripts",
+      "Fixed runtime guidance and public deployment policy",
+      "Current engineer Excel template and archive-local public device-license verification client 0.2.0",
+      "Nested startup budgets and credential-free startup phase timing; fixed transitive security dependencies; recording fullscreen, window enlargement and source-size zoom",
+      "Explicit absolute RuntimeHome forwarding from the Windows PowerShell installer without changing its default or running-service guard; UTF-8 BOM initialization script for Windows PowerShell 5 compatibility",
+      "Read-only latest public DSH reply, associated input, chronological full history and escaped limited Markdown formatting with original text retained",
+      "Engineer trial explicitly disables device activation in source and portable distribution; model credentials and execution permissions remain required",
+      "Restore previously explicit model opt-in on ordinary launch; prepare attachments while model unavailable; keep startup output visible and provide read-only model diagnostics; normalize packaged CMD line endings",
+      "AI case assistant keeps its existing upload/paste/drop composer; failed standard DOCX parsing falls back to local read-only Word/WPS; complete Windows installer includes current app and runtime"
+    ],
+    "excludes": [
+      "Project cases, business scripts and execution evidence",
+      "Credentials and browser sessions",
+      "QA, requirement history and files outside the runtime allowlist",
+      "Dependency directories from source ZIP"
+    ],
+    "acceptance": "Protected Office sources use frozen text and table segments during assistant generation, with image gaps explicit. Real generation and Excel download are being verified on the official workbench; native WPS remains NOT_RUN."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "baseline": [
+    {
+      "code": "WO-1001",
+      "title": "PCS月度巡检",
+      "station": "EAST",
+      "priority": "HIGH",
+      "status": "PENDING"
+    },
+    {
+      "code": "WO-1002",
+      "title": "消防设备检查",
+      "station": "WEST",
+      "priority": "NORMAL",
+      "status": "PENDING"
+    },
+    {
+      "code": "WO-1003",
+      "title": "电池温差复核",
+      "station": "EAST",
+      "priority": "NORMAL",
+      "status": "DONE"
+    }
+  ],
+  "create": {
+    "code": "WO-2001",
+    "title": "储能舱温控巡检",
+    "station": "WEST",
+    "priority": "HIGH"
+  },
+  "duplicate": {
+    "code": "WO-1001",
+    "title": "不得覆盖的工单",
+    "station": "WEST",
+    "priority": "NORMAL"
+  },
+  "viewer": {
+    "code": "WO-2002",
+    "title": "只读角色提交",
+    "station": "WEST",
+    "priority": "HIGH"
+  },
+  "scenarios": [
+    {
+      "id": "01",
+      "name": "新增工单并独立读回",
+      "role": "editor",
+      "data": {
+        "code": "WO-2001",
+        "title": "储能舱温控巡检",
+        "station": "WEST",
+        "priority": "HIGH"
+      }
+    },
+    {
+      "id": "02",
+      "name": "重复编号被拒绝且原记录不被覆盖",
+      "role": "editor",
+      "data": {
+        "code": "WO-1001",
+        "title": "不得覆盖的工单",
+        "station": "WEST",
+        "priority": "NORMAL"
+      }
+    },
+    {
+      "id": "03",
+      "name": "只读角色新增被拒绝且数据不变",
+      "role": "viewer",
+      "data": {
+        "code": "WO-2002",
+        "title": "只读角色提交",
+        "station": "WEST",
+        "priority": "HIGH"
+      }
+    },
+    {
+      "id": "04",
+      "name": "按东站与待处理组合查询",
+      "role": "editor",
+      "data": {
+        "station": "EAST",
+        "status": "PENDING"
+      }
+    },
+    {
+      "id": "05",
+      "name": "待处理工单完成并持久化",
+      "role": "editor",
+      "data": {
+        "code": "WO-1001"
+      }
+    },
+    {
+      "id": "06",
+      "name": "已完成工单禁止重复完成",
+      "role": "editor",
+      "data": {
+        "code": "WO-1003"
+      }
+    }
+  ]
+}

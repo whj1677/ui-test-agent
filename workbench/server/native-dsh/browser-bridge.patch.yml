@@ -1,0 +1,3 @@
+- insert:
+    - id: workbench-native-browser-bridge
+      name: ./browser-bridge.mjs

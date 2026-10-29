@@ -82,17 +82,41 @@ function assertionValues(message, matcher) {
     ? [left.join('\n'), right.join('\n')] : [null, null];
 }
 
-function errorFacts(error) {
+function errorFacts(error, observedAssertion = undefined) {
   if (!error) return null;
   const message = stripAnsi(error.message || error.value || String(error)).slice(0, 20000);
-  const [expected, actual] = assertionValues(message, error.matcherResult);
+  const supported = new Set(['toBe', 'toContain', 'toEqual', 'toStrictEqual', 'toHaveText', 'toContainText', 'toHaveValue', 'toHaveCount']);
+  const structured = observedAssertion && typeof observedAssertion === 'object' ? observedAssertion : null;
+  const captureSource = structured?.capture_source;
+  const trustedCapture = captureSource === 'PLAYWRIGHT_MATCHER_RESULT' ||
+    captureSource === 'PLAYWRIGHT_SOFT_MATCHER_ARGUMENTS' && ['toBe', 'toContain', 'toEqual', 'toStrictEqual'].includes(structured.name);
+  const complete = trustedCapture && supported.has(structured.name) && structured.expected_present && structured.actual_present
+    && structured.expected_complete && structured.actual_complete;
+  const format = value => typeof value === 'string' ? value : JSON.stringify(value);
+  const [expected, actual] = complete
+    ? [format(structured.expected), format(structured.actual)]
+    : observedAssertion === undefined ? assertionValues(message, error.matcherResult) : [null, null];
+  const directMatcher = /^(?:toHaveText|toContainText|toHaveValue|toHaveCount)$/.test(error.matcherResult?.name)
+    && expected !== null && actual !== null;
+  const source = complete ? captureSource : observedAssertion === undefined && directMatcher ? 'PLAYWRIGHT_MATCHER_RESULT'
+    : observedAssertion === undefined && (expected !== null || actual !== null) ? 'LEGACY_PLAYWRIGHT_MESSAGE' : null;
   let type = 'TEST_ERROR';
   const missingLocator = /strict mode violation|element\(s\) not found|locator resolved to 0 elements?/i.test(message);
   if (expected !== null && actual !== null && !missingLocator) type = 'ASSERTION_MISMATCH';
   else if (/strict mode violation|element\(s\) not found|resolved to \d+ elements|waiting for (?:getBy|locator)|未找到表头列/i.test(message)) type = 'LOCATOR_OR_TARGET';
   else if (/Expected(?: string)?:|Received(?: string)?:|expect\(/i.test(message)) type = 'ASSERTION_UNRESOLVED';
   else if (/TimeoutError|timed out|timeout \d+ms exceeded/i.test(message)) type = 'TIMEOUT';
-  return { type, message, expected, actual, attribution: 'PENDING_ANALYSIS' };
+  const unavailableReason = complete || source ? null : structured
+    ? !supported.has(structured.name) ? 'UNSUPPORTED_MATCHER'
+      : !trustedCapture ? 'MATCHER_CAPTURE_SOURCE_UNVERIFIED'
+      : !structured.expected_present || !structured.actual_present ? 'MATCHER_VALUES_UNAVAILABLE'
+        : 'MATCHER_VALUES_REDACTED_OR_LIMITED'
+    : observedAssertion === null ? 'MATCHER_VALUES_UNAVAILABLE' : null;
+  return { type, message, expected, actual, attribution: 'PENDING_ANALYSIS',
+    value_source: source, matcher_name: structured?.name ?? error.matcherResult?.name ?? null,
+    expected_present: structured ? structured.expected_present : expected !== null,
+    actual_present: structured ? structured.actual_present : actual !== null,
+    value_unavailable_reason: unavailableReason };
 }
 
 async function listFiles(root) {

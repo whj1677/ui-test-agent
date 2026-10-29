@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createWorkbenchServer } from '../server/app.mjs';
 import { createServiceShutdown } from '../server/service-shutdown.mjs';
-import { sourceFingerprint,createServiceIdentity } from '../server/service-identity.mjs';
+import { sourceFingerprint,createServiceIdentity,configurationFingerprint } from '../server/service-identity.mjs';
 import { WorkbenchStore } from '../server/store.mjs';
 import { WorkbenchRunManager } from '../server/executor.mjs';
 import { renderReport } from '../server/report-snapshots.mjs';
@@ -49,15 +49,39 @@ test('shutdown refuses admission first, stops both executors, drains and closes 
   assert.equal((await request({serviceState:state},'/api/runs','POST')).status,503);
 });
 
+test('credential recovery keeps restart configuration stable while actual configuration changes remain distinct',()=>{
+  const before={model:{provider:'deepseek-official',model:'deepseek-flash',credential_source:'not-configured'},
+    credential_policy:{use_stored_credentials:true},runtime_locations:{dsh:'configured-home'}};
+  const recovered=structuredClone(before);recovered.model.credential_source='windows-dpapi-current-user';
+  assert.equal(configurationFingerprint(before),configurationFingerprint(recovered));
+  assert.equal(before.model.credential_source,'not-configured');
+  for(const change of [value=>{value.model.model='another-model';},value=>{value.credential_policy.use_stored_credentials=false;},
+    value=>{value.runtime_locations.dsh='different-home';}]) {
+    const other=structuredClone(recovered);change(other);
+    assert.notEqual(configurationFingerprint(before),configurationFingerprint(other));
+  }
+});
+
 test('service identity changes with source and new records retain captured identity',async t=>{
   const root=await temp(t);
-  for(const dir of ['workbench/server','workbench/web-v2','harness-probe/src'])await fs.mkdir(path.join(root,dir),{recursive:true});
+  for(const dir of ['workbench/server','workbench/web-v2','harness-probe/src','src'])await fs.mkdir(path.join(root,dir),{recursive:true});
   for(const name of ['package.json','package-lock.json','workbench/package.json','workbench/package-lock.json','harness-probe/package.json','harness-probe/package-lock.json'])await fs.writeFile(path.join(root,name),'{}');
+  for(const name of ['workbench/native/package.json','workbench/native/package-lock.json','workbench/release.json','workbench/scripts/native-dsh-package.mjs','workbench/scripts/native-runtime.mjs','workbench/scripts/native-entry.mjs']){
+    await fs.mkdir(path.dirname(path.join(root,name)),{recursive:true});await fs.writeFile(path.join(root,name),name.endsWith('.json')?'{}':'// frozen runtime fixture');
+  }
+  await fs.copyFile(new URL('../release.json',import.meta.url),path.join(root,'workbench/release.json'));
+  for(const skill of ['ui-test-authoring-v1','backend-http-plan-v1','case-design-v1']) {
+    const dir=path.join(root,'workbench/server/skills',skill);await fs.mkdir(dir,{recursive:true});
+    await fs.writeFile(path.join(dir,'SKILL.md'),`frozen ${skill} fixture`);
+  }
   const file=path.join(root,'workbench/server/example.mjs');await fs.writeFile(file,'one');
   const identity=await createServiceIdentity({repoRoot:root,localRoot:root,instanceId:'test',configuration:{mode:'test'}});
   const store=new WorkbenchStore(path.join(root,'data'));await store.init();store.serviceIdentity=identity;
   const run=await store.createRun({run_id:'run-supervisor-12345678'});await fs.writeFile(file,'two');
   assert.notEqual((await sourceFingerprint(root)).source_sha256,identity.source_sha256);
+  const beforeModelChange=await sourceFingerprint(root);
+  await fs.writeFile(path.join(root,'src/deepseek.mjs'),'model-transport-change');
+  assert.notEqual((await sourceFingerprint(root)).source_sha256,beforeModelChange.source_sha256);
   assert.deepEqual((await store.getRun(run.run_id)).service_identity,identity);
 });
 

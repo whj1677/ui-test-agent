@@ -1,0 +1,49 @@
+.backend-case .backend-check { display: flex; align-items: flex-start; gap: 8px; line-height: 1.6; margin: 10px 0; }
+.backend-case .backend-check input { width: auto; margin-top: 5px; flex: 0 0 auto; }
+.backend-environments > summary { padding: 18px 22px; font-weight: 600; cursor: pointer; }
+.backend-plan-json { min-height: 360px; width: 100%; font: 13px/1.6 Consolas, monospace; tab-size: 2; resize: vertical; }
+.backend-plan-json[readonly] { background: #f5f6f7; }
+.backend-case pre, .backend-evidence pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 520px; overflow-y: auto; }
+.backend-evidence > section { margin-top: 22px; }
+.backend-evidence .panel-header { padding-left: 0; padding-right: 0; }
+.backend-step { border: 1px solid var(--border, #e2e5e8); border-radius: 8px; padding: 16px; margin: 14px 0; }
+.backend-step-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.backend-step dl { display: grid; grid-template-columns: 65px minmax(0,1fr); gap: 6px 12px; }
+.backend-step dd { margin: 0; white-space: pre-wrap; }
+.backend-request { border-top: 1px solid var(--border, #e2e5e8); margin-top: 12px; padding: 12px 0; }
+.backend-request > summary { cursor: pointer; overflow-wrap: anywhere; }
+.backend-request table code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.backend-case .case-context { flex-wrap: wrap; }
+.backend-readiness ol { margin: 12px 0; padding-left: 24px; line-height: 1.8; }
+.backend-plan-summary { display: grid; gap: 18px; margin: 18px 0; }
+.backend-plan-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.backend-plan-facts p, .backend-plan-step { border: 1px solid var(--border, #e2e5e8); border-radius: 8px; padding: 12px; margin: 0; }
+.backend-plan-step { margin: 12px 0; }
+.backend-plan-step > p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.backend-plan-request { border-top: 1px solid var(--border, #e2e5e8); padding: 12px 0; overflow-wrap: anywhere; }
+.backend-plan-request h5 { margin: 0 0 8px; font-size: 1em; }
+.backend-plan-request ul { margin: 8px 0; padding-left: 24px; }
+.backend-plan-request li { margin: 5px 0; }
+.backend-plan-technical { margin: 18px 0; }
+.backend-plan-technical > summary { cursor: pointer; font-weight: 600; padding: 10px 0; }
+.backend-advanced, .backend-manual, .script-advanced, .batch-advanced { border-top: 1px solid var(--border, #e2e5e8); margin: 12px 0; padding-top: 10px; }
+.backend-advanced > summary, .backend-manual > summary, .script-advanced > summary, .batch-advanced > summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+.script-dialog .modal-body, .batch-modal .modal-body { min-width: 0; }
+.script-dialog #script-plan li, .batch-modal td { overflow-wrap: anywhere; }
+.script-dialog input[type="checkbox"], .batch-modal input[type="checkbox"] { width: auto; }
+.script-dialog :focus-visible, .batch-modal :focus-visible, .backend-case details > summary:focus-visible { outline: 3px solid var(--focus, #2563eb); outline-offset: 2px; }
+@media (max-width: 700px) {
+  .script-dialog .table-wrap, .batch-modal .table-wrap { overflow-x: auto; max-width: 100%; }
+  .script-dialog footer, .batch-modal footer { display: flex; flex-wrap: wrap; gap: 8px; }
+  .script-dialog footer button, .batch-modal footer button { flex: 1 1 120px; }
+  .backend-manual, .backend-advanced { min-width: 0; }
+}
+@media (max-width: 700px) { .backend-case .case-context label { width: 100%; } .backend-step dl { grid-template-columns: 1fr; } }
+
+/* Keep the shared review controls in a predictable order on desktop and narrow screens. */
+.backend-bulk-review .bulk-review-footer{display:grid!important;grid-template-columns:minmax(160px,220px) minmax(0,1fr);gap:16px;align-items:center;text-align:left}
+.backend-bulk-review .bulk-review-footer .field{margin:0}
+.backend-bulk-review .bulk-review-footer .backend-check{display:flex;gap:8px;align-items:flex-start;line-height:1.65}
+.backend-bulk-review .bulk-review-footer .backend-check input{flex:none;margin-top:5px}
+.backend-bulk-review .bulk-review-footer .actions{grid-column:1/-1;justify-content:flex-end;margin:0}
+@media(max-width:760px){.backend-bulk-review .bulk-review-footer{grid-template-columns:minmax(0,1fr);gap:12px}.backend-bulk-review .bulk-review-footer .field{max-width:240px}}

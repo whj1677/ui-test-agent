@@ -28,5 +28,9 @@ const NETWORK_CODES = new Set([
 
 export function networkErrorCode(error) {
   const code = error?.cause?.code ?? error?.code;
-  return NETWORK_CODES.has(code) ? code : null;
+  return isNetworkErrorCode(code) ? code : null;
+}
+
+export function isNetworkErrorCode(code) {
+  return typeof code === 'string' && NETWORK_CODES.has(code);
 }

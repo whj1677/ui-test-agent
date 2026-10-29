@@ -2,6 +2,16 @@ import { validateSessionTerminationEndpoints } from './session-request-policy.mj
 
 export const AUTH01_FIXTURE_ENVIRONMENT_ID = 'auth01-local-fixture-v1';
 
+// Explicitly registered LAN targets may use HTTP; public targets still use HTTPS.
+export function authOriginAllowed(url) {
+  if (url.protocol === 'https:') return true;
+  if (url.protocol !== 'http:') return false;
+  if (['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)) return true;
+  const parts = url.hostname.split('.').map(Number);
+  return parts.length === 4 && parts.every(value => Number.isInteger(value) && value >= 0 && value <= 255) &&
+    (parts[0] === 10 || parts[0] === 192 && parts[1] === 168 || parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31);
+}
+
 export function localAuthEnvironments(baseUrl = 'http://127.0.0.1:4330') {
   const origin = new URL(baseUrl).origin;
   if (!/^http:\/\/(?:127\.0\.0\.1|localhost):\d+$/.test(origin)) throw new Error('AUTH01_FIXTURE_ORIGIN_INVALID');
@@ -30,17 +40,20 @@ export function configuredAuthEnvironments(value, baseUrl) {
     try { origin = new URL(item.origin); } catch { throw new Error('AUTH_ENVIRONMENTS_INVALID'); }
     if (origin.origin !== item.origin || origin.pathname !== '/' || origin.search || origin.hash ||
         origin.username || origin.password ||
-        !(origin.protocol === 'https:' || origin.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(origin.hostname))) {
+        !authOriginAllowed(origin)) {
       throw new Error('AUTH_ENVIRONMENTS_INVALID');
     }
-    for (const field of ['login_url', 'identity_url']) {
+    const browserPage = item.verification_mode === 'browser-page';
+    if (item.verification_mode && !['browser-page', 'identity-api'].includes(item.verification_mode)) throw new Error('AUTH_ENVIRONMENTS_INVALID');
+    for (const field of browserPage ? ['login_url', 'entry_url'] : ['login_url', 'identity_url']) {
       let target;
       try { target = new URL(item[field]); } catch { throw new Error('AUTH_ENVIRONMENTS_INVALID'); }
       if (target.origin !== origin.origin || target.username || target.password || target.hash) throw new Error('AUTH_ENVIRONMENTS_INVALID');
     }
     const session_termination_endpoints = validateSessionTerminationEndpoints(item.session_termination_endpoints);
     environments.push({ environment_id: item.environment_id, name: String(item.name || item.environment_id),
-      origin: origin.origin, login_url: item.login_url, identity_url: item.identity_url, roles: [...item.roles], session_termination_endpoints });
+      origin: origin.origin, login_url: item.login_url, identity_url: item.identity_url, roles: [...item.roles], session_termination_endpoints,
+      ...(browserPage ? { verification_mode: 'browser-page', entry_url: item.entry_url } : {}) });
     ids.add(item.environment_id);
   }
   return environments;

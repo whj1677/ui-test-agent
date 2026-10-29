@@ -1,0 +1,314 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0041",
+  "title": "工程师用例模板与CSV自动识别导入",
+  "metadata": {
+    "requirement_status": "限定导入功能已实现；工程29项及正式4322交互7组，0失败；完整发布未验",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-10-09"
+  },
+  "original_input": "用户提供电价管理.csv：你看一下这是我们测试工程师写的用例，这个用例导给我们agent是个什么情况。随后确认：嗯，可以，我们也可以给一个模板给测试工程师。当然如果我们agent能够自动识别肯定更好。",
+  "user_requirements": [
+    {
+      "id": "UN-0041-01",
+      "status": "已确认",
+      "goal": "提供工程师填写模板，并自动识别现有CSV及常见用例表头，减少手动映射。",
+      "constraints": "保留原步骤和预期、原表历史结果；缺失/歧义不得自动补业务规则或确认；正式4322验收，不执行客户业务用例。",
+      "success_criteria": "真实77条CSV无乱码进入预览，历史74通过3不通过不成为当前结果；下载模板可由同一入口解析。"
+    }
+  ],
+  "confirmed_facts": [
+    "用户CSV为GB18030，77条记录，TC-TPL-005预期空白。",
+    "既有导入仅接受xlsx/json；复合步骤仍保持原句，换行继续按原行一一对应。",
+    "REQ-0025已完成，当前新增CSV公共输入格式及工程师模板，独立建REQ-0041。"
+  ],
+  "inferences_and_open_questions": [
+    "自动识别限定格式和表头，不宣称理解所有业务歧义；无需真实模型请求。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0041-01",
+      "status": "已确认",
+      "requirement": "识别UTF8/GB18030 CSV和常见列名，支持显式映射纠正，保留xlsx/json原生包兼容。",
+      "acceptance_criteria": "真实文件77条，重复列/映射歧义不静默选择；缺预期保持待澄清。",
+      "constraints": "导入只形成草稿，未填写确认状态不得自动确认。"
+    },
+    {
+      "id": "DR-0041-02",
+      "status": "已确认",
+      "requirement": "保留原表字段与历史实际结果供人工追溯，避免进入模型预期和当前执行结论。",
+      "acceptance_criteria": "74/3历史完整保留；脚本输入快照排除source_fields；既有content和历史不变。",
+      "constraints": "不按分号自动拆业务步骤，不改原文和日期。"
+    },
+    {
+      "id": "DR-0041-03",
+      "status": "已确认",
+      "requirement": "提供可下载填写模板和简化自动识别界面。",
+      "acceptance_criteria": "模板首表无示例污染；自动匹配时默认摘要，未匹配可展开调整；原预览确认保留。",
+      "constraints": "模板只含通用虚构示例，不补业务规则。"
+    },
+    {
+      "id": "DR-0041-04",
+      "status": "已确认",
+      "requirement": "原正式4322完成导入验收并保全用户项目。",
+      "acceptance_criteria": "CSV预览/QA项目导入/模板下载解析/歧义提示真实操作；既有项目内容摘要一致。",
+      "constraints": "不另起工作台，不执行模型、脚本或生产请求。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0041-01",
+      "dr_ids": [
+        "DR-0041-01"
+      ],
+      "status": "已确认",
+      "summary": "识别UTF8/GB18030 CSV和常见列名，支持显式映射纠正，保留xlsx/json原生包兼容。",
+      "rationale": "导入只形成草稿，未填写确认状态不得自动确认。"
+    },
+    {
+      "id": "DD-0041-02",
+      "dr_ids": [
+        "DR-0041-02"
+      ],
+      "status": "已确认",
+      "summary": "保留原表字段与历史实际结果供人工追溯，避免进入模型预期和当前执行结论。",
+      "rationale": "不按分号自动拆业务步骤，不改原文和日期。"
+    },
+    {
+      "id": "DD-0041-03",
+      "dr_ids": [
+        "DR-0041-03"
+      ],
+      "status": "已确认",
+      "summary": "提供可下载填写模板和简化自动识别界面。",
+      "rationale": "模板只含通用虚构示例，不补业务规则。"
+    },
+    {
+      "id": "DD-0041-04",
+      "dr_ids": [
+        "DR-0041-04"
+      ],
+      "status": "已确认",
+      "summary": "原正式4322完成导入验收并保全用户项目。",
+      "rationale": "不另起工作台，不执行模型、脚本或生产请求。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "upload csv返回source_type=csv和workbook.sheets（suggested_mapping/mapping_issues）；preview沿用sheet_name/mapping，缺省才使用自动建议。",
+    "root_source.source_fields保存原表文本；business content沿用既有结构和hash；模型快照排除source_fields。",
+    "模板固定白名单下载 /workspace/test-case-template.xlsx。"
+  ],
+  "module_document_impact": [
+    "docs/modules/workbench-case-library.md：新增CSV、表头识别与原表历史隔离。"
+  ],
+  "risks_and_rollback": [
+    "兼容风险以旧XLSX物理换行、原生包测试和正式导入验证；回退仅新CSV入口/模板展示，不删除已存用例与源文件。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0041-01",
+      "dr_ids": [
+        "DR-0041-01"
+      ],
+      "dd_ids": [
+        "DD-0041-01"
+      ],
+      "status": "已实现",
+      "task": "识别UTF8/GB18030 CSV和常见列名，支持显式映射纠正，保留xlsx/json原生包兼容。",
+      "verification_ids": [
+        "VT-0041-01"
+      ]
+    },
+    {
+      "id": "TK-0041-02",
+      "dr_ids": [
+        "DR-0041-02"
+      ],
+      "dd_ids": [
+        "DD-0041-02"
+      ],
+      "status": "已实现",
+      "task": "保留原表字段与历史实际结果供人工追溯，避免进入模型预期和当前执行结论。",
+      "verification_ids": [
+        "VT-0041-02"
+      ]
+    },
+    {
+      "id": "TK-0041-03",
+      "dr_ids": [
+        "DR-0041-03"
+      ],
+      "dd_ids": [
+        "DD-0041-03"
+      ],
+      "status": "已实现",
+      "task": "提供可下载填写模板和简化自动识别界面。",
+      "verification_ids": [
+        "VT-0041-03"
+      ]
+    },
+    {
+      "id": "TK-0041-04",
+      "dr_ids": [
+        "DR-0041-04"
+      ],
+      "dd_ids": [
+        "DD-0041-04"
+      ],
+      "status": "已实现",
+      "task": "原正式4322完成导入验收并保全用户项目。",
+      "verification_ids": [
+        "VT-0041-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0041-01",
+      "dr_ids": [
+        "DR-0041-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "真实文件77条，重复列/映射歧义不静默选择；缺预期保持待澄清。",
+      "evidence_standard": "真实命令、退出码、统计、正式4322浏览器与接口证据",
+      "current_evidence": {
+        "command": "node --test workbench/tests/case-csv-import.test.mjs workbench/tests/excel-fidelity.test.mjs workbench/tests/case-library.test.mjs workbench/tests/case-import-view.test.mjs workbench/tests/case-import-source-isolation.test.mjs workbench/tests/requirements-export.test.mjs",
+        "exit_code": 0,
+        "test_count": 29,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261009-case-auto-import/engineering.log"
+      }
+    },
+    {
+      "id": "VT-0041-02",
+      "dr_ids": [
+        "DR-0041-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "74/3历史完整保留；脚本输入快照排除source_fields；既有content和历史不变。",
+      "evidence_standard": "真实命令、退出码、统计、正式4322浏览器与接口证据",
+      "current_evidence": {
+        "command": "node --test workbench/tests/case-csv-import.test.mjs workbench/tests/excel-fidelity.test.mjs workbench/tests/case-library.test.mjs workbench/tests/case-import-view.test.mjs workbench/tests/case-import-source-isolation.test.mjs workbench/tests/requirements-export.test.mjs",
+        "exit_code": 0,
+        "test_count": 29,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261009-case-auto-import/engineering.log"
+      }
+    },
+    {
+      "id": "VT-0041-03",
+      "dr_ids": [
+        "DR-0041-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "模板首表无示例污染；自动匹配时默认摘要，未匹配可展开调整；原预览确认保留。",
+      "evidence_standard": "真实命令、退出码、统计、正式4322浏览器与接口证据",
+      "current_evidence": {
+        "command": "node --test workbench/tests/case-csv-import.test.mjs workbench/tests/excel-fidelity.test.mjs workbench/tests/case-library.test.mjs workbench/tests/case-import-view.test.mjs workbench/tests/case-import-source-isolation.test.mjs workbench/tests/requirements-export.test.mjs",
+        "exit_code": 0,
+        "test_count": 29,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261009-case-auto-import/engineering.log"
+      }
+    },
+    {
+      "id": "VT-0041-04",
+      "dr_ids": [
+        "DR-0041-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "CSV预览/QA项目导入/模板下载解析/歧义提示真实操作；既有项目内容摘要一致。",
+      "evidence_standard": "真实命令、退出码、统计、正式4322浏览器与接口证据",
+      "current_evidence": {
+        "command": "node workbench/qa/20261009-case-auto-import/live-check.mjs",
+        "exit_code": 0,
+        "test_count": 7,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261009-case-auto-import/live.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:\\01_AI工程\\01_工程项目\\ui-test-agent",
+    "commands": [
+      "node --test workbench/tests/case-csv-import.test.mjs workbench/tests/excel-fidelity.test.mjs workbench/tests/case-library.test.mjs workbench/tests/case-import-view.test.mjs workbench/tests/case-import-source-isolation.test.mjs workbench/tests/requirements-export.test.mjs",
+      "node workbench/qa/20261009-case-auto-import/live-check.mjs"
+    ],
+    "environment": [
+      "Windows，唯一正式工作台4322，复用既有数据配置"
+    ],
+    "conclusion": [
+      "工程检查29项、失败0、跳过0；正式4322交互7组、失败0。",
+      "原CSV与原用户项目摘要不变；新建QA项目存放77条待确认用例。",
+      "真实模型调用和客户业务运行均未运行；整体发布门禁另见delivery_evidence.md。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0041-01",
+      "dr_id": "DR-0041-01",
+      "dd_id": "DD-0041-01",
+      "tk_id": "TK-0041-01",
+      "vt_id": "VT-0041-01",
+      "status": "限定验证已执行"
+    },
+    {
+      "un_id": "UN-0041-01",
+      "dr_id": "DR-0041-02",
+      "dd_id": "DD-0041-02",
+      "tk_id": "TK-0041-02",
+      "vt_id": "VT-0041-02",
+      "status": "限定验证已执行"
+    },
+    {
+      "un_id": "UN-0041-01",
+      "dr_id": "DR-0041-03",
+      "dd_id": "DD-0041-03",
+      "tk_id": "TK-0041-03",
+      "vt_id": "VT-0041-03",
+      "status": "限定验证已执行"
+    },
+    {
+      "un_id": "UN-0041-01",
+      "dr_id": "DR-0041-04",
+      "dd_id": "DD-0041-04",
+      "tk_id": "TK-0041-04",
+      "vt_id": "VT-0041-04",
+      "status": "限定验证已执行"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "本轮实现范围无阻塞待确认；电价业务预期中的未知规则仍由用户后续核对。"
+  ],
+  "prohibited_implementation": [
+    "禁止以原表实际结果判断本次执行通过。",
+    "禁止自动填补电价业务规则或批准全部用例。"
+  ],
+  "changes": [
+    {
+      "date": "2026-10-09",
+      "version": 1,
+      "type": "新增",
+      "description": "按用户确认实施模板与自动识别导入",
+      "impact": "用例导入/生成输入隔离/模板入口",
+      "confirmed_by": "用户当前授权"
+    }
+  ]
+}

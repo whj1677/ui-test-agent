@@ -89,3 +89,23 @@ test('formula cells and stale or cross-project confirmations fail closed', async
   await assert.rejects(() => manager.confirm(one.project_id, preview.preview_id), /CASE_IMPORT_PREVIEW_STALE/);
   await assert.rejects(() => manager.upload({ fileName: 'bad.xlsm', contentType: xlsxType, body: buffer }), /CASE_UPLOAD_TYPE_UNSUPPORTED/);
 });
+
+test('editing a bounded frozen browser contract preserves the previous case version', async (t) => {
+  const {root,manager,store}=await fixture();t.after(()=>fs.rm(root,{recursive:true,force:true}));
+  const project=await manager.createProject({name:'Browser contract versioning'});
+  const content={external_id:'UI-1',title:'Cancel without write',case_type:'UI',preconditions:'',test_data:'ordinary',module:'',status:'CONFIRMED',steps:[{order:1,action:'Cancel',expected:'No write request'}]};
+  const pkg={schema:'workbench/case-package-v1',package_id:'contract-case',cases:[{root_source:{stable_id:'contract-case-1'},lineage:[],source_version:1,content}]};
+  const upload=await manager.upload({fileName:'case.json',contentType:'application/json',body:Buffer.from(JSON.stringify(pkg))});
+  const preview=await manager.preview(project.project_id,{upload_id:upload.upload_id});
+  const imported=await manager.confirm(project.project_id,preview.preview_id),original=imported.project.cases[0];
+  const block=[{id:'cancel',step_order:1,source_quote:'No write request',kind:'no_writes',contract:{paths:['/gate/api/items/1'],methods:['POST','PUT','PATCH','DELETE']}}];
+  const next={...content,test_data:'x'.repeat(4900)+'\n[workbench-browser-assertions-v1]\n'+JSON.stringify(block)+'\n[/workbench-browser-assertions-v1]'};
+  assert.ok(next.test_data.length>5000);
+  const saved=await manager.updateCase(project.project_id,original.case_id,{revision:imported.project.revision,content:next});
+  assert.equal(saved.cases[0].current_version,2);assert.deepEqual(saved.cases[0].versions[0],original.versions[0]);
+  assert.equal(saved.cases[0].versions[1].content.test_data,next.test_data);
+  for(const invalid of ['x'.repeat(5001),next.test_data.replace('No write request','Unsupported quote'),'x'.repeat(32769)]){
+    await assert.rejects(manager.updateCase(project.project_id,original.case_id,{revision:saved.revision,content:{...next,test_data:invalid}}),/CASE_TEST_DATA_INVALID|BROWSER_ASSERTION_CONTRACT_INVALID/);
+  }
+  assert.equal((await store.getProject(project.project_id)).cases[0].current_version,2);
+});

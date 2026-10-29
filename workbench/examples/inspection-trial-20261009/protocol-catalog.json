@@ -1,0 +1,141 @@
+[
+  {
+    "method": "POST",
+    "path": "/__control/namespaces",
+    "text": "POST /__control/namespaces\nJSON {\"runId\":\"本次全新编号\"}。已有编号不覆盖、不重置。\n响应 201 {\"runId\":\"当前编号\",\"created\":true}。已有空间响应 200 {\"runId\":\"当前编号\",\"created\":false}。",
+    "response_text": "响应 201 {\"runId\":\"当前编号\",\"created\":true}。已有空间响应 200 {\"runId\":\"当前编号\",\"created\":false}。",
+    "request_fields": [
+      "runId"
+    ],
+    "requires_body": true,
+    "source_refs": [
+      {
+        "segment_id": "segment-6",
+        "quote_sha256": "df480ad46dc18c77024cb3ff79c2f059fd28a297d6a7b1b711ca43f2d1245190"
+      },
+      {
+        "segment_id": "segment-7",
+        "quote_sha256": "c9b91aa33f7993b42ad4b6d3421b986097771b067029df740595f60e7c7c1bac"
+      },
+      {
+        "segment_id": "segment-8",
+        "quote_sha256": "4591e0cd3cfab70557d6a5c990f7c6045559d5e89ceddb75da527eb16d3ef9ed"
+      }
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/namespaces/{runId}/orders",
+    "text": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+    "response_text": "响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+    "request_fields": [],
+    "requires_body": false,
+    "source_refs": [
+      {
+        "segment_id": "segment-10",
+        "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+      },
+      {
+        "segment_id": "segment-11",
+        "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+      },
+      {
+        "segment_id": "segment-12",
+        "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+      }
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/namespaces/{runId}/orders/{code}",
+    "text": "GET /api/v1/namespaces/{runId}/orders/{code}\n路径 code 是精确编号。\n响应 200 {\"runId\":\"当前编号\",\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}；无记录响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。",
+    "response_text": "响应 200 {\"runId\":\"当前编号\",\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}；无记录响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。",
+    "request_fields": [],
+    "requires_body": false,
+    "source_refs": [
+      {
+        "segment_id": "segment-14",
+        "quote_sha256": "bd821c47a7838005c59407766a29cdfd048fcdd47d1c26c452fac42f77514bcd"
+      },
+      {
+        "segment_id": "segment-15",
+        "quote_sha256": "6eba2b5b5b2eba6a9d6f91e67348a0e4924a1c5d6aa696d92be754b07a39a64b"
+      },
+      {
+        "segment_id": "segment-16",
+        "quote_sha256": "b261e8d9e69a094c132fb87eef56a6edf9a17a0bad816c63e1b15d4f4ae4d7d6"
+      }
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/namespaces/{runId}/orders",
+    "text": "POST /api/v1/namespaces/{runId}/orders\n请求头 x-synthetic-role=editor 或 viewer。JSON 四字段 code、title、station、priority。示例 JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。status 由服务赋 PENDING。\n响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+    "response_text": "响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+    "request_fields": [
+      "code",
+      "title",
+      "station",
+      "priority"
+    ],
+    "requires_body": true,
+    "source_refs": [
+      {
+        "segment_id": "segment-18",
+        "quote_sha256": "4c4e35d0346213755fe6ade5124eb57169db67e1fdf90d645d93ea4f667f1413"
+      },
+      {
+        "segment_id": "segment-19",
+        "quote_sha256": "e4ab2b055075284f35eece09f8d84155a1eba60ba5be3fcc98675be7221d1b2b"
+      },
+      {
+        "segment_id": "segment-20",
+        "quote_sha256": "329f90002fec37a88059359ac554b920c283a7960f0a7725700b046a3f5f42bc"
+      }
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/namespaces/{runId}/orders/{code}/complete",
+    "text": "POST /api/v1/namespaces/{runId}/orders/{code}/complete\n请求头 x-synthetic-role=editor 或 viewer。不发送正文。editor 将 PENDING 转为 DONE；其他字段不变。\n响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+    "response_text": "响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+    "request_fields": [],
+    "requires_body": false,
+    "source_refs": [
+      {
+        "segment_id": "segment-22",
+        "quote_sha256": "89f5c756b0b70289dc67599355d5efeec8b76d007d530998194a3d4c841c73a6"
+      },
+      {
+        "segment_id": "segment-23",
+        "quote_sha256": "694801bcb5066f17e9152a805af63e6db583e46b9a7e15484f84899069573070"
+      },
+      {
+        "segment_id": "segment-24",
+        "quote_sha256": "6f1e91b965d25c0cc736155723170605798bc14430c39b240f2fa774c24e403d"
+      }
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/__control/namespaces/{runId}",
+    "text": "DELETE /__control/namespaces/{runId}\n只删除本条用例自己的 runId。\n响应 200 {\"runId\":\"当前编号\",\"deleted\":true}；不存在时 deleted=false。生成的执行计划在任何结果下都要安排精确清理。",
+    "response_text": "响应 200 {\"runId\":\"当前编号\",\"deleted\":true}；不存在时 deleted=false。生成的执行计划在任何结果下都要安排精确清理。",
+    "request_fields": [],
+    "requires_body": false,
+    "source_refs": [
+      {
+        "segment_id": "segment-26",
+        "quote_sha256": "7df4114da9abd339958a13141097abc24d5ff1dcd86f0e22baeb565f364756c9"
+      },
+      {
+        "segment_id": "segment-27",
+        "quote_sha256": "344622c08f0360fb2335910fb77c3f5856ca5a26e7d7cb198b40b6e225992147"
+      },
+      {
+        "segment_id": "segment-28",
+        "quote_sha256": "d5695e515257deb2119288db183388d15c26b2822a40fa55a34469c03bd18bbe"
+      }
+    ]
+  }
+]

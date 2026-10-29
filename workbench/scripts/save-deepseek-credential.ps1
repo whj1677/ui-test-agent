@@ -1,7 +1,9 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
+$env:PSModulePath = Join-Path $PSHOME 'Modules'
+. (Join-Path $PSScriptRoot 'credential-paths.ps1')
 
-$credentialDirectory = Join-Path $env:LOCALAPPDATA 'ui-test-agent\credentials'
-$credentialFile = Join-Path $credentialDirectory 'deepseek-api-key.dpapi'
+$credentialFile = Get-WorkbenchCredentialWritePath
+$credentialDirectory = Split-Path -Parent $credentialFile
 $baseUrlFile = Join-Path $credentialDirectory 'deepseek-base-url.txt'
 
 if (Test-Path -LiteralPath $credentialFile) {
@@ -27,4 +29,6 @@ try {
 }
 
 Write-Output "已为当前 Windows 用户保存 DPAPI 加密凭据：$credentialFile"
-Write-Output '后续工作台前台脚本会自动读取；密钥未写入仓库、命令行或普通配置。'
+Write-Output '随后运行“启用模型工作台.cmd”；程序将从当前用户的 DPAPI 凭据读取到内存。'
+Write-Output '已有工作台请先正常停止再启动。显式配置旧 DSH_HOME 的开发环境继续使用其原凭据；本步骤不迁移或覆盖旧 DSH 配置。'
+Write-Output '密钥未写入仓库、命令行或普通配置；重新安装程序不需要再次发送密钥。'

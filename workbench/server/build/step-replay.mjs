@@ -26,12 +26,25 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
       entry.executed_case_version !== executedCaseVersion || entry.step_id !== covered[index].step_id ||
       entry.raw_title !== covered[index].raw_title || entry.status !== covered[index].execution_status))
       throw new Error('STEP_OBSERVATION_IDENTITY_OR_ORDER_MISMATCH');
+    // This describes the original recording only; replay images intentionally
+    // remain clean business evidence. Legacy observations have no such marker.
+    if (observations.some(entry => entry.action_highlight?.version === 'passive-dom-v1')) {
+      base.action_highlight = {
+        version: 'passive-dom-v1',
+        status: observations.every(entry => entry.action_highlight?.version === 'passive-dom-v1' &&
+          entry.action_highlight.status === 'INSTALLED') ? 'INSTALLED' : 'UNAVAILABLE',
+        applies_to: 'ORIGINAL_CONTINUOUS_VIDEO',
+      };
+    }
     const steps = [];
     for (const item of coverage.items) {
       const source = caseContent?.steps?.find((step) => step.order === item.order);
       const observation = observations.find((entry) => entry.step_id === item.step_id);
       const errors = (item.attributed_errors || []).map(entry => entry.error).filter(Boolean);
-      const mismatch = errors.find(error => error.actual != null) || errors[0];
+      const nativeAssertions = (item.attributed_assertions || []).filter(assertion =>
+        ['PLAYWRIGHT_MATCHER_RESULT', 'PLAYWRIGHT_MATCHER_ARGUMENTS', 'PLAYWRIGHT_SOFT_MATCHER_ARGUMENTS'].includes(assertion.value_source));
+      const collected = nativeAssertions.find(assertion => assertion.status === 'FAILED' && assertion.actual_present) || nativeAssertions.find(assertion => assertion.actual_present);
+      const mismatch = collected ? { ...collected, expected: collected.assertion_expected } : errors.find(error => error.actual != null) || errors[0];
       const captures = observation?.captures || [];
       const selected = captures.at(-1);
       const before = captures[0];
@@ -53,8 +66,14 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
       }
       steps.push({ step_id: item.step_id, order: item.order, raw_title: observation?.raw_title || item.raw_title,
         action: source?.action || '原步骤动作未取得', expected: source?.expected || '原步骤预期未取得',
-        execution_status: item.execution_status, actual: mismatch?.actual ?? '未单独采集实际值',
-        assertion_expected: mismatch?.expected ?? null, raw_error: observation?.raw_error || null,
+        execution_status: item.execution_status, actual: mismatch?.actual_present ? mismatch.actual : mismatch?.actual ?? '未单独采集实际值',
+        assertions: item.attributed_assertions || [], actual_recorded: mismatch?.actual_present ?? false,
+        assertion_expected: mismatch?.expected ?? null,
+        actual_present: mismatch?.actual_present ?? false, expected_present: mismatch?.expected_present ?? false,
+        matcher_name: mismatch?.matcher_name ?? null, value_source: mismatch?.value_source ?? null,
+        value_unavailable_reason: mismatch?.value_unavailable_reason ?? null,
+        raw_error: observation?.raw_error || null,
+        observer_start: observation?.started_at || null, observer_end: observation?.ended_at || null,
         executed_start: observation?.business_started_at || null, executed_end: observation?.business_ended_at || null,
         observer_start: observation?.started_at || null, observer_end: observation?.ended_at || null,
         screenshot_phase: selected?.phase || null, screenshot_file_name: screenshotName,
@@ -97,7 +116,7 @@ export async function renderStepReplay({ runDirectory, runId, candidateSha256, e
         const rows = phase === 'action'
           ? [['动作', step.action], ['预期', step.expected]]
           : [['状态', step.execution_status === 'PASSED' ? (caseFailed ? '本步骤通过；整条用例仍失败' : '本步骤通过') : step.execution_status === 'FAILED' ? '本步骤失败；整条用例失败' : '未执行'],
-            ['实际', step.actual], ...(step.execution_status === 'FAILED' ? [['预期', step.assertion_expected || step.expected]] : [])];
+            ['实际', step.actual], ...(step.execution_status === 'FAILED' ? [['预期', step.assertion_expected ?? step.expected]] : [])];
         let y = 83;
         for (const [label, value] of rows) {
           ctx.fillStyle = '#9dd4e5'; ctx.fillText(`${label}：`, 30, y); ctx.fillStyle = '#fff';

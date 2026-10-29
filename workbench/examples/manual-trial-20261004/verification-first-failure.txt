@@ -1,0 +1,4 @@
+2026-10-04 准备核验首次命令：node workbench/examples/manual-trial-20261004/verify-preparation.mjs
+退出码 1。核验辅助脚本调用 sourceFingerprint() 时漏传仓库路径，Node 报 ERR_INVALID_ARG_TYPE（path 为 undefined）。
+该脚本仅执行 GET 与本地文件读取；失败不是一次业务测试，不计为业务执行或通过。
+随后补充明确仓库路径，并采用实际返回字段 source_sha256；复核结果另存 verification.json。

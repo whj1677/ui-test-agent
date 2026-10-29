@@ -26,7 +26,7 @@ async function fixture(t){
   const content={external_id:'UNIT-1',title:'原要求 <script>alert(1)</script>',status:'CONFIRMED',steps:[{order:1,action:'读取字段',expected:'220.5 kW'}]};
   const project={project_id:'project-unit',name:'Unit',cases:[{case_id:'case-unit',versions:[{version:1,content,content_sha256:'A'.repeat(64)}]}]};
   const image=Buffer.from('unit-image-raw-bytes');await fs.writeFile(path.join(root,'image.png'),image);
-  const run={project_id:project.project_id,run_id:'run-unit',origin:'EXPLICIT_CANDIDATE_TRIAL',executed_case_id:'case-unit',executed_case_version:1,executed_external_id:'UNIT-1',execution_status:'FINISHED',status:'FAILED',frozen_case_content:content,error:{actual:'200 kW',password:'SECRET'},files:[{kind:'trial_screenshot',file_id:'media-1',relative_path:'image.png',bytes:image.length,sha256:createHash('sha256').update(image).digest('hex').toUpperCase()}]};
+  const run={project_id:project.project_id,run_id:'run-unit',origin:'EXPLICIT_CANDIDATE_TRIAL',executed_case_id:'case-unit',executed_case_version:1,executed_external_id:'UNIT-1',execution_status:'FINISHED',status:'FAILED',finished_at:'2026-09-28T00:00:00.000Z',frozen_case_content:content,error:{actual:'200 kW',password:'SECRET'},files:[{kind:'trial_screenshot',file_id:'media-1',relative_path:'image.png',bytes:image.length,sha256:createHash('sha256').update(image).digest('hex').toUpperCase()}]};
   const records=async()=>[run],caseStore={getProject:async id=>id===project.project_id?project:null};
   const reports=new ReportSnapshots({root:path.join(root,'reports'),caseStore,records,store:{runDirectory:()=>root},buildStore:{taskDirectory:()=>root},batchManager:{get:async()=>({batch_id:'batch-unit',state:'FINISHED',items:[{case_id:'case-unit',case_version:1,external_id:'UNIT-1',run_id:'run-unit',state:'FINISHED'},{case_id:'case-unit',case_version:1,external_id:'UNIT-2',state:'BLOCKED',reason:'SCRIPT_MISSING'}]})}});
   return {root,run,project,caseStore,reports,records};
@@ -68,6 +68,62 @@ test('generation preflight has real authorization boundary, separates revision i
   await assert.rejects(operations.preflight(f.project.project_id,{...request,items:[{...request.items[0],source_task_id:'source'}]}),/FRESH_INPUT/);
   const revise=await operations.preflight(f.project.project_id,{...request,mode:'revise'});assert.equal(revise.items[0].reason,'REVISION_SCRIPT_AND_FEEDBACK_REQUIRED');
   await assert.rejects(operations.preflight(f.project.project_id,{...request,mode:'revise',items:[{...source,feedback:'定位错误',run_id:'other'}]}),/RUN_IDENTITY/);
+});
+test('HTTP report preserves declared device query but redacts credentials and non-protocol query values',async t=>{
+  const f=await fixture(t),namespace='backend-run-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+  f.run.schema='workbench/backend-run-v1';f.run.origin='HTTP_BACKEND_PLAN';f.run.files=[];
+  f.run.http_evidence={steps:[{requests:[{request:{method:'GET',url:`http://user:PASS@127.0.0.1:4401/api/v1/namespaces/${namespace}/devices?code=DEV-001&token=SECRET&other=HIDDEN`},response:{status:200,json:{items:[{code:'DEV-001'}]}}}]}],cleanup:[]};
+  f.run.environment_binding={callback:'https://example.invalid/oauth?code=OAUTH_SECRET&state=PRIVATE_STATE'};
+  const report=await f.reports.create(f.project.project_id,{scope:'run',run_id:'run-unit',request_id:'http-query-preservation'});
+  const url=new URL(report.entries[0].http_evidence.steps[0].requests[0].request.url);
+  assert.equal(url.searchParams.get('code'),'DEV-001');assert.equal(url.searchParams.get('token'),'[REDACTED]');assert.equal(url.searchParams.get('other'),'[REDACTED]');
+  assert.equal(url.username,'');assert.equal(url.password,'');
+  const html=await f.reports.html(report.report_id,f.project.project_id);
+  assert.ok(html.includes('code=DEV-001'));assert.equal(/SECRET|HIDDEN|OAUTH_SECRET|PRIVATE_STATE|user:PASS/.test(html),false);
+  assert.equal(new URL(report.entries[0].environment.callback).search,'');
+});
+
+test('HTTP report preserves scoped business queries and renders assertion outcomes without consuming adjacent Chinese text',async t=>{
+  const f=await fixture(t);f.run.schema='workbench/backend-run-v1';f.run.origin='HTTP_BACKEND_PLAN';f.run.files=[];
+  f.run.frozen_case_content={...f.run.frozen_case_content,test_data:'请求 GET http://127.0.0.1:4462/api/books?page=1 与 GET http://127.0.0.1:4462/api/books?page=2；不携带 Authorization、Cookie 或其他密钥。',steps:[
+    {order:1,action:'读取第1页',expected:'首条编号应为 BK-001'},
+    {order:2,action:'读取第2页',expected:'应返回下一页记录'}
+  ]};
+  f.run.http_evidence={setup:[],steps:[
+    {order:1,action:'读取第1页',expected:'首条编号应为 BK-001',status:'FAILED',requests:[{request_id:'page-1',status:'FAILED',request:{method:'GET',url:'http://user:PASS@127.0.0.1:4462/api/books?keyword=bk-001&token=QUERY_SECRET&other=HIDDEN#FRAGMENT'},response:{status:200,json:{items:[]}},assertions:[{target:'json',pointer:'/items/0/code',op:'equals',expected:'BK-001',actual:null,actual_exists:false,status:'FAILED'}]}]},
+    {order:2,action:'读取第2页',expected:'应返回下一页记录',status:'NOT_RUN',requests:[]}
+  ],cleanup:[]};
+  f.run.environment_binding={callback:'https://example.invalid/oauth?code=OAUTH_SECRET&state=PRIVATE_STATE'};
+  const report=await f.reports.create(f.project.project_id,{scope:'run',run_id:'run-unit',request_id:'http-business-query-report'});
+  const entry=report.entries[0],requestUrl=new URL(entry.http_evidence.steps[0].requests[0].request.url);
+  assert.equal(requestUrl.searchParams.get('keyword'),'bk-001');assert.equal(requestUrl.searchParams.get('token'),'[REDACTED]');assert.equal(requestUrl.searchParams.get('other'),'[REDACTED]');
+  assert.equal(requestUrl.username,'');assert.equal(requestUrl.password,'');assert.equal(requestUrl.hash,'');
+  assert.ok(entry.content.test_data.includes('/api/books?page=1 与 GET'));
+  assert.ok(entry.content.test_data.includes('/api/books?page=2；不携带 Authorization、Cookie 或其他密钥。'));
+  assert.equal(/QUERY_SECRET|HIDDEN|FRAGMENT|OAUTH_SECRET|PRIVATE_STATE|user:PASS/.test(JSON.stringify(entry)),false);
+  assert.deepEqual(entry.steps,[
+    {order:1,status:'FAILED',actual:'/items/0/code：预期 "BK-001"；实际 字段缺失（actual_exists=false）'},
+    {order:2,status:'NOT_RUN',actual:'未执行'}
+  ]);
+  const html=await f.reports.html(report.report_id,f.project.project_id);
+  assert.ok(html.includes('首条编号应为 BK-001'));assert.ok(html.includes('字段缺失（actual_exists=false）'));assert.ok(html.includes('未执行'));
+  assert.equal(/OAUTH_SECRET|PRIVATE_STATE/.test(html),false);
+});
+
+test('revision run evidence must match source task and candidate version even when bundle bytes match',async t=>{
+  const f=await fixture(t),bundleSha='B'.repeat(64);
+  const selection={project_id:f.project.project_id,case_id:'case-unit',case_version:1,source_task_id:'task-B',candidate_version:2,bundle_sha256:bundleSha,environment_id:'not-ready'};
+  const run={...f.run,run_id:'run-shared-bundle',source_build_task_id:'task-A',candidate_version:2,bundle_sha256:bundleSha,environment_id:'not-ready'};
+  const manager={...buildManagerContract,store:{root:f.root},generationDisabled:true,developmentEnvironments:[],
+    caseAutomation:async()=>({candidates:[{applies_to_selected_version:true,selection}]})};
+  const operations=new ScriptOperations({root:path.join(f.root,'operations'),caseStore:f.caseStore,records:async()=>[run],buildManager:manager});
+  const input={mode:'revise',environment_id:'not-ready',items:[{...selection,feedback:'仅修复脚本',run_id:run.run_id}]};
+  await assert.rejects(operations.preflight(f.project.project_id,input),/REVISION_RUN_IDENTITY_MISMATCH/);
+  run.source_build_task_id='task-B';run.candidate_version=1;
+  await assert.rejects(operations.preflight(f.project.project_id,input),/REVISION_RUN_IDENTITY_MISMATCH/);
+  run.candidate_version=2;
+  const plan=await operations.preflight(f.project.project_id,input);
+  assert.equal(plan.items[0].reason,'GENERATION_NOT_AUTHORIZED');
 });
 
 test('invalid revision seed cannot consume an existing authorization',async t=>{

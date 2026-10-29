@@ -5,6 +5,7 @@ import { runHarnessTask, allowedEnvironment, DSH_BIN } from '../../../harness-pr
 import { runOwnedProcess } from '../../../harness-probe/src/process-control.mjs';
 import { startFixtureServer } from '../../../harness-probe/src/fixture-server.mjs';
 import { verifyCandidate } from '../../../harness-probe/src/verify-candidate.mjs';
+import { assertControlledDshConfig } from '../skills/config-isolation.mjs';
 
 const workbenchRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const candidateConfig = path.join(workbenchRoot, 'config', 'candidate.playwright.config.mjs');
@@ -40,7 +41,18 @@ export function verifyWorkbenchCandidate(options) {
   return verifyCandidate({ ...options, runtimeRoot: workbenchRoot, configPath: candidateConfig });
 }
 
-export const buildAdapter = { runHarnessTask, startFixtureServer, verifyCandidate: verifyWorkbenchCandidate, ensureHarnessRuntime };
+export async function runControlledHarnessTask(options, { probeConfig = runOwnedProcess, execute = runHarnessTask } = {}) {
+  if (options.developmentEndpoint) {
+    const env = allowedEnvironment({ DSH_HOME: options.dshHome });
+    const config = await probeConfig(process.execPath, [DSH_BIN, '--profile', 'headless', '--patch', options.patchPath, '--dump-config'],
+      { cwd: options.workspace, env, signal: options.signal, timeoutMs: 30_000 });
+    if (config.exitCode !== 0 || config.termination || config.observerError) throw new Error('DEVELOPMENT_HARNESS_PATCH_INVALID');
+    assertControlledDshConfig(config.stdout, { guard: 'workbench-development-guard', mcp: 'workbench-development-mcp', errorCode: 'DEVELOPMENT_HARNESS_PATCH_INVALID', retryPolicy: 'development-transport-v1' });
+  }
+  return execute(options);
+}
+
+export const buildAdapter = { runHarnessTask: runControlledHarnessTask, startFixtureServer, verifyCandidate: verifyWorkbenchCandidate, ensureHarnessRuntime };
 
 export function usageFromEvents(events) {
   const totals = {};

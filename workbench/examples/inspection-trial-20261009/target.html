@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>储能站巡检工单</title>
+  <style>
+    :root { color-scheme: light; --ink:#193047; --muted:#4b6174; --line:#cad5de; --blue:#095b91; --pale:#edf6fb; --paper:#fff; --bg:#f4f8fa; --bad:#a12622; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,"Microsoft YaHei",sans-serif; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:32px auto 64px; }
+    header { padding:24px 28px; color:white; background:#123b58; border-radius:14px; }
+    h1 { margin:0; font-size:1.8rem; } h2 { margin:0 0 18px; font-size:1.2rem; }
+    header p { margin:6px 0 0; color:#d7e7f1; }
+    main { display:grid; gap:18px; margin-top:18px; }
+    section { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:24px; box-shadow:0 2px 10px #1833490a; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+    label { display:grid; gap:6px; font-weight:600; }
+    input,select,button { font:inherit; }
+    input,select { min-width:0; width:100%; min-height:44px; border:1px solid #849baa; border-radius:8px; padding:8px 11px; background:white; color:var(--ink); }
+    input:focus-visible,select:focus-visible,button:focus-visible { outline:3px solid #e6a337; outline-offset:2px; }
+    button { border:1px solid var(--blue); border-radius:8px; min-height:44px; padding:9px 16px; background:var(--blue); color:white; font-weight:600; cursor:pointer; }
+    button:hover { background:#084a76; } button:active { background:#063654; }
+    button.secondary { background:white; color:var(--blue); } button.secondary:hover { background:var(--pale); }
+    button.danger { color:var(--bad); border-color:var(--bad); }
+    button.danger:hover { background:#fff3f2; }
+    button:disabled { opacity:.58; cursor:wait; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .feedback { min-height:28px; margin:0; padding:8px 0; font-weight:600; }
+    .feedback.error { color:var(--bad); } .feedback.success { color:#176540; }
+    .count { margin:0 0 12px; color:var(--muted); }
+    .table-wrap { overflow-x:auto; }
+    table { border-collapse:collapse; width:100%; min-width:720px; text-align:left; }
+    th,td { padding:12px 10px; border-bottom:1px solid var(--line); vertical-align:middle; }
+    th { background:var(--pale); white-space:nowrap; }
+    td:last-child { white-space:nowrap; }
+    .empty { text-align:center; color:var(--muted); padding:24px; }
+    @media(max-width:800px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:520px) { .wrap { width:calc(100% - 20px); margin:10px auto 32px; } header,section { padding:18px; } .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>储能站巡检工单</h1><p>按运行编号管理本次练习数据</p></header>
+  <main>
+    <section aria-labelledby="session-title">
+      <h2 id="session-title">本次运行</h2>
+      <div class="grid">
+        <label for="run-id">运行编号<input id="run-id" name="runId" required pattern="[a-z0-9][a-z0-9-]{2,63}" autocomplete="off"></label>
+        <label for="role">公开角色<select id="role" name="role"><option value="editor">editor</option><option value="viewer">viewer</option></select></label>
+      </div>
+      <div class="actions">
+        <button id="initialize" type="button">初始化本次数据</button>
+        <button id="refresh" type="button" class="secondary">刷新列表</button>
+        <button id="cleanup" type="button" class="secondary danger">清理本次数据</button>
+      </div>
+    </section>
+    <section aria-labelledby="create-title">
+      <h2 id="create-title">新增工单</h2>
+      <form id="create-form">
+        <div class="grid">
+          <label for="code">工单编号<input id="code" name="code" required pattern="WO-[0-9]{4}" value="WO-2001"></label>
+          <label for="title">工单标题<input id="title" name="title" required maxlength="60" value="储能舱温控巡检"></label>
+          <label for="station">所属站点<select id="station" name="station"><option value="EAST">东站（EAST）</option><option value="WEST" selected>西站（WEST）</option></select></label>
+          <label for="priority">优先级<select id="priority" name="priority"><option value="HIGH" selected>高（HIGH）</option><option value="NORMAL">普通（NORMAL）</option></select></label>
+        </div>
+        <div class="actions"><button type="submit">新增工单</button></div>
+      </form>
+    </section>
+    <section aria-labelledby="list-title">
+      <h2 id="list-title">工单列表</h2>
+      <form id="filter-form">
+        <div class="grid">
+          <label for="filter-code">查询编号<input id="filter-code" name="code" autocomplete="off"></label>
+          <label for="filter-station">筛选站点<select id="filter-station" name="station"><option value="">全部站点</option><option value="EAST">东站（EAST）</option><option value="WEST">西站（WEST）</option></select></label>
+          <label for="filter-status">筛选状态<select id="filter-status" name="status"><option value="">全部状态</option><option value="PENDING">待处理（PENDING）</option><option value="DONE">已完成（DONE）</option></select></label>
+        </div>
+        <div class="actions"><button type="submit">查询</button></div>
+      </form>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <p id="count" class="count">工单总数：0</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th scope="col">工单编号</th><th scope="col">工单标题</th><th scope="col">所属站点</th><th scope="col">优先级</th><th scope="col">状态</th><th scope="col">操作</th></tr></thead>
+        <tbody id="orders"><tr><td colspan="6" class="empty">请初始化本次数据</td></tr></tbody>
+      </table></div>
+    </section>
+  </main>
+</div>
+<script>
+(() => {
+  const byId = id => document.getElementById(id);
+  const runId = byId('run-id');
+  const feedback = byId('feedback');
+  const tbody = byId('orders');
+  const count = byId('count');
+  runId.value = 'run-' + (crypto.randomUUID ? crypto.randomUUID().replaceAll('-', '').slice(0, 16) : Math.random().toString(36).slice(2, 18));
+
+  function message(text, error = false) {
+    feedback.textContent = text;
+    feedback.className = 'feedback ' + (error ? 'error' : 'success');
+  }
+  function currentRun() {
+    if (!runId.checkValidity()) { runId.reportValidity(); throw new Error('运行编号格式无效。'); }
+    return runId.value;
+  }
+  function route() { return '/api/v1/namespaces/' + encodeURIComponent(currentRun()) + '/orders'; }
+  function clearList(text) {
+    tbody.replaceChildren();
+    const tr = tbody.insertRow();
+    const td = tr.insertCell();
+    td.colSpan = 6; td.className = 'empty'; td.textContent = text;
+    count.textContent = '工单总数：0';
+  }
+  async function request(url, options = {}) {
+    const response = await fetch(url, { ...options, headers: { 'x-synthetic-role': byId('role').value, ...(options.body ? { 'content-type': 'application/json' } : {}) } });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error?.message || '请求失败。');
+    return data;
+  }
+  function filters() {
+    const query = new URLSearchParams();
+    for (const [field, id] of [['code','filter-code'], ['station','filter-station'], ['status','filter-status']]) {
+      const value = byId(id).value.trim();
+      if (value) query.set(field, value);
+    }
+    return query.toString();
+  }
+  async function refresh() {
+    const query = filters();
+    const data = await request(route() + (query ? '?' + query : ''));
+    tbody.replaceChildren();
+    for (const item of data.items) {
+      const row = tbody.insertRow();
+      const labels = {EAST:'东站（EAST）',WEST:'西站（WEST）',HIGH:'高（HIGH）',NORMAL:'普通（NORMAL）',PENDING:'待处理（PENDING）',DONE:'已完成（DONE）'};
+      for (const key of ['code','title','station','priority','status']) row.insertCell().textContent = labels[item[key]] || item[key];
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = '完成工单';
+      button.setAttribute('aria-label', '完成工单 ' + item.code);
+      button.addEventListener('click', () => perform(async () => {
+        await request(route() + '/' + encodeURIComponent(item.code) + '/complete', { method:'POST' });
+        return '工单 ' + item.code + ' 已完成。';
+      }));
+      row.insertCell().append(button);
+    }
+    if (!data.items.length) clearList('没有符合条件的工单');
+    count.textContent = '工单总数：' + data.total;
+  }
+  async function perform(action, after = true) {
+    let notice, error = false;
+    try { notice = await action(); }
+    catch (problem) { notice = problem.message || '操作失败。'; error = true; }
+    if (after) {
+      try { await refresh(); }
+      catch (problem) { clearList('当前运行暂无数据'); if (!error) { notice = problem.message || '刷新失败。'; error = true; } }
+    }
+    message(notice, error);
+  }
+  byId('initialize').addEventListener('click', () => perform(async () => {
+    const data = await request('/__control/namespaces', { method:'POST', body:JSON.stringify({ runId:currentRun() }) });
+    return data.created ? '本次数据已初始化。' : '本次数据已存在。';
+  }));
+  byId('refresh').addEventListener('click', () => perform(async () => '列表已刷新。'));
+  byId('cleanup').addEventListener('click', () => perform(async () => {
+    const data = await request('/__control/namespaces/' + encodeURIComponent(currentRun()), { method:'DELETE' });
+    clearList('本次数据已清理');
+    return data.deleted ? '本次数据已清理。' : '本次数据不存在。';
+  }, false));
+  byId('create-form').addEventListener('submit', event => {
+    event.preventDefault();
+    perform(async () => {
+      const body = Object.fromEntries(new FormData(event.currentTarget));
+      const data = await request(route(), { method:'POST', body:JSON.stringify(body) });
+      return '工单 ' + data.item.code + ' 新增成功。';
+    });
+  });
+  byId('filter-form').addEventListener('submit', event => { event.preventDefault(); perform(async () => '查询已完成。'); });
+})();
+</script>
+</body>
+</html>

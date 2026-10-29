@@ -26,7 +26,8 @@ function harness({ launchGate, navigationGate, identityGate } = {}) {
     };
     return browser;
   } };
-  return { events, sessions: new TargetAuthSessions({ environments: [environment], browserExecutable: 'mock', browserType, headless: true }) };
+  return { events, sessions: new TargetAuthSessions({ environments: [environment], browserExecutable: 'mock', browserType,
+    loginPageProbe: async () => {}, headless: true }) };
 }
 
 test('same-scope concurrent opens share one launch and one session', async () => {
@@ -84,4 +85,18 @@ test('clear waits for identity check, notifies invalidation once, and prevents s
   assert.equal(sessions.status(scope).status, 'NOT_LOGGED_IN');
   assert.deepEqual(notices.map(note => [note.status, note.trigger]), [['CLEARED', 'cleared']]);
   await sessions.close();
+});
+
+test('opening the login browser can focus a valid protected session without replacing it or navigating', async () => {
+  const { events, sessions } = harness();
+  await sessions.open(scope);await sessions.check(scope);
+  const before=sessions.status(scope),item=[...sessions.sessions.values()][0];
+  let focused=0,navigated=0;
+  item.context.pages=()=>[{isClosed:()=>false,url:()=>environment.origin+'/app',bringToFront:async()=>{focused++;},goto:async()=>{navigated++;}}];
+  const release=sessions.beginTaskProtection(scope,before.session_version);
+  try{
+    const after=await sessions.open(scope,{reuseExisting:true});
+    assert.deepEqual(after,before);assert.equal(focused,1);assert.equal(navigated,0);
+    assert.equal(events.launches,1);assert.equal(events.closes,0);
+  }finally{release();await sessions.close();}
 });

@@ -1,6 +1,11 @@
 @echo off
 chcp 65001 >nul
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0workbench\scripts\check-install.ps1"
+set "AGENT_NODE=node"
+if exist "%~dp0portable-manifest.json" (
+  if not exist "%~dp0runtime\node\node.exe" exit /b 1
+  set "AGENT_NODE=%~dp0runtime\node\node.exe"
+)
+"%AGENT_NODE%" "%~dp0workbench\scripts\native-entry.mjs" doctor
 set "CHECK_EXIT=%ERRORLEVEL%"
 pause
 exit /b %CHECK_EXIT%

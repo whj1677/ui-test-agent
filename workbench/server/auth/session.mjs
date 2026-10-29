@@ -1,6 +1,9 @@
 import net from 'node:net';
+import { targetRequestAllowed } from '../project-target-access.mjs';
 import { randomUUID } from 'node:crypto';
 import { chromium } from 'playwright';
+import { configuredAuthEnvironments, authOriginAllowed } from './catalog.mjs';
+import { probeAuthenticatedPage, inspectAuthenticatedPages } from './browser-page.mjs';
 import { sessionTerminationRequest } from './session-request-policy.mjs';
 
 function scopeKey(scope) {
@@ -24,16 +27,20 @@ function publicState(item) {
     project_id: item.scope.project_id, environment_id: item.scope.environment_id, role: item.scope.role,
     session_version: item.version, status: item.status, account_id: item.identity?.account_id || null,
     expires_at: item.identity?.expires_at || null, reason: item.reason || null,
+    ...(item.verificationMode === 'browser-page' ? { verification_mode: 'browser-page', account_verified: false, role_verified: false } : {}),
   };
 }
 
 export class TargetAuthSessions {
-  constructor({ environments, browserExecutable, browserType = chromium, headless = false, now = () => Date.now() }) {
+  constructor({ environments, browserExecutable, browserType = chromium, headless = false,
+    loginPageProbe = probeLoginPage, browserPageProbe = probeAuthenticatedPage, now = () => Date.now() }) {
     this.environments = new Map(environments.map((item) => [item.environment_id, item]));
     this.browserExecutable = browserExecutable;
     this.browserType = browserType;
     this.headless = headless;
     this.now = now;
+    this.loginPageProbe = loginPageProbe;
+    this.browserPageProbe = browserPageProbe;
     this.sessions = new Map();
     this.operations = new Map();
     this.opening = new Map();
@@ -56,33 +63,59 @@ export class TargetAuthSessions {
     }
   }
 
+  registerEnvironment(input) {
+    const validated = configuredAuthEnvironments([input]).find(item => item.environment_id === input.environment_id);
+    if (!/^project-[\w-]+$/.test(input.project_id || '')) throw Error('AUTH_SCOPE_INVALID');
+    const environment = { ...validated, project_id: input.project_id, path_prefix: input.path_prefix };
+    const previous = this.environments.get(input.environment_id);
+    if (previous && JSON.stringify(previous) !== JSON.stringify(environment)) throw Error('AUTH_ENVIRONMENT_CONFIGURATION_CHANGED');
+    this.environments.set(input.environment_id, environment);
+  }
+
   environment(scope) {
     scopeKey(scope);
     const environment = this.environments.get(scope.environment_id);
+    if (environment?.project_id && environment.project_id !== scope.project_id) throw Error('AUTH_ENVIRONMENT_PROJECT_MISMATCH');
     if (!environment || !environment.roles.includes(scope.role)) throw new Error('AUTH_ENVIRONMENT_ROLE_NOT_ALLOWED');
-    for (const field of ['login_url', 'identity_url']) {
+    for (const field of environment.verification_mode === 'browser-page' ? ['login_url', 'entry_url'] : ['login_url', 'identity_url']) {
       const url = new URL(environment[field]);
       if (url.origin !== environment.origin || !['https:', 'http:'].includes(url.protocol)) throw new Error('AUTH_ENVIRONMENT_ORIGIN_INVALID');
-      if (url.protocol === 'http:' && !['127.0.0.1', 'localhost'].includes(url.hostname)) throw new Error('AUTH_ENVIRONMENT_ORIGIN_INVALID');
+      if (!authOriginAllowed(url)) throw new Error('AUTH_ENVIRONMENT_ORIGIN_INVALID');
     }
     return environment;
   }
 
-  list() {
-    return [...this.environments.values()].map(({ environment_id, name, roles }) => ({ environment_id, name, roles }));
+  list(projectId = null) {
+    return [...this.environments.values()].filter(item => !item.project_id || item.project_id === projectId).map(({ environment_id, name, roles, verification_mode }) => ({ environment_id, name, roles,
+      ...(verification_mode === 'browser-page' ? { verification_mode } : {}) }));
   }
 
   status(scope) {
     const item = this.sessions.get(scopeKey(scope));
-    return item ? publicState(item) : { ...scope, session_version: null, status: 'NOT_LOGGED_IN', account_id: null, expires_at: null, reason: null };
+    return item ? publicState(item) : { ...scope, session_version: null, status: 'NOT_LOGGED_IN', account_id: null, expires_at: null, reason: null,
+      ...(this.environments.get(scope.environment_id)?.verification_mode === 'browser-page' ? { verification_mode: 'browser-page', account_verified: false, role_verified: false } : {}) };
   }
 
-  async open(scope) {
+  async open(scope, { reuseExisting = false } = {}) {
     const environment = this.environment(scope);
     const key = scopeKey(scope);
     if (this.closing) throw new Error('AUTH_SESSIONS_CLOSING');
     if (this.opening.has(key)) return this.opening.get(key);
-    const pending = this.#enqueue(key, async () => this.#openUnlocked(scope, environment, key));
+    const pending = this.#enqueue(key, async () => {
+      const existing = this.sessions.get(key);
+      if (reuseExisting && existing?.browser.isConnected()) {
+        let page = existing.context.pages().find(page => !page.isClosed() && page.url() !== 'about:blank');
+        page ||= existing.context.pages().find(page => !page.isClosed());
+        page ||= await existing.context.newPage();
+        if (page.url() === 'about:blank' && !existing.protectionLeases?.size) {
+          await page.goto(existing.status === 'VALID' ? (environment.entry_url || environment.login_url) : environment.login_url,
+            { waitUntil: 'domcontentloaded', timeout: 30000 });
+        }
+        await page.bringToFront();
+        return publicState(existing);
+      }
+      return this.#openUnlocked(scope, environment, key);
+    });
     this.opening.set(key, pending);
     pending.finally(() => { if (this.opening.get(key) === pending) this.opening.delete(key); }).catch(() => {});
     return pending;
@@ -112,8 +145,9 @@ export class TargetAuthSessions {
   }
 
   async #openUnlocked(scope, environment, key) {
-    if (this.sessions.has(key)) await this.#clearUnlocked(scope, key);
     if (!this.browserExecutable) throw new Error('AUTH_BROWSER_EXECUTABLE_REQUIRED');
+    await this.loginPageProbe(environment.login_url);
+    if (this.sessions.has(key)) await this.#clearUnlocked(scope, key);
     const port = await freeLoopbackPort();
     const browser = await this.browserType.launch({
       headless: this.headless, executablePath: this.browserExecutable,
@@ -123,17 +157,21 @@ export class TargetAuthSessions {
       // newContext is off-the-record; no persistent profile is reused.
       const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, serviceWorkers: 'block' });
       let item;
+      if (environment.path_prefix && typeof context.routeWebSocket === 'function') await context.routeWebSocket('**/*', socket => socket.close());
       await context.route('**/*', route => {
         let target;
         try { target = new URL(route.request().url()); } catch { return route.abort(); }
         if (target.origin !== environment.origin) return route.abort();
+        if (item?.protectionLeases?.size && environment.path_prefix && !targetRequestAllowed(environment, target.href)) return route.abort('blockedbyclient');
         if (item?.protectionLeases?.size && sessionTerminationRequest(target.href, route.request().method(),
           environment.origin, environment.session_termination_endpoints)) return route.abort('blockedbyclient');
         return route.continue();
       });
       const page = await context.newPage();
-      await page.goto(environment.login_url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      try { await page.goto(environment.login_url, { waitUntil: 'domcontentloaded', timeout: 30000 }); }
+      catch { throw new Error('AUTH_LOGIN_PAGE_UNAVAILABLE'); }
       item = { scope: { ...scope }, version: randomUUID(), browser, context, page, port,
+        verificationMode: environment.verification_mode,
         status: 'AWAITING_LOGIN', identity: null, reason: null, protectionLeases: new Set() };
       browser.on('disconnected', () => {
         if (this.sessions.get(key) === item) {
@@ -151,13 +189,13 @@ export class TargetAuthSessions {
     }
   }
 
-  async check(scope) {
+  async check(scope, { confirmLogin = false, passive = false } = {}) {
     const environment = this.environment(scope);
     const key = scopeKey(scope);
-    return this.#enqueue(key, () => this.#checkUnlocked(scope, environment, key));
+    return this.#enqueue(key, () => this.#checkUnlocked(scope, environment, key, confirmLogin, passive));
   }
 
-  async #checkUnlocked(scope, environment, key) {
+  async #checkUnlocked(scope, environment, key, confirmLogin = false, passive = false) {
     const item = this.sessions.get(key);
     if (!item) return this.status(scope);
     const wasValid = item.status === 'VALID';
@@ -167,6 +205,32 @@ export class TargetAuthSessions {
     };
     if (!item.browser.isConnected()) {
       item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
+      return finish();
+    }
+    if (environment.verification_mode === 'browser-page') {
+      if (!confirmLogin && item.status !== 'VALID') return finish();
+      const reason = passive && !confirmLogin
+        ? await inspectAuthenticatedPages(item.context, environment)
+        : await this.browserPageProbe(item.context, environment);
+      if (!item.browser.isConnected()) {
+        item.status = 'BROWSER_CLOSED'; item.identity = null; item.reason = 'BROWSER_CLOSED';
+        return finish();
+      }
+      if (reason) {
+        item.status = reason === 'LOGIN_REQUIRED' ? (wasValid ? 'EXPIRED' : 'AWAITING_LOGIN') :
+          reason === 'PERMISSION_DENIED' ? 'PERMISSION_DENIED' : 'CHECK_UNAVAILABLE';
+        item.identity = null; item.reason = reason;
+        return finish();
+      }
+      if (!wasValid) item.version = randomUUID();
+      item.status = 'VALID'; item.reason = null;
+      // Account and role remain unknown in this mode. Only the confirmed
+      // browser session and the configured entry's accessibility are checked.
+      item.identity = null;
+      if (!wasValid && item.page && !item.page.isClosed()) {
+        await item.page.close();
+        item.page = await item.context.newPage();
+      }
       return finish();
     }
     let response;
@@ -289,4 +353,16 @@ export class TargetAuthSessions {
     })();
     return this.closing;
   }
+}
+
+async function probeLoginPage(url) {
+  let response;
+  try {
+    // No session cookies; redirects are not followed beyond the configured URL.
+    response = await fetch(url, { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(4000) });
+  } catch {
+    throw new Error('AUTH_LOGIN_TARGET_UNREACHABLE');
+  }
+  await response.body?.cancel().catch(() => {});
+  if (response.status >= 500) throw new Error('AUTH_LOGIN_PAGE_UNAVAILABLE');
 }

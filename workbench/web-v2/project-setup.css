@@ -1,0 +1,73 @@
+/* Project setup: the form leads, help and technical records stay secondary. */
+.project-setup-page{max-width:1180px;margin:0 auto}
+.project-setup-page .page-heading{margin-bottom:28px}
+.project-setup-page .page-heading h1{font-size:28px;letter-spacing:-.02em}
+.project-setup-page .page-heading p{font-size:14px;line-height:1.7;max-width:70ch}
+.project-setup-page .setup-steps{display:flex;list-style:none;gap:26px;padding:0 0 22px;margin:0 0 30px;border-bottom:1px solid var(--line)}
+.project-setup-page .setup-steps li{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.project-setup-page .setup-steps li>span{display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--line);border-radius:50%;flex-shrink:0;font-size:11px;font-variant-numeric:tabular-nums}
+.project-setup-page .setup-steps [aria-current]{color:var(--ink);font-weight:600}
+.project-setup-page .setup-steps [aria-current]>span{background:var(--accent);border-color:var(--accent);color:#fff}
+.project-setup-page .setup-layout{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:48px;align-items:start}
+.project-setup-page .project-setup{border:0;border-radius:0;box-shadow:none;margin:0}
+.project-setup-page .project-setup .panel-body{padding:0}
+.project-setup-page h2{font-size:18px;line-height:1.5;margin:0 0 20px;font-weight:650}
+.project-setup-page .field{margin:0}
+.project-setup-page .field>span{font-size:13px;font-weight:600}
+.project-setup-page .field input,.project-setup-page .field select,.project-setup-page .field textarea{width:100%;min-width:0;min-height:40px;border-radius:6px;background:var(--surface);border-color:var(--line)}
+.project-setup-page .field small{font-size:12px;line-height:1.65;color:var(--muted)}
+.project-setup-page .setup-name{margin-bottom:24px}
+.project-setup-page .form-grid{gap:20px 18px}
+.project-setup-page .setup-scope{display:flex;flex-wrap:wrap;gap:22px;border:0;margin:0 0 24px;padding:0}
+.project-setup-page .setup-scope legend{font-size:13px;font-weight:600;padding:0;margin-bottom:10px}
+.project-setup-page .setup-scope label{display:flex;gap:7px;align-items:center;font-size:13px;cursor:pointer}
+.project-setup-page input[type=checkbox]{width:16px;height:16px;min-height:0;margin:0;accent-color:var(--accent);flex-shrink:0}
+.project-setup-page .setup-auth-fields p{font-size:13px;line-height:1.7;margin:0}
+.project-setup-page .setup-backend-fields{margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
+.project-setup-page details{overflow-wrap:anywhere;border:0;border-top:1px solid var(--line);border-radius:0;padding:0}
+.project-setup-page details>summary{padding:16px 0;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink)}
+.project-setup-page details p{font-size:13px;line-height:1.7}
+.project-setup-page .setup-advanced{margin-top:28px;background:none}
+.project-setup-page .setup-advanced .form-grid{padding:4px 0 12px}
+.project-setup-page .setup-authorization{margin-top:24px;padding-top:24px;border-top:1px solid var(--line);border-radius:0;background:none}
+.project-setup-page .setup-consent{display:flex;gap:9px;align-items:flex-start;color:var(--ink);font-size:13px;line-height:1.7}
+.project-setup-page .setup-consent input{margin-top:3px}
+.project-setup-page #project-setup-status:empty{display:none}
+.project-setup-page .setup-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.project-setup-page .setup-footer>span{font-size:12px}
+.project-setup-page .setup-footer .button{min-height:40px;white-space:nowrap;padding:8px 16px}
+.project-setup-page .setup-account{position:sticky;top:90px;background:none;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none}
+.project-setup-page .setup-account .panel-body{padding:0 0 0 24px}
+.project-setup-page .setup-account-icon{display:block;width:22px;height:22px;color:var(--muted);margin-bottom:14px}
+.project-setup-page .setup-account-icon svg{width:22px;height:22px}
+.project-setup-page .setup-account h2{font-size:15px;margin-bottom:10px}
+.project-setup-page .setup-account p{color:var(--muted);font-size:13px;line-height:1.8;margin:0 0 14px}
+.project-setup-page .setup-account h3{font-size:13px;font-weight:600;color:var(--ink);margin:26px 0 14px}
+.project-setup-page dl{margin:0}
+.project-setup-page dl>div{display:flex;justify-content:space-between;gap:16px;margin:0 0 14px;min-width:0}
+.project-setup-page dt{color:var(--muted);font-size:12px}
+.project-setup-page dd{margin:0;font-size:12px;font-weight:500;text-align:right;overflow-wrap:anywhere;min-width:0}
+.project-setup-page .setup-saved{padding:18px 20px;margin-bottom:28px;border-radius:8px;background:var(--soft)}
+.project-setup-page .setup-saved h2{font-size:15px;margin:0 0 6px}
+.project-setup-page .setup-saved>p{font-size:12px;color:var(--muted);margin:0 0 16px}
+.project-setup-page .setup-saved dl>div:last-child{margin:0}
+.project-setup-page .setup-handoffs{margin:36px 0 0;background:none;border-bottom:1px solid var(--line)}
+.project-setup-page .setup-handoffs>summary{display:flex;align-items:center;justify-content:space-between;gap:18px;list-style:none;padding:18px 0}
+.project-setup-page .setup-handoffs>summary::-webkit-details-marker{display:none}
+.project-setup-page .setup-handoffs>summary strong,.project-setup-page .setup-handoffs>summary small{display:block}
+.project-setup-page .setup-handoffs>summary strong{font-size:13px}
+.project-setup-page .setup-handoffs>summary small{font-size:12px;font-weight:400;color:var(--muted);margin-top:4px}
+.project-setup-page .setup-handoff-action{color:var(--accent);font-size:12px;flex-shrink:0}
+.project-setup-page .setup-handoff-action:after{content:'';display:inline-block;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:0 3px 3px 10px}
+.project-setup-page .setup-handoffs[open] .setup-handoff-action:after{transform:rotate(225deg);margin-bottom:0}
+.project-setup-page #project-frontend-handoffs .panel{border:0}
+.project-setup-page #project-frontend-handoffs .panel-body{padding:8px 0 22px}
+.project-setup-page #project-frontend-handoffs form{display:flex;align-items:end;gap:16px;flex-wrap:wrap;padding:16px;border-radius:6px;background:var(--soft);margin-top:18px}
+.project-setup-page #project-frontend-handoffs form .field{flex:1;min-width:200px}
+.handoff-file-picker{position:relative;display:flex;align-items:center;gap:10px;min-height:40px;padding:5px;border:1px solid var(--line);border-radius:6px;background:var(--surface);cursor:pointer;overflow:hidden}
+.project-setup-page .handoff-file-picker input{position:absolute;width:1px;height:1px;min-height:0;padding:0;border:0;opacity:0}
+.handoff-file-picker:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.handoff-file-button{flex-shrink:0;padding:5px 9px;border-radius:4px;background:var(--soft);font-size:12px;font-weight:600}
+.handoff-file-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px}
+@media(max-width:1100px){.project-setup-page .setup-layout{grid-template-columns:minmax(0,1fr);gap:30px}.project-setup-page .setup-account{position:static;border:0;border-top:1px solid var(--line);padding-top:24px}.project-setup-page .setup-account .panel-body{padding:0;max-width:72ch}.project-setup-page .setup-steps{gap:18px}}
+@media(max-width:650px){.project-setup-page .page-heading h1{font-size:24px}.project-setup-page .setup-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:20px;margin-bottom:24px}.project-setup-page .form-grid{grid-template-columns:minmax(0,1fr)}.project-setup-page .setup-footer{flex-direction:column;align-items:stretch}.project-setup-page dl>div{flex-direction:column;gap:4px}.project-setup-page dd{text-align:left}.project-setup-page .setup-handoff-action{font-size:0}.project-setup-page .setup-handoff-action:after{width:7px;height:7px}.project-setup-page #project-frontend-handoffs form{flex-direction:column;align-items:stretch;padding:12px}.project-setup-page #project-frontend-handoffs form .field{width:100%;min-width:0}.handoff-file-picker{width:100%;min-width:0}.project-setup-page .setup-saved{padding:16px}}

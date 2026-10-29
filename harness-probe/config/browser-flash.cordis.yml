@@ -2,6 +2,9 @@
   config:
     provider: deepseek-official
     model: deepseek-flash
+- id: llm-deepseek
+  config:
+    protocol: messages
 - id: llm-retry
   disabled: true
 - insert:

@@ -44,6 +44,7 @@ for (const normalOnly of [false, true]) test(`production task API + pinned MCP +
         const client = new Client({ name: 'engineering-agent-adapter', version: '1' }, { versionNegotiation: { mode: 'auto' } });
         try {
           await onLifecycle({ type: 'process_spawn' });
+          await onLifecycle({ type: 'harness_event', event_type: 'tool_call', tool: 'mcp__playwright-mcp__browser_snapshot', call_id: 'engineering-observation' });
           await client.connect(new StreamableHTTPClientTransport(new URL(developmentEndpoint)));
           async function call(name, args = {}) { await onLifecycle({ type: 'harness_event', event_type: 'tool_call', tool: `mcp__workbench__${name}` }); const response = await client.callTool({ name, arguments: args }); assert.notEqual(response.isError, true, JSON.stringify(response)); const value = JSON.parse(response.content[0].text); observed.push({ name, value }); return value; }
           await call('read_draft');

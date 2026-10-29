@@ -1,0 +1,138 @@
+- link "跳到主要内容":
+  - /url: "#main"
+- complementary "工作台导航":
+  - link "测试工作台首页":
+    - /url: "#/projects"
+    - generic: W
+    - strong: 测试工作台
+  - navigation:
+    - link "← 全部项目":
+      - /url: "#/projects"
+    - strong: 手动体验 · 设备台账 · 20261004
+    - generic: 项目空间 · 0 条用例
+    - link "项目概况":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84"
+    - link "资料与用例设计":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/requirements"
+    - link "用例库":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/cases"
+    - link "协议绑定":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/bindings"
+    - link "执行结果":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/execution-list"
+    - link "测试批次":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/batches"
+    - link "报告":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/reports"
+    - link "被测系统与登录":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/auth"
+    - link "项目设置":
+      - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84/settings"
+  - strong: 已连接本机工作台
+  - generic: 项目与用例管理
+- link "项目":
+  - /url: "#/projects"
+- generic: /
+- link "手动体验 · 设备台账 · 20261004":
+  - /url: "#/projects/project-ea3b7596-e327-4d3b-95bd-382ccd569e84"
+- generic: /
+- strong: 资料与用例设计
+- generic: 服务就绪 · 真实后端
+- button "重启工作台"
+- status
+- main:
+  - heading "资料与用例设计" [level=1]
+  - paragraph: 手动体验 · 设备台账 · 20261004 · PRD/MRD 统一取证，前端与后端用例分别审阅确认。
+  - button "已有用例直接进入"
+  - button "后补协议与绑定"
+  - heading "1. 本轮资料与范围" [level=2]
+  - generic: 上传只形成资料快照；模型处理需要单独确认。
+  - heading "已存资料" [level=3]
+  - checkbox "本次采用 03-PROTOCOL.md"
+  - generic: 本次采用 03-PROTOCOL.md
+  - strong: 03-PROTOCOL.md
+  - generic: PROTOCOL · v1 · 已读取
+  - generic: 正文 已读取 · 表格 已读取 · 图片 未提供
+  - generic: 评审稿
+  - checkbox "本次采用 02-MRD.md"
+  - generic: 本次采用 02-MRD.md
+  - strong: 02-MRD.md
+  - generic: MRD · v1 · 已读取
+  - generic: 正文 已读取 · 表格 已读取 · 图片 未提供
+  - generic: 评审稿
+  - checkbox "本次采用 01-PRD.md"
+  - generic: 本次采用 01-PRD.md
+  - strong: 01-PRD.md
+  - generic: PRD · v1 · 已读取
+  - generic: 正文 已读取 · 表格 已读取 · 图片 未提供
+  - generic: 评审稿
+  - heading "添加资料" [level=3]
+  - text: 资料角色
+  - combobox "资料角色":
+    - option "PRD" [selected]
+    - option "MRD"
+    - option "通讯协议"
+    - option "原型/截图"
+  - text: 明确替代原资料（可选）
+  - combobox "明确替代原资料（可选）":
+    - option "新增独立快照" [selected]
+    - option "03-PROTOCOL.md · PROTOCOL"
+    - option "02-MRD.md · MRD"
+    - option "01-PRD.md · PRD"
+  - generic: 替代操作会复制原文件并新建快照；必须是同一文件内容，旧快照和已有设计引用保持不变。
+  - text: 选择文件
+  - button "选择文件"
+  - text: 采用版本
+  - textbox "采用版本":
+    - /placeholder: 如 v1.2
+  - text: 文档状态
+  - combobox "文档状态":
+    - option "待核对" [selected]
+    - option "评审稿"
+    - option "已确认"
+  - button "保存资料快照"
+  - text: 本期范围
+  - combobox "本期范围":
+    - option "本期全部" [selected]
+    - option "指定功能"
+  - text: 指定功能说明
+  - textbox "指定功能说明" [disabled]:
+    - /placeholder: 仅在选择指定功能时填写
+  - checkbox "允许本机已配置的模型处理本轮选定文字资料"
+  - text: 允许本机已配置的模型处理本轮选定文字资料
+  - checkbox "允许模型处理选定原型图片及 Word 正文内嵌图 （deepseek-flash；当前选中 0 张）"
+  - text: 允许模型处理选定原型图片及 Word 正文内嵌图 （deepseek-flash；当前选中 0 张）
+  - paragraph: 图片单独授权后随本次文字分析发送，独立图片与 Word 正文嵌入图共用最多 3 张 PNG/JPEG、单张 10 MiB、合计 20 MiB 限额；不勾选则仅文字分析。外链、页眉页脚及其他格式图片仍未分析。
+  - checkbox "增强检查：独立审查，必要时修订一次并复审"
+  - text: 增强检查：独立审查，必要时修订一次并复审
+  - paragraph: 普通生成：指定功能 1 次请求；全部功能按前端、后端串行生成，最多 2 次请求，两次都读取完整资料。任一失败保留已有稿件，不自动重试；结果仍需人工审阅。
+  - button "分析资料并生成候选" [disabled]
+  - generic: 模型调用与资源上限由服务端逐次预检；生成结果仍是候选。
+  - generic "显式规划有限子范围（最多 4 份）"
+  - status: 先勾选本轮采用的 PRD 或 MRD；协议和截图是可选补充。
+  - heading "2. 设计任务与规则核对" [level=2]
+  - generic: 读取状态、版本、来源冲突与待确认问题分别展示。
+  - text: 已有设计
+  - combobox "已有设计":
+    - option "请选择" [selected]
+  - button "刷新状态"
+  - generic: 选择既有设计或分析资料后，在这里核对规则与候选。
+  - heading "3. 前后端候选分别审阅" [level=2]
+  - generic: 确认业务预期不等于脚本或执行通过。
+  - button "前端用例 · 0" [pressed]
+  - button "后端用例 · 0"
+  - generic: 本组暂无候选。
+  - generic: 选择左侧候选，查看原预期、步骤和来源。
+  - button "确认所选 0 条前端用例" [disabled]
+  - generic: 待澄清候选保留；确认后才形成用例版本。后端缺协议时可确认业务用例，自动化状态仍待绑定。
+  - heading "4. 项目用例分别导出与自动化接续" [level=2]
+  - paragraph: 按类型导出本项目当前已确认的全部前端或后端用例，并非仅导出当前设计的候选。Excel 供人工测试，JSON 接续自动化；后补协议不改旧导出文件。
+  - strong: 本项目当前已确认的前端用例
+  - button "导出 Excel"
+  - button "导出 JSON"
+  - strong: 本项目当前已确认的后端用例
+  - button "导出 Excel"
+  - button "导出 JSON"
+  - button "进入现有用例库"
+  - button "为后端用例补协议"
+- status

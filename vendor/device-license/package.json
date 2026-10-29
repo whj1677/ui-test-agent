@@ -1,0 +1,13 @@
+{
+  "name": "@offline/device-license",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "exports": {
+    ".": "./index.mjs",
+    "./hardware": "./hardware.mjs"
+  },
+  "files": ["index.mjs", "core/", "hardware.mjs", "bin/DeviceLicense.dll", "bin/DeviceLicense.Bridge.exe", "bin/build-manifest.json", "README.md"],
+  "scripts": { "build": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File build.ps1", "test": "node --test tests/*.test.mjs" }
+}

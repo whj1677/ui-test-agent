@@ -1,0 +1,8 @@
+{
+  "schema": "workbench/windows-credential-build-v1",
+  "version": "1.0.0",
+  "platform": "win32-x64",
+  "source_sha256": "f61a075db02c3e0d9f1915691f1d3d156d3f761fd7779dd8463adaec28a8a570",
+  "artifact": "WindowsCredential.exe",
+  "sha256": "86d087601ff9b53b12447c1d5ddcd89926051d8fd6ddb272925259f15b6a866d"
+}

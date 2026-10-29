@@ -1,5 +1,10 @@
+import { withWindowTimeline } from './build/window-timeline.mjs';
+import {createModelSettings} from './model-settings.mjs';
+import { backendRoute } from './backend-routes.mjs';
+import { demonstrationRoute } from './demonstration-routes.mjs';
 import { scriptEnvironments } from './build/user-workflow.mjs';
 import { projectRecords } from './execution-records.mjs';
+import { ExecutionNotes } from './execution-notes.mjs';
 import { mediaType } from './build/candidate-trials.mjs';
 import http from 'node:http';
 import fs from 'node:fs/promises';
@@ -7,6 +12,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveInside, sha256File } from './integrity.mjs';
 import { developmentAuthorizations } from './build/development-authorization.mjs';
+import { requirementsRoute } from './requirements-routes.mjs';
+import { caseAssistantRoute } from './case-assistant/routes.mjs';
+import { exportCasesWorkbook } from './cases/design.mjs';
+import { importedScriptFile } from './cases/script-package.mjs';
+import { frontendHandoffRoute } from './frontend-handoffs.mjs';
+import { nativeDshRoute } from './native-dsh/routes.mjs';
 
 const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
 const defaultWorkspaceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web-v2');
@@ -26,26 +37,34 @@ function securityHeaders(contentType) {
     'cache-control': 'no-store',
     'x-content-type-options': 'nosniff',
     'referrer-policy': 'no-referrer',
-    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; frame-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' data:; frame-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
   };
 }
 
-async function sendStatic(response, webRoot, workspaceRoot, pathname) {
+async function sendStatic(response, workspaceRoot, pathname) {
   if(['/', '/index.html'].includes(pathname)){response.writeHead(308,{location:'/workspace/','cache-control':'no-store'});response.end();return true;}
   if(['/app.js','/styles.css'].includes(pathname)){sendJson(response,410,{error:'LEGACY_UI_REMOVED',entry:'/workspace/'});return true;}
   const workspaceFiles = new Map([
     ['/workspace', ['index.html', 'text/html; charset=utf-8']],
     ['/workspace/', ['index.html', 'text/html; charset=utf-8']],
+    ['/workspace/demonstration-control.html', ['demonstration-control.html', 'text/html; charset=utf-8']],
     ['/workspace/app.js', ['app.js', 'text/javascript; charset=utf-8']],
     ['/workspace/workflow.js', ['workflow.js', 'text/javascript; charset=utf-8']],
     ['/workspace/execution-media.js', ['execution-media.js', 'text/javascript; charset=utf-8']],
     ['/workspace/api.js', ['api.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/model-settings.js', ['model-settings.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/case-content-view.js', ['case-content-view.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/test-case-template.xlsx', ['test-case-template.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']],
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
-  for (const name of ['script-actions.js','reports.js','history.js','product.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
+  for (const name of ['backend.js','backend-bulk-review.js','backend.css','script-actions.js','reports.js','history.js','product.css','requirements.js','requirements-api.js','requirements.css','execution-list.js','execution-list.css','project-target-access.js','project-setup.js','project-workflow.js','project-workflow.css','project-setup.css','workspace-v2.css','batch-view.js','execution-notes.js','service-restart.js','demonstrations.js','demonstration-control.js','demonstration-control.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
+  for (const name of ['case-assistant.js', 'case-assistant-api.js', 'case-assistant.css', 'case-review.js', 'case-review.css']) workspaceFiles.set('/workspace/' + name, [name, name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8']);
+  workspaceFiles.set('/workspace/frontend-handoffs.js', ['frontend-handoffs.js', 'text/javascript; charset=utf-8']);
+  workspaceFiles.set('/workspace/native-dsh.js', ['native-dsh.js', 'text/javascript; charset=utf-8']);
+  workspaceFiles.set('/workspace/native-console-view.js', ['native-console-view.js', 'text/javascript; charset=utf-8']);
   const selected = workspaceFiles.get(pathname);
   if (!selected) return false;
-  response.writeHead(200, securityHeaders(selected[1]));
+  response.writeHead(200, { ...securityHeaders(selected[1]), ...(pathname === '/workspace/test-case-template.xlsx' ? { 'content-disposition': "attachment; filename*=UTF-8''%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E6%A8%A1%E6%9D%BF.xlsx" } : {}) });
   response.end(await fs.readFile(path.join(workspaceRoot, selected[0])));
   return true;
 }
@@ -172,6 +191,27 @@ function trustedMutation(request) {
 }
 
 function errorStatus(error) {
+  if (error.message.startsWith('NATIVE_DSH_')) {
+    if (error.message.endsWith('_NOT_AUTHORIZED')) return 403;
+    if (error.message.endsWith('_NOT_FOUND')) return 404;
+    if (/_BUSY$|_CONFLICT$|_CHANGED$/.test(error.message)) return 409;
+    if (/_UNAVAILABLE$|_STOPPING$/.test(error.message)) return 503;
+    return 400;
+  }
+  if (error.message.startsWith('CASE_ASSISTANT_')) {
+    if (/_NOT_FOUND$/.test(error.message)) return 404;
+    if (/_CONFLICT$|_BUSY$/.test(error.message)) return 409;
+    if (/_UNAVAILABLE$|_STOPPING$/.test(error.message)) return 503;
+    return 400;
+  }
+  if(error.message.startsWith('EXECUTION_NOTE_'))return error.message.endsWith('_NOT_FOUND')?404:error.message.endsWith('_CONFLICT')?409:error.message==='EXECUTION_NOTE_STORAGE_ERROR'?503:400;
+  if (error.message.startsWith('PROJECT_ENVIRONMENT_')) return /BUSY|CONFLICT|CONFIGURATION_CHANGED/.test(error.message) ? 409 : 422;
+  if (error.message.startsWith('REQUIREMENT_')) {
+    if (/_NOT_FOUND$/.test(error.message)) return 404;
+    if (/_CONFLICT$|_BUSY$|_IN_PROGRESS$/.test(error.message)) return 409;
+    if (/_UNAVAILABLE$|_NOT_ACCEPTING$/.test(error.message)) return 503;
+    return 400;
+  }
   if (['WORKBENCH_SHUTTING_DOWN','WORKBENCH_STORAGE_UNAVAILABLE'].includes(error.message)) return 503;
   if (['WORKBENCH_BUSY','BATCH_EXECUTOR_BUSY','GENERATION_EXECUTOR_BUSY'].includes(error.message)) return 409;
   if (['ASSET_NOT_APPROVED', 'ENVIRONMENT_NOT_ALLOWED'].includes(error.message)) return 400;
@@ -203,8 +243,14 @@ function errorStatus(error) {
 export function createWorkbenchServer(options = {}) {
   const serviceState = options.serviceState || { accepting: true };
   const serviceIdentity = options.serviceIdentity || null;
+  const serviceRestart = options.serviceRestart || null;
   const batchManager=options.batchManager;
   const {scriptOperations, reportSnapshots} = options;
+  const demonstrations = options.demonstrations;
+  const requirementsManager = options.requirementsManager;
+  const caseAssistantManager = options.caseAssistantManager;
+  const backendManager = options.backendManager;
+  const {projectEnvironments, projectTargetAccess, projectTrialAuthorization} = options;
   const store = options.store;
   const manager = options.manager;
   const buildStore = options.buildStore;
@@ -214,15 +260,49 @@ export function createWorkbenchServer(options = {}) {
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
   const authSessions = options.authSessions;
+  const executionNotes=options.executionNotes || (caseStore?.root ? new ExecutionNotes({root:path.join(caseStore.root,'execution-notes'),getRecords:projectId=>projectRecords({buildStore,caseStore,store,buildManager},projectId)}) : null);
   const webRoot = options.webRoot || defaultWebRoot;
   const workspaceRoot = options.workspaceRoot || defaultWorkspaceRoot;
+  const modelSettings=options.modelSettings||createModelSettings({busy:()=>serviceState.inFlightMutations>1||Object.values({manager,buildManager,batchManager,scriptOperations,demonstrations,requirementsManager,caseAssistantManager,backendManager,...(options.nativeDshManager?{nativeDsh:options.nativeDshManager}:{})}).some(m=>m&&(m.active||m.starting||m.generationOwner||m.generationStarting||m.generationBatchActive||m.storageFault))});
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
       const mutation = !['GET','HEAD','OPTIONS'].includes(request.method);
       const stopping = /\/(?:stop|cancel)$/.test(url.pathname);
       if (mutation && serviceState.accepting === false) return sendJson(response,503,{error:'WORKBENCH_SHUTTING_DOWN'});
-      if (mutation && !stopping && (buildManager?.storageFault || manager?.storageFault)) return sendJson(response,503,{error:'BUILD_STORAGE_UNAVAILABLE'});
+      if (mutation) {
+        serviceState.inFlightMutations = (serviceState.inFlightMutations || 0) + 1;
+        let released = false;
+        const release = () => { if (!released) { released = true; serviceState.inFlightMutations--; } };
+        response.once?.('finish',release);
+        response.once?.('close',release);
+      }
+      if(url.pathname==='/api/model-settings') {
+        if(!/^(127\.0\.0\.1|localhost):4322$/.test(request.headers.host||''))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+        try {
+          if(request.method==='GET')return sendJson(response,200,{...await modelSettings.status(),enabled:buildManager?.generationDisabled===false,
+            activation_available:serviceRestart?.canActivateModel?.()===true,restart_available:serviceRestart?.available()===true});
+          if(request.method!=='POST'||!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          return sendJson(response,200,await modelSettings.save(await readJsonBody(request,8192)));
+        } catch(error){const code=/^MODEL_(?:KEY|SETTINGS)_[A-Z_]+$/.test(error.message)?error.message:'MODEL_SETTINGS_UNAVAILABLE';return sendJson(response,code.endsWith('BUSY')||code.endsWith('EXISTS')?409:400,{error:code});}
+      }
+      const modelActivation=url.pathname==='/api/model-settings/activate';
+      if (request.method === 'POST' && (url.pathname === '/api/service/restart'||modelActivation)) {
+        if (!trustedMutation(request)) return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+        const body = await readJsonBody(request);
+        if (Object.keys(body).length !== 1 || typeof body.service_instance_id !== 'string') return sendJson(response,400,{error:'INVALID_RESTART_REQUEST'});
+        if(modelActivation&&!(await modelSettings.status()).configured)return sendJson(response,400,{error:'MODEL_CREDENTIAL_NOT_SAVED'});
+        const result = serviceRestart ? await serviceRestart.request(body.service_instance_id,modelActivation?{mode:'enable-model'}:undefined) : {status:503,error:'SERVICE_RESTART_UNMANAGED'};
+        if (result.beginDrain) {
+          let began = false;
+          const begin = () => { if (!began) { began = true; result.beginDrain(); } };
+          response.once('finish',begin);
+          response.once('close',begin);
+        }
+        return sendJson(response,result.status,result.value || {error:result.error});
+      }
+      if (mutation && !stopping && (buildManager?.storageFault || manager?.storageFault || backendManager?.storageFault)) return sendJson(response,503,{error:'BUILD_STORAGE_UNAVAILABLE'});
+      if (mutation && !stopping && (options.nativeDshManager?.active || options.nativeDshManager?.starting) && !url.pathname.includes('/native-dsh/')) return sendJson(response,409,{error:'NATIVE_DSH_BUSY'});
       if((buildManager?.generationOwner||buildManager?.generationStarting) && !stopping && request.method==='POST' && (url.pathname==='/api/candidate-trials'||url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'GENERATION_EXECUTOR_BUSY'});
       if((batchManager?.active||batchManager?.starting)&&!stopping&&request.method==='POST'&&(url.pathname==='/api/runs'||url.pathname.startsWith('/api/build/tasks')))return sendJson(response,409,{error:'BATCH_EXECUTOR_BUSY'});
       if (buildManager?.generationDisabled && request.method === 'POST' && (url.pathname === '/api/build/tasks' || /\/api\/build\/tasks\/(develop|[^/]+\/(start|revise|revision))$/.test(url.pathname))) return sendJson(response, 403, { error: 'MODEL_GENERATION_DISABLED_IN_TRIAL_PROFILE' });
@@ -233,14 +313,21 @@ export function createWorkbenchServer(options = {}) {
         } catch (error) { buildManager?.reportStorageFault?.(error,'health_storage_read'); }
         const buildDiagnostics = buildManager?.diagnostics?.() || null;
         sendJson(response, 200, {
-          service: 'approved-test-workbench', status: serviceState.accepting === false ? 'stopping' : (buildDiagnostics?.storage_status === 'FAILED'||manager?.storageFault) ? 'degraded' : 'ready',
+          service: 'approved-test-workbench', status: serviceState.accepting === false ? 'stopping' : (buildDiagnostics?.storage_status === 'FAILED'||manager?.storageFault||backendManager?.storageFault) ? 'degraded' : 'ready',
           service_identity: serviceIdentity,
-          accepting: serviceState.accepting !== false && !buildManager?.storageFault && !manager?.storageFault,
-          preparing: Boolean(manager?.starting || buildManager?.starting || batchManager?.starting || scriptOperations?.starting),
+          restart: {managed:serviceRestart?.isManaged() === true,available:serviceRestart?.available() === true},
+          accepting: serviceState.accepting !== false && !buildManager?.storageFault && !manager?.storageFault && !backendManager?.storageFault,
+          preparing: Boolean(manager?.starting || buildManager?.starting || batchManager?.starting || scriptOperations?.starting || requirementsManager?.starting || demonstrations?.starting),
+          active_demonstration_id: demonstrations?.active?.recording?.demonstration_id || demonstrations?.active?.demonstration_id || null,
           active_run_id: manager?.active?.runId || buildManager?.active?.runId || null,
           active_build_task_id: buildManager?.active?.taskId || null,
           active_batch_id: batchManager?.active?.id || null,
           active_script_operation_id: scriptOperations?.active?.operation.operation_id || null,
+          requirements: requirementsManager?.diagnostics?.() || null,
+          case_assistant: caseAssistantManager?.diagnostics?.() || null,
+          native_dsh: options.nativeDshManager?.diagnostics?.() || null,
+          backend: backendManager?.active ? {kind:backendManager.active.kind,plan_id:backendManager.active.plan_id,run_id:backendManager.active.run_id} : null,
+          active_backend_generation_batch_id: backendManager?.generationBatchActive?.batch?.batch_id || null,
           build_budget: budget,
           build_authorization: authorization,
           build_diagnostics: buildDiagnostics,
@@ -256,25 +343,27 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 200, { projects: await caseStore.listProjects() });
         return;
       }
-      const projectAuth = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/auth(?:\/(open|check|clear))?$/);
+      const projectAuth = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/auth(?:\/(open|focus|check|clear))?$/);
       if (authSessions && caseStore && projectAuth) {
         const projectId = decodeURIComponent(projectAuth[1]);
         if (!await caseStore.getProject(projectId)) return sendJson(response, 404, { error: 'CASE_PROJECT_NOT_FOUND' });
         if (request.method === 'GET' && !projectAuth[2]) {
           const environmentId = url.searchParams.get('environment_id');
           const role = url.searchParams.get('role');
+          const binding = await projectEnvironments?.binding(projectId);
           return sendJson(response, 200, {
-            environments: authSessions.list(),
-            session: environmentId && role ? authSessions.status({ project_id: projectId, environment_id: environmentId, role }) : null,
+            environments: authSessions.list(projectId).filter(item => !projectEnvironments || (item.environment_id || item.id) === binding?.ui_environment_id),
+            session: environmentId && role && (!projectEnvironments || environmentId === binding?.ui_environment_id) ? authSessions.status({ project_id: projectId, environment_id: environmentId, role }) : null,
           });
         }
         if (request.method === 'POST' && projectAuth[2]) {
           if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
           const body = await readJsonBody(request);
           const scope = { project_id: projectId, environment_id: body.environment_id, role: body.role };
+          if (projectAuth[2] !== 'clear') await projectEnvironments?.assert(projectId, 'ui', body.environment_id);
           authSessions.environment(scope);
-          const result = projectAuth[2] === 'open' ? await authSessions.open(scope)
-            : projectAuth[2] === 'check' ? await authSessions.check(scope) : await authSessions.clear(scope);
+          const result = ['open','focus'].includes(projectAuth[2]) ? await authSessions.open(scope, { reuseExisting: projectAuth[2] === 'focus' })
+            : projectAuth[2] === 'check' ? await authSessions.check(scope, { confirmLogin: body.confirm_login === true }) : await authSessions.clear(scope);
           return sendJson(response, 200, result);
         }
       }
@@ -294,14 +383,69 @@ export function createWorkbenchServer(options = {}) {
         return;
       }
       const projectExport = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/export$/);
+      if (await backendRoute({request,response,url,manager:backendManager,sendJson,readJsonBody,trustedMutation})) return;
+      if (await demonstrationRoute({request,response,url,demonstrations,sendJson,readJsonBody,trustedMutation})) return;
+      if (await requirementsRoute({request,response,url,manager:requirementsManager,sendJson,readJsonBody,readBinaryBody,trustedMutation,trustedLocalOrigin})) return;
+      if (await caseAssistantRoute({request,response,url,manager:caseAssistantManager,sendJson,readJsonBody,trustedMutation})) return;
+      if (await frontendHandoffRoute({request,response,url,manager:options.frontendHandoffs,sendJson,readJsonBody,trustedMutation})) return;
+      if (await nativeDshRoute({request,response,url,manager:options.nativeDshManager,sendJson,readJsonBody,trustedMutation,trustedLocalOrigin,sendRegisteredMedia})) return;
+      const targetRoute = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/(targets|trial-authorizations)$/);
+      const projectEnvironmentRoute = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/environment$/);
+      if (projectEnvironmentRoute && projectEnvironments) {
+        const projectId = decodeURIComponent(projectEnvironmentRoute[1]);
+        if (request.method === 'GET') return sendJson(response,200,await projectEnvironments.describe(projectId));
+        if (request.method === 'POST') {
+          if (!trustedMutation(request)) return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          return sendJson(response,200,await projectEnvironments.set(projectId,await readJsonBody(request)));
+        }
+        return sendJson(response,405,{error:'METHOD_NOT_ALLOWED'});
+      }
+      if (targetRoute) {
+        const projectId = decodeURIComponent(targetRoute[1]);
+        if (!await caseStore?.getProject(projectId)) return sendJson(response,404,{error:'CASE_PROJECT_NOT_FOUND'});
+        const targetManager = targetRoute[2] === 'targets' ? projectTargetAccess : projectTrialAuthorization;
+        if (!targetManager) return sendJson(response,503,{error:'PROJECT_TARGET_ACCESS_UNAVAILABLE'});
+        if (request.method === 'GET') return sendJson(response,200,await targetManager.list(projectId));
+        if (request.method === 'POST') {
+          if (!trustedMutation(request)) return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          const body = await readJsonBody(request);
+          return sendJson(response,201,targetRoute[2] === 'targets'
+            ? await projectTargetAccess.register(projectId,body)
+            : await projectTrialAuthorization.authorize(projectId,body));
+        }
+        return sendJson(response,405,{error:'METHOD_NOT_ALLOWED'});
+      }
+      const importedSource = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/imported-scripts\/([^/]+)\/(\d+)\/(imported-script-[a-f0-9]{64})\/files\/(manifest|\d+)$/);
+      if (caseStore && request.method === 'GET' && importedSource) {
+        const [,projectId,caseId,version,id,fileId] = importedSource;
+        const project = await caseStore.getProject(decodeURIComponent(projectId));
+        if (!project) throw Error('CASE_PROJECT_NOT_FOUND');
+        const file = importedScriptFile(project,decodeURIComponent(caseId),version,id,fileId);
+        response.writeHead(200,{...securityHeaders('text/plain; charset=utf-8'),'content-length':file.body.length,
+          'content-disposition':`inline; filename*=UTF-8''${encodeURIComponent(file.name)}`});
+        response.end(file.body); return;
+      }
       if (caseManager && request.method === 'GET' && projectExport) {
         const projectId = decodeURIComponent(projectExport[1]);
         const caseIds = url.searchParams.get('case_ids')?.split(',').filter(Boolean).map(decodeURIComponent) || [];
-        const pkg = await caseManager.exportPackage(projectId, caseIds);
-        const body = Buffer.from(`${JSON.stringify(pkg, null, 2)}\n`, 'utf8');
+        const caseType = url.searchParams.get('case_type');
+        const format = url.searchParams.get('format') || 'json';
+        if (!['json','xlsx'].includes(format)) throw Error('CASE_EXPORT_FORMAT_INVALID');
+        const pkg = await caseManager.exportPackage(projectId, caseIds, caseType);
+        if (requirementsManager) for (const item of pkg.cases) {
+          if (item.content.case_type !== 'BACKEND') continue;
+          const id = item.lineage.at(-1).case_id;
+          const { bindings } = await requirementsManager.getBindings(projectId, id);
+          const binding = bindings.filter(b => b.case_version === item.source_version && b.applicability === 'CURRENT_CASE_VERSION').at(-1);
+          item.protocol_binding = binding || null;
+          item.automation_readiness = !binding ? '待协议绑定' : binding.status === 'CONFLICT' ? '协议业务冲突，待复核' :
+            binding.status !== 'COMPLETE' ? '协议部分绑定' : binding.confirmation_status !== 'CONFIRMED' ? '技术映射待确认' : '技术绑定已确认；执行器、环境与脚本待准备';
+        }
+        const body = format === 'xlsx' ? await exportCasesWorkbook(pkg) : Buffer.from(`${JSON.stringify(pkg, null, 2)}\n`, 'utf8');
+        const fileName = `${caseType === 'UI' ? '前端测试用例' : caseType === 'BACKEND' ? '后端测试用例' : projectId + '-cases'}.${format}`;
         response.writeHead(200, {
-          ...securityHeaders('application/json; charset=utf-8'), 'content-length': body.length,
-          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`${projectId}-cases.json`)}`,
+          ...securityHeaders(format === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/json; charset=utf-8'), 'content-length': body.length,
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`,
         });
         response.end(body);
         return;
@@ -317,6 +461,12 @@ export function createWorkbenchServer(options = {}) {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
         const body = await readJsonBody(request, 64 * 1024);
         sendJson(response, 200, await caseManager.confirm(decodeURIComponent(projectConfirm[1]), decodeURIComponent(projectConfirm[2]), body.decisions || {}));
+        return;
+      }
+      const projectContentConfirm = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/confirm-content$/);
+      if (caseManager && request.method === 'POST' && projectContentConfirm) {
+        if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
+        sendJson(response, 200, await caseManager.confirmContents(decodeURIComponent(projectContentConfirm[1]), await readJsonBody(request, 64 * 1024)));
         return;
       }
       const projectCase = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/([^/]+)$/);
@@ -346,6 +496,7 @@ export function createWorkbenchServer(options = {}) {
         if(kind==='reports'&&reportSnapshots){
           if(request.method==='GET'){
             if(!id)return sendJson(response,200,{reports:await reportSnapshots.list(projectId)});
+            if(id==='latest-preview'&&!action)return sendJson(response,200,await reportSnapshots.latestPreview(projectId,url.searchParams.get('group_key')||'all'));
             const snapshot=await reportSnapshots.get(id,projectId);
             if(action==='html'){
               response.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-disposition':url.searchParams.has('download')?`attachment; filename="${snapshot.report_id}.html"`:'inline'});
@@ -368,7 +519,7 @@ export function createWorkbenchServer(options = {}) {
         }
         return sendJson(response,404,{error:'PRODUCT_OPERATION_NOT_FOUND'});
       }
-      if(request.method==='GET'&&url.pathname==='/api/script-environments')return sendJson(response,200,await scriptEnvironments(buildManager));
+      if(request.method==='GET'&&url.pathname==='/api/script-environments')return sendJson(response,200,await scriptEnvironments(buildManager,url.searchParams.get('project_id')));
       const batches=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/batches(?:\/([^/]+)(?:\/(start|stop))?)?$/);
       if(batchManager&&batches){
         const [projectId,id,action]=batches.slice(1).map(v=>v&&decodeURIComponent(v));
@@ -382,7 +533,9 @@ export function createWorkbenchServer(options = {}) {
       }
       const automation = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/([^/]+)\/automation$/);
       if (buildManager && request.method === 'GET' && automation) {
-        sendJson(response, 200, await buildManager.caseAutomation(decodeURIComponent(automation[1]), decodeURIComponent(automation[2]), Number(url.searchParams.get('version')))); return;
+        const pid=decodeURIComponent(automation[1]),cid=decodeURIComponent(automation[2]),v=Number(url.searchParams.get("version"));
+        const project=await caseStore.getProject(pid);const item=project?.cases.find(c=>c.case_id===cid);
+        sendJson(response,200,backendManager&&item?.versions.find(x=>x.version===v)?.content.case_type==="BACKEND" ? await backendManager.automation(pid,cid,v) : await buildManager.caseAutomation(pid,cid,v)); return;
       }
       if (buildManager && request.method === 'POST' && url.pathname === '/api/candidate-trials') {
         if (!trustedMutation(request)) return sendJson(response, 403, { error: 'UNTRUSTED_LOCAL_ORIGIN' });
@@ -395,6 +548,15 @@ export function createWorkbenchServer(options = {}) {
         sendJson(response, 202, await buildManager.stopCandidateTrial(decodeURIComponent(trialStop[1]))); return;
       }
       const projectExecutionRecords = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/execution-records$/);
+      const executionNoteRoute=url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/execution-records\/([^/]+)\/notes$/);
+      if(executionNotes && executionNoteRoute && ['GET','POST'].includes(request.method)){
+        const projectId=decodeURIComponent(executionNoteRoute[1]),runId=decodeURIComponent(executionNoteRoute[2]);
+        if(request.method==='POST'){
+          if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          return sendJson(response,201,await executionNotes.append(projectId,runId,await readJsonBody(request,32*1024)));
+        }
+        return sendJson(response,200,await executionNotes.list(projectId,runId));
+      }
       if (buildStore && request.method === 'GET' && projectExecutionRecords) {
         sendJson(response, 200, { records: await projectRecords({buildStore,caseStore,store,buildManager}, decodeURIComponent(projectExecutionRecords[1])) });
         return;
@@ -523,7 +685,7 @@ export function createWorkbenchServer(options = {}) {
         return;
       }
       if (store && request.method === 'GET' && /^\/api\/runs\/[^/]+$/.test(url.pathname)) {
-        const run = await store.getRun(decodeURIComponent(url.pathname.slice('/api/runs/'.length)));
+        const run = await withWindowTimeline(await store.getRun(decodeURIComponent(url.pathname.slice('/api/runs/'.length))), store);
         sendJson(response, run ? 200 : 404, run || { error: 'RUN_NOT_FOUND' });
         return;
       }
@@ -548,7 +710,7 @@ export function createWorkbenchServer(options = {}) {
         return;
       }
       if (request.method === 'GET' && await sendCaseTemplate(response, webRoot, url.pathname)) return;
-      if (request.method === 'GET' && await sendStatic(response, webRoot, workspaceRoot, url.pathname)) return;
+      if (request.method === 'GET' && await sendStatic(response, workspaceRoot, url.pathname)) return;
       sendJson(response, 404, { error: 'NOT_FOUND' });
     } catch (error) {
       sendJson(response, errorStatus(error), { error: error.message.split(':')[0] });

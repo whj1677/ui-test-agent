@@ -22,12 +22,18 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   reporter: [['json', { outputFile: process.env.PROBE_REPORT_PATH }]],
   use: {
-    headless: true,
-    launchOptions: { executablePath: process.env.DSH_PROBE_BROWSER_EXECUTABLE },
-    viewport: { width: 1280, height: 720 },
+    headless: process.env.PROBE_RECORD_WINDOW !== '1',
+    launchOptions: {
+      executablePath: process.env.DSH_PROBE_BROWSER_EXECUTABLE,
+      ...(process.env.PROBE_NETWORK_POLICY_ENABLED === '1' ? { args: [
+        '--remote-debugging-address=127.0.0.1', `--remote-debugging-port=${process.env.PROBE_CDP_DEBUGGING_PORT}`,
+      ] } : {}),
+    },
+    // Formal whole-window recording follows the native window; generation self-tests stay fixed.
+    viewport: process.env.PROBE_RECORD_WINDOW === '1' ? null : { width: 1280, height: 720 },
     locale: 'zh-CN',
     ...(authStorageState ? { storageState: authStorageState } : {}),
-    ...(authStorageState ? { serviceWorkers: 'block' } : {}),
+    ...((authStorageState || process.env.PROBE_NETWORK_POLICY_ENABLED === '1') ? { serviceWorkers: 'block' } : {}),
     screenshot: 'on',
     video: { mode: 'on', size: { width: 1280, height: 720 } },
     // Authenticated network traces can retain Cookie and Authorization headers.

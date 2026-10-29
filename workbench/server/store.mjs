@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { resolveInside } from './integrity.mjs';
+import { readList } from './read-list.mjs';
 
 const ACTIVE_STATES = new Set(['QUEUED', 'STARTING', 'RUNNING', 'STOPPING']);
 
@@ -125,13 +126,9 @@ export class WorkbenchStore {
 
   async listRuns() {
     const entries = await fs.readdir(this.runsRoot, { withFileTypes: true });
-    const runs = [];
-    for (const entry of entries) {
-      if (!entry.isDirectory() || !/^[a-z0-9][a-z0-9-]{7,80}$/.test(entry.name)) continue;
-      const run = await this.getRun(entry.name);
-      if (run) runs.push(run);
-    }
-    return runs.sort((left, right) => String(right.created_at).localeCompare(String(left.created_at)));
+    const valid = entries.filter(entry => entry.isDirectory() && /^[a-z0-9][a-z0-9-]{7,80}$/.test(entry.name));
+    const runs = await readList(valid, entry => this.getRun(entry.name));
+    return runs.filter(Boolean).sort((left, right) => String(right.created_at).localeCompare(String(left.created_at)));
   }
 
   async recoverInterrupted(now = new Date().toISOString()) {

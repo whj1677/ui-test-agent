@@ -1,4 +1,5 @@
 import { DEVELOPMENT_LIMITS } from './development-session.mjs';
+import { resolveDemonstrationEnvironment } from '../demonstration-environment.mjs';
 
 export const USER_GENERATION_LIMITS = Object.freeze({ ...DEVELOPMENT_LIMITS, harness_starts: 1 });
 
@@ -23,8 +24,25 @@ export function developmentAuthScope(manager, environment, projectId) {
   return scope;
 }
 
-export async function checkDevelopmentEnvironment(manager, environment, projectId = null) {
+export async function checkDevelopmentEnvironment(manager, environment, projectId = null, { checkBinding = true } = {}) {
+  if (checkBinding && manager.projectEnvironments) await manager.projectEnvironments.assert(projectId, 'ui', environment?.id);
   if (!environment) throw Error('GENERATION_ENVIRONMENT_NOT_READY');
+  if (environment.user_registered_target === true) {
+    if (!projectId || environment.project_id !== projectId || !environment.target_scope?.origin || !environment.target_scope?.path_prefix) throw Error('PROJECT_TARGET_SCOPE_INVALID');
+    const trial = manager.candidateTrialEnvironments.find(item => item.id === environment.id);
+    if (!trial || trial.configurationIdentity?.kind !== (environment.auth_requirement ? 'registered-auth-target' : 'registered-user-target') ||
+        trial.configurationIdentity.origin !== environment.target_scope.origin ||
+        trial.configurationIdentity.path_prefix !== environment.target_scope.path_prefix) throw Error('PROJECT_TARGET_CONFIGURATION_CHANGED');
+    await trial.check();
+    if (environment.auth_requirement) {
+      const scope = developmentAuthScope(manager, environment, projectId);
+      if (checkBinding && (await manager.authSessions.check(scope)).status !== 'VALID') throw Error('AUTH_SESSION_REQUIRED');
+      return { preparation: 'REGISTERED_AUTH_TARGET', entry: environment.normal_url, origin: environment.target_scope.origin,
+        path_prefix: environment.target_scope.path_prefix, auth_required: true, auth_role: scope.role, auth_environment_id: scope.environment_id };
+    }
+    return { preparation: 'REGISTERED_USER_TARGET', entry: environment.normal_url,
+      origin: environment.target_scope.origin, path_prefix: environment.target_scope.path_prefix, auth_required: false };
+  }
   if (environment.auth_requirement) {
     // Catalog validation is independent of login. Preflight with a project also
     // requires a currently verified in-memory session; no anonymous probe runs.
@@ -52,13 +70,35 @@ export async function checkDevelopmentEnvironment(manager, environment, projectI
   return { preparation: 'EXISTING_TARGET_READY', entry: environment.normal_url };
 }
 
-export async function scriptEnvironments(manager) {
-  const environments = await Promise.all(manager.developmentEnvironments.map(async env => {
+export async function scriptEnvironments(manager, projectId = null, { catalog = false } = {}) {
+  const binding = manager.projectEnvironments && projectId ? await manager.projectEnvironments.binding(projectId) : null;
+  const eligible = manager.developmentEnvironments.filter(env => (!env.user_registered_target || env.project_id === projectId) &&
+    (catalog || !manager.projectEnvironments || env.id === binding?.ui_environment_id));
+  const environments = await Promise.all(eligible.map(async env => {
     let readiness;
-    try { readiness = { ready: true, ...await checkDevelopmentEnvironment(manager, env) }; }
+    try {
+      if (!catalog && binding) await manager.projectEnvironments.assert(projectId, 'ui', env.id);
+      readiness = { ready: true, ...await checkDevelopmentEnvironment(manager, env, env.user_registered_target ? projectId : null, { checkBinding: false }) };
+    }
     catch (error) { readiness = { ready: false, reason: error.message }; }
-    return { id: env.id, name: env.name || (managedDevelopmentTarget(manager, env) ? '本机被测应用 · ' : '已登记测试系统 · ') + env.id,
-      validation_mode: env.validation_mode || 'paired', browser: '每次独立启动测试浏览器（后台无窗口）', ...readiness };
+    let demonstration = null;
+    if (projectId && (env.user_registered_target || env.auth_requirement)) {
+      try { demonstration = await resolveDemonstrationEnvironment(manager, projectId, env.id); }
+      catch { /* Catalog validity is reported by demonstration_ready, never as a login assertion. */ }
+    }
+    const automatic = Boolean(managedDevelopmentTarget(manager, env));
+    return { id: env.id, name: env.name || (automatic ? '本机被测应用 · ' : '已登记测试系统 · ') + env.id,
+      entry_url: automatic ? null : env.normal_url || null,
+      source: env.user_registered_target ? 'PROJECT_UI_REGISTRATION' : automatic ? 'LOCAL_AUTO_PREPARATION' : 'STARTUP_CONFIGURATION',
+      ...(env.user_registered_target ? { operator: env.operator || null, registered_at: env.registered_at || null } : {}),
+      validation_mode: env.validation_mode || 'paired', browser: '每次独立启动测试浏览器（后台无窗口）',
+      ...(env.user_registered_target ? { user_registered_target: true, target_scope: env.target_scope,
+        configuration_sha256: env.configuration_sha256 } : {}),
+      ...(env.auth_requirement ? { auth_required: true, auth_role: env.auth_requirement.role } : {}),
+      demonstration_ready: Boolean(demonstration && (demonstration.auth_required || readiness.ready)),
+      ...(demonstration ? { demonstration_configuration_sha256: demonstration.configuration_sha256 } : {}),
+      ...readiness };
   }));
-  return { generation_disabled: manager.generationDisabled, user_initiated_operations: manager.userInitiatedOperations === true, environments };
+  return { generation_disabled: manager.generationDisabled, user_initiated_operations: manager.userInitiatedOperations === true, environments,
+    ...(manager.projectEnvironments ? { project_environment_required: true, environment_binding: binding } : {}) };
 }

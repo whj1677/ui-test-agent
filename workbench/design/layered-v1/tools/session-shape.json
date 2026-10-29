@@ -1,0 +1,34 @@
+{
+  "file": "D:\\01_AI工程\\01_工程项目\\ui-test-agent\\workbench\\.local\\fresh25-b\\data\\native-dsh\\runtime-home\\sessions\\--C-Users-20240082-AppData-Local-ui-test-agent-native-dsh-ac346ffa51dc3ec5-projects-project-0c7a1af4-c25d-4bd4-8140-a5a43916a7db-workspace--\\session-8d23f460-f32f-4210-94ff-54c0681cdf33\\session.v4.jsonl.zstd",
+  "totalLines": 1,
+  "parsed": 1,
+  "typeCounts": {
+    "session": 1
+  },
+  "shapes": {
+    "session": {
+      "topKeys": [
+        "type",
+        "version",
+        "id",
+        "createdAt",
+        "cwd",
+        "isSeeded",
+        "delegationDepth",
+        "agentPreset"
+      ],
+      "innerKeys": [
+        "type",
+        "version",
+        "id",
+        "createdAt",
+        "cwd",
+        "isSeeded",
+        "delegationDepth",
+        "agentPreset"
+      ],
+      "dataKeys": [],
+      "dataPreview": "{}"
+    }
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "project": {
+    "revision": 3,
+    "cases": [
+      {
+        "case_id": "case-50cfdc39-6cca-472c-b09c-176006602d52",
+        "versions": [
+          {
+            "content": {
+              "status": "CONFIRMED",
+              "external_id": "BACKEND-R1-NORMAL-CREATE",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "POST /__control/namespaces，JSON {\"runId\":\"be-r1-01\"} 初始化本次运行命名空间。",
+                  "expected": "返回 201 {runId:be-r1-01,created:true}；若该 runId 已存在则返回 200 {runId:be-r1-01,created:false}，此时不得继续声称初次新增，应更换全新 runId 重做前置。"
+                },
+                {
+                  "order": 2,
+                  "action": "GET /api/v1/namespaces/be-r1-01/devices 读取提交前台账。",
+                  "expected": "200 {runId:be-r1-01,items:[DEV-001 完整对象],total:1}；记录为 code=DEV-001,name=循环泵一号,site=东站,ratedPowerKw=80。"
+                },
+                {
+                  "order": 3,
+                  "action": "POST /api/v1/namespaces/be-r1-01/devices，请求头 x-synthetic-role: editor，JSON 四字段 code=DEV-007,name=冷却泵二号,site=西站,ratedPowerKw=110。",
+                  "expected": "201 {runId:be-r1-01,created:true,item:{code:DEV-007,name:冷却泵二号,site:西站,ratedPowerKw:110}}。"
+                },
+                {
+                  "order": 4,
+                  "action": "独立 GET /api/v1/namespaces/be-r1-01/devices/DEV-007 读回新增记录。",
+                  "expected": "200 {runId:be-r1-01,item:{code:DEV-007,name:冷却泵二号,site:西站,ratedPowerKw:110}}；DEV-007 恰好一条且四字段与输入一致。"
+                },
+                {
+                  "order": 5,
+                  "action": "独立 GET /api/v1/namespaces/be-r1-01/devices 读回整个台账。",
+                  "expected": "200 {runId:be-r1-01,items:[DEV-001 未变, DEV-007 新增],total:2}；DEV-001 四字段仍为 循环泵一号/东站/80，总数由 1 变为 2。"
+                },
+                {
+                  "order": 6,
+                  "action": "DELETE /__control/namespaces/be-r1-01 清理本次运行命名空间。",
+                  "expected": "200 {runId:be-r1-01,deleted:true}；只清理本用例命名空间，公共初始记录 DEV-001 保留。"
+                }
+              ],
+              "case_type": "BACKEND",
+              "title": "后端：editor 在新命名空间正常新增 DEV-007 并独立读回"
+            },
+            "content_sha256": "B875FBBFEB1CEC622B71677A1B6849E87640973187330403B9B18C7342C9CF50",
+            "version": 1
+          }
+        ],
+        "current_version": 1
+      },
+      {
+        "case_id": "case-49da5103-8329-4054-8825-dee8da9b548b",
+        "versions": [
+          {
+            "content": {
+              "status": "CONFIRMED",
+              "external_id": "BACKEND-R2-DUPLICATE-REJECT",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "POST /__control/namespaces，JSON {\"runId\":\"be-r2-01\"} 初始化本次运行命名空间。",
+                  "expected": "返回 201 {runId:be-r2-01,created:true}；若该 runId 已存在则返回 200 {runId:be-r2-01,created:false}，此时不得继续声称初次新增，应更换全新 runId 重做前置。"
+                },
+                {
+                  "order": 2,
+                  "action": "GET /api/v1/namespaces/be-r2-01/devices 读取提交前台账。",
+                  "expected": "200 {runId:be-r2-01,items:[DEV-001 完整对象],total:1}；记录为 code=DEV-001,name=循环泵一号,site=东站,ratedPowerKw=80。"
+                },
+                {
+                  "order": 3,
+                  "action": "POST /api/v1/namespaces/be-r2-01/devices，请求头 x-synthetic-role: editor，JSON 四字段 code=DEV-001,name=不得覆盖的设备,site=西站,ratedPowerKw=110。",
+                  "expected": "409 {runId:be-r2-01,created:false,error:{code:DUPLICATE_CODE,message:非空重复说明}}；重复编号被拒绝，不得改写成创建成功。"
+                },
+                {
+                  "order": 4,
+                  "action": "独立 GET /api/v1/namespaces/be-r2-01/devices/DEV-001 读回被拒绝编号对应的记录。",
+                  "expected": "200 {runId:be-r2-01,item:{code:DEV-001,name:循环泵一号,site:东站,ratedPowerKw:80}}；DEV-001 恰好一条且仍为初始四字段，未被提交内容覆盖。"
+                },
+                {
+                  "order": 5,
+                  "action": "独立 GET /api/v1/namespaces/be-r2-01/devices 读回整个台账。",
+                  "expected": "200 {runId:be-r2-01,items:[DEV-001 初始对象],total:1}；整个台账与提交前一致，总数仍为 1。"
+                },
+                {
+                  "order": 6,
+                  "action": "DELETE /__control/namespaces/be-r2-01 清理本次运行命名空间。",
+                  "expected": "200 {runId:be-r2-01,deleted:true}；只清理本用例命名空间，公共初始记录 DEV-001 保留。"
+                }
+              ],
+              "case_type": "BACKEND",
+              "title": "后端：editor 提交已存在的 DEV-001 被 409 DUPLICATE_CODE 拒绝且数据不变"
+            },
+            "content_sha256": "DD8CF338D31507904755447ACF9384D7885EA3B2220C06041E7F3BFCBFE742F0",
+            "version": 1
+          }
+        ],
+        "current_version": 1
+      },
+      {
+        "case_id": "case-56a4c2c4-4f28-458b-aa71-959583f495b3",
+        "versions": [
+          {
+            "content": {
+              "status": "CONFIRMED",
+              "external_id": "BACKEND-R3-VIEWER-FORBIDDEN",
+              "steps": [
+                {
+                  "order": 1,
+                  "action": "POST /__control/namespaces，JSON {\"runId\":\"be-r3-01\"} 初始化本次运行命名空间。",
+                  "expected": "返回 201 {runId:be-r3-01,created:true}；若该 runId 已存在则返回 200 {runId:be-r3-01,created:false}，此时不得继续声称初次新增，应更换全新 runId 重做前置。"
+                },
+                {
+                  "order": 2,
+                  "action": "GET /api/v1/namespaces/be-r3-01/devices 读取提交前台账。",
+                  "expected": "200 {runId:be-r3-01,items:[DEV-001 完整对象],total:1}；记录为 code=DEV-001,name=循环泵一号,site=东站,ratedPowerKw=80。"
+                },
+                {
+                  "order": 3,
+                  "action": "POST /api/v1/namespaces/be-r3-01/devices，请求头 x-synthetic-role: viewer，JSON 四字段 code=DEV-008,name=观察泵三号,site=西站,ratedPowerKw=110。",
+                  "expected": "403 {runId:be-r3-01,created:false,error:{code:FORBIDDEN,message:非空拒绝说明}}；viewer 被拒绝创建，不得改写成创建成功。"
+                },
+                {
+                  "order": 4,
+                  "action": "独立 GET /api/v1/namespaces/be-r3-01/devices?code=DEV-008 读回被拒绝编号对应的过滤结果。",
+                  "expected": "200 {runId:be-r3-01,items:[]}；过滤结果中没有 DEV-008 记录。"
+                },
+                {
+                  "order": 5,
+                  "action": "独立 GET /api/v1/namespaces/be-r3-01/devices 读回整个台账。",
+                  "expected": "200 {runId:be-r3-01,items:[DEV-001 初始对象],total:1}；整个台账和 DEV-001 四字段与提交前一致，总数仍为 1。"
+                },
+                {
+                  "order": 6,
+                  "action": "DELETE /__control/namespaces/be-r3-01 清理本次运行命名空间。",
+                  "expected": "200 {runId:be-r3-01,deleted:true}；只清理本用例命名空间，公共初始记录 DEV-001 保留。"
+                }
+              ],
+              "case_type": "BACKEND",
+              "title": "后端：viewer 提交合法新增 DEV-008 被 403 FORBIDDEN 拒绝且台账不变"
+            },
+            "content_sha256": "248EF90949AC872E8642414ED277721957D56DE4AA83F6BB7AEF4103BE6CEC2C",
+            "version": 1
+          }
+        ],
+        "current_version": 1
+      }
+    ],
+    "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84"
+  },
+  "source": {
+    "segments": [
+      {
+        "segment_id": "segment-1",
+        "kind": "paragraph",
+        "location": {
+          "line": 1
+        },
+        "text": "# 设备台账合成 HTTP/JSON 协议 v1",
+        "quote_sha256": "df7e3d4aecb3c8fd94af6168d70d21524cd0b5f3c05ab523ca3a7b0220725522"
+      },
+      {
+        "segment_id": "segment-2",
+        "kind": "paragraph",
+        "location": {
+          "line": 3
+        },
+        "text": "技术契约来自 workbench/qa/20260926-req0038-completion/PROTOCOL.md；仅保留本次三个业务场景所需接口。不是客户协议或生产认证方案。业务预期来自 01-PRD.md，不能由实际响应反推或修改。",
+        "quote_sha256": "80eab36f41587c12e86153e78ec2d9c8a7be0d80c05c64a8c11b556c742f8f30"
+      },
+      {
+        "segment_id": "segment-3",
+        "kind": "paragraph",
+        "location": {
+          "line": 5
+        },
+        "text": "## 地址、输入与数据",
+        "quote_sha256": "6fc5c88f0ca1191712dfa676b43b455bfb612250bc5092cdbe5a4672173fdf3c"
+      },
+      {
+        "segment_id": "segment-4",
+        "kind": "paragraph",
+        "location": {
+          "line": 7
+        },
+        "text": "Base URL：http://127.0.0.1:4401，仅监听回环地址。JSON 使用 UTF-8，写请求 Content-Type 为 application/json；不使用真实 Cookie、密码或 Token，不跟随重定向。 每次执行每条用例使用全新 runId，格式 [a-z0-9][a-z0-9-]{2,63}。文档中的示例 runId 不固定复用。 公开请求头 x-synthetic-role 只接受 editor 或 viewer；它是合成角色字段，不是认证。 基线对象为 {\"code\":\"DEV-001\",\"name\":\"循环泵一号\",\"site\":\"东站\",\"ratedPowerKw\":80}。功率为数字，单位 kW。",
+        "quote_sha256": "bab5df29c863781c0094e91618fe77c1017369ff9d6708e35124dc718e1f81a5"
+      },
+      {
+        "segment_id": "segment-5",
+        "kind": "paragraph",
+        "location": {
+          "line": 12
+        },
+        "text": "## 初始化、读取、清理",
+        "quote_sha256": "8e6b4aa8b882a2b6c55f6e73da1be5a2b2961c32415e8d19679aaa501f039464"
+      },
+      {
+        "segment_id": "segment-6",
+        "kind": "table_row",
+        "location": {
+          "line": 14
+        },
+        "text": "| 方法与路径 | 请求与响应 |",
+        "quote_sha256": "3362166406058642cbb7c3eafffb452fc71117c74bbc15dde5c9459f32af4a6d"
+      },
+      {
+        "segment_id": "segment-7",
+        "kind": "table_row",
+        "location": {
+          "line": 15
+        },
+        "text": "|---|---|",
+        "quote_sha256": "4199ba454d6d3ae83657120c2bb6bd674eefc0dd7d3cd4cc844171dc6725135b"
+      },
+      {
+        "segment_id": "segment-8",
+        "kind": "table_row",
+        "location": {
+          "line": 16
+        },
+        "text": "| GET /health | 200，service=req0038-synthetic-ledger，schemaVersion=1；只识别服务，不算业务通过 |",
+        "quote_sha256": "dedf43f7657ee5443f12e3e2b747edbffc90247aaa9d4b12795358547b6b28d5"
+      },
+      {
+        "segment_id": "segment-9",
+        "kind": "table_row",
+        "location": {
+          "line": 17
+        },
+        "text": "| POST /__control/namespaces | JSON {\"runId\":\"本次全新编号\"}；新空间 201 {runId,created:true}，已有空间 200 {runId,created:false} 且不重置。测试初始前提不成立时不能继续声称初次新增 |",
+        "quote_sha256": "3b167febe6b5df6ce4e6b8bd312615ea9a5edd0f72e8679cb4b4bdd839c4d831"
+      },
+      {
+        "segment_id": "segment-10",
+        "kind": "table_row",
+        "location": {
+          "line": 18
+        },
+        "text": "| GET /api/v1/namespaces/{runId}/devices | 200 {runId,items:[...],total:N}；未传 code 为整个台账，可用 ?code=DEV-007 精确过滤 |",
+        "quote_sha256": "d54f7d8ad619ac9453a88ffcb7ac8becdb31b48a0030138a722baad5341aa956"
+      },
+      {
+        "segment_id": "segment-11",
+        "kind": "table_row",
+        "location": {
+          "line": 19
+        },
+        "text": "| GET /api/v1/namespaces/{runId}/devices/{code} | 存在时 200 {runId,item:{code,name,site,ratedPowerKw}}；不存在 404 DEVICE_NOT_FOUND |",
+        "quote_sha256": "6256c0c5f3e38deb6510d73367088632a24da3a472f002fe2fbf0383cf07375d"
+      },
+      {
+        "segment_id": "segment-12",
+        "kind": "table_row",
+        "location": {
+          "line": 20
+        },
+        "text": "| DELETE /__control/namespaces/{runId} | 200 {runId,deleted:true}；已不存在 deleted:false。只删除自身空间，不使用通配符 |",
+        "quote_sha256": "0c49503f811ff5c958f77f3f7b806e1c8e3c7ec984a2994902d8eef64dbf1bdc"
+      },
+      {
+        "segment_id": "segment-13",
+        "kind": "table_row",
+        "location": {
+          "line": 21
+        },
+        "text": "| GET /__control/baseline | 200 {items:[基线完整对象],total:1}；清理后仍保留 DEV-001 |",
+        "quote_sha256": "1368776529bf5d9b1a62539ebe37ef2d8d96863d7a00d1aa94c8f4f4299522ef"
+      },
+      {
+        "segment_id": "segment-14",
+        "kind": "paragraph",
+        "location": {
+          "line": 23
+        },
+        "text": "未初始化或已清理的业务命名空间返回 404 NAMESPACE_NOT_FOUND，不隐式创建。初始化与清理为本次合成测试编排接口，不扩展产品业务需求。",
+        "quote_sha256": "1b1c605c275f258cb10ef9d63e54cd803e6fd6e68efa37f5c11ab7f7c6bc3b39"
+      },
+      {
+        "segment_id": "segment-15",
+        "kind": "paragraph",
+        "location": {
+          "line": 25
+        },
+        "text": "## 创建请求",
+        "quote_sha256": "d9c750697e541323748dd5d7ea6ddc54db3e5ea6108989eb1640f7df97522ce2"
+      },
+      {
+        "segment_id": "segment-16",
+        "kind": "paragraph",
+        "location": {
+          "line": 27
+        },
+        "text": "POST /api/v1/namespaces/{runId}/devices，请求头 x-synthetic-role，JSON 四字段 code、name、site、ratedPowerKw。 code/name/site 为非空文本、首尾无空白，长度不超过 100；ratedPowerKw 为有限正数。原练习只使用下表合法输入，不另生字段边界测试。",
+        "quote_sha256": "055a53864d91c75b36a497318466b740637da1460cd97d9ec6c8c2097a88fcf1"
+      },
+      {
+        "segment_id": "segment-17",
+        "kind": "table_row",
+        "location": {
+          "line": 30
+        },
+        "text": "| 场景 | 请求 | 响应与独立读回 |",
+        "quote_sha256": "d63d72146f94025cd70ccebdf14d9d7963caeaeb457001d86691da7544e775ea"
+      },
+      {
+        "segment_id": "segment-18",
+        "kind": "table_row",
+        "location": {
+          "line": 31
+        },
+        "text": "|---|---|---|",
+        "quote_sha256": "23cca02b74f386463efa24796c7a9011b0d2c93f0c38b4d15d5d276205b59b43"
+      },
+      {
+        "segment_id": "segment-19",
+        "kind": "table_row",
+        "location": {
+          "line": 32
+        },
+        "text": "| 正常新增 | editor；{\"code\":\"DEV-007\",\"name\":\"冷却泵二号\",\"site\":\"西站\",\"ratedPowerKw\":110} | 201 {runId,created:true,item:{输入四字段}}；独立 GET DEV-007 恰好一条且四字段一致，DEV-001 不变，total=2 |",
+        "quote_sha256": "84e2a8660264f68821157e4473749f700bfd81a0b73e60cd0e694eaff0227147"
+      },
+      {
+        "segment_id": "segment-20",
+        "kind": "table_row",
+        "location": {
+          "line": 33
+        },
+        "text": "| 重复编号 | editor；{\"code\":\"DEV-001\",\"name\":\"不得覆盖的设备\",\"site\":\"西站\",\"ratedPowerKw\":110} | 409 {runId,created:false,error:{code:\"DUPLICATE_CODE\",message:非空重复说明}}；独立 GET 整个台账与提交前一致，DEV-001 不覆盖，total=1 |",
+        "quote_sha256": "1be0e3c7b109ae3a07fd724bc630232b8100c1fa5f97c1eafc03dbdc041b0cc3"
+      },
+      {
+        "segment_id": "segment-21",
+        "kind": "table_row",
+        "location": {
+          "line": 34
+        },
+        "text": "| viewer 拒绝 | viewer；{\"code\":\"DEV-008\",\"name\":\"观察泵三号\",\"site\":\"西站\",\"ratedPowerKw\":110} | 403 {runId,created:false,error:{code:\"FORBIDDEN\",message:非空拒绝说明}}；独立 GET ?code=DEV-008 的 items=[]，整个台账与提交前一致，total=1 |",
+        "quote_sha256": "e5d30b1541a78d9750aa06c14cb6f2fae5b1f028b57893c85bd7426d12473abb"
+      },
+      {
+        "segment_id": "segment-22",
+        "kind": "paragraph",
+        "location": {
+          "line": 36
+        },
+        "text": "断言必须同时包含响应类别、真实业务字段/数量和后置不变条件，不能只断言接口未抛异常。拒绝用例按照其原拒绝预期判断，不属于错误注入或正常新增失败。",
+        "quote_sha256": "4a0da163447dd8cda89fa908dda1f174806a048c2311ad08b5fdbdfabc0ba645"
+      },
+      {
+        "segment_id": "segment-23",
+        "kind": "paragraph",
+        "location": {
+          "line": 38
+        },
+        "text": "## 隔离与执行范围",
+        "quote_sha256": "4c34e7ec061c50f6928c248a84784e2046c9d20f9dbc477186dc14bd74197fc7"
+      },
+      {
+        "segment_id": "segment-24",
+        "kind": "paragraph",
+        "location": {
+          "line": 40
+        },
+        "text": "只允许本机目标、GET/POST/DELETE；控制路径 /__control/namespaces/ 与业务路径 /api/v1/namespaces/。初始化实际路径为 /__control/namespaces，清理为 /__control/namespaces/{runId}。 测试计划使用 {{runId}} 引用执行器产生的当前命名空间；每条用例单独初始化、独立观察、精确清理。不得修改/清理别的 runId。 没有修改设备或删除设备接口，不加入这类业务步骤。通用故障注入、读栅栏、超时和取消接口不在本次练习资料中。",
+        "quote_sha256": "0d4f65821ceca2757eab023456cfd0ff0456063d73bf7cb8b130df2e6aaf8267"
+      }
+    ],
+    "snapshot_id": "source-726e0efd-00d8-4b4f-a8eb-7fd21a31affd",
+    "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+    "kind": "PROTOCOL",
+    "sha256": "d6a3f835bf7b0fe9d2440f429c0f0af581d2db981ad940d6e6ca3014386c656f",
+    "file_name": "03-PROTOCOL.md"
+  }
+}

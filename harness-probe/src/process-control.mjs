@@ -23,7 +23,7 @@ export async function terminateOwnedTree(child) {
 
 export function runOwnedProcess(command, args, options = {}) {
   const {
-    cwd, env, timeoutMs = 60_000, signal, onStdoutLine, onLifecycle,
+    cwd, env, timeoutMs = 60_000, signal, onStdoutLine, onLifecycle, stdin,
     maxCaptureBytes = 256_000, drainTimeoutMs = DEFAULT_DRAIN_TIMEOUT_MS,
     terminationGraceMs = DEFAULT_TERMINATION_GRACE_MS,
   } = options;
@@ -105,7 +105,7 @@ export function runOwnedProcess(command, args, options = {}) {
         windowsHide: true,
         shell: false,
         detached: process.platform !== 'win32',
-        stdio: ['ignore', 'pipe', 'pipe'],
+        stdio: [stdin === undefined ? 'ignore' : 'pipe', 'pipe', 'pipe'],
       });
       queueLifecycle({ type: 'process_spawn', at: new Date().toISOString(), pid: child.pid ?? null, parent_pid: process.pid });
       child.stdout.on('data', (chunk) => {
@@ -139,6 +139,16 @@ export function runOwnedProcess(command, args, options = {}) {
       timer = setTimeout(() => void requestTermination('timeout'), timeoutMs);
       if (signal?.aborted) abort();
       else signal?.addEventListener('abort', abort, { once: true });
+      if (stdin !== undefined) {
+        // A child may exit before consuming a large prompt. Keep EPIPE owned by
+        // this invocation and never put input contents in lifecycle diagnostics.
+        child.stdin.once('error', (error) => {
+          processError ||= `stdin:${error.code || 'WRITE_FAILED'}`;
+          queueLifecycle({ type: 'stdin_error', at: new Date().toISOString(), code: error.code || null });
+          if (!exitObserved && !settled) void requestTermination('stdin_error');
+        });
+        child.stdin.end(stdin, 'utf8');
+      }
     } catch (error) {
       processError = error.message;
       queueLifecycle({ type: 'process_error', at: new Date().toISOString(), code: error.code || null });

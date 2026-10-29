@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { resolveInside } from '../integrity.mjs';
+import { readList } from '../read-list.mjs';
 
 const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANCELLING']);
 const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
@@ -224,13 +225,9 @@ export class BuildTaskStore {
 
   async listTasks() {
     const entries = await fs.readdir(this.root, { withFileTypes: true });
-    const tasks = [];
-    for (const entry of entries) {
-      if (!entry.isDirectory() || !/^build-[a-z0-9-]{8,80}$/.test(entry.name)) continue;
-      const task = await this.getTask(entry.name);
-      if (task) tasks.push(task);
-    }
-    return tasks.sort((left, right) => String(right.created_at).localeCompare(String(left.created_at)));
+    const valid = entries.filter(entry => entry.isDirectory() && /^build-[a-z0-9-]{8,80}$/.test(entry.name));
+    const tasks = await readList(valid, entry => this.getTask(entry.name));
+    return tasks.filter(Boolean).sort((left, right) => String(right.created_at).localeCompare(String(left.created_at)));
   }
 
   async getBudget() {

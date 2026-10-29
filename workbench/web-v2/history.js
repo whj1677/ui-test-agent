@@ -3,7 +3,9 @@ import { esc, stateLabel } from './workflow.js';
 
 // Compatibility inside the same product shell. Project-bound work returns to its case.
 export async function renderHistory({query,showPage,go}) {
+  const hash=location.hash;
   const [{assets},{runs},{tasks}]=await Promise.all([api('/api/assets'),api('/api/runs'),api('/api/build/tasks')]);
+  if(location.hash!==hash)return;
   const runId=query.get('run_id'),taskId=query.get('task_id');
   const run=runId?runs.find(r=>r.run_id===runId):null,task=taskId?tasks.find(t=>t.task_id===taskId):null;
   if(runId&&!run||taskId&&!task)throw Error('指定历史对象不存在');

@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-04T13:19:40.615Z",
+  "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+  "official_status": "ready",
+  "loaded_source_matches_disk": true,
+  "source_count": 3,
+  "source_read_statuses": [
+    [
+      "03-PROTOCOL.md",
+      "READ",
+      "REVIEW_DRAFT"
+    ],
+    [
+      "02-MRD.md",
+      "READ",
+      "REVIEW_DRAFT"
+    ],
+    [
+      "01-PRD.md",
+      "READ",
+      "REVIEW_DRAFT"
+    ]
+  ],
+  "cases": 0,
+  "designs": 0,
+  "runs": 0,
+  "backend_plans": 0,
+  "ui_target_ready": true,
+  "backend_environments": 1,
+  "target_state": "READY",
+  "target_service": "req0038-synthetic-ledger",
+  "public_baseline": {
+    "items": [
+      {
+        "code": "DEV-001",
+        "name": "循环泵一号",
+        "site": "东站",
+        "ratedPowerKw": 80
+      }
+    ],
+    "total": 1
+  },
+  "prior_project_count": 24,
+  "prior_projects_changed": [],
+  "business_generation": "NOT_RUN",
+  "business_execution": "NOT_RUN",
+  "source_provenance": [
+    {
+      "path": "workbench/qa/20260926-req0038-completion/CASES.md",
+      "sha256": "13f070839d465f7420ec0f952f8549867c991506b560d361932577edf1c69ed0"
+    },
+    {
+      "path": "workbench/qa/20260926-req0038-completion/PROTOCOL.md",
+      "sha256": "89da0a3e568edafea732bd8d3733632036b567175646b823706f5a4ea9172792"
+    },
+    {
+      "path": "workbench/qa/20260926-req0038-completion/fixture/server.mjs",
+      "sha256": "a81ca2df318843618a7260a8e0ba0d3d7bfc4d8789a12f26d42d0191aedfbf2c"
+    },
+    {
+      "path": "workbench/qa/20260926-req0038-completion/fixture/ledger.html",
+      "sha256": "1fbcf1a85b7ff9b3bdd9333ca75403e32c099e413cd88f5652195340e418adbe"
+    }
+  ],
+  "target_start": {
+    "current": "user foreground terminal reported; target identity verified",
+    "previous_exec_session_id": 62343,
+    "first_background_attempt": "automatic approval rejected Start-Process; no background service created"
+  }
+}

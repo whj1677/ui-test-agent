@@ -15,6 +15,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from ai_context_delivery_scope import DeliveryScope, load_delivery_scope
+
 try:
     from ai_context_change_records import (
         AI_CONTEXT_SCRIPT_PATHS,
@@ -73,6 +75,7 @@ ALLOWED_VERIFICATION_STATES = {
     "单元测试通过",
     "集成测试通过",
     "人工待确认",
+    "测试失败",
 }
 
 REQUIRED_NEW_ROOT_FILES = [
@@ -459,7 +462,8 @@ def _quick_fix_upgrade_target(fix_path: Path) -> tuple[str | None, str | None]:
     return target_match.group(0), None
 
 
-def check_changed_code_has_requirement_update(root: Path, issues: list[Issue], enabled: bool) -> None:
+def check_changed_code_has_requirement_update(root: Path, issues: list[Issue], enabled: bool,
+                                            delivery_scope: DeliveryScope | None = None) -> None:
     if not enabled:
         return
     changes = git_changes(root)
@@ -484,6 +488,8 @@ def check_changed_code_has_requirement_update(root: Path, issues: list[Issue], e
         if change.path:
             changed_paths.append(change.path)
     changed_paths = list(dict.fromkeys(changed_paths))
+    if delivery_scope is not None:
+        changed_paths = list(delivery_scope.selected_paths)
     code_changes = [path for path in changed_paths if is_code_or_test_change(path)]
     if not code_changes:
         return
@@ -1275,18 +1281,109 @@ def has_asserted_completion_claim(text: str) -> bool:
     return any(term in without_negated_states for term in COMPLETION_CLAIM_TERMS)
 
 
-def check_pass_claim_text(path: Path, text: str, issues: list[Issue]) -> None:
-    if not has_asserted_pass_claim(text):
-        return
-    has_failure = any(term in text for term in BUILD_FAILURE_TERMS)
-    if has_failure:
-        add_issue(
-            issues,
-            path,
-            "Document claims tests/build passed while failure, skipped-test, timeout, or non-zero evidence is present.",
-            "Downgrade verification to `无法运行` / `未运行` / `仅静态检查` / failure, and keep the original command output.",
+def pass_claim_evidence_units(text: str) -> list[tuple[str, str]]:
+    """Keep a verification row/batch separate from other historical executions."""
+    units: list[tuple[str, str]] = []
+    claim_lines: list[str] = []
+    in_fence = False
+    for line in text.splitlines():
+        if line.strip().startswith(("```", "~~~")):
+            in_fence = not in_fence
+            continue
+        if not in_fence:
+            claim_lines.append(line)
+    state_names = {"状态", "验证状态", "执行状态", "Verification state"}
+    pass_states = {"单元测试通过", "集成测试通过"}
+    for header, rows in markdown_tables("\n".join(claim_lines)):
+        # A vertical key/value table describes one execution, not one execution
+        # per field. Keep its state, exit code and counters bound together.
+        all_rows = [header, *rows]
+        if len(header) == 2 and any(len(row) == 2 and row[0] in state_names and row[1].strip("`") in pass_states for row in all_rows):
+            units.append(("key-value execution table", "\n".join(f"{row[0]}: {row[1]}" for row in all_rows if len(row) == 2)))
+            continue
+        states = [i for i, name in enumerate(header) if name in {"状态", "验证状态", "执行状态"}]
+        for row in rows:
+            joined = " | ".join(row)
+            if states:
+                if not any(i < len(row) and row[i].strip("`") in pass_states for i in states):
+                    continue
+            elif not has_asserted_pass_claim(joined):
+                continue
+            evidence_index = header_index(header, {"当前证据", "验证证据", "实际结果", "证据"})
+            evidence = row[evidence_index] if evidence_index is not None and evidence_index < len(row) else joined
+            for name in ("退出码", "Exit code", "失败数量", "Failure count", "测试数量", "Test count", "跳过数量", "Skipped count"):
+                index = header_index(header, {name})
+                if index is not None and index < len(row) and re.fullmatch(r"`?-?\d+`?", row[index]):
+                    evidence += f"\n{name}: {row[index]}"
+            units.append((row[0] if row else "verification row", evidence))
+
+    # A heading or list item identifies a separate prose execution. A following
+    # fenced log stays with its claim, including across blank lines.
+    block: list[str] = []
+    claims: list[str] = []
+    def flush() -> None:
+        chunk = "\n".join(block)
+        if has_asserted_pass_claim("\n".join(claims)):
+            units.append(("execution evidence block", chunk))
+        block.clear()
+        claims.clear()
+    fenced = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("```") or stripped.startswith("~~~"):
+            fenced = not fenced
+            block.append(line)
+            continue
+        if not fenced and (stripped.startswith("|") or re.match(r"^#{1,6}\s", stripped)):
+            flush()
+            continue
+        metadata_field = re.match(
+            r"^[-*+]\s+(?:Generated at|Record|Change fingerprint|Delivery scope|Preserved baseline SHA-256|"
+            r"Verification source|Verification state|Command|Exit code|Test count|Failure count|Skipped count|Log path|Log SHA-256|"
+            r"验证状态|执行状态|命令|退出码|测试数量|失败数量|跳过数量)\s*[:：]", stripped, flags=re.IGNORECASE
         )
+        if not fenced and not metadata_field and re.match(r"^(?:[-*+]|\d+\.)\s+", stripped):
+            flush()
+        if not fenced:
+            claims.append(line)
+        block.append(line)
+    flush()
+    return units
+
+
+def evidence_unit_failed(text: str) -> bool:
+    """Use observed outcomes; mentions of timeout/negative-test behavior are not failures."""
+    numeric_labels = r"退出码|exit code|失败数量|failure count"
+    if any(int(value) != 0 for value in re.findall(
+        rf"(?:{numeric_labels})\s*[:：]?\s*`?(-?\d+)`?", text, flags=re.IGNORECASE
+    )):
+        return True
+    if re.search(r"^\s*#\s+fail\s+[1-9]\d*\s*$", text, flags=re.MULTILINE):
+        return True
+    if re.search(r"\b(?:Failures|Errors)\s*:\s*[1-9]\d*|\b[1-9]\d*\s+(?:failed|errors?)\b", text, flags=re.IGNORECASE):
+        return True
+    total = numeric_evidence_value(text, ("测试数量", "Test count"))
+    skipped = numeric_evidence_value(text, ("跳过数量", "Skipped count"))
+    if total is not None and total > 0 and skipped is not None and skipped >= total:
+        return True
+    return any(term in text for term in (
+        "BUILD FAILURE", "BUILD FAILED", "COMPILATION ERROR", "There are test failures",
+        "Failed to execute goal", "Could not resolve", "Could not find artifact", "命令非 0",
+    ))
+
+
+def check_pass_claim_text(path: Path, text: str, issues: list[Issue]) -> None:
+    units = pass_claim_evidence_units(text)
+    if not units:
         return
+    for label, evidence in units:
+        if evidence_unit_failed(evidence):
+            add_issue(
+                issues, path,
+                f"Tests/build are claimed passed but the same verification execution has failure evidence ({label}).",
+                "Keep this execution's real failed/blocked state and original log; other batches cannot turn it into a pass.",
+            )
+            return
     if not has_exit_zero_evidence(text) or not has_test_count_evidence(text):
         add_issue(
             issues,
@@ -1734,6 +1831,16 @@ def check_old_files(root: Path, issues: list[Issue]) -> None:
 
 def run(root: Path, require_code_change_linked_req: bool = True) -> int:
     issues: list[Issue] = []
+    delivery_scope = None
+    try:
+        delivery_scope = load_delivery_scope(root)
+    except ValueError as exc:
+        add_issue(issues, root / "docs" / "ai_engineering" / "delivery_scope.json",
+                  str(exc), "Correct the explicit scope or restore the frozen bytes; do not suppress the Git gate.")
+    if delivery_scope is not None:
+        print(f"Verified delivery scope: {delivery_scope.requirement}; "
+              f"{len(delivery_scope.selected_paths)} selected files; "
+              f"{delivery_scope.preserved_count} existing changed files preserved.")
     check_root_structure(root, issues)
     check_requirement_structure(root, issues)
 
@@ -1775,7 +1882,7 @@ def run(root: Path, require_code_change_linked_req: bool = True) -> int:
     check_forbidden_phrases(root, issues)
     check_old_files(root, issues)
     check_untracked_delivery_evidence(root, issues)
-    check_changed_code_has_requirement_update(root, issues, require_code_change_linked_req)
+    check_changed_code_has_requirement_update(root, issues, require_code_change_linked_req, delivery_scope)
 
     if issues:
         print("FAIL ai-engineering-context checks")
@@ -1825,7 +1932,7 @@ def check_installation(root: Path) -> int:
             problems.append(f"{path.relative_to(root)}: {exc}")
     for name in ("check_ai_context.py", "sync_requirement_status.py",
                  "collect_delivery_evidence.py", "ai_context_change_records.py",
-                 "create_requirement.py", "requirement_source.py"):
+                  "create_requirement.py", "requirement_source.py", "ai_context_delivery_scope.py"):
         path = root / "scripts" / name
         try:
             compile(read_text(path), str(path), "exec")

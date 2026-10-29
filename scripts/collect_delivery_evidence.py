@@ -14,6 +14,8 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
+from ai_context_delivery_scope import DeliveryScope, load_delivery_scope
+
 try:
     from ai_context_change_records import (
         EVIDENCE_END,
@@ -336,6 +338,7 @@ def render_evidence(
     sync_out: str,
     check_code: int,
     check_out: str,
+    delivery_scope: DeliveryScope | None = None,
 ) -> str:
     now = _dt.datetime.now().astimezone().isoformat(timespec="seconds")
     status = "\n".join(git_status(root)) or "(clean)"
@@ -347,7 +350,9 @@ def render_evidence(
             "",
             f"- Generated at: `{now}`",
             f"- Record: `{record.identifier}`",
-            f"- Change fingerprint: `{code_change_fingerprint(root)}`",
+            f"- Change fingerprint: `{code_change_fingerprint(root, list(delivery_scope.selected_paths) if delivery_scope else None)}`",
+            f"- Delivery scope: `{delivery_scope.path if delivery_scope else 'whole working tree'}`",
+            f"- Preserved baseline SHA-256: `{delivery_scope.baseline_sha256 if delivery_scope else 'not scoped'}`",
             f"- Verification source: `{verification_source or '未记录'}`",
             f"- Verification state: `{verify_state or '未记录'}`",
             f"- Command: `{verify_command or '未记录'}`",
@@ -448,10 +453,11 @@ def collect_one(root: Path, record: ChangeRecord, args: argparse.Namespace, veri
         args.verify_log_sha256, args.verification_source,
         verify_log_text, args.notes, sync_out,
     )
-    initial_body = render_evidence(*values, 0, "(check runs after the initial evidence write)")
+    scope = getattr(args, "delivery_scope_context", None)
+    initial_body = render_evidence(*values, 0, "(check runs after the initial evidence write)", delivery_scope=scope)
     path = write_record_evidence(root, record, initial_body)
-    check_code, check_out = run_cmd(root, [sys.executable, "scripts/check_ai_context.py"], timeout=120)
-    final_body = render_evidence(*values, check_code, check_out)
+    check_code, check_out = run_cmd(root, [sys.executable, "scripts/check_ai_context.py"], timeout=getattr(args, "context_timeout", 120))
+    final_body = render_evidence(*values, check_code, check_out, delivery_scope=scope)
     path = write_record_evidence(root, record, final_body)
     return path, check_code
 
@@ -590,6 +596,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skipped-count", default="", help="Optional expected skipped count; checked against parsed output.")
     parser.add_argument("--verify-log", default="", help="Project-local .log/.txt destination overwritten with this run's output.")
     parser.add_argument("--verify-timeout", type=int, default=300, help="Verification command timeout in seconds.")
+    def positive_seconds(value):
+        seconds = int(value)
+        if seconds <= 0:
+            raise argparse.ArgumentTypeError("context timeout must be positive")
+        return seconds
+    parser.add_argument("--context-timeout", type=positive_seconds, default=120,
+                        help="Full context check timeout in seconds; failures still propagate (default: 120).")
     parser.add_argument("--notes", default="", help="Additional evidence notes.")
     return parser.parse_args()
 
@@ -616,6 +629,13 @@ def main() -> int:
         return 2
 
     record = records[0]
+    try:
+        args.delivery_scope_context = load_delivery_scope(root)
+        if args.delivery_scope_context and (record.kind != "REQ" or record.identifier != args.delivery_scope_context.requirement):
+            raise ValueError("Selected record differs from the active verified delivery scope.")
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 2
     try:
         verify_log_path, verification_errors = prepare_verification(root, record, args)
     except (OSError, ValueError) as exc:

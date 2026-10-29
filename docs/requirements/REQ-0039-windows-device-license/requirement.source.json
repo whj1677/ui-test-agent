@@ -1,0 +1,411 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0039",
+  "title": "Windows完整环境包与主板绑定永久授权",
+  "metadata": {
+    "requirement_status": "实现中",
+    "governance_level": "G2",
+    "version": 4,
+    "last_updated": "2026-09-28"
+  },
+  "original_input": "现在还有点额度，你直接把剩下的事情给干干吧。然后我们这个程序你想想怎么把整个程序给打包。然后我们还要做一个组件就是先采集使用者的硬件信息，我们有一个密钥生成，我们先拿到一个用户信息然后生成一个密钥，密钥输出一次以后永久保存再使用者的电脑，如果程序换了硬件环境我们程序就起不来。补充：绑定主板身份；换主板需重新授权，升级内存、硬盘不影响。考虑DeepSeek/Harness有无安装及路径不同；所需环境一起打包，包大没关系。",
+  "user_requirements": [
+    {
+      "id": "UN-0039-01",
+      "status": "已确认",
+      "goal": "提供自带运行环境的Windows便携包，以及主板绑定的离线永久授权；用户首次提交设备申请并导入发行者签发的许可，以后本机自动验证。",
+      "constraints": "仅主板绑定；不将开发机模型密钥、用户资料、签发私钥和绝对路径打包；正式功能测试只用4322原工作台。",
+      "success_criteria": "自带Node/Harness/插件/浏览器；无全局Node/Harness依赖；本机授权后重启可用，换主板/篡改/缺授权业务不可启动；真实界面及产物检查证据明确。"
+    }
+  ],
+  "confirmed_facts": [
+    "用户同意主板身份绑定，升级内存或硬盘不锁定，换主板由拥有者重新签发。",
+    "授权永久有效，仅本地校验；DeepSeek调用仍需使用者自己的API密钥和网络。",
+    "现有source-only打包器不是完整环境包，当前源码资源闭包须修复。",
+    "剩余DOCX内嵌PNG/JPEG补齐归REQ-0038，不将客户资料缺失伪装成产品验证。",
+    "用户要求授权模块作为独立组件供其他Agent链接复用；独立工程device-license，不把通用实现埋入本工作台。",
+    "用户进一步明确DLL形式独立组件；采用.NET Framework DLL，Node通过本地进程桥直接加载，不需要授权服务器。",
+    "已构建完整Windows x64便携r2候选：573128787字节，SHA256 706857c5de4d7552a927026a4277aceea9e3e1327c6b77c142ce7b27f145db84。Node22.19.0、三组602条锁定依赖、Harness固定插件、Chromium151与录像工具齐全；30587文件摘要及排密独立检查一致，包内固定required:true公开信任根。",
+    "本机实际包内Node/PATH排除全局Node及Harness，在中文空格新目录与同副本改名后两次执行完整性诊断、离线profile初始化、插件解析、真实Chromium截图和录像；未启动第二个工作台或业务模型。证据workbench/qa/20260926-portable/node-environment-r2/result.json与relocated-environment-r2/result.json。",
+    "正式4322真实浏览器完成同意采集、设备申请、坏签名拒绝、生产密钥签发导入、错误替换保留原许可、原配置重启自动授权。主管独立四项只读检查确认源码与独立SDK十文件摘要、原配置/数据根与10项目；该证据不等于客户便携包跨机业务验收。",
+    "独立device-license组件0.2.0实际.NET Framework托管DLL与本地Bridge，RSA3072/exponent65537/SHA256-PKCS1；18项实际DLL机制检查成功，包括真实主板与C#直接引用。错主板是签名合法的模拟摘要反例，不是实体换板。私钥为发行方DPAPI保护且不入包，客户只带公钥。",
+    "Windows PowerShell5.1读取Node UTF-8中文路径的编码缺陷已修复，新增实际回归；包装机制7项成功、0失败跳过。原候选Python写盘后跨进程字节不同的诊断失败保留，根因未确认；原ZIP的唯一Node对照后完整摘要一致，r2沿用同方法，未改变系统保护或放宽完整性规则。",
+    "本轮DOCX正式浏览器仅1次deepseek-flash请求4412tokens，0次Harness；JPEG观察与追溯正常，但候选提前校验句没有原文依据，保留待审未确认，详见REQ0038 v12及DOCX报告。",
+    "最终collector实际运行npm --prefix workbench test，233项成功、0失败跳过，测试退出0；collector因治理检查返回1。检查仍含REQ0015两处历史矛盾及本次REQ0038/0039混合需求规则，未改历史/门禁或合并范围。证据workbench/qa/20260926-packaged-license/unit-tests.log与本REQ delivery_evidence.md。git diff --check实际退出0。",
+    "2026-09-27首次路径复核：单独调用ensureHarnessRuntime且profile未准备时存在pnpm分支，但正式portable启动和启用模型入口均先调用setup-runtime.ps1，离线声明两插件并创建指向包内依赖的受管junction。旧verify-installed实际执行该入口准备并核对插件解析路径。因此此前“默认客户首次需要pnpm”的阶段性判断不成立，已叫停额外bootstrap改造；本轮须用新Skills包复验原路径。",
+    "2026-09-28新Skills 1.1包本机有限核验：冻结源码指纹9345b221c1e270935d54a20865200800b926c0a2f325683ff40c1cd4e965ba23，候选ZIP和Windows便携ZIP构建及独立字节核验退出0；普通PowerShell Expand-Archive解压到新中文空格目录退出0，包内Node完整性核验退出0；私有PATH与新RuntimeHome离线准备、固定插件解析、包内Chromium静态页截图和WebM探针退出0。证据workbench/qa/20260928-skills11/packaging-acceptance-summary.json；同机证据，不等于产品发布或干净Windows验收。"
+  ],
+  "inferences_and_open_questions": [
+    "纯软件离线校验限制复制和误用，不宣称抵抗管理员改码、固件伪造或虚拟机克隆。",
+    "本机解包/独立Node路径验收与干净Windows第二台机器验收分开，当前没有另一台机器。",
+    "客户资源管理器解压、干净Windows第二台机器和实体换主板尚未验；Node解包成功不代表本机跨进程文件保护差异根治。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0039-01",
+      "status": "已确认",
+      "requirement": "按白名单打包Node、三组锁定依赖、固定Harness插件与Chromium；不含凭据、工作数据或开发机绝对路径。",
+      "acceptance_criteria": "源闭包、依赖版本、精确清单和摘要可检查；离线准备无需npm或浏览器下载。",
+      "constraints": "不覆盖旧工作台数据，不发布或上传私钥。"
+    },
+    {
+      "id": "DR-0039-02",
+      "status": "已确认",
+      "requirement": "用户填写显示名称并同意后导出设备申请，只持久化产品隔离的主板指纹。",
+      "acceptance_criteria": "主板字段不可用或占位值拒绝，不降级绑定CPU、硬盘、MAC或账户。",
+      "constraints": "不覆盖旧工作台数据，不发布或上传私钥。"
+    },
+    {
+      "id": "DR-0039-03",
+      "status": "已确认",
+      "requirement": "发行私钥独立保存；永久许可证签名覆盖产品、主体、设备指纹和策略；业务初始化前验证。",
+      "acceptance_criteria": "缺失、篡改、错产品、错主板或无可信公钥时不初始化业务数据、不开放业务API。",
+      "constraints": "不覆盖旧工作台数据，不发布或上传私钥。"
+    },
+    {
+      "id": "DR-0039-04",
+      "status": "已确认",
+      "requirement": "同一4322入口提供激活指引、设备申请下载、许可证导入；成功后本地原子保存并启动；显式重新授权替换。",
+      "acceptance_criteria": "正常重启自动验证，重复导入幂等，错误文件不覆盖原有效许可。",
+      "constraints": "不覆盖旧工作台数据，不发布或上传私钥。"
+    },
+    {
+      "id": "DR-0039-05",
+      "status": "已确认",
+      "requirement": "优先包内Node/Harness/浏览器，目标路径动态解析，首次用户配置DPAPI模型密钥。",
+      "acceptance_criteria": "开发机路径不进入用户配置，缺全局Harness仍可执行本地自检；诊断区分授权、运行时、插件、浏览器、模型凭据。",
+      "constraints": "不覆盖旧工作台数据，不发布或上传私钥。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0039-01",
+      "dr_ids": [
+        "DR-0039-01"
+      ],
+      "status": "已确认",
+      "summary": "完整环境包",
+      "rationale": "按白名单打包Node、三组锁定依赖、固定Harness插件与Chromium；不含凭据、工作数据或开发机绝对路径。"
+    },
+    {
+      "id": "DD-0039-02",
+      "dr_ids": [
+        "DR-0039-02"
+      ],
+      "status": "已确认",
+      "summary": "设备申请",
+      "rationale": "用户填写显示名称并同意后导出设备申请，只持久化产品隔离的主板指纹。"
+    },
+    {
+      "id": "DD-0039-03",
+      "dr_ids": [
+        "DR-0039-03"
+      ],
+      "status": "已确认",
+      "summary": "离线签发与启动校验",
+      "rationale": "发行私钥独立保存；永久许可证签名覆盖产品、主体、设备指纹和策略；业务初始化前验证。"
+    },
+    {
+      "id": "DD-0039-04",
+      "dr_ids": [
+        "DR-0039-04"
+      ],
+      "status": "已确认",
+      "summary": "激活与持久化",
+      "rationale": "同一4322入口提供激活指引、设备申请下载、许可证导入；成功后本地原子保存并启动；显式重新授权替换。"
+    },
+    {
+      "id": "DD-0039-05",
+      "dr_ids": [
+        "DR-0039-05"
+      ],
+      "status": "已确认",
+      "summary": "运行环境适配",
+      "rationale": "优先包内Node/Harness/浏览器，目标路径动态解析，首次用户配置DPAPI模型密钥。正式portable入口先调用setup-runtime.ps1声明固定插件与受管依赖junction；本轮沿用此架构，以新包空白应用私有目录和无全局pnpm的PATH复验，不改用户全局profile。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "设备申请（显示名+主板hash）→拥有者离线RSA3072/SHA256签发→使用者导入→验签并原子落盘→每次启动重新采集主板并验签→正式工作台。",
+    "包内固定信任根；不允许环境变量关闭发布包授权；开发源模式显式区分且不得作为客户包。",
+    "独立@offline/device-license组件，product参数和签名域隔离；工作台通过本地包依赖接入，完整包仅携带组件运行白名单。",
+    "独立.NET托管DLL在本地自行读取主板并验签；Node不得传入假hardware作为生产放行依据。C#可直接引用DLL，Node/Python可使用配套DeviceLicense.Bridge.exe本地标准输入输出；不是原生C ABI，无网络授权服务器。"
+  ],
+  "module_document_impact": [
+    "workbench启动、便携发布、licensing新模块、requirements DOCX图片另归REQ-0038。"
+  ],
+  "risks_and_rollback": [
+    "现有正式实例保持至空闲并重启；源码和数据保留，授权存于独立本地目录。",
+    "纯离线软件防篡改能力有限；不得保证永不破解；主板维修或固件报告变化须重新授权。",
+    "Windows永久保存不等于文件无法删除，丢失时可重新导入原许可；同主板系统重装不强制重签。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0039-01",
+      "dr_ids": [
+        "DR-0039-01"
+      ],
+      "dd_ids": [
+        "DD-0039-01"
+      ],
+      "status": "本机新包核验完成；发布待确认",
+      "task": "完整环境包",
+      "verification_ids": [
+        "VT-0039-01"
+      ]
+    },
+    {
+      "id": "TK-0039-02",
+      "dr_ids": [
+        "DR-0039-02"
+      ],
+      "dd_ids": [
+        "DD-0039-02"
+      ],
+      "status": "已完成",
+      "task": "设备申请",
+      "verification_ids": [
+        "VT-0039-02"
+      ]
+    },
+    {
+      "id": "TK-0039-03",
+      "dr_ids": [
+        "DR-0039-03"
+      ],
+      "dd_ids": [
+        "DD-0039-03"
+      ],
+      "status": "已完成",
+      "task": "离线签发与启动校验",
+      "verification_ids": [
+        "VT-0039-03"
+      ]
+    },
+    {
+      "id": "TK-0039-04",
+      "dr_ids": [
+        "DR-0039-04"
+      ],
+      "dd_ids": [
+        "DD-0039-04"
+      ],
+      "status": "已完成",
+      "task": "激活与持久化",
+      "verification_ids": [
+        "VT-0039-04"
+      ]
+    },
+    {
+      "id": "TK-0039-05",
+      "dr_ids": [
+        "DR-0039-05"
+      ],
+      "dd_ids": [
+        "DD-0039-05"
+      ],
+      "status": "已完成",
+      "task": "运行环境适配",
+      "verification_ids": [
+        "VT-0039-05"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0039-01",
+      "dr_ids": [
+        "DR-0039-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "完整环境包",
+      "evidence_standard": "源闭包、依赖版本、精确清单和摘要可检查；离线准备无需npm或浏览器下载。",
+      "current_evidence": "Skills 1.1新包同机有限核验（无单元测试计数）：候选包构建及独立字节核验 exit 0，日志 workbench/qa/20260928-skills11/candidate-build.log、candidate-verify.log，ZIP SHA-256 8a0b41ad5580ca4f355605148efaf10e415ed511f8d7dcd1e9061d959d571457；便携包构建及独立归档核验 exit 0，日志 portable-build.log、portable-archive-independent-verify.log/json，ZIP workbench/qa/20260928-skills11/portable-20260928-skills11.zip，SHA-256 8ddea91fdedcd498c4849ac0277ad2753bff6735591aca9e5a30410182cd9175。PowerShell Expand-Archive 到新中文空格目录 exit 0（expand-archive.log）；包内 Node 执行 workbench/scripts/verify-portable.mjs exit 0（portable-verify-expand-archive.log）；包内 Node 执行 workbench/qa/20260926-portable/verify-installed.mjs，以排除全局Node/Harness的私有PATH和新RuntimeHome离线准备、固定插件解析及Chromium静态页截图/WebM，exit 0（portable-installed.log、portable-installed/result.json）。汇总：workbench/qa/20260928-skills11/packaging-acceptance-summary.json；同机字节及运行时探针，不代表正式工作台产品验收、干净Windows、客户独立安装或实体换板。历史r2证据保留。"
+    },
+    {
+      "id": "VT-0039-02",
+      "dr_ids": [
+        "DR-0039-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "设备申请",
+      "evidence_standard": "主板字段不可用或占位值拒绝，不降级绑定CPU、硬盘、MAC或账户。",
+      "current_evidence": {
+        "command": "npm --prefix ../device-license test",
+        "exit_code": 0,
+        "test_count": 18,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "../device-license/qa/dll-tests.log"
+      }
+    },
+    {
+      "id": "VT-0039-03",
+      "dr_ids": [
+        "DR-0039-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "离线签发与启动校验",
+      "evidence_standard": "缺失、篡改、错产品、错主板或无可信公钥时不初始化业务数据、不开放业务API。",
+      "current_evidence": "正式4322浏览器激活及SDK坏许可保留原文件检查；范围和媒体详见报告；实际证据：workbench/qa/20260926-license-activation/REPORT.md。已执行范围详见总报告；不替代产品发布或干净机验收。"
+    },
+    {
+      "id": "VT-0039-04",
+      "dr_ids": [
+        "DR-0039-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "激活与持久化",
+      "evidence_standard": "正常重启自动验证，重复导入幂等，错误文件不覆盖原有效许可。",
+      "current_evidence": "正式4322按原启动器/配置关闭重启后真实浏览器检查；范围和媒体详见报告；实际证据：workbench/qa/20260926-license-activation/REPORT.md。已执行范围详见总报告；不替代产品发布或干净机验收。"
+    },
+    {
+      "id": "VT-0039-05",
+      "dr_ids": [
+        "DR-0039-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "人工待确认",
+      "item": "运行环境适配",
+      "evidence_standard": "开发机路径不进入用户配置，缺全局Harness仍可执行本地自检；诊断区分授权、运行时、插件、浏览器、模型凭据。",
+      "current_evidence": "包内node运行workbench/qa/20260926-portable/verify-installed.mjs；同机QA解包目录改名并复用私有runtime home；实际证据：workbench/qa/20260926-portable/relocated-environment-r2/result.json。已执行范围详见总报告；不替代产品发布或干净机验收。"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:\\01_AI工程\\01_工程项目\\ui-test-agent",
+    "commands": [
+      "npm --prefix workbench test",
+      "node --test workbench/tests/portable-package.test.mjs",
+      "python workbench/scripts/package-portable.py --TrustFile ../device-license/public/ui-test-agent-trust.json <本轮r2构建参数，见脚本与build-r2.log>",
+      "python workbench/qa/20260926-portable/verify-archive.py --archive <r2完整ZIP> --output <archive-verification-r2.json>",
+      "包内node verify-installed.mjs <中文空格解包根> <证据目录> <私有runtime home>",
+      "PowerShell Expand-Archive（新Skills 1.1便携ZIP→同机中文空格新目录；命令与exit 0见workbench/qa/20260928-skills11/expand-archive.log及packaging-acceptance-summary.json）",
+      "包内Node workbench/scripts/verify-portable.mjs（exit 0，见workbench/qa/20260928-skills11/portable-verify-expand-archive.log）",
+      "包内Node workbench/qa/20260926-portable/verify-installed.mjs（私有PATH/RuntimeHome，exit 0，见workbench/qa/20260928-skills11/portable-installed.log）"
+    ],
+    "environment": [
+      "Windows / PowerShell5.1；唯一正式4322，原fresh-b/fresh25-b及原配置不变；无另一工作台。",
+      "目标Windows10/11 x64与系统.NET Framework4.8；客户不用编译器/全局Node/Harness，包内Node与浏览器；AI请求另外需要用户Key及网络。",
+      "包环境验收仅本机新路径和真实重定位，子进程PATH排除全局Node/Harness；独立DLL机制与正式业务工作台分别取证。"
+    ],
+    "conclusion": [
+      "完整r2候选及本机运行环境核验已执行，正式4322设备申请/导入/拒绝/重启持久化已执行，详细证据workbench/qa/20260926-packaged-license/REPORT.md。",
+      "工程实现任务已完成，五项完整产品VT保持人工待确认；干净Windows/第二实体主板/普通用户独立安装/受保护客户文档仍未验，不判产品发布通过。",
+      "最终受控工程233项成功、0失败/跳过（测试退出0）；与独立DLL18项不能相加作为产品覆盖率。治理检查非零：历史REQ0015两处及本轮两个明确REQ同时变更，未为过门禁改需求或历史。",
+      "Skills 1.1新候选ZIP与便携ZIP已在同机完成独立字节核验；PowerShell新中文空格路径解压、包内Node自检、私有PATH/RuntimeHome离线准备、Chromium静态页截图与WebM探针均实际退出0。证据workbench/qa/20260928-skills11/packaging-acceptance-summary.json；不是正式工作台业务验收，也不是干净Windows或第二实体主板验收。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0039-01",
+      "dr_id": "DR-0039-01",
+      "dd_id": "DD-0039-01",
+      "tk_id": "TK-0039-01",
+      "vt_id": "VT-0039-01",
+      "status": "新Skills 1.1本机包字节与离线运行环境核验已完成；发布/干净Windows人工待确认"
+    },
+    {
+      "un_id": "UN-0039-01",
+      "dr_id": "DR-0039-02",
+      "dd_id": "DD-0039-02",
+      "tk_id": "TK-0039-02",
+      "vt_id": "VT-0039-02",
+      "status": "实现已完成；本机有限验收已执行，完整产品人工待确认"
+    },
+    {
+      "un_id": "UN-0039-01",
+      "dr_id": "DR-0039-03",
+      "dd_id": "DD-0039-03",
+      "tk_id": "TK-0039-03",
+      "vt_id": "VT-0039-03",
+      "status": "实现已完成；本机有限验收已执行，完整产品人工待确认"
+    },
+    {
+      "un_id": "UN-0039-01",
+      "dr_id": "DR-0039-04",
+      "dd_id": "DD-0039-04",
+      "tk_id": "TK-0039-04",
+      "vt_id": "VT-0039-04",
+      "status": "实现已完成；本机有限验收已执行，完整产品人工待确认"
+    },
+    {
+      "un_id": "UN-0039-01",
+      "dr_id": "DR-0039-05",
+      "dd_id": "DD-0039-05",
+      "tk_id": "TK-0039-05",
+      "vt_id": "VT-0039-05",
+      "status": "实现已完成；本机有限验收已执行，完整产品人工待确认"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    },
+    {
+      "version": 2,
+      "link": "../../../workbench/qa/20260926-packaged-license/REPORT.md",
+      "status": "本机有限验收已执行",
+      "notes": "保留首包和Python解压失败；r2中文路径修复复验及正式4322授权证据，未发布。"
+    },
+    {
+      "version": 3,
+      "link": "无",
+      "status": "新Skills包待重建",
+      "notes": "保留首次初始化路径复核：正式portable入口已有离线profile及受管junction；待新Skills包重建，不覆盖r2/a7证据。"
+    },
+    {
+      "version": 4,
+      "link": "../../../workbench/qa/20260928-skills11/packaging-acceptance-summary.md",
+      "status": "Skills 1.1本机包核验完成，发布待确认",
+      "notes": "新候选及便携ZIP字节核验、PowerShell普通解压、包内Node及私有PATH/RuntimeHome离线探针均退出0；clean Windows、实体主板、客户安装未验。"
+    }
+  ],
+  "open_questions": [
+    "无阻塞本轮实现的业务输入；干净Windows第二台机器、实体更换主板和客户独立安装证据缺失，保留未验。",
+    "本机Python/Node对部分文档读取字节不同，原因未确认；未更改系统保护。"
+  ],
+  "prohibited_implementation": [
+    "不收集原始硬件序列号到报告/模型/客户申请文件；不把签发私钥或模型凭据入包。",
+    "不以假指纹模拟当真实换硬件证据；模拟反例与实机采集分列。"
+  ],
+  "changes": [
+    {
+      "date": "2026-09-26",
+      "version": 1,
+      "type": "新建",
+      "description": "用户授权完整环境包及主板永久授权；独立组件供其他Agent接入。",
+      "impact": "新增独立device-license与主库启动适配及便携打包。",
+      "confirmed_by": "用户2026-09-26确认主板绑定及独立组件。"
+    },
+    {
+      "date": "2026-09-26",
+      "version": 2,
+      "type": "实现及有限验收",
+      "description": "完成全环境r2候选、独立.NET DLL接入、首次DPAPI配置、同机中文路径重定位及正式4322真实激活与重启；完整产品VT不扩大为通过。",
+      "impact": "新增部署产物/独立授权组件与证据；正式数据原位保留，未提交推送。",
+      "confirmed_by": "用户已授权实现与真实验收，主管按实际证据独立复核。"
+    },
+    {
+      "date": "2026-09-27",
+      "version": 3,
+      "type": "Skills包及首次初始化路径复核",
+      "description": "用户授权继续未完事项。初步审查遗漏setup-runtime而怀疑首次初始化依赖pnpm；主管核对portable启动、启用模型和原真实探针后推翻该判断，叫停不必要的bootstrap改造。新Skills包构建与独立核验仍进行中。",
+      "impact": "沿用已有离线profile/junction架构，更新含Skills的候选包；DLL、硬件策略、旧包和旧证据保持。",
+      "confirmed_by": "start-workbench.ps1:106、enable-model-workbench.ps1:14、setup-runtime.ps1及旧verify-installed.mjs。"
+    },
+    {
+      "date": "2026-09-28",
+      "version": 4,
+      "type": "Skills 1.1本机包有限验收",
+      "description": "完成Skills 1.1新候选/便携ZIP构建及独立字节核验、普通Windows PowerShell解压、包内Node与私有RuntimeHome离线探针；保留r2/a7历史证据。",
+      "impact": "TK-0039-01从待重包更新为本机新包核验完成；发布、干净Windows与客户独立安装仍待确认，未扩展DLL或实体换板结论。",
+      "confirmed_by": "主管复核workbench/qa/20260928-skills11/packaging-acceptance-summary.json/.md、原日志与截图/录像。"
+    }
+  ]
+}

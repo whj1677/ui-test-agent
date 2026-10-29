@@ -21,7 +21,7 @@ assert.ok(Array.isArray(projects.projects));
 const result={schema:'workbench/official-readonly-check-v1',at:new Date().toISOString(),entry:base+'/workspace/',
   scope:'read-only official service and source identity; no new business/model execution',checks:4,
   service_identity:health.service_identity,project_count:projects.projects.length,
-  active:Boolean(health.active_run_id||health.active_build_task_id||health.active_batch_id||health.active_script_operation_id||health.preparing)};
+  active:Boolean(health.active_demonstration_id||health.active_run_id||health.active_build_task_id||health.active_batch_id||health.active_script_operation_id||health.preparing||health.requirements?.active||health.backend||health.case_assistant?.active_turn_id||health.case_assistant?.starting)};
 const index=process.argv.indexOf('--output');
 if(index!==-1){if(!process.argv[index+1])throw Error('OUTPUT_PATH_REQUIRED');await fs.writeFile(path.resolve(process.argv[index+1]),JSON.stringify(result,null,2)+'\n');}
 console.log(JSON.stringify(result,null,2));

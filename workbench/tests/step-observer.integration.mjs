@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -46,21 +47,24 @@ assert(success.observations.every((item) => item.started_at <= item.business_sta
 const browser = await chromium.launch({ executablePath: executable, headless: true });
 try {
   const page = await browser.newPage();
-  async function visualText(file) {
+  async function visualPixelHash(file) {
     const bytes = await fs.readFile(file);
     await page.setContent(`<img id="evidence" src="data:image/png;base64,${bytes.toString('base64')}">`);
-    return page.evaluate(async () => {
+    const rgbaBase64 = await page.evaluate(async () => {
       const image = document.querySelector('#evidence'); await image.decode();
       const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
       canvas.getContext('2d').drawImage(image, 0, 0);
       const pixel = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
-      let hash = 0; for (let i = 0; i < pixel.length; i += 64) hash = (hash * 31 + pixel[i]) >>> 0;
-      return hash;
+      let bytes = '';
+      for (let offset = 0; offset < pixel.length; offset += 8192)
+        bytes += String.fromCharCode(...pixel.subarray(offset, offset + 8192));
+      return btoa(bytes);
     });
+    return createHash('sha256').update(Buffer.from(rgbaBase64, 'base64')).digest('hex');
   }
   const hashes = [];
   for (const step of success.observations) for (const capture of step.captures)
-    hashes.push(await visualText(path.join(success.evidenceDir, capture.file_name)));
+    hashes.push(await visualPixelHash(path.join(success.evidenceDir, capture.file_name)));
   assert.equal(hashes[1], hashes[2], 'same B scene belongs to step 1 end and step 2 start');
   assert.equal(hashes[2], hashes[3], 'pure assertion has same before/after scene');
   assert.equal(hashes[3], hashes[4], 'rapid following step begins at same B scene');

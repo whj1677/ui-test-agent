@@ -10,6 +10,7 @@ import { BuildTaskStore } from '../server/build/store.mjs';
 import { BuildTaskManager } from '../server/build/manager.mjs';
 import { CaseLibraryStore } from '../server/cases/store.mjs';
 import { contentHash } from '../server/cases/excel.mjs';
+import { developmentRecords } from '../server/build/candidate-trials.mjs';
 import { digest } from '../server/build/development-session.mjs';
 import { developmentBundle } from '../server/build/development-bundle.mjs';
 import { createWorkbenchServer } from '../server/app.mjs';
@@ -100,4 +101,47 @@ test('user-owned normal rerun uses verified local target without model grant; ne
   const r=await f.manager.startCandidateTrial(f.request);await f.manager.settle();assert.equal(f.counts().executes,1);
   const saved=await f.runStore.getRun(r.run_id);assert.equal(saved.model_calls,0);assert.equal(saved.approval_status,'NOT_APPROVED');
   assert.equal(saved.bundle.sha256,f.request.bundle_sha256);
+});
+test('independent media uses exact frozen paths and hashes without borrowing another run', () => {
+  const file = { file_id: 'own-video', relative_path: 'development/independent-1/evidence/video.webm', bytes: 100, sha256: 'same' };
+  const task = { task_id: 'build-own', source: { project_id: 'project-one', case_id: 'case-one', case_version: 1, external_id: 'UI-1' }, input_bundle: { snapshot: { content: { steps: [] } } },
+    development: { self_tests: [] }, candidates: [{ version: 1, bundle: { sha256: 'bundle' }, trial_runs: [{ run_id: 'independent-one', run_type: 'normal',
+      media: [{ relative_path: 'independent-1/evidence/video.webm', bytes: 100, sha256: 'same' }] }] }],
+    files: [file, { ...file, file_id: 'wrong-hash', sha256: 'changed' }, { ...file, file_id: 'other-run', relative_path: 'development/independent-2/evidence/video.webm' }, { ...file, file_id: 'old-layout', relative_path: 'development/final/normal/video.webm' }] };
+  const original = JSON.stringify(task);
+  const [record] = developmentRecords(task);
+  assert.deepEqual(record.files.map(f => f.file_id), ['own-video']);
+  assert.equal(record.files[0].run_id, 'independent-one');
+  assert.equal(JSON.stringify(task), original, 'historical task is view-only');
+  task.candidates[0].trial_runs[0].media = [];
+  assert.deepEqual(developmentRecords(task)[0].files, [], 'empty manifest cannot borrow old-layout media');
+});
+
+test('project registered authenticated trial injects fixed path policy and memory authentication into actual verifier call', async t => {
+  const f = await fixture(t);
+  const origin = 'https://target.example.test';
+  const requirement = { environment_id: 'engineering', role: 'tester' };
+  await f.store.updateTask(f.request.source_task_id, task => ({ ...task, auth_requirement: requirement }));
+  f.manager.developmentEnvironments = [{ id: 'engineering', normal_url: `${origin}/app/`, auth_requirement: requirement }];
+  f.manager.candidateTrialEnvironments[0].configurationIdentity = { kind: 'registered-auth-target',
+    project_id: f.project.project_id, origin, path_prefix: '/app', normal_url: `${origin}/app/` };
+  let status = 'VALID';
+  const authState = { cookies: [], origins: [] };
+  f.manager.authSessions = { environment: () => ({ origin, session_termination_endpoints: [] }),
+    check: async () => ({ status }), beginTaskProtection: () => () => {}, stateForExecution: async () => authState };
+  f.manager.bindDevelopmentAuth = async () => ({ scope: { project_id: f.project.project_id, ...requirement },
+    session_version: 'memory-version', role: 'tester', account_id: 'test-user' });
+  f.manager.startDevelopmentAuthWatch = () => ({ detected: null, stop: async () => {} });
+  const original = f.manager.adapter.verifyCandidate;
+  let received;
+  f.manager.adapter.verifyCandidate = async options => { received = options; return original(options); };
+  status = 'EXPIRED';
+  await assert.rejects(f.manager.startCandidateTrial(f.request), /AUTH_SESSION_REQUIRED/);
+  assert.equal(f.counts().executes, 0);
+  status = 'VALID';
+  await f.manager.startCandidateTrial(f.request);
+  await f.manager.settle();
+  assert.equal(f.counts().executes, 1);
+  assert.deepEqual(received.networkPolicy, { origin, path_prefix: '/app' });
+  assert.equal(received.authStorageState, authState);
 });

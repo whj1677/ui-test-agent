@@ -292,7 +292,7 @@ test('DeepSeek failed connection records a safe error without exception message 
     key: secret,
     fetchImpl: async () => {
       requests++;
-      throw new Error(secret);
+      throw Object.assign(new Error(secret), { cause: { code: 'ECONNRESET', message: secret } });
     },
   });
   await assert.rejects(

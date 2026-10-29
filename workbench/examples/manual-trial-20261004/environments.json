@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-04T13:03:45.322Z",
+  "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+  "user_scope": "User selected local synthetic project preparation.",
+  "ui_environment_id": "user-target-c17add2d-5f08-4d10-b209-a57f944bc657",
+  "backend_environment_id": "env-12b49856-dbbb-45ef-8786-00cc301d5881",
+  "ui": {
+    "targets": [
+      {
+        "schema": "workbench/project-target-v1",
+        "environment_id": "user-target-c17add2d-5f08-4d10-b209-a57f944bc657",
+        "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+        "name": "设备台账 · 本次合成练习 UI",
+        "operator": "Codex（按用户选择准备公开合成练习）",
+        "origin": "http://127.0.0.1:4401",
+        "entry_url": "http://127.0.0.1:4401/ledger/",
+        "path_prefix": "/",
+        "protocol": "http:",
+        "configuration_sha256": "7AF2F3C08DE194924DA0161537719FA6DB0F8CE6951B97176AEFC219A44A1555",
+        "revision": 1,
+        "registered_at": "2026-10-04T13:03:45.215Z",
+        "ready": true
+      }
+    ]
+  },
+  "backend": {
+    "environments": [
+      {
+        "mode": "synthetic-namespace",
+        "environment_id": "env-12b49856-dbbb-45ef-8786-00cc301d5881",
+        "project_id": "project-ea3b7596-e327-4d3b-95bd-382ccd569e84",
+        "name": "设备台账 · 本次合成 namespace",
+        "base_url": "http://127.0.0.1:4401",
+        "non_production": true,
+        "authorized": true,
+        "reviewer": "Codex（按用户选择准备公开合成练习）",
+        "created_at": "2026-10-04T13:03:45.316Z",
+        "allowed_methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "allowed_headers": [
+          "x-synthetic-role"
+        ],
+        "allowed_header_values": {
+          "x-synthetic-role": [
+            "editor",
+            "viewer"
+          ]
+        },
+        "allowed_path_prefixes": [
+          "/api/v1/namespaces/",
+          "/__control/namespaces/"
+        ],
+        "namespace": {
+          "setup_path": "/__control/namespaces",
+          "resource_prefix": "/api/v1/namespaces/",
+          "cleanup_prefix": "/__control/namespaces/"
+        },
+        "id": "env-12b49856-dbbb-45ef-8786-00cc301d5881",
+        "configuration_sha256": "5098548884f202d766f133a9f79e4ffbfd48ae14cebcfaef578b95ac54c60c14"
+      }
+    ],
+    "plans": [],
+    "model_available": true,
+    "generation_limits": {
+      "wall_ms": 900000,
+      "tool_calls": 80,
+      "harness_starts": 1,
+      "self_tests": 5,
+      "quality_reviews": 3,
+      "independent_validations": 2
+    }
+  },
+  "models_started": 0,
+  "business_runs_started": 0,
+  "note": "Only target configuration. No exact candidate trial authorization or plan/case confirmation."
+}

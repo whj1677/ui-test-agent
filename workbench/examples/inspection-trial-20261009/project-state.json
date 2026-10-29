@@ -1,0 +1,18 @@
+{
+  "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+  "name": "手动体验 · 储能站巡检工单 · 20261009",
+  "entry": "http://127.0.0.1:4322/workspace/#/projects/project-148c9560-700b-4020-a4fc-7b57cc739bae",
+  "target": "http://127.0.0.1:4460/inspection/",
+  "phase": "PREPARED_FOR_USER",
+  "service_instance_id": "service-fe09f0f2-131d-4e40-a308-719485fe4b61",
+  "ui_environment_id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+  "backend_environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+  "prepared_at": "2026-10-09T01:25:39.825Z",
+  "frontend_cases": 6,
+  "backend_cases": 6,
+  "backend_ready": 6,
+  "frontend_ready": 6,
+  "old_projects_unchanged": 35,
+  "model_requests_started": 0,
+  "business_executions_started": 0
+}

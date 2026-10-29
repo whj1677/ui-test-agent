@@ -1,5 +1,7 @@
+import { withWindowTimeline } from './build/window-timeline.mjs';
 import { developmentRecords } from './build/candidate-trials.mjs';
 import { reviewFor } from './batches.mjs';
+import { buildFailureFeedback } from './failure-feedback.mjs';
 
 export async function projectRecords({buildStore, caseStore, store, buildManager}, projectId) {
   const project = await caseStore.getProject(projectId);
@@ -20,6 +22,9 @@ export async function projectRecords({buildStore, caseStore, store, buildManager
     run.requirement_review = reviewFor(buildManager, {...task.source, source_task_id: task.task_id, bundle_sha256: run.bundle_sha256});
     run.script_version = task.script_version || null;
   }
-  records.push(...(await store.listRuns()).filter(r => r.schema === 'workbench/candidate-trial-v1' && r.project_id === projectId));
-  return records.sort((a,b) => String(a.started_at).localeCompare(String(b.started_at)));
+  records.push(...(await store.listRuns()).filter(r => ['workbench/candidate-trial-v1','workbench/backend-run-v1'].includes(r.schema) && r.project_id === projectId));
+  const projected = await Promise.all(records.map(run => withWindowTimeline(run, store)));
+  return projected.map(run => ({ ...run, failure_feedback: buildFailureFeedback({ record: run,
+    caseContent: run.frozen_case_content || project.cases.find(c => c.case_id === (run.executed_case_id || run.case_id))?.versions.find(v => v.version === (run.executed_case_version || run.case_version))?.content }) }))
+    .sort((a,b) => String(a.started_at).localeCompare(String(b.started_at)));
 }

@@ -1,0 +1,171 @@
+{
+  "mode": "generate",
+  "environment_id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+  "quality_review_mode": "static-v1",
+  "skill_profile": "off",
+  "skill": {
+    "profile": "off",
+    "name": null,
+    "version": null,
+    "sha256": null
+  },
+  "items": [
+    {
+      "case_id": "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+      "external_id": "UI-WO-01",
+      "title": "新增工单并独立读回",
+      "case_version": 1,
+      "content_sha256": "EF23985784CD873573CAA209FFED0B4C6353D62F2FF9F70E7E223119CED931C1",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-c89c6019-0e9d-4064-bf0b-8b365471dffd",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    },
+    {
+      "case_id": "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+      "external_id": "UI-WO-02",
+      "title": "重复编号被拒绝且原记录不被覆盖",
+      "case_version": 1,
+      "content_sha256": "D386AB34F8940F59CD639A57DFB1C73A537177E3981400364F15F375845749CA",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-48a66b9d-80c6-4feb-b5d3-72cce6f6a4a9",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    },
+    {
+      "case_id": "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+      "external_id": "UI-WO-03",
+      "title": "只读角色新增被拒绝且数据不变",
+      "case_version": 1,
+      "content_sha256": "D5181FADD84DE7C38B4461DE5716F0C5C198AA849558F95CB07C7604FD2C3320",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-80088f66-3a16-4a0a-93cf-6149b2697554",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    },
+    {
+      "case_id": "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+      "external_id": "UI-WO-04",
+      "title": "按东站与待处理组合查询",
+      "case_version": 1,
+      "content_sha256": "0FB293379B758DC3A5AB875F47675FEE4A253FC642AB7A76BA85E861DF25C36E",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-162010f7-38e6-4e93-aedb-06f0c8fb48cb",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    },
+    {
+      "case_id": "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+      "external_id": "UI-WO-05",
+      "title": "待处理工单完成并持久化",
+      "case_version": 1,
+      "content_sha256": "986202BFC8E9EE692523D3CB0009CC9E8D786ACB16EB6066FB56BC50AA355D39",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-b355a58c-41c2-4d69-bad1-1cde20108431",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    },
+    {
+      "case_id": "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+      "external_id": "UI-WO-06",
+      "title": "已完成工单禁止重复完成",
+      "case_version": 1,
+      "content_sha256": "2833264B43A5ACB0473ABA3D7736C26F5025E5261EA0C18364EF7BD07CBB4A27",
+      "old_scripts": [],
+      "logical_id": null,
+      "requires_model_confirmation": true,
+      "limits": {
+        "self_tests": 3,
+        "revisions": 2,
+        "tool_calls": 120,
+        "harness_starts": 1,
+        "quality_reviews": 3,
+        "independent_validations": 2,
+        "wall_ms": 1200000
+      },
+      "state": "QUEUED",
+      "reason": null,
+      "input": {
+        "case_id": "case-5c158bda-4bf9-419d-a7f7-caab70fc4a01",
+        "case_version": 1
+      },
+      "revision_evidence": null
+    }
+  ],
+  "model_calls_required": true
+}

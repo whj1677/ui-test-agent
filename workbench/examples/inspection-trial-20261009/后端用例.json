@@ -1,0 +1,222 @@
+{
+  "schema": "workbench/case-package-v1",
+  "package_id": "inspection-trial-20261009-BACKEND-v1",
+  "cases": [
+    {
+      "package_case_id": "API-WO-01",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-01",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-01",
+        "title": "新增工单并独立读回",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+            "expected": "HTTP 201；created=true；item={\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；总数 4；WO-2001 恰好一条，五字段为 {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}；原有三条完整对象 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "API-WO-02",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-02",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-02",
+        "title": "重复编号被拒绝且原记录不被覆盖",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}。",
+            "expected": "HTTP 409；error.code=DUPLICATE_CODE；error.message 为非空重复说明。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "API-WO-03",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-03",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-03",
+        "title": "只读角色新增被拒绝且数据不变",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}；x-synthetic-role=viewer；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=viewer；JSON {\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+            "expected": "HTTP 403；error.code=FORBIDDEN；error.message 为非空权限拒绝说明。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。不存在 WO-2002。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "API-WO-04",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-04",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-04",
+        "title": "按东站与待处理组合查询",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"station\":\"EAST\",\"status\":\"PENDING\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders?station=EAST&status=PENDING。",
+            "expected": "HTTP 200；total=1；items 恰好等于 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}]。不得包含 WO-1002 或 WO-1003。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "API-WO-05",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-05",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-05",
+        "title": "待处理工单完成并持久化",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"code\":\"WO-1001\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "POST /api/v1/namespaces/{{runId}}/orders/WO-1001/complete；请求头 x-synthetic-role=editor；不发送正文。",
+            "expected": "HTTP 200；updated=true；item={\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；总数 3；WO-1001 五字段为 {\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}；其余两条完整对象 [{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "package_case_id": "API-WO-06",
+      "source_version": 1,
+      "root_source": {
+        "type": "public-synthetic",
+        "stable_id": "inspection-20261009-API-WO-06",
+        "file_name": "01-PRD.md"
+      },
+      "lineage": [],
+      "content": {
+        "external_id": "API-WO-06",
+        "title": "已完成工单禁止重复完成",
+        "case_type": "BACKEND",
+        "module": "储能站巡检工单",
+        "preconditions": "Base URL=http://127.0.0.1:4460。测试编排 setup 先 POST /__control/namespaces，JSON {\"runId\":\"{{runId}}\"}，必须 HTTP 201 且 created=true。业务步骤结束后，无论成败均在 cleanup DELETE /__control/namespaces/{{runId}}，核对 HTTP 200 且 deleted=true。setup/cleanup 不属于下面三个业务步骤。每条单独空间，无需登录。",
+        "test_data": "{\"code\":\"WO-1003\"}；x-synthetic-role=editor；runId=每次执行生成的唯一编号。基线 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+        "steps": [
+          {
+            "order": 1,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+            "expected": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。"
+          },
+          {
+            "order": 2,
+            "action": "POST /api/v1/namespaces/{{runId}}/orders/WO-1003/complete；请求头 x-synthetic-role=editor；不发送正文。",
+            "expected": "HTTP 409；error.code=ALREADY_COMPLETED；error.message 为非空已完成说明。"
+          },
+          {
+            "order": 3,
+            "action": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+            "expected": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。"
+          }
+        ],
+        "status": "CONFIRMED"
+      }
+    }
+  ]
+}

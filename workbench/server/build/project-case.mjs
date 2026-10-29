@@ -15,6 +15,8 @@ export function bindProjectCaseVerification(content, environmentDefinition) {
     if (content.external_id !== binding.case_id) return null;
   } else if (binding.kind === 'auth-session') {
     // 登录态由任务级认证要求与运行时会话版本绑定，不在用例内容层校验。
+  } else if (binding.kind === 'registered-user-target') {
+    // Runtime network policy enforces this exact origin and path scope.
   } else return null;
   return {
     ...structuredClone(environmentDefinition.internal.verification),
@@ -89,6 +91,7 @@ export function renderProjectCaseAgentInstruction(template, { entryUrl, candidat
 
 export function assembleProjectCaseInput(options) {
   const { project, item, versionRecord, environmentTemplate, counterexampleActual, frozenAt } = options;
+  if (versionRecord.content.case_type === 'BACKEND') throw Error('BACKEND_EXECUTOR_NOT_CONFIGURED');
   let environmentDefinition = options.environmentDefinition;
   if (!environmentDefinition && environmentTemplate) {
     environmentDefinition = {
@@ -106,6 +109,9 @@ export function assembleProjectCaseInput(options) {
     };
   }
   const publicTemplate = environmentDefinition.public;
+  // Original spreadsheet fields are audit material, never model input or an execution oracle.
+  const modelRootSource = structuredClone(item.root_source);
+  if (modelRootSource) delete modelRootSource.source_fields;
   const source = {
     kind: 'project-case',
     project_id: project.project_id,
@@ -114,15 +120,20 @@ export function assembleProjectCaseInput(options) {
     external_id: versionRecord.content.external_id,
     case_version: versionRecord.version,
     content_sha256: versionRecord.content_sha256,
-    root_source: structuredClone(item.root_source),
+    root_source: modelRootSource,
     lineage: structuredClone(item.lineage),
   };
   const environmentRef = {
     environment_id: environmentDefinition.environment_id,
+    ...(options.projectEnvironmentIdentity ? { project_environment_identity: structuredClone(options.projectEnvironmentIdentity) } : {}),
     template_id: publicTemplate.template_id,
     template_version: publicTemplate.version,
     allowed_entry: structuredClone(publicTemplate.allowed_entry),
     candidate_contract: structuredClone(publicTemplate.candidate_contract),
+    ...(publicTemplate.allowed_entry?.kind === 'registered-user-target' ? {
+      network_policy: { origin: publicTemplate.allowed_entry.origin, path_prefix: publicTemplate.allowed_entry.path_prefix,
+        configuration_sha256: publicTemplate.allowed_entry.configuration_sha256 },
+    } : {}),
   };
   const binding = environmentDefinition.internal.binding;
   if (binding.kind === 'exact-content' && versionRecord.content_sha256 !== binding.content_sha256) {

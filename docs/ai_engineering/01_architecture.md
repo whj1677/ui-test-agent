@@ -1,5 +1,7 @@
 # 01 架构说明
 
+2026-10-04（REQ-0038 v41）：项目测试环境配置 → 项目绑定修订（UI/HTTP ID + 配置摘要）→ 生成/示范/候选/HTTP 执行前校验。绑定服务由 `workbench/server/index.mjs` 统一装配；旧注册表、脚本、计划与运行历史保持原身份。接口与兼容边界见 `docs/modules/workbench-case-library.md` 和本轮 `workbench/qa/20261004-project-environment/REPORT.md`。
+
 ## 结论
 
 本文档基于当前项目目录和构建文件自动草拟。模块职责、上下游依赖和关键数据流需要后续人工确认。

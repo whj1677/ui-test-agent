@@ -10,6 +10,7 @@ import { startUnfamiliarSite, siteRoot } from '../../scripts/unfamiliar-site-ser
 export function frozenTrialEnvironment(config) {
   if(config.kind === 'registered-static-html') return staticEnvironment(config);
   if(config.kind === 'registered-auth-target') return authEnvironment(config);
+  if(config.kind === 'registered-user-target') return registeredUserEnvironment(config);
 
   const check = async () => {
     try {
@@ -32,7 +33,49 @@ export function frozenTrialEnvironment(config) {
   } };
 }
 
+function registeredUserEnvironment(config) {
+  const check = async () => {
+    let entry;
+    try { entry = new URL(config.normal_url); } catch { throw Error('PROJECT_TARGET_ENTRY_URL_INVALID'); }
+    const prefix = config.path_prefix;
+    const rawPath = typeof config.normal_url === 'string'
+      ? config.normal_url.match(/^[a-z][a-z0-9+.-]*:\/\/[^/?#]*(\/[^?#]*)?/i)?.[1] || '/'
+      : '/';
+    let decodedPath;
+    try { decodedPath = decodeURIComponent(entry.pathname); } catch { throw Error('PROJECT_TARGET_CONFIGURATION_CHANGED'); }
+    if (typeof config.normal_url !== 'string' || config.normal_url.length > 2048 ||
+        /[\\\u0000-\u001f]/.test(config.normal_url) ||
+        entry.origin !== config.origin || entry.username || entry.password || entry.hash ||
+        !['http:', 'https:'].includes(entry.protocol) ||
+        (['127.0.0.1', 'localhost', '[::1]'].includes(entry.hostname.toLowerCase()) && entry.port === '4322') ||
+        typeof prefix !== 'string' || !prefix.startsWith('/') || prefix.startsWith('//') ||
+        /[\\?#%\u0000-\u001f]/.test(prefix) || prefix.split('/').some(part => part === '.' || part === '..') ||
+        /%(?:2e|2f|5c)/i.test(rawPath) || /\\/.test(rawPath) ||
+        rawPath.split('/').some(part => part === '.' || part === '..') ||
+        decodedPath.includes('%') || decodedPath.includes('\\') ||
+        decodedPath.split('/').some(part => part === '.' || part === '..') ||
+        !(prefix === '/' || decodedPath === prefix || decodedPath.startsWith(`${prefix}/`)))
+      throw Error('PROJECT_TARGET_CONFIGURATION_CHANGED');
+    if (config.kind === 'registered-auth-target') return true;
+    try {
+      const response = await fetch(entry, { signal: AbortSignal.timeout(2500), redirect: 'error' });
+      await response.body?.cancel();
+      if (!response.ok) throw Error('unavailable');
+    } catch { throw Error('GENERATION_TARGET_UNREACHABLE'); }
+    return true;
+  };
+  return { id: config.id, configurationIdentity: config, check, async acquire(lane) {
+    if (lane !== 'normal') throw Error('TRIAL_ENVIRONMENT_UNAVAILABLE');
+    await check();
+    return { url: config.normal_url, identity: { environment_id: config.id, url: config.normal_url,
+      name: typeof config.name === 'string' ? config.name : null,
+      origin: config.origin, path_prefix: config.path_prefix, configuration_sha256: config.configuration_sha256,
+      ownership: 'REGISTERED_USER_TARGET' }, release: async () => {} };
+  } };
+}
+
 function authEnvironment(config) {
+  if (config.project_id) return registeredUserEnvironment(config);
   return { id: config.id, configurationIdentity: config,
     async check() {
       let entry;

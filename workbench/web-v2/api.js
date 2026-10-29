@@ -23,7 +23,8 @@ export async function api(path, options = {}) {
 export async function uploadCaseFile(file) {
   const lower = file.name.toLocaleLowerCase();
   const contentType = lower.endsWith('.json') ? 'application/json'
-    : lower.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : '';
+    : lower.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      : lower.endsWith('.csv') ? 'text/csv' : '';
   if (!contentType) throw new ApiError('CASE_UPLOAD_TYPE_UNSUPPORTED', 400);
   if (file.size > 10 * 1024 * 1024) throw new ApiError('CASE_UPLOAD_SIZE_INVALID', 413);
   let response;

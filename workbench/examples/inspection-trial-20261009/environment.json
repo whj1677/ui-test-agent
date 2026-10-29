@@ -1,0 +1,144 @@
+{
+  "schema": "workbench/project-environment-v1",
+  "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+  "revision": 1,
+  "ui_environment_id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+  "backend_environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+  "ui_identity": {
+    "environment_id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+    "configuration_sha256": "ba4ae699e41db13f88f9acdb0d9fbf842bf34fe669947219fd446db833366326"
+  },
+  "backend_identity": {
+    "environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+    "configuration_sha256": "532e96e72c4cf1e29ac3e3ce9975f79dd1b809a681bcf4613f657a9f1b8053cc"
+  },
+  "updated_at": "2026-10-09T01:25:38.339Z",
+  "ui_options": [
+    {
+      "id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+      "name": "巡检工单 · 前端环境",
+      "entry_url": "http://127.0.0.1:4460/inspection/",
+      "source": "PROJECT_UI_REGISTRATION",
+      "operator": "Codex：按用户要求准备本地合成练习",
+      "registered_at": "2026-10-09T01:25:38.263Z",
+      "validation_mode": "normal-only",
+      "browser": "每次独立启动测试浏览器（后台无窗口）",
+      "user_registered_target": true,
+      "target_scope": {
+        "origin": "http://127.0.0.1:4460",
+        "path_prefix": "/"
+      },
+      "configuration_sha256": "E03A93855C45FC743E9D3B335830813AB1A0D589DC2C109E352DF660367BE445",
+      "demonstration_ready": true,
+      "demonstration_configuration_sha256": "E03A93855C45FC743E9D3B335830813AB1A0D589DC2C109E352DF660367BE445",
+      "ready": true,
+      "preparation": "REGISTERED_USER_TARGET",
+      "entry": "http://127.0.0.1:4460/inspection/",
+      "origin": "http://127.0.0.1:4460",
+      "path_prefix": "/",
+      "auth_required": false
+    }
+  ],
+  "backend_options": [
+    {
+      "mode": "synthetic-namespace",
+      "environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+      "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+      "name": "巡检工单 · 后端环境",
+      "base_url": "http://127.0.0.1:4460",
+      "non_production": true,
+      "authorized": true,
+      "reviewer": "Codex：按用户要求准备本地合成练习",
+      "created_at": "2026-10-09T01:25:38.330Z",
+      "allowed_methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "allowed_headers": [
+        "x-synthetic-role"
+      ],
+      "allowed_header_values": {
+        "x-synthetic-role": [
+          "editor",
+          "viewer"
+        ]
+      },
+      "allowed_path_prefixes": [
+        "/api/v1/namespaces/",
+        "/__control/namespaces/"
+      ],
+      "namespace": {
+        "setup_path": "/__control/namespaces",
+        "resource_prefix": "/api/v1/namespaces/",
+        "cleanup_prefix": "/__control/namespaces/",
+        "run_id_prefix": "inspection"
+      },
+      "id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+      "configuration_sha256": "532e96e72c4cf1e29ac3e3ce9975f79dd1b809a681bcf4613f657a9f1b8053cc"
+    }
+  ],
+  "ui": {
+    "id": "user-target-e47e86b7-0e52-4b01-8217-82bf1c717f9b",
+    "name": "巡检工单 · 前端环境",
+    "entry_url": "http://127.0.0.1:4460/inspection/",
+    "source": "PROJECT_UI_REGISTRATION",
+    "operator": "Codex：按用户要求准备本地合成练习",
+    "registered_at": "2026-10-09T01:25:38.263Z",
+    "validation_mode": "normal-only",
+    "browser": "每次独立启动测试浏览器（后台无窗口）",
+    "user_registered_target": true,
+    "target_scope": {
+      "origin": "http://127.0.0.1:4460",
+      "path_prefix": "/"
+    },
+    "configuration_sha256": "E03A93855C45FC743E9D3B335830813AB1A0D589DC2C109E352DF660367BE445",
+    "demonstration_ready": true,
+    "demonstration_configuration_sha256": "E03A93855C45FC743E9D3B335830813AB1A0D589DC2C109E352DF660367BE445",
+    "ready": true,
+    "preparation": "REGISTERED_USER_TARGET",
+    "entry": "http://127.0.0.1:4460/inspection/",
+    "origin": "http://127.0.0.1:4460",
+    "path_prefix": "/",
+    "auth_required": false
+  },
+  "backend": {
+    "mode": "synthetic-namespace",
+    "environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+    "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+    "name": "巡检工单 · 后端环境",
+    "base_url": "http://127.0.0.1:4460",
+    "non_production": true,
+    "authorized": true,
+    "reviewer": "Codex：按用户要求准备本地合成练习",
+    "created_at": "2026-10-09T01:25:38.330Z",
+    "allowed_methods": [
+      "GET",
+      "POST",
+      "DELETE"
+    ],
+    "allowed_headers": [
+      "x-synthetic-role"
+    ],
+    "allowed_header_values": {
+      "x-synthetic-role": [
+        "editor",
+        "viewer"
+      ]
+    },
+    "allowed_path_prefixes": [
+      "/api/v1/namespaces/",
+      "/__control/namespaces/"
+    ],
+    "namespace": {
+      "setup_path": "/__control/namespaces",
+      "resource_prefix": "/api/v1/namespaces/",
+      "cleanup_prefix": "/__control/namespaces/",
+      "run_id_prefix": "inspection"
+    },
+    "id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+    "configuration_sha256": "532e96e72c4cf1e29ac3e3ce9975f79dd1b809a681bcf4613f657a9f1b8053cc"
+  },
+  "ui_status": "CONFIGURED",
+  "backend_status": "CONFIGURED"
+}

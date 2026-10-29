@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { randomUUID } from 'node:crypto';
 import { safeFeedback, developmentError } from './development-feedback.mjs';
+import { allowedBrowserTools } from './development-tool-guard.mjs';
 
 const object = (properties = {}, required = []) => ({ type: 'object', properties, required, additionalProperties: false });
 function valid(value, schema) {
@@ -13,18 +14,20 @@ function valid(value, schema) {
   return true;
 }
 export const DEVELOPMENT_TOOLS = [
+  { name: 'report_blocker', description: 'In self-test mode, stop this case early when an observed missing prerequisite prevents implementation. Quote the exact frozen precondition or test-data text, describe what was actually checked and the unresolved blocker. Requires a completed page observation. Does not create or pass a script, and does not assert that data is globally absent.', inputSchema: object({ requirement: { type: 'string' }, observed: { type: 'string' }, reason: { type: 'string' } }, ['requirement', 'observed', 'reason']) },
   { name: 'run_diagnostic', description: 'Run the prepared node --check command on snapshots of task JavaScript modules. No arbitrary command/path/URL or model credentials. Syntax diagnostics do not replace self_test.', inputSchema: object() },
   { name: 'read_draft', description: 'Read the frozen normal case, current editable draft and cumulative task budget.', inputSchema: object() },
   { name: 'write_draft', description: 'Statically check ES module syntax and permitted capabilities, then replace only this task draft. Rejected code is NOT saved. This does not execute or runtime-validate it. Supply the current SHA to prevent stale writes.', inputSchema: object({ code: { type: 'string' }, previous_sha256: { type: ['string', 'null'] } }, ['code', 'previous_sha256']) },
   { name: 'self_test', description: 'Execute an immutable snapshot of the current draft on the bound NORMAL environment. Returns actual Playwright error, steps, report and evidence. Max 3 executions per logical task; failed tests are feedback, not a tool failure.', inputSchema: object() },
   { name: 'read_evidence', description: 'Read this task development execution report or screenshot. No paths or URLs accepted.', inputSchema: object({ execution: { type: 'integer', minimum: 1, maximum: 3 }, kind: { type: 'string', enum: ['report', 'screenshot'] } }, ['execution', 'kind']) },
   { name: 'check_fidelity', description: 'Inspect finite original-obligation checks before submitting; returns helper/branch gaps and unknowns. This is not execution or human approval.', inputSchema: object() },
+  { name: 'review_candidate', description: 'Independently review the current fully self-tested package against the frozen case and trusted normal execution. No browser execution or human approval. Findings can be repaired in this same session.', inputSchema: object() },
   { name: 'submit_candidate', description: 'Freeze the current tested bytes and provide coverage for every original step. Stops editing. May report unresolved business difference, missing coverage or environmental blocking; never grants approval.', inputSchema: object({ sha256: { type: 'string' }, outcome: { type: 'string', enum: ['ready', 'business_difference', 'needs_analysis', 'environment_blocked', 'budget_exhausted'] }, coverage: { type: 'array', items: object({ order: { type: 'integer' }, requirement: { type: 'string' }, check_lines: { type: 'array', items: { type: 'integer' } }, execution: { type: 'integer' }, uncovered: { type: 'string' } }, ['order', 'requirement', 'check_lines', 'execution', 'uncovered']) } }, ['sha256', 'outcome', 'coverage']) },
 ];
 
 // Small stateless Streamable HTTP JSON-RPC endpoint; exercised with DSH's pinned MCP client.
 // The unguessable route is per-task and closed before independent final validation.
-export async function startDevelopmentMcp(invoke, { getState = () => ({}) } = {}) {
+export async function startDevelopmentMcp(invoke, { getState = () => ({}), beforeBrowserTool = null } = {}) {
   const route = `/${randomUUID()}`;
   let closing = false;
   const server = http.createServer(async (request, response) => {
@@ -43,6 +46,13 @@ export async function startDevelopmentMcp(invoke, { getState = () => ({}) } = {}
         response.end(JSON.stringify({ jsonrpc: '2.0', id: message.id, error: { code: -32601, message: 'Legacy initialize transport supported' } })); return;
       }
       else if (message.method === 'ping') result = {};
+      // Private harness hook; not a model tool and not charged a second tool call.
+      else if (message.method === 'workbench/browser-observation') {
+        if (!beforeBrowserTool || !allowedBrowserTools.includes(message.params?.tool) ||
+            !message.params?.args || typeof message.params.args !== 'object' || Array.isArray(message.params.args)) throw Error('BROWSER_OBSERVATION_HOOK_INVALID');
+        try { result = await beforeBrowserTool(message.params.tool, message.params.args); }
+        catch (error) { result = { allowed: false, ...safeFeedback(error, getState()) }; }
+      }
       else if (message.method === 'tools/list') result = { tools: DEVELOPMENT_TOOLS };
       else if (message.method === 'tools/call') {
         const tool = DEVELOPMENT_TOOLS.find(item => item.name === message.params?.name);

@@ -6,28 +6,33 @@
   <title>测试工作台 · 项目与用例</title>
   <link rel="stylesheet" href="/workspace/styles.css">
   <link rel="stylesheet" href="/workspace/product.css">
+  <link rel="stylesheet" href="/workspace/project-workflow.css">
+  <link rel="stylesheet" href="/workspace/case-review.css">
+  <link rel="stylesheet" href="/workspace/requirements.css">
+  <link rel="stylesheet" href="/workspace/execution-list.css">
+  <link rel="stylesheet" href="/workspace/workspace-v2.css">
+  <link rel="stylesheet" href="/workspace/project-setup.css">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <div class="shell">
     <aside class="sidebar" aria-label="工作台导航">
       <a class="brand" href="#/projects" aria-label="测试工作台首页">
-        <span class="brand-mark">W</span>
-        <span><strong>测试工作台</strong><small>PROJECT WORKSPACE</small></span>
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></span>
+        <span><strong>测试工作台</strong></span>
       </a>
-      <nav class="side-nav">
-        <a class="side-link active" data-nav href="#/projects" aria-current="page"><span class="nav-icon" aria-hidden="true">◇</span>项目</a>
-        <span class="side-link disabled" aria-disabled="true"><span class="nav-icon">○</span>建例任务<small>请先选择项目</small></span>
-        <span class="side-link disabled" aria-disabled="true"><span class="nav-icon">□</span>执行记录<small>请先选择项目</small></span>
+      <nav class="side-nav" aria-label="项目导航">
+        <a class="side-link active" data-nav href="#/projects" aria-current="page">项目列表</a>
       </nav>
       <div class="side-spacer"></div>
+      <a class="side-link" data-nav href="#/model-settings">模型设置</a>
       <div class="connection"><span></span><div><strong>已连接本机工作台</strong><small>项目与用例管理</small></div></div>
 
     </aside>
     <section class="workspace">
       <header class="topbar">
         <div id="breadcrumbs" class="breadcrumbs"></div>
-        <div class="top-status"><span id="service-dot"></span><span id="service-label">正在连接服务…</span></div>
+        <div class="top-status"><span id="service-dot"></span><span id="service-label">正在连接服务…</span><button class="button small" id="service-restart" type="button" disabled title="正在读取服务状态">重启工作台</button><span id="service-restart-status" role="status" aria-live="polite"></span></div>
       </header>
       <main id="main" class="content" tabindex="-1">
         <div id="page-loading" class="loading-panel"><span class="spinner"></span>正在读取真实后端数据…</div>

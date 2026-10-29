@@ -1,0 +1,714 @@
+{
+  "project_id": "project-148c9560-700b-4020-a4fc-7b57cc739bae",
+  "project_revision": 2,
+  "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+  "protocol_sha256": "c872c7dc4e6a4227206e91933956f4c1bcc167f321bb1173d3841db6aafaf003",
+  "environment_id": "env-555ff7b4-fbee-40e2-b620-d9688a4b169d",
+  "environment_sha256": "532e96e72c4cf1e29ac3e3ce9975f79dd1b809a681bcf4613f657a9f1b8053cc",
+  "catalog": [
+    {
+      "method": "POST",
+      "path": "/__control/namespaces",
+      "text": "POST /__control/namespaces\nJSON {\"runId\":\"本次全新编号\"}。已有编号不覆盖、不重置。\n响应 201 {\"runId\":\"当前编号\",\"created\":true}。已有空间响应 200 {\"runId\":\"当前编号\",\"created\":false}。",
+      "response_text": "响应 201 {\"runId\":\"当前编号\",\"created\":true}。已有空间响应 200 {\"runId\":\"当前编号\",\"created\":false}。",
+      "request_fields": [
+        "runId"
+      ],
+      "requires_body": true,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-6",
+          "quote_sha256": "df480ad46dc18c77024cb3ff79c2f059fd28a297d6a7b1b711ca43f2d1245190"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-7",
+          "quote_sha256": "c9b91aa33f7993b42ad4b6d3421b986097771b067029df740595f60e7c7c1bac"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-8",
+          "quote_sha256": "4591e0cd3cfab70557d6a5c990f7c6045559d5e89ceddb75da527eb16d3ef9ed"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/namespaces/{runId}/orders",
+      "text": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+      "response_text": "响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+      "request_fields": [],
+      "requires_body": false,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-10",
+          "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-11",
+          "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-12",
+          "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/namespaces/{runId}/orders/{code}",
+      "text": "GET /api/v1/namespaces/{runId}/orders/{code}\n路径 code 是精确编号。\n响应 200 {\"runId\":\"当前编号\",\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}；无记录响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。",
+      "response_text": "响应 200 {\"runId\":\"当前编号\",\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}；无记录响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。",
+      "request_fields": [],
+      "requires_body": false,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-14",
+          "quote_sha256": "bd821c47a7838005c59407766a29cdfd048fcdd47d1c26c452fac42f77514bcd"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-15",
+          "quote_sha256": "6eba2b5b5b2eba6a9d6f91e67348a0e4924a1c5d6aa696d92be754b07a39a64b"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-16",
+          "quote_sha256": "b261e8d9e69a094c132fb87eef56a6edf9a17a0bad816c63e1b15d4f4ae4d7d6"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/namespaces/{runId}/orders",
+      "text": "POST /api/v1/namespaces/{runId}/orders\n请求头 x-synthetic-role=editor 或 viewer。JSON 四字段 code、title、station、priority。示例 JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。status 由服务赋 PENDING。\n响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+      "response_text": "响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+      "request_fields": [
+        "code",
+        "title",
+        "station",
+        "priority"
+      ],
+      "requires_body": true,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-18",
+          "quote_sha256": "4c4e35d0346213755fe6ade5124eb57169db67e1fdf90d645d93ea4f667f1413"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-19",
+          "quote_sha256": "e4ab2b055075284f35eece09f8d84155a1eba60ba5be3fcc98675be7221d1b2b"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-20",
+          "quote_sha256": "329f90002fec37a88059359ac554b920c283a7960f0a7725700b046a3f5f42bc"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/namespaces/{runId}/orders/{code}/complete",
+      "text": "POST /api/v1/namespaces/{runId}/orders/{code}/complete\n请求头 x-synthetic-role=editor 或 viewer。不发送正文。editor 将 PENDING 转为 DONE；其他字段不变。\n响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+      "response_text": "响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+      "request_fields": [],
+      "requires_body": false,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-22",
+          "quote_sha256": "89f5c756b0b70289dc67599355d5efeec8b76d007d530998194a3d4c841c73a6"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-23",
+          "quote_sha256": "694801bcb5066f17e9152a805af63e6db583e46b9a7e15484f84899069573070"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-24",
+          "quote_sha256": "6f1e91b965d25c0cc736155723170605798bc14430c39b240f2fa774c24e403d"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/__control/namespaces/{runId}",
+      "text": "DELETE /__control/namespaces/{runId}\n只删除本条用例自己的 runId。\n响应 200 {\"runId\":\"当前编号\",\"deleted\":true}；不存在时 deleted=false。生成的执行计划在任何结果下都要安排精确清理。",
+      "response_text": "响应 200 {\"runId\":\"当前编号\",\"deleted\":true}；不存在时 deleted=false。生成的执行计划在任何结果下都要安排精确清理。",
+      "request_fields": [],
+      "requires_body": false,
+      "source_refs": [
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-26",
+          "quote_sha256": "7df4114da9abd339958a13141097abc24d5ff1dcd86f0e22baeb565f364756c9"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-27",
+          "quote_sha256": "344622c08f0360fb2335910fb77c3f5856ca5a26e7d7cb198b40b6e225992147"
+        },
+        {
+          "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+          "segment_id": "segment-28",
+          "quote_sha256": "d5695e515257deb2119288db183388d15c26b2822a40fa55a34469c03bd18bbe"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "case_id": "case-b4aec78c-00c2-4ef4-857f-544587de6d93",
+      "case_version": 1,
+      "content_sha256": "4416C91C1101F38FA6F07EA86EBACB3594E470C2594B6C3856DCBB0BD6BAD4A2",
+      "title": "新增工单并独立读回",
+      "external_id": "API-WO-01",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+          "response": "POST /api/v1/namespaces/{runId}/orders\n请求头 x-synthetic-role=editor 或 viewer。JSON 四字段 code、title、station、priority。示例 JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。status 由服务赋 PENDING。\n响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+          "observation": "HTTP 201；created=true；item={\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-18",
+              "quote_sha256": "4c4e35d0346213755fe6ade5124eb57169db67e1fdf90d645d93ea4f667f1413"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-19",
+              "quote_sha256": "e4ab2b055075284f35eece09f8d84155a1eba60ba5be3fcc98675be7221d1b2b"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-20",
+              "quote_sha256": "329f90002fec37a88059359ac554b920c283a7960f0a7725700b046a3f5f42bc"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；总数 4；WO-2001 恰好一条，五字段为 {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}；原有三条完整对象 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    },
+    {
+      "case_id": "case-cf9fd627-9b33-45f9-a58a-edada1430c39",
+      "case_version": 1,
+      "content_sha256": "99B9A45C3C1D731447DDA174D425F66955B6DE159EA39C9061A4761FF69EC9D1",
+      "title": "重复编号被拒绝且原记录不被覆盖",
+      "external_id": "API-WO-02",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=editor；JSON {\"code\":\"WO-1001\",\"title\":\"不得覆盖的工单\",\"station\":\"WEST\",\"priority\":\"NORMAL\"}。",
+          "response": "POST /api/v1/namespaces/{runId}/orders\n请求头 x-synthetic-role=editor 或 viewer。JSON 四字段 code、title、station、priority。示例 JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。status 由服务赋 PENDING。\n响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+          "observation": "HTTP 409；error.code=DUPLICATE_CODE；error.message 为非空重复说明。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-18",
+              "quote_sha256": "4c4e35d0346213755fe6ade5124eb57169db67e1fdf90d645d93ea4f667f1413"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-19",
+              "quote_sha256": "e4ab2b055075284f35eece09f8d84155a1eba60ba5be3fcc98675be7221d1b2b"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-20",
+              "quote_sha256": "329f90002fec37a88059359ac554b920c283a7960f0a7725700b046a3f5f42bc"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    },
+    {
+      "case_id": "case-16dd9683-964f-4b2f-9792-7b68d537d891",
+      "case_version": 1,
+      "content_sha256": "F7694BEA4B5071D0EA9C72FB6C9601FFD513F0D2FCA2F90EC6AEFC6C0C747BAF",
+      "title": "只读角色新增被拒绝且数据不变",
+      "external_id": "API-WO-03",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "POST /api/v1/namespaces/{{runId}}/orders；请求头 x-synthetic-role=viewer；JSON {\"code\":\"WO-2002\",\"title\":\"只读角色提交\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。",
+          "response": "POST /api/v1/namespaces/{runId}/orders\n请求头 x-synthetic-role=editor 或 viewer。JSON 四字段 code、title、station、priority。示例 JSON {\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\"}。status 由服务赋 PENDING。\n响应 201 {\"runId\":\"当前编号\",\"created\":true,\"item\":{\"code\":\"WO-2001\",\"title\":\"储能舱温控巡检\",\"station\":\"WEST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"DUPLICATE_CODE\",\"message\":\"工单编号已存在\"}}：输入 WO-1001 等已存在编号，原记录不变。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 写入拒绝。 响应 400 {\"runId\":\"当前编号\",\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"字段不符合要求\"}}：字段无效。 所有拒绝的 items 与请求前逐字段相同，不得仅核对数量。拒绝 message 是非空中文，测试不要求文字逐字一致。",
+          "observation": "HTTP 403；error.code=FORBIDDEN；error.message 为非空权限拒绝说明。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-18",
+              "quote_sha256": "4c4e35d0346213755fe6ade5124eb57169db67e1fdf90d645d93ea4f667f1413"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-19",
+              "quote_sha256": "e4ab2b055075284f35eece09f8d84155a1eba60ba5be3fcc98675be7221d1b2b"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-20",
+              "quote_sha256": "329f90002fec37a88059359ac554b920c283a7960f0a7725700b046a3f5f42bc"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。不存在 WO-2002。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    },
+    {
+      "case_id": "case-e2a3c00e-2456-442d-880e-a7421b3ecf89",
+      "case_version": 1,
+      "content_sha256": "6674BCDA662F9B966B57BF1243738373D26A270ADE2A935C484BDC2DF813DD78",
+      "title": "按东站与待处理组合查询",
+      "external_id": "API-WO-04",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders?station=EAST&status=PENDING。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=1；items 恰好等于 [{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}]。不得包含 WO-1002 或 WO-1003。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    },
+    {
+      "case_id": "case-aede2e24-6a77-4f5b-93ce-d9bbac82beb9",
+      "case_version": 1,
+      "content_sha256": "4E5573176A70F904CB9CC2D987F43CB14F37447E1C58E9033933EEC83BCD387D",
+      "title": "待处理工单完成并持久化",
+      "external_id": "API-WO-05",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "POST /api/v1/namespaces/{{runId}}/orders/WO-1001/complete；请求头 x-synthetic-role=editor；不发送正文。",
+          "response": "POST /api/v1/namespaces/{runId}/orders/{code}/complete\n请求头 x-synthetic-role=editor 或 viewer。不发送正文。editor 将 PENDING 转为 DONE；其他字段不变。\n响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+          "observation": "HTTP 200；updated=true；item={\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-22",
+              "quote_sha256": "89f5c756b0b70289dc67599355d5efeec8b76d007d530998194a3d4c841c73a6"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-23",
+              "quote_sha256": "694801bcb5066f17e9152a805af63e6db583e46b9a7e15484f84899069573070"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-24",
+              "quote_sha256": "6f1e91b965d25c0cc736155723170605798bc14430c39b240f2fa774c24e403d"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；总数 3；WO-1001 五字段为 {\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}；其余两条完整对象 [{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}] 保持不变。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    },
+    {
+      "case_id": "case-5fb2a4a5-4cfe-41de-8a4f-e298a7b5924c",
+      "case_version": 1,
+      "content_sha256": "19464E8AE1E2035C1248A22A84935B68E76D1C9B7270944A20B12B07E343532D",
+      "title": "已完成工单禁止重复完成",
+      "external_id": "API-WO-06",
+      "status": "READY",
+      "missing": [],
+      "mappings": [
+        {
+          "step_order": 1,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，保存完整提交前列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；total=3；items=[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        },
+        {
+          "step_order": 2,
+          "status": "MAPPED",
+          "request": "POST /api/v1/namespaces/{{runId}}/orders/WO-1003/complete；请求头 x-synthetic-role=editor；不发送正文。",
+          "response": "POST /api/v1/namespaces/{runId}/orders/{code}/complete\n请求头 x-synthetic-role=editor 或 viewer。不发送正文。editor 将 PENDING 转为 DONE；其他字段不变。\n响应 200 {\"runId\":\"当前编号\",\"updated\":true,\"item\":{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"DONE\"}}。 响应 409 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ALREADY_COMPLETED\",\"message\":\"工单已完成\"}}：已有 DONE 不重复完成。 响应 403 {\"runId\":\"当前编号\",\"error\":{\"code\":\"FORBIDDEN\",\"message\":\"只读角色不能修改工单\"}}：viewer 拒绝。 响应 404 {\"runId\":\"当前编号\",\"error\":{\"code\":\"ORDER_NOT_FOUND\",\"message\":\"工单不存在\"}}。拒绝均不写入。",
+          "observation": "HTTP 409；error.code=ALREADY_COMPLETED；error.message 为非空已完成说明。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-22",
+              "quote_sha256": "89f5c756b0b70289dc67599355d5efeec8b76d007d530998194a3d4c841c73a6"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-23",
+              "quote_sha256": "694801bcb5066f17e9152a805af63e6db583e46b9a7e15484f84899069573070"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-24",
+              "quote_sha256": "6f1e91b965d25c0cc736155723170605798bc14430c39b240f2fa774c24e403d"
+            }
+          ]
+        },
+        {
+          "step_order": 3,
+          "status": "MAPPED",
+          "request": "GET /api/v1/namespaces/{{runId}}/orders，不加过滤参数，独立查询整个列表。",
+          "response": "GET /api/v1/namespaces/{runId}/orders\n可选 query code、station、status，精确匹配，多条件 AND；无过滤返回全部记录，total 是过滤后数量。\n响应 200 {\"runId\":\"当前编号\",\"items\":[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"}],\"total\":1}。此示例对应 station=EAST&status=PENDING；无条件初始 total=3 且 items 为上述完整基线。",
+          "observation": "HTTP 200；整个列表 items 与提交前及初始基线完全相同：[{\"code\":\"WO-1001\",\"title\":\"PCS月度巡检\",\"station\":\"EAST\",\"priority\":\"HIGH\",\"status\":\"PENDING\"},{\"code\":\"WO-1002\",\"title\":\"消防设备检查\",\"station\":\"WEST\",\"priority\":\"NORMAL\",\"status\":\"PENDING\"},{\"code\":\"WO-1003\",\"title\":\"电池温差复核\",\"station\":\"EAST\",\"priority\":\"NORMAL\",\"status\":\"DONE\"}]；total=3。不得仅核对总数或单个提示。",
+          "source_refs": [
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-10",
+              "quote_sha256": "86fe7a1ba1598a7f83635533db82673a38822a8a6c350b1bfbb45f44d8517474"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-11",
+              "quote_sha256": "d1c0ace089265278c4c540a1fc36c55c88a8a8a4d79c0c25e020816d1161bdc5"
+            },
+            {
+              "snapshot_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+              "segment_id": "segment-12",
+              "quote_sha256": "aaedd0040c1b5a5c46a69095d1b6f37d88c9ca82d6d8912a094e9d0c57478695"
+            }
+          ]
+        }
+      ],
+      "binding_version": null,
+      "expected_binding_revision": 0,
+      "protocol_source_id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5"
+    }
+  ],
+  "protocols": [
+    {
+      "id": "source-6cbb4af2-354c-4b8d-a6c2-31f30a75c5d5",
+      "name": "03-通讯协议.md"
+    }
+  ],
+  "automatic_scope": "仅自动识别明确 HTTP 方法、路径、请求字段与响应定义；未知格式需补充，不修改业务预期。",
+  "model_available": true,
+  "generation_limits": {
+    "wall_ms": 900000,
+    "tool_calls": 80,
+    "harness_starts": 1,
+    "self_tests": 5,
+    "quality_reviews": 3,
+    "independent_validations": 2
+  },
+  "limits": {
+    "generation": {
+      "wall_ms": 900000,
+      "tool_calls": 80,
+      "harness_starts": 1,
+      "self_tests": 5,
+      "quality_reviews": 3,
+      "independent_validations": 2
+    },
+    "max_batch_cases": 12,
+    "concurrency": 1
+  },
+  "preparation_sha256": "4c997290706e44d1e14955d1eaab3f35a4ee0c0f115db547a2408acddf70e1d5"
+}
