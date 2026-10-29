@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { sha256 } from './documents.mjs';
+import { writeAtomicJsonLine as writeAtomic } from '../atomic-json.mjs';
 
 const PROJECT_ID = /^project-[a-z0-9-]{8,80}$/;
 const CASE_ID = /^case-[a-z0-9-]{8,80}$/;
@@ -14,22 +15,6 @@ async function readJson(file, fallback = null) {
   try { return JSON.parse(await fs.readFile(file, 'utf8')); }
   catch (error) { if (error.code === 'ENOENT') return fallback; throw error; }
 }
-async function writeAtomic(file, value) {
-  await fs.mkdir(path.dirname(file), { recursive: true });
-  const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  await fs.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
-  try {
-    for (let attempt = 0; ; attempt += 1) {
-      try { await fs.rename(temporary, file); break; }
-      catch (error) {
-        if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= 7) throw error;
-        await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
-      }
-    }
-  }
-  finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
-}
-
 export class RequirementsStore {
   #queue = Promise.resolve();
   constructor(root) { this.root = path.resolve(root); }

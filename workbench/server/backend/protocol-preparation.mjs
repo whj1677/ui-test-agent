@@ -61,6 +61,14 @@ function jsonFieldNames(value, fields = new Set()) {
   return [...fields];
 }
 
+function requiresRequestBody(text) {
+  // Remove only a complete clause explicitly saying no body. Embedded phrases
+  // in conditions or prohibitions stay conservative, as do other body mentions
+  // and JSON declarations in the same endpoint.
+  const requestText = text.replace(/(^|[，,。.;；！？!?\r\n])[ \t]*(?:无|(?:无需|不需要)[ \t]*(?:发送|携带)?|不(?:使用|发送|携带|包含|含)|没有)[ \t]*(?:任何[ \t]*)?请求体(?=[ \t]*(?:[，,。.;；！？!?\r\n]|$))/g, '$1');
+  return /\bJSON\s*(?:\{|(?:四|三|二|两|[1-9])字段)|请求体|request\s*body/i.test(requestText);
+}
+
 // Only a method/path at the start of a line (or table row) defines an endpoint.
 export function protocolCatalog(source) {
   const lines = (source?.segments || []).flatMap(segment => String(segment.text || '').split(/\r?\n/).map(text => ({ text, segment })));
@@ -91,7 +99,7 @@ export function protocolCatalog(source) {
     const fields = declaration?.[1].split(/[、,，]\s*/) || (body ? jsonFieldNames(body) : []);
     const segments = [...new Map(block.map(line => [line.segment.segment_id, line.segment])).values()];
     entries.push({ method: match[1], path: match[3], text: block.map(line => line.text).join('\n'), response_text: responses.join('\n'),
-      request_fields: fields, requires_body: /\bJSON\s*(?:\{|(?:四|三|二|两|[1-9])字段)|请求体|request\s*body/i.test(requestText), source_refs: refs(source, segments) });
+      request_fields: fields, requires_body: requiresRequestBody(requestText), source_refs: refs(source, segments) });
   }
   return entries;
 }

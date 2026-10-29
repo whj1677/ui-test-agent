@@ -151,6 +151,11 @@
     "tests/desktop-launch.test.mjs",
     "tests/model-activation.test.mjs",
     "tests/office-reader.test.mjs",
-    "tests/incremental-upgrade.test.mjs"
+    "tests/incremental-upgrade.test.mjs",
+    "tests/model-config.test.mjs",
+    "tests/model-credential-paths.test.mjs",
+    "tests/start-config.test.mjs",
+    "tests/atomic-json.test.mjs",
+    "tests/frontend-downloads.test.mjs"
   ]
 }

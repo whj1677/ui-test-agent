@@ -1,0 +1,380 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0042",
+  "title": "软件架构与冗余审查及全功能验证",
+  "metadata": {
+    "requirement_status": "人工待确认",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-10-29"
+  },
+  "original_input": "审查一下我们的软件架构、文件结构、代码冗余等。如果要修改先git归档并推送远端。然后修改完成后进行全功能测试。补充：先git归档并推送远端。",
+  "user_requirements": [
+    {
+      "id": "UN-0042-01",
+      "status": "已确认",
+      "goal": "审查架构与目录职责，修复有证据的重复实现和测试入口遗漏，验证改动后的功能。",
+      "constraints": "代码修改前完成Git归档和远端核验；仅正式4322工作台；保留历史数据；付费和真实业务操作需明确授权。",
+      "success_criteria": "归档提交可恢复；审查有源码依据；定向与完整工程清单执行；正式工作台功能矩阵区分通过、失败和未运行，未覆盖不冒充全功能通过。"
+    }
+  ],
+  "confirmed_facts": [
+    "2026-10-29已创建并推送codex/archive-before-architecture-review-20261029，远端与本地提交均为599fea82e22157b3ede632c40d05c05626c69214；634变更文件。",
+    "未跟踪的安装包、outputs、artifacts、运行QA和浏览器资料保留本机未上传；现有受保护xlsx按Git可见原始字节归档。",
+    "正式入口固定http://127.0.0.1:4322/workspace/；源码分支codex/architecture-review-20261029。",
+    "检查时native_dsh运行时为ERROR/NATIVE_DSH_HOME_BUSY；health.ready不等于模型执行能力可用。",
+    "用户明确允许使用当前模型和现有限额，仅测试本次新建合成项目。需求1次请求已完成；助手1轮已完成并导出UI/HTTP各1条，但助手新增未来源支撑的交互预期，保持NEEDS_CLARIFICATION。",
+    "Native DSH旧锁parent PID已消失，host PID3956被晚于锁创建的TQClient复用；核对锁摘要及无DSH宿主后，将精确旧锁在同目录改名留档，再受控重启，已恢复RUNNING，未结束无关进程。"
+  ],
+  "inferences_and_open_questions": [
+    "保留旧src/public引用，不按目录年龄删除；共享文件写入与下载逻辑已发现语义重复和漂移。",
+    "真实模型调用及真实业务目标不因一般全功能测试要求自动获得付费/生产写授权。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0042-01",
+      "status": "已实现",
+      "requirement": "审查架构与文件职责，并建立已推送的回退点",
+      "acceptance_criteria": "列明入口/前后端/执行器/数据与历史目录，有具体代码证据和风险优先级",
+      "constraints": "只处理本轮范围，不改变业务规则、历史数据与正式工作台入口。"
+    },
+    {
+      "id": "DR-0042-02",
+      "status": "已实现",
+      "requirement": "收敛四个存储模块的原子JSON重复实现",
+      "acceptance_criteria": "重试次数、临时文件、清理、尾部换行与既有IO注入语义保持；不改变其他存储策略",
+      "constraints": "只处理本轮范围，不改变业务规则、历史数据与正式工作台入口。"
+    },
+    {
+      "id": "DR-0042-03",
+      "status": "已实现",
+      "requirement": "统一前端文件下载公共处理",
+      "acceptance_criteria": "保留调用和返回契约；正确处理网络、非JSON错误、错误MIME及损坏下载文件名",
+      "constraints": "只处理本轮范围，不改变业务规则、历史数据与正式工作台入口。"
+    },
+    {
+      "id": "DR-0042-04",
+      "status": "已实现",
+      "requirement": "补工程测试入口并执行正式功能验证",
+      "acceptance_criteria": "新增明确安全的工程测试入清单；运行完整清单和4322功能测试；付费/环境受阻项明确标注",
+      "constraints": "只处理本轮范围，不改变业务规则、历史数据与正式工作台入口。"
+    },
+    {
+      "id": "DR-0042-05",
+      "status": "已实现",
+      "requirement": "修复正式功能测试发现的明确无请求体被误判为必须请求体。",
+      "acceptance_criteria": "原合成协议保持不变；无请求体不再触发字段缺失，同分句肯定请求体和相邻接口仍独立判定。",
+      "constraints": "仅改确定的局部解析错误，不放宽不明字段、方法或环境授权。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0042-01",
+      "dr_ids": [
+        "DR-0042-01"
+      ],
+      "status": "已确认",
+      "summary": "审查架构与文件职责，并建立已推送的回退点",
+      "rationale": "列明入口/前后端/执行器/数据与历史目录，有具体代码证据和风险优先级"
+    },
+    {
+      "id": "DD-0042-02",
+      "dr_ids": [
+        "DR-0042-02"
+      ],
+      "status": "已确认",
+      "summary": "收敛四个存储模块的原子JSON重复实现",
+      "rationale": "重试次数、临时文件、清理、尾部换行与既有IO注入语义保持；不改变其他存储策略"
+    },
+    {
+      "id": "DD-0042-03",
+      "dr_ids": [
+        "DR-0042-03"
+      ],
+      "status": "已确认",
+      "summary": "统一前端文件下载公共处理",
+      "rationale": "保留调用和返回契约；正确处理网络、非JSON错误、错误MIME及损坏下载文件名"
+    },
+    {
+      "id": "DD-0042-04",
+      "dr_ids": [
+        "DR-0042-04"
+      ],
+      "status": "已确认",
+      "summary": "补工程测试入口并执行正式功能验证",
+      "rationale": "新增明确安全的工程测试入清单；运行完整清单和4322功能测试；付费/环境受阻项明确标注"
+    },
+    {
+      "id": "DD-0042-05",
+      "dr_ids": [
+        "DR-0042-05"
+      ],
+      "status": "已确认",
+      "summary": "按当前接口请求区间识别明确否定，保留肯定证据。",
+      "rationale": "真实4322准备接口把无请求体判requires_body=true，阻塞明确只读GET用例；不能修改测试资料绕过。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "启动脚本 → server/index装配 → app/routes → 各manager/store/executor；web-v2经HTTP调用。",
+    "原子写入统一经atomic-json；下载统一经api.js；公开API、持久化schema和业务审批保持。"
+  ],
+  "module_document_impact": [
+    "更新docs/ai_engineering/01_architecture.md的占位架构为源码核验现状；详细审查记录在本包review.md。",
+    "本次无需模块文档变更，原因：共享工具去重和明确否定的局部误判修正保持公开接口、持久化schema及领域职责；当前架构和目录事实已在01_architecture.md同步，现有模块业务契约未变。"
+  ],
+  "risks_and_rollback": [
+    "归档分支只作为恢复点；不reset覆盖本机未归档运行数据。需要回退时逐项恢复本轮改动。",
+    "跨存储复用可能改变字节格式；定向测试验证换行、失败和重试边界。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0042-01",
+      "dr_ids": [
+        "DR-0042-01"
+      ],
+      "dd_ids": [
+        "DD-0042-01"
+      ],
+      "status": "已完成",
+      "task": "审查架构与文件职责，并建立已推送的回退点",
+      "verification_ids": [
+        "VT-0042-01"
+      ]
+    },
+    {
+      "id": "TK-0042-02",
+      "dr_ids": [
+        "DR-0042-02"
+      ],
+      "dd_ids": [
+        "DD-0042-02"
+      ],
+      "status": "已完成",
+      "task": "收敛四个存储模块的原子JSON重复实现",
+      "verification_ids": [
+        "VT-0042-02"
+      ]
+    },
+    {
+      "id": "TK-0042-03",
+      "dr_ids": [
+        "DR-0042-03"
+      ],
+      "dd_ids": [
+        "DD-0042-03"
+      ],
+      "status": "已完成",
+      "task": "统一前端文件下载公共处理",
+      "verification_ids": [
+        "VT-0042-03"
+      ]
+    },
+    {
+      "id": "TK-0042-04",
+      "dr_ids": [
+        "DR-0042-04"
+      ],
+      "dd_ids": [
+        "DD-0042-04"
+      ],
+      "status": "已完成",
+      "task": "补工程测试入口并执行正式功能验证",
+      "verification_ids": [
+        "VT-0042-04"
+      ]
+    },
+    {
+      "id": "TK-0042-05",
+      "dr_ids": [
+        "DR-0042-05"
+      ],
+      "dd_ids": [
+        "DD-0042-05"
+      ],
+      "status": "已完成",
+      "task": "局部请求体否定解析修复、反例回归、原合成协议正式复验。",
+      "verification_ids": [
+        "VT-0042-05"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0042-01",
+      "dr_ids": [
+        "DR-0042-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "仅静态检查",
+      "item": "列明入口/前后端/执行器/数据与历史目录，有具体代码证据和风险优先级",
+      "evidence_standard": "实际命令、退出码、统计、证据路径；工程/正式功能/模型调用分开。",
+      "current_evidence": {
+        "command": "git ls-remote --heads origin refs/heads/codex/archive-before-architecture-review-20261029",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-architecture-review/archive-verification.json"
+      }
+    },
+    {
+      "id": "VT-0042-02",
+      "dr_ids": [
+        "DR-0042-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "重试次数、临时文件、清理、尾部换行与既有IO注入语义保持；不改变其他存储策略",
+      "evidence_standard": "实际命令、退出码、统计、证据路径；工程/正式功能/模型调用分开。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 1366,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-architecture-review/engineering-final.log"
+      }
+    },
+    {
+      "id": "VT-0042-03",
+      "dr_ids": [
+        "DR-0042-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "保留调用和返回契约；正确处理网络、非JSON错误、错误MIME及损坏下载文件名",
+      "evidence_standard": "实际命令、退出码、统计、证据路径；工程/正式功能/模型调用分开。",
+      "current_evidence": {
+        "command": "npm test",
+        "exit_code": 0,
+        "test_count": 1366,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-architecture-review/engineering-final.log"
+      }
+    },
+    {
+      "id": "VT-0042-04",
+      "dr_ids": [
+        "DR-0042-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "测试失败",
+      "item": "新增明确安全的工程测试入清单；运行完整清单和4322功能测试；付费/环境受阻项明确标注",
+      "evidence_standard": "实际命令、退出码、统计、证据路径；工程/正式功能/模型调用分开。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261029-architecture-review/page-readiness/verify-pages.mjs",
+        "exit_code": 1,
+        "test_count": 22,
+        "failure_count": 1,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-architecture-review/page-readiness/results.json"
+      }
+    },
+    {
+      "id": "VT-0042-05",
+      "dr_ids": [
+        "DR-0042-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "无请求体、肯定请求体与相邻接口隔离回归，并用原正式输入复验。",
+      "evidence_standard": "实际定向命令、退出码、统计及原4322准备返回。",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/backend-protocol-layout.test.mjs workbench/tests/backend-preparation.test.mjs workbench/tests/backend-case-stages.test.mjs workbench/tests/backend-readonly-post-query.test.mjs",
+        "exit_code": 0,
+        "test_count": 34,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261029-architecture-review/protocol-negation-final.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:\\01_AI工程\\01_工程项目\\ui-test-agent",
+    "commands": [
+      "npm test",
+      "npm run test:official",
+      "node workbench/qa/20261029-architecture-review/official-functional.mjs"
+    ],
+    "environment": [
+      "Windows/Node>=22；唯一正式4322入口；复用原配置和数据。"
+    ],
+    "conclusion": [
+      "最终冻结源码f73a015df6a8f1a1df9a7e01144baf7b279d189981d4c78e7af86cc6e2141bd4的完整工程清单1366通过，0失败0跳过；Harness补充32通过。",
+      "正式零模型44项检查、资料输入7项、4项浏览器下载通过；18页面中17通过，报告预览CSP控制台错误保留失败。",
+      "真实需求1次请求生成UI1/HTTP1；助手1轮导出UI/HTTP各1条，存在无来源交互预期，保留NEEDS_CLARIFICATION。",
+      "UI本次真实任务内部3次自测，初次实际值缺失保留，最终13/13完整并有录像时间线；冻结脚本复跑model_calls=0通过。HTTP生成经核对5个业务断言后确认，执行及复跑各1请求/model_calls=0通过。",
+      "最新项目报告2通过0未执行；原73项目、配置和数据根保持；只新增3个本轮合成项目。",
+      "未进行干净Windows安装、真实认证挑战、WPS/受保护文档现场兼容、图片模型理解、人工示范录制或正式环境故障注入；不能宣称全功能全部通过或发布就绪。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0042-01",
+      "dr_id": "DR-0042-01",
+      "dd_id": "DD-0042-01",
+      "tk_id": "TK-0042-01",
+      "vt_id": "VT-0042-01",
+      "status": "已实现；工程与限定功能已验证，整体验收待确认"
+    },
+    {
+      "un_id": "UN-0042-01",
+      "dr_id": "DR-0042-02",
+      "dd_id": "DD-0042-02",
+      "tk_id": "TK-0042-02",
+      "vt_id": "VT-0042-02",
+      "status": "已实现；工程与限定功能已验证，整体验收待确认"
+    },
+    {
+      "un_id": "UN-0042-01",
+      "dr_id": "DR-0042-03",
+      "dd_id": "DD-0042-03",
+      "tk_id": "TK-0042-03",
+      "vt_id": "VT-0042-03",
+      "status": "已实现；工程与限定功能已验证，整体验收待确认"
+    },
+    {
+      "un_id": "UN-0042-01",
+      "dr_id": "DR-0042-04",
+      "dd_id": "DD-0042-04",
+      "tk_id": "TK-0042-04",
+      "vt_id": "VT-0042-04",
+      "status": "已实现；工程与限定功能已验证，整体验收待确认"
+    },
+    {
+      "un_id": "UN-0042-01",
+      "dr_id": "DR-0042-05",
+      "dd_id": "DD-0042-05",
+      "tk_id": "TK-0042-05",
+      "vt_id": "VT-0042-05",
+      "status": "已实现；工程与限定功能已验证，整体验收待确认"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [
+    "报告预览内联style触发CSP控制台错误，内容和样式已加载但严格页面检查保留失败。",
+    "助手候选新增来源未规定的查询后控件状态及点击空白操作，保留待确认，不重复付费重跑。",
+    "PID复用导致旧DSH锁误判本轮仅安全恢复现场，永久进程身份识别修复仍待单独实现；CSS、转义工具、忙碌状态重复列为后续。"
+  ],
+  "prohibited_implementation": [
+    "不删除旧目录和业务数据、不新起影子工作台、不换正式端口或数据目录；模型仅新建合成项目且沿用限额，不重试未知付费结果；不把工程测试称全功能验收。"
+  ],
+  "changes": [
+    {
+      "date": "2026-10-29",
+      "version": 1,
+      "type": "新建",
+      "description": "先远端归档，完成架构审查、限定去重与无请求体误判修复；执行最终工程清单和合成真实模型/零模型复跑，保留失败和未覆盖项。",
+      "impact": "存储共享工具、前端下载、测试入口与架构文档",
+      "confirmed_by": "用户当前指令"
+    }
+  ]
+}
