@@ -1,0 +1,8 @@
+{
+  "schema": "office-field-diagnostic/v1",
+  "revision": "office-trace-20261030-1",
+  "original_source_sha256": "e4640c39feea328110cb5a1941c92f023decaabf6c87661e2dd31d66a914c29c",
+  "diagnostic_source_sha256": "69e5bf7ea04fd563b1613ef0dc0ebf7063c986c665d1ec2b161ce95d82a269e1",
+  "exe_sha256": "7522edc910bab73068848fede764578ee085c6e2868c4f08f98f7528d63051e1",
+  "production_modified": false
+}
