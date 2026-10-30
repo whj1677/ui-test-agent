@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {diagnostics} from '../diagnostics.mjs';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { runHarnessEventProcess, allowedEnvironment, DSH_BIN, assessHarnessRun, harnessProviderError } from '../../../harness-probe/src/harness-runner.mjs';
@@ -39,6 +40,7 @@ export function createCaseAssistantClient({ config = {}, root, runHarness = runH
   return {
     get available() { return configured(); },
     async generate({ taskId, projectId, turnId, messages, sources, previous = null, signal, onProgress = async () => {} }) {
+      void diagnostics.record('case-assistant','generation.started',{task_id:taskId,project_id:projectId,turn_id:turnId,model:config.model,provider:config.provider,source_count:Array.isArray(sources)?sources.length:null});
       if (!configured()) throw new Error('CASE_ASSISTANT_DSH_UNAVAILABLE');
       if (![taskId, projectId, turnId].every(validId)) throw new Error('CASE_ASSISTANT_ID_INVALID');
       if (!Array.isArray(sources) || sources.length > 20 || !Array.isArray(messages) || messages.length > 200) throw new Error('CASE_ASSISTANT_INPUT_LIMIT_EXCEEDED');
@@ -102,8 +104,10 @@ export function createCaseAssistantClient({ config = {}, root, runHarness = runH
             : termination === 'cancelled' ? 'CASE_ASSISTANT_CANCELLED' : processEvidence(execution).tool_json_invalid ? 'CASE_ASSISTANT_TOOL_JSON_INVALID'
               : !assessment.completed ? 'CASE_ASSISTANT_DSH_FAILED' : 'CASE_ASSISTANT_RESPONSE_MISSING');
         }
+        void diagnostics.record('case-assistant','generation.finished',{task_id:taskId,project_id:projectId,turn_id:turnId,elapsed_ms:Date.now()-startedAt});
         return { ...structuredClone(session.response), execution: evidence() };
       } catch (error) {
+        await diagnostics.record('case-assistant','generation.failed',{task_id:taskId,project_id:projectId,turn_id:turnId,error},'error');
         const code = controller.signal.aborted ? timedOut ? 'CASE_ASSISTANT_TIMED_OUT' : 'CASE_ASSISTANT_CANCELLED' : safeError(error);
         const failure = new Error(code);
         failure.execution = { ...evidence(), error_code: code };

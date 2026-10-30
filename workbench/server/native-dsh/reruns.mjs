@@ -78,8 +78,8 @@ export function createNativeRerun(manager, projectId, input = {}) {
   return manager.serial(async () => {
     if (!/^[a-zA-Z0-9-]{8,100}$/.test(input.request_id || '')) throw Error('NATIVE_DSH_REQUEST_INVALID');
     if (input.allow_execution !== true || input.allow_model === true) throw Error('NATIVE_DSH_EXECUTION_NOT_AUTHORIZED');
-    const minutes = input.timeout_minutes ?? 30;
-    if (!Number.isInteger(minutes) || minutes < 1 || minutes > 120) throw Error('NATIVE_DSH_TIMEOUT_INVALID');
+    const executionMode=input.execution_mode ?? 'BACKGROUND';
+    if(!['BACKGROUND','FOREGROUND'].includes(executionMode))throw Error('NATIVE_DSH_EXECUTION_MODE_INVALID');
     const stored = await manager.load(projectId), requestSha = hash(input);
     const previous = stored.tasks.find(task => task.request_id === input.request_id);
     if (previous) {
@@ -94,7 +94,7 @@ export function createNativeRerun(manager, projectId, input = {}) {
       if (!preview.allowed) throw Error(preview.reason);
       const task = { id: `native-${randomUUID()}`, project_id: projectId, request_id: input.request_id, request_sha256: requestSha,
         kind: 'FROZEN_SCRIPT_RERUN', model_calls: 0, status: 'RUNNING', stage: '正在准备冻结脚本复跑（无模型）', created_at: now(),
-        session_id: stored.session_id, environment_id: environment.id, environment_identity: binding.ui_identity, timeout_minutes: minutes,
+        session_id: stored.session_id, environment_id: environment.id, environment_identity: binding.ui_identity, completion_policy: 'FROZEN_RUNS_FINISHED', execution_mode: executionMode,
         items: sources.map((source, index) => ({ case_id: source.case_id, case_version: source.case_version, content_sha256: source.content_sha256,
           external_id: source.external_id, formal_entry: source.entry, content: source.frozen_case_content, status: 'NOT_RUN',
           rerun_source: { ...input.items[index] } })), runs: [], reply: '', revision_notes: '', runtime: { kind: 'FROZEN_SCRIPT_RUNNER', model: null } };
@@ -109,7 +109,7 @@ export function createNativeRerun(manager, projectId, input = {}) {
 }
 
 async function processNativeRerun(manager, active, task) {
-  const started = Date.now(), timer = setTimeout(() => active.controller.abort('timeout'), task.timeout_minutes * 60_000);
+  const started = Date.now();
   let release;
   try {
     const environment = manager.buildManager.developmentEnvironments.find(value => value.id === task.environment_id);
@@ -129,7 +129,7 @@ async function processNativeRerun(manager, active, task) {
     }
     await manager.update(active.projectId, task.id, value => {
       value.status = active.unconfirmed ? 'STOP_UNCONFIRMED' : active.controller.signal.aborted ? active.controller.signal.reason === 'timeout' ? 'TIMED_OUT' : 'CANCELLED'
-        : value.items.every(item => item.status === 'PASSED') ? 'COMPLETED' : value.runs.length ? 'PARTIAL' : 'FAILED';
+        : value.items.every(item => item.status === 'PASSED') && !value.items.some(item=>value.runs.filter(run=>run.case_id===item.case_id&&run.counts_for_case).at(-1)?.evidence_status==='INCOMPLETE') ? 'COMPLETED' : value.runs.length ? 'PARTIAL' : 'FAILED';
       value.stage = active.unconfirmed ? '尚未确认复跑进程停止，保留运行锁' : value.status === 'COMPLETED' ? '冻结脚本复跑完成（无模型）' : '复跑已结束，保留实际结果与证据';
     });
   } catch (error) {
@@ -138,7 +138,6 @@ async function processNativeRerun(manager, active, task) {
       value.stage = value.error;
     });
   } finally {
-    clearTimeout(timer);
     if (active.executePromise) await active.executePromise.catch(() => {});
     if (active.unconfirmed) active.release = release;
     else if (typeof release === 'function') release();
@@ -155,7 +154,7 @@ export function registeredRunEvidence(result, runId) {
     return value;
   };
   const registered = { ...result, artifacts: (result.artifacts || []).map(file => ({ ...file, id: idMap.get(file.id) })) };
-  for (const key of ['files', 'window_recording', 'window_timeline', 'step_replay', 'step_coverage', 'caption_timeline']) {
+  for (const key of ['files', 'page_recording', 'window_recording', 'window_timeline', 'step_replay', 'step_coverage', 'caption_timeline']) {
     if (result[key] != null) registered[key] = mapIds(result[key]);
   }
   return registered;

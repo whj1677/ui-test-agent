@@ -89,7 +89,8 @@ export function nativeTaskOutcome(task, result, active) {
   if (active.unconfirmed) return 'STOP_UNCONFIRMED';
   if (active.controller.signal.aborted) return active.controller.signal.reason === 'timeout' ? 'TIMED_OUT' : 'CANCELLED';
   if (result.error) return 'FAILED';
-  if (task.items.every(item => item.status === 'PASSED')) return 'COMPLETED';
+  if (task.items.every(item => item.status === 'PASSED')) return task.items.some(item =>
+    task.runs.filter(run => run.case_id === item.case_id && run.counts_for_case).at(-1)?.evidence_status === 'INCOMPLETE') ? 'PARTIAL' : 'COMPLETED';
   if (task.runs.length) return 'PARTIAL';
   const latest = new Map((task.drafts || []).map(draft => [draft.case_id, draft]));
   if (task.items.length && task.items.every(item => latest.get(item.case_id)?.draft_status === 'BLOCKED_PRECONDITION')) return 'BLOCKED';
@@ -99,20 +100,23 @@ export function nativeTaskOutcome(task, result, active) {
 
 export function nativeTaskHelper(endpoint, token, { registrationOnly = false } = {}) {
   return `import { readFile } from 'node:fs/promises';
-const args=process.argv.slice(2),register=args[0]==='register-draft';
+const args=process.argv.slice(2),register=args[0]==='register-draft',finish=args[0]==='finish-batch';
 ${registrationOnly ? "if(!register)throw Error('NATIVE_DSH_EXECUTION_DISABLED');" : ''}
 if(register)args.shift();
 const option=name=>{const i=args.indexOf(name);return i<0?undefined:args[i+1];};
 let body={request_id:option('--request-id')||crypto.randomUUID(),case_id:args[0],entry:args[1]};
-if(register){
+if(finish){
+ const task=JSON.parse(await readFile(new URL('./current-task.json',import.meta.url),'utf8'));
+ body={batch_number:task.batch_number};
+}else if(register){
  const task=JSON.parse(await readFile(new URL('./current-task.json',import.meta.url),'utf8'));
  const item=task.cases.find(row=>row.case_id===args[0]||row.external_id===args[0]);
  if(!item)throw Error('NATIVE_DSH_CASE_NOT_IN_TASK');
  const code=option('--blocked-code');
  body={...body,case_id:item.case_id,case_version:item.case_version,content_sha256:item.content_sha256,draft_status:code?'BLOCKED_PRECONDITION':'UNEXECUTED',...(code?{blocker:{code,summary:option('--reason')}}:{})};
 }else body.purpose=args[2]==='--diagnostic'?'diagnostic':args[2]||'case';
-const response=await fetch(${JSON.stringify(endpoint)}+(register?'/drafts':'/execute'),{method:'POST',headers:{'Content-Type':'application/json','Authorization':${JSON.stringify('Bearer ' + token)}},body:JSON.stringify(body)});
+const response=await fetch(${JSON.stringify(endpoint)}+(finish?'/finish':register?'/drafts':'/execute'),{method:'POST',headers:{'Content-Type':'application/json','Authorization':${JSON.stringify('Bearer ' + token)}},body:JSON.stringify(body)});
 const result=await response.json();console.log(JSON.stringify(result,null,2));
-process.exit(response.ok&&(register?result.operation==='REGISTER_DRAFT'&&result.execution_status==='NOT_RUN':result.status==='PASSED')?0:1);
+process.exit(response.ok&&(finish?result.operation==='BATCH_FINISHED':register?result.operation==='REGISTER_DRAFT'&&result.execution_status==='NOT_RUN':result.status==='PASSED')?0:1);
 `;
 }

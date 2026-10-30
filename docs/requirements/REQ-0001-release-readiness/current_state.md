@@ -5,10 +5,10 @@
 
 ## 元数据
 
-- 需求状态：v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。
+- 需求状态：v19侧栏版本显示已实现；WPS关闭仍BUSY的现场问题未解决，已打开已保存原件后备不足以覆盖此场景。按用户要求暂停交付打包，等待并行修改完成后统一核验；需用户电脑WPS接口诊断。
 - 治理分级：G2
-- 当前版本：18
-- 最后更新：2026-10-29
+- 当前版本：19
+- 最后更新：2026-10-30
 
 ## 当前有效用户需求
 
@@ -28,6 +28,7 @@
 | UN-0001-12 | 已确认 | 接入企业保护DOCX的本机Word只读后备，并交付选择旧安装目录的轻量增量升级包 |
 | UN-0001-13 | 已确认 | 把Word/WPS读取后备直接打进新的完整Windows安装器，取消增量升级包交付 |
 | UN-0001-14 | 已确认 | 继续使用同一受保护需求文档，在AI用例助手真实生成一次并下载Excel，验证读取到下载的整个流程 |
+| UN-0001-15 | 已确认 | 修复用户WPS文档读取BUSY并在左侧导航显示版本号；不能把本机Word验证当作用户WPS已恢复。 |
 
 ## 当前有效开发需求
 
@@ -50,6 +51,7 @@
 | DR-0001-15 | 已确认 | 网页显式启用模型及安全重新加载保存密钥 |
 | DR-0001-16 | 已确认 | 加入DOCX本机Word只读后备和离线增量升级/回退 |
 | DR-0001-17 | 已确认 | 完整安装器包含Word/WPS后备并验证程序/环境完整性 |
+| DR-0001-18 | 已确认 | WPS已打开原件只读后备和侧栏运行版本标识 |
 
 ## 当前有效设计
 
@@ -76,6 +78,7 @@
 | DD-0001-19 | DR-0001-17 | 已确认 | 复用已验证完整安装包的同锁依赖与运行时，覆盖当前受控运行代码并重建完整摘要，Inno Setup生成新EXE；模板仅复用上一完整包中可解析的公开工程模板，不修改本机加密原件。 |
 | DD-0001-20 | DR-0001-17 | 已确认 | Office结果先校验段落/单元格位置与类型，再省略空白文字；有效原文不改，重新连续分配segment_id并保留原位置与quote_sha256。 |
 | DD-0001-21 | DR-0001-17 | 已确认 | 生成会话只对local-office/PARTIAL、图片UNANALYZED且嵌图清单为空的DOCX使用已冻结文字，不重开原件ZIP；原字节摘要仍核验，普通DOCX插图继续解析及校验，MCP清单保留读取方式和图片缺口。 |
+| DD-0001-22 | DR-0001-18 | 已确认 | WPS共享实例只读已打开已保存的精确原件；导航使用health.service_identity.release.version。 |
 
 ## 当前有效任务
 
@@ -113,6 +116,8 @@
 | TK-0001-30 | DR-0001-17 / DD-0001-19 | 已实现并完成限定工程、正式助手和安装验证；真实WPS未验 | 重建并验证含修复的完整安装器 |
 | TK-0001-31 | DR-0001-17 / DD-0001-21 | 已实现；真实生成与网页Excel下载及内容/引用核对通过 | 修复受保护资料生成准备并完成真实生成和Excel下载 |
 | TK-0001-32 | DR-0001-17 / DD-0001-19 | 已实现；完整程序字节与编译核对通过，安装向导未重复执行 | 完整安装包包含受保护资料生成修复 |
+| TK-0001-33 | DR-0001-18 / DD-0001-22 | 已完成 | 实现并验证WPS精确已保存原件读取逻辑 |
+| TK-0001-34 | DR-0001-18 / DD-0001-22 | 已完成 | 显示并实测正式4322的侧栏版本号 |
 
 ## 当前有效验证项
 
@@ -150,6 +155,8 @@
 | VT-0001-30 | DR-0001-17 | 集成测试通过 | 重建并验证含修复的完整安装器 | 命令：pwsh -File workbench/qa/20261029-protected-document-retest/verify-full-install.ps1；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/install.log |
 | VT-0001-31 | DR-0001-17 | 集成测试通过 | 修复受保护资料生成准备并完成真实生成和Excel下载 | 命令：C:/Users/20240082/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -X utf8 workbench/.local/protected-e2e-20261029/verify-xlsx.py；退出码：0；测试数量：2；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/generation-verify.log |
 | VT-0001-32 | DR-0001-17 | 集成测试通过 | 完整安装包包含受保护资料生成修复 | 命令：pwsh -File workbench/scripts/build-windows-installer.ps1 -ProgramRoot D:/UAOF3Build -OutputDirectory D:/UAOF3Setup -Iscc D:/01_AI工程/01_工程项目/pm-req/evidence/build-tools/InnoSetup-6.7.3/ISCC.exe；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/generation-build-v3.log |
+| VT-0001-33 | DR-0001-18 | 单元测试通过 | 实现并验证WPS精确已保存原件读取逻辑 | 命令：workbench/qa/20261030-wps-reader/WpsReaderTests.exe；退出码：0；测试数量：6；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-reader/wps-contract.log |
+| VT-0001-34 | DR-0001-18 | 集成测试通过 | 显示并实测正式4322的侧栏版本号 | 命令：node workbench/qa/20261030-wps-reader/verify-sidebar.mjs；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-reader/sidebar-final.log |
 
 ## 人工待确认项
 

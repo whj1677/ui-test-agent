@@ -188,3 +188,19 @@ test('unsupported CommonJS TypeScript is diagnosed before formal execution and k
     assert.equal(await fs.readFile(path.join(root,'run/snapshot/case.spec.ts'),'utf8'),await fs.readFile(path.join(workspace,'case.spec.ts'),'utf8'));
   } finally { await fs.rm(root,{recursive:true,force:true}); }
 });
+
+
+test('real background browser records only page evidence and never requests desktop capture', {timeout:90000}, async()=>{
+  const root=await fs.mkdtemp(path.join(os.tmpdir(),'native-background-engineering-')),workspace=path.join(root,'workspace');await fs.mkdir(workspace);
+  try{
+    const source=`import {test,expect} from '@playwright/test';test('BG-1 background',async({page})=>{await test.step('CASE_STEP_1',async()=>{await page.setContent('<h1>Background ready</h1>');await expect(page.locator('h1')).toHaveText('Background ready');expect(await page.evaluate(()=>navigator.userAgent)).toContain('HeadlessChrome');});});`;
+    await fs.writeFile(path.join(workspace,'background.spec.mjs'),source);
+    const result=await executeNativeScript({workspace,runDirectory:path.join(root,'run'),entry:'background.spec.mjs',caseId:'BG-1',executionMode:'BACKGROUND',browserExecutable:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',timeoutMs:40000,
+      identity:{run_id:'run-bg',project_id:'project-bg',source_task_id:'task-bg',executed_case_id:'case-bg',executed_case_version:1,executed_content_sha256:'a'.repeat(64),executed_external_id:'BG-1'},frozenCaseContent:{steps:[{order:1,action:'Show synthetic background page',expected:'Background ready in a headless browser'}]}},
+      {prepareRecorder:()=>assert.fail('No desktop recording in background')});
+    assert.equal(result.status,'PASSED',result.error);assert.equal(result.execution_mode,'BACKGROUND');assert.equal(result.page_recording.status,'COMPLETE');
+    assert.equal(result.window_recording.status,'NOT_REQUESTED');assert.notEqual(result.window_timeline.status,'VERIFIED');
+    assert.ok(result.files.some(file=>file.kind==='trial_video'));assert.ok(result.files.some(file=>file.kind==='trial_trace'));
+    assert.equal(result.evidence_status,'COMPLETE',JSON.stringify(result.evidence_errors));assert.equal(await fs.readFile(path.join(workspace,'background.spec.mjs'),'utf8'),source);
+  }finally{assert.ok(path.basename(root).startsWith('native-background-engineering-'));await fs.rm(root,{recursive:true,force:true});}
+});

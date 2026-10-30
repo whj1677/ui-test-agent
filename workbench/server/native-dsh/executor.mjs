@@ -1,3 +1,4 @@
+import {diagnostics} from '../diagnostics.mjs';
 import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
@@ -199,11 +200,13 @@ export async function collectArtifacts(root) {
 }
 
 /** Owns one isolated execution. This is an execution boundary, not a hostile-code sandbox. */
-export async function executeNativeScript({ workspace, runDirectory, entry, purpose = 'case', caseId, baseUrl, storageState, browserExecutable, signal, timeoutMs = 180_000, onProgress, identity, frozenCaseContent, frozenSource }, { execute = runOwnedProcess, renderReplay, prepareRecorder = prepareWindowRecorder, finalizeEvidence = finalizeNativeEvidence } = {}) {
+export async function executeNativeScript({ workspace, runDirectory, entry, purpose = 'case', caseId, baseUrl, storageState, browserExecutable, executionMode = 'FOREGROUND', signal, timeoutMs = 180_000, onProgress, identity, frozenCaseContent, frozenSource }, { execute = runOwnedProcess, renderReplay, prepareRecorder = prepareWindowRecorder, finalizeEvidence = finalizeNativeEvidence } = {}) {
   const started_at = new Date().toISOString();
-  const result = { entry, purpose, status: 'ERROR', error: null, started_at, finished_at: null, script_sha256: null, bundle_sha256: null, artifacts: [], tests: [], report: null };
+  const result = { entry, purpose, status: 'ERROR', error: null, execution_mode: executionMode, started_at, finished_at: null, script_sha256: null, bundle_sha256: null, artifacts: [], tests: [], report: null };
   let root, privateDirectory, snapshot, manifest, created = false, dependencyLink, evidenceIdentity, observations = [];
   try {
+    if (!['BACKGROUND','FOREGROUND'].includes(executionMode)) throw Error('NATIVE_DSH_EXECUTION_MODE_INVALID');
+    const background = executionMode === 'BACKGROUND';
     const imported=Boolean(frozenSource?.importedPackage);
     if ((!workspace && !frozenSource?.runDirectory&&!imported) || !runDirectory || !entry || !caseId || !/^[\w.-]{1,160}$/.test(caseId)) throw Error('NATIVE_EXECUTION_INPUT_INVALID');
     if (!Number.isFinite(timeoutMs) || timeoutMs < 1 || timeoutMs > 1_800_000) throw Error('NATIVE_TIMEOUT_INVALID');
@@ -266,27 +269,29 @@ export async function executeNativeScript({ workspace, runDirectory, entry, purp
       timeout: Math.min(timeoutMs, 120_000), globalTimeout: timeoutMs, expect: { timeout: 10_000 },
       outputDir: path.join(root, 'artifacts'), preserveOutput: 'always',
       reporter: [[path.join(here, 'reporter.mjs'), { outputFile: reportPath, caseId }]],
-      use: { browserName: 'chromium', headless: false, video: 'on', trace: 'on', screenshot: 'on', baseURL: baseUrl || undefined, storageState: stateFile, launchOptions: browserExecutable ? { executablePath: browserExecutable } : {} },
+      use: { browserName: 'chromium', headless: background, video: 'on', trace: 'on', screenshot: 'on', baseURL: baseUrl || undefined, storageState: stateFile, launchOptions: browserExecutable ? { executablePath: browserExecutable } : {} },
     };
     const childEnv = { ...processEnvironment(), NO_COLOR: '1' };
     if (evidenceIdentity) {
-      config.use.viewport = null;
+      config.use.viewport = background ? {width:1280,height:800} : null;
       const evidenceConfigPath = path.join(privateDirectory, 'evidence-config.json');
-      const recorderPrepared = await prepareRecorder().catch(() => null);
+      const recorderPrepared = background ? null : await prepareRecorder().catch(() => null);
       await fs.writeFile(evidenceConfigPath, JSON.stringify({ runDirectory: root, snapshot, entry, files: manifest.files,
-        identity: evidenceIdentity, caseContent: frozenCaseContent, timeoutMs, recorderPrepared }), { mode: 0o600 });
+        identity: evidenceIdentity, caseContent: frozenCaseContent, executionMode, timeoutMs, recorderPrepared }), { mode: 0o600 });
       childEnv.NATIVE_EVIDENCE_CONFIG = evidenceConfigPath;
       config['@playwright/test'] = { babelPlugins: [[path.join(here, 'evidence-plugin.cjs'), { run_id: identity.run_id }]] };
     }
     const configPath = path.join(privateDirectory, 'playwright.config.mjs');
     await fs.writeFile(configPath, `const config=${JSON.stringify(config)};\nconfig.testMatch=new RegExp(${JSON.stringify('(?:^|[/\\\\])' + escapeRe(entry).replaceAll('/', '[/\\\\]') + '$')});\nconfig.grep=new RegExp(${JSON.stringify(escapeRe(caseId))});\nexport default config;\n`);
     onProgress?.({ type: 'execution_started', case_id: caseId, script_sha256: manifest.script_sha256, bundle_sha256: manifest.bundle_sha256 });
+    void diagnostics.record('browser','execution.started',{case_id:caseId,run_id:identity?.run_id,browser_executable:browserExecutable,execution_mode:executionMode});
     if (result.evidence_preflight) result.evidence_preflight.business_execution_started = true;
     const child = await execute(process.execPath, [playwrightCli, 'test', '--config', configPath], {
       cwd: snapshot, env: childEnv, signal, timeoutMs,
       onStdoutLine: line => { if (line.startsWith('NATIVE_EXECUTION_EVENT ')) { try { onProgress?.(JSON.parse(line.slice(23))); } catch {} } },
       maxCaptureBytes: 1024 * 1024,
     });
+    void diagnostics.record('browser','process.finished',{case_id:caseId,run_id:identity?.run_id,exit_code:child.exitCode,termination:child.termination,error:child.error,stderr:child.stderr},child.exitCode===0?'info':'error');
     await fs.writeFile(path.join(root, 'stdout.log'), child.stdout || '');
     await fs.writeFile(path.join(root, 'stderr.log'), child.stderr || '');
     result.report = await fs.readFile(reportPath, 'utf8').then(JSON.parse).catch(() => null);
@@ -326,6 +331,7 @@ export async function executeNativeScript({ workspace, runDirectory, entry, purp
       }
     }
     onProgress?.({ type: 'execution_finished', status: result.status, error: result.error, case_id: caseId });
+    void diagnostics.record('browser','execution.finished',{case_id:caseId,status:result.status,error:result.error},result.status==='PASSED'?'info':'warn');
   }
   return result;
 }

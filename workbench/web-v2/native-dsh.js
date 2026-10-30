@@ -1,3 +1,4 @@
+import { projectCaseSelection } from './case-selection.js';
 import { api } from './api.js';
 import { esc } from './workflow.js';
 
@@ -13,6 +14,11 @@ const errors = {
   AUTH_SESSION_NOT_VALID: '登录会话已失效，请到环境设置重新登录。',
   PROJECT_ENVIRONMENT_NOT_CONFIGURED: '请先配置本项目的前端测试环境。',
   PROJECT_ENVIRONMENT_CONFIGURATION_CHANGED: '项目环境已变化，请重新载入后核对。',
+  NATIVE_DSH_CLOSEOUT_STALLED: '用例已有结果，但 DSH 收尾长时间没有进展；已停止并保留结果，收尾未完整确认。',
+  NATIVE_DSH_CLOSEOUT_TOOL_LIMIT: 'DSH 收尾超过允许的后续工具次数；已停止并保留结果。',
+  NATIVE_DSH_ATTEMPT_LIMIT: '本条已达到首次执行加两次修复的上限，请保留结果并继续其他用例。',
+  NATIVE_DSH_CASE_ALREADY_PASSED: '本条已通过，本批不再重复执行。',
+  NATIVE_DSH_PAGE_FACTS_REQUIRED: '请先保存本批定位经验，再提交完成回执。',
   NATIVE_DSH_CASE_CHANGED: '用例版本已变化，请重新载入本页后选择。',
   NATIVE_DSH_EXISTING_SOURCE_CHANGED: '现有稿件副本已变化，未登记。请保留原稿后重新提交。',
   NATIVE_ENTRY_NOT_IN_SOURCE_BUNDLE: '所选用例尚无现有正式脚本；仅登记模式不会生成新稿。',
@@ -91,20 +97,21 @@ export function nativeDshCaseItems(project) {
   });
 }
 
-export function nativeDshTaskInput({ items, selected, environmentId, requestId, timeoutMinutes = 30, revisionNotes = '', kind = 'DSH_GENERATION_SELF_TEST' }) {
+export function nativeDshTaskInput({ items, selected, environmentId, requestId, revisionNotes = '', executionMode = 'BACKGROUND', kind = 'DSH_GENERATION_SELF_TEST' }) {
   if (!['DSH_GENERATION_SELF_TEST', 'REGISTER_EXISTING_DRAFT'].includes(kind)) throw Error('任务模式无效。');
+  if (!['BACKGROUND','FOREGROUND'].includes(executionMode)) throw Error('请选择后台或前台执行。');
   const registrationOnly = kind === 'REGISTER_EXISTING_DRAFT';
   const scope = items.filter(item => selected.has(item.case_id));
+  if (scope.length !== selected.size) throw Error(`已选 ${selected.size} 条，其中 ${selected.size-scope.length} 条不是已确认的前端用例；请返回用例库核对范围。`);
   if (!scope.length) throw Error('请至少选择一条已确认的前端用例。');
   if (scope.length > 200) throw Error('本次最多选择 200 条用例。');
   if (registrationOnly && scope.length !== 1) throw Error('仅登记模式每次请选择一条现有脚本。');
   if (!registrationOnly && !environmentId) throw Error('请先配置本项目的前端测试环境。');
-  if (!Number.isInteger(timeoutMinutes) || timeoutMinutes < 1 || timeoutMinutes > 120) throw Error('本批时间上限应为 1 至 120 分钟。');
   if (typeof revisionNotes !== 'string') throw Error('本批修订说明应为文本。');
   const notes = revisionNotes.trim();
   if (notes.length > 8000) throw Error('本批修订说明最多 8000 字符。');
   return { request_id: requestId, items: scope.map(({ case_id, case_version, content_sha256 }) => ({ case_id, case_version, content_sha256 })),
-    ...(registrationOnly ? { kind, allow_execution: false } : { environment_id: environmentId, allow_execution: true }), allow_model: true, timeout_minutes: timeoutMinutes,
+    ...(registrationOnly ? { kind, allow_execution: false } : { environment_id: environmentId, allow_execution: true }), allow_model: true, execution_mode: executionMode,
     ...(notes ? { revision_notes: notes } : {}) };
 }
 
@@ -305,9 +312,12 @@ function runHtml(run, task, projectId) {
 export function nativeDshTaskHtml(task, projectId, { open = false } = {}) {
   const active = activeStates.has(task.status), id = esc(task.id), runs = task.runs || [];
   const registrationOnly = task.kind === 'REGISTER_EXISTING_DRAFT';
+  const handled = (task.items || []).filter(item => runs.some(run=>run.case_id===item.case_id && run.counts_for_case) || (task.drafts || []).some(draft=>draft.case_id===item.case_id && draft.draft_status==='BLOCKED_PRECONDITION')).length;
   return `<details class="panel" data-native-task="${id}"${open ? ' open' : ''}><summary>${esc(task.created_at || '')} · ${esc(registrationOnly && task.status === 'COMPLETED' ? '登记完成 · 未运行' : statusLabel(task.status))} · ${(task.items || []).length} 条用例 · <span data-native-elapsed="${id}">${duration(elapsed(task))}</span></summary><div class="panel-body">
     ${registrationOnly ? '<p class="notice">仅登记已有脚本，未运行不计通过。独立登记会话只使用现有源包副本；本次没有执行证据，已有运行结果保留。</p>' : ''}
-    ${task.batch_progress ? `<p role="status"><strong>自动分批进度：第 ${esc(task.batch_progress.current)} / ${esc(task.batch_progress.total)} 批</strong> · 总计 ${esc(task.batch_progress.submitted_cases)} 条 · 整个任务共用时间上限</p>` : ''}
+    ${!registrationOnly ? `<p>执行方式：${task.execution_mode === 'BACKGROUND' ? '后台 · 页面录像' : '前台 · 整窗录像'}</p>` : ''}
+    ${task.batch_progress ? `<p role="status"><strong>自动分批进度：第 ${esc(task.batch_progress.current)} / ${esc(task.batch_progress.total)} 批</strong> · 总计 ${esc(task.batch_progress.submitted_cases)} 条 · 完成后自动结束</p>` : ''}
+    ${!registrationOnly ? `<p role="status">用例处理进度：${handled}/${(task.items || []).length} 条 · ${esc(task.stage || statusLabel(task.status))}</p>` : ''}
     ${errorHtml(task.error)}${nativeDshDiagnosticsHtml(task, projectId)}
     ${typeof task.revision_notes === 'string' && task.revision_notes ? `<details data-native-revision-notes><summary>本批修订说明（提交时记录）</summary><pre class="preserve-text">${esc(task.revision_notes)}</pre></details>` : ''}
     ${task.preflight ? `<details data-native-preflight><summary>前置预检（不阻塞执行）</summary>${nativeDshPreflightHtml(task.preflight)}</details>` : ''}
@@ -318,6 +328,7 @@ export function nativeDshTaskHtml(task, projectId, { open = false } = {}) {
     ${(task.drafts || []).filter(draft => draft.schema === 'workbench/native-dsh-draft-v1' && draft.project_id === projectId && draft.task_id === task.id).map(draft => `<details data-native-draft="${esc(draft.id)}"><summary>${esc(draft.external_id)} · ${draft.draft_status === 'BLOCKED_PRECONDITION' ? '前置阻塞 · 未执行' : '稿件已登记 · 未执行'}</summary><p>仅保存稿件；未执行、不计通过，没有执行证据，人工首审未登记。</p>${draft.blocker ? `<p class="notice warning">DSH 报告（未独立核验）：${esc(draft.blocker.code)} · ${esc(draft.blocker.summary)}</p>` : ''}<p>脚本 SHA-256：<code>${esc(draft.script_sha256)}</code></p><p>文件包 SHA-256：<code>${esc(draft.bundle_sha256)}</code></p>${artifactsHtml(projectId, task.id, draft.artifacts, draft.script_sha256)}</details>`).join('')}
     ${runs.length ? runs.map(run => runHtml(run, task, projectId)).join('') : '<p class="muted">尚未收到程序执行记录。</p>'}
     ${task.artifacts?.length ? `<div>任务文件：${artifactsHtml(projectId, task.id, task.artifacts)}</div>` : ''}
+    ${(task.completion_receipts || []).length ? `<details><summary>收尾与证据保存记录</summary>${task.completion_receipts.map(receipt=>`<p>第 ${esc(receipt.batch_number)} 批 · 已保存 ${esc(receipt.finished_at)}${receipt.artifact ? ` · <a href="${nativeDshArtifactUrl(projectId,task.id,receipt.artifact.id)}" target="_blank" rel="noreferrer">本批定位经验</a>` : ''}</p>`).join('')}</details>` : ''}
     ${task.reply ? `<details><summary>dsh 任务说明</summary><pre class="preserve-text">${esc(task.reply)}</pre></details>` : ''}
     <details><summary>任务与会话编号</summary><p>任务：${id}<br>${registrationOnly ? '独立登记会话' : '项目会话'}：${esc(task.session_id || '尚未建立')}</p></details>
   </div></details>`;
@@ -325,7 +336,7 @@ export function nativeDshTaskHtml(task, projectId, { open = false } = {}) {
 
 export async function renderNativeDsh({ project, query = new URLSearchParams(), showPage, isCurrent = () => true }) {
   const projectId = project.project_id, base = `#/projects/${encodeURIComponent(projectId)}`, endpoint = `/api/case-library/projects/${encodeURIComponent(projectId)}`;
-  const items = nativeDshCaseItems(project), selected = new Set(items.filter(item => (query.get('selected') || '').split(',').includes(item.case_id)).map(item => item.case_id));
+  const items = nativeDshCaseItems(project), selected = projectCaseSelection(project.project_id, project.cases, query);
   let disposed = false, timer, refreshing = false, sending = false, data = null, environment = null, authSession = null, requestIdentity = null, historyFingerprint = '', stateRevision = 0;
   const controllers = new Set(), live = () => !disposed && isCurrent();
   const dispose = () => { disposed = true; clearTimeout(timer); for (const controller of controllers) controller.abort(); controllers.clear(); };
@@ -340,9 +351,9 @@ export async function renderNativeDsh({ project, query = new URLSearchParams(), 
     <section class="panel"><div class="panel-body"><p id="native-session" role="status">正在读取项目会话…</p><p id="native-environment" class="muted"></p>
     <label class="field">本批任务模式<select id="native-task-kind"><option value="DSH_GENERATION_SELF_TEST">生成脚本并自测</option><option value="REGISTER_EXISTING_DRAFT">仅登记现有稿件</option></select></label>
     <h2>测试范围与设置</h2><p id="native-mode-description">可一次启动全部用例，程序每 20 条自动分批连续处理。</p>
-    <div class="actions"><button class="button" id="native-select-all" type="button">全选</button><button class="button" id="native-select-none" type="button">清空选择</button><label class="field">本批时间上限（分钟）<input id="native-timeout" type="number" min="1" max="120" step="1" value="30"></label></div>
+    <div class="actions"><button class="button" id="native-select-all" type="button">选择全部可测试用例（${items.length}）</button><button class="button" id="native-select-none" type="button">清空选择</button><label class="field">浏览器执行方式<select id="native-execution-mode"><option value="BACKGROUND" selected>后台执行（默认）</option><option value="FOREGROUND">前台执行（可观看浏览器）</option></select></label><span class="muted">后台保存页面录像；前台保存整窗录像。完成后自动结束。</span></div>
     <p class="muted">达到上限会停止本批并保留已产生的文件与结果。你也可以随时停止。</p>
-    <details><summary>选择测试用例（${items.length} 条已确认前端用例）</summary><div class="table-wrap"><table class="pw-table"><thead><tr><th>选择</th><th>测试用例</th><th>版本</th></tr></thead><tbody>${items.map(item => `<tr><td><input type="checkbox" data-native-case="${esc(item.case_id)}" aria-label="选择 ${esc(item.external_id || item.title)}"${selected.has(item.case_id) ? ' checked' : ''}></td><td><small>${esc(item.external_id)}</small><strong>${esc(item.title)}</strong></td><td>v${esc(item.case_version)}</td></tr>`).join('')}</tbody></table></div></details>
+    <p id="native-scope-warning" class="notice warning" hidden></p><details><summary>选择测试用例（${items.length} 条已确认前端用例）</summary><div class="table-wrap"><table class="pw-table"><thead><tr><th>选择</th><th>测试用例</th><th>版本</th></tr></thead><tbody>${items.map(item => `<tr><td><input type="checkbox" data-native-case="${esc(item.case_id)}" aria-label="选择 ${esc(item.external_id || item.title)}"${selected.has(item.case_id) ? ' checked' : ''}></td><td><small>${esc(item.external_id)}</small><strong>${esc(item.title)}</strong></td><td>v${esc(item.case_version)}</td></tr>`).join('')}</tbody></table></div></details>
     ${items.length ? '' : '<p>暂无已确认的前端用例。请先导入并确认用例正文。</p>'}
     <label class="field">本批修订说明（可选）<textarea id="native-revision-notes" rows="4" maxlength="8000" placeholder="写明本批需要修订的用例与要求"></textarea></label>
     <p class="muted">最多 8000 字符，将随本批任务保存。</p>
@@ -374,16 +385,19 @@ export async function renderNativeDsh({ project, query = new URLSearchParams(), 
       transcriptButton.disabled = !data?.session_id;
       transcriptButton.title = data?.session_id ? '读取本项目会话的输入与回复' : '本项目尚未建立 dsh 会话';
     }
-    node('#native-start').disabled = sending || !ready || busy() || !selected.size;
+    const unavailable = [...selected].filter(id=>!items.some(item=>item.case_id===id)).length;
+    node('#native-scope-warning').hidden = !unavailable;
+    node('#native-scope-warning').textContent = `已保留所选 ${selected.size} 条，其中 ${unavailable} 条尚不是已确认的前端用例。请返回用例库核对，或明确改选全部可测试用例。`;
+    node('#native-start').disabled = sending || !ready || busy() || !selected.size || !!unavailable;
     node('#native-start').textContent = sending ? '正在提交…' : `${registrationOnly ? '让 DSH 登记现有稿件' : '开始测试'}${selected.size ? `（${selected.size} 条）` : ''}`;
     node('#native-start-all').hidden = registrationOnly;
     node('#native-start-all').disabled = sending || !ready || busy() || !items.length;
     node('#native-start-all').textContent = `全部开始（${items.length} 条）`;
-    node('#native-ready').textContent = needsLogin && !loginReady ? '尚未完成本项目登录，测试还没有开始。打开登录窗口，登录后点击“我已登录，检查状态”。' : !ready ? '请先配置测试环境并确认 DSH 已就绪。' : busy() ? '测试正在处理，进度显示在下方。' : `已选 ${selected.size} 条 / 可测试 ${items.length} 条。超过 20 条自动连续分批；调用真实模型，时间上限为整个任务总上限。`;
+    node('#native-ready').textContent = needsLogin && !loginReady ? '尚未完成本项目登录，测试还没有开始。打开登录窗口，登录后点击“我已登录，检查状态”。' : !ready ? '请先配置测试环境并确认 DSH 已就绪。' : busy() ? '测试正在处理，进度显示在下方。' : `已选 ${selected.size} 条 / 可测试 ${items.length} 条。超过 20 条自动连续分批；调用真实模型，处理完成后自动结束。`;
     node('#native-login-open').hidden = node('#native-login-check').hidden = !needsLogin || loginReady;
     node('#native-task-kind').disabled = sending || busy();
     node('#native-mode-description').textContent = registrationOnly ? '仅登记已有脚本，未运行不计通过。每次选择一条已有正式脚本，由 DSH 在独立会话核对冻结副本并登记；不生成或修改业务稿，不登录、不访问测试目标，不产生执行证据。已有结果保留。' : '调用真实模型编写或修订脚本并在真实浏览器自测。可全部开始，由程序每 20 条自动连续处理；登录、版本和环境校验仍逐批执行。';
-    node('#native-timeout').disabled = sending;
+    node('#native-execution-mode').disabled = sending || busy();
     node('#native-revision-notes').disabled = sending;
     node('#native-select-all').disabled = sending; node('#native-select-none').disabled = sending;
     document.querySelectorAll('[data-native-case]').forEach(input => { input.checked = selected.has(input.dataset.nativeCase); input.disabled = sending; });
@@ -426,7 +440,7 @@ export async function renderNativeDsh({ project, query = new URLSearchParams(), 
     finally { refreshing = false; if (live() && busy()) timer = setTimeout(() => void refresh(), 2500); }
   };
   document.querySelectorAll('[data-native-case]').forEach(input => { input.onchange = () => { input.checked ? selected.add(input.dataset.nativeCase) : selected.delete(input.dataset.nativeCase); update(); }; });
-  node('#native-select-all').onclick = () => { for (const item of items) selected.add(item.case_id); update(); };
+  node('#native-select-all').onclick = () => { selected.clear(); for (const item of items) selected.add(item.case_id); update(); };
   node('#native-select-none').onclick = () => { selected.clear(); update(); };
   node('#native-task-kind').onchange = () => { requestIdentity = null; update(); };
   node('#native-refresh').onclick = () => { node('#native-error').textContent = ''; void refresh({ withEnvironment: true }); };
@@ -498,7 +512,7 @@ export async function renderNativeDsh({ project, query = new URLSearchParams(), 
     if (sending || busy() || !live()) return;
     let input;
     try {
-      input = nativeDshTaskInput({ items, selected, environmentId: environment?.ui_environment_id || environment?.ui?.id, requestId: '', timeoutMinutes: Number(node('#native-timeout').value), revisionNotes: node('#native-revision-notes').value, kind: taskKind() });
+      input = nativeDshTaskInput({ items, selected, environmentId: environment?.ui_environment_id || environment?.ui?.id, requestId: '', revisionNotes: node('#native-revision-notes').value, executionMode: node('#native-execution-mode').value || 'BACKGROUND', kind: taskKind() });
       const identity = JSON.stringify(input);
       if (requestIdentity?.identity !== identity) requestIdentity = { identity, requestId: `native-${crypto.randomUUID()}` };
       input.request_id = requestIdentity.requestId;
@@ -508,11 +522,11 @@ export async function renderNativeDsh({ project, query = new URLSearchParams(), 
       const task = await request(`${endpoint}/native-dsh/tasks`, post(input));
       if (!live()) return;
       requestIdentity = null; data = { ...data, active_task_id: activeStates.has(task.status) ? task.id : null, tasks: [task, ...(data?.tasks || []).filter(item => item.id !== task.id)] };
-      selected.clear(); node('#native-revision-notes').value = ''; renderHistory(); await refresh();
+      node('#native-revision-notes').value = ''; renderHistory(); await refresh();
     } catch (error) { if (live()) node('#native-error').textContent = errorMessage(error); }
     finally { sending = false; update(); }
   };
-  node('#native-start-all').onclick = async () => { if (node('#native-start-all').disabled) return; for (const item of items) selected.add(item.case_id); update(); await node('#native-start').onclick(); };
+  node('#native-start-all').onclick = async () => { if (node('#native-start-all').disabled) return; selected.clear(); for (const item of items) selected.add(item.case_id); update(); await node('#native-start').onclick(); };
   await refresh({ withEnvironment: true });
   return dispose;
 }

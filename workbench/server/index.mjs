@@ -46,6 +46,13 @@ import { createNativeDshRuntime } from './native-dsh/runtime.mjs';
 import { nativeDshPackage } from '../scripts/native-dsh-package.mjs';
 import { prepareNativeWorkspaceRuntime } from './native-dsh/workspace-runtime.mjs';
 import { startupPhase } from './startup-phase.mjs';
+import {configureDiagnostics,diagnostics} from './diagnostics.mjs';
+import {fileURLToPath} from 'node:url';
+
+const diagnosticRelease=await fs.readFile(new URL('../release.json',import.meta.url),'utf8').then(JSON.parse).catch(()=>({version:'unknown'}));
+configureDiagnostics({programRoot:fileURLToPath(new URL('../../',import.meta.url)),version:diagnosticRelease.version});
+await diagnostics.record('service','startup',{platform:process.platform,arch:process.arch,node:process.version});
+process.on('uncaughtExceptionMonitor',error=>diagnostics.fatal(error));
 
 const host = '127.0.0.1';
 const port = Number(process.env.WORKBENCH_PORT || 4322);
@@ -257,6 +264,7 @@ manager.onStorageFault = (error,operation) => buildManager.reportStorageFault(er
 manager.otherActive = () => Boolean(nativeDshManager.active||nativeDshManager.starting||buildManager.active||buildManager.starting||buildManager.storageFault||scriptOperations.active||scriptOperations.starting||batchManager.active||batchManager.starting||requirementsManager.active||requirementsManager.starting||caseAssistantManager?.active||caseAssistantManager?.starting||backendManager?.active || backendManager?.generationBatchActive || backendManager?.storageFault||demonstrations?.active||demonstrations?.starting);
 const server = createWorkbenchServer({ nativeDshManager, frontendHandoffs, caseAssistantManager, demonstrations, projectEnvironments, projectTargetAccess, projectTrialAuthorization, backendManager, serviceState, serviceIdentity, serviceRestart, requirementsManager, scriptOperations, reportSnapshots, batchManager, store, manager, buildStore, buildManager, buildRevalidationStore, buildAssessmentStore, caseStore, caseManager, authSessions });
 server.listen(port, host, () => {
+  void diagnostics.record('service','ready',{service_instance_id:serviceIdentity.service_instance_id,source_sha256:serviceIdentity.source_sha256,configuration_sha256:serviceIdentity.configuration_sha256,data_root_sha256:serviceIdentity.data_root_sha256});
   serviceRestart.markReady();
   console.log(`Approved test workbench http://${host}:${port}`);
   if (recovered.length) console.log(`Recovered interrupted runs: ${recovered.join(', ')}`);
@@ -266,8 +274,9 @@ server.listen(port, host, () => {
 drain = createServiceShutdown({nativeDshManager,caseAssistantManager,demonstrations,backendManager,state:serviceState,server,runManager:manager,buildManager,batchManager,scriptOperations,authSessions,requirementsManager,requirementsModel,
   onError:(error,operation)=>console.error(JSON.stringify({type:'shutdown_error',operation,code:error?.code||error?.message||'UNKNOWN'}))});
 function shutdown(signal) {
+  void diagnostics.record('service','shutdown.requested',{signal});
   console.log(JSON.stringify({ type: 'service_shutdown_requested', service_instance_id: serviceInstanceId, signal }));
-  return drain();
+  return drain().finally(()=>diagnostics.flush());
 }
 process.once('SIGINT', () => void shutdown('SIGINT'));
 process.once('SIGTERM', () => void shutdown('SIGTERM'));
