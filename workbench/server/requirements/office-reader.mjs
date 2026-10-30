@@ -5,10 +5,11 @@ import {fileURLToPath} from 'node:url';
 import {promisify} from 'node:util';
 import {execFile} from 'node:child_process';
 import {inspectDocument,sha256} from './documents.mjs';
+import {diagnostics} from '../diagnostics.mjs';
 
 const execute=promisify(execFile);
 const worker=fileURLToPath(new URL('./office-word-reader.exe',import.meta.url));
-const codes=new Set(['REQUIREMENT_OFFICE_REQUIRED','REQUIREMENT_OFFICE_BUSY','REQUIREMENT_OFFICE_PERMISSION_DENIED','REQUIREMENT_OFFICE_OPEN_FAILED','REQUIREMENT_OFFICE_TIMEOUT','REQUIREMENT_OFFICE_CANCELLED','REQUIREMENT_OFFICE_EMPTY','REQUIREMENT_OFFICE_LIMIT']);
+const codes=new Set(['REQUIREMENT_OFFICE_REQUIRED','REQUIREMENT_OFFICE_BUSY','REQUIREMENT_OFFICE_UNSAVED','REQUIREMENT_OFFICE_PERMISSION_DENIED','REQUIREMENT_OFFICE_OPEN_FAILED','REQUIREMENT_OFFICE_TIMEOUT','REQUIREMENT_OFFICE_CANCELLED','REQUIREMENT_OFFICE_EMPTY','REQUIREMENT_OFFICE_LIMIT']);
 let reading=false;
 const fail=code=>{throw Error(code);};
 
@@ -23,6 +24,8 @@ export async function readWordDocument({body,signal,originalPath=null,provider='
   if(!['auto','word','wps'].includes(provider))fail('REQUIREMENT_OFFICE_OPEN_FAILED');
   if(reading)fail('REQUIREMENT_OFFICE_BUSY');
   reading=true;
+  const started=Date.now();
+  void diagnostics.record('office','read.started',{provider,original_path_supplied:Boolean(originalPath),platform});
   let directory;
   const options={windowsHide:true,encoding:'utf8',maxBuffer:24*1024*1024,env:officeEnvironment(environment)};
   try {
@@ -45,14 +48,19 @@ export async function readWordDocument({body,signal,originalPath=null,provider='
       const output=await run(worker,['read','--input',input,'--owner',owner,'--provider',provider],{...options,timeout:90000,signal});
       result=JSON.parse(output.stdout.replace(/^\uFEFF/,''));
     } catch(error) {
+      await diagnostics.record('office','worker.failed',{provider,error},'error');
       if(signal?.aborted)fail('REQUIREMENT_OFFICE_CANCELLED');
       if(error.killed || error.code==='ETIMEDOUT')fail('REQUIREMENT_OFFICE_TIMEOUT');
       fail('REQUIREMENT_OFFICE_OPEN_FAILED');
     }
-    if(result.status!=='PARTIAL')fail(codes.has(result.code)?result.code:'REQUIREMENT_OFFICE_OPEN_FAILED');
+    if(result.status!=='PARTIAL'){
+      await diagnostics.record('office','read.rejected',{provider,resolved_provider:result.provider,code:result.code,phase:result.phase,hresult:result.hresult,probe:result.diagnostic,attempts:result.attempts},'error');
+      fail(codes.has(result.code)?result.code:'REQUIREMENT_OFFICE_OPEN_FAILED');
+    }
     if(useOriginal && sha256(await fs.readFile(input))!==sha256(body))fail('REQUIREMENT_SOURCE_INTEGRITY_FAILED');
     return useOriginal?{...result,original_body:body,file_name:path.basename(input)}:result;
-  } finally {
+  } catch(error) {await diagnostics.record('office','read.failed',{provider,error,elapsed_ms:Date.now()-started},'error');throw error;} finally {
+    void diagnostics.record('office','read.finished',{provider,elapsed_ms:Date.now()-started});
     if(directory) {
       const owner=path.join(directory,'owner.json');
       if(await fs.stat(owner).catch(()=>null)) {

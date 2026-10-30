@@ -289,7 +289,7 @@ function bindNativeRerun(root) {
         startButton.onclick=async()=>{
           startButton.disabled=true;progress.textContent='正在启动所选冻结脚本复跑…';
           try {
-            const task=await api(`${endpoint}/reruns`,post({items,request_id:requestId,allow_execution:true,timeout_minutes:30}));
+            const task=await api(`${endpoint}/reruns`,post({items,request_id:requestId,allow_execution:true}));
             startedTask=task.id || task.task?.id || task.task_id;startButton.hidden=true;
             dialog.querySelector('[data-native-rerun-close]').textContent='关闭（运行继续）';
             await update();

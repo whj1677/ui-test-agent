@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
 import { resolveInside } from '../integrity.mjs';
 import { readList } from '../read-list.mjs';
+import { writeAtomicJsonLine as writeJsonAtomic } from '../atomic-json.mjs';
 
 const ACTIVE_TASK_STATES = new Set(['STARTING', 'GENERATING', 'VERIFYING', 'CANCELLING']);
 const RETRYABLE_WRITE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
@@ -87,24 +87,6 @@ async function readJson(file, fallback) {
     if (error.code === 'ENOENT' && fallback !== undefined) return fallback;
     throw error;
   }
-}
-
-async function writeJsonAtomic(file, value, io = fs) {
-  await io.mkdir(path.dirname(file), { recursive: true });
-  const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  await io.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
-  try {
-    for (let attempt = 0; ; attempt += 1) {
-      try {
-        await io.rename(temporary, file);
-        break;
-      } catch (error) {
-        if (!RETRYABLE_WRITE_CODES.has(error.code) || attempt >= 7) throw error;
-        await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
-      }
-    }
-  }
-  finally { await io.rm(temporary, { force: true }).catch(() => {}); }
 }
 
 export class BuildTaskStore {

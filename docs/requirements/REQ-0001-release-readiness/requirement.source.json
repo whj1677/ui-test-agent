@@ -3,12 +3,12 @@
   "req_id": "REQ-0001",
   "title": "多界面真实链路发布就绪",
   "metadata": {
-    "requirement_status": "v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。",
+    "requirement_status": "v19侧栏版本显示已实现；WPS关闭仍BUSY的现场问题未解决，已打开已保存原件后备不足以覆盖此场景。按用户要求暂停交付打包，等待并行修改完成后统一核验；需用户电脑WPS接口诊断。",
     "governance_level": "G2",
-    "version": 18,
-    "last_updated": "2026-10-29"
+    "version": 19,
+    "last_updated": "2026-10-30"
   },
-  "original_input": "用户设定持续目标：把Agent优化到可以发布，不能只口头宣布；通过大量界面测试发现并修复问题，每修复一个问题Git同步，修改前创建需求包。用户授权本机操作、官方DeepSeek测试和现有GitHub项目同步。凭据原文省略，不写入文件。\n2026-09-25用户在发布差距评估后明确授权主管完成安装启动、有限真实业务接入、可信回归及执行边界收口。当前不自动commit/push/tag/发布，保留已有未提交修复。\n2026-10-28用户反馈另一台电脑使用测试Agent-工程师试用交付包-免激活-20261026.zip：密钥配置成功后AI用例助手仍不可用，点击添加/导入文档无反应；另反馈保存前端环境时报GENERATION_TARGET_UNREACHABLE。修复已有试用链路，不改变显式模型授权与测试范围。\n2026-10-28用户明确要求：接入需求Agent已有的本机Office只读后备，然后做升级包；不打包旧环境，用户选择之前安装的路径，只升级本次功能。",
+  "original_input": "用户设定持续目标：把Agent优化到可以发布，不能只口头宣布；通过大量界面测试发现并修复问题，每修复一个问题Git同步，修改前创建需求包。用户授权本机操作、官方DeepSeek测试和现有GitHub项目同步。凭据原文省略，不写入文件。\n2026-09-25用户在发布差距评估后明确授权主管完成安装启动、有限真实业务接入、可信回归及执行边界收口。当前不自动commit/push/tag/发布，保留已有未提交修复。\n2026-10-28用户反馈另一台电脑使用测试Agent-工程师试用交付包-免激活-20261026.zip：密钥配置成功后AI用例助手仍不可用，点击添加/导入文档无反应；另反馈保存前端环境时报GENERATION_TARGET_UNREACHABLE。修复已有试用链路，不改变显式模型授权与测试范围。\n2026-10-28用户明确要求：接入需求Agent已有的本机Office只读后备，然后做升级包；不打包旧环境，用户选择之前安装的路径，只升级本次功能。\n2026-10-30 用户反馈用户电脑WPS仍报REQUIREMENT_OFFICE_BUSY，要求修复，必要时交DSH处理；补充在左侧导航增加版本号。",
   "user_requirements": [
     {
       "id": "UN-0001-01",
@@ -107,6 +107,13 @@
       "goal": "继续使用同一受保护需求文档，在AI用例助手真实生成一次并下载Excel，验证读取到下载的整个流程",
       "constraints": "本轮用户明确授权使用已配置模型实际生成；沿用正式4322、同一原件与既有配置。只验证草稿生成和下载，业务仍待核对。",
       "success_criteria": "实际模型生成任务完成；本轮选取前端6/后端6条代表性草稿，两份XLSX经网页按钮下载，字段、步骤、来源引用和待确认/未执行状态核对通过；失败与未覆盖项保留。"
+    },
+    {
+      "id": "UN-0001-15",
+      "status": "已确认",
+      "goal": "修复用户WPS文档读取BUSY并在左侧导航显示版本号；不能把本机Word验证当作用户WPS已恢复。",
+      "constraints": "修改前Git归档推送；唯一4322、保护原文档和数据配置；真实WPS现场复测保留。",
+      "success_criteria": "WPS复用进程时可只读明确路径的已保存原件，未保存或路径不明拒绝；侧栏显示实际运行版本。"
     }
   ],
   "confirmed_facts": [
@@ -179,7 +186,9 @@
     "解包后使用包内verifyCandidate、readBuildInfo和server.start核验：包/源代码/HTTP构建均9b7f132246fa，随机端口和新数据目录，首页/JS/CSS均HTTP200，JS/CSS字节摘要与包相同，未配置模型、无任务；关闭后监听器与写锁释放。已使用禁联网注入fetch且调用计数0，不是Agent业务运行；实际日志validation/REQ-0001-candidate-runtime.log。",
     "解包精确文件清单和敏感文件名排除检查未发现用户数据/依赖目录/凭据文件；指定Key/token/私钥正则扫描0命中，仅限所列模式，不证明所有敏感内容不存在。该HTTP验证共享工作区node_modules，未运行新包安装器/Chromium/Python导入，不是干净Windows；PENDING_ACCEPTANCE不变，完整证据及限制见candidate-check.md。",
     "2026-10-28：用户反馈目标地址问题已恢复；用例助手曾可用后又不可用，并反馈启动窗口很快关闭。原包普通启动固定model=false与页面禁用资料框均有源码证据；远端启动窗口关闭原因尚无日志。正式4322配置/数据指纹保持，本轮1个合成QA项目，DOCX/Markdown上传201/READ，浏览器available=false故障注入验证资料选择与禁用发送；49项定向通过，模型POST为0。",
-    "用户提供的受企业保护DOCX在当前Python视角为552045字节且ZIP有效，在Node视角为553069字节且文件头非ZIP；Node上传长度与用户截图一致。只检查容器、摘要和解析返回码，未运行Office、未解密/导出文档正文或发送模型。pm-req源码提供标准解析失败后的本机Office只读后备，测试Agent当前没有此能力。"
+    "用户提供的受企业保护DOCX在当前Python视角为552045字节且ZIP有效，在Node视角为553069字节且文件头非ZIP；Node上传长度与用户截图一致。只检查容器、摘要和解析返回码，未运行Office、未解密/导出文档正文或发送模型。pm-req源码提供标准解析失败后的本机Office只读后备，测试Agent当前没有此能力。",
+    "WPS现场截图为REQUIREMENT_OFFICE_BUSY；现有C#读取器要求新建Office进程。新增只读后备仅匹配明确原始完整路径的已打开且已保存WPS文档，不打开其他文件、不修改全局设置、不关闭用户窗口；未保存或读取期间变更拒绝。DSH现有助手接收已提取来源段，不能假定可解密原始企业保护文件。",
+    "2026-10-30用户明确回复：WPS已完全关闭仍报错；并要求等待并行修改完成后再一起核验打包。中间候选不作为修复完成版交付。新增独立只读WPS诊断，仅探测COM接口/进程复用/文档数量，不读取内容、不改宏设置；本机WPS未注册，用户电脑诊断待执行。"
   ],
   "inferences_and_open_questions": [
     "本轮默认最多两轮固定零模型回归；真实模型验证仅在明确所需目标和预算后有限执行，工具调用与供应商费用分列。无操作系统级隔离时不可宣称可安全运行任意页面/代码。",
@@ -412,6 +421,22 @@
         "不为本机测试修复或调整企业加密策略",
         "不自动提交、推送或公开发布"
       ]
+    },
+    {
+      "id": "DR-0001-18",
+      "status": "已确认",
+      "requirement": "WPS已打开原件只读后备和侧栏运行版本标识",
+      "acceptance_criteria": [
+        "仅匹配指定完整原始路径且已保存的WPS文档；读取期间发生编辑拒绝，不打开其它文档或修改共享设置",
+        "无可用HWND的WPS接口仍可进行精确已打开原件匹配；保留既有独立实例和所有权限/大小限制",
+        "导航显示当前服务release版本，服务不可用时标待确认，不写死安装包编号",
+        "真实WPS、受保护原件和DSH内容处理现场结果独立记录，尚未实测不得宣称解决",
+        "WPS完全关闭仍BUSY的真实现场需要诊断后修复，当前已打开原件后备不作该场景通过。"
+      ],
+      "constraints": [
+        "不关闭用户WPS或文档，不调整企业加密策略",
+        "DSH仍使用可追溯来源，不假定可直接解密受保护原件"
+      ]
     }
   ],
   "design_decisions": [
@@ -603,6 +628,15 @@
       "status": "已确认",
       "summary": "生成会话只对local-office/PARTIAL、图片UNANALYZED且嵌图清单为空的DOCX使用已冻结文字，不重开原件ZIP；原字节摘要仍核验，普通DOCX插图继续解析及校验，MCP清单保留读取方式和图片缺口。",
       "rationale": "原件可被Word读取不代表原字节为普通ZIP；真实生成必须沿用冻结正文并暴露未覆盖图片。"
+    },
+    {
+      "id": "DD-0001-22",
+      "dr_ids": [
+        "DR-0001-18"
+      ],
+      "status": "已确认",
+      "summary": "WPS共享实例只读已打开已保存的精确原件；导航使用health.service_identity.release.version。",
+      "rationale": "原严格新PID条件可能拒绝WPS共享实例；本机无WPS，只能独立核验代码逻辑与正式页面，用户现场待验。"
     }
   ],
   "interfaces_and_data_flow": [
@@ -1080,6 +1114,34 @@
       "task": "完整安装包包含受保护资料生成修复",
       "verification_ids": [
         "VT-0001-32"
+      ]
+    },
+    {
+      "id": "TK-0001-33",
+      "dr_ids": [
+        "DR-0001-18"
+      ],
+      "dd_ids": [
+        "DD-0001-22"
+      ],
+      "status": "已完成",
+      "task": "实现并验证WPS精确已保存原件读取逻辑",
+      "verification_ids": [
+        "VT-0001-33"
+      ]
+    },
+    {
+      "id": "TK-0001-34",
+      "dr_ids": [
+        "DR-0001-18"
+      ],
+      "dd_ids": [
+        "DD-0001-22"
+      ],
+      "status": "已完成",
+      "task": "显示并实测正式4322的侧栏版本号",
+      "verification_ids": [
+        "VT-0001-34"
       ]
     }
   ],
@@ -1596,6 +1658,42 @@
         "skipped_count": 0,
         "log_path": "workbench/qa/20261029-protected-document-retest/generation-build-v3.log"
       }
+    },
+    {
+      "id": "VT-0001-33",
+      "dr_ids": [
+        "DR-0001-18"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "实现并验证WPS精确已保存原件读取逻辑",
+      "evidence_standard": "WPS为编译后合成对象逻辑测试，实际WPS未运行；版本号为唯一4322真实浏览器验证，零模型。",
+      "current_evidence": {
+        "command": "workbench/qa/20261030-wps-reader/WpsReaderTests.exe",
+        "exit_code": 0,
+        "test_count": 6,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-wps-reader/wps-contract.log"
+      }
+    },
+    {
+      "id": "VT-0001-34",
+      "dr_ids": [
+        "DR-0001-18"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "显示并实测正式4322的侧栏版本号",
+      "evidence_standard": "WPS为编译后合成对象逻辑测试，实际WPS未运行；版本号为唯一4322真实浏览器验证，零模型。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261030-wps-reader/verify-sidebar.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-wps-reader/sidebar-final.log"
+      }
     }
   ],
   "verification_environment": {
@@ -1883,6 +1981,22 @@
       "tk_id": "TK-0001-32",
       "vt_id": "VT-0001-32",
       "status": "限定实现与集成通过；业务确认及真实WPS待验"
+    },
+    {
+      "un_id": "UN-0001-15",
+      "dr_id": "DR-0001-18",
+      "dd_id": "DD-0001-22",
+      "tk_id": "TK-0001-33",
+      "vt_id": "VT-0001-33",
+      "status": "仅已打开已保存原件逻辑完成；WPS关闭仍BUSY现场尚未修复，待诊断。"
+    },
+    {
+      "un_id": "UN-0001-15",
+      "dr_id": "DR-0001-18",
+      "dd_id": "DD-0001-22",
+      "tk_id": "TK-0001-34",
+      "vt_id": "VT-0001-34",
+      "status": "代码和限定验证完成；实际WPS现场待复测"
     }
   ],
   "trace_history": [
@@ -2255,6 +2369,14 @@
       "description": "v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。",
       "impact": "修复生成准备对受保护原件的ZIP重解析；更新完整安装包，不改变原件与加密策略。",
       "confirmed_by": "用户明确要求继续同一加密文档，在AI用例助手实际生成一次用例并下载Excel验证整个流程"
+    },
+    {
+      "date": "2026-10-30",
+      "version": 19,
+      "type": "修复",
+      "description": "WPS共享进程中的精确已保存原件只读读取，以及侧栏显示服务真实release版本；实际WPS现场待复测。",
+      "impact": "Office后备、助手提示与侧栏版本展示",
+      "confirmed_by": "用户本轮指令"
     }
   ]
 }

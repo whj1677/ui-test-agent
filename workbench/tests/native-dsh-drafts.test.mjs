@@ -184,7 +184,7 @@ test('only the precise draft route delegates its task bearer without relying on 
 
 test('DSH helper has explicit non-execution registration and preserves existing execution syntax', async () => {
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-  const source = nativeTaskHelper('http://local.invalid/tasks/t', 'fixture-token').replace("import { readFile } from 'node:fs/promises';", '').replace('import.meta.url', "'file:///fixture/execute.mjs'");
+  const source = nativeTaskHelper('http://local.invalid/tasks/t', 'fixture-token').replace("import { readFile } from 'node:fs/promises';", '').replaceAll('import.meta.url', "'file:///fixture/execute.mjs'");
   for (const register of [true, false]) {
     let call, exit;
     const argv = ['node', 'execute.mjs', ...(register ? ['register-draft'] : []), 'TC-024', 'specs/TC-024.spec.mjs', ...(register ? ['--blocked-code', 'MISSING_AUTHORIZED_TEST_DATA', '--reason', '两个园区缺失'] : ['--diagnostic'])];

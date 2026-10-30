@@ -1,4 +1,7 @@
 import fs from 'node:fs/promises';
+import { batchCoverage, assertAttemptAllowed, closeoutReason } from './completion.mjs';
+import { rejectSymlinkPath } from './executor.mjs';
+import {diagnostics} from '../diagnostics.mjs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { randomUUID, createHash, timingSafeEqual } from 'node:crypto';
@@ -127,6 +130,7 @@ export class NativeDshManager {
   serial(fn) { const result = this.queue.then(fn, fn); this.queue = result.catch(() => {}); return result; }
   diagnostics() { return { available: Boolean(this.client?.available) && !this.storageFault, active_task_id: this.active?.taskId || null, project_id: this.active?.projectId || null, starting: this.starting, state_unconfirmed: Boolean(this.storageFault), runtime: this.client?.identity || null, last_diagnostic: this.lastDiagnostic || null }; }
   async recordDiagnostic(projectId, taskId, error, phase) {
+    await diagnostics.record('native.task','failed',{project_id:projectId,task_id:taskId,phase,error},'error');
     const value = { schema: 'workbench/native-dsh-task-diagnostic-v1', at: now(), project_id: projectId, task_id: taskId,
       ...safeDiagnostic(error, phase, error?.native_update_phase) };
     this.lastDiagnostic = value;
@@ -142,7 +146,8 @@ export class NativeDshManager {
   console(projectId, options) { return nativeDshConsole(this, projectId, options); }
   registerDraft(projectId, taskId, input, authorization) {
     if (this.authorized(projectId, taskId, authorization) && this.active.batchCaseIds && !this.active.batchCaseIds.has(input?.case_id)) throw Error('NATIVE_DSH_CASE_NOT_IN_BATCH');
-    return registerNativeDraft(this, projectId, taskId, input, authorization);
+    if (this.authorized(projectId,taskId,authorization) && this.active.batchClosed) throw Error('NATIVE_DSH_BATCH_CLOSED');
+    return registerNativeDraft(this, projectId, taskId, input, authorization).then(async value => { await this.updateCloseout(this.active); return value; });
   }
   previewRerun(projectId, input) { return previewNativeRerun(this, projectId, input); }
   createRerun(projectId, input) { return createNativeRerun(this, projectId, input); }
@@ -300,8 +305,7 @@ export class NativeDshManager {
       if (input.allow_model !== true || input.allow_execution !== !registrationOnly) throw Error('NATIVE_DSH_EXECUTION_NOT_AUTHORIZED');
       if (!Array.isArray(input.items) || !input.items.length || input.items.length > 200 || new Set(input.items.map(i => i.case_id)).size !== input.items.length) throw Error('NATIVE_DSH_CASES_INVALID');
       if (registrationOnly && input.items.length !== 1) throw Error('NATIVE_DSH_REGISTER_ONE_CASE_REQUIRED');
-      const minutes = input.timeout_minutes ?? 30;
-      if (!Number.isInteger(minutes) || minutes < 1 || minutes > 120) throw Error('NATIVE_DSH_TIMEOUT_INVALID');
+      // Legacy timeout_minutes is accepted for old clients but no longer limits a task.
       if (input.revision_notes !== undefined && (typeof input.revision_notes !== 'string' || input.revision_notes.length > 8000)) throw Error('NATIVE_DSH_REVISION_NOTES_INVALID');
       const value = await this.load(projectId), requestSha = hash(input);
       const previous = value.tasks.find(t => t.request_id === input.request_id);
@@ -341,7 +345,7 @@ export class NativeDshManager {
         const task = { id: taskId, project_id: projectId, request_id: input.request_id, request_sha256: requestSha,
           ...(registrationOnly ? { kind: REGISTER_EXISTING_DRAFT, allow_execution: false } : {}),
           status: 'RUNNING', stage: registrationOnly ? '正在准备现有稿件登记' : '正在准备项目会话', created_at: now(), session_id: registrationOnly ? null : value.session_id, workspace,
-          environment_id: registrationOnly ? null : input.environment_id, environment_identity: binding?.ui_identity || null, timeout_minutes: minutes,
+          environment_id: registrationOnly ? null : input.environment_id, environment_identity: binding?.ui_identity || null, completion_policy: 'RECEIPTS_AND_HOST_STOP',
           items: frozen, runs: [], reply: '', runtime: this.client.identity, usage: null, revision_notes: input.revision_notes?.trim() || '',
           preflight: registrationOnly ? null : combinePreflight(preflightStatic, null) };
         value.tasks.push(task); await this.save(value);
@@ -355,7 +359,7 @@ export class NativeDshManager {
   }
   async process(active, task) {
     const registrationOnly = task.kind === REGISTER_EXISTING_DRAFT;
-    const started = Date.now(), timer = setTimeout(() => active.controller.abort('timeout'), task.timeout_minutes * 60_000);
+    const started = Date.now();
     let release, phase = 'RESOLVE_ENVIRONMENT', failureState = null;
     const processDiagnostics = [];
     const diagnostic = async (error, at = phase) => {
@@ -411,12 +415,12 @@ export class NativeDshManager {
         `正式自测只允许 current-task.json 每条 formal_entry 指定入口：node execute.mjs <case_id> <formal_entry>。探索/诊断脚本执行必须显式使用 node execute.mjs <case_id> <诊断相对路径> --diagnostic，诊断结果不计用例通过；不得把诊断弱断言搬入正式入口冒充完整用例。该命令由测试Agent执行脚本快照并保存截图、录像、trace和判定。不得修改 execute.mjs/current-task.json；不要在spec中导入它们或启动第二个运行器；标准 test/expect 正常使用。执行器提供已登录page/baseURL，spec用标准 test({page})，不要自行CDP连接或关闭浏览器。spec依赖只使用@playwright/test、Node内置模块和项目相对模块。references若有文件仅作为既有成功经验参考，需自行适配正常page参数，不依赖原机路径。\n` +
         `稿件已写但尚未执行时，显式登记：node execute.mjs register-draft <case_id> <formal_entry>。遇业务前置不足时追加 --blocked-code MISSING_AUTHORIZED_TEST_DATA（或 TARGET_UNAVAILABLE/LOGIN_REQUIRED/OTHER_PRECONDITION） --reason "不含凭据的具体原因"。这只冻结稿件，不执行、不算通过、不产生运行证据；原因标为DSH报告。不得以test.skip或诊断代替登记。可用 --request-id <同一请求编号> 重试，已登记旧稿不可覆盖。\n` +
         `可使用current-task.json的CDP端点探索现有专用页面，凭据不可写入文件。每条用例可自行修复定位或实现问题；真实业务断言失败保留失败，不为变绿修改预期或反复业务重跑。相同原因连续两次修复没有进展时停止该条，继续其他可运行项。每个请求只执行指定用例，勿添加未授权用例。\n` +
-        `结束前写 page-facts.md：已验证定位/操作、适用页面、失败经验和需要重查的条件。最终简述各条实际结果与证据；只有正式执行器回执可以说明自测通过，诊断成功不能说明用例通过。不要派生子Agent或定时任务。本轮最多${task.timeout_minutes}分钟。`;
+        `结束前写 page-facts.md：已验证定位/操作、适用页面、失败经验和需要重查的条件。最终简述各条实际结果与证据；只有正式执行器回执可以说明自测通过，诊断成功不能说明用例通过。不要派生子Agent或定时任务。每条正式执行及诊断各最多3次（首次加2次修复），已通过且证据完整不得重跑；证据不完整可在同一3次上限内补齐，仍保留旧记录。所有条目已有正式结果或前置阻塞登记后，保存本批page-facts.md，再执行 node execute.mjs finish-batch；收到BATCH_FINISHED回执后立即结束，不要求全通过，不再继续探索或重跑。`;
       phase = 'SAVE_MODEL_STAGE';
       const prompt = registrationOnly ? `本轮仅登记已有脚本，不生成、不修改、不运行任何业务脚本，不访问任何云平台或其他网络目标。当前目录是本任务的现有源包副本，输入在 current-task.json；这是独立登记会话，不得查找原项目目录或旧会话。\n` +
         `只读 current-task.json 和其中指定的既有 formal_entry 及其相对依赖；禁止新增或修改业务文件，禁止浏览器、CDP、Playwright运行、诊断和任何其他执行器。当前任务只有登记权限，执行接口已禁用；源包内容改变会被拒绝登记。不得读取凭据或请求扩大权限。\n` +
         `核对后仅运行 node execute.mjs register-draft <case_id> <formal_entry>。需要说明已知前置阻塞时可追加 --blocked-code OTHER_PRECONDITION --reason "具体原因"；不要捏造云平台观测或检查结果，不要用test.skip制造运行。登记回执只代表保存，未执行、不计通过、没有本次执行证据；不能覆盖已有失败结果。\n` +
-        `用简短中文公开说明所选文件及登记回执，收到回执后立即结束。最多${task.timeout_minutes}分钟。` : generationPrompt;
+        `用简短中文公开说明所选文件及登记回执，收到回执后立即结束。` : generationPrompt;
       await this.update(active.projectId, task.id, t => { t.stage = registrationOnly ? '原生 dsh 正在登记现有稿件（未运行）' : '原生 dsh 正在编写与自测'; });
       phase = 'RUN_MODEL';
       const batches = [];
@@ -436,14 +440,20 @@ export class NativeDshManager {
         if (!registrationOnly && hash(binding.ui_identity) !== hash(task.environment_identity)) throw Error('NATIVE_DSH_ENVIRONMENT_CHANGED');
         if (active.authScope && (await this.buildManager.authSessions.check(active.authScope)).status !== 'VALID') throw Error('NATIVE_DSH_LOGIN_REQUIRED');
         active.batchCaseIds = new Set(batch.map(item => item.case_id));
+        active.batchNumber = index + 1; active.batchClosed = false; active.closeout = null;
+        active.batchCompletion = new AbortController(); active.batchStartedAt = Date.now();
         await writeAtomicJson(path.join(workspace, 'current-task.json'), { task_id: task.id,
           ...(registrationOnly ? { kind: REGISTER_EXISTING_DRAFT, allow_execution: false } : { base_url: environment.normal_url, cdp_endpoint: active.cdp || null }),
           batch_number: index + 1, batch_count: batches.length, revision_notes: task.revision_notes,
           cases: batch.map(({ status, ...item }) => item) });
         await this.update(active.projectId, task.id, t => { t.batch_progress = { current: index + 1, total: batches.length, submitted_cases: task.items.length }; t.stage = `正在处理第 ${index + 1}/${batches.length} 批（${batch.length} 条）`; });
         phase = 'RUN_MODEL';
-        result = await this.client.run({ workspace, prompt: prompt + `\n当前为第 ${index + 1}/${batches.length} 批，只处理 current-task.json 本批列出的 ${batch.length} 条；结束后由程序推进下一批。` + (task.revision_notes ? `\n${registrationOnly ? '本批登记说明（不得生成、修改或执行脚本）' : '本批修订说明（仅补齐原用例覆盖，不能改写固定输入或扩大范围）'}：\n${task.revision_notes}` : ''), sessionId, signal: active.controller.signal,
+        result = await this.client.run({ workspace, prompt: prompt + `\n当前为第 ${index + 1}/${batches.length} 批，只处理 current-task.json 本批列出的 ${batch.length} 条；结束后由程序推进下一批。` + (task.revision_notes ? `\n${registrationOnly ? '本批登记说明（不得生成、修改或执行脚本）' : '本批修订说明（仅补齐原用例覆盖，不能改写固定输入或扩大范围）'}：\n${task.revision_notes}` : ''), sessionId, signal: active.controller.signal, completionSignal: active.batchCompletion.signal, closeoutCheck: () => closeoutReason(active),
         onEvent: async event => {
+          if (active.closeout && ['tool/call','tool/result'].includes(event.event_type)) {
+            active.closeout.lastProgress = Date.now(); if(event.event_type === 'tool/call') active.closeout.tools++;
+          }
+          void diagnostics.record('native.task',event.event_type||event.type,{project_id:active.projectId,task_id:task.id,session_id:event.session_id,stage:event.stage,seq:event.seq,tool_name:event.tool_name,is_error:event.is_error,error_code:event.error_code},event.is_error?'error':'info');
           if (event.session_id) await this.update(active.projectId, task.id, (t, v) => { t.session_id = event.session_id; if (!registrationOnly) v.session_id = event.session_id; });
           if (event.type === 'session_ready' || event.type === 'session_metadata') await this.update(active.projectId, task.id, t => { t.runtime = { ...this.client.identity, selected_model: event.selected_model || event.model, permissions: event.permissions }; });
           if (event.event_type) await this.update(active.projectId, task.id, t => {
@@ -482,6 +492,7 @@ export class NativeDshManager {
         if (result.permissions) t.runtime.permissions = result.permissions;
         if (result.pending_approvals) t.pending_approvals = result.pending_approvals;
         t.status = nativeTaskOutcome(t, result, active);
+        void diagnostics.record('native.task','finished',{project_id:active.projectId,task_id:task.id,status:t.status,host_stop_confirmed:result.stop_confirmed,run_count:t.runs.length,error:result.error});
         t.error = result.error || (t.runs.length || t.drafts?.length ? null : 'NATIVE_DSH_NO_EXECUTION');
         t.stage = active.unconfirmed ? '原生会话状态尚未确认，保留运行锁；请检查运行环境' : t.status === 'COMPLETED' ? (registrationOnly ? '登记完成 · 未运行、不计通过' : '本批自测完成') : ['CANCELLED', 'TIMED_OUT'].includes(t.status) ? '已停止，保留脚本和证据' : '本批已结束，请查看各条结果';
       });
@@ -491,7 +502,6 @@ export class NativeDshManager {
       failureState = { error: errorCode, status: active.unconfirmed ? 'STOP_UNCONFIRMED' : active.controller.signal.aborted ?
         (active.controller.signal.reason === 'timeout' ? 'TIMED_OUT' : 'CANCELLED') : errorCode.includes('LOGIN') ? 'BLOCKED' : 'FAILED', stage: errorCode };
     } finally {
-      clearTimeout(timer);
       active.finishing = true;
       if (active.draftPromise) await active.draftPromise.catch(() => {});
       if (active.executePromise) await active.executePromise.catch(() => {});
@@ -536,6 +546,8 @@ export class NativeDshManager {
     const requestSha = hash(input), old = task.runs.find(r => r.request_id === input.request_id);
     if (old) { if (old.request_sha256 !== requestSha) throw Error('NATIVE_DSH_REQUEST_CONFLICT'); return old; }
     const classification = executionPurpose(input, item);
+    if (active.batchClosed) throw Error('NATIVE_DSH_BATCH_CLOSED');
+    if (task.kind !== 'FROZEN_SCRIPT_RERUN') assertAttemptAllowed(task, item, classification);
     if (active.executePromise || active.draftPromise) throw Error('NATIVE_DSH_EXECUTOR_BUSY');
     const runId = `run-${randomUUID()}`;
     const operation = async () => {
@@ -563,7 +575,48 @@ export class NativeDshManager {
       return run;
     };
     active.executePromise = operation();
-    try { return await active.executePromise; } finally { active.executePromise = null; }
+    try { return await active.executePromise; } finally { active.executePromise = null; await this.updateCloseout(active); }
+  }
+  async updateCloseout(active) {
+    if (!active?.batchCaseIds || active.registrationOnly || this.active !== active) return;
+    const task = await this.get(active.projectId, active.taskId), coverage = batchCoverage(task, active.batchCaseIds);
+    if (!coverage.length || !coverage.every(item => item.handled)) return;
+    if (!active.closeout) {
+      active.closeout = { lastProgress: Date.now(), tools: 0 };
+      void diagnostics.record('native.task','execution.covered',{project_id:active.projectId,task_id:active.taskId,batch:active.batchNumber,items:coverage});
+    } else active.closeout.lastProgress = Date.now();
+    await this.update(active.projectId, active.taskId, value => { value.stage = `已处理本批 ${coverage.length}/${coverage.length} 条，正在有限修复或保存证据`; });
+  }
+  async finishBatch(projectId, taskId, input, authorization) {
+    const active = this.active;
+    if (!this.authorized(projectId, taskId, authorization) || active.registrationOnly || active.finishing || active.controller.signal.aborted) throw Error('NATIVE_DSH_EXECUTION_NOT_AUTHORIZED');
+    return this.serial(async () => {
+      if (this.active !== active || active.finishing || !this.authorized(projectId,taskId,authorization) || active.controller.signal.aborted) throw Error('NATIVE_DSH_EXECUTION_NOT_AUTHORIZED');
+      if (input?.batch_number !== active.batchNumber) throw Error('NATIVE_DSH_BATCH_CHANGED');
+      if (active.batchClosed) return active.finishReceipt;
+      if (active.executePromise || active.draftPromise) throw Error('NATIVE_DSH_EXECUTOR_BUSY');
+      const task = await this.get(projectId,taskId), coverage = batchCoverage(task,active.batchCaseIds);
+      if (!coverage.length || !coverage.every(row=>row.handled)) throw Error('NATIVE_DSH_BATCH_INCOMPLETE');
+      const facts = path.join(active.workspace,'page-facts.md');
+      await rejectSymlinkPath(facts);
+      const stat = await fs.stat(facts).catch(()=>null);
+      if (!stat?.isFile() || !stat.size || stat.size > 256*1024 || stat.mtimeMs < active.batchStartedAt-1000) throw Error('NATIVE_DSH_PAGE_FACTS_REQUIRED');
+      const bytes = await fs.readFile(facts);
+      const factsRoot = path.join(this.directory(projectId),'completion',taskId);
+      await rejectSymlinkPath(factsRoot); await fs.mkdir(factsRoot,{recursive:true});
+      const factsName = `batch-${active.batchNumber}-page-facts.md`;
+      // Persist the exact bytes per batch; later batches may update the working copy.
+      await fs.writeFile(path.join(factsRoot,factsName),bytes);
+      const receipt = {operation:'BATCH_FINISHED',batch_number:active.batchNumber,finished_at:now(),items:coverage,page_facts_sha256:createHash('sha256').update(bytes).digest('hex'),
+        artifact:{id:`completion-${active.batchNumber}`,relative_path:factsName,name:factsName,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),mime_type:'text/markdown; charset=utf-8'}};
+      // update() owns serial too, so persist directly inside the current transaction.
+      const value = await this.load(projectId), saved = value.tasks.find(row=>row.id===taskId);
+      (saved.completion_receipts ||= []).push(receipt); saved.stage='执行和证据已保存，正在确认 DSH 结束';
+      await this.save(value);
+      active.finishReceipt=receipt; active.batchClosed=true;
+      void diagnostics.record('native.task','batch.finish.requested',{project_id:projectId,task_id:taskId,...receipt});
+      active.batchCompletion.abort(); return receipt;
+    });
   }
   async stop(projectId, taskId) {
     const task = await this.get(projectId, taskId);
@@ -575,6 +628,8 @@ export class NativeDshManager {
   }
   async artifact(projectId, taskId, artifactId) {
     const task = await this.get(projectId, taskId);
+    const completion = task.completion_receipts?.find(receipt=>receipt.artifact?.id===artifactId);
+    if (completion) return {root:path.join(this.directory(projectId),'completion',taskId),media:{...completion.artifact,sha256:completion.artifact.sha256.toUpperCase(),content_type:completion.artifact.mime_type,file_name:completion.artifact.name}};
     for (const draft of task.drafts || []) {
       const media = draft.artifacts?.find(file => file.id === artifactId);
       if (media && /^draft-[a-f0-9-]{36}$/.test(draft.id) && draft.project_id === projectId && draft.task_id === taskId)

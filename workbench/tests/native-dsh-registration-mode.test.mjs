@@ -120,7 +120,7 @@ test('request identity separates registration from generation and retries never 
 test('registration-only helper refuses a business or diagnostic execute command before any HTTP call', async () => {
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
   const helper = nativeTaskHelper('http://local.invalid/tasks/task', 'test-only-token', { registrationOnly: true })
-    .replace("import { readFile } from 'node:fs/promises';", '').replace('import.meta.url', "'file:///fixture/execute.mjs'");
+    .replace("import { readFile } from 'node:fs/promises';", '').replaceAll('import.meta.url', "'file:///fixture/execute.mjs'");
   let calls = 0;
   for (const extra of [[], ['--diagnostic']]) {
     await assert.rejects(new AsyncFunction('process', 'fetch', helper)({ argv: ['node', 'execute.mjs', 'one', 'specs/TC-one.spec.mjs', ...extra] }, async () => { calls++; }), /EXECUTION_DISABLED/);

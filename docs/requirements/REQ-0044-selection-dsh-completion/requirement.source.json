@@ -1,0 +1,328 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0044",
+  "title": "跨页选择传递与DSH按完成条件收尾并合并日志打包",
+  "metadata": {
+    "requirement_status": "已确认，实施及验证中",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-10-30"
+  },
+  "original_input": "就按这个方案改，先 git 归档并推送远端，再把跨页选择、选择传递和 DSH 收尾机制修好，连同日志系统一起做全功能测试，还有我觉得时间可以去掉。测试完重新打包。文档读取问题先不动。",
+  "user_requirements": [
+    {
+      "id": "UN-0044-01",
+      "status": "已确认",
+      "goal": "一次选择贯穿跨页用例核对、生成与执行；DSH按完成条件收尾，移除整批时间上限，合并日志验证和重新打包。",
+      "constraints": "先归档推送；只用正式4322；保护历史及并行成果；文档读取代码不再修改；沿用现有限额仅用新合成项目做真实模型测试。",
+      "success_criteria": "70条一次全选且跨页/刷新/切页范围一致；终态含失败也可结束；修复有界、证据保存且宿主停止确认后释放锁；日志可导出；全工程及正式功能实测、完整安装包核验。"
+    }
+  ],
+  "confirmed_facts": [
+    "修改前归档437b15e57ca53d0ec9b09cb210ee3e965008d534已推送并远端核验。",
+    "现用例页已具备筛选全选，但各页面独立Set且任务提交后清空；DSH当前依赖模型turn/end收尾。",
+    "用户取消整批时间设置；单次工具、传输和停止确认保护保留。"
+  ],
+  "inferences_and_open_questions": [],
+  "development_requirements": [
+    {
+      "id": "DR-0044-01",
+      "status": "已确认",
+      "requirement": "跨页及跨页面共享选择",
+      "acceptance_criteria": "按项目与浏览器标签页保存范围；显式本页/筛选全选，切页刷新仍保留，提交不清空；不静默扩大或丢弃选择。",
+      "constraints": "不改业务预期、凭据授权或既有业务数据；不修改文档读取逻辑。"
+    },
+    {
+      "id": "DR-0044-02",
+      "status": "已确认",
+      "requirement": "DSH完成回执与停止确认",
+      "acceptance_criteria": "每批执行/阻塞已覆盖所有所选项、定位经验保存、无执行写入时可提交finish-batch；确认宿主已停止后推进下一批，不要求全通过；停止未确认继续占锁。",
+      "constraints": "不改业务预期、凭据授权或既有业务数据；不修改文档读取逻辑。"
+    },
+    {
+      "id": "DR-0044-03",
+      "status": "已确认",
+      "requirement": "有界修复及明确进度",
+      "acceptance_criteria": "正式执行和诊断各最多三次/用例；已通过项不再重跑；收尾阶段显示执行数量及工作，保存执行/收尾/确认日志；收尾无进展或超额工具终止并如实记不完整。",
+      "constraints": "不改业务预期、凭据授权或既有业务数据；不修改文档读取逻辑。"
+    },
+    {
+      "id": "DR-0044-04",
+      "status": "已确认",
+      "requirement": "取消整批时限",
+      "acceptance_criteria": "前端不再输入/发送时间上限，生成和冻结脚本复跑均无总时长定时器；保留单工具与传输、停止确认保护。",
+      "constraints": "不改业务预期、凭据授权或既有业务数据；不修改文档读取逻辑。"
+    },
+    {
+      "id": "DR-0044-05",
+      "status": "已确认",
+      "requirement": "合并日志回归与完整打包",
+      "acceptance_criteria": "连同REQ43和已完成并行修改执行工程全清单、正式4322全功能与新合成真实模型验证，保存失败证据；创建新完整安装器/包，不宣称远端WPS已修复。",
+      "constraints": "不改业务预期、凭据授权或既有业务数据；不修改文档读取逻辑。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0044-01",
+      "dr_ids": [
+        "DR-0044-01"
+      ],
+      "status": "已确认",
+      "summary": "跨页及跨页面共享选择",
+      "rationale": "按项目与浏览器标签页保存范围；显式本页/筛选全选，切页刷新仍保留，提交不清空；不静默扩大或丢弃选择。"
+    },
+    {
+      "id": "DD-0044-02",
+      "dr_ids": [
+        "DR-0044-02"
+      ],
+      "status": "已确认",
+      "summary": "DSH完成回执与停止确认",
+      "rationale": "每批执行/阻塞已覆盖所有所选项、定位经验保存、无执行写入时可提交finish-batch；确认宿主已停止后推进下一批，不要求全通过；停止未确认继续占锁。"
+    },
+    {
+      "id": "DD-0044-03",
+      "dr_ids": [
+        "DR-0044-03"
+      ],
+      "status": "已确认",
+      "summary": "有界修复及明确进度",
+      "rationale": "正式执行和诊断各最多三次/用例；已通过项不再重跑；收尾阶段显示执行数量及工作，保存执行/收尾/确认日志；收尾无进展或超额工具终止并如实记不完整。"
+    },
+    {
+      "id": "DD-0044-04",
+      "dr_ids": [
+        "DR-0044-04"
+      ],
+      "status": "已确认",
+      "summary": "取消整批时限",
+      "rationale": "前端不再输入/发送时间上限，生成和冻结脚本复跑均无总时长定时器；保留单工具与传输、停止确认保护。"
+    },
+    {
+      "id": "DD-0044-05",
+      "dr_ids": [
+        "DR-0044-05"
+      ],
+      "status": "已确认",
+      "summary": "合并日志回归与完整打包",
+      "rationale": "连同REQ43和已完成并行修改执行工程全清单、正式4322全功能与新合成真实模型验证，保存失败证据；创建新完整安装器/包，不宣称远端WPS已修复。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "projectCaseSelection共享项目范围；选定用例版本由既有服务端再次冻结核对。",
+    "新增任务Bearer保护的finish批次回执；持久化后通知原生客户端停止确认，失败保留锁。"
+  ],
+  "module_document_impact": [
+    "docs/modules/test-workbench.md：选择、无整批时限、收尾和日志运维。"
+  ],
+  "risks_and_rollback": [
+    "通过归档437b15e恢复本轮目标文件；不覆盖其他并行改动。",
+    "DSH停止不能仅凭HTTP accepted判定，确认失败必须保留STOP_UNCONFIRMED。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0044-01",
+      "dr_ids": [
+        "DR-0044-01"
+      ],
+      "dd_ids": [
+        "DD-0044-01"
+      ],
+      "status": "待实现",
+      "task": "跨页及跨页面共享选择",
+      "verification_ids": [
+        "VT-0044-01"
+      ]
+    },
+    {
+      "id": "TK-0044-02",
+      "dr_ids": [
+        "DR-0044-02"
+      ],
+      "dd_ids": [
+        "DD-0044-02"
+      ],
+      "status": "待实现",
+      "task": "DSH完成回执与停止确认",
+      "verification_ids": [
+        "VT-0044-02"
+      ]
+    },
+    {
+      "id": "TK-0044-03",
+      "dr_ids": [
+        "DR-0044-03"
+      ],
+      "dd_ids": [
+        "DD-0044-03"
+      ],
+      "status": "待实现",
+      "task": "有界修复及明确进度",
+      "verification_ids": [
+        "VT-0044-03"
+      ]
+    },
+    {
+      "id": "TK-0044-04",
+      "dr_ids": [
+        "DR-0044-04"
+      ],
+      "dd_ids": [
+        "DD-0044-04"
+      ],
+      "status": "待实现",
+      "task": "取消整批时限",
+      "verification_ids": [
+        "VT-0044-04"
+      ]
+    },
+    {
+      "id": "TK-0044-05",
+      "dr_ids": [
+        "DR-0044-05"
+      ],
+      "dd_ids": [
+        "DD-0044-05"
+      ],
+      "status": "待实现",
+      "task": "合并日志回归与完整打包",
+      "verification_ids": [
+        "VT-0044-05"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0044-01",
+      "dr_ids": [
+        "DR-0044-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "按项目与浏览器标签页保存范围；显式本页/筛选全选，切页刷新仍保留，提交不清空；不静默扩大或丢弃选择。",
+      "evidence_standard": "实际日志、命令退出码和正式4322产物",
+      "current_evidence": "待验证"
+    },
+    {
+      "id": "VT-0044-02",
+      "dr_ids": [
+        "DR-0044-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "每批执行/阻塞已覆盖所有所选项、定位经验保存、无执行写入时可提交finish-batch；确认宿主已停止后推进下一批，不要求全通过；停止未确认继续占锁。",
+      "evidence_standard": "实际日志、命令退出码和正式4322产物",
+      "current_evidence": "待验证"
+    },
+    {
+      "id": "VT-0044-03",
+      "dr_ids": [
+        "DR-0044-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "正式执行和诊断各最多三次/用例；已通过项不再重跑；收尾阶段显示执行数量及工作，保存执行/收尾/确认日志；收尾无进展或超额工具终止并如实记不完整。",
+      "evidence_standard": "实际日志、命令退出码和正式4322产物",
+      "current_evidence": "待验证"
+    },
+    {
+      "id": "VT-0044-04",
+      "dr_ids": [
+        "DR-0044-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "前端不再输入/发送时间上限，生成和冻结脚本复跑均无总时长定时器；保留单工具与传输、停止确认保护。",
+      "evidence_standard": "实际日志、命令退出码和正式4322产物",
+      "current_evidence": "待验证"
+    },
+    {
+      "id": "VT-0044-05",
+      "dr_ids": [
+        "DR-0044-05"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "未运行",
+      "item": "连同REQ43和已完成并行修改执行工程全清单、正式4322全功能与新合成真实模型验证，保存失败证据；创建新完整安装器/包，不宣称远端WPS已修复。",
+      "evidence_standard": "实际日志、命令退出码和正式4322产物",
+      "current_evidence": "待验证"
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:\\01_AI工程\\01_工程项目\\ui-test-agent",
+    "commands": [
+      "npm test",
+      "npm run test:official"
+    ],
+    "environment": [
+      "Windows，正式127.0.0.1:4322"
+    ],
+    "conclusion": [
+      "实施中，尚未完成本轮验收。"
+    ]
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0044-01",
+      "dr_id": "DR-0044-01",
+      "dd_id": "DD-0044-01",
+      "tk_id": "TK-0044-01",
+      "vt_id": "VT-0044-01",
+      "status": "已确认"
+    },
+    {
+      "un_id": "UN-0044-01",
+      "dr_id": "DR-0044-02",
+      "dd_id": "DD-0044-02",
+      "tk_id": "TK-0044-02",
+      "vt_id": "VT-0044-02",
+      "status": "已确认"
+    },
+    {
+      "un_id": "UN-0044-01",
+      "dr_id": "DR-0044-03",
+      "dd_id": "DD-0044-03",
+      "tk_id": "TK-0044-03",
+      "vt_id": "VT-0044-03",
+      "status": "已确认"
+    },
+    {
+      "un_id": "UN-0044-01",
+      "dr_id": "DR-0044-04",
+      "dd_id": "DD-0044-04",
+      "tk_id": "TK-0044-04",
+      "vt_id": "VT-0044-04",
+      "status": "已确认"
+    },
+    {
+      "un_id": "UN-0044-01",
+      "dr_id": "DR-0044-05",
+      "dd_id": "DD-0044-05",
+      "tk_id": "TK-0044-05",
+      "vt_id": "VT-0044-05",
+      "status": "已确认"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "无",
+      "notes": "新建需求包"
+    }
+  ],
+  "open_questions": [],
+  "prohibited_implementation": [
+    "不得修改文档读取问题或使用既有真实项目做新增付费测试。"
+  ],
+  "changes": [
+    {
+      "date": "2026-10-30",
+      "version": 1,
+      "type": "新建",
+      "description": "用户确认选择/收尾方案并取消时间设置，归档推送后实施",
+      "impact": "全链路",
+      "confirmed_by": "用户"
+    }
+  ]
+}

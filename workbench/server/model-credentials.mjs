@@ -5,6 +5,7 @@ import { execFile } from 'node:child_process';
 import { parseEnv } from 'node:util';
 import { verifyCredentialBroker } from '../scripts/native-runtime.mjs';
 import { locateModelCredential } from './model-credential-storage.mjs';
+import {registerDiagnosticSecret} from './diagnostics.mjs';
 
 export const DEEPSEEK_OFFICIAL_URL = 'https://api.deepseek.com';
 const worker = fileURLToPath(new URL('../scripts/native/WindowsCredential.exe', import.meta.url));
@@ -13,6 +14,7 @@ function credential(apiKey, baseUrl, source) {
   if (typeof apiKey !== 'string' || !apiKey.trim() || apiKey.length > 4096 || /[\u0000-\u001f\u007f]/.test(apiKey)) throw failure('MODEL_CREDENTIAL_INVALID');
   const base = baseUrl?.trim().replace(/\/$/, '') || DEEPSEEK_OFFICIAL_URL;
   if (![DEEPSEEK_OFFICIAL_URL, `${DEEPSEEK_OFFICIAL_URL}/v1`].includes(base)) throw failure('MODEL_CREDENTIAL_ENDPOINT_NOT_OFFICIAL');
+  registerDiagnosticSecret(apiKey.trim());
   return { apiKey: apiKey.trim(), baseUrl: base, source };
 }
 

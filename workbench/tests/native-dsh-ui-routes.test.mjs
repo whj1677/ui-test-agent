@@ -47,10 +47,11 @@ test('login preparation blocks start, offers direct recovery, and all-start subm
 test('native selection freezes only selected confirmed UI versions, not older or unclassified cases', () => {
   const items = nativeDshCaseItems(project);
   assert.deepEqual(items.map(item => item.case_id), ['one', 'two']);
-  const input = nativeDshTaskInput({ items, selected: new Set(['two', 'backend']), environmentId: 'env', requestId: 'request' });
-  assert.deepEqual(input, { request_id: 'request', environment_id: 'env', allow_model: true, allow_execution: true, timeout_minutes: 30,
+  const input = nativeDshTaskInput({ items, selected: new Set(['two']), environmentId: 'env', requestId: 'request' });
+  assert.deepEqual(input, { request_id: 'request', environment_id: 'env', allow_model: true, allow_execution: true,
     items: [{ case_id: 'two', case_version: 2, content_sha256: 'b'.repeat(64) }] });
-  for (const timeoutMinutes of [0, 121, NaN, 1.5]) assert.throws(() => nativeDshTaskInput({ items, selected: new Set(['one']), environmentId: 'env', requestId: 'r', timeoutMinutes }), /时间上限/);
+  assert.throws(() => nativeDshTaskInput({items,selected:new Set(['two','backend']),environmentId:'env'}), /不是已确认/);
+  assert.equal('timeout_minutes' in input,false);
   assert.throws(() => nativeDshTaskInput({ items, selected: new Set(), environmentId: 'env', requestId: 'r' }), /至少选择/);
 });
 
@@ -484,7 +485,7 @@ test('separate selections preserve retry identity, active progress, failure evid
   };
   let dispose, pageHtml;
   try {
-    dispose = await renderNativeDsh({ project, query: new URLSearchParams('selected=one,backend'), showPage(value) { pageHtml = value; } });
+    dispose = await renderNativeDsh({ project, query: new URLSearchParams('selected=one'), showPage(value) { pageHtml = value; } });
     assert.equal(submitted.length, 0, 'opening the page must never start a model');
     assert.equal(dom.node('#native-start').disabled, false);
     assert.match(pageHtml, /<textarea id="native-revision-notes"[^>]*maxlength="8000"/);
@@ -501,13 +502,14 @@ test('separate selections preserve retry identity, active progress, failure evid
     assert.equal(dom.node('#native-revision-notes').disabled, true);
     resolveCreate(); await pending; deferCreate = null;
     assert.equal(submitted[1].request_id, firstRequest, 'an ambiguous network retry must retain request identity');
-    assert.equal(dom.node('#native-start').disabled, true); assert.equal(dom.cases[0].checked, false);
+    assert.equal(dom.node('#native-start').disabled, true); assert.equal(dom.cases[0].checked, true);
     assert.equal(dom.node('#native-revision-notes').value, '', 'accepted task clears the revision draft');
     assert.equal(dom.node('#native-revision-notes').disabled, false);
     assert.match(dom.node('#native-current').innerHTML, /补齐原测试数据\n保留失败证据/);
     await dom.node('stop:task-1').onclick();
     assert.match(dom.node('#native-history').innerHTML, /locator failed/); assert.match(dom.node('#native-history').innerHTML, /files\/failed-image/);
     assert.equal(submitted.length, 2, 'stopping must never start another batch');
+    dom.node('#native-select-none').onclick();
     dom.cases[1].checked = true; dom.cases[1].onchange();
     await dom.node('#native-start').onclick();
     assert.notEqual(submitted[2].request_id, firstRequest); assert.deepEqual(submitted[2].items.map(item => item.case_id), ['two']);
