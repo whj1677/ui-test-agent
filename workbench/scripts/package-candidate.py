@@ -25,6 +25,7 @@ FILES = (
     'workbench/native/package.json', 'workbench/native/package-lock.json', 'workbench/release.json',
     '安装.ps1', '安装.cmd', '启动.ps1', '启动.cmd', '环境检查.cmd', '试用说明.md',
     '配置模型密钥.cmd', '启用模型工作台.cmd', '诊断模型启动.cmd',
+    '导出诊断日志.cmd', 'workbench/scripts/export-diagnostics.mjs',
     'harness-probe/src/setup-harness.mjs',
     'workbench/scripts/start-workbench.ps1', 'workbench/scripts/check-install.ps1',
     'workbench/scripts/start-workbench.local.json.example',

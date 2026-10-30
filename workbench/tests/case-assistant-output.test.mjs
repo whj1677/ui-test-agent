@@ -31,7 +31,8 @@ test('typed Excel roundtrip preserves literal IDs, aligned steps, pending confir
   const conversation = context(), input = response(candidate()), before = JSON.stringify(input);
   const checked = checkAssistantOutput(input, conversation);
   assert.equal(checked.checks.ready_count, 1);
-  assert.equal(checked.checks.status, 'READY_FOR_REVIEW');
+  assert.equal(checked.checks.status, 'NEEDS_CLARIFICATION');
+  assert.equal(checked.checks.semantic_status, 'NOT_REVIEWED');
   assert.equal(JSON.stringify(input), before);
   const bytes = await exportAssistantWorkbook({ conversation, turn: checked, caseType: 'UI' });
   const { manager, project, upload } = await importer(t);
@@ -59,13 +60,13 @@ test('business questions export as editable pending drafts in UI and backend wor
   const turn = checkAssistantOutput(response(candidate(), missing, candidate('BACKEND', 'API-1')), context());
   assert.equal(turn.checks.ready_count, 3);
   assert.equal(turn.checks.pending_count, 0);
-  assert.equal(turn.checks.content_warning_count, 1);
+  assert.equal(turn.checks.content_warning_count, 3);
   assert.deepEqual(turn.checks.by_type.UI, { ready_count: 2, pending_count: 0 });
   const bytes = await exportAssistantWorkbook({ conversation: context(), turn, caseType: 'UI' });
   const workbook = new ExcelJS.Workbook(); await workbook.xlsx.load(bytes);
   assert.equal(workbook.worksheets.length, 2);
   assert.equal(workbook.worksheets[0].rowCount, 3);
-  assert.equal(workbook.worksheets[0].getCell('K3').value, '编号大小写是否敏感？');
+  assert.match(workbook.worksheets[0].getCell('K3').value, /编号大小写是否敏感？/);
   assert.equal(workbook.worksheets[0].getCell('H3').value, '待确认');
   assert.equal(workbook.worksheets[0].getCell('L3').value, '未执行');
   assert.match(JSON.stringify(workbook.worksheets[1].getSheetValues()), /编号大小写是否敏感/);

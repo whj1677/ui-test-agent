@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
+import {diagnostics,browserDiagnosticLines} from '../diagnostics.mjs';
 
 const fail = (code, extra = {}) => Object.assign(new Error(code), { code, ...extra });
 const validSession = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/.test(value);
@@ -112,7 +113,7 @@ export function createNativeDshClient({ baseUrl, resolveBaseUrl, fetchImpl = glo
   async function request(url, init = {}) {
     try {
       return await fetchImpl(url, { ...init, redirect: 'manual', signal: AbortSignal.timeout(requestTimeoutMs) });
-    } catch { throw fail('NATIVE_DSH_CONNECTION_FAILED'); }
+    } catch(error) {await diagnostics.record('dsh','request.failed',{error},'error');throw fail('NATIVE_DSH_CONNECTION_FAILED'); }
   }
 
   async function authenticate() {
@@ -123,7 +124,7 @@ export function createNativeDshClient({ baseUrl, resolveBaseUrl, fetchImpl = glo
         browserLaunchUrl = next?.launchUrl || null;
         return next;
       });
-      try { address = await resolving; } catch { resolving = null; throw fail('NATIVE_DSH_RUNTIME_UNAVAILABLE'); }
+      try { address = await resolving; } catch(error) {await diagnostics.record('dsh','host.start.failed',{error},'error');resolving = null;throw fail('NATIVE_DSH_RUNTIME_UNAVAILABLE'); }
     }
     if (!address) throw fail('NATIVE_DSH_NOT_CONFIGURED');
     if (!address.launchUrl || cookie) return;
@@ -272,6 +273,7 @@ export function createNativeDshClient({ baseUrl, resolveBaseUrl, fetchImpl = glo
             }
             if (event.type === 'turn/end' && ownTurn !== undefined && event.data?.turn === ownTurn) terminal = event;
             if (['request/header', 'permission/preset', 'sandbox/mode', 'approval/policy'].includes(event.type)) {
+              void diagnostics.record('dsh','session.metadata',{session_id:id,selected_model:model,permissions,seq:event.seq});
               await emit({ type: 'session_metadata', selected_model: model, permissions, seq: event.seq, at: eventTime(event.time) });
             }
             if (event.type === 'tool/call' && safeLabel(event.data?.name)) toolNames.set(event.data.callId, event.data.name);
@@ -283,6 +285,16 @@ export function createNativeDshClient({ baseUrl, resolveBaseUrl, fetchImpl = glo
                   : event.type === 'assistant/message' ? { summary: safeProgress(textContent(event.data?.message)) }
                     : { summary: event.type === 'turn/start' ? '原生 dsh 开始编写与自测' : '原生 dsh 本轮执行结束' };
               if (event.type === 'assistant/message' && !progress.summary) continue;
+              if(event.type==='assistant/message'){
+                const claim=browserDiagnosticLines(textContent(event.data?.message));
+                if(claim)void diagnostics.record('dsh','browser.model-statement',{session_id:id,seq:event.seq,verification:'MODEL_STATEMENT_ONLY',excerpt:claim});
+              }
+              if(event.type==='tool/call'||event.type==='tool/result'){
+                const browser=event.type==='tool/result'&&tool==='pwsh'?browserDiagnosticLines(textContent(event.data?.message)):'';
+                void diagnostics.record('dsh',event.type,{session_id:id,call_id:event.data?.callId||event.data?.message?.toolCallId,tool_name:tool,seq:event.seq,native_at:eventTime(event.time),...progress,
+                  ...(progress.is_error?{error_excerpt:textContent(event.data?.message)}:{}),...(browser?{browser_diagnostic:browser}:{})},progress.is_error?'error':browser&&/error|failed|cannot|unable|denied|EPERM|EACCES|not found|does not exist|timeout|无法|失败|拒绝/i.test(browser)?'warn':'info');
+              }
+              if(['turn/start','turn/end'].includes(event.type))void diagnostics.record('dsh',event.type,{session_id:id,seq:event.seq,reason:event.data?.reason});
               await emit({ type: 'event', event_type: event.type, seq: event.seq, turn: event.data?.turn,
                 at: eventTime(event.time), ...(tool ? { tool_name: tool } : {}), ...progress,
                 ...(event.type === 'turn/start' ? { stage: '原生 dsh 正在编写与自测' } : {}) });
@@ -350,6 +362,7 @@ export function createNativeDshClient({ baseUrl, resolveBaseUrl, fetchImpl = glo
             await delay(pollIntervalMs, controller.signal);
           }
         } catch (error) {
+          await diagnostics.record('dsh','transport.failed',{session_id:id,error},'error');
           if (submitted && controller.signal.aborted) return await cancel();
           const busy = submitted || error.code === 'NATIVE_DSH_SESSION_BUSY';
           if (busy) uncertain.add(key);

@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { writeAtomicJsonLine } from '../atomic-json.mjs';
 
 const PROJECT = /^project-[a-z0-9-]{8,80}$/;
 const CONVERSATION = /^conversation-[a-f0-9-]{36}$/;
@@ -55,18 +55,6 @@ export class CaseAssistantStore {
     return records.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
   }
   async write(value) {
-    const destination = this.file(value.project_id, value.id);
-    await fs.mkdir(path.dirname(destination), { recursive: true });
-    const temporary = `${destination}.${randomUUID()}.tmp`;
-    await fs.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
-    try {
-      for (let attempt = 0; ; attempt++) {
-        try { await fs.rename(temporary, destination); break; }
-        catch (error) {
-          if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= 7) throw error;
-          await new Promise(resolve => setTimeout(resolve, 20 * (attempt + 1)));
-        }
-      }
-    } finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
+    await writeAtomicJsonLine(this.file(value.project_id, value.id), value);
   }
 }

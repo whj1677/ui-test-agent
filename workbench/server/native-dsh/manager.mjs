@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import {diagnostics} from '../diagnostics.mjs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { randomUUID, createHash, timingSafeEqual } from 'node:crypto';
@@ -127,6 +128,7 @@ export class NativeDshManager {
   serial(fn) { const result = this.queue.then(fn, fn); this.queue = result.catch(() => {}); return result; }
   diagnostics() { return { available: Boolean(this.client?.available) && !this.storageFault, active_task_id: this.active?.taskId || null, project_id: this.active?.projectId || null, starting: this.starting, state_unconfirmed: Boolean(this.storageFault), runtime: this.client?.identity || null, last_diagnostic: this.lastDiagnostic || null }; }
   async recordDiagnostic(projectId, taskId, error, phase) {
+    await diagnostics.record('native.task','failed',{project_id:projectId,task_id:taskId,phase,error},'error');
     const value = { schema: 'workbench/native-dsh-task-diagnostic-v1', at: now(), project_id: projectId, task_id: taskId,
       ...safeDiagnostic(error, phase, error?.native_update_phase) };
     this.lastDiagnostic = value;
@@ -444,6 +446,7 @@ export class NativeDshManager {
         phase = 'RUN_MODEL';
         result = await this.client.run({ workspace, prompt: prompt + `\n当前为第 ${index + 1}/${batches.length} 批，只处理 current-task.json 本批列出的 ${batch.length} 条；结束后由程序推进下一批。` + (task.revision_notes ? `\n${registrationOnly ? '本批登记说明（不得生成、修改或执行脚本）' : '本批修订说明（仅补齐原用例覆盖，不能改写固定输入或扩大范围）'}：\n${task.revision_notes}` : ''), sessionId, signal: active.controller.signal,
         onEvent: async event => {
+          void diagnostics.record('native.task',event.event_type||event.type,{project_id:active.projectId,task_id:task.id,session_id:event.session_id,stage:event.stage,seq:event.seq,tool_name:event.tool_name,is_error:event.is_error,error_code:event.error_code},event.is_error?'error':'info');
           if (event.session_id) await this.update(active.projectId, task.id, (t, v) => { t.session_id = event.session_id; if (!registrationOnly) v.session_id = event.session_id; });
           if (event.type === 'session_ready' || event.type === 'session_metadata') await this.update(active.projectId, task.id, t => { t.runtime = { ...this.client.identity, selected_model: event.selected_model || event.model, permissions: event.permissions }; });
           if (event.event_type) await this.update(active.projectId, task.id, t => {

@@ -7,11 +7,14 @@ const response=(value,ok=true)=>({ok,status:ok?200:503,json:async()=>value});
 test('report loads without child-frame navigation and keeps style and internal links',async()=>{
  const events=()=>({handlers:new Map(),addEventListener(k,f){this.handlers.set(k,f);},removeEventListener(k){this.handlers.delete(k);}});
  const frame=events(),retry=events(),status={textContent:''},timers=new Map();let seq=0,current=true;
- const doc=events();doc.body={childElementCount:1};doc.querySelectorAll=()=>[{textContent:'body {color:red}'}];doc.adoptedStyleSheets=[];let scrolled=false,written='';
+ const doc=events();doc.body={childElementCount:1};doc.adoptedStyleSheets=[];let scrolled=false,written='';
  doc.open=()=>{};doc.write=html=>written=html;doc.close=()=>{};doc.getElementById=id=>id==='case-1'?{scrollIntoView(){scrolled=true;}}:null;
- frame.contentDocument=doc;frame.contentWindow={CSSStyleSheet:class{replaceSync(css){this.css=css;}}};
- const dispose=bindReportFrame({frame,retry,status,url:'/report/html',isCurrent:()=>current,fetchReport:async()=>({ok:true,text:async()=>'<p>report</p>'}),setTimer:fn=>{timers.set(++seq,fn);return seq;},clearTimer:id=>timers.delete(id)});
- await new Promise(resolve=>setImmediate(resolve));assert.equal(written,'<p>report</p>');assert.equal(frame.src,undefined);assert.equal(status.textContent,'报告预览已加载');assert.match(doc.adoptedStyleSheets[0].css,/color:red/);
+ doc.createElement=name=>{assert.equal(name,'template');return {set innerHTML(html){assert.equal(html,'<style media="screen">body {color:red}</style>');},content:{firstElementChild:{textContent:'body {color:red}',media:'screen'}}};};
+ frame.contentDocument=doc;frame.contentWindow={
+  CSSStyleSheet:class{constructor(options){this.media=options.media;}replaceSync(css){this.css=css;}}
+ };
+ const dispose=bindReportFrame({frame,retry,status,url:'/report/html',isCurrent:()=>current,fetchReport:async()=>({ok:true,text:async()=>'<style media="screen">body {color:red}</style><p>report</p>'}),setTimer:fn=>{timers.set(++seq,fn);return seq;},clearTimer:id=>timers.delete(id)});
+ await new Promise(resolve=>setImmediate(resolve));assert.equal(written,'<p>report</p>');assert.equal(frame.src,undefined);assert.equal(status.textContent,'报告预览已加载');assert.match(doc.adoptedStyleSheets[0].css,/color:red/);assert.equal(doc.adoptedStyleSheets[0].media,'screen');
  let prevented=false;doc.handlers.get('click')({target:{closest:()=>({getAttribute:()=> '#case-1'})},preventDefault(){prevented=true;}});assert.ok(scrolled&&prevented);assert.equal(timers.size,0);
  current=false;await retry.handlers.get('click')();dispose();assert.equal(retry.handlers.size,0);
 });

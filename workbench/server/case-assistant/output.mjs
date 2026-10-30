@@ -1,4 +1,5 @@
 import ExcelJS from 'exceljs';
+import { sourceTextSupport } from './source-support.mjs';
 
 const FAIL = 'CASE_ASSISTANT_OUTPUT_INVALID';
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
@@ -31,6 +32,17 @@ function sourceReference(raw, sources, messages) {
   const segment = source?.segments?.find(item => item.segment_id === segmentId);
   if (!source || source.kind === 'IMAGE' || !segment || typeof segment.text !== 'string' || (quote && !segment.text.includes(quote))) return null;
   return { source_id: sourceId, segment_id: segmentId, ...(quote ? { quote } : {}) };
+}
+
+function supportEvidence(references, sources, messages) {
+  return references.flatMap((ref, reference_index) => {
+    let verified;
+    try { verified = sourceReference(ref, sources, messages); } catch { return []; }
+    if (!verified) return [];
+    const text = verified.message_id ? messages.find(item => item.id === verified.message_id).text
+      : sources.find(item => item.snapshot_id === verified.source_id).segments.find(item => item.segment_id === verified.segment_id).text;
+    return [{ text, quote: verified.quote, reference_index }];
+  });
 }
 
 function normalizeImages(raw, sources) {
@@ -106,7 +118,14 @@ export function checkAssistantOutput(raw, { sources = [], messages = [] } = {}) 
         }
       }
       if (!references.some(ref => { try { return sourceReference(ref, sources, messages); } catch { return false; } })) add('EXPECTED_SOURCE_REQUIRED', '本步骤缺少可核对的文档或用户补充来源，请测试工程师核对。', order, 'WARNING');
-      entry.steps.push({ order: step.order, action, expected, source_refs: references });
+      const evidence = supportEvidence(references, sources, messages);
+      const source_support = { action: sourceTextSupport(action, evidence), expected: sourceTextSupport(expected, evidence), semantic_status: 'NOT_REVIEWED' };
+      for (const [field, label, content] of [['action', '动作', action], ['expected', '预期', expected]]) {
+        if (content && source_support[field].status === 'UNVERIFIED') issues.push({
+          ...issue('STEP_SOURCE_SUPPORT_UNVERIFIED', `${label}完整表述未核对为所引来源原句，请人工核对（改写不等于错误）：${content.slice(0, 100)}`, id, order, 'WARNING'), field,
+        });
+      }
+      entry.steps.push({ order: step.order, action, expected, source_refs: references, source_support });
     }
     if (!entry.steps.length) add('CASE_STEPS_REQUIRED', '缺少测试步骤。');
     if (['action', 'expected'].some(key => entry.steps.map(step => step[key]).join('\n').length > 32767) ||
@@ -114,7 +133,7 @@ export function checkAssistantOutput(raw, { sources = [], messages = [] } = {}) 
       add('CASE_WORKBOOK_CELL_LIMIT', '单条用例超出 Excel 单元格上限，请拆为可独立执行的用例。');
     if (/(?:同上|同基线|沿用上一(?:条|个)?用例|参照上一(?:条|个)?用例)/.test(`${entry.preconditions}\n${entry.test_data}`)) add('CASE_DATA_NOT_STANDALONE', '前置条件与数据依赖其他用例，请展开为可独立使用的内容。', null, 'WARNING');
     entry.pending_questions.forEach(question => add('CASE_CLARIFICATION_REQUIRED', question, null, 'WARNING'));
-    entry.checks = { ready: !issues.some(item => item.severity === 'BLOCKING'), issues };
+    entry.checks = { ready: !issues.some(item => item.severity === 'BLOCKING'), semantic_status: 'NOT_REVIEWED', issues };
     result.cases.push(entry);
   }
   for (const key of ['case_id', 'external_id']) {
@@ -143,10 +162,11 @@ export function checkAssistantOutput(raw, { sources = [], messages = [] } = {}) 
   const ready = result.cases.filter(entry => entry.checks.ready);
   const warningCount = result.cases.filter(entry => entry.checks.content_warning_count > 0).length;
   result.checks = { status: globalIssues.length ? 'NEEDS_CLARIFICATION' : result.cases.length ? (ready.length === result.cases.length && !warningCount ? 'READY_FOR_REVIEW' : 'NEEDS_CLARIFICATION') : 'WAITING_FOR_INPUT',
+    semantic_status: 'NOT_REVIEWED',
     issues: [...globalIssues, ...result.cases.flatMap(entry => entry.checks.issues)], total_count: result.cases.length, ready_count: ready.length,
     pending_count: result.cases.length - ready.length, content_warning_count: warningCount,
     by_type: Object.fromEntries(['UI', 'BACKEND'].map(type => [type, { ready_count: ready.filter(entry => entry.case_type === type).length, pending_count: result.cases.filter(entry => entry.case_type === type && !entry.checks.ready).length }])),
-    limitation: '可下载仅表示 Excel 格式可导入；业务内容由测试工程师核对，待补充项及未核实来源已标注。所有用例均待确认、未执行。' };
+    limitation: '可下载仅表示 Excel 格式可导入；DIRECT_QUOTE 仅表示完整文字可在所引来源中找到，不证明业务语义正确。改写或未匹配表述保留待核对提示；所有用例均待确认、语义未审查、未执行。' };
   return result;
 }
 

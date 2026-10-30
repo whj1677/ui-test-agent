@@ -18,11 +18,15 @@ import { exportCasesWorkbook } from './cases/design.mjs';
 import { importedScriptFile } from './cases/script-package.mjs';
 import { frontendHandoffRoute } from './frontend-handoffs.mjs';
 import { nativeDshRoute } from './native-dsh/routes.mjs';
+import { changeCaseLifecycle } from './cases/lifecycle.mjs';
+import {diagnostics,diagnosticValue} from './diagnostics.mjs';
+import {randomUUID} from 'node:crypto';
 
 const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
 const defaultWorkspaceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web-v2');
 
 function sendJson(response, status, value) {
+  if(status>=400)void diagnostics.record('http','response.error',{status,error_code:typeof value?.error==='string'&&/^[A-Z0-9_:-]{1,120}$/.test(value.error)?value.error:'HTTP_ERROR'},status>=500?'error':'warn');
   response.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
@@ -53,12 +57,13 @@ async function sendStatic(response, workspaceRoot, pathname) {
     ['/workspace/execution-media.js', ['execution-media.js', 'text/javascript; charset=utf-8']],
     ['/workspace/api.js', ['api.js', 'text/javascript; charset=utf-8']],
     ['/workspace/model-settings.js', ['model-settings.js', 'text/javascript; charset=utf-8']],
+    ['/workspace/diagnostics-ui.js', ['diagnostics-ui.js', 'text/javascript; charset=utf-8']],
     ['/workspace/case-content-view.js', ['case-content-view.js', 'text/javascript; charset=utf-8']],
     ['/workspace/test-case-template.xlsx', ['test-case-template.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']],
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
   for (const name of ['backend.js','backend-bulk-review.js','backend.css','script-actions.js','reports.js','history.js','product.css','requirements.js','requirements-api.js','requirements.css','execution-list.js','execution-list.css','project-target-access.js','project-setup.js','project-workflow.js','project-workflow.css','project-setup.css','workspace-v2.css','batch-view.js','execution-notes.js','service-restart.js','demonstrations.js','demonstration-control.js','demonstration-control.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
-  for (const name of ['case-assistant.js', 'case-assistant-api.js', 'case-assistant.css', 'case-review.js', 'case-review.css']) workspaceFiles.set('/workspace/' + name, [name, name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8']);
+  for (const name of ['case-assistant.js', 'case-assistant-api.js', 'case-assistant.css', 'case-review.js', 'case-review.css', 'case-lifecycle.js']) workspaceFiles.set('/workspace/' + name, [name, name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/frontend-handoffs.js', ['frontend-handoffs.js', 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/native-dsh.js', ['native-dsh.js', 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/native-console-view.js', ['native-console-view.js', 'text/javascript; charset=utf-8']);
@@ -259,16 +264,44 @@ export function createWorkbenchServer(options = {}) {
   const buildAssessmentStore = options.buildAssessmentStore;
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
+  let caseLifecycleMutation = false;
+  const lifecycleBusy = () => Object.values({manager,buildManager,batchManager,scriptOperations,demonstrations,requirementsManager,caseAssistantManager,backendManager,nativeDsh:options.nativeDshManager}).some(m => m && (m.active || m.starting || m.generationOwner || m.generationStarting || m.generationBatchActive || m.storageFault || m.shutdownRequested));
   const authSessions = options.authSessions;
   const executionNotes=options.executionNotes || (caseStore?.root ? new ExecutionNotes({root:path.join(caseStore.root,'execution-notes'),getRecords:projectId=>projectRecords({buildStore,caseStore,store,buildManager},projectId)}) : null);
   const webRoot = options.webRoot || defaultWebRoot;
   const workspaceRoot = options.workspaceRoot || defaultWorkspaceRoot;
   const modelSettings=options.modelSettings||createModelSettings({busy:()=>serviceState.inFlightMutations>1||Object.values({manager,buildManager,batchManager,scriptOperations,demonstrations,requirementsManager,caseAssistantManager,backendManager,...(options.nativeDshManager?{nativeDsh:options.nativeDshManager}:{})}).some(m=>m&&(m.active||m.starting||m.generationOwner||m.generationStarting||m.generationBatchActive||m.storageFault))});
   return http.createServer(async (request, response) => {
+    const requestId=randomUUID(),started=Date.now(),journal=options.diagnostics||diagnostics;
+    response.setHeader?.('x-diagnostic-id',requestId);
+    return journal.context({request_id:requestId},async()=>{
+    const route=String(request.url||'').split('?')[0].slice(0,1000);
+    void journal.record('http','request.started',{method:request.method,route});
+    response.once?.('finish',()=>void journal.context({request_id:requestId},()=>journal.record('http','request.finished',{method:request.method,route,status:response.statusCode,elapsed_ms:Date.now()-started},response.statusCode>=500?'error':response.statusCode>=400?'warn':'info')));
     try {
       const url = new URL(request.url, 'http://127.0.0.1');
+      if(url.pathname.startsWith('/api/diagnostics')) {
+        if(!/^(127\.0\.0\.1|localhost):4322$/.test(request.headers.host||''))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+        if(url.pathname==='/api/diagnostics/export'&&request.method==='GET'){
+          if(request.headers['sec-fetch-site']==='cross-site')return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          if(request.headers.origin&&!trustedLocalOrigin(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          const component=manager=>{try{const v=manager?.diagnostics?.();return v?{available:v.available,starting:v.starting,state_unconfirmed:v.state_unconfirmed,active_task_id:v.active_task_id,active_turn_id:v.active_turn_id,runtime_state:v.runtime?.runtime?.state,last_diagnostic:v.last_diagnostic}:null;}catch(error){return {status:'DIAGNOSTICS_UNAVAILABLE',error:diagnosticValue(error)};}};
+          const bundle=await journal.export({service:serviceIdentity,logging:journal.status(),platform:process.platform,arch:process.arch,node:process.version,service_accepting:serviceState.accepting!==false,model_enabled:typeof buildManager?.generationDisabled==='boolean'?!buildManager.generationDisabled:null,components:{native_dsh:component(options.nativeDshManager),case_assistant:component(caseAssistantManager),build:component(buildManager)}});
+          response.writeHead(200,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','content-disposition':'attachment; filename="workbench-diagnostics.json"','x-content-type-options':'nosniff'});
+          return response.end(JSON.stringify(bundle,null,2));
+        }
+        if(url.pathname==='/api/diagnostics/client'&&request.method==='POST'){
+          if(!trustedMutation(request))return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+          const body=await readJsonBody(request,24*1024);
+          if(!body||Array.isArray(body)||!['error','unhandledrejection'].includes(body.kind)||typeof body.message!=='string')return sendJson(response,400,{error:'DIAGNOSTIC_EVENT_INVALID'});
+          await journal.record('web',body.kind,diagnosticValue({message:body.message,stack:body.stack,file:body.file,line:body.line}), 'error');
+          return sendJson(response,202,{recorded:true,request_id:requestId});
+        }
+        return sendJson(response,404,{error:'NOT_FOUND'});
+      }
       const mutation = !['GET','HEAD','OPTIONS'].includes(request.method);
       const stopping = /\/(?:stop|cancel)$/.test(url.pathname);
+      if (mutation && caseLifecycleMutation) return sendJson(response,409,{error:'CASE_LIFECYCLE_BUSY'});
       if (mutation && serviceState.accepting === false) return sendJson(response,503,{error:'WORKBENCH_SHUTTING_DOWN'});
       if (mutation) {
         serviceState.inFlightMutations = (serviceState.inFlightMutations || 0) + 1;
@@ -326,6 +359,7 @@ export function createWorkbenchServer(options = {}) {
           requirements: requirementsManager?.diagnostics?.() || null,
           case_assistant: caseAssistantManager?.diagnostics?.() || null,
           native_dsh: options.nativeDshManager?.diagnostics?.() || null,
+          diagnostic_logging: journal.status(),
           backend: backendManager?.active ? {kind:backendManager.active.kind,plan_id:backendManager.active.plan_id,run_id:backendManager.active.run_id} : null,
           active_backend_generation_batch_id: backendManager?.generationBatchActive?.batch?.batch_id || null,
           build_budget: budget,
@@ -462,6 +496,19 @@ export function createWorkbenchServer(options = {}) {
         const body = await readJsonBody(request, 64 * 1024);
         sendJson(response, 200, await caseManager.confirm(decodeURIComponent(projectConfirm[1]), decodeURIComponent(projectConfirm[2]), body.decisions || {}));
         return;
+      }
+      const lifecycle = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/(delete|restore)$/);
+      if (caseStore && caseManager && request.method === 'POST' && lifecycle) {
+        if (!trustedMutation(request)) return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+        const body = await readJsonBody(request,64 * 1024);
+        const projectId = decodeURIComponent(lifecycle[1]);
+        if (!await caseStore.getProject(projectId)) return sendJson(response,404,{error:'CASE_PROJECT_NOT_FOUND'});
+        // Close mutation admission synchronously after the final activity check.
+        if (serviceState.inFlightMutations !== 1 || lifecycleBusy()) return sendJson(response,409,{error:'CASE_LIFECYCLE_BUSY'});
+        caseLifecycleMutation = true;
+        try { return sendJson(response,200,await changeCaseLifecycle(caseStore,projectId,body,{restore:lifecycle[2] === 'restore'})); }
+        catch (error) { return sendJson(response,/CONFLICT/.test(error.message)?409:error.message === 'CASE_LIFECYCLE_NOT_FOUND'?404:400,{error:error.message}); }
+        finally { caseLifecycleMutation = false; }
       }
       const projectContentConfirm = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/confirm-content$/);
       if (caseManager && request.method === 'POST' && projectContentConfirm) {
@@ -713,7 +760,9 @@ export function createWorkbenchServer(options = {}) {
       if (request.method === 'GET' && await sendStatic(response, workspaceRoot, url.pathname)) return;
       sendJson(response, 404, { error: 'NOT_FOUND' });
     } catch (error) {
+      await journal.record('http','request.failed',{method:request.method,route,error},'error');
       sendJson(response, errorStatus(error), { error: error.message.split(':')[0] });
     }
+    });
   });
 }

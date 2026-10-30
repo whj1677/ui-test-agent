@@ -1,0 +1,312 @@
+{
+  "schema": "ai-engineering-context/requirement-source-v1",
+  "req_id": "REQ-0043",
+  "title": "跨电脑运行诊断日志与脱敏导出",
+  "metadata": {
+    "requirement_status": "实现及本机工程/正式4322导出验证完成；用户电脑需新版本复现，日志不补录历史事件；合并打包仍按此前要求等待并行修改。",
+    "governance_level": "G2",
+    "version": 1,
+    "last_updated": "2026-10-30"
+  },
+  "original_input": "我们自己做个日志系统，把这个报错等信息全部输入到日志中，方便我们定位问题。其他信息也进行记录，不然用户电脑上有问题我们都不知道问题在哪。",
+  "user_requirements": [
+    {
+      "id": "UN-0043-01",
+      "status": "已确认",
+      "goal": "跨电脑故障可通过用户导出的运行日志定位，不仅保存报错，还保存相关正常过程与版本环境。",
+      "constraints": "保留并行修改与用户数据；唯一正式4322；先Git归档推送；凭据和业务正文不默认写入；打包等待并行修改完成的既有要求保持。",
+      "success_criteria": "启动、请求、任务、DSH工具、浏览器和Office关键事件有时序/关联号；错误链经脱敏可导出，服务不可用也有本机导出入口；日志有界且写入失败不使业务操作失败。"
+    }
+  ],
+  "confirmed_facts": [
+    "用户截图中DSH说明Chromium无法启动，但原工具结果只显示操作完成，不能据此证明真实沙箱根因。",
+    "用户明确该问题发生在用户电脑；本机验证与远端故障验收必须区分。",
+    "修改前已推送并核验6591357748e990cafcb1f78e4d57d7125c89240c；源码、WPS及并行编辑保留，运行数据/QA/输出包和凭据未上传。",
+    "本机唯一4322的网页异常采集、请求关联、脱敏下载、跨站拒绝、同程序离线导出及实际CLI导出通过；0模型/0业务变更，原数据根与配置身份保持；用户电脑历史错误未补录，WPS/Chromium现场根因未因此被证明已解决。"
+  ],
+  "inferences_and_open_questions": [
+    "无法补录部署前未保存的用户电脑历史事件；部署日志能力后需现场复现。"
+  ],
+  "development_requirements": [
+    {
+      "id": "DR-0043-01",
+      "status": "已实现",
+      "requirement": "集中式有界日志、隐私过滤及写入隔离",
+      "acceptance_criteria": "日志按程序隔离、按服务/启动器分流，每流最多5个2MiB文件并清理14天未更新的日志文件；错误对象/cause/栈和敏感字段脱敏；溢出和存储错误可见。",
+      "constraints": "不改业务判定、浏览器权限、模型授权、正式入口或历史数据；不记录用户凭据和业务输入正文。"
+    },
+    {
+      "id": "DR-0043-02",
+      "status": "已实现",
+      "requirement": "启动、请求与任务全链路正常/异常记录",
+      "acceptance_criteria": "记录版本、程序/服务/请求/任务标识、阶段、时间与耗时；请求正文、密钥、文档正文不作为日志载荷。",
+      "constraints": "不改业务判定、浏览器权限、模型授权、正式入口或历史数据；不记录用户凭据和业务输入正文。"
+    },
+    {
+      "id": "DR-0043-03",
+      "status": "已实现",
+      "requirement": "DSH、浏览器、Office和网页异常诊断",
+      "acceptance_criteria": "保留工具退出码与失败片段，零退出码中的浏览器错误行也可检索；Office错误phase/hresult保留；网页错误采集不递归刷屏。",
+      "constraints": "不改业务判定、浏览器权限、模型授权、正式入口或历史数据；不记录用户凭据和业务输入正文。"
+    },
+    {
+      "id": "DR-0043-04",
+      "status": "已实现",
+      "requirement": "网页和离线可导出诊断包",
+      "acceptance_criteria": "同源本地网页可下载JSON；不启动工作台、不调用模型的离线CMD可导出同一程序日志；坏行与日志失败明确标记。",
+      "constraints": "不改业务判定、浏览器权限、模型授权、正式入口或历史数据；不记录用户凭据和业务输入正文。"
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-0043-01",
+      "dr_ids": [
+        "DR-0043-01"
+      ],
+      "status": "已确认",
+      "summary": "集中式有界日志、隐私过滤及写入隔离",
+      "rationale": "日志按程序隔离、按服务/启动器分流，每流最多5个2MiB文件并清理14天未更新的日志文件；错误对象/cause/栈和敏感字段脱敏；溢出和存储错误可见。"
+    },
+    {
+      "id": "DD-0043-02",
+      "dr_ids": [
+        "DR-0043-02"
+      ],
+      "status": "已确认",
+      "summary": "启动、请求与任务全链路正常/异常记录",
+      "rationale": "记录版本、程序/服务/请求/任务标识、阶段、时间与耗时；请求正文、密钥、文档正文不作为日志载荷。"
+    },
+    {
+      "id": "DD-0043-03",
+      "dr_ids": [
+        "DR-0043-03"
+      ],
+      "status": "已确认",
+      "summary": "DSH、浏览器、Office和网页异常诊断",
+      "rationale": "保留工具退出码与失败片段，零退出码中的浏览器错误行也可检索；Office错误phase/hresult保留；网页错误采集不递归刷屏。"
+    },
+    {
+      "id": "DD-0043-04",
+      "dr_ids": [
+        "DR-0043-04"
+      ],
+      "status": "已确认",
+      "summary": "网页和离线可导出诊断包",
+      "rationale": "同源本地网页可下载JSON；不启动工作台、不调用模型的离线CMD可导出同一程序日志；坏行与日志失败明确标记。"
+    }
+  ],
+  "interfaces_and_data_flow": [
+    "启动器/server → 诊断事件脱敏与限量JSONL → 网页同源导出或离线CMD → 用户主动发送诊断JSON。",
+    "DSH原始工具事件在摘要压缩前采集失败信息；正常事件保留结构化元数据，不改变原任务成功/失败判定。"
+  ],
+  "module_document_impact": [
+    "docs/modules/test-workbench.md需说明日志目录、保留策略和导出入口。"
+  ],
+  "risks_and_rollback": [
+    "日志错误片段可能含业务路径/名称；用户名路径和凭据自动脱敏，业务正文不默认采集。",
+    "可逐项恢复归档代码；不以回滚清理用户既有运行数据。"
+  ],
+  "tasks": [
+    {
+      "id": "TK-0043-01",
+      "dr_ids": [
+        "DR-0043-01"
+      ],
+      "dd_ids": [
+        "DD-0043-01"
+      ],
+      "status": "已完成",
+      "task": "集中式有界日志、隐私过滤及写入隔离",
+      "verification_ids": [
+        "VT-0043-01"
+      ]
+    },
+    {
+      "id": "TK-0043-02",
+      "dr_ids": [
+        "DR-0043-02"
+      ],
+      "dd_ids": [
+        "DD-0043-02"
+      ],
+      "status": "已完成",
+      "task": "启动、请求与任务全链路正常/异常记录",
+      "verification_ids": [
+        "VT-0043-02"
+      ]
+    },
+    {
+      "id": "TK-0043-03",
+      "dr_ids": [
+        "DR-0043-03"
+      ],
+      "dd_ids": [
+        "DD-0043-03"
+      ],
+      "status": "已完成",
+      "task": "DSH、浏览器、Office和网页异常诊断",
+      "verification_ids": [
+        "VT-0043-03"
+      ]
+    },
+    {
+      "id": "TK-0043-04",
+      "dr_ids": [
+        "DR-0043-04"
+      ],
+      "dd_ids": [
+        "DD-0043-04"
+      ],
+      "status": "已完成",
+      "task": "网页和离线可导出诊断包",
+      "verification_ids": [
+        "VT-0043-04"
+      ]
+    }
+  ],
+  "verification_items": [
+    {
+      "id": "VT-0043-01",
+      "dr_ids": [
+        "DR-0043-01"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "集中式有界日志、隐私过滤及写入隔离",
+      "evidence_standard": "工程注入正反例、唯一正式4322导出与离线导出分开；用户电脑历史故障不作通过。 同一92项回归集合重复引用，不累加计数；全量首轮1397通过/5失败已保留，5项响应替身兼容错误修复后对应20项与最终92项均通过。",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/diagnostics.test.mjs workbench/tests/native-dsh-client.test.mjs workbench/tests/native-dsh-executor.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/startup-budget.test.mjs workbench/tests/portable-package.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/native-runtime.test.mjs workbench/tests/model-settings.test.mjs workbench/tests/model-activation.test.mjs workbench/tests/demonstration-integration.test.mjs",
+        "exit_code": 0,
+        "test_count": 92,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-diagnostics-system/regression-final.log"
+      }
+    },
+    {
+      "id": "VT-0043-02",
+      "dr_ids": [
+        "DR-0043-02"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "启动、请求与任务全链路正常/异常记录",
+      "evidence_standard": "工程注入正反例、唯一正式4322导出与离线导出分开；用户电脑历史故障不作通过。 同一92项回归集合重复引用，不累加计数；全量首轮1397通过/5失败已保留，5项响应替身兼容错误修复后对应20项与最终92项均通过。",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/diagnostics.test.mjs workbench/tests/native-dsh-client.test.mjs workbench/tests/native-dsh-executor.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/startup-budget.test.mjs workbench/tests/portable-package.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/native-runtime.test.mjs workbench/tests/model-settings.test.mjs workbench/tests/model-activation.test.mjs workbench/tests/demonstration-integration.test.mjs",
+        "exit_code": 0,
+        "test_count": 92,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-diagnostics-system/regression-final.log"
+      }
+    },
+    {
+      "id": "VT-0043-03",
+      "dr_ids": [
+        "DR-0043-03"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "单元测试通过",
+      "item": "DSH、浏览器、Office和网页异常诊断",
+      "evidence_standard": "工程注入正反例、唯一正式4322导出与离线导出分开；用户电脑历史故障不作通过。 同一92项回归集合重复引用，不累加计数；全量首轮1397通过/5失败已保留，5项响应替身兼容错误修复后对应20项与最终92项均通过。",
+      "current_evidence": {
+        "command": "node --test --test-concurrency=1 workbench/tests/diagnostics.test.mjs workbench/tests/native-dsh-client.test.mjs workbench/tests/native-dsh-executor.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/startup-budget.test.mjs workbench/tests/portable-package.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/native-runtime.test.mjs workbench/tests/model-settings.test.mjs workbench/tests/model-activation.test.mjs workbench/tests/demonstration-integration.test.mjs",
+        "exit_code": 0,
+        "test_count": 92,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-diagnostics-system/regression-final.log"
+      }
+    },
+    {
+      "id": "VT-0043-04",
+      "dr_ids": [
+        "DR-0043-04"
+      ],
+      "confirmation_status": "已确认",
+      "execution_status": "集成测试通过",
+      "item": "网页和离线可导出诊断包",
+      "evidence_standard": "工程注入正反例、唯一正式4322导出与离线导出分开；用户电脑历史故障不作通过。 同一92项回归集合重复引用，不累加计数；全量首轮1397通过/5失败已保留，5项响应替身兼容错误修复后对应20项与最终92项均通过。",
+      "current_evidence": {
+        "command": "node workbench/qa/20261030-diagnostics-system/verify-official.mjs",
+        "exit_code": 0,
+        "test_count": 1,
+        "failure_count": 0,
+        "skipped_count": 0,
+        "log_path": "workbench/qa/20261030-diagnostics-system/official-verified.log"
+      }
+    }
+  ],
+  "verification_environment": {
+    "working_directory": "D:\\01_AI工程\\01_工程项目\\ui-test-agent",
+    "commands": [
+      "npm test",
+      "node --test --test-concurrency=1 workbench/tests/diagnostics.test.mjs workbench/tests/native-dsh-client.test.mjs workbench/tests/native-dsh-executor.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/startup-budget.test.mjs workbench/tests/portable-package.test.mjs workbench/tests/model-credentials.test.mjs workbench/tests/native-runtime.test.mjs workbench/tests/model-settings.test.mjs workbench/tests/model-activation.test.mjs workbench/tests/demonstration-integration.test.mjs",
+      "node workbench/qa/20261030-diagnostics-system/verify-official.mjs",
+      "node workbench/scripts/export-diagnostics.mjs"
+    ],
+    "environment": [
+      "Windows/Node22，唯一正式4322；本机原配置和数据目录身份保持；无模型调用、无业务变更。"
+    ],
+    "conclusion": "全量首轮1397通过5失败，原失败保留；响应替身兼容错误修复后20项和最终92项均通过；正式页面与离线导出通过，用户现场仍待部署复现。"
+  },
+  "trace_current": [
+    {
+      "un_id": "UN-0043-01",
+      "dr_id": "DR-0043-01",
+      "dd_id": "DD-0043-01",
+      "tk_id": "TK-0043-01",
+      "vt_id": "VT-0043-01",
+      "status": "实现、本机工程和正式4322导出完成；用户现场及后续合并安装独立保留"
+    },
+    {
+      "un_id": "UN-0043-01",
+      "dr_id": "DR-0043-02",
+      "dd_id": "DD-0043-02",
+      "tk_id": "TK-0043-02",
+      "vt_id": "VT-0043-02",
+      "status": "实现、本机工程和正式4322导出完成；用户现场及后续合并安装独立保留"
+    },
+    {
+      "un_id": "UN-0043-01",
+      "dr_id": "DR-0043-03",
+      "dd_id": "DD-0043-03",
+      "tk_id": "TK-0043-03",
+      "vt_id": "VT-0043-03",
+      "status": "实现、本机工程和正式4322导出完成；用户现场及后续合并安装独立保留"
+    },
+    {
+      "un_id": "UN-0043-01",
+      "dr_id": "DR-0043-04",
+      "dd_id": "DD-0043-04",
+      "tk_id": "TK-0043-04",
+      "vt_id": "VT-0043-04",
+      "status": "实现、本机工程和正式4322导出完成；用户现场及后续合并安装独立保留"
+    }
+  ],
+  "trace_history": [
+    {
+      "version": 1,
+      "link": "无",
+      "status": "新建",
+      "notes": "用户明确要求新增跨电脑诊断日志；不继承历史现场通过结论。"
+    }
+  ],
+  "open_questions": [
+    "用户电脑需安装合并后的新版本并复现，才能取得新日志；该现场结果未运行。"
+  ],
+  "prohibited_implementation": [
+    "不记录API Key、Authorization/Cookie、完整模型提示或文档正文；不静默上传诊断包；不更改沙箱或连接未授权浏览器。"
+  ],
+  "changes": [
+    {
+      "date": "2026-10-30",
+      "version": 1,
+      "type": "新建",
+      "description": "实现跨电脑诊断日志、正常过程元数据和脱敏导出，用户现场验收独立保留。",
+      "impact": "日志、启动/请求/任务/Office/DSH/浏览器接入与导出界面",
+      "confirmed_by": "用户本轮明确要求"
+    }
+  ]
+}

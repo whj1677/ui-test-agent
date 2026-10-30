@@ -1,3 +1,4 @@
+import {diagnostics} from '../diagnostics.mjs';
 import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
@@ -281,12 +282,14 @@ export async function executeNativeScript({ workspace, runDirectory, entry, purp
     const configPath = path.join(privateDirectory, 'playwright.config.mjs');
     await fs.writeFile(configPath, `const config=${JSON.stringify(config)};\nconfig.testMatch=new RegExp(${JSON.stringify('(?:^|[/\\\\])' + escapeRe(entry).replaceAll('/', '[/\\\\]') + '$')});\nconfig.grep=new RegExp(${JSON.stringify(escapeRe(caseId))});\nexport default config;\n`);
     onProgress?.({ type: 'execution_started', case_id: caseId, script_sha256: manifest.script_sha256, bundle_sha256: manifest.bundle_sha256 });
+    void diagnostics.record('browser','execution.started',{case_id:caseId,run_id:identity?.run_id,browser_executable:browserExecutable});
     if (result.evidence_preflight) result.evidence_preflight.business_execution_started = true;
     const child = await execute(process.execPath, [playwrightCli, 'test', '--config', configPath], {
       cwd: snapshot, env: childEnv, signal, timeoutMs,
       onStdoutLine: line => { if (line.startsWith('NATIVE_EXECUTION_EVENT ')) { try { onProgress?.(JSON.parse(line.slice(23))); } catch {} } },
       maxCaptureBytes: 1024 * 1024,
     });
+    void diagnostics.record('browser','process.finished',{case_id:caseId,run_id:identity?.run_id,exit_code:child.exitCode,termination:child.termination,error:child.error,stderr:child.stderr},child.exitCode===0?'info':'error');
     await fs.writeFile(path.join(root, 'stdout.log'), child.stdout || '');
     await fs.writeFile(path.join(root, 'stderr.log'), child.stderr || '');
     result.report = await fs.readFile(reportPath, 'utf8').then(JSON.parse).catch(() => null);
@@ -326,6 +329,7 @@ export async function executeNativeScript({ workspace, runDirectory, entry, purp
       }
     }
     onProgress?.({ type: 'execution_finished', status: result.status, error: result.error, case_id: caseId });
+    void diagnostics.record('browser','execution.finished',{case_id:caseId,status:result.status,error:result.error},result.status==='PASSED'?'info':'warn');
   }
   return result;
 }
