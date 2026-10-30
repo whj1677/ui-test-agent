@@ -77,6 +77,8 @@ test('registration-only task avoids target access, isolates source/session, and 
   f.manager.get = get;
   const draft = await f.register(task); assert.equal(draft.execution_status, 'NOT_RUN'); assert.equal(draft.counts_for_case, false);
   assert.equal(draft.script_sha256, task.items[0].existing_source.script_sha256);
+  assert.equal(model.completionSignal.aborted,true,'Persisted registration requests host completion without any execution');
+  assert.equal(model.signal.aborted,false,'Task is completed, not cancelled');
   await f.finish();
   const after = await f.manager.load(f.projectId), ended = await f.manager.get(f.projectId, task.id), projection = await f.manager.console(f.projectId);
   assert.equal(after.session_id, f.oldSession); assert.equal(after.session_workspace, f.source); assert.equal(after.session_directory, before.session_directory);
@@ -120,7 +122,7 @@ test('request identity separates registration from generation and retries never 
 test('registration-only helper refuses a business or diagnostic execute command before any HTTP call', async () => {
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
   const helper = nativeTaskHelper('http://local.invalid/tasks/task', 'test-only-token', { registrationOnly: true })
-    .replace("import { readFile } from 'node:fs/promises';", '').replace('import.meta.url', "'file:///fixture/execute.mjs'");
+    .replace("import { readFile } from 'node:fs/promises';", '').replaceAll('import.meta.url', "'file:///fixture/execute.mjs'");
   let calls = 0;
   for (const extra of [[], ['--diagnostic']]) {
     await assert.rejects(new AsyncFunction('process', 'fetch', helper)({ argv: ['node', 'execute.mjs', 'one', 'specs/TC-one.spec.mjs', ...extra] }, async () => { calls++; }), /EXECUTION_DISABLED/);

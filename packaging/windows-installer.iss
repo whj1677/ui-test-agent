@@ -11,6 +11,9 @@ AppVersion=0.1.0
 AppPublisher=Test Workbench
 DefaultDirName={localappdata}\UITestAgent
 DefaultGroupName=测试工作台
+UsePreviousAppDir=yes
+UsePreviousGroup=yes
+UsePreviousTasks=yes
 DisableDirPage=no
 DisableProgramGroupPage=yes
 DisableWelcomePage=no
@@ -25,7 +28,10 @@ OutputDir={#ReleaseDir}
 OutputBaseFilename=UITestAgent-Setup
 UninstallFilesDir={app}\uninstall
 UninstallDisplayIcon={app}\program\runtime\node\node.exe
-CloseApplications=no
+; Restart Manager identifies holders of the exact installed file resources.
+; Force permits termination of an unresponsive old process, never by image name.
+CloseApplications=force
+CloseApplicationsFilter=*.exe,*.dll
 RestartApplications=no
 SetupLogging=yes
 [Languages]
@@ -45,8 +51,7 @@ begin
   Result := '';
   if Length(ExpandConstant('{app}\program')) + 180 > 240 then
     Result := '安装位置过长，请选择较短的位置，例如 D:\测试工作台。'
-  else if FileExists(ExpandConstant('{app}\program\portable-manifest.json')) then
-    Result := '所选位置已有测试工作台，请选择新的安装位置以保留原程序和项目。';
+  ;
 end;
 function InitializeUninstall(): Boolean;
 var

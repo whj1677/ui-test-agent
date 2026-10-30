@@ -26,6 +26,8 @@
       </nav>
       <div class="side-spacer"></div>
       <a class="side-link" data-nav href="#/model-settings">模型设置</a>
+      <div id="workbench-version" class="workbench-version" aria-label="工作台版本">版本待确认</div>
+      <button id="export-diagnostics" class="side-link" type="button">导出诊断日志</button>
       <div class="connection"><span></span><div><strong>已连接本机工作台</strong><small>项目与用例管理</small></div></div>
 
     </aside>
@@ -43,5 +45,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="modal-root"></div>
   <script src="/workspace/app.js" type="module"></script>
+  <script src="/workspace/diagnostics-ui.js" type="module"></script>
 </body>
 </html>

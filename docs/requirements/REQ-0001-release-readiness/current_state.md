@@ -5,10 +5,10 @@
 
 ## 元数据
 
-- 需求状态：v18修复生成准备对受保护Office原件的ZIP重解析；54项相关工程通过，正式4322真实DSH读取102段、生成前端6/后端6条，用网页按钮下载两份Excel，55步骤和75引用核对通过；v3完整包57367文件与源码核验并编译成功。业务仍待确认、未执行，图片与真实WPS未验，新EXE未重复安装向导。
+- 需求状态：v22本轮WPS独立读取、正式4322限定全功能、默认原目录覆盖与自动结束目标旧进程均完成本机验证；最新1420项通过，安装/文件/数据和非目标进程保护已验。客户电脑、原件语义及干净Windows未验，全局发布就绪仍受既有边界约束。
 - 治理分级：G2
-- 当前版本：18
-- 最后更新：2026-10-29
+- 当前版本：22
+- 最后更新：2026-10-30
 
 ## 当前有效用户需求
 
@@ -28,6 +28,9 @@
 | UN-0001-12 | 已确认 | 接入企业保护DOCX的本机Word只读后备，并交付选择旧安装目录的轻量增量升级包 |
 | UN-0001-13 | 已确认 | 把Word/WPS读取后备直接打进新的完整Windows安装器，取消增量升级包交付 |
 | UN-0001-14 | 已确认 | 继续使用同一受保护需求文档，在AI用例助手真实生成一次并下载Excel，验证读取到下载的整个流程 |
+| UN-0001-15 | 已确认 | 修复用户WPS文档读取BUSY并在左侧导航显示版本号；不能把本机Word验证当作用户WPS已恢复。 |
+| UN-0001-16 | 已确认 | 移植需求Agent已验证的WPS独立读取方案，完整回归并重新打包 |
+| UN-0001-17 | 已确认 | 安装器自动结束原安装目录的旧程序后覆盖升级 |
 
 ## 当前有效开发需求
 
@@ -50,6 +53,10 @@
 | DR-0001-15 | 已确认 | 网页显式启用模型及安全重新加载保存密钥 |
 | DR-0001-16 | 已确认 | 加入DOCX本机Word只读后备和离线增量升级/回退 |
 | DR-0001-17 | 已确认 | 完整安装器包含Word/WPS后备并验证程序/环境完整性 |
+| DR-0001-18 | 已确认 | WPS已打开原件只读后备和侧栏运行版本标识 |
+| DR-0001-19 | 已确认 | 独立WPS读取及完整候选交付 |
+| DR-0001-20 | 已确认 | 完整安装器默认覆盖已有安装目录并保留用户数据 |
+| DR-0001-21 | 已确认 | 安装器按实际文件占用自动关闭旧程序 |
 
 ## 当前有效设计
 
@@ -76,6 +83,10 @@
 | DD-0001-19 | DR-0001-17 | 已确认 | 复用已验证完整安装包的同锁依赖与运行时，覆盖当前受控运行代码并重建完整摘要，Inno Setup生成新EXE；模板仅复用上一完整包中可解析的公开工程模板，不修改本机加密原件。 |
 | DD-0001-20 | DR-0001-17 | 已确认 | Office结果先校验段落/单元格位置与类型，再省略空白文字；有效原文不改，重新连续分配segment_id并保留原位置与quote_sha256。 |
 | DD-0001-21 | DR-0001-17 | 已确认 | 生成会话只对local-office/PARTIAL、图片UNANALYZED且嵌图清单为空的DOCX使用已冻结文字，不重开原件ZIP；原字节摘要仍核验，普通DOCX插图继续解析及校验，MCP清单保留读取方式和图片缺口。 |
+| DD-0001-22 | DR-0001-18 | 已确认 | WPS共享实例只读已打开已保存的精确原件；导航使用health.service_identity.release.version。 |
+| DD-0001-23 | DR-0001-19 | 已确认 | 将pm-req 443038c/c1aa7a9的双位数注册发现、CLSID创建、独立空闲进程组和上传副本原则移植到现有.NET helper；替代DD-0001-22的共享文档后备。 |
+| DD-0001-24 | DR-0001-20 | 已确认 | v21保留固定AppId和原路径/任务设置、文件覆盖保留数据；原全局4322拒绝策略在v22由DD-0001-25资源自动关闭替代。 |
+| DD-0001-25 | DR-0001-21 | 已确认 | CloseApplications=force、Filter=*.exe,*.dll、RestartApplications=no；用Windows Restart Manager按安装目标文件资源识别持有者，移除安装阶段全局4322忙碌拒绝。 |
 
 ## 当前有效任务
 
@@ -113,6 +124,19 @@
 | TK-0001-30 | DR-0001-17 / DD-0001-19 | 已实现并完成限定工程、正式助手和安装验证；真实WPS未验 | 重建并验证含修复的完整安装器 |
 | TK-0001-31 | DR-0001-17 / DD-0001-21 | 已实现；真实生成与网页Excel下载及内容/引用核对通过 | 修复受保护资料生成准备并完成真实生成和Excel下载 |
 | TK-0001-32 | DR-0001-17 / DD-0001-19 | 已实现；完整程序字节与编译核对通过，安装向导未重复执行 | 完整安装包包含受保护资料生成修复 |
+| TK-0001-33 | DR-0001-18 / DD-0001-22 | 已完成 | 实现并验证WPS精确已保存原件读取逻辑 |
+| TK-0001-34 | DR-0001-18 / DD-0001-22 | 已完成 | 显示并实测正式4322的侧栏版本号 |
+| TK-0001-35 | DR-0001-19 / DD-0001-23 | 已完成 | 实现并回归注册识别、安全设置与进程组归属 |
+| TK-0001-36 | DR-0001-19 / DD-0001-23 | 已完成 | 验证真实WPS合成正文表格及未保存编辑共存 |
+| TK-0001-37 | DR-0001-19 / DD-0001-23 | 已完成 | 执行完整工程回归与正式4322全功能验证 |
+| TK-0001-38 | DR-0001-19 / DD-0001-23 | 已完成 | 重建完整安装器/便携包并独立核对源码和运行时字节 |
+| TK-0001-39 | DR-0001-19 / DD-0001-23 | 已完成 | 执行本轮正式交付检查并披露客户电脑/安装边界 |
+| TK-0001-40 | DR-0001-20 / DD-0001-24 | 已完成 | v21默认原目录升级及运行中拒绝（历史策略，v22自动关闭由TK-0001-43替代） |
+| TK-0001-41 | DR-0001-20 / DD-0001-24 | 已完成 | 真实安装器同目录覆盖与用户数据保留验证 |
+| TK-0001-42 | DR-0001-20 / DD-0001-24 | 已完成 | 新增安装规则后完整工程回归和最终候选交付检查 |
+| TK-0001-43 | DR-0001-21 / DD-0001-25 | 已完成 | 实现并验证安装目标资源自动关闭规则 |
+| TK-0001-44 | DR-0001-21 / DD-0001-25 | 已完成 | 实测旧进程自动结束、其它进程及原工作台不变和数据保留 |
+| TK-0001-45 | DR-0001-21 / DD-0001-25 | 已完成 | 最终工程全清单、自动关闭安装器打包与交付收口 |
 
 ## 当前有效验证项
 
@@ -150,6 +174,19 @@
 | VT-0001-30 | DR-0001-17 | 集成测试通过 | 重建并验证含修复的完整安装器 | 命令：pwsh -File workbench/qa/20261029-protected-document-retest/verify-full-install.ps1；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/install.log |
 | VT-0001-31 | DR-0001-17 | 集成测试通过 | 修复受保护资料生成准备并完成真实生成和Excel下载 | 命令：C:/Users/20240082/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -X utf8 workbench/.local/protected-e2e-20261029/verify-xlsx.py；退出码：0；测试数量：2；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/generation-verify.log |
 | VT-0001-32 | DR-0001-17 | 集成测试通过 | 完整安装包包含受保护资料生成修复 | 命令：pwsh -File workbench/scripts/build-windows-installer.ps1 -ProgramRoot D:/UAOF3Build -OutputDirectory D:/UAOF3Setup -Iscc D:/01_AI工程/01_工程项目/pm-req/evidence/build-tools/InnoSetup-6.7.3/ISCC.exe；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261029-protected-document-retest/generation-build-v3.log |
+| VT-0001-33 | DR-0001-18 | 单元测试通过 | 实现并验证WPS精确已保存原件读取逻辑 | 命令：workbench/qa/20261030-wps-reader/WpsReaderTests.exe；退出码：0；测试数量：6；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-reader/wps-contract.log |
+| VT-0001-34 | DR-0001-18 | 集成测试通过 | 显示并实测正式4322的侧栏版本号 | 命令：node workbench/qa/20261030-wps-reader/verify-sidebar.mjs；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-reader/sidebar-final.log |
+| VT-0001-35 | DR-0001-19 | 单元测试通过 | 实现并回归注册识别、安全设置与进程组归属 | 命令：node --test workbench/tests/office-native.test.mjs workbench/tests/office-reader.test.mjs；退出码：0；测试数量：11；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/targeted-release.log |
+| VT-0001-36 | DR-0001-19 | 集成测试通过 | 验证真实WPS合成正文表格及未保存编辑共存 | 命令：node workbench/qa/20261030-wps-port/official-wps-release.mjs；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/official-wps-release-final.log |
+| VT-0001-37 | DR-0001-19 | 单元测试通过 | 执行完整工程回归与正式4322全功能验证 | 命令：npm test；退出码：0；测试数量：1420；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/full-regression-release.log |
+| VT-0001-38 | DR-0001-19 | 集成测试通过 | 重建完整安装器/便携包并独立核对源码和运行时字节 | 命令：node workbench/qa/20261030-wps-port/verify-package-source.mjs；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/package-source.log |
+| VT-0001-39 | DR-0001-19 | 集成测试通过 | 执行本轮正式交付检查并披露客户电脑/安装边界 | 命令：node --test workbench/tests/office-native.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/windows-installer.test.mjs；退出码：0；测试数量：14；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/collector-stable.log |
+| VT-0001-40 | DR-0001-20 | 单元测试通过 | v21原目录升级及忙碌拒绝历史验证；v22新策略另见VT-0001-43/44 | 命令：node --test workbench/tests/windows-installer.test.mjs；退出码：0；测试数量：3；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/installer-contract.log |
+| VT-0001-41 | DR-0001-20 | 集成测试通过 | 真实安装器同目录覆盖与用户数据保留验证 | 命令：node workbench/qa/20261030-wps-port/finalize-delivery.mjs；退出码：0；测试数量：3；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/delivery-verified.log |
+| VT-0001-42 | DR-0001-20 | 单元测试通过 | 新增安装规则后完整工程回归和最终候选交付检查 | 命令：npm test；退出码：0；测试数量：1420；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/full-regression-release.log |
+| VT-0001-43 | DR-0001-21 | 单元测试通过 | 实现并验证安装目标资源自动关闭规则 | 命令：node --test workbench/tests/windows-installer.test.mjs；退出码：0；测试数量：3；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/autostop/installer-contract.log |
+| VT-0001-44 | DR-0001-21 | 集成测试通过 | 实测旧进程自动结束、其它进程及原工作台不变和数据保留 | 命令：node workbench/qa/20261030-wps-port/autostop/finalize.mjs；退出码：0；测试数量：3；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/autostop/delivery-verified.log |
+| VT-0001-45 | DR-0001-21 | 单元测试通过 | 最终工程全清单、自动关闭安装器打包与交付收口 | 命令：npm test；退出码：0；测试数量：1420；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-wps-port/autostop/full-regression.log |
 
 ## 人工待确认项
 

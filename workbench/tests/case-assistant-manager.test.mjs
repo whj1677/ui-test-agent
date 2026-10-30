@@ -255,8 +255,9 @@ test('public historical checks match export without overwriting the accepted ori
   const file = manager.store.file(projectId, conversation.id), before = await fs.readFile(file);
   const visible = await manager.get(projectId, conversation.id);
   assert.equal(visible.turns[0].checks.ready_count, 1);
-  assert.equal(visible.turns[0].checks.issues[0].code, 'GLOBAL_QUESTIONS_UNRESOLVED');
-  assert.equal(visible.turns[0].checks.issues[0].severity, 'WARNING');
+  assert(visible.turns[0].checks.issues.some(item => item.code === 'GLOBAL_QUESTIONS_UNRESOLVED' && item.severity === 'WARNING'));
+  assert(visible.turns[0].checks.issues.some(item => item.code === 'STEP_SOURCE_SUPPORT_UNVERIFIED' && item.field === 'expected'));
+  assert.equal(visible.turns[0].checks.semantic_status, 'NOT_REVIEWED');
   assert.deepEqual(visible.turns[0].questions, turn.questions);
   assert.equal(Object.hasOwn(visible.turns[0], 'source_snapshots'), false);
   const workbook = new ExcelJS.Workbook();

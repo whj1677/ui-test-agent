@@ -27,7 +27,7 @@ async function fixture(t){
     buildManager:{developmentEnvironments:[{id:'env-target',project_id:projectId,user_registered_target:true,normal_url:'http://local-sut.invalid/',auth_requirement:{environment_id:'env-target',role:'qa'}}],authSessions:{check:async()=>({status:authValid?'VALID':'INVALID'}),beginTaskProtection:()=>()=>{},stateForExecution:async()=>({cookies:[],origins:[]})}},
     execute:async args=>{executions++;assert.equal(args.workspace,undefined);assert.equal(args.frozenSource.runDirectory,undefined);assert.equal(args.frozenSource.importedPackage.bundle_sha256,pkg.bundle_sha256);assert.equal(args.identity.source_draft_id,imported.id);assert.equal(args.identity.source_kind,'IMPORTED_SCRIPT');
       return executeNativeScript(args,{prepareRecorder:async()=>null,finalizeEvidence:async()=>{},execute:async(_,argv,options)=>{
-        const config=(await import(pathToFileURL(argv.at(-1)).href)).default;assert.equal(config.use.headless,false);assert.equal(options.env.DEEPSEEK_API_KEY,undefined);
+        const config=(await import(pathToFileURL(argv.at(-1)).href)).default;assert.equal(config.use.headless,true);assert.equal(options.env.DEEPSEEK_API_KEY,undefined);
         for(const [name,text]of Object.entries(texts))assert.equal(await fs.readFile(path.join(config.testDir,name),'utf8'),text);
         await fs.writeFile(config.reporter[0][1].outputFile,JSON.stringify({status:'failed',finished_at:new Date().toISOString(),tests:[{title:'PKG-001 fixture',status:'failed',expected_status:'passed',errors:['factual fixture failure']}]}));
         return {exitCode:1,stdout:'',stderr:'',outputComplete:true};

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
+import { selectionRouteIdentity } from '../web-v2/case-selection.js';
 import { renderCaseContent, loadCaseExecutionContext } from '../web-v2/case-content-view.js';
 
 const project={project_id:'one',name:'项目'},item={case_id:'case',current_version:2,root_source:{row:7},versions:[{version:1},{version:2}]};
@@ -49,7 +50,7 @@ function routing(){
     route:()=>{const parts=context.location.hash.slice(2).split('/');return {parts,query:new URLSearchParams(),projectId:parts[1]};},
     refreshServiceHealth:()=>new Promise(()=>{}),loadProjects:async()=>{throw Error('deep route must not load all projects');},
     loadProject:id=>{loads.push(id);return new Promise(resolve=>pending.set(id,resolve));},
-    setSidebarNavigation(){},setBreadcrumb(){},renderCases:p=>shown.push(p.project_id),showFatal:e=>{throw e;},URLSearchParams,
+    setSidebarNavigation(){},setBreadcrumb(){},renderCases:p=>shown.push(p.project_id),showFatal:e=>{throw e;},URLSearchParams,selectionRouteIdentity,
   });
   vm.runInContext(appSource.slice(start,end),context);
   return {context,shown,loads,pending};

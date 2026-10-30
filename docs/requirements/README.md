@@ -1,3 +1,11 @@
+- [REQ-0044 跨页选择与DSH收尾、合并日志打包](REQ-0044-selection-dsh-completion/current_state.md)：归档推送后完成；1415项完整回归全通过，70条选择传递、DSH收尾、默认后台/可选前台和诊断日志经正式4322核验，batch2完整包字节已核验；文档读取与多任务并行暂停。
+
+- [REQ-0025 v4 可恢复删除用例](REQ-0025-workbench-m3a-case-import-export/current_state.md)：用例库新增单条/所选删除、已删除列表及恢复；20项相关工程检查与正式4322取消、单条/批量删除恢复、刷新验证通过。2原用例完整版本/来源恢复，79个其他项目不变；正式交付检查受其他任务并行变更阻断，本轮未重打安装包。见[验证记录](../../workbench/qa/20261030-case-delete/REPORT.md)。
+
+- [REQ-0043 跨电脑运行诊断日志与脱敏导出](REQ-0043-runtime-diagnostics/current_state.md)：已随REQ-0044合并验证并打包batch2；正式4322采集/脱敏及离线导出通过，用户电脑需部署后复现。
+
+- [REQ-0042 v2 三项继续修复](REQ-0042-architecture-review/current_state.md)：CSP、助手来源核对、宿主锁PID身份已修复；1387工程、32 Harness、正式页面18/18、下载4/4、媒体10/10及UI/HTTP实际执行与零模型复跑通过；来源语义与未覆盖现场边界见[复验报告](REQ-0042-architecture-review/followup-review.md)。
+
 - [REQ-0001 v18 受保护文档真实生成与Excel下载](REQ-0001-release-readiness/current_state.md)：修复生成准备重解析原件ZIP的问题；正式4322真实生成前端6/后端6条并经网页按钮下载，55步骤/75有效引用核对通过，54项相关检查通过。v3完整包包含修复，业务确认和真实WPS仍待验证。见[本轮记录](../../workbench/qa/20261029-protected-document-retest/REPORT.md)。
 
 - [REQ-0001 v17 受保护Word真实复验](REQ-0001-release-readiness/current_state.md)：修复Office制表符空段落误报，正式4322助手读取原件102有效段，普通与受保护上传接口通过，43项工程检查通过；更新完整安装器，真实WPS未验。见[本轮记录](../../workbench/qa/20261029-protected-document-retest/REPORT.md)。
@@ -196,7 +204,7 @@
 
 - [REQ-0002-wrapped-label-controls](REQ-0002-wrapped-label-controls/current_state.md)：REQ-0001子问题；嵌套标签控件观察/查询绑定与缺口报告，先复现再修复。
 
-- [REQ-0001-release-readiness](REQ-0001-release-readiness/current_state.md)：用户新设持续发布目标；先需求、逐问题修复/验证/Git同步，多界面真实模型与安全/安装/独立操作证据齐备才可判内部试用就绪。
+- [REQ-0001-release-readiness](REQ-0001-release-readiness/current_state.md)：v22 WPS独立读取、默认原目录自动结束旧进程并覆盖升级已本机验证，保留项目/配置；最新工程1420项通过，正式4322及安装数据保留已验，客户电脑与干净Windows待复验。
 
 - [REQ-20260916-internal-beta](REQ-20260916-internal-beta/current_state.md)：已授权实施；身份、同站点清理保护和安装恢复入口已做工程验证。真实模型、干净 Windows 和独立人员验收未齐全，候选待验。
 - [REQ-20260916-checkpoints](REQ-20260916-checkpoints/current_state.md)：原步骤内分段检查，工程实现与限定验证完成；真实模型效果和真实业务验收未验证。

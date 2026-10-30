@@ -7,8 +7,8 @@ export async function nativeDshRoute({ request, response, url, manager, sendJson
   const method = request.method;
   // The owned local runner has no browser Origin. Its short-lived task bearer
   // is checked by the manager; only execution and non-executing draft registration qualify.
-  if (method === 'POST' && parts.length === 3 && parts[0] === 'tasks' && ['execute', 'drafts'].includes(parts[2])) {
-    const value = await manager[parts[2] === 'drafts' ? 'registerDraft' : 'executeRequest'](projectId, parts[1], await readJsonBody(request), request.headers.authorization);
+  if (method === 'POST' && parts.length === 3 && parts[0] === 'tasks' && ['execute', 'drafts', 'finish'].includes(parts[2])) {
+    const value = await manager[parts[2] === 'finish' ? 'finishBatch' : parts[2] === 'drafts' ? 'registerDraft' : 'executeRequest'](projectId, parts[1], await readJsonBody(request), request.headers.authorization);
     sendJson(response, 200, value);
     return true;
   }

@@ -2,27 +2,26 @@
 
 ## Delivery Evidence (managed)
 
-- Generated at: `2026-10-29T14:50:44+08:00`
+- Generated at: `2026-10-30T15:27:57+08:00`
 - Record: `REQ-0001-release-readiness`
-- Change fingerprint: `5abc559c41412166145d528c6e4eff050cd4f2422c423e83e16625c5b9fe54c5`
+- Change fingerprint: `16fe9497e041517c6afec2e6739083ba8b55819742f086a66820c815e41573d9`
 - Delivery scope: `docs/ai_engineering/delivery_scope.json`
-- Preserved baseline SHA-256: `aaab798623f6a62ca1c25b869db1b126154a42ad03558ef941cca730db8e11da`
+- Preserved baseline SHA-256: `449a35ee293f5312d17f8fd2af24c400c6fa0228063dd44c9978e217329b75e5`
 - Verification source: `collector-executed-v1`
-- Verification state: `集成测试通过`
-- Command: `node --test workbench/tests/case-assistant-dsh.test.mjs workbench/tests/case-assistant-manager.test.mjs workbench/tests/case-assistant-output.test.mjs`
+- Verification state: `单元测试通过`
+- Command: `node --test workbench/tests/office-native.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/windows-installer.test.mjs`
 - Exit code: `0`
-- Test count: `54`
+- Test count: `14`
 - Failure count: `0`
 - Skipped count: `0`
-- Log path: `workbench/qa/20261029-protected-document-retest/generation-collector-tests.log`
-- Log SHA-256: `d3272a5fd79df7e504c7a29e12cc975ee777c8b6b8d1d84a7e3413d82633d6f0`
+- Log path: `workbench/qa/20261030-wps-port/autostop/collector-final.log`
+- Log SHA-256: `22901be21b17b92e9c6941e7d4eaafd4df664e4e59c4e0fefa6ff0d7af68694a`
 
 ### Git Status
 
 ```text
- M .gitignore
- M README.md
  M docs/ai_engineering/01_architecture.md
+ M docs/ai_engineering/delivery_scope.json
  M docs/modules/test-workbench.md
  M docs/modules/workbench-case-library.md
  M docs/requirements/README.md
@@ -36,124 +35,79 @@
  M docs/requirements/REQ-0001-release-readiness/current_state.md
  M docs/requirements/REQ-0001-release-readiness/delivery_evidence.md
  M docs/requirements/REQ-0001-release-readiness/requirement.source.json
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md
- M docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/requirement.source.json
- M docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/03_tasks.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/04_verification.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/05_trace.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/change_log.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/current_state.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md
- M docs/requirements/REQ-0037-autonomous-candidate-development/requirement.source.json
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/00_user_requirement.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/01_development_requirement.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/02_design.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/03_tasks.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/04_verification.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/05_trace.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/change_log.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/current_state.md
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/requirement.source.json
- M docs/requirements/REQ-0038-requirements-and-protocol-test-input/输入资料与验收约定.md
- M harness-probe/config/browser-auth-attach.cordis.yml
- M harness-probe/config/browser-flash.cordis.yml
- M harness-probe/config/browser.cordis.yml
- M harness-probe/package-lock.json
- M harness-probe/package.json
- M harness-probe/src/harness-runner.mjs
- M harness-probe/src/process-control.mjs
- M harness-probe/src/verify-candidate.mjs
- M package-lock.json
- M package.json
- M scripts/check_ai_context.py
- M scripts/collect_delivery_evidence.py
- M src/deepseek.mjs
- M src/model-transport.mjs
- M tests/model-transport.test.mjs
- M tests/telemetry.test.mjs
- M workbench/config/candidate.playwright.config.mjs
- M workbench/docs/release-candidate.md
- M workbench/package-lock.json
- M workbench/package.json
- M workbench/scripts/check-install.ps1
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/00_user_requirement.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/01_development_requirement.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/02_design.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/03_tasks.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/04_verification.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/05_trace.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/change_log.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/current_state.md
+ M docs/requirements/REQ-0025-workbench-m3a-case-import-export/requirement.source.json
+ M packaging/windows-installer.iss
+ M workbench/release.json
+ M workbench/scripts/native-entry.mjs
  M workbench/scripts/package-candidate.py
- M workbench/scripts/run-unit-checks.mjs
- M workbench/scripts/save-deepseek-credential.ps1
- M workbench/scripts/start-workbench.ps1
  M workbench/scripts/test-manifest.json
- M workbench/scripts/verify-official-workbench.mjs
  M workbench/server/app.mjs
- M workbench/server/auth/catalog.mjs
- M workbench/server/auth/session.mjs
- M workbench/server/batches.mjs
- M workbench/server/build/adapter.mjs
- M workbench/server/build/candidate-trials.mjs
- M workbench/server/build/development-authorization.mjs
- M workbench/server/build/development-evidence.mjs
- M workbench/server/build/development-feedback.mjs
- M workbench/server/build/development-fidelity.mjs
- M workbench/server/build/development-mcp.mjs
- M workbench/server/build/development-patch.mjs
- M workbench/server/build/development-session.mjs
- M workbench/server/build/development-task.mjs
- M workbench/server/build/development-tool-guard.mjs
- M workbench/server/build/manager.mjs
- M workbench/server/build/project-case.mjs
- M workbench/server/build/report.mjs
- M workbench/server/build/step-observer.mjs
- M workbench/server/build/step-replay.mjs
+ M workbench/server/atomic-json.mjs
+ M workbench/server/backend/protocol-preparation.mjs
  M workbench/server/build/store.mjs
- M workbench/server/build/trial-environment.mjs
- M workbench/server/build/user-workflow.mjs
- M workbench/server/cases/excel.mjs
- M workbench/server/cases/manager.mjs
- M workbench/server/execution-records.mjs
+ M workbench/server/case-assistant/dsh-client.mjs
+ M workbench/server/case-assistant/output.mjs
+ M workbench/server/case-assistant/prompt.mjs
+ M workbench/server/case-assistant/store.mjs
+ M workbench/server/cases/store.mjs
  M workbench/server/index.mjs
- M workbench/server/report-snapshots.mjs
- M workbench/server/report.mjs
- M workbench/server/script-operations.mjs
- M workbench/server/service-identity.mjs
- M workbench/server/service-shutdown.mjs
- M workbench/server/store.mjs
- M workbench/tests/auth-concurrency.test.mjs
- M workbench/tests/auth-session-request-policy.test.mjs
- M workbench/tests/candidate-trials.test.mjs
- M workbench/tests/case-library.test.mjs
- M workbench/tests/development-auth-binding.test.mjs
- M workbench/tests/development-fidelity.test.mjs
- M workbench/tests/development-production.test.mjs
- M workbench/tests/development-session.test.mjs
- M workbench/tests/product-v21.test.mjs
- M workbench/tests/run-evidence.test.mjs
- M workbench/tests/start-config.test.mjs
- M workbench/tests/step-observer.integration.mjs
- M workbench/tests/supervisor-reliability.test.mjs
+ M workbench/server/model-credentials.mjs
+ M workbench/server/native-dsh/client.mjs
+ M workbench/server/native-dsh/console.mjs
+ M workbench/server/native-dsh/drafts.mjs
+ M workbench/server/native-dsh/evidence-result.mjs
+ M workbench/server/native-dsh/evidence-runtime.mjs
+ M workbench/server/native-dsh/executor.mjs
+ M workbench/server/native-dsh/host-lock.mjs
+ M workbench/server/native-dsh/manager.mjs
+ M workbench/server/native-dsh/reruns.mjs
+ M workbench/server/native-dsh/routes.mjs
+ M workbench/server/requirements/office-reader.mjs
+ M workbench/server/requirements/office-word-reader.build.json
+ M workbench/server/requirements/office-word-reader.cs
+ M workbench/server/requirements/office-word-reader.exe
+ M workbench/server/requirements/store.mjs
+ M workbench/server/skills/case-design-v1/SKILL.md
+ M workbench/server/startup-phase.mjs
+ M workbench/tests/backend-protocol-layout.test.mjs
+ M workbench/tests/case-assistant-manager.test.mjs
+ M workbench/tests/case-assistant-output.test.mjs
+ M workbench/tests/native-dsh-client.test.mjs
+ M workbench/tests/native-dsh-drafts.test.mjs
+ M workbench/tests/native-dsh-evidence.test.mjs
+ M workbench/tests/native-dsh-executor.test.mjs
+ M workbench/tests/native-dsh-host-lock.test.mjs
+ M workbench/tests/native-dsh-manager.test.mjs
+ M workbench/tests/native-dsh-registration-mode.test.mjs
+ M workbench/tests/native-dsh-reruns.test.mjs
+ M workbench/tests/native-dsh-ui-routes.test.mjs
+ M workbench/tests/native-imported-reruns.test.mjs
+ M workbench/tests/navigation-loading.test.mjs
+ M workbench/tests/office-reader.test.mjs
+ M workbench/tests/project-batch-entry.test.mjs
+ M workbench/tests/project-workflow-view.test.mjs
+ M workbench/tests/report-navigation.test.mjs
+ M workbench/tests/workspace-merged-view.test.mjs
  M workbench/web-v2/api.js
  M workbench/web-v2/app.js
- M workbench/web-v2/execution-media.js
- M workbench/web-v2/history.js
+ M workbench/web-v2/case-assistant-api.js
+ M workbench/web-v2/case-assistant.js
+ M workbench/web-v2/case-content-view.js
  M workbench/web-v2/index.html
- M workbench/web-v2/product.css
+ M workbench/web-v2/native-console-view.js
+ M workbench/web-v2/native-dsh.js
+ M workbench/web-v2/project-workflow.js
  M workbench/web-v2/reports.js
- M workbench/web-v2/script-actions.js
- M workbench/web-v2/styles.css
- M workbench/web-v2/workflow.js
- M 启动.cmd
- M 安装.cmd
- M 安装.ps1
- M 环境检查.cmd
- M 试用说明.md
+ M workbench/web-v2/requirements-api.js
+ M workbench/web-v2/workspace-v2.css
 ?? .impeccable/design.json
 ?? .impeccable/review/assistant-desktop.png
 ?? .impeccable/review/assistant-mobile.png
@@ -182,8 +136,6 @@
 ?? .impeccable/review/user-desktop.png
 ?? .impeccable/review/workflow-desktop.png
 ?? .impeccable/review/workflow-mobile.png
-?? PRODUCT.md
-?? Windows便携包说明.md
 ?? artifacts/ui-flow-review-20261007-images.zip
 ?? artifacts/ui-flow-review-20261007/README.md
 ?? artifacts/ui-flow-review-20261007/guides/A.html
@@ -281,50 +233,39 @@
 ?? artifacts/ui-flow-review-20261008-v2/screens.json
 ?? artifacts/ui-flow-review-20261008-v2/source-images-before.json
 ?? artifacts/ui-flow-review-20261008-v2/visual-review.md
-?? docs/ai_engineering/delivery_scope.json
-?? docs/ai_engineering/delivery_scope.md
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/UI草图说明.md
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/delivery_evidence.md
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/execution-list-v1.png
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/overview-v1.png
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/project-workspace-v1.png
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/protocol-binding-v1.png
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/生成记录.md
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/架构与实施计划.md
-?? docs/requirements/REQ-0038-requirements-and-protocol-test-input/项目汇总报告与被测系统配置.md
-?? docs/requirements/REQ-0039-windows-device-license/00_user_requirement.md
-?? docs/requirements/REQ-0039-windows-device-license/01_development_requirement.md
-?? docs/requirements/REQ-0039-windows-device-license/02_design.md
-?? docs/requirements/REQ-0039-windows-device-license/03_tasks.md
-?? docs/requirements/REQ-0039-windows-device-license/04_verification.md
-?? docs/requirements/REQ-0039-windows-device-license/05_trace.md
-?? docs/requirements/REQ-0039-windows-device-license/change_log.md
-?? docs/requirements/REQ-0039-windows-device-license/current_state.md
-?? docs/requirements/REQ-0039-windows-device-license/delivery_evidence.md
-?? docs/requirements/REQ-0039-windows-device-license/requirement.source.json
-?? docs/requirements/REQ-0039-windows-device-license/用户使用与组件交接.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/00_user_requirement.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/01_development_requirement.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/02_design.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/03_tasks.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/04_verification.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/05_trace.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/change_log.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/current_state.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/delivery_evidence.md
-?? docs/requirements/REQ-0040-managed-workbench-restart/requirement.source.json
-?? docs/requirements/REQ-0041-engineer-case-auto-import/00_user_requirement.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/01_development_requirement.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/02_design.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/03_tasks.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/04_verification.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/05_trace.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/change_log.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/current_state.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/delivery_evidence.md
-?? docs/requirements/REQ-0041-engineer-case-auto-import/requirement.source.json
-?? harness-probe/src/provider-environment.mjs
-?? harness-probe/tests/harness-stdin.test.mjs
+?? docs/requirements/REQ-0042-architecture-review/00_user_requirement.md
+?? docs/requirements/REQ-0042-architecture-review/01_development_requirement.md
+?? docs/requirements/REQ-0042-architecture-review/02_design.md
+?? docs/requirements/REQ-0042-architecture-review/03_tasks.md
+?? docs/requirements/REQ-0042-architecture-review/04_verification.md
+?? docs/requirements/REQ-0042-architecture-review/05_trace.md
+?? docs/requirements/REQ-0042-architecture-review/change_log.md
+?? docs/requirements/REQ-0042-architecture-review/current_state.md
+?? docs/requirements/REQ-0042-architecture-review/delivery_evidence.md
+?? docs/requirements/REQ-0042-architecture-review/followup-review.md
+?? docs/requirements/REQ-0042-architecture-review/packaging-review.md
+?? docs/requirements/REQ-0042-architecture-review/requirement.source.json
+?? docs/requirements/REQ-0042-architecture-review/review.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/00_user_requirement.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/01_development_requirement.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/02_design.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/03_tasks.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/04_verification.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/05_trace.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/change_log.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/current_state.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/delivery_evidence.md
+?? docs/requirements/REQ-0043-runtime-diagnostics/requirement.source.json
+?? docs/requirements/REQ-0044-selection-dsh-completion/00_user_requirement.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/01_development_requirement.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/02_design.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/03_tasks.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/04_verification.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/05_trace.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/change_log.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/current_state.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/delivery_evidence.md
+?? docs/requirements/REQ-0044-selection-dsh-completion/requirement.source.json
 ?? outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/artifact_checks.json
 ?? outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/build_workbook.mjs
 ?? outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/extract_sources.py
@@ -418,6 +359,32 @@
 ?? outputs/20261029-Word-WPS完整安装包/使用说明.txt
 ?? outputs/20261029-Word-WPS完整安装包/测试Agent-完整安装包-20261029.exe
 ?? outputs/20261029-office-upgrade/测试Agent-Word-WPS功能升级包-20261029.zip
+?? outputs/20261029-架构修复完整安装包-v4/SHA256SUMS.txt
+?? outputs/20261029-架构修复完整安装包-v4/交付清单.json
+?? outputs/20261029-架构修复完整安装包-v4/使用说明.txt
+?? outputs/20261029-架构修复完整安装包-v4/测试Agent-完整便携包-20261029-v4.zip
+?? outputs/20261029-架构修复完整安装包-v4/测试Agent-完整安装包-20261029-v4.exe
+?? outputs/20261030-WPS与自动覆盖-v4/SHA256.txt
+?? outputs/20261030-WPS与自动覆盖-v4/交付收据.json
+?? outputs/20261030-WPS与自动覆盖-v4/使用说明.txt
+?? outputs/20261030-WPS与自动覆盖-v4/测试Agent-安装器-20261030-wps3-自动升级.exe
+?? outputs/20261030-WPS与自动覆盖-v4/测试Agent-完整便携包-20261030-wps3.zip
+?? outputs/20261030-WPS兼容候选-v1/暂不交付.txt
+?? outputs/20261030-WPS兼容候选-v1/测试Agent-WPS兼容候选-20261030-v1.exe
+?? outputs/20261030-WPS兼容候选-v1/测试Agent-WPS兼容候选-20261030-v1.zip
+?? outputs/20261030-WPS独立读取-v3/SHA256.txt
+?? outputs/20261030-WPS独立读取-v3/交付收据.json
+?? outputs/20261030-WPS独立读取-v3/使用说明.txt
+?? outputs/20261030-WPS独立读取-v3/测试Agent-安装器-20261030-wps3.exe
+?? outputs/20261030-WPS独立读取-v3/测试Agent-完整便携包-20261030-wps3.zip
+?? outputs/20261030-WPS诊断.zip
+?? outputs/20261030-WPS诊断/WpsDiagnostics.exe
+?? outputs/20261030-WPS诊断/使用说明.txt
+?? outputs/20261030-后台执行与日志-v2/SHA256.txt
+?? outputs/20261030-后台执行与日志-v2/交付收据.json
+?? outputs/20261030-后台执行与日志-v2/使用说明.md
+?? outputs/20261030-后台执行与日志-v2/测试Agent-安装器-20261030-batch2.exe
+?? outputs/20261030-后台执行与日志-v2/测试Agent-完整便携包-20261030-batch2.zip
 ?? outputs/_inspect_20261013/dump.txt
 ?? outputs/_inspect_20261013/dump_xlsx.py
 ?? outputs/_inspect_20261013/project-environments.json
@@ -440,117 +407,6 @@
 ?? outputs/frontend-visual-review-20261027/setup-handoff-mobile.png
 ?? outputs/frontend-visual-review-20261027/setup-mobile.png
 ?? outputs/frontend-visual-review-20261027/verify.mjs
-?? packaging/ChineseSimplified.isl
-?? packaging/windows-installer.iss
-?? qa/20261009-backend-entry/before/workbench/tests/backend-view.test.mjs
-?? qa/20261009-backend-entry/before/workbench/web-v2/backend.js
-?? scripts/ai_context_delivery_scope.py
-?? scripts/test_ai_context_delivery.py
-?? skills/dsh-ui-runner/SKILL.md
-?? skills/dsh-ui-runner/references/runtime-api.md
-?? skills/dsh-ui-runner/references/shared-api.md
-?? skills/dsh-ui-runner/scripts/runtime.mjs
-?? skills/dsh-ui-runner/scripts/shared.mjs
-?? skills/dsh-ui-runner/scripts/shared.test.mjs
-?? skills/dsh-ui-runner/tests/runtime.test.mjs
-?? skills/dsh-ui-runner/tests/shared.test.mjs
-?? skills/frontend-module-handoff/SKILL.md
-?? skills/frontend-module-handoff/references/contract.md
-?? skills/frontend-module-handoff/scripts/contract.mjs
-?? skills/frontend-module-handoff/scripts/handoff.mjs
-?? skills/frontend-module-handoff/开发者使用说明.md
-?? vendor/device-license/bin/DeviceLicense.Bridge.exe
-?? vendor/device-license/bin/DeviceLicense.dll
-?? vendor/device-license/bin/build-manifest.json
-?? vendor/device-license/core/bridge.mjs
-?? vendor/device-license/core/schema.mjs
-?? vendor/device-license/core/storage.mjs
-?? vendor/device-license/core/verify.mjs
-?? vendor/device-license/hardware.mjs
-?? vendor/device-license/index.mjs
-?? vendor/device-license/package.json
-?? workbench/design/layered-v1/DESIGN.md
-?? workbench/design/layered-v1/HANDOFF.md
-?? workbench/design/layered-v1/README.md
-?? workbench/design/layered-v1/packages/ui-automation-core/registry.mjs
-?? workbench/design/layered-v1/packages/ui-automation-core/status.mjs
-?? workbench/design/layered-v1/packages/ui-automation-core/transcript.mjs
-?? workbench/design/layered-v1/packages/ui-automation-core/zstd-frames.mjs
-?? workbench/design/layered-v1/packages/ui-automation-web-adapters/drag-track.mjs
-?? workbench/design/layered-v1/packages/ui-automation-web-adapters/overlay.mjs
-?? workbench/design/layered-v1/packages/ui-automation-web-adapters/virtual-select.mjs
-?? workbench/design/layered-v1/packages/ui-automation-web-adapters/visibility.mjs
-?? workbench/design/layered-v1/tools/inspect-session-log.mjs
-?? workbench/design/layered-v1/tools/inspect-session-log2.mjs
-?? workbench/design/layered-v1/tools/session-shape.json
-?? workbench/design/layered-v1/tools/show-event.mjs
-?? workbench/design/layered-v1/tools/transcript-008-009.json
-?? workbench/design/layered-v1/tools/verify-transcript.mjs
-?? workbench/design/layered-v1/workspace/gates/case-preflight.mjs
-?? workbench/design/layered-v1/workspace/gates/profile-admission.mjs
-?? workbench/design/layered-v1/workspace/modules/control-electricity-price-template/module-profile.json
-?? workbench/design/modern-console/DESIGN.md
-?? workbench/design/modern-console/surface-brief.md
-?? workbench/docs/office-upgrade.md
-?? workbench/examples/inspection-trial-20261009/01-PRD.md
-?? workbench/examples/inspection-trial-20261009/02-用例说明.md
-?? workbench/examples/inspection-trial-20261009/03-通讯协议.md
-?? workbench/examples/inspection-trial-20261009/README.md
-?? workbench/examples/inspection-trial-20261009/backend-preparation.json
-?? workbench/examples/inspection-trial-20261009/case-package.json
-?? workbench/examples/inspection-trial-20261009/environment.json
-?? workbench/examples/inspection-trial-20261009/fixture-expectations.json
-?? workbench/examples/inspection-trial-20261009/frontend-preflight.json
-?? workbench/examples/inspection-trial-20261009/import-preview.json
-?? workbench/examples/inspection-trial-20261009/import-result.json
-?? workbench/examples/inspection-trial-20261009/old-projects-before.json
-?? workbench/examples/inspection-trial-20261009/preparation-api-log.json
-?? workbench/examples/inspection-trial-20261009/prepare-materials.mjs
-?? workbench/examples/inspection-trial-20261009/prepare-workbench.mjs
-?? workbench/examples/inspection-trial-20261009/project-state.json
-?? workbench/examples/inspection-trial-20261009/protocol-catalog.json
-?? workbench/examples/inspection-trial-20261009/start-target.ps1
-?? workbench/examples/inspection-trial-20261009/target-ready.png
-?? workbench/examples/inspection-trial-20261009/target.html
-?? workbench/examples/inspection-trial-20261009/target.mjs
-?? workbench/examples/inspection-trial-20261009/verification-first-attempt.json
-?? workbench/examples/inspection-trial-20261009/verification.json
-?? workbench/examples/inspection-trial-20261009/verify-preparation.mjs
-?? workbench/examples/inspection-trial-20261009/前端用例.json
-?? workbench/examples/inspection-trial-20261009/后端用例.json
-?? workbench/examples/inspection-trial-20261009/启动练习环境.cmd
-?? workbench/examples/inspection-trial-20261009/启动练习环境.ps1
-?? workbench/examples/inspection-trial-20261009/导入文件/00-开始这里.md
-?? workbench/examples/inspection-trial-20261009/导入文件/01-前端用例.json
-?? workbench/examples/inspection-trial-20261009/导入文件/02-后端用例.json
-?? workbench/examples/inspection-trial-20261009/导入文件/03-通讯协议.md
-?? workbench/examples/inspection-trial-20261009/导入文件/04-需求说明.md
-?? workbench/examples/inspection-trial-20261009/导入文件/05-用例说明.md
-?? workbench/examples/inspection-trial-20261009/巡检工单-导入材料.zip
-?? workbench/examples/manual-trial-20261004/01-PRD.md
-?? workbench/examples/manual-trial-20261004/02-MRD.md
-?? workbench/examples/manual-trial-20261004/03-PROTOCOL.md
-?? workbench/examples/manual-trial-20261004/README.md
-?? workbench/examples/manual-trial-20261004/backend-environment.json
-?? workbench/examples/manual-trial-20261004/environments.json
-?? workbench/examples/manual-trial-20261004/old-projects-before.json
-?? workbench/examples/manual-trial-20261004/preparation.json
-?? workbench/examples/manual-trial-20261004/prepare-environments.mjs
-?? workbench/examples/manual-trial-20261004/prepare-project.mjs
-?? workbench/examples/manual-trial-20261004/project-created.json
-?? workbench/examples/manual-trial-20261004/project-ready.dom.txt
-?? workbench/examples/manual-trial-20261004/project-ready.png
-?? workbench/examples/manual-trial-20261004/start-target.mjs
-?? workbench/examples/manual-trial-20261004/start-target.ps1
-?? workbench/examples/manual-trial-20261004/target-ready.dom.txt
-?? workbench/examples/manual-trial-20261004/target-ready.png
-?? workbench/examples/manual-trial-20261004/verification-first-failure.txt
-?? workbench/examples/manual-trial-20261004/verification.json
-?? workbench/examples/manual-trial-20261004/verify-preparation.mjs
-?? workbench/examples/manual-trial-20261004/人工核对参考.md
-?? workbench/native/WindowsCredential.cs
-?? workbench/native/package-lock.json
-?? workbench/native/package.json
 ?? workbench/qa/20260926-docx-embedded/README.md
 ?? workbench/qa/20260926-docx-embedded/acceptance-official.json
 ?? workbench/qa/20260926-docx-embedded/acceptance-official.mjs
@@ -16268,6 +16124,172 @@
 ?? workbench/qa/20261028-web-model-activation/tests.log
 ?? workbench/qa/20261028-web-model-activation/update-req.py
 ?? workbench/qa/20261028-web-model-activation/verify-command.txt
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/exported-cases.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/input-package.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/owned-project.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-assistant.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-batches.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-BACKEND-ARCH-001.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-UI-ARCH-001.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-library.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-execution-list.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-generation.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-history.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-import.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-legacy-requirements.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-model-settings.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-native-dsh.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-overview.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-project-index.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-protocol-bindings.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-reports.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-setup.png
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/projects-before-hashes.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/requirements-design.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/results.json
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/unexecuted-report.html
+?? workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/unexecuted-report.json
+?? workbench/qa/20261029-architecture-review/archive-verification.json
+?? workbench/qa/20261029-architecture-review/before-restart.json
+?? workbench/qa/20261029-architecture-review/context-check.log
+?? workbench/qa/20261029-architecture-review/delivery-baseline.json
+?? workbench/qa/20261029-architecture-review/delivery-collector-console.log
+?? workbench/qa/20261029-architecture-review/delivery-collector.log
+?? workbench/qa/20261029-architecture-review/delivery-first-failure.md
+?? workbench/qa/20261029-architecture-review/delivery-scope-draft.json
+?? workbench/qa/20261029-architecture-review/delivery-scope-final.json
+?? workbench/qa/20261029-architecture-review/delivery-scope-first.json
+?? workbench/qa/20261029-architecture-review/delivery-scope-spec.json
+?? workbench/qa/20261029-architecture-review/engineering-final.log
+?? workbench/qa/20261029-architecture-review/engineering.log
+?? workbench/qa/20261029-architecture-review/execution-report.html
+?? workbench/qa/20261029-architecture-review/execution-report.log
+?? workbench/qa/20261029-architecture-review/final-review-note.json
+?? workbench/qa/20261029-architecture-review/final-state.json
+?? workbench/qa/20261029-architecture-review/harness-engineering.log
+?? workbench/qa/20261029-architecture-review/http-confirm.log
+?? workbench/qa/20261029-architecture-review/http-rerun-final.log
+?? workbench/qa/20261029-architecture-review/http-rerun-start.log
+?? workbench/qa/20261029-architecture-review/http-review.log
+?? workbench/qa/20261029-architecture-review/http-run-final.log
+?? workbench/qa/20261029-architecture-review/http-run-start.log
+?? workbench/qa/20261029-architecture-review/http-start.log
+?? workbench/qa/20261029-architecture-review/lane-prepare.log
+?? workbench/qa/20261029-architecture-review/model-functional.mjs
+?? workbench/qa/20261029-architecture-review/model-run/assistant-BACKEND.xlsx
+?? workbench/qa/20261029-architecture-review/model-run/assistant-UI.xlsx
+?? workbench/qa/20261029-architecture-review/model-run/assistant-dispatch.json
+?? workbench/qa/20261029-architecture-review/model-run/assistant-export-result.json
+?? workbench/qa/20261029-architecture-review/model-run/assistant-poll-1793259807437-61d8c7fd.json
+?? workbench/qa/20261029-architecture-review/model-run/assistant-poll-1793259851430-bb32b70e.json
+?? workbench/qa/20261029-architecture-review/model-run/assistant-start.json
+?? workbench/qa/20261029-architecture-review/model-run/design-prepared.json
+?? workbench/qa/20261029-architecture-review/model-run/owned-project.json
+?? workbench/qa/20261029-architecture-review/model-run/prepare-dispatch.json
+?? workbench/qa/20261029-architecture-review/model-run/prepared.json
+?? workbench/qa/20261029-architecture-review/model-run/requests.ndjson
+?? workbench/qa/20261029-architecture-review/model-run/requirements-dispatch.json
+?? workbench/qa/20261029-architecture-review/model-run/requirements-poll-1793259766953-542c05db.json
+?? workbench/qa/20261029-architecture-review/model-run/requirements-start.json
+?? workbench/qa/20261029-architecture-review/model-run/sources.json
+?? workbench/qa/20261029-architecture-review/official-final.log
+?? workbench/qa/20261029-architecture-review/official-functional.log
+?? workbench/qa/20261029-architecture-review/official-functional.mjs
+?? workbench/qa/20261029-architecture-review/official-readonly.log
+?? workbench/qa/20261029-architecture-review/page-readiness/downloads/case-package-json-project-afed9ae3-1c9f-4e23-9e81-3b4169e3b56e-cases.json
+?? workbench/qa/20261029-architecture-review/page-readiness/downloads/report-html-report-5075bfa2e9feaa12d46ec43b77b07f55c6630ffb.html
+?? workbench/qa/20261029-architecture-review/page-readiness/downloads/requirements-ui-json-前端测试用例.json
+?? workbench/qa/20261029-architecture-review/page-readiness/downloads/requirements-ui-xlsx-前端测试用例.xlsx
+?? workbench/qa/20261029-architecture-review/page-readiness/page-assistant-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-assistant-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-batches-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-batches-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-case-BACKEND-ARCH-001-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-case-BACKEND-ARCH-001-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-case-UI-ARCH-001-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-case-library-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-execution-list-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-execution-list-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-generation-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-history-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-import-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-legacy-requirements-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-legacy-requirements-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-model-settings-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-native-dsh-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-native-dsh-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-overview-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-project-index-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-project-index-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-protocol-bindings-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-protocol-bindings-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-report-preview-failed.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-reports-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/page-setup-pass.png
+?? workbench/qa/20261029-architecture-review/page-readiness/results-initial.json
+?? workbench/qa/20261029-architecture-review/page-readiness/results.json
+?? workbench/qa/20261029-architecture-review/page-readiness/verify-pages-initial.mjs
+?? workbench/qa/20261029-architecture-review/page-readiness/verify-pages.mjs
+?? workbench/qa/20261029-architecture-review/prepare-delivery-scope.py
+?? workbench/qa/20261029-architecture-review/protocol-negation-final.log
+?? workbench/qa/20261029-architecture-review/protocol-negation.log
+?? workbench/qa/20261029-architecture-review/source-inputs.log
+?? workbench/qa/20261029-architecture-review/source-inputs.mjs
+?? workbench/qa/20261029-architecture-review/source-inputs/csv-preview.json
+?? workbench/qa/20261029-architecture-review/source-inputs/csv-rejection.json
+?? workbench/qa/20261029-architecture-review/source-inputs/csv-upload.json
+?? workbench/qa/20261029-architecture-review/source-inputs/docx-source.json
+?? workbench/qa/20261029-architecture-review/source-inputs/png-source.json
+?? workbench/qa/20261029-architecture-review/source-inputs/project-after.json
+?? workbench/qa/20261029-architecture-review/source-inputs/project-before.json
+?? workbench/qa/20261029-architecture-review/source-inputs/rejected-formats.json
+?? workbench/qa/20261029-architecture-review/source-inputs/requests.json
+?? workbench/qa/20261029-architecture-review/source-inputs/reservation.json
+?? workbench/qa/20261029-architecture-review/source-inputs/results.json
+?? workbench/qa/20261029-architecture-review/source-inputs/sources-after.json
+?? workbench/qa/20261029-architecture-review/source-inputs/synthetic-image.png
+?? workbench/qa/20261029-architecture-review/source-inputs/synthetic-input.csv
+?? workbench/qa/20261029-architecture-review/source-inputs/synthetic-input.docx
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane.mjs
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-case-package.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-http-preparation.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-prepare-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-prepare-failure.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-53-23-867Z-9ddc22-start-ui-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-53-23-867Z-9ddc22-start-ui.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-56-55-572Z-56b12f-read-ui-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-56-55-572Z-56b12f-read-ui.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-58-17-254Z-fbc561-rerun-ui-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-58-17-254Z-fbc561-rerun-ui.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-05-079Z-a311dc-read-ui-rerun-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-05-079Z-a311dc-read-ui-rerun.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-13-683Z-2c8763-start-http-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-13-683Z-2c8763-start-http.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-00-43-811Z-9e4d6c-read-http-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-00-43-811Z-9e4d6c-read-http.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-09-571Z-f3328d-confirm-http-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-09-571Z-f3328d-confirm-http.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-10-002Z-d84542-run-http-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-10-002Z-d84542-run-http.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-23-048Z-3452dc-read-http-run-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-23-048Z-3452dc-read-http-run.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-45-162Z-69df39-rerun-http-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-45-162Z-69df39-rerun-http.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-07-080Z-db4955-read-http-rerun-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-07-080Z-db4955-read-http-rerun.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-09-307Z-f3c9c0-report-calls.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-09-307Z-f3c9c0-report.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/original-protocol-after-fix.json
+?? workbench/qa/20261029-architecture-review/synthetic-model-lane/state.json
+?? workbench/qa/20261029-architecture-review/target-fixture.mjs
+?? workbench/qa/20261029-architecture-review/target-oracle.json
+?? workbench/qa/20261029-architecture-review/ui-file-integrity.json
+?? workbench/qa/20261029-architecture-review/ui-filter-result.png
+?? workbench/qa/20261029-architecture-review/ui-observe.log
+?? workbench/qa/20261029-architecture-review/ui-rerun-final.log
+?? workbench/qa/20261029-architecture-review/ui-rerun-start.log
+?? workbench/qa/20261029-architecture-review/ui-reviewed-script.mjs
+?? workbench/qa/20261029-architecture-review/ui-start.log
 ?? workbench/qa/20261029-protected-document-retest/REPORT.md
 ?? workbench/qa/20261029-protected-document-retest/assemble-full-installer.mjs
 ?? workbench/qa/20261029-protected-document-retest/assembly-resumed.log
@@ -16335,356 +16357,908 @@
 ?? workbench/qa/20261029-protected-document-retest/verify-installed-reader.mjs
 ?? workbench/qa/20261029-protected-document-retest/verify-persisted.mjs
 ?? workbench/qa/20261029-protected-document-retest/verify-upload.mjs
-?? workbench/release.json
-?? workbench/scripts/build-credential-broker.mjs
-?? workbench/scripts/build-windows-installer.ps1
-?? workbench/scripts/credential-paths.ps1
-?? workbench/scripts/diagnose-model.mjs
-?? workbench/scripts/enable-model-workbench.ps1
-?? workbench/scripts/incremental-upgrade.mjs
-?? workbench/scripts/model-config.ps1
-?? workbench/scripts/native-dsh-package.mjs
-?? workbench/scripts/native-entry.mjs
-?? workbench/scripts/native-runtime.mjs
-?? workbench/scripts/native/WindowsCredential.exe
-?? workbench/scripts/native/build-manifest.json
-?? workbench/scripts/open-workbench.ps1
-?? workbench/scripts/package-office-upgrade.py
-?? workbench/scripts/package-portable.py
-?? workbench/scripts/read-deepseek-credential.ps1
-?? workbench/scripts/runtime-paths.ps1
-?? workbench/scripts/setup-runtime.ps1
-?? workbench/scripts/template-authoring/build-test-case-template.mjs
-?? workbench/scripts/template-authoring/guide-preview.png
-?? workbench/scripts/template-authoring/main-preview.png
-?? workbench/scripts/upgrade-bootstrap.cs
-?? workbench/scripts/verify-portable-archive.mjs
-?? workbench/scripts/verify-portable.mjs
-?? workbench/scripts/verify-runtime-dependencies.mjs
-?? workbench/server/auth/browser-page.mjs
-?? workbench/server/backend-manager.mjs
-?? workbench/server/backend-routes.mjs
-?? workbench/server/backend/case-stages.mjs
-?? workbench/server/backend/example.mjs
-?? workbench/server/backend/execution.mjs
-?? workbench/server/backend/generation-batches.mjs
-?? workbench/server/backend/harness-contract.mjs
-?? workbench/server/backend/harness-manager.mjs
-?? workbench/server/backend/harness-mcp.mjs
-?? workbench/server/backend/harness-patch.mjs
-?? workbench/server/backend/harness-session.mjs
-?? workbench/server/backend/harness-tool-guard.mjs
-?? workbench/server/backend/protocol-preparation.mjs
-?? workbench/server/backend/query-contract.mjs
-?? workbench/server/backend/schema.mjs
-?? workbench/server/build/action-highlight.mjs
-?? workbench/server/build/browser-assertion-contract.mjs
-?? workbench/server/build/browser-assertion-evidence.mjs
-?? workbench/server/build/browser-assertion-guide.mjs
-?? workbench/server/build/browser-assertion-records.mjs
-?? workbench/server/build/cdp-network-guard.mjs
-?? workbench/server/build/development-exploration.mjs
-?? workbench/server/build/development-fast-path.mjs
-?? workbench/server/build/development-repair-focus.mjs
-?? workbench/server/build/development-technical-context.mjs
-?? workbench/server/build/project-target-browser.mjs
-?? workbench/server/build/project-trial-authorization.mjs
-?? workbench/server/build/window-recorder.cs
-?? workbench/server/build/window-recorder.mjs
-?? workbench/server/build/window-timeline.mjs
-?? workbench/server/case-assistant/dsh-client.mjs
-?? workbench/server/case-assistant/json-recovery.mjs
-?? workbench/server/case-assistant/manager.mjs
-?? workbench/server/case-assistant/mcp-session.mjs
-?? workbench/server/case-assistant/output.mjs
-?? workbench/server/case-assistant/prompt.mjs
-?? workbench/server/case-assistant/routes.mjs
-?? workbench/server/case-assistant/store.mjs
-?? workbench/server/cases/design.mjs
-?? workbench/server/cases/script-package.mjs
-?? workbench/server/cases/workbook-package.mjs
-?? workbench/server/demonstration-browser.mjs
-?? workbench/server/demonstration-environment.mjs
-?? workbench/server/demonstration-floating.cs
-?? workbench/server/demonstration-floating.mjs
-?? workbench/server/demonstration-routes.mjs
-?? workbench/server/demonstrations.mjs
-?? workbench/server/execution-notes.mjs
-?? workbench/server/failure-feedback.mjs
-?? workbench/server/frontend-handoff-contract.mjs
-?? workbench/server/frontend-handoffs.mjs
-?? workbench/server/licensing/activation.css
-?? workbench/server/licensing/activation.html
-?? workbench/server/licensing/activation.js
-?? workbench/server/licensing/activation.mjs
-?? workbench/server/licensing/cli.mjs
-?? workbench/server/licensing/deployment-policy.mjs
-?? workbench/server/licensing/gate.mjs
-?? workbench/server/model-credential-storage.mjs
-?? workbench/server/model-credentials.mjs
-?? workbench/server/model-settings.mjs
-?? workbench/server/native-dsh/browser-bridge.mjs
-?? workbench/server/native-dsh/browser-bridge.patch.yml
-?? workbench/server/native-dsh/client.mjs
-?? workbench/server/native-dsh/console.mjs
-?? workbench/server/native-dsh/drafts.mjs
-?? workbench/server/native-dsh/evidence-plugin.cjs
-?? workbench/server/native-dsh/evidence-result.mjs
-?? workbench/server/native-dsh/evidence-runtime.mjs
-?? workbench/server/native-dsh/evidence-transform.cjs
-?? workbench/server/native-dsh/evidence-transform.mjs
-?? workbench/server/native-dsh/execution-purpose.mjs
-?? workbench/server/native-dsh/executor.mjs
-?? workbench/server/native-dsh/host-lock.mjs
-?? workbench/server/native-dsh/imported-source.mjs
-?? workbench/server/native-dsh/locator-observation.mjs
-?? workbench/server/native-dsh/manager.mjs
-?? workbench/server/native-dsh/portable.mjs
-?? workbench/server/native-dsh/preflight.mjs
-?? workbench/server/native-dsh/profile-admission.mjs
-?? workbench/server/native-dsh/report-records.mjs
-?? workbench/server/native-dsh/reporter.mjs
-?? workbench/server/native-dsh/reruns.mjs
-?? workbench/server/native-dsh/routes.mjs
-?? workbench/server/native-dsh/runtime.mjs
-?? workbench/server/native-dsh/transcript.mjs
-?? workbench/server/native-dsh/workspace-runtime.mjs
-?? workbench/server/native-dsh/zstd-frames.mjs
-?? workbench/server/owned-supervisor.mjs
-?? workbench/server/project-environments.mjs
-?? workbench/server/project-target-access.mjs
-?? workbench/server/quality-review-harness-guard.mjs
-?? workbench/server/quality-review-harness-mcp.mjs
-?? workbench/server/quality-review-harness-patch.mjs
-?? workbench/server/quality-review-harness.mjs
-?? workbench/server/quality-review.mjs
-?? workbench/server/read-list.mjs
-?? workbench/server/report-latest-selection.mjs
-?? workbench/server/report-layout.mjs
-?? workbench/server/requirements-model.mjs
-?? workbench/server/requirements-routes.mjs
-?? workbench/server/requirements/candidates.mjs
-?? workbench/server/requirements/documents.mjs
-?? workbench/server/requirements/images.mjs
-?? workbench/server/requirements/manager.mjs
-?? workbench/server/requirements/model.mjs
-?? workbench/server/requirements/office-reader.mjs
-?? workbench/server/requirements/office-word-reader.build.json
-?? workbench/server/requirements/office-word-reader.cs
-?? workbench/server/requirements/office-word-reader.exe
-?? workbench/server/requirements/quality-model.mjs
-?? workbench/server/requirements/quality.mjs
-?? workbench/server/requirements/store.mjs
-?? workbench/server/service-restart.mjs
-?? workbench/server/skills/backend-http-plan-v1/SKILL.md
-?? workbench/server/skills/case-design-v1/SKILL.md
-?? workbench/server/skills/config-isolation.mjs
-?? workbench/server/skills/loader.mjs
-?? workbench/server/skills/ui-test-authoring-v1/SKILL.md
-?? workbench/server/startup-phase.mjs
-?? workbench/tests/action-highlight.test.mjs
-?? workbench/tests/auth-browser-page.test.mjs
-?? workbench/tests/auth-login-preflight.test.mjs
-?? workbench/tests/authorization-navigation.test.mjs
-?? workbench/tests/backend-array-member.test.mjs
-?? workbench/tests/backend-batches.test.mjs
-?? workbench/tests/backend-bulk-review.test.mjs
-?? workbench/tests/backend-case-stages.test.mjs
-?? workbench/tests/backend-content-type.test.mjs
-?? workbench/tests/backend-execution.test.mjs
-?? workbench/tests/backend-feedback.test.mjs
-?? workbench/tests/backend-harness-acceptance.test.mjs
-?? workbench/tests/backend-harness-contract.test.mjs
-?? workbench/tests/backend-harness-diagnostic.test.mjs
-?? workbench/tests/backend-harness-protocol.test.mjs
-?? workbench/tests/backend-harness-startup-cleanup.test.mjs
-?? workbench/tests/backend-manager.test.mjs
-?? workbench/tests/backend-namespace-prefix.test.mjs
-?? workbench/tests/backend-preparation.test.mjs
-?? workbench/tests/backend-protocol-layout.test.mjs
-?? workbench/tests/backend-quality-loop.test.mjs
-?? workbench/tests/backend-readonly-post-query.test.mjs
-?? workbench/tests/backend-record-assertion.test.mjs
-?? workbench/tests/backend-response-reference.test.mjs
-?? workbench/tests/backend-view.test.mjs
-?? workbench/tests/batch-view.test.mjs
-?? workbench/tests/bindings-navigation.test.mjs
-?? workbench/tests/browser-assertion-contract.test.mjs
-?? workbench/tests/browser-assertion-evidence.test.mjs
-?? workbench/tests/browser-assertion-records.test.mjs
-?? workbench/tests/candidate-quality-review.test.mjs
-?? workbench/tests/case-assistant-dsh.test.mjs
-?? workbench/tests/case-assistant-json-recovery.test.mjs
-?? workbench/tests/case-assistant-manager.test.mjs
-?? workbench/tests/case-assistant-output.test.mjs
-?? workbench/tests/case-assistant-view.test.mjs
-?? workbench/tests/case-content-review.test.mjs
-?? workbench/tests/case-csv-import.test.mjs
-?? workbench/tests/case-import-source-isolation.test.mjs
-?? workbench/tests/case-import-view.test.mjs
-?? workbench/tests/case-review-lifecycle.test.mjs
-?? workbench/tests/case-script-package.test.mjs
-?? workbench/tests/demonstration-auth-browser.test.mjs
-?? workbench/tests/demonstration-auth.test.mjs
-?? workbench/tests/demonstration-browser.test.mjs
-?? workbench/tests/demonstration-floating-host.test.mjs
-?? workbench/tests/demonstration-floating-native.test.mjs
-?? workbench/tests/demonstration-generation.test.mjs
-?? workbench/tests/demonstration-integration.test.mjs
-?? workbench/tests/demonstration-route-guard.test.mjs
-?? workbench/tests/demonstration-selection.test.mjs
-?? workbench/tests/demonstration-view.test.mjs
-?? workbench/tests/demonstrations.test.mjs
-?? workbench/tests/dependency-security.test.mjs
-?? workbench/tests/desktop-launch.test.mjs
-?? workbench/tests/development-assertion-sources.test.mjs
-?? workbench/tests/development-cleanup-obligations.test.mjs
-?? workbench/tests/development-convergence-integration.test.mjs
-?? workbench/tests/development-exploration.test.mjs
-?? workbench/tests/development-fast-task.test.mjs
-?? workbench/tests/development-locator-hints.test.mjs
-?? workbench/tests/development-navigation-hints.test.mjs
-?? workbench/tests/development-network-failure.test.mjs
-?? workbench/tests/development-technical-context.test.mjs
-?? workbench/tests/development-transport-retry.test.mjs
-?? workbench/tests/dsh-skill-isolation.test.mjs
-?? workbench/tests/dsh-skills.test.mjs
-?? workbench/tests/execution-list.test.mjs
-?? workbench/tests/execution-notes-entry.test.mjs
-?? workbench/tests/execution-notes.test.mjs
-?? workbench/tests/execution-ux.test.mjs
-?? workbench/tests/failure-feedback.test.mjs
-?? workbench/tests/feedback-view.test.mjs
-?? workbench/tests/fixtures/backend-http-plan-v110.md
-?? workbench/tests/fixtures/backend-http-plan-v120.md
-?? workbench/tests/fixtures/backend-practice-preparation.json
-?? workbench/tests/fixtures/docx-image-fixture.mjs
-?? workbench/tests/fixtures/owned-child.mjs
-?? workbench/tests/fixtures/ui-test-authoring-v110.md
-?? workbench/tests/fixtures/ui-test-authoring-v120.md
-?? workbench/tests/frontend-handoff-contract.test.mjs
-?? workbench/tests/frontend-handoffs-ui.test.mjs
-?? workbench/tests/frontend-handoffs.test.mjs
-?? workbench/tests/generation-progress.test.mjs
-?? workbench/tests/generation-recovery.test.mjs
-?? workbench/tests/harness-provider-address.test.mjs
-?? workbench/tests/incremental-upgrade.test.mjs
-?? workbench/tests/installer-runtime-home.test.mjs
-?? workbench/tests/license-activation.test.mjs
-?? workbench/tests/license-runtime-identity.test.mjs
-?? workbench/tests/model-activation.test.mjs
-?? workbench/tests/model-config.test.mjs
-?? workbench/tests/model-credential-paths.test.mjs
-?? workbench/tests/model-credentials.test.mjs
-?? workbench/tests/model-settings.test.mjs
-?? workbench/tests/native-console-view.test.mjs
-?? workbench/tests/native-dsh-browser-bridge.test.mjs
-?? workbench/tests/native-dsh-client.test.mjs
-?? workbench/tests/native-dsh-console.test.mjs
-?? workbench/tests/native-dsh-drafts.test.mjs
-?? workbench/tests/native-dsh-evidence.test.mjs
-?? workbench/tests/native-dsh-executor.test.mjs
-?? workbench/tests/native-dsh-host-lock.test.mjs
-?? workbench/tests/native-dsh-manager.test.mjs
-?? workbench/tests/native-dsh-registration-mode.test.mjs
-?? workbench/tests/native-dsh-reruns.test.mjs
-?? workbench/tests/native-dsh-runtime.test.mjs
-?? workbench/tests/native-dsh-transcript.test.mjs
-?? workbench/tests/native-dsh-ui-routes.test.mjs
-?? workbench/tests/native-dsh-workspace-runtime.test.mjs
-?? workbench/tests/native-evidence-plugin.test.mjs
-?? workbench/tests/native-evidence-view.test.mjs
-?? workbench/tests/native-imported-reruns.test.mjs
-?? workbench/tests/native-install-delivery.test.mjs
-?? workbench/tests/native-locator-observation.test.mjs
-?? workbench/tests/native-report.test.mjs
-?? workbench/tests/native-runtime.test.mjs
-?? workbench/tests/navigation-loading.test.mjs
-?? workbench/tests/office-reader.test.mjs
-?? workbench/tests/page-responsiveness.test.mjs
-?? workbench/tests/portable-package.test.mjs
-?? workbench/tests/preflight-task-snapshot.test.mjs
-?? workbench/tests/project-auth-targets.test.mjs
-?? workbench/tests/project-batch-entry.test.mjs
-?? workbench/tests/project-environments.test.mjs
-?? workbench/tests/project-index.test.mjs
-?? workbench/tests/project-loading.test.mjs
-?? workbench/tests/project-setup.test.mjs
-?? workbench/tests/project-target-access.test.mjs
-?? workbench/tests/project-trial-authorization.test.mjs
-?? workbench/tests/project-workflow-view.test.mjs
-?? workbench/tests/quality-review-harness.test.mjs
-?? workbench/tests/quality-review-mode.test.mjs
-?? workbench/tests/report-layout.test.mjs
-?? workbench/tests/report-navigation.test.mjs
-?? workbench/tests/report-project-latest-view.test.mjs
-?? workbench/tests/report-project-latest.test.mjs
-?? workbench/tests/requirements-design-quality.test.mjs
-?? workbench/tests/requirements-documents.test.mjs
-?? workbench/tests/requirements-domain.test.mjs
-?? workbench/tests/requirements-embedded-images.test.mjs
-?? workbench/tests/requirements-export.test.mjs
-?? workbench/tests/requirements-images.test.mjs
-?? workbench/tests/requirements-integration.test.mjs
-?? workbench/tests/requirements-model.test.mjs
-?? workbench/tests/requirements-quality-workflow.test.mjs
-?? workbench/tests/requirements-quality.test.mjs
-?? workbench/tests/requirements-view.test.mjs
-?? workbench/tests/service-restart-ui.test.mjs
-?? workbench/tests/service-restart.test.mjs
-?? workbench/tests/skills-packaging.test.mjs
-?? workbench/tests/startup-budget.test.mjs
-?? workbench/tests/target-settings-view.test.mjs
-?? workbench/tests/ui-assertion-evidence.test.mjs
-?? workbench/tests/ui-quality-loop.test.mjs
-?? workbench/tests/window-recorder.test.mjs
-?? workbench/tests/window-recording-view.test.mjs
-?? workbench/tests/window-timeline.test.mjs
-?? workbench/tests/workspace-merged-view.test.mjs
-?? workbench/tools/verify-live-transcript.mjs
-?? workbench/web-v2/backend-bulk-review.js
-?? workbench/web-v2/backend.css
-?? workbench/web-v2/backend.js
-?? workbench/web-v2/batch-view.js
-?? workbench/web-v2/case-assistant-api.js
-?? workbench/web-v2/case-assistant.css
-?? workbench/web-v2/case-assistant.js
-?? workbench/web-v2/case-content-view.js
-?? workbench/web-v2/case-review.css
-?? workbench/web-v2/case-review.js
-?? workbench/web-v2/demonstration-control.css
-?? workbench/web-v2/demonstration-control.html
-?? workbench/web-v2/demonstration-control.js
-?? workbench/web-v2/demonstrations.js
-?? workbench/web-v2/execution-list.css
-?? workbench/web-v2/execution-list.js
-?? workbench/web-v2/execution-notes.js
-?? workbench/web-v2/frontend-handoffs.js
-?? workbench/web-v2/model-settings.js
-?? workbench/web-v2/native-console-view.js
-?? workbench/web-v2/native-dsh.js
-?? workbench/web-v2/project-setup.css
-?? workbench/web-v2/project-setup.js
-?? workbench/web-v2/project-target-access.js
-?? workbench/web-v2/project-workflow.css
-?? workbench/web-v2/project-workflow.js
-?? workbench/web-v2/requirements-api.js
-?? workbench/web-v2/requirements.css
-?? workbench/web-v2/requirements.js
-?? workbench/web-v2/service-restart.js
-?? workbench/web-v2/test-case-template.xlsx
-?? workbench/web-v2/workspace-v2.css
-?? 分享文档-UI测试Agent.md
-?? 启用模型工作台.cmd
-?? 诊断模型启动.cmd
-?? 配置模型密钥.cmd
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/exported-cases.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/input-package.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/owned-project.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-assistant.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-batches.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-BACKEND-ARCH-001.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-UI-ARCH-001.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-library.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-execution-list.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-generation.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-history.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-import.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-legacy-requirements.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-model-settings.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-native-dsh.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-overview.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-project-index.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-protocol-bindings.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-reports.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-setup.png
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/projects-before-hashes.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/requirements-design.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/results.json
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/unexecuted-report.html
+?? workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/unexecuted-report.json
+?? workbench/qa/20261029-three-fixes/archive.json
+?? workbench/qa/20261029-three-fixes/assistant-export.log
+?? workbench/qa/20261029-three-fixes/assistant-source-support-offline.json
+?? workbench/qa/20261029-three-fixes/assistant-verification.json
+?? workbench/qa/20261029-three-fixes/assistant-verification.log
+?? workbench/qa/20261029-three-fixes/baseline-freeze.log
+?? workbench/qa/20261029-three-fixes/before.json
+?? workbench/qa/20261029-three-fixes/context-check.log
+?? workbench/qa/20261029-three-fixes/csp-parser-probe-template-document.log
+?? workbench/qa/20261029-three-fixes/csp-parser-probe.log
+?? workbench/qa/20261029-three-fixes/csp-parser-probe.mjs
+?? workbench/qa/20261029-three-fixes/delivery-baseline-final.json
+?? workbench/qa/20261029-three-fixes/delivery-baseline.json
+?? workbench/qa/20261029-three-fixes/delivery-collector-console.log
+?? workbench/qa/20261029-three-fixes/delivery-collector.log
+?? workbench/qa/20261029-three-fixes/delivery-scope-final.json
+?? workbench/qa/20261029-three-fixes/delivery-scope-spec.json
+?? workbench/qa/20261029-three-fixes/engineering.log
+?? workbench/qa/20261029-three-fixes/execution-prepare.log
+?? workbench/qa/20261029-three-fixes/execution-report.html
+?? workbench/qa/20261029-three-fixes/execution-report.log
+?? workbench/qa/20261029-three-fixes/final-review-note.json
+?? workbench/qa/20261029-three-fixes/final-state.json
+?? workbench/qa/20261029-three-fixes/final-state.log
+?? workbench/qa/20261029-three-fixes/finalize-record.mjs
+?? workbench/qa/20261029-three-fixes/fixture-shutdown.json
+?? workbench/qa/20261029-three-fixes/formal-host-identity.json
+?? workbench/qa/20261029-three-fixes/harness-engineering.log
+?? workbench/qa/20261029-three-fixes/host-lock-first.log
+?? workbench/qa/20261029-three-fixes/host-lock-targeted.log
+?? workbench/qa/20261029-three-fixes/http-confirm.log
+?? workbench/qa/20261029-three-fixes/http-generation-dispatch.log
+?? workbench/qa/20261029-three-fixes/http-generation-read.log
+?? workbench/qa/20261029-three-fixes/http-rerun-result.log
+?? workbench/qa/20261029-three-fixes/http-rerun.log
+?? workbench/qa/20261029-three-fixes/http-run-result.log
+?? workbench/qa/20261029-three-fixes/http-run.log
+?? workbench/qa/20261029-three-fixes/model-assistant-dispatch.log
+?? workbench/qa/20261029-three-fixes/model-content-review.json
+?? workbench/qa/20261029-three-fixes/model-functional.mjs
+?? workbench/qa/20261029-three-fixes/model-prepare.log
+?? workbench/qa/20261029-three-fixes/model-requirements-dispatch.log
+?? workbench/qa/20261029-three-fixes/model-run/assistant-BACKEND.xlsx
+?? workbench/qa/20261029-three-fixes/model-run/assistant-UI.xlsx
+?? workbench/qa/20261029-three-fixes/model-run/assistant-dispatch.json
+?? workbench/qa/20261029-three-fixes/model-run/assistant-export-result.json
+?? workbench/qa/20261029-three-fixes/model-run/assistant-poll-1793263129212-8def4968.json
+?? workbench/qa/20261029-three-fixes/model-run/assistant-poll-1793263221054-7bfd9944.json
+?? workbench/qa/20261029-three-fixes/model-run/assistant-start.json
+?? workbench/qa/20261029-three-fixes/model-run/design-prepared.json
+?? workbench/qa/20261029-three-fixes/model-run/owned-project.json
+?? workbench/qa/20261029-three-fixes/model-run/prepare-dispatch.json
+?? workbench/qa/20261029-three-fixes/model-run/prepared.json
+?? workbench/qa/20261029-three-fixes/model-run/requests.ndjson
+?? workbench/qa/20261029-three-fixes/model-run/requirements-dispatch.json
+?? workbench/qa/20261029-three-fixes/model-run/requirements-poll-1793263020355-0b7ba234.json
+?? workbench/qa/20261029-three-fixes/model-run/requirements-poll-1793263084024-008e8084.json
+?? workbench/qa/20261029-three-fixes/model-run/requirements-start.json
+?? workbench/qa/20261029-three-fixes/model-run/sources.json
+?? workbench/qa/20261029-three-fixes/official-context.json
+?? workbench/qa/20261029-three-fixes/official-functional.log
+?? workbench/qa/20261029-three-fixes/official-functional.mjs
+?? workbench/qa/20261029-three-fixes/official-preflight.log
+?? workbench/qa/20261029-three-fixes/packaging/build-installer.log
+?? workbench/qa/20261029-three-fixes/packaging/build-portable.log
+?? workbench/qa/20261029-three-fixes/packaging/cleanup-build.ps1
+?? workbench/qa/20261029-three-fixes/packaging/cleanup.json
+?? workbench/qa/20261029-three-fixes/packaging/cleanup.log
+?? workbench/qa/20261029-three-fixes/packaging/context-check.log
+?? workbench/qa/20261029-three-fixes/packaging/delivery-collector-console.log
+?? workbench/qa/20261029-three-fixes/packaging/delivery-collector.log
+?? workbench/qa/20261029-three-fixes/packaging/delivery-scope-spec.json
+?? workbench/qa/20261029-three-fixes/packaging/delivery-scope.json
+?? workbench/qa/20261029-three-fixes/packaging/extract-verified-archive.mjs
+?? workbench/qa/20261029-three-fixes/packaging/extraction.log
+?? workbench/qa/20261029-three-fixes/packaging/final-review-note.json
+?? workbench/qa/20261029-three-fixes/packaging/finalize-package.py
+?? workbench/qa/20261029-three-fixes/packaging/full-install-detail-architecture-v4.log
+?? workbench/qa/20261029-three-fixes/packaging/full-install-result-architecture-v4-verified.json
+?? workbench/qa/20261029-three-fixes/packaging/full-install-result-architecture-v4.json
+?? workbench/qa/20261029-three-fixes/packaging/full-installed-bytes-architecture-v4.log
+?? workbench/qa/20261029-three-fixes/packaging/install-console.log
+?? workbench/qa/20261029-three-fixes/packaging/installer-registration-after-architecture-v4.reg
+?? workbench/qa/20261029-three-fixes/packaging/installer-registration-before-architecture-v4.reg
+?? workbench/qa/20261029-three-fixes/packaging/native-stage-verification.log
+?? workbench/qa/20261029-three-fixes/packaging/packaging-result.json
+?? workbench/qa/20261029-three-fixes/packaging/preservation-recheck.log
+?? workbench/qa/20261029-three-fixes/packaging/record-delivery.py
+?? workbench/qa/20261029-three-fixes/packaging/requirement-before.json
+?? workbench/qa/20261029-three-fixes/packaging/runtime-source-check.json
+?? workbench/qa/20261029-three-fixes/packaging/service-before.json
+?? workbench/qa/20261029-three-fixes/packaging/source-before.json
+?? workbench/qa/20261029-three-fixes/packaging/source-installed-verification.json
+?? workbench/qa/20261029-three-fixes/packaging/source-zip-verification.json
+?? workbench/qa/20261029-three-fixes/packaging/sync.log
+?? workbench/qa/20261029-three-fixes/packaging/verify-full-install-initial.ps1
+?? workbench/qa/20261029-three-fixes/packaging/verify-full-install.ps1
+?? workbench/qa/20261029-three-fixes/packaging/verify-install-preservation.ps1
+?? workbench/qa/20261029-three-fixes/packaging/verify-package-source.py
+?? workbench/qa/20261029-three-fixes/page-readiness/browser-verification.log
+?? workbench/qa/20261029-three-fixes/page-readiness/downloads/case-package-json-2026-10-29T08-36-43-663Z-3160c4d0-project-03cea111-754b-400c-85f8-664e57b66cb1-cases.json
+?? workbench/qa/20261029-three-fixes/page-readiness/downloads/report-html-2026-10-29T08-36-43-663Z-3160c4d0-report-c1959326c57c945327fda7220c6263913557125e.html
+?? workbench/qa/20261029-three-fixes/page-readiness/downloads/requirements-ui-json-2026-10-29T08-36-43-663Z-3160c4d0-前端测试用例.json
+?? workbench/qa/20261029-three-fixes/page-readiness/downloads/requirements-ui-xlsx-2026-10-29T08-36-43-663Z-3160c4d0-前端测试用例.xlsx
+?? workbench/qa/20261029-three-fixes/page-readiness/page-assistant-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-batches-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-case-BACKEND-ARCH-001-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-case-UI-ARCH-001-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-case-library-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-execution-list-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-generation-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-history-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-import-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-legacy-requirements-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-model-settings-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-native-dsh-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-overview-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-project-index-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-protocol-bindings-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-report-preview-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-reports-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/page-setup-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+?? workbench/qa/20261029-three-fixes/page-readiness/results-attempt-2026-10-29T08-36-43-663Z-3160c4d0.json
+?? workbench/qa/20261029-three-fixes/page-readiness/results.json
+?? workbench/qa/20261029-three-fixes/page-readiness/verify-pages.mjs
+?? workbench/qa/20261029-three-fixes/prepare-delivery-scope.py
+?? workbench/qa/20261029-three-fixes/prepare-followup.mjs
+?? workbench/qa/20261029-three-fixes/previous-requirement.source.json
+?? workbench/qa/20261029-three-fixes/report-media/browser-media-initial.log
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/01-preview-ready-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/02-layout-and-sandbox-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/03-directory-anchor-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/04-image-enlarge-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/05-video-1-decode-play-pause-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/06-video-2-decode-play-pause-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/07-video-3-decode-play-pause-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/08-trace-1-download-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/09-no-csp-or-request-errors-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/10-immutable-project-and-snapshot-pass.png
+?? workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/results.json
+?? workbench/qa/20261029-three-fixes/report-media/verify-report-media.mjs
+?? workbench/qa/20261029-three-fixes/report-preview-engineering-attempt2.log
+?? workbench/qa/20261029-three-fixes/report-preview-engineering-attempt3.log
+?? workbench/qa/20261029-three-fixes/report-preview-engineering-attempt4.log
+?? workbench/qa/20261029-three-fixes/report-preview-engineering-attempt5.log
+?? workbench/qa/20261029-three-fixes/report-preview-engineering-initial.log
+?? workbench/qa/20261029-three-fixes/report-preview-engineering.log
+?? workbench/qa/20261029-three-fixes/restart-final.log
+?? workbench/qa/20261029-three-fixes/restart.log
+?? workbench/qa/20261029-three-fixes/reviewed-snapshot_diagnostics_explore-architecture.spec.mjs
+?? workbench/qa/20261029-three-fixes/reviewed-snapshot_lib_architecture-page.mjs
+?? workbench/qa/20261029-three-fixes/reviewed-snapshot_specs_UI-ARCH-MODEL-001.spec.mjs
+?? workbench/qa/20261029-three-fixes/source-inputs.log
+?? workbench/qa/20261029-three-fixes/source-inputs.mjs
+?? workbench/qa/20261029-three-fixes/source-inputs/csv-preview.json
+?? workbench/qa/20261029-three-fixes/source-inputs/csv-rejection.json
+?? workbench/qa/20261029-three-fixes/source-inputs/csv-upload.json
+?? workbench/qa/20261029-three-fixes/source-inputs/docx-source.json
+?? workbench/qa/20261029-three-fixes/source-inputs/png-source.json
+?? workbench/qa/20261029-three-fixes/source-inputs/project-after.json
+?? workbench/qa/20261029-three-fixes/source-inputs/project-before.json
+?? workbench/qa/20261029-three-fixes/source-inputs/rejected-formats.json
+?? workbench/qa/20261029-three-fixes/source-inputs/requests.json
+?? workbench/qa/20261029-three-fixes/source-inputs/reservation.json
+?? workbench/qa/20261029-three-fixes/source-inputs/results.json
+?? workbench/qa/20261029-three-fixes/source-inputs/sources-after.json
+?? workbench/qa/20261029-three-fixes/source-inputs/synthetic-image.png
+?? workbench/qa/20261029-three-fixes/source-inputs/synthetic-input.csv
+?? workbench/qa/20261029-three-fixes/source-inputs/synthetic-input.docx
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane.mjs
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-case-package.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-http-preparation.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-prepare-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-prepare.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-41-14-596Z-b430f6-start-http-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-41-14-596Z-b430f6-start-http.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-09-539Z-be54c2-read-http-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-09-539Z-be54c2-read-http.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-564Z-95854b-confirm-http-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-564Z-95854b-confirm-http.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-910Z-20dd0f-run-http-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-910Z-20dd0f-run-http.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-37-092Z-eee08c-read-http-run-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-37-092Z-eee08c-read-http-run.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-49-758Z-b50359-rerun-http-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-49-758Z-b50359-rerun-http.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-094Z-54fa21-read-http-rerun-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-094Z-54fa21-read-http-rerun.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-880Z-503298-start-ui-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-880Z-503298-start-ui.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-00-848Z-5a7a7e-read-ui-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-00-848Z-5a7a7e-read-ui.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-48-110Z-ffcd68-read-ui-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-48-110Z-ffcd68-read-ui.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-16-592Z-91a571-read-ui-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-16-592Z-91a571-read-ui.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-41-689Z-194df2-rerun-ui-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-41-689Z-194df2-rerun-ui.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-04-238Z-1a6d3c-read-ui-rerun-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-04-238Z-1a6d3c-read-ui-rerun.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-24-052Z-6ffc4d-report-calls.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-24-052Z-6ffc4d-report.json
+?? workbench/qa/20261029-three-fixes/synthetic-model-lane/state.json
+?? workbench/qa/20261029-three-fixes/target-fixture.mjs
+?? workbench/qa/20261029-three-fixes/ui-filter-result.png
+?? workbench/qa/20261029-three-fixes/ui-generation-dispatch.log
+?? workbench/qa/20261029-three-fixes/ui-integrity.json
+?? workbench/qa/20261029-three-fixes/ui-integrity.log
+?? workbench/qa/20261029-three-fixes/ui-read-1.log
+?? workbench/qa/20261029-three-fixes/ui-read-2.log
+?? workbench/qa/20261029-three-fixes/ui-read-3.log
+?? workbench/qa/20261029-three-fixes/ui-rerun-check.json
+?? workbench/qa/20261029-three-fixes/ui-rerun-dispatch.log
+?? workbench/qa/20261029-three-fixes/ui-rerun-result.log
+?? workbench/qa/20261029-three-fixes/verify-assistant.mjs
+?? workbench/qa/20261029-three-fixes/verify-final.mjs
+?? workbench/qa/20261029-three-fixes/verify-ui-run.mjs
+?? workbench/qa/20261030-case-delete/REPORT.md
+?? workbench/qa/20261030-case-delete/collector-exit.txt
+?? workbench/qa/20261030-case-delete/collector-tests.log
+?? workbench/qa/20261030-case-delete/collector.log
+?? workbench/qa/20261030-case-delete/concurrent-changes.json
+?? workbench/qa/20261030-case-delete/context-exit.txt
+?? workbench/qa/20261030-case-delete/context.log
+?? workbench/qa/20261030-case-delete/delete-confirmation.png
+?? workbench/qa/20261030-case-delete/deleted-batch.png
+?? workbench/qa/20261030-case-delete/deleted-list.png
+?? workbench/qa/20261030-case-delete/delivery-baseline.json
+?? workbench/qa/20261030-case-delete/delivery-gates.json
+?? workbench/qa/20261030-case-delete/official-result.json
+?? workbench/qa/20261030-case-delete/restart.log
+?? workbench/qa/20261030-case-delete/restored-list.png
+?? workbench/qa/20261030-case-delete/scope-before.json
+?? workbench/qa/20261030-case-delete/service-before.json
+?? workbench/qa/20261030-case-delete/sync-exit.txt
+?? workbench/qa/20261030-case-delete/sync.log
+?? workbench/qa/20261030-case-delete/tests-diagnostic-header.log
+?? workbench/qa/20261030-case-delete/tests-final.log
+?? workbench/qa/20261030-case-delete/tests-initial.log
+?? workbench/qa/20261030-case-delete/tests-storage-status.log
+?? workbench/qa/20261030-case-delete/tests.log
+?? workbench/qa/20261030-diagnostics-system/archive.json
+?? workbench/qa/20261030-diagnostics-system/before-health.json
+?? workbench/qa/20261030-diagnostics-system/delivery-baseline.json
+?? workbench/qa/20261030-diagnostics-system/diagnostic-export.png
+?? workbench/qa/20261030-diagnostics-system/diagnostics-final.log
+?? workbench/qa/20261030-diagnostics-system/engineering.log
+?? workbench/qa/20261030-diagnostics-system/final-focused.log
+?? workbench/qa/20261030-diagnostics-system/freeze.log
+?? workbench/qa/20261030-diagnostics-system/launcher-negative.log
+?? workbench/qa/20261030-diagnostics-system/launcher-result.json
+?? workbench/qa/20261030-diagnostics-system/logging-final.log
+?? workbench/qa/20261030-diagnostics-system/official-complete.log
+?? workbench/qa/20261030-diagnostics-system/official-export-initial.json
+?? workbench/qa/20261030-diagnostics-system/official-export.json
+?? workbench/qa/20261030-diagnostics-system/official-final-all.log
+?? workbench/qa/20261030-diagnostics-system/official-final.log
+?? workbench/qa/20261030-diagnostics-system/official-release.log
+?? workbench/qa/20261030-diagnostics-system/official-result-initial.json
+?? workbench/qa/20261030-diagnostics-system/official-result.json
+?? workbench/qa/20261030-diagnostics-system/official-verified.log
+?? workbench/qa/20261030-diagnostics-system/official.log
+?? workbench/qa/20261030-diagnostics-system/offline-cli-export.json
+?? workbench/qa/20261030-diagnostics-system/offline-cli.log
+?? workbench/qa/20261030-diagnostics-system/prepare-delivery.py
+?? workbench/qa/20261030-diagnostics-system/privacy-final.log
+?? workbench/qa/20261030-diagnostics-system/regression-complete.log
+?? workbench/qa/20261030-diagnostics-system/regression-final.log
+?? workbench/qa/20261030-diagnostics-system/restart-complete.log
+?? workbench/qa/20261030-diagnostics-system/restart-final-correlation.log
+?? workbench/qa/20261030-diagnostics-system/restart-final-source.log
+?? workbench/qa/20261030-diagnostics-system/restart-final.log
+?? workbench/qa/20261030-diagnostics-system/restart-release.log
+?? workbench/qa/20261030-diagnostics-system/restart-verified.log
+?? workbench/qa/20261030-diagnostics-system/restart.log
+?? workbench/qa/20261030-diagnostics-system/router-retest.log
+?? workbench/qa/20261030-diagnostics-system/source-verification.json
+?? workbench/qa/20261030-diagnostics-system/sync-invalid.log
+?? workbench/qa/20261030-diagnostics-system/sync.log
+?? workbench/qa/20261030-diagnostics-system/targeted-final.log
+?? workbench/qa/20261030-diagnostics-system/targeted-initial.log
+?? workbench/qa/20261030-diagnostics-system/targeted.log
+?? workbench/qa/20261030-diagnostics-system/unit-complete.log
+?? workbench/qa/20261030-diagnostics-system/unit-initial.log
+?? workbench/qa/20261030-diagnostics-system/unit-release.log
+?? workbench/qa/20261030-diagnostics-system/unit-verified.log
+?? workbench/qa/20261030-diagnostics-system/verify-official.mjs
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-54-40-265Z-28c4afe7/results.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/exported-cases.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/input-package.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/owned-project.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-assistant.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-batches.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-BACKEND-ARCH-001.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-UI-ARCH-001.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-library.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-execution-list.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-generation.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-history.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-import.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-legacy-requirements.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-model-settings.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-native-dsh.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-overview.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-project-index.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-protocol-bindings.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-reports.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-setup.png
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/projects-before-hashes.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/requirements-design.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/results.json
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/unexecuted-report.html
+?? workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/unexecuted-report.json
+?? workbench/qa/20261030-selection-lifecycle/REPORT.md
+?? workbench/qa/20261030-selection-lifecycle/archive.json
+?? workbench/qa/20261030-selection-lifecycle/assistant-dispatch.log
+?? workbench/qa/20261030-selection-lifecycle/assistant-export.log
+?? workbench/qa/20261030-selection-lifecycle/assistant-progress.log
+?? workbench/qa/20261030-selection-lifecycle/assistant-progress2.log
+?? workbench/qa/20261030-selection-lifecycle/assistant-result.json
+?? workbench/qa/20261030-selection-lifecycle/assistant-verified-final.log
+?? workbench/qa/20261030-selection-lifecycle/assistant-verified.log
+?? workbench/qa/20261030-selection-lifecycle/background-archive.json
+?? workbench/qa/20261030-selection-lifecycle/background-dsh-progress.log
+?? workbench/qa/20261030-selection-lifecycle/background-dsh-result.json
+?? workbench/qa/20261030-selection-lifecycle/background-dsh-start.log
+?? workbench/qa/20261030-selection-lifecycle/background-dsh-state.json
+?? workbench/qa/20261030-selection-lifecycle/background-evidence.log
+?? workbench/qa/20261030-selection-lifecycle/background-initial.log
+?? workbench/qa/20261030-selection-lifecycle/before-health.json
+?? workbench/qa/20261030-selection-lifecycle/build-installer.log
+?? workbench/qa/20261030-selection-lifecycle/build-portable.log
+?? workbench/qa/20261030-selection-lifecycle/collector-before-secondary.log
+?? workbench/qa/20261030-selection-lifecycle/collector-console.log
+?? workbench/qa/20261030-selection-lifecycle/collector-initial.log
+?? workbench/qa/20261030-selection-lifecycle/collector.log
+?? workbench/qa/20261030-selection-lifecycle/completion-retest.log
+?? workbench/qa/20261030-selection-lifecycle/context-check.log
+?? workbench/qa/20261030-selection-lifecycle/delivery-baseline-after-secondary.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-baseline-final.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-baseline.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-receipt.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-scope-after-secondary.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-scope-final.json
+?? workbench/qa/20261030-selection-lifecycle/delivery-scope.json
+?? workbench/qa/20261030-selection-lifecycle/design-prepare.log
+?? workbench/qa/20261030-selection-lifecycle/diagnostic-export.json
+?? workbench/qa/20261030-selection-lifecycle/document-reading-preserved.json
+?? workbench/qa/20261030-selection-lifecycle/execution-report.html
+?? workbench/qa/20261030-selection-lifecycle/extract-archive.log
+?? workbench/qa/20261030-selection-lifecycle/extract-verified-archive.mjs
+?? workbench/qa/20261030-selection-lifecycle/final-delta.log
+?? workbench/qa/20261030-selection-lifecycle/final-mapping-retest.log
+?? workbench/qa/20261030-selection-lifecycle/freeze.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-background-final.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-background-progress.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-background-result.json
+?? workbench/qa/20261030-selection-lifecycle/frozen-background-start.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-foreground-final.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-foreground-read.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-foreground-result.json
+?? workbench/qa/20261030-selection-lifecycle/frozen-foreground-start.log
+?? workbench/qa/20261030-selection-lifecycle/frozen-mode-state.json
+?? workbench/qa/20261030-selection-lifecycle/full-regression-final.log
+?? workbench/qa/20261030-selection-lifecycle/full-regression-release.log
+?? workbench/qa/20261030-selection-lifecycle/full-regression.log
+?? workbench/qa/20261030-selection-lifecycle/helper-retest.log
+?? workbench/qa/20261030-selection-lifecycle/http-confirm.log
+?? workbench/qa/20261030-selection-lifecycle/http-generation-dispatch.log
+?? workbench/qa/20261030-selection-lifecycle/http-generation-progress.log
+?? workbench/qa/20261030-selection-lifecycle/http-rerun-read.log
+?? workbench/qa/20261030-selection-lifecycle/http-rerun.log
+?? workbench/qa/20261030-selection-lifecycle/http-run-read.log
+?? workbench/qa/20261030-selection-lifecycle/http-run.log
+?? workbench/qa/20261030-selection-lifecycle/imported-rerun-retest.log
+?? workbench/qa/20261030-selection-lifecycle/initial-targeted.log
+?? workbench/qa/20261030-selection-lifecycle/lifecycle-official.log
+?? workbench/qa/20261030-selection-lifecycle/lifecycle-result.json
+?? workbench/qa/20261030-selection-lifecycle/main-evidence-before-secondary.md
+?? workbench/qa/20261030-selection-lifecycle/main-evidence-full-failed.md
+?? workbench/qa/20261030-selection-lifecycle/model-functional.mjs
+?? workbench/qa/20261030-selection-lifecycle/model-lane.mjs
+?? workbench/qa/20261030-selection-lifecycle/model-prepare-final.log
+?? workbench/qa/20261030-selection-lifecycle/model-prepare-ready.log
+?? workbench/qa/20261030-selection-lifecycle/model-prepare.log
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-BACKEND.xlsx
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-UI.xlsx
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-dispatch.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-export-result.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-poll-1793332642413-5f12b4ba.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-poll-1793332680523-4290e95c.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/assistant-start.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/design-prepared.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/owned-project.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/prepare-dispatch.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/prepared.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/requests.ndjson
+?? workbench/qa/20261030-selection-lifecycle/model-run/requirements-dispatch.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332469081-de301dbf.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332494678-ad748f06.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332567045-f904876b.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/requirements-start.json
+?? workbench/qa/20261030-selection-lifecycle/model-run/sources.json
+?? workbench/qa/20261030-selection-lifecycle/model-ui-dispatch.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress1.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress10.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress2.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress3.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress4.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress5.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress6.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress7.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress8.log
+?? workbench/qa/20261030-selection-lifecycle/model-ui-progress9.log
+?? workbench/qa/20261030-selection-lifecycle/official-functional-final.log
+?? workbench/qa/20261030-selection-lifecycle/official-functional.log
+?? workbench/qa/20261030-selection-lifecycle/official-functional.mjs
+?? workbench/qa/20261030-selection-lifecycle/official-release.log
+?? workbench/qa/20261030-selection-lifecycle/offline-export.json
+?? workbench/qa/20261030-selection-lifecycle/offline-release-export.json
+?? workbench/qa/20261030-selection-lifecycle/package-source-verification.json
+?? workbench/qa/20261030-selection-lifecycle/package-source-verified.log
+?? workbench/qa/20261030-selection-lifecycle/prepare-delivery.py
+?? workbench/qa/20261030-selection-lifecycle/registration-closeout-final.log
+?? workbench/qa/20261030-selection-lifecycle/report-create.log
+?? workbench/qa/20261030-selection-lifecycle/report-preview.png
+?? workbench/qa/20261030-selection-lifecycle/report-result.json
+?? workbench/qa/20261030-selection-lifecycle/report-verified.log
+?? workbench/qa/20261030-selection-lifecycle/requirements-dispatch.log
+?? workbench/qa/20261030-selection-lifecycle/requirements-final.log
+?? workbench/qa/20261030-selection-lifecycle/requirements-progress.log
+?? workbench/qa/20261030-selection-lifecycle/requirements-progress2.log
+?? workbench/qa/20261030-selection-lifecycle/restart-background.log
+?? workbench/qa/20261030-selection-lifecycle/restart-final-delta.log
+?? workbench/qa/20261030-selection-lifecycle/restart-final.log
+?? workbench/qa/20261030-selection-lifecycle/restart-page-recording.log
+?? workbench/qa/20261030-selection-lifecycle/restart-release.log
+?? workbench/qa/20261030-selection-lifecycle/restart.log
+?? workbench/qa/20261030-selection-lifecycle/scope-after-secondary.log
+?? workbench/qa/20261030-selection-lifecycle/scope-final.log
+?? workbench/qa/20261030-selection-lifecycle/scope.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-baseline-v2.json
+?? workbench/qa/20261030-selection-lifecycle/secondary-baseline.json
+?? workbench/qa/20261030-selection-lifecycle/secondary-collector-console.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-collector-first.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-collector.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-context.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-record-metadata-reverted.json
+?? workbench/qa/20261030-selection-lifecycle/secondary-scope-v2.json
+?? workbench/qa/20261030-selection-lifecycle/secondary-scope.json
+?? workbench/qa/20261030-selection-lifecycle/secondary-scope.log
+?? workbench/qa/20261030-selection-lifecycle/secondary-sync.log
+?? workbench/qa/20261030-selection-lifecycle/selection-acceptance.log
+?? workbench/qa/20261030-selection-lifecycle/selection-lifecycle-final.log
+?? workbench/qa/20261030-selection-lifecycle/selection-lifecycle-retest.log
+?? workbench/qa/20261030-selection-lifecycle/selection-official-complete.log
+?? workbench/qa/20261030-selection-lifecycle/selection-official-final.log
+?? workbench/qa/20261030-selection-lifecycle/selection-official-retest.log
+?? workbench/qa/20261030-selection-lifecycle/selection-official.log
+?? workbench/qa/20261030-selection-lifecycle/selection-release.log
+?? workbench/qa/20261030-selection-lifecycle/selection-result.json
+?? workbench/qa/20261030-selection-lifecycle/selection-state.json
+?? workbench/qa/20261030-selection-lifecycle/selection-verified.log
+?? workbench/qa/20261030-selection-lifecycle/selection-with-environment.log
+?? workbench/qa/20261030-selection-lifecycle/selection70-export.json
+?? workbench/qa/20261030-selection-lifecycle/selection70.png
+?? workbench/qa/20261030-selection-lifecycle/source-before.json
+?? workbench/qa/20261030-selection-lifecycle/sync-evidence-schema.log
+?? workbench/qa/20261030-selection-lifecycle/sync-initial.log
+?? workbench/qa/20261030-selection-lifecycle/sync-validation.log
+?? workbench/qa/20261030-selection-lifecycle/sync.log
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-39-54-743Z-b94e67-prepare-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-39-54-743Z-b94e67-prepare-failure.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-case-package.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-prepare-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-prepare-failure.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-case-package.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-http-preparation.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-prepare-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-prepare.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-13-098Z-b2cb39-start-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-13-098Z-b2cb39-start-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-29-084Z-4f1c5d-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-29-084Z-4f1c5d-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-57-801Z-aecf8e-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-57-801Z-aecf8e-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-42-46-241Z-f759ff-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-42-46-241Z-f759ff-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-43-08-887Z-8d098c-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-43-08-887Z-8d098c-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-27-062Z-479fba-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-27-062Z-479fba-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-53-536Z-3fe71b-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-53-536Z-3fe71b-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-46-06-049Z-e67b5f-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-46-06-049Z-e67b5f-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-26-963Z-994433-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-26-963Z-994433-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-48-203Z-b5b6c5-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-48-203Z-b5b6c5-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-55-244Z-f22aa9-read-ui-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-55-244Z-f22aa9-read-ui.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-25-749Z-971083-start-http-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-25-749Z-971083-start-http.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-43-474Z-28f8ab-read-http-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-43-474Z-28f8ab-read-http.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-081Z-74a2be-confirm-http-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-081Z-74a2be-confirm-http.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-400Z-33dce9-run-http-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-400Z-33dce9-run-http.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-726Z-afd906-read-http-run-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-726Z-afd906-read-http-run.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-28-913Z-aa8b2b-rerun-http-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-28-913Z-aa8b2b-rerun-http.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-29-327Z-246afa-read-http-rerun-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-29-327Z-246afa-read-http-rerun.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T04-05-54-709Z-24ec7a-report-calls.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T04-05-54-709Z-24ec7a-report.json
+?? workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/state.json
+?? workbench/qa/20261030-selection-lifecycle/target-fixture.mjs
+?? workbench/qa/20261030-selection-lifecycle/targeted-extra.log
+?? workbench/qa/20261030-selection-lifecycle/targeted-final.log
+?? workbench/qa/20261030-selection-lifecycle/targeted.log
+?? workbench/qa/20261030-selection-lifecycle/verify-assistant.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-background-dsh.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-frozen-modes.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-lifecycle.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-package-source.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-report.mjs
+?? workbench/qa/20261030-selection-lifecycle/verify-selection.mjs
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/exported-cases.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/input-package.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/owned-project.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-assistant.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-batches.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-BACKEND-ARCH-001.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-UI-ARCH-001.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-library.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-execution-list.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-generation.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-history.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-import.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-legacy-requirements.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-model-settings.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-native-dsh.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-overview.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-project-index.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-protocol-bindings.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-reports.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-setup.png
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/projects-before-hashes.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/requirements-design.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/results.json
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.html
+?? workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.json
+?? workbench/qa/20261030-wps-port/REPORT.md
+?? workbench/qa/20261030-wps-port/after-upgrade-health.json
+?? workbench/qa/20261030-wps-port/after-upgrade-projects.json
+?? workbench/qa/20261030-wps-port/archive.json
+?? workbench/qa/20261030-wps-port/assistant-dispatch.log
+?? workbench/qa/20261030-wps-port/assistant-export.log
+?? workbench/qa/20261030-wps-port/assistant-progress.log
+?? workbench/qa/20261030-wps-port/assistant-progress2.log
+?? workbench/qa/20261030-wps-port/assistant-result.json
+?? workbench/qa/20261030-wps-port/assistant-verified.log
+?? workbench/qa/20261030-wps-port/autostop/REPORT.md
+?? workbench/qa/20261030-wps-port/autostop/build-installer.log
+?? workbench/qa/20261030-wps-port/autostop/collector-final-console.log
+?? workbench/qa/20261030-wps-port/autostop/collector-final.log
+?? workbench/qa/20261030-wps-port/autostop/collector-progress-console.log
+?? workbench/qa/20261030-wps-port/autostop/collector-progress.log
+?? workbench/qa/20261030-wps-port/autostop/context-final.log
+?? workbench/qa/20261030-wps-port/autostop/delivery-receipt.json
+?? workbench/qa/20261030-wps-port/autostop/delivery-verified.log
+?? workbench/qa/20261030-wps-port/autostop/external-pid.json
+?? workbench/qa/20261030-wps-port/autostop/finalize.mjs
+?? workbench/qa/20261030-wps-port/autostop/full-regression.log
+?? workbench/qa/20261030-wps-port/autostop/hold-runtime.mjs
+?? workbench/qa/20261030-wps-port/autostop/installed-pids.json
+?? workbench/qa/20261030-wps-port/autostop/installed-pids.json.child
+?? workbench/qa/20261030-wps-port/autostop/installer-contract.log
+?? workbench/qa/20261030-wps-port/autostop/installer.log
+?? workbench/qa/20261030-wps-port/autostop/manifest-before.json
+?? workbench/qa/20261030-wps-port/autostop/prepare.log
+?? workbench/qa/20261030-wps-port/autostop/render.log
+?? workbench/qa/20261030-wps-port/autostop/restoration.log
+?? workbench/qa/20261030-wps-port/autostop/restore.log
+?? workbench/qa/20261030-wps-port/autostop/result.json
+?? workbench/qa/20261030-wps-port/autostop/scope-final.log
+?? workbench/qa/20261030-wps-port/autostop/scope-progress.log
+?? workbench/qa/20261030-wps-port/autostop/staging-restored.log
+?? workbench/qa/20261030-wps-port/autostop/state.json
+?? workbench/qa/20261030-wps-port/autostop/sync-final.log
+?? workbench/qa/20261030-wps-port/autostop/sync-progress.log
+?? workbench/qa/20261030-wps-port/autostop/termination-observed.json
+?? workbench/qa/20261030-wps-port/autostop/upgrade.log
+?? workbench/qa/20261030-wps-port/autostop/verify-autostop.ps1
+?? workbench/qa/20261030-wps-port/background-read.log
+?? workbench/qa/20261030-wps-port/background-start.log
+?? workbench/qa/20261030-wps-port/before-health.json
+?? workbench/qa/20261030-wps-port/before-upgrade-projects.json
+?? workbench/qa/20261030-wps-port/before-upgrade-stop-health.json
+?? workbench/qa/20261030-wps-port/build-installer.log
+?? workbench/qa/20261030-wps-port/build-portable.log
+?? workbench/qa/20261030-wps-port/cleanup-verification.log
+?? workbench/qa/20261030-wps-port/closeout-result.json
+?? workbench/qa/20261030-wps-port/closeout.log
+?? workbench/qa/20261030-wps-port/collector-final-console.log
+?? workbench/qa/20261030-wps-port/collector-final.log
+?? workbench/qa/20261030-wps-port/collector-initial-console.log
+?? workbench/qa/20261030-wps-port/collector-maintenance-console.log
+?? workbench/qa/20261030-wps-port/collector-progress-console.log
+?? workbench/qa/20261030-wps-port/collector-stable-console.log
+?? workbench/qa/20261030-wps-port/collector-stable.log
+?? workbench/qa/20261030-wps-port/compile-final.log
+?? workbench/qa/20261030-wps-port/compile-release.log
+?? workbench/qa/20261030-wps-port/compile.log
+?? workbench/qa/20261030-wps-port/context-final.log
+?? workbench/qa/20261030-wps-port/delivery-baseline-index.json
+?? workbench/qa/20261030-wps-port/delivery-baseline-inplace.json
+?? workbench/qa/20261030-wps-port/delivery-baseline-maintenance.json
+?? workbench/qa/20261030-wps-port/delivery-baseline.json
+?? workbench/qa/20261030-wps-port/delivery-receipt.json
+?? workbench/qa/20261030-wps-port/delivery-scope.json
+?? workbench/qa/20261030-wps-port/delivery-verified.log
+?? workbench/qa/20261030-wps-port/diagnostic-export.json
+?? workbench/qa/20261030-wps-port/execution-report.html
+?? workbench/qa/20261030-wps-port/extract-verified-archive.mjs
+?? workbench/qa/20261030-wps-port/extract.log
+?? workbench/qa/20261030-wps-port/final-diagnostic-export.json
+?? workbench/qa/20261030-wps-port/finalize-delivery.mjs
+?? workbench/qa/20261030-wps-port/foreground-read.log
+?? workbench/qa/20261030-wps-port/foreground-start.log
+?? workbench/qa/20261030-wps-port/freeze.log
+?? workbench/qa/20261030-wps-port/frozen-background-result.json
+?? workbench/qa/20261030-wps-port/frozen-foreground-result.json
+?? workbench/qa/20261030-wps-port/frozen-mode-state.json
+?? workbench/qa/20261030-wps-port/full-regression-release.log
+?? workbench/qa/20261030-wps-port/full-regression.log
+?? workbench/qa/20261030-wps-port/http-confirm.log
+?? workbench/qa/20261030-wps-port/http-dispatch.log
+?? workbench/qa/20261030-wps-port/http-read.log
+?? workbench/qa/20261030-wps-port/http-rerun-read.log
+?? workbench/qa/20261030-wps-port/http-rerun.log
+?? workbench/qa/20261030-wps-port/http-run-read.log
+?? workbench/qa/20261030-wps-port/http-run.log
+?? workbench/qa/20261030-wps-port/install-blocked.log
+?? workbench/qa/20261030-wps-port/install-prepare.log
+?? workbench/qa/20261030-wps-port/install-uninstall.log
+?? workbench/qa/20261030-wps-port/install-upgrade.log
+?? workbench/qa/20261030-wps-port/installed-office-probe.json
+?? workbench/qa/20261030-wps-port/installer-blocked.log
+?? workbench/qa/20261030-wps-port/installer-contract.log
+?? workbench/qa/20261030-wps-port/installer-install.log
+?? workbench/qa/20261030-wps-port/installer-state.json
+?? workbench/qa/20261030-wps-port/installer-uninstall.log
+?? workbench/qa/20261030-wps-port/installer-upgrade.log
+?? workbench/qa/20261030-wps-port/lifecycle-final.log
+?? workbench/qa/20261030-wps-port/lifecycle-result.json
+?? workbench/qa/20261030-wps-port/lifecycle.log
+?? workbench/qa/20261030-wps-port/model-functional.mjs
+?? workbench/qa/20261030-wps-port/model-lane-prepare.log
+?? workbench/qa/20261030-wps-port/model-lane.mjs
+?? workbench/qa/20261030-wps-port/model-prepare.log
+?? workbench/qa/20261030-wps-port/model-run/assistant-BACKEND.xlsx
+?? workbench/qa/20261030-wps-port/model-run/assistant-UI.xlsx
+?? workbench/qa/20261030-wps-port/model-run/assistant-dispatch.json
+?? workbench/qa/20261030-wps-port/model-run/assistant-export-result.json
+?? workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340929365-e0c8fab2.json
+?? workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340959134-e677ae9a.json
+?? workbench/qa/20261030-wps-port/model-run/assistant-start.json
+?? workbench/qa/20261030-wps-port/model-run/design-prepared.json
+?? workbench/qa/20261030-wps-port/model-run/owned-project.json
+?? workbench/qa/20261030-wps-port/model-run/prepare-dispatch.json
+?? workbench/qa/20261030-wps-port/model-run/prepared-before-helper-cleanup-fix.json
+?? workbench/qa/20261030-wps-port/model-run/prepared.json
+?? workbench/qa/20261030-wps-port/model-run/requests.ndjson
+?? workbench/qa/20261030-wps-port/model-run/requirements-dispatch.json
+?? workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340781748-fe5a6cab.json
+?? workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340798486-0a82e5cb.json
+?? workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340831867-dbefd415.json
+?? workbench/qa/20261030-wps-port/model-run/requirements-start.json
+?? workbench/qa/20261030-wps-port/model-run/sources.json
+?? workbench/qa/20261030-wps-port/native-file.mjs
+?? workbench/qa/20261030-wps-port/official-functional.log
+?? workbench/qa/20261030-wps-port/official-functional.mjs
+?? workbench/qa/20261030-wps-port/official-release.log
+?? workbench/qa/20261030-wps-port/official-restored.log
+?? workbench/qa/20261030-wps-port/official-source.log
+?? workbench/qa/20261030-wps-port/official-wps-release-final.log
+?? workbench/qa/20261030-wps-port/official-wps-release-result.json
+?? workbench/qa/20261030-wps-port/official-wps-release.log
+?? workbench/qa/20261030-wps-port/official-wps-release.mjs
+?? workbench/qa/20261030-wps-port/official-wps-result.json
+?? workbench/qa/20261030-wps-port/official-wps.log
+?? workbench/qa/20261030-wps-port/official-wps.mjs
+?? workbench/qa/20261030-wps-port/owned-stop.json
+?? workbench/qa/20261030-wps-port/package-source-verification.json
+?? workbench/qa/20261030-wps-port/package-source.log
+?? workbench/qa/20261030-wps-port/prepare-delivery.py
+?? workbench/qa/20261030-wps-port/real-wps-release.log
+?? workbench/qa/20261030-wps-port/real-wps-release.py
+?? workbench/qa/20261030-wps-port/real-wps-result.json
+?? workbench/qa/20261030-wps-port/real-wps.log
+?? workbench/qa/20261030-wps-port/real-wps.py
+?? workbench/qa/20261030-wps-port/registration-probe.json
+?? workbench/qa/20261030-wps-port/render-initial.log
+?? workbench/qa/20261030-wps-port/render-inplace.log
+?? workbench/qa/20261030-wps-port/report-create.log
+?? workbench/qa/20261030-wps-port/report-preview.png
+?? workbench/qa/20261030-wps-port/report-result.json
+?? workbench/qa/20261030-wps-port/report-verified.log
+?? workbench/qa/20261030-wps-port/requirements-dispatch.log
+?? workbench/qa/20261030-wps-port/requirements-progress.log
+?? workbench/qa/20261030-wps-port/requirements-progress2.log
+?? workbench/qa/20261030-wps-port/requirements-progress3.log
+?? workbench/qa/20261030-wps-port/restart-release.log
+?? workbench/qa/20261030-wps-port/restart.log
+?? workbench/qa/20261030-wps-port/restoration-final.log
+?? workbench/qa/20261030-wps-port/restoration-release.log
+?? workbench/qa/20261030-wps-port/restoration-result.json
+?? workbench/qa/20261030-wps-port/restoration-verified.log
+?? workbench/qa/20261030-wps-port/restoration.log
+?? workbench/qa/20261030-wps-port/scope-final.log
+?? workbench/qa/20261030-wps-port/scope-initial.log
+?? workbench/qa/20261030-wps-port/scope-maintenance.log
+?? workbench/qa/20261030-wps-port/scope-progress.log
+?? workbench/qa/20261030-wps-port/scope-stable.log
+?? workbench/qa/20261030-wps-port/selection-final.log
+?? workbench/qa/20261030-wps-port/selection-result.json
+?? workbench/qa/20261030-wps-port/selection-retest.log
+?? workbench/qa/20261030-wps-port/selection-state.json
+?? workbench/qa/20261030-wps-port/selection.log
+?? workbench/qa/20261030-wps-port/selection70-export.json
+?? workbench/qa/20261030-wps-port/selection70.png
+?? workbench/qa/20261030-wps-port/source-before.json
+?? workbench/qa/20261030-wps-port/source-node-view.json
+?? workbench/qa/20261030-wps-port/source-python-view.json
+?? workbench/qa/20261030-wps-port/start-restored-final.log
+?? workbench/qa/20261030-wps-port/start-restored.log
+?? workbench/qa/20261030-wps-port/sync-closeout.log
+?? workbench/qa/20261030-wps-port/sync-final.log
+?? workbench/qa/20261030-wps-port/sync-initial.log
+?? workbench/qa/20261030-wps-port/sync-progress.log
+?? workbench/qa/20261030-wps-port/synthetic-editor-owner.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-case-package.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-http-preparation.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report-calls.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report.json
+?? workbench/qa/20261030-wps-port/synthetic-model-lane/state.json
+?? workbench/qa/20261030-wps-port/synthetic-wps.docx
+?? workbench/qa/20261030-wps-port/target-fixture.mjs
+?? workbench/qa/20261030-wps-port/targeted-final.log
+?? workbench/qa/20261030-wps-port/targeted-initial.log
+?? workbench/qa/20261030-wps-port/targeted-release.log
+?? workbench/qa/20261030-wps-port/ui-dispatch.log
+?? workbench/qa/20261030-wps-port/ui-progress.log
+?? workbench/qa/20261030-wps-port/ui-progress2.log
+?? workbench/qa/20261030-wps-port/ui-progress3.log
+?? workbench/qa/20261030-wps-port/ui-progress4.log
+?? workbench/qa/20261030-wps-port/ui-progress5.log
+?? workbench/qa/20261030-wps-port/upload-assistant.mjs
+?? workbench/qa/20261030-wps-port/verify-assistant.mjs
+?? workbench/qa/20261030-wps-port/verify-background-dsh.mjs
+?? workbench/qa/20261030-wps-port/verify-cleanup.mjs
+?? workbench/qa/20261030-wps-port/verify-closeout.mjs
+?? workbench/qa/20261030-wps-port/verify-frozen-modes.mjs
+?? workbench/qa/20261030-wps-port/verify-installer-upgrade.ps1
+?? workbench/qa/20261030-wps-port/verify-lifecycle.mjs
+?? workbench/qa/20261030-wps-port/verify-package-source.mjs
+?? workbench/qa/20261030-wps-port/verify-report.mjs
+?? workbench/qa/20261030-wps-port/verify-restored.mjs
+?? workbench/qa/20261030-wps-port/verify-selection.mjs
+?? workbench/qa/20261030-wps-port/wps-assistant-UI.xlsx
+?? workbench/qa/20261030-wps-port/wps-assistant-dispatch.log
+?? workbench/qa/20261030-wps-port/wps-assistant-export.json
+?? workbench/qa/20261030-wps-port/wps-assistant-export.log
+?? workbench/qa/20261030-wps-port/wps-assistant-final.log
+?? workbench/qa/20261030-wps-port/wps-assistant-progress.log
+?? workbench/qa/20261030-wps-port/wps-assistant-result.json
+?? workbench/qa/20261030-wps-port/wps-assistant-state.json
+?? workbench/qa/20261030-wps-port/wps-editing.json
+?? workbench/qa/20261030-wps-port/wps-idle.json
+?? workbench/qa/20261030-wps-port/wps-upload-final.log
+?? workbench/qa/20261030-wps-port/wps-upload.log
+?? workbench/qa/20261030-wps-reader/WpsDiagnostics.cs
+?? workbench/qa/20261030-wps-reader/WpsDiagnostics.exe
+?? workbench/qa/20261030-wps-reader/WpsReaderTests.cs
+?? workbench/qa/20261030-wps-reader/WpsReaderTests.exe
+?? workbench/qa/20261030-wps-reader/archive.json
+?? workbench/qa/20261030-wps-reader/build-installer.log
+?? workbench/qa/20261030-wps-reader/build-portable.log
+?? workbench/qa/20261030-wps-reader/compile.log
+?? workbench/qa/20261030-wps-reader/concurrent-source-changes.json
+?? workbench/qa/20261030-wps-reader/current-status.json
+?? workbench/qa/20261030-wps-reader/delivery-baseline.json
+?? workbench/qa/20261030-wps-reader/diagnostic-artifact.json
+?? workbench/qa/20261030-wps-reader/engineering.log
+?? workbench/qa/20261030-wps-reader/extract-verified-archive.mjs
+?? workbench/qa/20261030-wps-reader/extraction.log
+?? workbench/qa/20261030-wps-reader/freeze.log
+?? workbench/qa/20261030-wps-reader/frozen-source-verification.json
+?? workbench/qa/20261030-wps-reader/frozen-source-verification.log
+?? workbench/qa/20261030-wps-reader/native-stage-verification.log
+?? workbench/qa/20261030-wps-reader/preflight.log
+?? workbench/qa/20261030-wps-reader/prepare-delivery.py
+?? workbench/qa/20261030-wps-reader/restart-confirmed.log
+?? workbench/qa/20261030-wps-reader/restart.log
+?? workbench/qa/20261030-wps-reader/runtime-preflight.log
+?? workbench/qa/20261030-wps-reader/sidebar-final.log
+?? workbench/qa/20261030-wps-reader/sidebar-verification.json
+?? workbench/qa/20261030-wps-reader/sidebar-version.png
+?? workbench/qa/20261030-wps-reader/sidebar.log
+?? workbench/qa/20261030-wps-reader/source-before.json
+?? workbench/qa/20261030-wps-reader/source-zip-verification.json
+?? workbench/qa/20261030-wps-reader/start.log
+?? workbench/qa/20261030-wps-reader/sync-pending.log
+?? workbench/qa/20261030-wps-reader/sync.log
+?? workbench/qa/20261030-wps-reader/targeted.log
+?? workbench/qa/20261030-wps-reader/timeout-retest.log
+?? workbench/qa/20261030-wps-reader/verify-frozen-source.mjs
+?? workbench/qa/20261030-wps-reader/verify-sidebar.mjs
+?? workbench/qa/20261030-wps-reader/wps-contract.log
+?? workbench/qa/20261030-wps-reader/wps-diagnostic.json
+?? workbench/scripts/build-office-reader.mjs
+?? workbench/scripts/export-diagnostics.mjs
+?? workbench/server/case-assistant/source-support.mjs
+?? workbench/server/cases/lifecycle.mjs
+?? workbench/server/diagnostics.mjs
+?? workbench/server/native-dsh/completion.mjs
+?? workbench/tests/atomic-json.test.mjs
+?? workbench/tests/case-assistant-source-support.test.mjs
+?? workbench/tests/case-lifecycle.test.mjs
+?? workbench/tests/case-selection-completion.test.mjs
+?? workbench/tests/diagnostics.test.mjs
+?? workbench/tests/fixtures/OfficeNativeTests.cs
+?? workbench/tests/frontend-downloads.test.mjs
+?? workbench/tests/office-native.test.mjs
+?? workbench/tests/report-preview-csp.test.mjs
+?? workbench/tests/windows-installer.test.mjs
+?? workbench/web-v2/case-lifecycle.js
+?? workbench/web-v2/case-selection.js
+?? workbench/web-v2/diagnostics-ui.js
+?? 导出诊断日志.cmd
 ```
 
 ### Git Diff Stat
 
 ```text
-warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/ai_engineering/01_architecture.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/modules/workbench-case-library.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0001-release-readiness/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
@@ -16696,223 +17270,128 @@ warning: in the working copy of 'docs/requirements/REQ-0001-release-readiness/05
 warning: in the working copy of 'docs/requirements/REQ-0001-release-readiness/change_log.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0001-release-readiness/current_state.md', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'docs/requirements/REQ-0001-release-readiness/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/02_design.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/04_verification.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/05_trace.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/change_log.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/current_state.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0036-ui-ux-01-workbench-usability-review/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/02_design.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/04_verification.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/05_trace.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/change_log.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/current_state.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0037-autonomous-candidate-development/delivery_evidence.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/02_design.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/04_verification.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/05_trace.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/change_log.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/current_state.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'docs/requirements/REQ-0038-requirements-and-protocol-test-input/输入资料与验收约定.md', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/config/browser-auth-attach.cordis.yml', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/config/browser-flash.cordis.yml', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/config/browser.cordis.yml', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/package-lock.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/package.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'harness-probe/src/harness-runner.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'scripts/check_ai_context.py', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'scripts/collect_delivery_evidence.py', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/deepseek.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/model-transport.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/model-transport.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'tests/telemetry.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/config/candidate.playwright.config.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/docs/release-candidate.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/00_user_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/01_development_requirement.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/02_design.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/03_tasks.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/04_verification.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/05_trace.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/change_log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/requirements/REQ-0025-workbench-m3a-case-import-export/current_state.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'packaging/windows-installer.iss', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/scripts/package-candidate.py', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/scripts/run-unit-checks.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/scripts/save-deepseek-credential.ps1', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/scripts/start-workbench.ps1', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/scripts/verify-official-workbench.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/auth/catalog.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/adapter.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-authorization.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-evidence.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-feedback.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-mcp.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/development-patch.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/manager.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/report.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/build/store.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/cases/excel.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/cases/manager.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/report.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/script-operations.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/service-identity.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/service-shutdown.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/server/store.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/auth-concurrency.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/auth-session-request-policy.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/candidate-trials.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/case-library.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/development-fidelity.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/development-production.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/product-v21.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/run-evidence.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/start-config.test.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/step-observer.integration.mjs', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/tests/supervisor-reliability.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/atomic-json.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/backend/protocol-preparation.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/case-assistant/dsh-client.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/case-assistant/output.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/case-assistant/prompt.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/case-assistant/store.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/cases/store.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/model-credentials.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/native-dsh/host-lock.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/requirements/office-word-reader.build.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/requirements/store.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/skills/case-design-v1/SKILL.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/server/startup-phase.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/backend-protocol-layout.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/case-assistant-manager.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/case-assistant-output.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/native-dsh-host-lock.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/office-reader.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/tests/report-navigation.test.mjs', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/web-v2/api.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/web-v2/history.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'workbench/web-v2/index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workbench/web-v2/case-assistant-api.js', LF will be replaced by CRLF the next time Git touches it
 warning: in the working copy of 'workbench/web-v2/reports.js', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of '安装.cmd', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of '环境检查.cmd', LF will be replaced by CRLF the next time Git touches it
- .gitignore                                         |     3 +
- README.md                                          |     2 +
- docs/ai_engineering/01_architecture.md             |     2 +
- docs/modules/test-workbench.md                     |   124 +
- docs/modules/workbench-case-library.md             |   132 +
- docs/requirements/README.md                        |   100 +-
- .../00_user_requirement.md                         |    17 +
- .../01_development_requirement.md                  |    12 +
- .../REQ-0001-release-readiness/02_design.md        |    20 +
- .../REQ-0001-release-readiness/03_tasks.md         |    21 +
- .../REQ-0001-release-readiness/04_verification.md  |    21 +
- .../REQ-0001-release-readiness/05_trace.md         |    21 +
- .../REQ-0001-release-readiness/change_log.md       |    16 +
- .../REQ-0001-release-readiness/current_state.md    |    88 +-
- .../delivery_evidence.md                           | 34986 ++++++++++++++++++-
- .../requirement.source.json                        |  1621 +-
- .../00_user_requirement.md                         |     8 +
- .../01_development_requirement.md                  |     3 +
- .../02_design.md                                   |     6 +
- .../03_tasks.md                                    |     3 +
- .../04_verification.md                             |     7 +
- .../05_trace.md                                    |     7 +
- .../change_log.md                                  |     3 +
- .../current_state.md                               |    26 +-
- .../delivery_evidence.md                           | 32949 ++++++++++++++++-
- .../requirement.source.json                        |   342 +-
- .../00_user_requirement.md                         |    23 +
- .../01_development_requirement.md                  |     8 +
- .../02_design.md                                   |    11 +
- .../03_tasks.md                                    |    10 +
- .../04_verification.md                             |    15 +
- .../05_trace.md                                    |    15 +
- .../change_log.md                                  |     6 +
- .../current_state.md                               |    55 +-
- .../delivery_evidence.md                           |  7049 +++-
- .../requirement.source.json                        |   723 +-
- .../00_user_requirement.md                         |   218 +-
- .../01_development_requirement.md                  |    65 +-
- .../02_design.md                                   |   113 +-
- .../03_tasks.md                                    |   104 +-
- .../04_verification.md                             |   501 +-
- .../05_trace.md                                    |   119 +-
- .../change_log.md                                  |    96 +
- .../current_state.md                               |   413 +-
- .../requirement.source.json                        |  6771 +++-
- ...252\214\346\224\266\347\272\246\345\256\232.md" |    29 +-
- .../config/browser-auth-attach.cordis.yml          |     3 +
- harness-probe/config/browser-flash.cordis.yml      |     3 +
- harness-probe/config/browser.cordis.yml            |     3 +
- harness-probe/package-lock.json                    |   262 +-
- harness-probe/package.json                         |     5 +
- harness-probe/src/harness-runner.mjs               |    32 +-
- harness-probe/src/process-control.mjs              |    14 +-
- harness-probe/src/verify-candidate.mjs             |    63 +-
- package-lock.json                                  |    12 +
- package.json                                       |     1 +
- scripts/check_ai_context.py                        |   133 +-
- scripts/collect_delivery_evidence.py               |    28 +-
- src/deepseek.mjs                                   |    43 +-
- src/model-transport.mjs                            |     6 +-
- tests/model-transport.test.mjs                     |    70 +
- tests/telemetry.test.mjs                           |     2 +-
- workbench/config/candidate.playwright.config.mjs   |    14 +-
- workbench/docs/release-candidate.md                |    37 +-
- workbench/package-lock.json                        |     3 +-
- workbench/package.json                             |     3 +-
- workbench/scripts/check-install.ps1                |    20 +-
- workbench/scripts/package-candidate.py             |    88 +-
- workbench/scripts/run-unit-checks.mjs              |     7 +-
- workbench/scripts/save-deepseek-credential.ps1     |    12 +-
- workbench/scripts/start-workbench.ps1              |   143 +-
- workbench/scripts/test-manifest.json               |   138 +-
- workbench/scripts/verify-official-workbench.mjs    |     2 +-
- workbench/server/app.mjs                           |   204 +-
- workbench/server/auth/catalog.mjs                  |    19 +-
- workbench/server/auth/session.mjs                  |   102 +-
- workbench/server/batches.mjs                       |    52 +-
- workbench/server/build/adapter.mjs                 |    14 +-
- workbench/server/build/candidate-trials.mjs        |    79 +-
- .../server/build/development-authorization.mjs     |     3 +-
- workbench/server/build/development-evidence.mjs    |     9 +-
- workbench/server/build/development-feedback.mjs    |    10 +-
- workbench/server/build/development-fidelity.mjs    |   157 +-
- workbench/server/build/development-mcp.mjs         |    12 +-
- workbench/server/build/development-patch.mjs       |     6 +-
- workbench/server/build/development-session.mjs     |   211 +-
- workbench/server/build/development-task.mjs        |   234 +-
- workbench/server/build/development-tool-guard.mjs  |    21 +-
- workbench/server/build/manager.mjs                 |    44 +-
- workbench/server/build/project-case.mjs            |    13 +-
- workbench/server/build/report.mjs                  |    57 +-
- workbench/server/build/step-observer.mjs           |   193 +-
- workbench/server/build/step-replay.mjs             |    27 +-
- workbench/server/build/store.mjs                   |    11 +-
- workbench/server/build/trial-environment.mjs       |    43 +
- workbench/server/build/user-workflow.mjs           |    54 +-
- workbench/server/cases/excel.mjs                   |   129 +-
- workbench/server/cases/manager.mjs                 |   141 +-
- workbench/server/execution-records.mjs             |     9 +-
- workbench/server/index.mjs                         |   183 +-
- workbench/server/report-snapshots.mjs              |   146 +-
- workbench/server/report.mjs                        |    30 +-
- workbench/server/script-operations.mjs             |   144 +-
- workbench/server/service-identity.mjs              |    60 +-
- workbench/server/service-shutdown.mjs              |    10 +-
- workbench/server/store.mjs                         |    11 +-
- workbench/tests/auth-concurrency.test.mjs          |    17 +-
- .../tests/auth-session-request-policy.test.mjs     |     2 +-
- workbench/tests/candidate-trials.test.mjs          |    44 +
- workbench/tests/case-library.test.mjs              |    20 +
- workbench/tests/development-auth-binding.test.mjs  |     4 +-
- workbench/tests/development-fidelity.test.mjs      |     7 +-
- workbench/tests/development-production.test.mjs    |     1 +
- workbench/tests/development-session.test.mjs       |   184 +-
- workbench/tests/product-v21.test.mjs               |    58 +-
- workbench/tests/run-evidence.test.mjs              |    18 +-
- workbench/tests/start-config.test.mjs              |    26 +-
- workbench/tests/step-observer.integration.mjs      |    14 +-
- workbench/tests/supervisor-reliability.test.mjs    |    28 +-
- workbench/web-v2/api.js                            |     3 +-
- workbench/web-v2/app.js                            |  1157 +-
- workbench/web-v2/execution-media.js                |   295 +-
- workbench/web-v2/history.js                        |     2 +
- workbench/web-v2/index.html                        |    19 +-
- workbench/web-v2/product.css                       |   132 +-
- workbench/web-v2/reports.js                        |   189 +-
- workbench/web-v2/script-actions.js                 |   258 +-
- workbench/web-v2/styles.css                        |    57 +-
- workbench/web-v2/workflow.js                       |   105 +-
- "\345\220\257\345\212\250.cmd"                     |    11 +-
- "\345\256\211\350\243\205.cmd"                     |     9 +-
- "\345\256\211\350\243\205.ps1"                     |    30 +-
- ...16\257\345\242\203\346\243\200\346\237\245.cmd" |     7 +-
- ...257\225\347\224\250\350\257\264\346\230\216.md" |    24 +-
- 134 files changed, 89510 insertions(+), 3680 deletions(-)
+warning: in the working copy of 'workbench/web-v2/requirements-api.js', LF will be replaced by CRLF the next time Git touches it
+ docs/ai_engineering/01_architecture.md             |   25 +
+ docs/ai_engineering/delivery_scope.json            |  937 ++---
+ docs/modules/test-workbench.md                     |   37 +
+ docs/modules/workbench-case-library.md             |   10 +
+ docs/requirements/README.md                        |   10 +-
+ .../00_user_requirement.md                         |   14 +
+ .../01_development_requirement.md                  |    4 +
+ .../REQ-0001-release-readiness/02_design.md        |    4 +
+ .../REQ-0001-release-readiness/03_tasks.md         |   13 +
+ .../REQ-0001-release-readiness/04_verification.md  |   19 +
+ .../REQ-0001-release-readiness/05_trace.md         |   13 +
+ .../REQ-0001-release-readiness/change_log.md       |    4 +
+ .../REQ-0001-release-readiness/current_state.md    |   43 +-
+ .../delivery_evidence.md                           | 4114 ++++++++++++--------
+ .../requirement.source.json                        |  693 +++-
+ .../00_user_requirement.md                         |    2 +
+ .../01_development_requirement.md                  |    1 +
+ .../02_design.md                                   |    3 +
+ .../03_tasks.md                                    |    2 +
+ .../04_verification.md                             |    2 +
+ .../05_trace.md                                    |    2 +
+ .../change_log.md                                  |    1 +
+ .../current_state.md                               |   14 +-
+ .../requirement.source.json                        |  555 ++-
+ packaging/windows-installer.iss                    |   11 +-
+ workbench/release.json                             |    6 +-
+ workbench/scripts/native-entry.mjs                 |   17 +-
+ workbench/scripts/package-candidate.py             |    1 +
+ workbench/scripts/test-manifest.json               |   14 +-
+ workbench/server/app.mjs                           |   53 +-
+ workbench/server/atomic-json.mjs                   |   13 +-
+ workbench/server/backend/protocol-preparation.mjs  |   10 +-
+ workbench/server/build/store.mjs                   |   20 +-
+ workbench/server/case-assistant/dsh-client.mjs     |    4 +
+ workbench/server/case-assistant/output.mjs         |   26 +-
+ workbench/server/case-assistant/prompt.mjs         |    3 +-
+ workbench/server/case-assistant/store.mjs          |   16 +-
+ workbench/server/cases/store.mjs                   |   20 +-
+ workbench/server/index.mjs                         |   11 +-
+ workbench/server/model-credentials.mjs             |    2 +
+ workbench/server/native-dsh/client.mjs             |   28 +-
+ workbench/server/native-dsh/console.mjs            |    4 +-
+ workbench/server/native-dsh/drafts.mjs             |   14 +-
+ workbench/server/native-dsh/evidence-result.mjs    |    9 +-
+ workbench/server/native-dsh/evidence-runtime.mjs   |    2 +-
+ workbench/server/native-dsh/executor.mjs           |   18 +-
+ workbench/server/native-dsh/host-lock.mjs          |   66 +-
+ workbench/server/native-dsh/manager.mjs            |   96 +-
+ workbench/server/native-dsh/reruns.mjs             |   13 +-
+ workbench/server/native-dsh/routes.mjs             |    4 +-
+ workbench/server/requirements/office-reader.mjs    |   26 +-
+ .../requirements/office-word-reader.build.json     |   31 +-
+ .../server/requirements/office-word-reader.cs      |  184 +-
+ .../server/requirements/office-word-reader.exe     |  Bin 20480 -> 27136 bytes
+ workbench/server/requirements/store.mjs            |   17 +-
+ workbench/server/skills/case-design-v1/SKILL.md    |    5 +-
+ workbench/server/startup-phase.mjs                 |    5 +-
+ workbench/tests/backend-protocol-layout.test.mjs   |   46 +-
+ workbench/tests/case-assistant-manager.test.mjs    |    5 +-
+ workbench/tests/case-assistant-output.test.mjs     |    7 +-
+ workbench/tests/native-dsh-client.test.mjs         |   47 +
+ workbench/tests/native-dsh-drafts.test.mjs         |    2 +-
+ workbench/tests/native-dsh-evidence.test.mjs       |   16 +
+ workbench/tests/native-dsh-executor.test.mjs       |   15 +-
+ workbench/tests/native-dsh-host-lock.test.mjs      |  134 +-
+ workbench/tests/native-dsh-manager.test.mjs        |   42 +-
+ .../tests/native-dsh-registration-mode.test.mjs    |    4 +-
+ workbench/tests/native-dsh-reruns.test.mjs         |    4 +-
+ workbench/tests/native-dsh-ui-routes.test.mjs      |   12 +-
+ workbench/tests/native-imported-reruns.test.mjs    |    2 +-
+ workbench/tests/navigation-loading.test.mjs        |    3 +-
+ workbench/tests/office-reader.test.mjs             |   16 +-
+ workbench/tests/project-batch-entry.test.mjs       |    4 +-
+ workbench/tests/project-workflow-view.test.mjs     |   10 +-
+ workbench/tests/report-navigation.test.mjs         |   11 +-
+ workbench/tests/workspace-merged-view.test.mjs     |    5 +-
+ workbench/web-v2/api.js                            |   99 +-
+ workbench/web-v2/app.js                            |   49 +-
+ workbench/web-v2/case-assistant-api.js             |   19 +-
+ workbench/web-v2/case-assistant.js                 |    4 +-
+ workbench/web-v2/case-content-view.js              |    2 +-
+ workbench/web-v2/index.html                        |   23 +-
+ workbench/web-v2/native-console-view.js            |    4 +-
+ workbench/web-v2/native-dsh.js                     |   42 +-
+ workbench/web-v2/project-workflow.js               |    5 +-
+ workbench/web-v2/reports.js                        |   15 +-
+ workbench/web-v2/requirements-api.js               |    9 +-
+ workbench/web-v2/workspace-v2.css                  |   10 +-
+ 88 files changed, 5336 insertions(+), 2601 deletions(-)
 ```
 
 ### Untracked Files
@@ -16946,8 +17425,6 @@ warning: in the working copy of '环境检查.cmd', LF will be replaced by CRLF 
 .impeccable/review/user-desktop.png
 .impeccable/review/workflow-desktop.png
 .impeccable/review/workflow-mobile.png
-PRODUCT.md
-Windows便携包说明.md
 artifacts/ui-flow-review-20261007-images.zip
 artifacts/ui-flow-review-20261007/README.md
 artifacts/ui-flow-review-20261007/guides/A.html
@@ -17045,50 +17522,39 @@ artifacts/ui-flow-review-20261008-v2/screens.html
 artifacts/ui-flow-review-20261008-v2/screens.json
 artifacts/ui-flow-review-20261008-v2/source-images-before.json
 artifacts/ui-flow-review-20261008-v2/visual-review.md
-docs/ai_engineering/delivery_scope.json
-docs/ai_engineering/delivery_scope.md
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/UI草图说明.md
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/delivery_evidence.md
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/execution-list-v1.png
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/overview-v1.png
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/project-workspace-v1.png
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/protocol-binding-v1.png
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/ui-design/生成记录.md
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/架构与实施计划.md
-docs/requirements/REQ-0038-requirements-and-protocol-test-input/项目汇总报告与被测系统配置.md
-docs/requirements/REQ-0039-windows-device-license/00_user_requirement.md
-docs/requirements/REQ-0039-windows-device-license/01_development_requirement.md
-docs/requirements/REQ-0039-windows-device-license/02_design.md
-docs/requirements/REQ-0039-windows-device-license/03_tasks.md
-docs/requirements/REQ-0039-windows-device-license/04_verification.md
-docs/requirements/REQ-0039-windows-device-license/05_trace.md
-docs/requirements/REQ-0039-windows-device-license/change_log.md
-docs/requirements/REQ-0039-windows-device-license/current_state.md
-docs/requirements/REQ-0039-windows-device-license/delivery_evidence.md
-docs/requirements/REQ-0039-windows-device-license/requirement.source.json
-docs/requirements/REQ-0039-windows-device-license/用户使用与组件交接.md
-docs/requirements/REQ-0040-managed-workbench-restart/00_user_requirement.md
-docs/requirements/REQ-0040-managed-workbench-restart/01_development_requirement.md
-docs/requirements/REQ-0040-managed-workbench-restart/02_design.md
-docs/requirements/REQ-0040-managed-workbench-restart/03_tasks.md
-docs/requirements/REQ-0040-managed-workbench-restart/04_verification.md
-docs/requirements/REQ-0040-managed-workbench-restart/05_trace.md
-docs/requirements/REQ-0040-managed-workbench-restart/change_log.md
-docs/requirements/REQ-0040-managed-workbench-restart/current_state.md
-docs/requirements/REQ-0040-managed-workbench-restart/delivery_evidence.md
-docs/requirements/REQ-0040-managed-workbench-restart/requirement.source.json
-docs/requirements/REQ-0041-engineer-case-auto-import/00_user_requirement.md
-docs/requirements/REQ-0041-engineer-case-auto-import/01_development_requirement.md
-docs/requirements/REQ-0041-engineer-case-auto-import/02_design.md
-docs/requirements/REQ-0041-engineer-case-auto-import/03_tasks.md
-docs/requirements/REQ-0041-engineer-case-auto-import/04_verification.md
-docs/requirements/REQ-0041-engineer-case-auto-import/05_trace.md
-docs/requirements/REQ-0041-engineer-case-auto-import/change_log.md
-docs/requirements/REQ-0041-engineer-case-auto-import/current_state.md
-docs/requirements/REQ-0041-engineer-case-auto-import/delivery_evidence.md
-docs/requirements/REQ-0041-engineer-case-auto-import/requirement.source.json
-harness-probe/src/provider-environment.mjs
-harness-probe/tests/harness-stdin.test.mjs
+docs/requirements/REQ-0042-architecture-review/00_user_requirement.md
+docs/requirements/REQ-0042-architecture-review/01_development_requirement.md
+docs/requirements/REQ-0042-architecture-review/02_design.md
+docs/requirements/REQ-0042-architecture-review/03_tasks.md
+docs/requirements/REQ-0042-architecture-review/04_verification.md
+docs/requirements/REQ-0042-architecture-review/05_trace.md
+docs/requirements/REQ-0042-architecture-review/change_log.md
+docs/requirements/REQ-0042-architecture-review/current_state.md
+docs/requirements/REQ-0042-architecture-review/delivery_evidence.md
+docs/requirements/REQ-0042-architecture-review/followup-review.md
+docs/requirements/REQ-0042-architecture-review/packaging-review.md
+docs/requirements/REQ-0042-architecture-review/requirement.source.json
+docs/requirements/REQ-0042-architecture-review/review.md
+docs/requirements/REQ-0043-runtime-diagnostics/00_user_requirement.md
+docs/requirements/REQ-0043-runtime-diagnostics/01_development_requirement.md
+docs/requirements/REQ-0043-runtime-diagnostics/02_design.md
+docs/requirements/REQ-0043-runtime-diagnostics/03_tasks.md
+docs/requirements/REQ-0043-runtime-diagnostics/04_verification.md
+docs/requirements/REQ-0043-runtime-diagnostics/05_trace.md
+docs/requirements/REQ-0043-runtime-diagnostics/change_log.md
+docs/requirements/REQ-0043-runtime-diagnostics/current_state.md
+docs/requirements/REQ-0043-runtime-diagnostics/delivery_evidence.md
+docs/requirements/REQ-0043-runtime-diagnostics/requirement.source.json
+docs/requirements/REQ-0044-selection-dsh-completion/00_user_requirement.md
+docs/requirements/REQ-0044-selection-dsh-completion/01_development_requirement.md
+docs/requirements/REQ-0044-selection-dsh-completion/02_design.md
+docs/requirements/REQ-0044-selection-dsh-completion/03_tasks.md
+docs/requirements/REQ-0044-selection-dsh-completion/04_verification.md
+docs/requirements/REQ-0044-selection-dsh-completion/05_trace.md
+docs/requirements/REQ-0044-selection-dsh-completion/change_log.md
+docs/requirements/REQ-0044-selection-dsh-completion/current_state.md
+docs/requirements/REQ-0044-selection-dsh-completion/delivery_evidence.md
+docs/requirements/REQ-0044-selection-dsh-completion/requirement.source.json
 outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/artifact_checks.json
 outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/build_workbook.mjs
 outputs/01a132dc-ed71-7bb2-9506-13cdf156290d/extract_sources.py
@@ -17182,6 +17648,32 @@ outputs/20261029-Word-WPS完整安装包-v3/测试Agent-完整安装包-20261029
 outputs/20261029-Word-WPS完整安装包/使用说明.txt
 outputs/20261029-Word-WPS完整安装包/测试Agent-完整安装包-20261029.exe
 outputs/20261029-office-upgrade/测试Agent-Word-WPS功能升级包-20261029.zip
+outputs/20261029-架构修复完整安装包-v4/SHA256SUMS.txt
+outputs/20261029-架构修复完整安装包-v4/交付清单.json
+outputs/20261029-架构修复完整安装包-v4/使用说明.txt
+outputs/20261029-架构修复完整安装包-v4/测试Agent-完整便携包-20261029-v4.zip
+outputs/20261029-架构修复完整安装包-v4/测试Agent-完整安装包-20261029-v4.exe
+outputs/20261030-WPS与自动覆盖-v4/SHA256.txt
+outputs/20261030-WPS与自动覆盖-v4/交付收据.json
+outputs/20261030-WPS与自动覆盖-v4/使用说明.txt
+outputs/20261030-WPS与自动覆盖-v4/测试Agent-安装器-20261030-wps3-自动升级.exe
+outputs/20261030-WPS与自动覆盖-v4/测试Agent-完整便携包-20261030-wps3.zip
+outputs/20261030-WPS兼容候选-v1/暂不交付.txt
+outputs/20261030-WPS兼容候选-v1/测试Agent-WPS兼容候选-20261030-v1.exe
+outputs/20261030-WPS兼容候选-v1/测试Agent-WPS兼容候选-20261030-v1.zip
+outputs/20261030-WPS独立读取-v3/SHA256.txt
+outputs/20261030-WPS独立读取-v3/交付收据.json
+outputs/20261030-WPS独立读取-v3/使用说明.txt
+outputs/20261030-WPS独立读取-v3/测试Agent-安装器-20261030-wps3.exe
+outputs/20261030-WPS独立读取-v3/测试Agent-完整便携包-20261030-wps3.zip
+outputs/20261030-WPS诊断.zip
+outputs/20261030-WPS诊断/WpsDiagnostics.exe
+outputs/20261030-WPS诊断/使用说明.txt
+outputs/20261030-后台执行与日志-v2/SHA256.txt
+outputs/20261030-后台执行与日志-v2/交付收据.json
+outputs/20261030-后台执行与日志-v2/使用说明.md
+outputs/20261030-后台执行与日志-v2/测试Agent-安装器-20261030-batch2.exe
+outputs/20261030-后台执行与日志-v2/测试Agent-完整便携包-20261030-batch2.zip
 outputs/_inspect_20261013/dump.txt
 outputs/_inspect_20261013/dump_xlsx.py
 outputs/_inspect_20261013/project-environments.json
@@ -17204,117 +17696,6 @@ outputs/frontend-visual-review-20261027/setup-desktop.png
 outputs/frontend-visual-review-20261027/setup-handoff-mobile.png
 outputs/frontend-visual-review-20261027/setup-mobile.png
 outputs/frontend-visual-review-20261027/verify.mjs
-packaging/ChineseSimplified.isl
-packaging/windows-installer.iss
-qa/20261009-backend-entry/before/workbench/tests/backend-view.test.mjs
-qa/20261009-backend-entry/before/workbench/web-v2/backend.js
-scripts/ai_context_delivery_scope.py
-scripts/test_ai_context_delivery.py
-skills/dsh-ui-runner/SKILL.md
-skills/dsh-ui-runner/references/runtime-api.md
-skills/dsh-ui-runner/references/shared-api.md
-skills/dsh-ui-runner/scripts/runtime.mjs
-skills/dsh-ui-runner/scripts/shared.mjs
-skills/dsh-ui-runner/scripts/shared.test.mjs
-skills/dsh-ui-runner/tests/runtime.test.mjs
-skills/dsh-ui-runner/tests/shared.test.mjs
-skills/frontend-module-handoff/SKILL.md
-skills/frontend-module-handoff/references/contract.md
-skills/frontend-module-handoff/scripts/contract.mjs
-skills/frontend-module-handoff/scripts/handoff.mjs
-skills/frontend-module-handoff/开发者使用说明.md
-vendor/device-license/bin/DeviceLicense.Bridge.exe
-vendor/device-license/bin/DeviceLicense.dll
-vendor/device-license/bin/build-manifest.json
-vendor/device-license/core/bridge.mjs
-vendor/device-license/core/schema.mjs
-vendor/device-license/core/storage.mjs
-vendor/device-license/core/verify.mjs
-vendor/device-license/hardware.mjs
-vendor/device-license/index.mjs
-vendor/device-license/package.json
-workbench/design/layered-v1/DESIGN.md
-workbench/design/layered-v1/HANDOFF.md
-workbench/design/layered-v1/README.md
-workbench/design/layered-v1/packages/ui-automation-core/registry.mjs
-workbench/design/layered-v1/packages/ui-automation-core/status.mjs
-workbench/design/layered-v1/packages/ui-automation-core/transcript.mjs
-workbench/design/layered-v1/packages/ui-automation-core/zstd-frames.mjs
-workbench/design/layered-v1/packages/ui-automation-web-adapters/drag-track.mjs
-workbench/design/layered-v1/packages/ui-automation-web-adapters/overlay.mjs
-workbench/design/layered-v1/packages/ui-automation-web-adapters/virtual-select.mjs
-workbench/design/layered-v1/packages/ui-automation-web-adapters/visibility.mjs
-workbench/design/layered-v1/tools/inspect-session-log.mjs
-workbench/design/layered-v1/tools/inspect-session-log2.mjs
-workbench/design/layered-v1/tools/session-shape.json
-workbench/design/layered-v1/tools/show-event.mjs
-workbench/design/layered-v1/tools/transcript-008-009.json
-workbench/design/layered-v1/tools/verify-transcript.mjs
-workbench/design/layered-v1/workspace/gates/case-preflight.mjs
-workbench/design/layered-v1/workspace/gates/profile-admission.mjs
-workbench/design/layered-v1/workspace/modules/control-electricity-price-template/module-profile.json
-workbench/design/modern-console/DESIGN.md
-workbench/design/modern-console/surface-brief.md
-workbench/docs/office-upgrade.md
-workbench/examples/inspection-trial-20261009/01-PRD.md
-workbench/examples/inspection-trial-20261009/02-用例说明.md
-workbench/examples/inspection-trial-20261009/03-通讯协议.md
-workbench/examples/inspection-trial-20261009/README.md
-workbench/examples/inspection-trial-20261009/backend-preparation.json
-workbench/examples/inspection-trial-20261009/case-package.json
-workbench/examples/inspection-trial-20261009/environment.json
-workbench/examples/inspection-trial-20261009/fixture-expectations.json
-workbench/examples/inspection-trial-20261009/frontend-preflight.json
-workbench/examples/inspection-trial-20261009/import-preview.json
-workbench/examples/inspection-trial-20261009/import-result.json
-workbench/examples/inspection-trial-20261009/old-projects-before.json
-workbench/examples/inspection-trial-20261009/preparation-api-log.json
-workbench/examples/inspection-trial-20261009/prepare-materials.mjs
-workbench/examples/inspection-trial-20261009/prepare-workbench.mjs
-workbench/examples/inspection-trial-20261009/project-state.json
-workbench/examples/inspection-trial-20261009/protocol-catalog.json
-workbench/examples/inspection-trial-20261009/start-target.ps1
-workbench/examples/inspection-trial-20261009/target-ready.png
-workbench/examples/inspection-trial-20261009/target.html
-workbench/examples/inspection-trial-20261009/target.mjs
-workbench/examples/inspection-trial-20261009/verification-first-attempt.json
-workbench/examples/inspection-trial-20261009/verification.json
-workbench/examples/inspection-trial-20261009/verify-preparation.mjs
-workbench/examples/inspection-trial-20261009/前端用例.json
-workbench/examples/inspection-trial-20261009/后端用例.json
-workbench/examples/inspection-trial-20261009/启动练习环境.cmd
-workbench/examples/inspection-trial-20261009/启动练习环境.ps1
-workbench/examples/inspection-trial-20261009/导入文件/00-开始这里.md
-workbench/examples/inspection-trial-20261009/导入文件/01-前端用例.json
-workbench/examples/inspection-trial-20261009/导入文件/02-后端用例.json
-workbench/examples/inspection-trial-20261009/导入文件/03-通讯协议.md
-workbench/examples/inspection-trial-20261009/导入文件/04-需求说明.md
-workbench/examples/inspection-trial-20261009/导入文件/05-用例说明.md
-workbench/examples/inspection-trial-20261009/巡检工单-导入材料.zip
-workbench/examples/manual-trial-20261004/01-PRD.md
-workbench/examples/manual-trial-20261004/02-MRD.md
-workbench/examples/manual-trial-20261004/03-PROTOCOL.md
-workbench/examples/manual-trial-20261004/README.md
-workbench/examples/manual-trial-20261004/backend-environment.json
-workbench/examples/manual-trial-20261004/environments.json
-workbench/examples/manual-trial-20261004/old-projects-before.json
-workbench/examples/manual-trial-20261004/preparation.json
-workbench/examples/manual-trial-20261004/prepare-environments.mjs
-workbench/examples/manual-trial-20261004/prepare-project.mjs
-workbench/examples/manual-trial-20261004/project-created.json
-workbench/examples/manual-trial-20261004/project-ready.dom.txt
-workbench/examples/manual-trial-20261004/project-ready.png
-workbench/examples/manual-trial-20261004/start-target.mjs
-workbench/examples/manual-trial-20261004/start-target.ps1
-workbench/examples/manual-trial-20261004/target-ready.dom.txt
-workbench/examples/manual-trial-20261004/target-ready.png
-workbench/examples/manual-trial-20261004/verification-first-failure.txt
-workbench/examples/manual-trial-20261004/verification.json
-workbench/examples/manual-trial-20261004/verify-preparation.mjs
-workbench/examples/manual-trial-20261004/人工核对参考.md
-workbench/native/WindowsCredential.cs
-workbench/native/package-lock.json
-workbench/native/package.json
 workbench/qa/20260926-docx-embedded/README.md
 workbench/qa/20260926-docx-embedded/acceptance-official.json
 workbench/qa/20260926-docx-embedded/acceptance-official.mjs
@@ -33032,6 +33413,172 @@ workbench/qa/20261028-web-model-activation/tests-initial.log
 workbench/qa/20261028-web-model-activation/tests.log
 workbench/qa/20261028-web-model-activation/update-req.py
 workbench/qa/20261028-web-model-activation/verify-command.txt
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/exported-cases.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/input-package.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/owned-project.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-assistant.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-batches.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-BACKEND-ARCH-001.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-UI-ARCH-001.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-case-library.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-execution-list.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-generation.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-history.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-import.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-legacy-requirements.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-model-settings.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-native-dsh.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-overview.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-project-index.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-protocol-bindings.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-reports.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/page-setup.png
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/projects-before-hashes.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/requirements-design.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/results.json
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/unexecuted-report.html
+workbench/qa/20261029-architecture-review/20261029-architecture-2026-10-29T07-38-24-811Z-5bc17330/unexecuted-report.json
+workbench/qa/20261029-architecture-review/archive-verification.json
+workbench/qa/20261029-architecture-review/before-restart.json
+workbench/qa/20261029-architecture-review/context-check.log
+workbench/qa/20261029-architecture-review/delivery-baseline.json
+workbench/qa/20261029-architecture-review/delivery-collector-console.log
+workbench/qa/20261029-architecture-review/delivery-collector.log
+workbench/qa/20261029-architecture-review/delivery-first-failure.md
+workbench/qa/20261029-architecture-review/delivery-scope-draft.json
+workbench/qa/20261029-architecture-review/delivery-scope-final.json
+workbench/qa/20261029-architecture-review/delivery-scope-first.json
+workbench/qa/20261029-architecture-review/delivery-scope-spec.json
+workbench/qa/20261029-architecture-review/engineering-final.log
+workbench/qa/20261029-architecture-review/engineering.log
+workbench/qa/20261029-architecture-review/execution-report.html
+workbench/qa/20261029-architecture-review/execution-report.log
+workbench/qa/20261029-architecture-review/final-review-note.json
+workbench/qa/20261029-architecture-review/final-state.json
+workbench/qa/20261029-architecture-review/harness-engineering.log
+workbench/qa/20261029-architecture-review/http-confirm.log
+workbench/qa/20261029-architecture-review/http-rerun-final.log
+workbench/qa/20261029-architecture-review/http-rerun-start.log
+workbench/qa/20261029-architecture-review/http-review.log
+workbench/qa/20261029-architecture-review/http-run-final.log
+workbench/qa/20261029-architecture-review/http-run-start.log
+workbench/qa/20261029-architecture-review/http-start.log
+workbench/qa/20261029-architecture-review/lane-prepare.log
+workbench/qa/20261029-architecture-review/model-functional.mjs
+workbench/qa/20261029-architecture-review/model-run/assistant-BACKEND.xlsx
+workbench/qa/20261029-architecture-review/model-run/assistant-UI.xlsx
+workbench/qa/20261029-architecture-review/model-run/assistant-dispatch.json
+workbench/qa/20261029-architecture-review/model-run/assistant-export-result.json
+workbench/qa/20261029-architecture-review/model-run/assistant-poll-1793259807437-61d8c7fd.json
+workbench/qa/20261029-architecture-review/model-run/assistant-poll-1793259851430-bb32b70e.json
+workbench/qa/20261029-architecture-review/model-run/assistant-start.json
+workbench/qa/20261029-architecture-review/model-run/design-prepared.json
+workbench/qa/20261029-architecture-review/model-run/owned-project.json
+workbench/qa/20261029-architecture-review/model-run/prepare-dispatch.json
+workbench/qa/20261029-architecture-review/model-run/prepared.json
+workbench/qa/20261029-architecture-review/model-run/requests.ndjson
+workbench/qa/20261029-architecture-review/model-run/requirements-dispatch.json
+workbench/qa/20261029-architecture-review/model-run/requirements-poll-1793259766953-542c05db.json
+workbench/qa/20261029-architecture-review/model-run/requirements-start.json
+workbench/qa/20261029-architecture-review/model-run/sources.json
+workbench/qa/20261029-architecture-review/official-final.log
+workbench/qa/20261029-architecture-review/official-functional.log
+workbench/qa/20261029-architecture-review/official-functional.mjs
+workbench/qa/20261029-architecture-review/official-readonly.log
+workbench/qa/20261029-architecture-review/page-readiness/downloads/case-package-json-project-afed9ae3-1c9f-4e23-9e81-3b4169e3b56e-cases.json
+workbench/qa/20261029-architecture-review/page-readiness/downloads/report-html-report-5075bfa2e9feaa12d46ec43b77b07f55c6630ffb.html
+workbench/qa/20261029-architecture-review/page-readiness/downloads/requirements-ui-json-前端测试用例.json
+workbench/qa/20261029-architecture-review/page-readiness/downloads/requirements-ui-xlsx-前端测试用例.xlsx
+workbench/qa/20261029-architecture-review/page-readiness/page-assistant-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-assistant-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-batches-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-batches-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-case-BACKEND-ARCH-001-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-case-BACKEND-ARCH-001-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-case-UI-ARCH-001-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-case-library-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-execution-list-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-execution-list-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-generation-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-history-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-import-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-legacy-requirements-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-legacy-requirements-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-model-settings-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-native-dsh-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-native-dsh-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-overview-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-project-index-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-project-index-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-protocol-bindings-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-protocol-bindings-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-report-preview-failed.png
+workbench/qa/20261029-architecture-review/page-readiness/page-reports-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/page-setup-pass.png
+workbench/qa/20261029-architecture-review/page-readiness/results-initial.json
+workbench/qa/20261029-architecture-review/page-readiness/results.json
+workbench/qa/20261029-architecture-review/page-readiness/verify-pages-initial.mjs
+workbench/qa/20261029-architecture-review/page-readiness/verify-pages.mjs
+workbench/qa/20261029-architecture-review/prepare-delivery-scope.py
+workbench/qa/20261029-architecture-review/protocol-negation-final.log
+workbench/qa/20261029-architecture-review/protocol-negation.log
+workbench/qa/20261029-architecture-review/source-inputs.log
+workbench/qa/20261029-architecture-review/source-inputs.mjs
+workbench/qa/20261029-architecture-review/source-inputs/csv-preview.json
+workbench/qa/20261029-architecture-review/source-inputs/csv-rejection.json
+workbench/qa/20261029-architecture-review/source-inputs/csv-upload.json
+workbench/qa/20261029-architecture-review/source-inputs/docx-source.json
+workbench/qa/20261029-architecture-review/source-inputs/png-source.json
+workbench/qa/20261029-architecture-review/source-inputs/project-after.json
+workbench/qa/20261029-architecture-review/source-inputs/project-before.json
+workbench/qa/20261029-architecture-review/source-inputs/rejected-formats.json
+workbench/qa/20261029-architecture-review/source-inputs/requests.json
+workbench/qa/20261029-architecture-review/source-inputs/reservation.json
+workbench/qa/20261029-architecture-review/source-inputs/results.json
+workbench/qa/20261029-architecture-review/source-inputs/sources-after.json
+workbench/qa/20261029-architecture-review/source-inputs/synthetic-image.png
+workbench/qa/20261029-architecture-review/source-inputs/synthetic-input.csv
+workbench/qa/20261029-architecture-review/source-inputs/synthetic-input.docx
+workbench/qa/20261029-architecture-review/synthetic-model-lane.mjs
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-case-package.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-http-preparation.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-prepare-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-44-25-543Z-214024-prepare-failure.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-53-23-867Z-9ddc22-start-ui-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-53-23-867Z-9ddc22-start-ui.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-56-55-572Z-56b12f-read-ui-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-56-55-572Z-56b12f-read-ui.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-58-17-254Z-fbc561-rerun-ui-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-58-17-254Z-fbc561-rerun-ui.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-05-079Z-a311dc-read-ui-rerun-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-05-079Z-a311dc-read-ui-rerun.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-13-683Z-2c8763-start-http-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T07-59-13-683Z-2c8763-start-http.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-00-43-811Z-9e4d6c-read-http-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-00-43-811Z-9e4d6c-read-http.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-09-571Z-f3328d-confirm-http-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-09-571Z-f3328d-confirm-http.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-10-002Z-d84542-run-http-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-10-002Z-d84542-run-http.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-23-048Z-3452dc-read-http-run-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-23-048Z-3452dc-read-http-run.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-45-162Z-69df39-rerun-http-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-01-45-162Z-69df39-rerun-http.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-07-080Z-db4955-read-http-rerun-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-07-080Z-db4955-read-http-rerun.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-09-307Z-f3c9c0-report-calls.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/2026-10-29T08-02-09-307Z-f3c9c0-report.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/original-protocol-after-fix.json
+workbench/qa/20261029-architecture-review/synthetic-model-lane/state.json
+workbench/qa/20261029-architecture-review/target-fixture.mjs
+workbench/qa/20261029-architecture-review/target-oracle.json
+workbench/qa/20261029-architecture-review/ui-file-integrity.json
+workbench/qa/20261029-architecture-review/ui-filter-result.png
+workbench/qa/20261029-architecture-review/ui-observe.log
+workbench/qa/20261029-architecture-review/ui-rerun-final.log
+workbench/qa/20261029-architecture-review/ui-rerun-start.log
+workbench/qa/20261029-architecture-review/ui-reviewed-script.mjs
+workbench/qa/20261029-architecture-review/ui-start.log
 workbench/qa/20261029-protected-document-retest/REPORT.md
 workbench/qa/20261029-protected-document-retest/assemble-full-installer.mjs
 workbench/qa/20261029-protected-document-retest/assembly-resumed.log
@@ -33099,697 +33646,1011 @@ workbench/qa/20261029-protected-document-retest/verify-full-install.ps1
 workbench/qa/20261029-protected-document-retest/verify-installed-reader.mjs
 workbench/qa/20261029-protected-document-retest/verify-persisted.mjs
 workbench/qa/20261029-protected-document-retest/verify-upload.mjs
-workbench/release.json
-workbench/scripts/build-credential-broker.mjs
-workbench/scripts/build-windows-installer.ps1
-workbench/scripts/credential-paths.ps1
-workbench/scripts/diagnose-model.mjs
-workbench/scripts/enable-model-workbench.ps1
-workbench/scripts/incremental-upgrade.mjs
-workbench/scripts/model-config.ps1
-workbench/scripts/native-dsh-package.mjs
-workbench/scripts/native-entry.mjs
-workbench/scripts/native-runtime.mjs
-workbench/scripts/native/WindowsCredential.exe
-workbench/scripts/native/build-manifest.json
-workbench/scripts/open-workbench.ps1
-workbench/scripts/package-office-upgrade.py
-workbench/scripts/package-portable.py
-workbench/scripts/read-deepseek-credential.ps1
-workbench/scripts/runtime-paths.ps1
-workbench/scripts/setup-runtime.ps1
-workbench/scripts/template-authoring/build-test-case-template.mjs
-workbench/scripts/template-authoring/guide-preview.png
-workbench/scripts/template-authoring/main-preview.png
-workbench/scripts/upgrade-bootstrap.cs
-workbench/scripts/verify-portable-archive.mjs
-workbench/scripts/verify-portable.mjs
-workbench/scripts/verify-runtime-dependencies.mjs
-workbench/server/auth/browser-page.mjs
-workbench/server/backend-manager.mjs
-workbench/server/backend-routes.mjs
-workbench/server/backend/case-stages.mjs
-workbench/server/backend/example.mjs
-workbench/server/backend/execution.mjs
-workbench/server/backend/generation-batches.mjs
-workbench/server/backend/harness-contract.mjs
-workbench/server/backend/harness-manager.mjs
-workbench/server/backend/harness-mcp.mjs
-workbench/server/backend/harness-patch.mjs
-workbench/server/backend/harness-session.mjs
-workbench/server/backend/harness-tool-guard.mjs
-workbench/server/backend/protocol-preparation.mjs
-workbench/server/backend/query-contract.mjs
-workbench/server/backend/schema.mjs
-workbench/server/build/action-highlight.mjs
-workbench/server/build/browser-assertion-contract.mjs
-workbench/server/build/browser-assertion-evidence.mjs
-workbench/server/build/browser-assertion-guide.mjs
-workbench/server/build/browser-assertion-records.mjs
-workbench/server/build/cdp-network-guard.mjs
-workbench/server/build/development-exploration.mjs
-workbench/server/build/development-fast-path.mjs
-workbench/server/build/development-repair-focus.mjs
-workbench/server/build/development-technical-context.mjs
-workbench/server/build/project-target-browser.mjs
-workbench/server/build/project-trial-authorization.mjs
-workbench/server/build/window-recorder.cs
-workbench/server/build/window-recorder.mjs
-workbench/server/build/window-timeline.mjs
-workbench/server/case-assistant/dsh-client.mjs
-workbench/server/case-assistant/json-recovery.mjs
-workbench/server/case-assistant/manager.mjs
-workbench/server/case-assistant/mcp-session.mjs
-workbench/server/case-assistant/output.mjs
-workbench/server/case-assistant/prompt.mjs
-workbench/server/case-assistant/routes.mjs
-workbench/server/case-assistant/store.mjs
-workbench/server/cases/design.mjs
-workbench/server/cases/script-package.mjs
-workbench/server/cases/workbook-package.mjs
-workbench/server/demonstration-browser.mjs
-workbench/server/demonstration-environment.mjs
-workbench/server/demonstration-floating.cs
-workbench/server/demonstration-floating.mjs
-workbench/server/demonstration-routes.mjs
-workbench/server/demonstrations.mjs
-workbench/server/execution-notes.mjs
-workbench/server/failure-feedback.mjs
-workbench/server/frontend-handoff-contract.mjs
-workbench/server/frontend-handoffs.mjs
-workbench/server/licensing/activation.css
-workbench/server/licensing/activation.html
-workbench/server/licensing/activation.js
-workbench/server/licensing/activation.mjs
-workbench/server/licensing/cli.mjs
-workbench/server/licensing/deployment-policy.mjs
-workbench/server/licensing/gate.mjs
-workbench/server/model-credential-storage.mjs
-workbench/server/model-credentials.mjs
-workbench/server/model-settings.mjs
-workbench/server/native-dsh/browser-bridge.mjs
-workbench/server/native-dsh/browser-bridge.patch.yml
-workbench/server/native-dsh/client.mjs
-workbench/server/native-dsh/console.mjs
-workbench/server/native-dsh/drafts.mjs
-workbench/server/native-dsh/evidence-plugin.cjs
-workbench/server/native-dsh/evidence-result.mjs
-workbench/server/native-dsh/evidence-runtime.mjs
-workbench/server/native-dsh/evidence-transform.cjs
-workbench/server/native-dsh/evidence-transform.mjs
-workbench/server/native-dsh/execution-purpose.mjs
-workbench/server/native-dsh/executor.mjs
-workbench/server/native-dsh/host-lock.mjs
-workbench/server/native-dsh/imported-source.mjs
-workbench/server/native-dsh/locator-observation.mjs
-workbench/server/native-dsh/manager.mjs
-workbench/server/native-dsh/portable.mjs
-workbench/server/native-dsh/preflight.mjs
-workbench/server/native-dsh/profile-admission.mjs
-workbench/server/native-dsh/report-records.mjs
-workbench/server/native-dsh/reporter.mjs
-workbench/server/native-dsh/reruns.mjs
-workbench/server/native-dsh/routes.mjs
-workbench/server/native-dsh/runtime.mjs
-workbench/server/native-dsh/transcript.mjs
-workbench/server/native-dsh/workspace-runtime.mjs
-workbench/server/native-dsh/zstd-frames.mjs
-workbench/server/owned-supervisor.mjs
-workbench/server/project-environments.mjs
-workbench/server/project-target-access.mjs
-workbench/server/quality-review-harness-guard.mjs
-workbench/server/quality-review-harness-mcp.mjs
-workbench/server/quality-review-harness-patch.mjs
-workbench/server/quality-review-harness.mjs
-workbench/server/quality-review.mjs
-workbench/server/read-list.mjs
-workbench/server/report-latest-selection.mjs
-workbench/server/report-layout.mjs
-workbench/server/requirements-model.mjs
-workbench/server/requirements-routes.mjs
-workbench/server/requirements/candidates.mjs
-workbench/server/requirements/documents.mjs
-workbench/server/requirements/images.mjs
-workbench/server/requirements/manager.mjs
-workbench/server/requirements/model.mjs
-workbench/server/requirements/office-reader.mjs
-workbench/server/requirements/office-word-reader.build.json
-workbench/server/requirements/office-word-reader.cs
-workbench/server/requirements/office-word-reader.exe
-workbench/server/requirements/quality-model.mjs
-workbench/server/requirements/quality.mjs
-workbench/server/requirements/store.mjs
-workbench/server/service-restart.mjs
-workbench/server/skills/backend-http-plan-v1/SKILL.md
-workbench/server/skills/case-design-v1/SKILL.md
-workbench/server/skills/config-isolation.mjs
-workbench/server/skills/loader.mjs
-workbench/server/skills/ui-test-authoring-v1/SKILL.md
-workbench/server/startup-phase.mjs
-workbench/tests/action-highlight.test.mjs
-workbench/tests/auth-browser-page.test.mjs
-workbench/tests/auth-login-preflight.test.mjs
-workbench/tests/authorization-navigation.test.mjs
-workbench/tests/backend-array-member.test.mjs
-workbench/tests/backend-batches.test.mjs
-workbench/tests/backend-bulk-review.test.mjs
-workbench/tests/backend-case-stages.test.mjs
-workbench/tests/backend-content-type.test.mjs
-workbench/tests/backend-execution.test.mjs
-workbench/tests/backend-feedback.test.mjs
-workbench/tests/backend-harness-acceptance.test.mjs
-workbench/tests/backend-harness-contract.test.mjs
-workbench/tests/backend-harness-diagnostic.test.mjs
-workbench/tests/backend-harness-protocol.test.mjs
-workbench/tests/backend-harness-startup-cleanup.test.mjs
-workbench/tests/backend-manager.test.mjs
-workbench/tests/backend-namespace-prefix.test.mjs
-workbench/tests/backend-preparation.test.mjs
-workbench/tests/backend-protocol-layout.test.mjs
-workbench/tests/backend-quality-loop.test.mjs
-workbench/tests/backend-readonly-post-query.test.mjs
-workbench/tests/backend-record-assertion.test.mjs
-workbench/tests/backend-response-reference.test.mjs
-workbench/tests/backend-view.test.mjs
-workbench/tests/batch-view.test.mjs
-workbench/tests/bindings-navigation.test.mjs
-workbench/tests/browser-assertion-contract.test.mjs
-workbench/tests/browser-assertion-evidence.test.mjs
-workbench/tests/browser-assertion-records.test.mjs
-workbench/tests/candidate-quality-review.test.mjs
-workbench/tests/case-assistant-dsh.test.mjs
-workbench/tests/case-assistant-json-recovery.test.mjs
-workbench/tests/case-assistant-manager.test.mjs
-workbench/tests/case-assistant-output.test.mjs
-workbench/tests/case-assistant-view.test.mjs
-workbench/tests/case-content-review.test.mjs
-workbench/tests/case-csv-import.test.mjs
-workbench/tests/case-import-source-isolation.test.mjs
-workbench/tests/case-import-view.test.mjs
-workbench/tests/case-review-lifecycle.test.mjs
-workbench/tests/case-script-package.test.mjs
-workbench/tests/demonstration-auth-browser.test.mjs
-workbench/tests/demonstration-auth.test.mjs
-workbench/tests/demonstration-browser.test.mjs
-workbench/tests/demonstration-floating-host.test.mjs
-workbench/tests/demonstration-floating-native.test.mjs
-workbench/tests/demonstration-generation.test.mjs
-workbench/tests/demonstration-integration.test.mjs
-workbench/tests/demonstration-route-guard.test.mjs
-workbench/tests/demonstration-selection.test.mjs
-workbench/tests/demonstration-view.test.mjs
-workbench/tests/demonstrations.test.mjs
-workbench/tests/dependency-security.test.mjs
-workbench/tests/desktop-launch.test.mjs
-workbench/tests/development-assertion-sources.test.mjs
-workbench/tests/development-cleanup-obligations.test.mjs
-workbench/tests/development-convergence-integration.test.mjs
-workbench/tests/development-exploration.test.mjs
-workbench/tests/development-fast-task.test.mjs
-workbench/tests/development-locator-hints.test.mjs
-workbench/tests/development-navigation-hints.test.mjs
-workbench/tests/development-network-failure.test.mjs
-workbench/tests/development-technical-context.test.mjs
-workbench/tests/development-transport-retry.test.mjs
-workbench/tests/dsh-skill-isolation.test.mjs
-workbench/tests/dsh-skills.test.mjs
-workbench/tests/execution-list.test.mjs
-workbench/tests/execution-notes-entry.test.mjs
-workbench/tests/execution-notes.test.mjs
-workbench/tests/execution-ux.test.mjs
-workbench/tests/failure-feedback.test.mjs
-workbench/tests/feedback-view.test.mjs
-workbench/tests/fixtures/backend-http-plan-v110.md
-workbench/tests/fixtures/backend-http-plan-v120.md
-workbench/tests/fixtures/backend-practice-preparation.json
-workbench/tests/fixtures/docx-image-fixture.mjs
-workbench/tests/fixtures/owned-child.mjs
-workbench/tests/fixtures/ui-test-authoring-v110.md
-workbench/tests/fixtures/ui-test-authoring-v120.md
-workbench/tests/frontend-handoff-contract.test.mjs
-workbench/tests/frontend-handoffs-ui.test.mjs
-workbench/tests/frontend-handoffs.test.mjs
-workbench/tests/generation-progress.test.mjs
-workbench/tests/generation-recovery.test.mjs
-workbench/tests/harness-provider-address.test.mjs
-workbench/tests/incremental-upgrade.test.mjs
-workbench/tests/installer-runtime-home.test.mjs
-workbench/tests/license-activation.test.mjs
-workbench/tests/license-runtime-identity.test.mjs
-workbench/tests/model-activation.test.mjs
-workbench/tests/model-config.test.mjs
-workbench/tests/model-credential-paths.test.mjs
-workbench/tests/model-credentials.test.mjs
-workbench/tests/model-settings.test.mjs
-workbench/tests/native-console-view.test.mjs
-workbench/tests/native-dsh-browser-bridge.test.mjs
-workbench/tests/native-dsh-client.test.mjs
-workbench/tests/native-dsh-console.test.mjs
-workbench/tests/native-dsh-drafts.test.mjs
-workbench/tests/native-dsh-evidence.test.mjs
-workbench/tests/native-dsh-executor.test.mjs
-workbench/tests/native-dsh-host-lock.test.mjs
-workbench/tests/native-dsh-manager.test.mjs
-workbench/tests/native-dsh-registration-mode.test.mjs
-workbench/tests/native-dsh-reruns.test.mjs
-workbench/tests/native-dsh-runtime.test.mjs
-workbench/tests/native-dsh-transcript.test.mjs
-workbench/tests/native-dsh-ui-routes.test.mjs
-workbench/tests/native-dsh-workspace-runtime.test.mjs
-workbench/tests/native-evidence-plugin.test.mjs
-workbench/tests/native-evidence-view.test.mjs
-workbench/tests/native-imported-reruns.test.mjs
-workbench/tests/native-install-delivery.test.mjs
-workbench/tests/native-locator-observation.test.mjs
-workbench/tests/native-report.test.mjs
-workbench/tests/native-runtime.test.mjs
-workbench/tests/navigation-loading.test.mjs
-workbench/tests/office-reader.test.mjs
-workbench/tests/page-responsiveness.test.mjs
-workbench/tests/portable-package.test.mjs
-workbench/tests/preflight-task-snapshot.test.mjs
-workbench/tests/project-auth-targets.test.mjs
-workbench/tests/project-batch-entry.test.mjs
-workbench/tests/project-environments.test.mjs
-workbench/tests/project-index.test.mjs
-workbench/tests/project-loading.test.mjs
-workbench/tests/project-setup.test.mjs
-workbench/tests/project-target-access.test.mjs
-workbench/tests/project-trial-authorization.test.mjs
-workbench/tests/project-workflow-view.test.mjs
-workbench/tests/quality-review-harness.test.mjs
-workbench/tests/quality-review-mode.test.mjs
-workbench/tests/report-layout.test.mjs
-workbench/tests/report-navigation.test.mjs
-workbench/tests/report-project-latest-view.test.mjs
-workbench/tests/report-project-latest.test.mjs
-workbench/tests/requirements-design-quality.test.mjs
-workbench/tests/requirements-documents.test.mjs
-workbench/tests/requirements-domain.test.mjs
-workbench/tests/requirements-embedded-images.test.mjs
-workbench/tests/requirements-export.test.mjs
-workbench/tests/requirements-images.test.mjs
-workbench/tests/requirements-integration.test.mjs
-workbench/tests/requirements-model.test.mjs
-workbench/tests/requirements-quality-workflow.test.mjs
-workbench/tests/requirements-quality.test.mjs
-workbench/tests/requirements-view.test.mjs
-workbench/tests/service-restart-ui.test.mjs
-workbench/tests/service-restart.test.mjs
-workbench/tests/skills-packaging.test.mjs
-workbench/tests/startup-budget.test.mjs
-workbench/tests/target-settings-view.test.mjs
-workbench/tests/ui-assertion-evidence.test.mjs
-workbench/tests/ui-quality-loop.test.mjs
-workbench/tests/window-recorder.test.mjs
-workbench/tests/window-recording-view.test.mjs
-workbench/tests/window-timeline.test.mjs
-workbench/tests/workspace-merged-view.test.mjs
-workbench/tools/verify-live-transcript.mjs
-workbench/web-v2/backend-bulk-review.js
-workbench/web-v2/backend.css
-workbench/web-v2/backend.js
-workbench/web-v2/batch-view.js
-workbench/web-v2/case-assistant-api.js
-workbench/web-v2/case-assistant.css
-workbench/web-v2/case-assistant.js
-workbench/web-v2/case-content-view.js
-workbench/web-v2/case-review.css
-workbench/web-v2/case-review.js
-workbench/web-v2/demonstration-control.css
-workbench/web-v2/demonstration-control.html
-workbench/web-v2/demonstration-control.js
-workbench/web-v2/demonstrations.js
-workbench/web-v2/execution-list.css
-workbench/web-v2/execution-list.js
-workbench/web-v2/execution-notes.js
-workbench/web-v2/frontend-handoffs.js
-workbench/web-v2/model-settings.js
-workbench/web-v2/native-console-view.js
-workbench/web-v2/native-dsh.js
-workbench/web-v2/project-setup.css
-workbench/web-v2/project-setup.js
-workbench/web-v2/project-target-access.js
-workbench/web-v2/project-workflow.css
-workbench/web-v2/project-workflow.js
-workbench/web-v2/requirements-api.js
-workbench/web-v2/requirements.css
-workbench/web-v2/requirements.js
-workbench/web-v2/service-restart.js
-workbench/web-v2/test-case-template.xlsx
-workbench/web-v2/workspace-v2.css
-分享文档-UI测试Agent.md
-启用模型工作台.cmd
-诊断模型启动.cmd
-配置模型密钥.cmd
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/exported-cases.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/input-package.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/owned-project.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-assistant.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-batches.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-BACKEND-ARCH-001.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-UI-ARCH-001.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-case-library.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-execution-list.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-generation.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-history.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-import.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-legacy-requirements.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-model-settings.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-native-dsh.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-overview.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-project-index.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-protocol-bindings.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-reports.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/page-setup.png
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/projects-before-hashes.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/requirements-design.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/results.json
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/unexecuted-report.html
+workbench/qa/20261029-three-fixes/20261029-three-fixes-2026-10-29T08-35-03-455Z-a82d04b5/unexecuted-report.json
+workbench/qa/20261029-three-fixes/archive.json
+workbench/qa/20261029-three-fixes/assistant-export.log
+workbench/qa/20261029-three-fixes/assistant-source-support-offline.json
+workbench/qa/20261029-three-fixes/assistant-verification.json
+workbench/qa/20261029-three-fixes/assistant-verification.log
+workbench/qa/20261029-three-fixes/baseline-freeze.log
+workbench/qa/20261029-three-fixes/before.json
+workbench/qa/20261029-three-fixes/context-check.log
+workbench/qa/20261029-three-fixes/csp-parser-probe-template-document.log
+workbench/qa/20261029-three-fixes/csp-parser-probe.log
+workbench/qa/20261029-three-fixes/csp-parser-probe.mjs
+workbench/qa/20261029-three-fixes/delivery-baseline-final.json
+workbench/qa/20261029-three-fixes/delivery-baseline.json
+workbench/qa/20261029-three-fixes/delivery-collector-console.log
+workbench/qa/20261029-three-fixes/delivery-collector.log
+workbench/qa/20261029-three-fixes/delivery-scope-final.json
+workbench/qa/20261029-three-fixes/delivery-scope-spec.json
+workbench/qa/20261029-three-fixes/engineering.log
+workbench/qa/20261029-three-fixes/execution-prepare.log
+workbench/qa/20261029-three-fixes/execution-report.html
+workbench/qa/20261029-three-fixes/execution-report.log
+workbench/qa/20261029-three-fixes/final-review-note.json
+workbench/qa/20261029-three-fixes/final-state.json
+workbench/qa/20261029-three-fixes/final-state.log
+workbench/qa/20261029-three-fixes/finalize-record.mjs
+workbench/qa/20261029-three-fixes/fixture-shutdown.json
+workbench/qa/20261029-three-fixes/formal-host-identity.json
+workbench/qa/20261029-three-fixes/harness-engineering.log
+workbench/qa/20261029-three-fixes/host-lock-first.log
+workbench/qa/20261029-three-fixes/host-lock-targeted.log
+workbench/qa/20261029-three-fixes/http-confirm.log
+workbench/qa/20261029-three-fixes/http-generation-dispatch.log
+workbench/qa/20261029-three-fixes/http-generation-read.log
+workbench/qa/20261029-three-fixes/http-rerun-result.log
+workbench/qa/20261029-three-fixes/http-rerun.log
+workbench/qa/20261029-three-fixes/http-run-result.log
+workbench/qa/20261029-three-fixes/http-run.log
+workbench/qa/20261029-three-fixes/model-assistant-dispatch.log
+workbench/qa/20261029-three-fixes/model-content-review.json
+workbench/qa/20261029-three-fixes/model-functional.mjs
+workbench/qa/20261029-three-fixes/model-prepare.log
+workbench/qa/20261029-three-fixes/model-requirements-dispatch.log
+workbench/qa/20261029-three-fixes/model-run/assistant-BACKEND.xlsx
+workbench/qa/20261029-three-fixes/model-run/assistant-UI.xlsx
+workbench/qa/20261029-three-fixes/model-run/assistant-dispatch.json
+workbench/qa/20261029-three-fixes/model-run/assistant-export-result.json
+workbench/qa/20261029-three-fixes/model-run/assistant-poll-1793263129212-8def4968.json
+workbench/qa/20261029-three-fixes/model-run/assistant-poll-1793263221054-7bfd9944.json
+workbench/qa/20261029-three-fixes/model-run/assistant-start.json
+workbench/qa/20261029-three-fixes/model-run/design-prepared.json
+workbench/qa/20261029-three-fixes/model-run/owned-project.json
+workbench/qa/20261029-three-fixes/model-run/prepare-dispatch.json
+workbench/qa/20261029-three-fixes/model-run/prepared.json
+workbench/qa/20261029-three-fixes/model-run/requests.ndjson
+workbench/qa/20261029-three-fixes/model-run/requirements-dispatch.json
+workbench/qa/20261029-three-fixes/model-run/requirements-poll-1793263020355-0b7ba234.json
+workbench/qa/20261029-three-fixes/model-run/requirements-poll-1793263084024-008e8084.json
+workbench/qa/20261029-three-fixes/model-run/requirements-start.json
+workbench/qa/20261029-three-fixes/model-run/sources.json
+workbench/qa/20261029-three-fixes/official-context.json
+workbench/qa/20261029-three-fixes/official-functional.log
+workbench/qa/20261029-three-fixes/official-functional.mjs
+workbench/qa/20261029-three-fixes/official-preflight.log
+workbench/qa/20261029-three-fixes/packaging/build-installer.log
+workbench/qa/20261029-three-fixes/packaging/build-portable.log
+workbench/qa/20261029-three-fixes/packaging/cleanup-build.ps1
+workbench/qa/20261029-three-fixes/packaging/cleanup.json
+workbench/qa/20261029-three-fixes/packaging/cleanup.log
+workbench/qa/20261029-three-fixes/packaging/context-check.log
+workbench/qa/20261029-three-fixes/packaging/delivery-collector-console.log
+workbench/qa/20261029-three-fixes/packaging/delivery-collector.log
+workbench/qa/20261029-three-fixes/packaging/delivery-scope-spec.json
+workbench/qa/20261029-three-fixes/packaging/delivery-scope.json
+workbench/qa/20261029-three-fixes/packaging/extract-verified-archive.mjs
+workbench/qa/20261029-three-fixes/packaging/extraction.log
+workbench/qa/20261029-three-fixes/packaging/final-review-note.json
+workbench/qa/20261029-three-fixes/packaging/finalize-package.py
+workbench/qa/20261029-three-fixes/packaging/full-install-detail-architecture-v4.log
+workbench/qa/20261029-three-fixes/packaging/full-install-result-architecture-v4-verified.json
+workbench/qa/20261029-three-fixes/packaging/full-install-result-architecture-v4.json
+workbench/qa/20261029-three-fixes/packaging/full-installed-bytes-architecture-v4.log
+workbench/qa/20261029-three-fixes/packaging/install-console.log
+workbench/qa/20261029-three-fixes/packaging/installer-registration-after-architecture-v4.reg
+workbench/qa/20261029-three-fixes/packaging/installer-registration-before-architecture-v4.reg
+workbench/qa/20261029-three-fixes/packaging/native-stage-verification.log
+workbench/qa/20261029-three-fixes/packaging/packaging-result.json
+workbench/qa/20261029-three-fixes/packaging/preservation-recheck.log
+workbench/qa/20261029-three-fixes/packaging/record-delivery.py
+workbench/qa/20261029-three-fixes/packaging/requirement-before.json
+workbench/qa/20261029-three-fixes/packaging/runtime-source-check.json
+workbench/qa/20261029-three-fixes/packaging/service-before.json
+workbench/qa/20261029-three-fixes/packaging/source-before.json
+workbench/qa/20261029-three-fixes/packaging/source-installed-verification.json
+workbench/qa/20261029-three-fixes/packaging/source-zip-verification.json
+workbench/qa/20261029-three-fixes/packaging/sync.log
+workbench/qa/20261029-three-fixes/packaging/verify-full-install-initial.ps1
+workbench/qa/20261029-three-fixes/packaging/verify-full-install.ps1
+workbench/qa/20261029-three-fixes/packaging/verify-install-preservation.ps1
+workbench/qa/20261029-three-fixes/packaging/verify-package-source.py
+workbench/qa/20261029-three-fixes/page-readiness/browser-verification.log
+workbench/qa/20261029-three-fixes/page-readiness/downloads/case-package-json-2026-10-29T08-36-43-663Z-3160c4d0-project-03cea111-754b-400c-85f8-664e57b66cb1-cases.json
+workbench/qa/20261029-three-fixes/page-readiness/downloads/report-html-2026-10-29T08-36-43-663Z-3160c4d0-report-c1959326c57c945327fda7220c6263913557125e.html
+workbench/qa/20261029-three-fixes/page-readiness/downloads/requirements-ui-json-2026-10-29T08-36-43-663Z-3160c4d0-前端测试用例.json
+workbench/qa/20261029-three-fixes/page-readiness/downloads/requirements-ui-xlsx-2026-10-29T08-36-43-663Z-3160c4d0-前端测试用例.xlsx
+workbench/qa/20261029-three-fixes/page-readiness/page-assistant-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-batches-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-case-BACKEND-ARCH-001-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-case-UI-ARCH-001-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-case-library-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-execution-list-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-generation-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-history-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-import-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-legacy-requirements-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-model-settings-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-native-dsh-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-overview-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-project-index-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-protocol-bindings-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-report-preview-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-reports-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/page-setup-pass-2026-10-29T08-36-43-663Z-3160c4d0.png
+workbench/qa/20261029-three-fixes/page-readiness/results-attempt-2026-10-29T08-36-43-663Z-3160c4d0.json
+workbench/qa/20261029-three-fixes/page-readiness/results.json
+workbench/qa/20261029-three-fixes/page-readiness/verify-pages.mjs
+workbench/qa/20261029-three-fixes/prepare-delivery-scope.py
+workbench/qa/20261029-three-fixes/prepare-followup.mjs
+workbench/qa/20261029-three-fixes/previous-requirement.source.json
+workbench/qa/20261029-three-fixes/report-media/browser-media-initial.log
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/01-preview-ready-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/02-layout-and-sandbox-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/03-directory-anchor-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/04-image-enlarge-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/05-video-1-decode-play-pause-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/06-video-2-decode-play-pause-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/07-video-3-decode-play-pause-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/08-trace-1-download-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/09-no-csp-or-request-errors-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/10-immutable-project-and-snapshot-pass.png
+workbench/qa/20261029-three-fixes/report-media/report-02b30cabd51135b955681ff67ee990b19d68e3bc-2026-10-29T08-48-49-368Z-09b6624d/results.json
+workbench/qa/20261029-three-fixes/report-media/verify-report-media.mjs
+workbench/qa/20261029-three-fixes/report-preview-engineering-attempt2.log
+workbench/qa/20261029-three-fixes/report-preview-engineering-attempt3.log
+workbench/qa/20261029-three-fixes/report-preview-engineering-attempt4.log
+workbench/qa/20261029-three-fixes/report-preview-engineering-attempt5.log
+workbench/qa/20261029-three-fixes/report-preview-engineering-initial.log
+workbench/qa/20261029-three-fixes/report-preview-engineering.log
+workbench/qa/20261029-three-fixes/restart-final.log
+workbench/qa/20261029-three-fixes/restart.log
+workbench/qa/20261029-three-fixes/reviewed-snapshot_diagnostics_explore-architecture.spec.mjs
+workbench/qa/20261029-three-fixes/reviewed-snapshot_lib_architecture-page.mjs
+workbench/qa/20261029-three-fixes/reviewed-snapshot_specs_UI-ARCH-MODEL-001.spec.mjs
+workbench/qa/20261029-three-fixes/source-inputs.log
+workbench/qa/20261029-three-fixes/source-inputs.mjs
+workbench/qa/20261029-three-fixes/source-inputs/csv-preview.json
+workbench/qa/20261029-three-fixes/source-inputs/csv-rejection.json
+workbench/qa/20261029-three-fixes/source-inputs/csv-upload.json
+workbench/qa/20261029-three-fixes/source-inputs/docx-source.json
+workbench/qa/20261029-three-fixes/source-inputs/png-source.json
+workbench/qa/20261029-three-fixes/source-inputs/project-after.json
+workbench/qa/20261029-three-fixes/source-inputs/project-before.json
+workbench/qa/20261029-three-fixes/source-inputs/rejected-formats.json
+workbench/qa/20261029-three-fixes/source-inputs/requests.json
+workbench/qa/20261029-three-fixes/source-inputs/reservation.json
+workbench/qa/20261029-three-fixes/source-inputs/results.json
+workbench/qa/20261029-three-fixes/source-inputs/sources-after.json
+workbench/qa/20261029-three-fixes/source-inputs/synthetic-image.png
+workbench/qa/20261029-three-fixes/source-inputs/synthetic-input.csv
+workbench/qa/20261029-three-fixes/source-inputs/synthetic-input.docx
+workbench/qa/20261029-three-fixes/synthetic-model-lane.mjs
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-case-package.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-http-preparation.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-prepare-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-40-34-694Z-0865d7-prepare.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-41-14-596Z-b430f6-start-http-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-41-14-596Z-b430f6-start-http.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-09-539Z-be54c2-read-http-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-09-539Z-be54c2-read-http.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-564Z-95854b-confirm-http-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-564Z-95854b-confirm-http.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-910Z-20dd0f-run-http-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-27-910Z-20dd0f-run-http.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-37-092Z-eee08c-read-http-run-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-37-092Z-eee08c-read-http-run.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-49-758Z-b50359-rerun-http-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-49-758Z-b50359-rerun-http.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-094Z-54fa21-read-http-rerun-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-094Z-54fa21-read-http-rerun.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-880Z-503298-start-ui-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-43-50-880Z-503298-start-ui.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-00-848Z-5a7a7e-read-ui-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-00-848Z-5a7a7e-read-ui.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-48-110Z-ffcd68-read-ui-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-45-48-110Z-ffcd68-read-ui.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-16-592Z-91a571-read-ui-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-16-592Z-91a571-read-ui.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-41-689Z-194df2-rerun-ui-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-47-41-689Z-194df2-rerun-ui.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-04-238Z-1a6d3c-read-ui-rerun-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-04-238Z-1a6d3c-read-ui-rerun.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-24-052Z-6ffc4d-report-calls.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/2026-10-29T08-48-24-052Z-6ffc4d-report.json
+workbench/qa/20261029-three-fixes/synthetic-model-lane/state.json
+workbench/qa/20261029-three-fixes/target-fixture.mjs
+workbench/qa/20261029-three-fixes/ui-filter-result.png
+workbench/qa/20261029-three-fixes/ui-generation-dispatch.log
+workbench/qa/20261029-three-fixes/ui-integrity.json
+workbench/qa/20261029-three-fixes/ui-integrity.log
+workbench/qa/20261029-three-fixes/ui-read-1.log
+workbench/qa/20261029-three-fixes/ui-read-2.log
+workbench/qa/20261029-three-fixes/ui-read-3.log
+workbench/qa/20261029-three-fixes/ui-rerun-check.json
+workbench/qa/20261029-three-fixes/ui-rerun-dispatch.log
+workbench/qa/20261029-three-fixes/ui-rerun-result.log
+workbench/qa/20261029-three-fixes/verify-assistant.mjs
+workbench/qa/20261029-three-fixes/verify-final.mjs
+workbench/qa/20261029-three-fixes/verify-ui-run.mjs
+workbench/qa/20261030-case-delete/REPORT.md
+workbench/qa/20261030-case-delete/collector-exit.txt
+workbench/qa/20261030-case-delete/collector-tests.log
+workbench/qa/20261030-case-delete/collector.log
+workbench/qa/20261030-case-delete/concurrent-changes.json
+workbench/qa/20261030-case-delete/context-exit.txt
+workbench/qa/20261030-case-delete/context.log
+workbench/qa/20261030-case-delete/delete-confirmation.png
+workbench/qa/20261030-case-delete/deleted-batch.png
+workbench/qa/20261030-case-delete/deleted-list.png
+workbench/qa/20261030-case-delete/delivery-baseline.json
+workbench/qa/20261030-case-delete/delivery-gates.json
+workbench/qa/20261030-case-delete/official-result.json
+workbench/qa/20261030-case-delete/restart.log
+workbench/qa/20261030-case-delete/restored-list.png
+workbench/qa/20261030-case-delete/scope-before.json
+workbench/qa/20261030-case-delete/service-before.json
+workbench/qa/20261030-case-delete/sync-exit.txt
+workbench/qa/20261030-case-delete/sync.log
+workbench/qa/20261030-case-delete/tests-diagnostic-header.log
+workbench/qa/20261030-case-delete/tests-final.log
+workbench/qa/20261030-case-delete/tests-initial.log
+workbench/qa/20261030-case-delete/tests-storage-status.log
+workbench/qa/20261030-case-delete/tests.log
+workbench/qa/20261030-diagnostics-system/archive.json
+workbench/qa/20261030-diagnostics-system/before-health.json
+workbench/qa/20261030-diagnostics-system/delivery-baseline.json
+workbench/qa/20261030-diagnostics-system/diagnostic-export.png
+workbench/qa/20261030-diagnostics-system/diagnostics-final.log
+workbench/qa/20261030-diagnostics-system/engineering.log
+workbench/qa/20261030-diagnostics-system/final-focused.log
+workbench/qa/20261030-diagnostics-system/freeze.log
+workbench/qa/20261030-diagnostics-system/launcher-negative.log
+workbench/qa/20261030-diagnostics-system/launcher-result.json
+workbench/qa/20261030-diagnostics-system/logging-final.log
+workbench/qa/20261030-diagnostics-system/official-complete.log
+workbench/qa/20261030-diagnostics-system/official-export-initial.json
+workbench/qa/20261030-diagnostics-system/official-export.json
+workbench/qa/20261030-diagnostics-system/official-final-all.log
+workbench/qa/20261030-diagnostics-system/official-final.log
+workbench/qa/20261030-diagnostics-system/official-release.log
+workbench/qa/20261030-diagnostics-system/official-result-initial.json
+workbench/qa/20261030-diagnostics-system/official-result.json
+workbench/qa/20261030-diagnostics-system/official-verified.log
+workbench/qa/20261030-diagnostics-system/official.log
+workbench/qa/20261030-diagnostics-system/offline-cli-export.json
+workbench/qa/20261030-diagnostics-system/offline-cli.log
+workbench/qa/20261030-diagnostics-system/prepare-delivery.py
+workbench/qa/20261030-diagnostics-system/privacy-final.log
+workbench/qa/20261030-diagnostics-system/regression-complete.log
+workbench/qa/20261030-diagnostics-system/regression-final.log
+workbench/qa/20261030-diagnostics-system/restart-complete.log
+workbench/qa/20261030-diagnostics-system/restart-final-correlation.log
+workbench/qa/20261030-diagnostics-system/restart-final-source.log
+workbench/qa/20261030-diagnostics-system/restart-final.log
+workbench/qa/20261030-diagnostics-system/restart-release.log
+workbench/qa/20261030-diagnostics-system/restart-verified.log
+workbench/qa/20261030-diagnostics-system/restart.log
+workbench/qa/20261030-diagnostics-system/router-retest.log
+workbench/qa/20261030-diagnostics-system/source-verification.json
+workbench/qa/20261030-diagnostics-system/sync-invalid.log
+workbench/qa/20261030-diagnostics-system/sync.log
+workbench/qa/20261030-diagnostics-system/targeted-final.log
+workbench/qa/20261030-diagnostics-system/targeted-initial.log
+workbench/qa/20261030-diagnostics-system/targeted.log
+workbench/qa/20261030-diagnostics-system/unit-complete.log
+workbench/qa/20261030-diagnostics-system/unit-initial.log
+workbench/qa/20261030-diagnostics-system/unit-release.log
+workbench/qa/20261030-diagnostics-system/unit-verified.log
+workbench/qa/20261030-diagnostics-system/verify-official.mjs
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-54-40-265Z-28c4afe7/results.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/exported-cases.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/input-package.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/owned-project.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-assistant.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-batches.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-BACKEND-ARCH-001.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-UI-ARCH-001.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-case-library.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-execution-list.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-generation.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-history.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-import.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-legacy-requirements.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-model-settings.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-native-dsh.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-overview.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-project-index.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-protocol-bindings.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-reports.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/page-setup.png
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/projects-before-hashes.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/requirements-design.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/results.json
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/unexecuted-report.html
+workbench/qa/20261030-selection-lifecycle/20261030-selection-lifecycle-functional-2026-10-30T03-56-13-355Z-28161542/unexecuted-report.json
+workbench/qa/20261030-selection-lifecycle/REPORT.md
+workbench/qa/20261030-selection-lifecycle/archive.json
+workbench/qa/20261030-selection-lifecycle/assistant-dispatch.log
+workbench/qa/20261030-selection-lifecycle/assistant-export.log
+workbench/qa/20261030-selection-lifecycle/assistant-progress.log
+workbench/qa/20261030-selection-lifecycle/assistant-progress2.log
+workbench/qa/20261030-selection-lifecycle/assistant-result.json
+workbench/qa/20261030-selection-lifecycle/assistant-verified-final.log
+workbench/qa/20261030-selection-lifecycle/assistant-verified.log
+workbench/qa/20261030-selection-lifecycle/background-archive.json
+workbench/qa/20261030-selection-lifecycle/background-dsh-progress.log
+workbench/qa/20261030-selection-lifecycle/background-dsh-result.json
+workbench/qa/20261030-selection-lifecycle/background-dsh-start.log
+workbench/qa/20261030-selection-lifecycle/background-dsh-state.json
+workbench/qa/20261030-selection-lifecycle/background-evidence.log
+workbench/qa/20261030-selection-lifecycle/background-initial.log
+workbench/qa/20261030-selection-lifecycle/before-health.json
+workbench/qa/20261030-selection-lifecycle/build-installer.log
+workbench/qa/20261030-selection-lifecycle/build-portable.log
+workbench/qa/20261030-selection-lifecycle/collector-before-secondary.log
+workbench/qa/20261030-selection-lifecycle/collector-console.log
+workbench/qa/20261030-selection-lifecycle/collector-initial.log
+workbench/qa/20261030-selection-lifecycle/collector.log
+workbench/qa/20261030-selection-lifecycle/completion-retest.log
+workbench/qa/20261030-selection-lifecycle/context-check.log
+workbench/qa/20261030-selection-lifecycle/delivery-baseline-after-secondary.json
+workbench/qa/20261030-selection-lifecycle/delivery-baseline-final.json
+workbench/qa/20261030-selection-lifecycle/delivery-baseline.json
+workbench/qa/20261030-selection-lifecycle/delivery-receipt.json
+workbench/qa/20261030-selection-lifecycle/delivery-scope-after-secondary.json
+workbench/qa/20261030-selection-lifecycle/delivery-scope-final.json
+workbench/qa/20261030-selection-lifecycle/delivery-scope.json
+workbench/qa/20261030-selection-lifecycle/design-prepare.log
+workbench/qa/20261030-selection-lifecycle/diagnostic-export.json
+workbench/qa/20261030-selection-lifecycle/document-reading-preserved.json
+workbench/qa/20261030-selection-lifecycle/execution-report.html
+workbench/qa/20261030-selection-lifecycle/extract-archive.log
+workbench/qa/20261030-selection-lifecycle/extract-verified-archive.mjs
+workbench/qa/20261030-selection-lifecycle/final-delta.log
+workbench/qa/20261030-selection-lifecycle/final-mapping-retest.log
+workbench/qa/20261030-selection-lifecycle/freeze.log
+workbench/qa/20261030-selection-lifecycle/frozen-background-final.log
+workbench/qa/20261030-selection-lifecycle/frozen-background-progress.log
+workbench/qa/20261030-selection-lifecycle/frozen-background-result.json
+workbench/qa/20261030-selection-lifecycle/frozen-background-start.log
+workbench/qa/20261030-selection-lifecycle/frozen-foreground-final.log
+workbench/qa/20261030-selection-lifecycle/frozen-foreground-read.log
+workbench/qa/20261030-selection-lifecycle/frozen-foreground-result.json
+workbench/qa/20261030-selection-lifecycle/frozen-foreground-start.log
+workbench/qa/20261030-selection-lifecycle/frozen-mode-state.json
+workbench/qa/20261030-selection-lifecycle/full-regression-final.log
+workbench/qa/20261030-selection-lifecycle/full-regression-release.log
+workbench/qa/20261030-selection-lifecycle/full-regression.log
+workbench/qa/20261030-selection-lifecycle/helper-retest.log
+workbench/qa/20261030-selection-lifecycle/http-confirm.log
+workbench/qa/20261030-selection-lifecycle/http-generation-dispatch.log
+workbench/qa/20261030-selection-lifecycle/http-generation-progress.log
+workbench/qa/20261030-selection-lifecycle/http-rerun-read.log
+workbench/qa/20261030-selection-lifecycle/http-rerun.log
+workbench/qa/20261030-selection-lifecycle/http-run-read.log
+workbench/qa/20261030-selection-lifecycle/http-run.log
+workbench/qa/20261030-selection-lifecycle/imported-rerun-retest.log
+workbench/qa/20261030-selection-lifecycle/initial-targeted.log
+workbench/qa/20261030-selection-lifecycle/lifecycle-official.log
+workbench/qa/20261030-selection-lifecycle/lifecycle-result.json
+workbench/qa/20261030-selection-lifecycle/main-evidence-before-secondary.md
+workbench/qa/20261030-selection-lifecycle/main-evidence-full-failed.md
+workbench/qa/20261030-selection-lifecycle/model-functional.mjs
+workbench/qa/20261030-selection-lifecycle/model-lane.mjs
+workbench/qa/20261030-selection-lifecycle/model-prepare-final.log
+workbench/qa/20261030-selection-lifecycle/model-prepare-ready.log
+workbench/qa/20261030-selection-lifecycle/model-prepare.log
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-BACKEND.xlsx
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-UI.xlsx
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-dispatch.json
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-export-result.json
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-poll-1793332642413-5f12b4ba.json
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-poll-1793332680523-4290e95c.json
+workbench/qa/20261030-selection-lifecycle/model-run/assistant-start.json
+workbench/qa/20261030-selection-lifecycle/model-run/design-prepared.json
+workbench/qa/20261030-selection-lifecycle/model-run/owned-project.json
+workbench/qa/20261030-selection-lifecycle/model-run/prepare-dispatch.json
+workbench/qa/20261030-selection-lifecycle/model-run/prepared.json
+workbench/qa/20261030-selection-lifecycle/model-run/requests.ndjson
+workbench/qa/20261030-selection-lifecycle/model-run/requirements-dispatch.json
+workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332469081-de301dbf.json
+workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332494678-ad748f06.json
+workbench/qa/20261030-selection-lifecycle/model-run/requirements-poll-1793332567045-f904876b.json
+workbench/qa/20261030-selection-lifecycle/model-run/requirements-start.json
+workbench/qa/20261030-selection-lifecycle/model-run/sources.json
+workbench/qa/20261030-selection-lifecycle/model-ui-dispatch.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress1.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress10.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress2.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress3.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress4.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress5.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress6.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress7.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress8.log
+workbench/qa/20261030-selection-lifecycle/model-ui-progress9.log
+workbench/qa/20261030-selection-lifecycle/official-functional-final.log
+workbench/qa/20261030-selection-lifecycle/official-functional.log
+workbench/qa/20261030-selection-lifecycle/official-functional.mjs
+workbench/qa/20261030-selection-lifecycle/official-release.log
+workbench/qa/20261030-selection-lifecycle/offline-export.json
+workbench/qa/20261030-selection-lifecycle/offline-release-export.json
+workbench/qa/20261030-selection-lifecycle/package-source-verification.json
+workbench/qa/20261030-selection-lifecycle/package-source-verified.log
+workbench/qa/20261030-selection-lifecycle/prepare-delivery.py
+workbench/qa/20261030-selection-lifecycle/registration-closeout-final.log
+workbench/qa/20261030-selection-lifecycle/report-create.log
+workbench/qa/20261030-selection-lifecycle/report-preview.png
+workbench/qa/20261030-selection-lifecycle/report-result.json
+workbench/qa/20261030-selection-lifecycle/report-verified.log
+workbench/qa/20261030-selection-lifecycle/requirements-dispatch.log
+workbench/qa/20261030-selection-lifecycle/requirements-final.log
+workbench/qa/20261030-selection-lifecycle/requirements-progress.log
+workbench/qa/20261030-selection-lifecycle/requirements-progress2.log
+workbench/qa/20261030-selection-lifecycle/restart-background.log
+workbench/qa/20261030-selection-lifecycle/restart-final-delta.log
+workbench/qa/20261030-selection-lifecycle/restart-final.log
+workbench/qa/20261030-selection-lifecycle/restart-page-recording.log
+workbench/qa/20261030-selection-lifecycle/restart-release.log
+workbench/qa/20261030-selection-lifecycle/restart.log
+workbench/qa/20261030-selection-lifecycle/scope-after-secondary.log
+workbench/qa/20261030-selection-lifecycle/scope-final.log
+workbench/qa/20261030-selection-lifecycle/scope.log
+workbench/qa/20261030-selection-lifecycle/secondary-baseline-v2.json
+workbench/qa/20261030-selection-lifecycle/secondary-baseline.json
+workbench/qa/20261030-selection-lifecycle/secondary-collector-console.log
+workbench/qa/20261030-selection-lifecycle/secondary-collector-first.log
+workbench/qa/20261030-selection-lifecycle/secondary-collector.log
+workbench/qa/20261030-selection-lifecycle/secondary-context.log
+workbench/qa/20261030-selection-lifecycle/secondary-record-metadata-reverted.json
+workbench/qa/20261030-selection-lifecycle/secondary-scope-v2.json
+workbench/qa/20261030-selection-lifecycle/secondary-scope.json
+workbench/qa/20261030-selection-lifecycle/secondary-scope.log
+workbench/qa/20261030-selection-lifecycle/secondary-sync.log
+workbench/qa/20261030-selection-lifecycle/selection-acceptance.log
+workbench/qa/20261030-selection-lifecycle/selection-lifecycle-final.log
+workbench/qa/20261030-selection-lifecycle/selection-lifecycle-retest.log
+workbench/qa/20261030-selection-lifecycle/selection-official-complete.log
+workbench/qa/20261030-selection-lifecycle/selection-official-final.log
+workbench/qa/20261030-selection-lifecycle/selection-official-retest.log
+workbench/qa/20261030-selection-lifecycle/selection-official.log
+workbench/qa/20261030-selection-lifecycle/selection-release.log
+workbench/qa/20261030-selection-lifecycle/selection-result.json
+workbench/qa/20261030-selection-lifecycle/selection-state.json
+workbench/qa/20261030-selection-lifecycle/selection-verified.log
+workbench/qa/20261030-selection-lifecycle/selection-with-environment.log
+workbench/qa/20261030-selection-lifecycle/selection70-export.json
+workbench/qa/20261030-selection-lifecycle/selection70.png
+workbench/qa/20261030-selection-lifecycle/source-before.json
+workbench/qa/20261030-selection-lifecycle/sync-evidence-schema.log
+workbench/qa/20261030-selection-lifecycle/sync-initial.log
+workbench/qa/20261030-selection-lifecycle/sync-validation.log
+workbench/qa/20261030-selection-lifecycle/sync.log
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-39-54-743Z-b94e67-prepare-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-39-54-743Z-b94e67-prepare-failure.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-case-package.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-prepare-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-40-52-401Z-400f55-prepare-failure.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-case-package.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-http-preparation.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-prepare-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-12-681Z-984c9d-prepare.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-13-098Z-b2cb39-start-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-13-098Z-b2cb39-start-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-29-084Z-4f1c5d-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-29-084Z-4f1c5d-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-57-801Z-aecf8e-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-41-57-801Z-aecf8e-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-42-46-241Z-f759ff-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-42-46-241Z-f759ff-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-43-08-887Z-8d098c-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-43-08-887Z-8d098c-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-27-062Z-479fba-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-27-062Z-479fba-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-53-536Z-3fe71b-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-44-53-536Z-3fe71b-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-46-06-049Z-e67b5f-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-46-06-049Z-e67b5f-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-26-963Z-994433-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-26-963Z-994433-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-48-203Z-b5b6c5-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-48-203Z-b5b6c5-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-55-244Z-f22aa9-read-ui-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-47-55-244Z-f22aa9-read-ui.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-25-749Z-971083-start-http-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-25-749Z-971083-start-http.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-43-474Z-28f8ab-read-http-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-43-474Z-28f8ab-read-http.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-081Z-74a2be-confirm-http-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-081Z-74a2be-confirm-http.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-400Z-33dce9-run-http-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-400Z-33dce9-run-http.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-726Z-afd906-read-http-run-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-58-57-726Z-afd906-read-http-run.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-28-913Z-aa8b2b-rerun-http-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-28-913Z-aa8b2b-rerun-http.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-29-327Z-246afa-read-http-rerun-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T03-59-29-327Z-246afa-read-http-rerun.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T04-05-54-709Z-24ec7a-report-calls.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/2026-10-30T04-05-54-709Z-24ec7a-report.json
+workbench/qa/20261030-selection-lifecycle/synthetic-model-lane/state.json
+workbench/qa/20261030-selection-lifecycle/target-fixture.mjs
+workbench/qa/20261030-selection-lifecycle/targeted-extra.log
+workbench/qa/20261030-selection-lifecycle/targeted-final.log
+workbench/qa/20261030-selection-lifecycle/targeted.log
+workbench/qa/20261030-selection-lifecycle/verify-assistant.mjs
+workbench/qa/20261030-selection-lifecycle/verify-background-dsh.mjs
+workbench/qa/20261030-selection-lifecycle/verify-frozen-modes.mjs
+workbench/qa/20261030-selection-lifecycle/verify-lifecycle.mjs
+workbench/qa/20261030-selection-lifecycle/verify-package-source.mjs
+workbench/qa/20261030-selection-lifecycle/verify-report.mjs
+workbench/qa/20261030-selection-lifecycle/verify-selection.mjs
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/exported-cases.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/input-package.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/owned-project.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-assistant.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-batches.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-BACKEND-ARCH-001.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-UI-ARCH-001.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-library.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-execution-list.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-generation.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-history.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-import.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-legacy-requirements.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-model-settings.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-native-dsh.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-overview.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-project-index.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-protocol-bindings.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-reports.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-setup.png
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/projects-before-hashes.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/requirements-design.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/results.json
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.html
+workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.json
+workbench/qa/20261030-wps-port/REPORT.md
+workbench/qa/20261030-wps-port/after-upgrade-health.json
+workbench/qa/20261030-wps-port/after-upgrade-projects.json
+workbench/qa/20261030-wps-port/archive.json
+workbench/qa/20261030-wps-port/assistant-dispatch.log
+workbench/qa/20261030-wps-port/assistant-export.log
+workbench/qa/20261030-wps-port/assistant-progress.log
+workbench/qa/20261030-wps-port/assistant-progress2.log
+workbench/qa/20261030-wps-port/assistant-result.json
+workbench/qa/20261030-wps-port/assistant-verified.log
+workbench/qa/20261030-wps-port/autostop/REPORT.md
+workbench/qa/20261030-wps-port/autostop/build-installer.log
+workbench/qa/20261030-wps-port/autostop/collector-final-console.log
+workbench/qa/20261030-wps-port/autostop/collector-final.log
+workbench/qa/20261030-wps-port/autostop/collector-progress-console.log
+workbench/qa/20261030-wps-port/autostop/collector-progress.log
+workbench/qa/20261030-wps-port/autostop/context-final.log
+workbench/qa/20261030-wps-port/autostop/delivery-receipt.json
+workbench/qa/20261030-wps-port/autostop/delivery-verified.log
+workbench/qa/20261030-wps-port/autostop/external-pid.json
+workbench/qa/20261030-wps-port/autostop/finalize.mjs
+workbench/qa/20261030-wps-port/autostop/full-regression.log
+workbench/qa/20261030-wps-port/autostop/hold-runtime.mjs
+workbench/qa/20261030-wps-port/autostop/installed-pids.json
+workbench/qa/20261030-wps-port/autostop/installed-pids.json.child
+workbench/qa/20261030-wps-port/autostop/installer-contract.log
+workbench/qa/20261030-wps-port/autostop/installer.log
+workbench/qa/20261030-wps-port/autostop/manifest-before.json
+workbench/qa/20261030-wps-port/autostop/prepare.log
+workbench/qa/20261030-wps-port/autostop/render.log
+workbench/qa/20261030-wps-port/autostop/restoration.log
+workbench/qa/20261030-wps-port/autostop/restore.log
+workbench/qa/20261030-wps-port/autostop/result.json
+workbench/qa/20261030-wps-port/autostop/scope-final.log
+workbench/qa/20261030-wps-port/autostop/scope-progress.log
+workbench/qa/20261030-wps-port/autostop/staging-restored.log
+workbench/qa/20261030-wps-port/autostop/state.json
+workbench/qa/20261030-wps-port/autostop/sync-final.log
+workbench/qa/20261030-wps-port/autostop/sync-progress.log
+workbench/qa/20261030-wps-port/autostop/termination-observed.json
+workbench/qa/20261030-wps-port/autostop/upgrade.log
+workbench/qa/20261030-wps-port/autostop/verify-autostop.ps1
+workbench/qa/20261030-wps-port/background-read.log
+workbench/qa/20261030-wps-port/background-start.log
+workbench/qa/20261030-wps-port/before-health.json
+workbench/qa/20261030-wps-port/before-upgrade-projects.json
+workbench/qa/20261030-wps-port/before-upgrade-stop-health.json
+workbench/qa/20261030-wps-port/build-installer.log
+workbench/qa/20261030-wps-port/build-portable.log
+workbench/qa/20261030-wps-port/cleanup-verification.log
+workbench/qa/20261030-wps-port/closeout-result.json
+workbench/qa/20261030-wps-port/closeout.log
+workbench/qa/20261030-wps-port/collector-final-console.log
+workbench/qa/20261030-wps-port/collector-final.log
+workbench/qa/20261030-wps-port/collector-initial-console.log
+workbench/qa/20261030-wps-port/collector-maintenance-console.log
+workbench/qa/20261030-wps-port/collector-progress-console.log
+workbench/qa/20261030-wps-port/collector-stable-console.log
+workbench/qa/20261030-wps-port/collector-stable.log
+workbench/qa/20261030-wps-port/compile-final.log
+workbench/qa/20261030-wps-port/compile-release.log
+workbench/qa/20261030-wps-port/compile.log
+workbench/qa/20261030-wps-port/context-final.log
+workbench/qa/20261030-wps-port/delivery-baseline-index.json
+workbench/qa/20261030-wps-port/delivery-baseline-inplace.json
+workbench/qa/20261030-wps-port/delivery-baseline-maintenance.json
+workbench/qa/20261030-wps-port/delivery-baseline.json
+workbench/qa/20261030-wps-port/delivery-receipt.json
+workbench/qa/20261030-wps-port/delivery-scope.json
+workbench/qa/20261030-wps-port/delivery-verified.log
+workbench/qa/20261030-wps-port/diagnostic-export.json
+workbench/qa/20261030-wps-port/execution-report.html
+workbench/qa/20261030-wps-port/extract-verified-archive.mjs
+workbench/qa/20261030-wps-port/extract.log
+workbench/qa/20261030-wps-port/final-diagnostic-export.json
+workbench/qa/20261030-wps-port/finalize-delivery.mjs
+workbench/qa/20261030-wps-port/foreground-read.log
+workbench/qa/20261030-wps-port/foreground-start.log
+workbench/qa/20261030-wps-port/freeze.log
+workbench/qa/20261030-wps-port/frozen-background-result.json
+workbench/qa/20261030-wps-port/frozen-foreground-result.json
+workbench/qa/20261030-wps-port/frozen-mode-state.json
+workbench/qa/20261030-wps-port/full-regression-release.log
+workbench/qa/20261030-wps-port/full-regression.log
+workbench/qa/20261030-wps-port/http-confirm.log
+workbench/qa/20261030-wps-port/http-dispatch.log
+workbench/qa/20261030-wps-port/http-read.log
+workbench/qa/20261030-wps-port/http-rerun-read.log
+workbench/qa/20261030-wps-port/http-rerun.log
+workbench/qa/20261030-wps-port/http-run-read.log
+workbench/qa/20261030-wps-port/http-run.log
+workbench/qa/20261030-wps-port/install-blocked.log
+workbench/qa/20261030-wps-port/install-prepare.log
+workbench/qa/20261030-wps-port/install-uninstall.log
+workbench/qa/20261030-wps-port/install-upgrade.log
+workbench/qa/20261030-wps-port/installed-office-probe.json
+workbench/qa/20261030-wps-port/installer-blocked.log
+workbench/qa/20261030-wps-port/installer-contract.log
+workbench/qa/20261030-wps-port/installer-install.log
+workbench/qa/20261030-wps-port/installer-state.json
+workbench/qa/20261030-wps-port/installer-uninstall.log
+workbench/qa/20261030-wps-port/installer-upgrade.log
+workbench/qa/20261030-wps-port/lifecycle-final.log
+workbench/qa/20261030-wps-port/lifecycle-result.json
+workbench/qa/20261030-wps-port/lifecycle.log
+workbench/qa/20261030-wps-port/model-functional.mjs
+workbench/qa/20261030-wps-port/model-lane-prepare.log
+workbench/qa/20261030-wps-port/model-lane.mjs
+workbench/qa/20261030-wps-port/model-prepare.log
+workbench/qa/20261030-wps-port/model-run/assistant-BACKEND.xlsx
+workbench/qa/20261030-wps-port/model-run/assistant-UI.xlsx
+workbench/qa/20261030-wps-port/model-run/assistant-dispatch.json
+workbench/qa/20261030-wps-port/model-run/assistant-export-result.json
+workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340929365-e0c8fab2.json
+workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340959134-e677ae9a.json
+workbench/qa/20261030-wps-port/model-run/assistant-start.json
+workbench/qa/20261030-wps-port/model-run/design-prepared.json
+workbench/qa/20261030-wps-port/model-run/owned-project.json
+workbench/qa/20261030-wps-port/model-run/prepare-dispatch.json
+workbench/qa/20261030-wps-port/model-run/prepared-before-helper-cleanup-fix.json
+workbench/qa/20261030-wps-port/model-run/prepared.json
+workbench/qa/20261030-wps-port/model-run/requests.ndjson
+workbench/qa/20261030-wps-port/model-run/requirements-dispatch.json
+workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340781748-fe5a6cab.json
+workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340798486-0a82e5cb.json
+workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340831867-dbefd415.json
+workbench/qa/20261030-wps-port/model-run/requirements-start.json
+workbench/qa/20261030-wps-port/model-run/sources.json
+workbench/qa/20261030-wps-port/native-file.mjs
+workbench/qa/20261030-wps-port/official-functional.log
+workbench/qa/20261030-wps-port/official-functional.mjs
+workbench/qa/20261030-wps-port/official-release.log
+workbench/qa/20261030-wps-port/official-restored.log
+workbench/qa/20261030-wps-port/official-source.log
+workbench/qa/20261030-wps-port/official-wps-release-final.log
+workbench/qa/20261030-wps-port/official-wps-release-result.json
+workbench/qa/20261030-wps-port/official-wps-release.log
+workbench/qa/20261030-wps-port/official-wps-release.mjs
+workbench/qa/20261030-wps-port/official-wps-result.json
+workbench/qa/20261030-wps-port/official-wps.log
+workbench/qa/20261030-wps-port/official-wps.mjs
+workbench/qa/20261030-wps-port/owned-stop.json
+workbench/qa/20261030-wps-port/package-source-verification.json
+workbench/qa/20261030-wps-port/package-source.log
+workbench/qa/20261030-wps-port/prepare-delivery.py
+workbench/qa/20261030-wps-port/real-wps-release.log
+workbench/qa/20261030-wps-port/real-wps-release.py
+workbench/qa/20261030-wps-port/real-wps-result.json
+workbench/qa/20261030-wps-port/real-wps.log
+workbench/qa/20261030-wps-port/real-wps.py
+workbench/qa/20261030-wps-port/registration-probe.json
+workbench/qa/20261030-wps-port/render-initial.log
+workbench/qa/20261030-wps-port/render-inplace.log
+workbench/qa/20261030-wps-port/report-create.log
+workbench/qa/20261030-wps-port/report-preview.png
+workbench/qa/20261030-wps-port/report-result.json
+workbench/qa/20261030-wps-port/report-verified.log
+workbench/qa/20261030-wps-port/requirements-dispatch.log
+workbench/qa/20261030-wps-port/requirements-progress.log
+workbench/qa/20261030-wps-port/requirements-progress2.log
+workbench/qa/20261030-wps-port/requirements-progress3.log
+workbench/qa/20261030-wps-port/restart-release.log
+workbench/qa/20261030-wps-port/restart.log
+workbench/qa/20261030-wps-port/restoration-final.log
+workbench/qa/20261030-wps-port/restoration-release.log
+workbench/qa/20261030-wps-port/restoration-result.json
+workbench/qa/20261030-wps-port/restoration-verified.log
+workbench/qa/20261030-wps-port/restoration.log
+workbench/qa/20261030-wps-port/scope-final.log
+workbench/qa/20261030-wps-port/scope-initial.log
+workbench/qa/20261030-wps-port/scope-maintenance.log
+workbench/qa/20261030-wps-port/scope-progress.log
+workbench/qa/20261030-wps-port/scope-stable.log
+workbench/qa/20261030-wps-port/selection-final.log
+workbench/qa/20261030-wps-port/selection-result.json
+workbench/qa/20261030-wps-port/selection-retest.log
+workbench/qa/20261030-wps-port/selection-state.json
+workbench/qa/20261030-wps-port/selection.log
+workbench/qa/20261030-wps-port/selection70-export.json
+workbench/qa/20261030-wps-port/selection70.png
+workbench/qa/20261030-wps-port/source-before.json
+workbench/qa/20261030-wps-port/source-node-view.json
+workbench/qa/20261030-wps-port/source-python-view.json
+workbench/qa/20261030-wps-port/start-restored-final.log
+workbench/qa/20261030-wps-port/start-restored.log
+workbench/qa/20261030-wps-port/sync-closeout.log
+workbench/qa/20261030-wps-port/sync-final.log
+workbench/qa/20261030-wps-port/sync-initial.log
+workbench/qa/20261030-wps-port/sync-progress.log
+workbench/qa/20261030-wps-port/synthetic-editor-owner.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-case-package.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-http-preparation.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report-calls.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report.json
+workbench/qa/20261030-wps-port/synthetic-model-lane/state.json
+workbench/qa/20261030-wps-port/synthetic-wps.docx
+workbench/qa/20261030-wps-port/target-fixture.mjs
+workbench/qa/20261030-wps-port/targeted-final.log
+workbench/qa/20261030-wps-port/targeted-initial.log
+workbench/qa/20261030-wps-port/targeted-release.log
+workbench/qa/20261030-wps-port/ui-dispatch.log
+workbench/qa/20261030-wps-port/ui-progress.log
+workbench/qa/20261030-wps-port/ui-progress2.log
+workbench/qa/20261030-wps-port/ui-progress3.log
+workbench/qa/20261030-wps-port/ui-progress4.log
+workbench/qa/20261030-wps-port/ui-progress5.log
+workbench/qa/20261030-wps-port/upload-assistant.mjs
+workbench/qa/20261030-wps-port/verify-assistant.mjs
+workbench/qa/20261030-wps-port/verify-background-dsh.mjs
+workbench/qa/20261030-wps-port/verify-cleanup.mjs
+workbench/qa/20261030-wps-port/verify-closeout.mjs
+workbench/qa/20261030-wps-port/verify-frozen-modes.mjs
+workbench/qa/20261030-wps-port/verify-installer-upgrade.ps1
+workbench/qa/20261030-wps-port/verify-lifecycle.mjs
+workbench/qa/20261030-wps-port/verify-package-source.mjs
+workbench/qa/20261030-wps-port/verify-report.mjs
+workbench/qa/20261030-wps-port/verify-restored.mjs
+workbench/qa/20261030-wps-port/verify-selection.mjs
+workbench/qa/20261030-wps-port/wps-assistant-UI.xlsx
+workbench/qa/20261030-wps-port/wps-assistant-dispatch.log
+workbench/qa/20261030-wps-port/wps-assistant-export.json
+workbench/qa/20261030-wps-port/wps-assistant-export.log
+workbench/qa/20261030-wps-port/wps-assistant-final.log
+workbench/qa/20261030-wps-port/wps-assistant-progress.log
+workbench/qa/20261030-wps-port/wps-assistant-result.json
+workbench/qa/20261030-wps-port/wps-assistant-state.json
+workbench/qa/20261030-wps-port/wps-editing.json
+workbench/qa/20261030-wps-port/wps-idle.json
+workbench/qa/20261030-wps-port/wps-upload-final.log
+workbench/qa/20261030-wps-port/wps-upload.log
+workbench/qa/20261030-wps-reader/WpsDiagnostics.cs
+workbench/qa/20261030-wps-reader/WpsDiagnostics.exe
+workbench/qa/20261030-wps-reader/WpsReaderTests.cs
+workbench/qa/20261030-wps-reader/WpsReaderTests.exe
+workbench/qa/20261030-wps-reader/archive.json
+workbench/qa/20261030-wps-reader/build-installer.log
+workbench/qa/20261030-wps-reader/build-portable.log
+workbench/qa/20261030-wps-reader/compile.log
+workbench/qa/20261030-wps-reader/concurrent-source-changes.json
+workbench/qa/20261030-wps-reader/current-status.json
+workbench/qa/20261030-wps-reader/delivery-baseline.json
+workbench/qa/20261030-wps-reader/diagnostic-artifact.json
+workbench/qa/20261030-wps-reader/engineering.log
+workbench/qa/20261030-wps-reader/extract-verified-archive.mjs
+workbench/qa/20261030-wps-reader/extraction.log
+workbench/qa/20261030-wps-reader/freeze.log
+workbench/qa/20261030-wps-reader/frozen-source-verification.json
+workbench/qa/20261030-wps-reader/frozen-source-verification.log
+workbench/qa/20261030-wps-reader/native-stage-verification.log
+workbench/qa/20261030-wps-reader/preflight.log
+workbench/qa/20261030-wps-reader/prepare-delivery.py
+workbench/qa/20261030-wps-reader/restart-confirmed.log
+workbench/qa/20261030-wps-reader/restart.log
+workbench/qa/20261030-wps-reader/runtime-preflight.log
+workbench/qa/20261030-wps-reader/sidebar-final.log
+workbench/qa/20261030-wps-reader/sidebar-verification.json
+workbench/qa/20261030-wps-reader/sidebar-version.png
+workbench/qa/20261030-wps-reader/sidebar.log
+workbench/qa/20261030-wps-reader/source-before.json
+workbench/qa/20261030-wps-reader/source-zip-verification.json
+workbench/qa/20261030-wps-reader/start.log
+workbench/qa/20261030-wps-reader/sync-pending.log
+workbench/qa/20261030-wps-reader/sync.log
+workbench/qa/20261030-wps-reader/targeted.log
+workbench/qa/20261030-wps-reader/timeout-retest.log
+workbench/qa/20261030-wps-reader/verify-frozen-source.mjs
+workbench/qa/20261030-wps-reader/verify-sidebar.mjs
+workbench/qa/20261030-wps-reader/wps-contract.log
+workbench/qa/20261030-wps-reader/wps-diagnostic.json
+workbench/scripts/build-office-reader.mjs
+workbench/scripts/export-diagnostics.mjs
+workbench/server/case-assistant/source-support.mjs
+workbench/server/cases/lifecycle.mjs
+workbench/server/diagnostics.mjs
+workbench/server/native-dsh/completion.mjs
+workbench/tests/atomic-json.test.mjs
+workbench/tests/case-assistant-source-support.test.mjs
+workbench/tests/case-lifecycle.test.mjs
+workbench/tests/case-selection-completion.test.mjs
+workbench/tests/diagnostics.test.mjs
+workbench/tests/fixtures/OfficeNativeTests.cs
+workbench/tests/frontend-downloads.test.mjs
+workbench/tests/office-native.test.mjs
+workbench/tests/report-preview-csp.test.mjs
+workbench/tests/windows-installer.test.mjs
+workbench/web-v2/case-lifecycle.js
+workbench/web-v2/case-selection.js
+workbench/web-v2/diagnostics-ui.js
+导出诊断日志.cmd
 ```
 
 ### Verification Log Excerpt
 
 ```text
 ai-engineering-context verification-log-v1
-Started at: 2026-10-29T14:49:57+08:00
-Command: node --test workbench/tests/case-assistant-dsh.test.mjs workbench/tests/case-assistant-manager.test.mjs workbench/tests/case-assistant-output.test.mjs
+Started at: 2026-10-30T15:26:53+08:00
+Command: node --test workbench/tests/office-native.test.mjs workbench/tests/office-reader.test.mjs workbench/tests/windows-installer.test.mjs
 Exit code: 0
-Parsed test count: 54
+Parsed test count: 14
 Parsed failure count: 0
 Parsed skipped count: 0
 
 --- command output ---
 TAP version 13
-# Subtest: Skill is frozen with identity and the new patch keeps other tools and global skills closed
-ok 1 - Skill is frozen with identity and the new patch keeps other tools and global skills closed
+# Subtest: native WPS registration, ownership and security contracts
+ok 1 - native WPS registration, ownership and security contracts
   ---
-  duration_ms: 9.4778
+  duration_ms: 1452.0481
   type: 'test'
   ...
-# Subtest: frozen source integrity, project identity and input bounds are enforced
-ok 2 - frozen source integrity, project identity and input bounds are enforced
+# Subtest: standard DOCX stays on the original parser; unsafe or oversized input never opens Office
+ok 2 - standard DOCX stays on the original parser; unsafe or oversized input never opens Office
   ---
-  duration_ms: 0.7754
+  duration_ms: 5.6375
   type: 'test'
   ...
-# Subtest: protected Office text reaches generation while its images remain unanalysed and original bytes stay bound
-ok 3 - protected Office text reaches generation while its images remain unanalysed and original bytes stay bound
+# Subtest: protected DOCX freezes original bytes and positioned Word/WPS text, with uncovered images explicit
+ok 3 - protected DOCX freezes original bytes and positioned Word/WPS text, with uncovered images explicit
   ---
-  duration_ms: 451.7744
+  duration_ms: 1.2373
   type: 'test'
   ...
-# Subtest: ordinary DOCX still exposes verified embedded images for mandatory reading
-ok 4 - ordinary DOCX still exposes verified embedded images for mandatory reading
+# Subtest: empty, unbounded or fabricated Office outputs are rejected
+ok 4 - empty, unbounded or fabricated Office outputs are rejected
   ---
-  duration_ms: 6.0226
+  duration_ms: 0.857
   type: 'test'
   ...
-# Subtest: unread documents and assistant messages remain visibly invalid citations without rejecting the whole draft
-ok 5 - unread documents and assistant messages remain visibly invalid citations without rejecting the whole draft
+# Subtest: blank Office paragraphs and table cells do not discard readable text or weaken location checks
+ok 5 - blank Office paragraphs and table cells do not discard readable text or weaken location checks
   ---
-  duration_ms: 0.8961
+  duration_ms: 0.5983
   type: 'test'
   ...
-# Subtest: short document and user references expand only to their frozen actual identities
-ok 6 - short document and user references expand only to their frozen actual identities
+# Subtest: assistant original-path reading keeps paths private, forwards provider and filters model credentials
+ok 6 - assistant original-path reading keeps paths private, forwards provider and filters model credentials
   ---
-  duration_ms: 0.882
+  duration_ms: 18.4083
   type: 'test'
   ...
-# Subtest: guessed short reference to unread material cannot bypass read admission
-ok 7 - guessed short reference to unread material cannot bypass read admission
+# Subtest: Office safety refusal is preserved and cleanup still runs after worker timeout
+ok 7 - Office safety refusal is preserved and cleanup still runs after worker timeout
   ---
-  duration_ms: 1.0859
+  duration_ms: 7.9053
   type: 'test'
   ...
-# Subtest: staging preserves earlier cases through an invalid batch and permits a single-case correction
-ok 8 - staging preserves earlier cases through an invalid batch and permits a single-case correction
+# Subtest: invalid local paths and unsupported platform do not fabricate a source
+ok 8 - invalid local paths and unsupported platform do not fabricate a source
   ---
-  duration_ms: 1.4102
+  duration_ms: 0.6021
   type: 'test'
   ...
-# Subtest: staged IDs, total count and final mode are explicit and cannot silently drop or publish partial cases
-ok 9 - staged IDs, total count and final mode are explicit and cannot silently drop or publish partial cases
+# Subtest: native Office import is local-only and persists source integrity without model availability
+ok 9 - native Office import is local-only and persists source integrity without model availability
   ---
-  duration_ms: 21.6829
+  duration_ms: 11.2972
   type: 'test'
   ...
-# Subtest: incomplete business expectations are returned as questions, without blocking submission
-ok 10 - incomplete business expectations are returned as questions, without blocking submission
+# Subtest: Office source endpoint refuses untrusted origin and caller-supplied filesystem paths
+ok 10 - Office source endpoint refuses untrusted origin and caller-supplied filesystem paths
   ---
-  duration_ms: 0.7072
+  duration_ms: 0.8267
   type: 'test'
   ...
-# Subtest: global business questions remain visible while a format-valid draft can be submitted
-ok 11 - global business questions remain visible while a format-valid draft can be submitted
+# Subtest: shutdown aborts an outstanding local Office read before source persistence
+ok 11 - shutdown aborts an outstanding local Office read before source persistence
   ---
-  duration_ms: 0.4166
+  duration_ms: 2.6509
   type: 'test'
   ...
-# Subtest: case-specific questions preserve both format-valid drafts for engineer review
-ok 12 - case-specific questions preserve both format-valid drafts for engineer review
+# Subtest: installer upgrades the previous registered directory without making version directories
+ok 12 - installer upgrades the previous registered directory without making version directories
   ---
-  duration_ms: 0.4202
+  duration_ms: 0.8437
   type: 'test'
   ...
-# Subtest: staged invalid citations remain warnings when correcting another field, and cannot be marked valid by the model
-ok 13 - staged invalid citations remain warnings when correcting another field, and cannot be marked valid by the model
+# Subtest: upgrade closes exact installed resources through Restart Manager and preserves mutable data
+ok 13 - upgrade closes exact installed resources through Restart Manager and preserves mutable data
   ---
-  duration_ms: 0.7174
+  duration_ms: 0.4249
   type: 'test'
   ...
-# Subtest: staging remains non-final and cancellation prevents publication of staged cases
-ok 14 - staging remains non-final and cancellation prevents publication of staged cases
+# Subtest: silent installer does not launch a second workbench during verification
+ok 14 - silent installer does not launch a second workbench during verification
   ---
-  duration_ms: 0.3439
+  duration_ms: 1.1182
   type: 'test'
   ...
-# Subtest: real image content must be read and accounted for; pixels never enter execution metadata
-ok 15 - real image content must be read and accounted for; pixels never enter execution metadata
-  ---
-  duration_ms: 0.984
-  type: 'test'
-  ...
-# Subtest: MCP permits only scoped tools and denies unknown sources/paths without leaking errors
-ok 16 - MCP permits only scoped tools and denies unknown sources/paths without leaking errors
-  ---
-  duration_ms: 57.4311
-  type: 'test'
-  ...
-# Subtest: MCP field limits match workbook checks and provide an exact repair location
-ok 17 - MCP field limits match workbook checks and provide an exact repair location
-  ---
-  duration_ms: 26.0391
-  type: 'test'
-  ...
-# Subtest: replacement characters are rejected recursively with the exact field before saving the response
-ok 18 - replacement characters are rejected recursively with the exact field before saving the response
-  ---
-  duration_ms: 0.742
-  type: 'test'
-  ...
-# Subtest: new DSH round receives explicit history and prior draft, and returns only safe execution metadata
-ok 19 - new DSH round receives explicit history and prior draft, and returns only safe execution metadata
-  ---
-  duration_ms: 25.6188
-  type: 'test'
-  ...
-# Subtest: process failure remains failure even after a valid draft was submitted
-ok 20 - process failure remains failure even after a valid draft was submitted
-  ---
-  duration_ms: 20.1189
-  type: 'test'
-  ...
-# Subtest: JSON recovery progress and safe evidence retain the single process and original limits
-ok 21 - JSON recovery progress and safe evidence retain the single process and original limits
-  ---
-  duration_ms: 19.581
-  type: 'test'
-  ...
-# Subtest: tool JSON exhaustion has a specific failure; malformed transport and other errors stay distinct
-ok 22 - tool JSON exhaustion has a specific failure; malformed transport and other errors stay distinct
-  ---
-  duration_ms: 20.6795
-  type: 'test'
-  ...
-# Subtest: missing submission, incomplete process output, and invalid config never count as success
-ok 23 - missing submission, incomplete process output, and invalid config never count as success
-  ---
-  duration_ms: 23.2832
-  type: 'test'
-  ...
-# Subtest: cancellation stops admission and reaches an active owned process; MCP closes after abort
-ok 24 - cancellation stops admission and reaches an active owned process; MCP closes after abort
-  ---
-  duration_ms: 16.4546
-  type: 'test'
-  ...
-# Subtest: deadline abort is distinct from user cancellation and does not start DSH after expiry
-ok 25 - deadline abort is distinct from user cancellation and does not start DSH after expiry
-  ---
-  duration_ms: 16.4152
-  type: 'test'
-  ...
-# Subtest: availability requires a real configured runtime and task paths cannot escape its data root
-ok 26 - availability requires a real configured runtime and task paths cannot escape its data root
-  ---
-  duration_ms: 9.2385
-  type: 'test'
-  ...
-# Subtest: empty chat waits for input; text-only dialogue can clarify and reuse prior user evidence
-ok 27 - empty chat waits for input; text-only dialogue can clarify and reuse prior user evidence
-  ---
-  duration_ms: 97.5663
-  type: 'test'
-  ...
-# Subtest: simultaneous duplicate request is idempotent while conflicting payload and another request are rejected
-ok 28 - simultaneous duplicate request is idempotent while conflicting payload and another request are rejected
-  ---
-  duration_ms: 20.1703
-  type: 'test'
-  ...
-# Subtest: creating a conversation while the same project generates resumes the existing turn without another call
-ok 29 - creating a conversation while the same project generates resumes the existing turn without another call
-  ---
-  duration_ms: 21.6864
-  type: 'test'
-  ...
-# Subtest: two conversations cannot launch concurrent generations and a source-read race observes external activity
-ok 30 - two conversations cannot launch concurrent generations and a source-read race observes external activity
-  ---
-  duration_ms: 17.1009
-  type: 'test'
-  ...
-# Subtest: late model success and progress after cancellation cannot overwrite CANCELLED
-ok 31 - late model success and progress after cancellation cannot overwrite CANCELLED
-  ---
-  duration_ms: 18.558
-  type: 'test'
-  ...
-# Subtest: shutdown aborts the active request and restart recovery never automatically calls a model
-ok 32 - shutdown aborts the active request and restart recovery never automatically calls a model
-  ---
-  duration_ms: 19.2478
-  type: 'test'
-  ...
-# Subtest: cross-project conversation/source access and path traversal fail without creating a model request
-ok 33 - cross-project conversation/source access and path traversal fail without creating a model request
-  ---
-  duration_ms: 9.1199
-  type: 'test'
-  ...
-# Subtest: malformed source_ids returns a controlled validation error even with empty text
-ok 34 - malformed source_ids returns a controlled validation error even with empty text
-  ---
-  duration_ms: 7.0963
-  type: 'test'
-  ...
-# Subtest: historical export keeps its original source snapshot after a later turn reads altered metadata
-ok 35 - historical export keeps its original source snapshot after a later turn reads altered metadata
-  ---
-  duration_ms: 61.0181
-  type: 'test'
-  ...
-# Subtest: route injection rejects untrusted mutations and serves explicit typed downloads without listening
-ok 36 - route injection rejects untrusted mutations and serves explicit typed downloads without listening
-  ---
-  duration_ms: 1.0774
-  type: 'test'
-  ...
-# Subtest: manager and real MCP session share source-reading, submission and workbook checks without a server
-ok 37 - manager and real MCP session share source-reading, submission and workbook checks without a server
-  ---
-  duration_ms: 28.9101
-  type: 'test'
-  ...
-# Subtest: public historical checks match export without overwriting the accepted original record
-ok 38 - public historical checks match export without overwriting the accepted original record
-  ---
-  duration_ms: 27.9142
-  type: 'test'
-  ...
-# Subtest: typed Excel roundtrip preserves literal IDs, aligned steps, pending confirmation and source fields
-ok 39 - typed Excel roundtrip preserves literal IDs, aligned steps, pending confirmation and source fields
-  ---
-  duration_ms: 141.9768
-  type: 'test'
-  ...
-# Subtest: business questions export as editable pending drafts in UI and backend workbooks
-ok 40 - business questions export as editable pending drafts in UI and backend workbooks
-  ---
-  duration_ms: 138.6883
-  type: 'test'
-  ...
-# Subtest: invented refs, assistant messages and images cannot serve as a business oracle
-ok 41 - invented refs, assistant messages and images cannot serve as a business oracle
-  ---
-  duration_ms: 0.8118
-  type: 'test'
-  ...
-# Subtest: missing expected results and changed sources remain visible without blocking draft editing
-ok 42 - missing expected results and changed sources remain visible without blocking draft editing
-  ---
-  duration_ms: 57.2778
-  type: 'test'
-  ...
-# Subtest: an explanatory leave-empty placeholder remains unresolved even without a separate pending question
-ok 43 - an explanatory leave-empty placeholder remains unresolved even without a separate pending question
-  ---
-  duration_ms: 5.2121
-  type: 'test'
-  ...
-# Subtest: unassigned global questions stay visible in every affected draft without a format blocker
-ok 44 - unassigned global questions stay visible in every affected draft without a format blocker
-  ---
-  duration_ms: 17.308
-  type: 'test'
-  ...
-# Subtest: questions associated with pending cases do not block independent ready cases
-ok 45 - questions associated with pending cases do not block independent ready cases
-  ---
-  duration_ms: 8.131
-  type: 'test'
-  ...
-# Subtest: replacement characters in case text stay visible and block readiness and Excel export
-ok 46 - replacement characters in case text stay visible and block readiness and Excel export
-  ---
-  duration_ms: 1.2706
-  type: 'test'
-  ...
-# Subtest: corrupted reply or global questions create a global blocker without rewriting the original text
-ok 47 - corrupted reply or global questions create a global blocker without rewriting the original text
-  ---
-  duration_ms: 0.5077
-  type: 'test'
-  ...
-# Subtest: step misalignment, multiline cells and duplicate IDs stay blocked while content warnings do not
-ok 48 - step misalignment, multiline cells and duplicate IDs stay blocked while content warnings do not
-  ---
-  duration_ms: 0.6041
-  type: 'test'
-  ...
-# Subtest: bad row structure and oversized text block only their row and survive saved-output rechecks
-ok 49 - bad row structure and oversized text block only their row and survive saved-output rechecks
-  ---
-  duration_ms: 52.8179
-  type: 'test'
-  ...
-# Subtest: unread-reference markers cannot be promoted by a later full-context recheck
-ok 50 - unread-reference markers cannot be promoted by a later full-context recheck
-  ---
-  duration_ms: 0.3454
-  type: 'test'
-  ...
-# Subtest: unknown short-reference identity survives stored-output rechecks and Excel export
-ok 51 - unknown short-reference identity survives stored-output rechecks and Excel export
-  ---
-  duration_ms: 8.7303
-  type: 'test'
-  ...
-# Subtest: editable UI and BACKEND drafts roundtrip all import fields and literal formula-like text
-ok 52 - editable UI and BACKEND drafts roundtrip all import fields and literal formula-like text
-  ---
-  duration_ms: 89.2305
-  type: 'test'
-  ...
-# Subtest: Excel importer rejects unknown explicit case layers while preserving legacy test-type meaning
-ok 53 - Excel importer rejects unknown explicit case layers while preserving legacy test-type meaning
-  ---
-  duration_ms: 39.8475
-  type: 'test'
-  ...
-# Subtest: image observations refer only to registered standalone or embedded images
-ok 54 - image observations refer only to registered standalone or embedded images
-  ---
-  duration_ms: 0.4325
-  type: 'test'
-  ...
-1..54
-# tests 54
+1..14
+# tests 14
 # suites 0
-# pass 54
+# pass 14
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 1196.5686
+# duration_ms 1581.6927
 ```
 
 ### Sync Record Status
@@ -33803,10 +34664,10 @@ DRY-RUN: no derived changes for REQ-0001-release-readiness; explicit implementat
 - Exit code: `0`
 
 ```text
-Verified delivery scope: REQ-0001-release-readiness; 144 selected files; 18961 existing changed files preserved.
+Verified delivery scope: REQ-0001-release-readiness; 71 selected files; 16914 existing changed files preserved.
 PASS ai-engineering-context checks
 ```
 
 ### Notes
 
-v18 actual DSH generation and both browser downloads passed; 12 drafts, 55 steps, 75 references. Evidence paths now materialized before snapshot. Business review pending; images/WPS/new v3 install wizard not verified.
+无
