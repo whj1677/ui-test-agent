@@ -1,4 +1,4 @@
-import { api, ApiError } from './api.js';
+import { api, downloadFile } from './api.js';
 const base = id => `/api/case-library/projects/${encodeURIComponent(id)}/requirements`;
 const json = (body, method = 'POST') => ({ method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
 export const requirementsApi = {
@@ -25,8 +25,9 @@ export const requirementsApi = {
       'x-replaces-source-id': encodeURIComponent(replacesSourceId || '') }, body,
   }),
   async exportCases(id, { caseType, format }) {
-    const response = await fetch(`/api/case-library/projects/${encodeURIComponent(id)}/export?case_type=${encodeURIComponent(caseType)}&format=${encodeURIComponent(format)}`);
-    if (!response.ok) throw new ApiError((await response.json()).error, response.status);
-    return { blob: await response.blob(), name: decodeURIComponent(response.headers.get('content-disposition')?.match(/filename\*=UTF-8''([^;]+)/i)?.[1] || `cases.${format}`) };
+    return downloadFile(`/api/case-library/projects/${encodeURIComponent(id)}/export?case_type=${encodeURIComponent(caseType)}&format=${encodeURIComponent(format)}`, {
+      contentType: format === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/json',
+      invalidResponseCode: 'CASE_EXPORT_RESPONSE_INVALID', fallbackName: `cases.${format}`,
+    });
   },
 };

@@ -74,7 +74,7 @@ function mediaProjection(run, artifacts) {
     return { ...artifact, file_id: artifact.id, file_name: artifact.name, mime_type: artifact.content_type,
       kind: recorded?.kind || legacyKind[artifact.kind] || artifact.kind };
   });
-  const evidence = Object.fromEntries(['step_coverage', 'step_replay', 'window_recording', 'window_timeline', 'caption_timeline', 'timing_validation', 'failure_step']
+  const evidence = Object.fromEntries(['execution_mode', 'page_recording', 'step_coverage', 'step_replay', 'window_recording', 'window_timeline', 'caption_timeline', 'timing_validation', 'failure_step']
     .filter(key => run[key] != null).map(key => [key, structuredClone(run[key])]));
   for (const key of ['unbound_assertions', 'evidence_mapping', 'evidence_errors']) {
     if (run[key] != null) evidence[key] = publicEvidence(run[key]);
@@ -234,7 +234,7 @@ export async function nativeDshConsole(manager, projectId, { caseId, caseVersion
     const completed = task.kind !== 'REGISTER_EXISTING_DRAFT' && (task.recorded_status || task.status) === 'COMPLETED';
     const status = completed ? items.every(item => item.status === 'PASSED') ? 'COMPLETED' : taskRecords.some(record => record.counts_for_case) ? 'PARTIAL' : 'FAILED' : task.status;
     const diagnostics = taskDiagnostics(task, projectId);
-    return { task_id: task.id, kind: task.kind || 'DSH_GENERATION_SELF_TEST', model_calls: task.kind === 'FROZEN_SCRIPT_RERUN' ? 0 : task.model_calls ?? null,
+    return { task_id: task.id, execution_mode:task.execution_mode || 'FOREGROUND', kind: task.kind || 'DSH_GENERATION_SELF_TEST', model_calls: task.kind === 'FROZEN_SCRIPT_RERUN' ? 0 : task.model_calls ?? null,
       status, recorded_status: task.recorded_status || (status !== task.status ? task.status : null),
       created_at: task.created_at || null, finished_at: task.finished_at || null, revision_notes: task.revision_notes || '',
       run_ids: taskRecords.map(record => record.run_id), items, ...(diagnostics.length ? { diagnostics } : {}) };

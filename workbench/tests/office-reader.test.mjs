@@ -59,12 +59,26 @@ test('assistant original-path reading keeps paths private, forwards provider and
   const calls=[];
   const source=await importNativeOfficeDocument({originalPath:file,provider:'wps',reader:options=>readWordDocument({...options,environment:{...process.env,DEEPSEEK_API_KEY:'SYNTHETIC_SECRET',OPENAI_API_KEY:'SYNTHETIC_SECRET'},run:async(command,args,options)=>{
     calls.push(args);assert.equal(options.env.DEEPSEEK_API_KEY,undefined);assert.equal(options.env.OPENAI_API_KEY,undefined);
+    const snapshot=args[args.indexOf('--input')+1];assert.notEqual(snapshot,file);
+    assert.deepEqual(await fs.readFile(snapshot),protectedBytes);
     assert.equal(options.windowsHide,true,'Office reading must stay in the background');
     return {stdout:JSON.stringify(extracted('wps')),stderr:''};
   }})});
-  assert.equal(calls.length,1);assert.equal(calls[0][0],'read');assert.ok(calls[0].includes(file));assert.ok(calls[0].includes('wps'));
+  assert.equal(calls.length,1);assert.equal(calls[0][0],'read');assert.ok(!calls[0].includes(file));assert.ok(calls[0].includes('wps'));
   assert.equal(source.inspected.sha256,sha256(protectedBytes));assert.equal(source.fileName,'原文件.docx');
   assert.doesNotMatch(JSON.stringify(source.inspected),/ui-office-test-|SYNTHETIC_SECRET/);
+});
+
+test('Office safety refusal is preserved and cleanup still runs after worker timeout',async()=>{
+  await assert.rejects(readWordDocument({body:protectedBytes,run:async()=>({stdout:JSON.stringify({status:'FAILED',code:'REQUIREMENT_OFFICE_SAFE_MODE_UNSUPPORTED',phase:'READONLY_SECURITY'})})}),/OFFICE_SAFE_MODE_UNSUPPORTED/);
+  const calls=[];
+  await assert.rejects(readWordDocument({body:protectedBytes,run:async(_command,args)=>{
+    calls.push(args[0]);
+    if(args[0]==='cleanup')return {stdout:''};
+    await fs.writeFile(args[args.indexOf('--owner')+1],'[]');
+    throw Object.assign(Error('synthetic timeout'),{killed:true});
+  }}),/OFFICE_TIMEOUT/);
+  assert.deepEqual(calls,['read','cleanup']);
 });
 test('invalid local paths and unsupported platform do not fabricate a source',async()=>{
   await assert.rejects(readWordDocument({body:protectedBytes,platform:'linux'}),/OFFICE_REQUIRED/);

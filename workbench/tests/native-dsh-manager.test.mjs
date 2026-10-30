@@ -94,9 +94,11 @@ test('diagnostic success never establishes or replaces a case result, and formal
   status = 'PASSED'; await invoke('_diag2.spec.mjs', 'diagnostic');
   assert.equal((await f.manager.get(f.p1, task.id)).items[0].status, 'FAILED');
   await invoke('specs\\TC-one.spec.mjs');
-  for (status of ['FAILED', 'CANCELLED']) await invoke('_diag3.spec.mjs', 'diagnostic');
+  status = 'FAILED'; await invoke('_diag3.spec.mjs', 'diagnostic');
+  status = 'CANCELLED'; await assert.rejects(invoke('_diag3.spec.mjs','diagnostic'),/ATTEMPT_LIMIT/);
+  await assert.rejects(invoke('specs/TC-one.spec.mjs'),/ALREADY_PASSED/);
   const current = await f.manager.get(f.p1, task.id);
-  assert.equal(current.items[0].status, 'PASSED'); assert.equal(current.runs.length, 6);
+  assert.equal(current.items[0].status, 'PASSED'); assert.equal(current.runs.length, 5);
   assert.equal(current.runs.filter(run => run.counts_for_case).length, 2);
   control.finish(); await f.manager.completion;
   assert.equal((await f.manager.get(f.p1, task.id)).status, 'COMPLETED');
@@ -582,4 +584,40 @@ test('public progress, approval lifecycle and observed model metadata persist wi
   assert.deepEqual(persisted.pending_approvals, []); assert.equal(persisted.events.length, 2); assert.equal(persisted.usage.total_tokens, 123);
   assert.equal(persisted.reply, '本轮已记录工具问题，尚未执行用例。'); assert.equal(persisted.status, 'FAILED'); assert.equal(persisted.error, 'NATIVE_DSH_NO_EXECUTION');
   assert.doesNotMatch(JSON.stringify(persisted), /DO_NOT_PERSIST/); assert.equal(f.executions.length, 0);
+});
+
+
+test('finish receipt closes mixed results without cancelling the task and validates batch scope and facts', async t => {
+  const f = await fixture(t,{execute:async()=>({status:'FAILED',error:'EXPECTED_BUSINESS_DIFFERENCE',artifacts:[]})});
+  preparationWithoutNetwork(f);
+  const task = await f.manager.create(f.p1,taskInput()),control=await f.ready(1);
+  assert.equal(task.timeout_minutes,undefined);
+  await assert.rejects(f.manager.finishBatch(f.p1,task.id,{batch_number:1},'Bearer bad'),/NOT_AUTHORIZED/);
+  await assert.rejects(f.manager.finishBatch(f.p1,task.id,{batch_number:2},f.bearer()),/BATCH_CHANGED/);
+  await assert.rejects(f.manager.finishBatch(f.p1,task.id,{batch_number:1},f.bearer()),/BATCH_INCOMPLETE/);
+  await f.manager.executeRequest(f.p1,task.id,{request_id:'finish-failed-run',case_id:'one',entry:'specs/TC-one.spec.mjs'},f.bearer());
+  await assert.rejects(f.manager.finishBatch(f.p1,task.id,{batch_number:1},f.bearer()),/PAGE_FACTS_REQUIRED/);
+  await fs.writeFile(path.join(task.workspace,'page-facts.md'),'Verified location; business failure retained.');
+  const receipt=await f.manager.finishBatch(f.p1,task.id,{batch_number:1},f.bearer());
+  assert.equal(receipt.operation,'BATCH_FINISHED');assert.equal(receipt.items[0].status,'FAILED');
+  assert.equal(control.completionSignal.aborted,true);assert.equal(control.signal.aborted,false);
+  assert.deepEqual(await f.manager.finishBatch(f.p1,task.id,{batch_number:1},f.bearer()),receipt);
+  await assert.rejects(f.manager.executeRequest(f.p1,task.id,{request_id:'run-after-finish',case_id:'one',entry:'specs/TC-one.spec.mjs'},f.bearer()),/BATCH_CLOSED/);
+  assert.ok(f.manager.active,'receipt alone does not release lock');
+  control.finish({stop_confirmed:true});await f.manager.completion;
+  const saved=await f.manager.get(f.p1,task.id);assert.equal(saved.status,'PARTIAL');assert.equal(saved.items[0].status,'FAILED');
+  assert.equal(saved.completion_receipts.length,1);assert.equal(f.manager.active,null);
+  const artifact=await f.manager.artifact(f.p1,task.id,receipt.artifact.id);
+  assert.equal(await fs.readFile(path.join(artifact.root,artifact.media.relative_path),'utf8'),'Verified location; business failure retained.');
+});
+
+test('repair attempts are bounded and idempotent retries do not consume another attempt',async t=>{
+  const f=await fixture(t,{execute:async()=>({status:'FAILED',artifacts:[]})});preparationWithoutNetwork(f);
+  const task=await f.manager.create(f.p1,taskInput()),control=await f.ready(1);
+  const input={request_id:'idempotent-repair-run',case_id:'one',entry:'specs/TC-one.spec.mjs'};
+  const run=await f.manager.executeRequest(f.p1,task.id,input,f.bearer());
+  assert.equal((await f.manager.executeRequest(f.p1,task.id,input,f.bearer())).id,run.id);
+  for(let i=0;i<2;i++)await f.manager.executeRequest(f.p1,task.id,{...input,request_id:'bounded-repair-'+i},f.bearer());
+  await assert.rejects(f.manager.executeRequest(f.p1,task.id,{...input,request_id:'bounded-repair-over'},f.bearer()),/ATTEMPT_LIMIT/);
+  assert.equal(f.executions.length,3);control.finish();await f.manager.completion;
 });

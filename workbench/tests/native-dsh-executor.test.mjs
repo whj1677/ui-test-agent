@@ -31,14 +31,14 @@ test('unbound formal evidence is diagnosed before business execution; diagnostic
     assert.equal(diagnostic.status,'PASSED');assert.equal(diagnostic.purpose,'diagnostic');assert.equal(diagnostic.evidence_preflight,undefined);
   } finally {await f.close();}
 });
-function fakeProcess({ status = 'passed', tests = [testResult(status)], termination = null, outputComplete = true, mutate = null } = {}) {
+function fakeProcess({ status = 'passed', tests = [testResult(status)], termination = null, outputComplete = true, mutate = null, headless = false } = {}) {
   return async (command, args, options) => {
     assert.equal(command, process.execPath);
     assert.match(args[0], /[\\/]workbench[\\/]node_modules[\\/]@playwright[\\/]test[\\/]cli\.js$/);
     assert.equal(options.env.DEEPSEEK_API_KEY, undefined);
     assert.equal(options.env.NODE_OPTIONS, undefined);
     const config = (await import(pathToFileURL(args.at(-1)).href)).default;
-    assert.equal(config.use.headless, false);
+    assert.equal(config.use.headless, headless);
     assert.equal(config.use.video, 'on'); assert.equal(config.use.trace, 'on'); assert.equal(config.use.screenshot, 'on');
     const reportPath = config.reporter[0][1].outputFile;
     await fs.writeFile(reportPath, JSON.stringify({ status, finished_at: new Date().toISOString(), tests, errors: [] }));
@@ -180,4 +180,15 @@ test('real standard Playwright produces readable screenshots, video and trace fo
       if (expected !== 'Ready') assert.match(result.error, /Deliberate failure/);
     }
   } finally { await f.close(); }
+});
+
+
+test('explicit background config is headless with page video, trace and screenshots; invalid modes never execute',async()=>{
+  const f=await fixture();
+  try{
+    const background=await executeNativeScript(f.options({executionMode:'BACKGROUND'}),{execute:fakeProcess({headless:true}),prepareRecorder:()=>assert.fail('Background must not prepare a desktop recorder')});
+    assert.equal(background.status,'PASSED',background.error);assert.equal(background.execution_mode,'BACKGROUND');
+    const invalid=await executeNativeScript(f.options({executionMode:'HIDDEN_WINDOW'}),{execute:()=>assert.fail('Invalid mode must not execute')});
+    assert.match(invalid.error,/EXECUTION_MODE_INVALID/);
+  }finally{await f.close();}
 });

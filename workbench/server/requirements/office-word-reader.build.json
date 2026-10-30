@@ -1,13 +1,18 @@
 {
   "schema": "workbench/office-word-reader-build-v1",
   "framework": ".NET Framework 4.8 (existing package prerequisite)",
-  "source_sha256": "db887bae811f7fb5ff14d5dc32e190551f1749e181ce3bba287fdc3e0d4da2b1",
-  "sha256": "b4f4d82d1afad798abb8b402a08e404078f243484f4592492d68ef89a688f234",
-  "bytes": 20480,
+  "source_sha256": "e4640c39feea328110cb5a1941c92f023decaabf6c87661e2dd31d66a914c29c",
+  "sha256": "a1feaf6369b258ad5c67c8c9e9e3da57b5b5d354543cad96f61803c2c7f7308e",
+  "bytes": 27136,
   "providers": [
     "Word.Application",
     "KWPS.Application",
     "WPS.Application"
   ],
-  "target": "winexe"
+  "target": "winexe",
+  "platform": "win32-x64",
+  "registry_views": [
+    64,
+    32
+  ]
 }

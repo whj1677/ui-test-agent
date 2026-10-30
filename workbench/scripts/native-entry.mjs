@@ -1,6 +1,7 @@
 // Customer entry: fixed 4322, bundled runtime, explicit model opt-in.
 // The repository's formal PowerShell launcher remains available for operators.
 import fs from 'node:fs/promises';
+import {configureDiagnostics,diagnostics} from '../server/diagnostics.mjs';
 import path from 'node:path';
 import net from 'node:net';
 import {fileURLToPath} from 'node:url';
@@ -50,10 +51,16 @@ export async function savedModelOptIn(runtimeHome=privateRuntimeHome()) {
   return trial.model_calls_allowed===true && trial.user_initiated_operations===true;
 }
 async function foreground(command,args,options={}) {
+  const release=await readJson(path.join(applicationRoot,'workbench/release.json')).catch(()=>({version:'unknown'}));
+  configureDiagnostics({programRoot:applicationRoot,version:release.version,role:"launcher"});
+  await diagnostics.record('launcher','process.starting',{platform:process.platform,arch:process.arch,node:process.version});
   return new Promise((resolve,reject)=>{
-    const child=spawn(command,args,{windowsHide:false,stdio:'inherit',...options});
-    child.once('error',()=>reject(Error('RUNTIME_PROCESS_START_FAILED')));
-    child.once('exit',code=>resolve(code??1));
+    let stderr='';
+    const child=spawn(command,args,{windowsHide:false,stdio:['inherit','pipe','pipe'],...options});
+    child.stdout?.on('data',data=>process.stdout.write(data));
+    child.stderr?.on('data',data=>{process.stderr.write(data);if(stderr.length<16000)stderr+=data.toString('utf8').slice(0,16000-stderr.length);});
+    child.once('error',error=>{void diagnostics.record('launcher','process.spawn.failed',{error},'error').finally(()=>reject(Error('RUNTIME_PROCESS_START_FAILED')));});
+    child.once('exit',code=>{void diagnostics.record('launcher','process.exited',{exit_code:code,stderr},code===0?'info':'error').finally(()=>resolve(code??1));});
   });
 }
 export async function openWorkbenchWhenReady({root=applicationRoot,signal,inspect=()=>existingService(root),open=()=>{
@@ -145,7 +152,9 @@ export async function main(argv=process.argv.slice(2)) {
   try{return await running;}finally{controller.abort();}
 }
 if(process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
-  main().then(code=>{process.exitCode=code;}).catch(error=>{
+  main().then(code=>{process.exitCode=code;}).catch(async error=>{
+    if(!diagnostics.status().enabled)configureDiagnostics({programRoot:applicationRoot,version:(await readJson(path.join(applicationRoot,'workbench/release.json')).catch(()=>({version:'unknown'}))).version,role:'launcher'});
+    await diagnostics.record('launcher','preparation.failed',{error},'error');
     const code=/^(?:RUNTIME_|NATIVE_DSH_PACKAGE_|MODEL_CREDENTIAL_|CREDENTIAL_BROKER_|DOTNET48_|PORTABLE_)[A-Z0-9_]+$/.test(error.message)?error.message:'RUNTIME_PREPARATION_FAILED';
     const help={RUNTIME_STOP_EXISTING_BEFORE_SETUP:'工作台已经运行。请等任务结束后正常停止，再运行“启用模型工作台.cmd”。',MODEL_CREDENTIAL_NOT_SAVED:'尚未找到当前 Windows 账户保存的密钥，请先运行“配置模型密钥.cmd”。'};
     console.error(code+'：'+(help[code] || '准备未完成；未切换端口、结束其他进程或修改系统策略。'));process.exitCode=1;

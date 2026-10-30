@@ -1,3 +1,4 @@
+import { projectCaseSelection } from './case-selection.js';
 import { api } from './api.js';
 import { loadNativeConsole, nativeConsoleModel, nativeScriptsHtml, nativeRecordsHtml, nativeRerunGroups, bindNativeConsole } from './native-console-view.js';
 import { esc, batchReasons, stateLabel, remedyHtml, workspaceViewsHtml, workspaceViewHref } from './workflow.js';
@@ -132,7 +133,7 @@ export async function renderProjectWorkflow({project,showPage,go,launchBatch,onE
   try{environment=await api(`${endpoint}/environment`,{signal:initialSignal});}catch(error){dispose();throw error;}
   if (!live()) return dispose;
   const ui=environment.ui,backend=environment.backend,uiId=environment.ui_environment_id || ui?.id;
-  const uiItems=currentUiItems(project),caseItems=currentCaseItems(project),selected=new Set();
+  const uiItems=currentUiItems(project),caseItems=currentCaseItems(project),selected=projectCaseSelection(project.project_id,project.cases,new URLSearchParams((globalThis.location?.hash||'').split('?')[1]||''));
   const hasBackendCases=(project.cases||[]).some(item=>item.versions?.find(v=>Number(v.version)===Number(item.current_version))?.content?.case_type==='BACKEND');
   let nativeData={scripts:[],records:[],tasks:[]};
   const nativeModel=()=>nativeConsoleModel(project,nativeData,{currentOnly:true});
@@ -167,7 +168,7 @@ export async function renderProjectWorkflow({project,showPage,go,launchBatch,onE
   const requestedPrepare=['ui','backend'].includes(viewQuery.get('prepare'))?viewQuery.get('prepare'):null;
   const requestedType=['all','ui','backend'].includes(viewQuery.get('test_type'))?viewQuery.get('test_type'):null;
   const nativeActive=()=>nativeData.tasks?.some(task=>['QUEUED','PREPARING','RUNNING','STOPPING','STOP_UNCONFIRMED'].includes(task.status));
-  const nativeHref=()=>{const ids=[...selected].filter(id=>caseItems.some(item=>item.case_id===id && item.case_type!=='BACKEND'));return `${base}/native-dsh${!nativeActive()&&ids.length?`?selected=${encodeURIComponent(ids.join(','))}`:''}`;};
+  const nativeHref=()=>`${base}/native-dsh?selected=${encodeURIComponent([...selected].join(','))}`;
   for(const item of uiItems)if((viewQuery.get('selected')||'').split(',').includes(item.case_id))selected.add(item.case_id);
   if(requestedPrepare==='ui' && viewQuery.get('legacy')!=='1'){go(nativeHref());return dispose;}
   const activeType=generationProgress(uiOperation).active?'ui':generationBatches.some(batch=>generationProgress(batch,'backend').active)?'backend':null;

@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
+import { projectCaseSelection } from '../web-v2/case-selection.js';
+let selectionFixture = 0;
 import { workspaceViewHref, workspaceViewsHtml } from '../web-v2/workflow.js';
 import { pendingReviewItems } from '../web-v2/case-review.js';
 import { renderProjectWorkflow } from '../web-v2/project-workflow.js';
@@ -64,7 +66,7 @@ function element(attributes = '') {
 function view(hash = '#/projects/project-merged/cases') {
   let nodes = new Map(), checks = [], openButtons = [], html = '';
   const pages = [], reviews = [], navigations = [], replacements = [], queries = [], effects = [], sideNav = element();
-  const location = { hash };
+  const location = { hash }, selectionSuffix='-fixture-'+(++selectionFixture);
   const node = selector => {
     queries.push(selector);
     if (!nodes.has(selector)) nodes.set(selector, element());
@@ -88,6 +90,7 @@ function view(hash = '#/projects/project-merged/cases') {
   const context = vm.createContext({
     state, sideNav, document, location, URLSearchParams, Set, Map, encodeURIComponent, decodeURIComponent,
     workspaceViewsHtml, pendingReviewItems, showPage, setBreadcrumb() {},
+    projectCaseSelection:id=>projectCaseSelection(id+selectionSuffix),
     history: { replaceState(_state, _title, url) { location.hash = url; replacements.push(url); } },
     openCaseContentReview: async options => { reviews.push(options); },
     go: href => { navigations.push(href); location.hash = href; }, toast: (...args) => effects.push(args),

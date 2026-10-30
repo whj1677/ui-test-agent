@@ -44,7 +44,7 @@ test('an all-pending project still shows bulk preparation and an explicit review
     assert.match(html,/批量核对用例（2）/);assert.match(html,/<details class="pw-case-picker" id="pw-case-picker">/);
     assert.equal(node('#pw-prepare-ui').hidden,false);
     node('#pw-prepare-ui').onclick();
-    assert.deepEqual(navigations,['#/projects/project-test/native-dsh']);
+    assert.deepEqual(navigations,['#/projects/project-test/native-dsh?selected=']);
     assert.equal(node('#pw-generate-ui').hidden,false);assert.equal(node('#pw-generate-ui').disabled,true);
     assert.match(node('#pw-ui-blockers').innerHTML,/2 条用例正文尚未确认/);
     assert.match(node('#pw-ui-blockers').innerHTML,/批量核对并确认用例/);
@@ -70,7 +70,7 @@ test('shared login blocker keeps bulk generation visible above collapsed per-cas
     const generatePosition=html.indexOf('id="pw-generate-ui"'),readinessPosition=html.indexOf('id="pw-ui-readiness"');
     assert.ok(generatePosition>=0 && generatePosition<readinessPosition,'the batch action must precede per-case readiness');
     node('#pw-prepare-ui').onclick();
-    assert.deepEqual(navigations,['#/projects/project-test/native-dsh']);
+    assert.deepEqual(navigations,['#/projects/project-test/native-dsh?selected=']);
     assert.equal(node('#pw-generate-ui').hidden,false);
     assert.equal(node('#pw-generate-ui').disabled,true);
     assert.equal(node('#pw-generate-ui').textContent,'批量生成前端脚本（0）');

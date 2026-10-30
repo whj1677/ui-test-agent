@@ -229,7 +229,7 @@ test('switching test tabs preserves inputs and old-version running receipts with
   try{const project={project_id:'p-switch',cases:[]};let html='';dispose=await renderProjectWorkflow({project,showPage:value=>html=value,launchBatch:(...args)=>runs.push(args),go:value=>navigation.push(value)});assert.doesNotMatch(html,/<section class="panel pw-workspace" hidden/);await new Promise(resolve=>setImmediate(resolve));
     const before=calls.length,progress=node('#pw-ui-progress').innerHTML;node('#pw-protocol-select').value='chosen-protocol';
     node('#pw-tab-backend').onclick();assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-panel-backend').hidden,true);assert.equal(node('#pw-panel-all').hidden,false);assert.equal(node('#pw-tab-backend').attributes['aria-selected'],'true');
-    node('#pw-tab-ui').onclick();assert.equal(node('#pw-panel-ui').hidden,true);node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p-switch/native-dsh']);assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-protocol-select').value,'chosen-protocol');assert.equal(node('#pw-ui-progress').innerHTML,progress);assert.equal(calls.length,before);assert.equal(node('#pw-generate-ui').disabled,true);
+    node('#pw-tab-ui').onclick();assert.equal(node('#pw-panel-ui').hidden,true);node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p-switch/native-dsh?selected=']);assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-protocol-select').value,'chosen-protocol');assert.equal(node('#pw-ui-progress').innerHTML,progress);assert.equal(calls.length,before);assert.equal(node('#pw-generate-ui').disabled,true);
     node('#pw-run-selected').onclick();assert.deepEqual(runs,[]);assert.ok(!calls.some(c=>c.options.method==='POST' && c.path.endsWith('/script-operations')));
   }finally{dispose?.();Object.assign(globalThis,original);}
 });
@@ -267,7 +267,7 @@ test('daily table runs explicit mixed selections, clears them on type changes, a
     node('#pw-select-ready').onclick();assert.equal(node('#pw-selection-summary').textContent,'已选择 2 条：前端 1 条，后端 1 条');node('#pw-run-selected').onclick();assert.deepEqual(runs[0],[project,'selected',['u1','b1']]);
     node('#pw-tab-ui').onclick();assert.equal(node('#pw-run-selected').disabled,true);assert.match(node('#pw-selection-summary').textContent,/请选择本次要运行/);assert.ok(!node('#pw-run-table').innerHTML.includes('后端正常'));
     assert.equal(node('#pw-panel-all').hidden,false);assert.equal(node('#pw-panel-ui').hidden,true);
-    node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p-selected-v2/native-dsh']);assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-panel-all').hidden,false);
+    node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p-selected-v2/native-dsh?selected=']);assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-panel-all').hidden,false);
     node('#pw-back-to-cases').onclick();assert.equal(node('#pw-panel-all').hidden,false);assert.equal(node('#pw-panel-ui').hidden,true);assert.equal(node('#pw-generation-footer').hidden,true);assert.equal(node('#pw-tab-ui').attributes['aria-selected'],'true');
     node('#pw-select-ready').onclick();assert.equal(node('#pw-selection-summary').textContent,'已选择 1 条：前端 1 条，后端 0 条');node('#pw-run-selected').onclick();assert.deepEqual(runs[1],[project,'selected',['u1']]);
     const blocked=node('#pw-run-table').inputs.find(input=>input.dataset.pwCase==='u2');blocked.checked=true;blocked.onchange();assert.equal(node('#pw-selection-summary').textContent,'已选择 2 条：前端 2 条，后端 0 条');node('#pw-run-selected').onclick();assert.deepEqual(runs[2],[project,'selected',['u1','u2']]);
@@ -354,7 +354,7 @@ test('ordinary frontend preparation routes straight to DSH with selected fronten
   globalThis.fetch=async(path,options={})=>{calls.push({path,options});return {ok:true,status:200,json:async()=>({ui:{id:'env'},ui_environment_id:'env'})};};
   const cases=[['u1','UI'],['b1','BACKEND']].map(([case_id,case_type])=>({case_id,current_version:1,versions:[{version:1,content:{case_type,status:'CONFIRMED'}}]}));
   try{const dispose=await renderProjectWorkflow({project:{project_id:'p',cases},showPage(){assert.fail('Old prepare UI');},go:value=>navigation.push(value)});
-    assert.deepEqual(navigation,['#/projects/p/native-dsh?selected=u1']);assert.equal(calls.length,1);assert.equal(calls[0].options.method,undefined);dispose();
+    assert.deepEqual(navigation,['#/projects/p/native-dsh?selected=u1%2Cb1']);assert.equal(calls.length,1);assert.equal(calls[0].options.method,undefined);dispose();
   }finally{Object.assign(globalThis,original);}
 });
 
@@ -373,9 +373,9 @@ test('an active project task turns generation entries into a read-only return to
   try{
     const project={project_id:'p',cases:[{case_id:'u1',current_version:1,versions:[{version:1,content:{external_id:'u1',case_type:'UI',status:'CONFIRMED'}}]}]};
     dispose=await renderProjectWorkflow({project,showPage(){},go:path=>navigation.push(path)});
-    assert.equal(node('#pw-native-dsh').textContent,'查看当前测试进度');assert.equal(node('#pw-native-dsh').attrs.href,'#/projects/p/native-dsh');
+    assert.equal(node('#pw-native-dsh').textContent,'查看当前测试进度');assert.equal(node('#pw-native-dsh').attrs.href,'#/projects/p/native-dsh?selected=u1');
     assert.equal(node('#pw-prepare-ui').textContent,'查看前端生成进度');assert.equal(node('#pw-run-selected').disabled,true);assert.equal(node('#pw-run-error').textContent,'');
-    node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p/native-dsh']);
+    node('#pw-prepare-ui').onclick();assert.deepEqual(navigation,['#/projects/p/native-dsh?selected=u1']);
     assert.ok(calls.every(call=>!call.options.method||call.path.endsWith('/preflight')),'opening progress never submits a generation request');
   }finally{dispose?.();Object.assign(globalThis,original);}
 });

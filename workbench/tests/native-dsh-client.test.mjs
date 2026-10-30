@@ -361,3 +361,50 @@ test('pwsh final nonzero exit footer counts as a failure without treating body e
   assert.equal(outputs[0].error_code, 'PROCESS_EXIT_NONZERO');
   assert.match(outputs[0].summary, /退出码 1/);
 });
+
+
+test('diagnostic journal captures a zero-exit Chromium error and redacts credentials while preserving tool verdict', async t => {
+  const fs=await import('node:fs/promises'),os=await import('node:os'),path=await import('node:path');
+  const {configureDiagnostics}=await import('../server/diagnostics.mjs');
+  const root=await fs.mkdtemp(path.join(os.tmpdir(),'dsh-diagnostic-test-'));
+  t.after(()=>{assert.equal(path.dirname(path.resolve(root)),path.resolve(os.tmpdir()));assert.ok(path.basename(root).startsWith('dsh-diagnostic-test-'));return fs.rm(root,{recursive:true,force:true});});
+  const journal=configureDiagnostics({root,programRoot:workspace,version:'fixture'});
+  const host=mockHost({states:({requestId})=>{
+    const state=turn(prior,requestId,{end:false});
+    const add=(type,data)=>state.events.push(e(state.events.length,type,data));
+    add('tool/call',{turn:2,name:'pwsh',callId:'browser-probe',arguments:'NEVER_LOG_COMMAND'});
+    add('tool/result',{turn:2,message:{toolCallId:'browser-probe',isError:false,content:[{type:'text',text:'browserType.launch: spawn EPERM https://user:private@localhost:4322/app?token=private-query\n[exit code: 0]'}]}});
+    add('turn/end',{turn:2,reason:{kind:'completed'}});return state;
+  }});
+  const seen=[];await clientFor(host).run({workspace,prompt:'PRIVATE_PROMPT',onEvent:event=>seen.push(event)});
+  const result=seen.find(event=>event.event_type==='tool/result');assert.equal(result.is_error,false);
+  const exported=await journal.export(),text=JSON.stringify(exported);
+  assert.ok(exported.events.some(event=>event.event==='tool/result'&&event.level==='warn'&&event.data.browser_diagnostic.includes('EPERM')&&typeof event.data.native_at==='string'));
+  for(const value of ['private-query','user:private','PRIVATE_PROMPT','NEVER_LOG_COMMAND'])assert.ok(!text.includes(value));
+});
+
+
+test('completion receipt stops an owned live turn successfully only after idle confirmation',async()=>{
+  const complete=new AbortController();
+  const host=mockHost({states:({requestId,count,cancelled})=>{
+    if(count===0)complete.abort();
+    return turn(prior,requestId,{end:cancelled,reason:'aborted'});
+  }});
+  const result=await clientFor(host,{cancelTimeoutMs:100}).run({workspace,prompt:'finish owned work',completionSignal:complete.signal});
+  assert.equal(result.error,null);assert.equal(result.stop_confirmed,true);
+  assert.equal(host.calls.filter(call=>call.method==='session/cancel').length,1);
+});
+
+test('completion receipt never releases an unconfirmed native turn',async()=>{
+  const complete=new AbortController();
+  const host=mockHost({states:({requestId,count})=>{if(count===0)complete.abort();return turn(prior,requestId,{end:false});}});
+  const result=await clientFor(host).run({workspace,prompt:'finish',completionSignal:complete.signal});
+  assert.equal(result.error,'NATIVE_DSH_CANCEL_NOT_CONFIRMED');assert.equal(result.stop_confirmed,false);assert.equal(result.busy,true);
+});
+
+test('closeout without progress stops with an explicit incomplete result',async()=>{
+  let ready=false;
+  const host=mockHost({states:({requestId,cancelled})=>{ready=true;return turn(prior,requestId,{end:cancelled,reason:'aborted'});}});
+  const result=await clientFor(host,{cancelTimeoutMs:100}).run({workspace,prompt:'closeout',closeoutCheck:()=>ready?'NATIVE_DSH_CLOSEOUT_STALLED':null});
+  assert.equal(result.error,'NATIVE_DSH_CLOSEOUT_STALLED');assert.equal(result.stop_confirmed,true);
+});

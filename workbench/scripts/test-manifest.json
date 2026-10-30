@@ -10,6 +10,7 @@
     "tests/case-review-lifecycle.test.mjs",
     "tests/project-batch-entry.test.mjs",
     "tests/case-content-review.test.mjs",
+    "tests/case-lifecycle.test.mjs",
     "tests/auth-browser-page.test.mjs",
     "tests/backend-protocol-layout.test.mjs",
     "tests/backend-readonly-post-query.test.mjs",
@@ -151,6 +152,16 @@
     "tests/desktop-launch.test.mjs",
     "tests/model-activation.test.mjs",
     "tests/office-reader.test.mjs",
-    "tests/incremental-upgrade.test.mjs"
+    "tests/incremental-upgrade.test.mjs",
+    "tests/model-config.test.mjs",
+    "tests/model-credential-paths.test.mjs",
+    "tests/start-config.test.mjs",
+    "tests/atomic-json.test.mjs",
+    "tests/frontend-downloads.test.mjs",
+    "tests/report-preview-csp.test.mjs",
+    "tests/case-assistant-source-support.test.mjs",
+    "tests/diagnostics.test.mjs",
+    "tests/case-selection-completion.test.mjs",
+    "tests/office-native.test.mjs"
   ]
 }

@@ -5,11 +5,20 @@ import { randomUUID } from 'node:crypto';
 const RETRYABLE_RENAME = new Set(['EPERM', 'EACCES', 'EBUSY']);
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-// Match the bounded Windows rename retry used by the case and build stores.
 export async function writeAtomicJson(file, value, io = fs, delay = wait) {
+  return writeJson(file, value, io, delay, '');
+}
+
+// Existing record stores retain their newline-terminated JSON byte format.
+export async function writeAtomicJsonLine(file, value, io = fs, delay = wait) {
+  return writeJson(file, value, io, delay, '\n');
+}
+
+async function writeJson(file, value, io, delay, suffix) {
   await io.mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  await io.writeFile(temporary, JSON.stringify(value, null, 2), { flag: 'wx' });
+  const content = JSON.stringify(value, null, 2);
+  await io.writeFile(temporary, suffix ? `${content}${suffix}` : content, { flag: 'wx' });
   try {
     for (let attempt = 0; ; attempt += 1) {
       try { await io.rename(temporary, file); break; }

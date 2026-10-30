@@ -32,7 +32,7 @@ export async function assembleNativeEvidence({ root, result, identity, caseConte
   result.evidence_mapping = metadata?.mapping || { status: 'UNAVAILABLE', reason: 'RUNTIME_METADATA_MISSING' };
   result.step_coverage = { status: complete ? 'COMPLETE' : 'INCOMPLETE', expected_steps: items.length, observed_steps: items.filter(i => i.observed).length, items };
   result.unbound_assertions = await read(path.join(directory, 'unbound-assertions.json')) || [];
-  result.window_recording = await read(path.join(root, 'artifacts', 'window-recording', 'recording.json')) || { status: 'UNAVAILABLE', reason: 'WINDOW_RECORDING_NOT_COLLECTED' };
+  result.window_recording = result.execution_mode === 'BACKGROUND' ? {status:'NOT_REQUESTED',scope:'PAGE',reason:'BACKGROUND_MODE_PAGE_VIDEO'} : await read(path.join(root, 'artifacts', 'window-recording', 'recording.json')) || { status: 'UNAVAILABLE', reason: 'WINDOW_RECORDING_NOT_COLLECTED' };
   const basicSteps = items.map(item => {
     const source = caseContent.steps.find(s => s.order === item.order), observation = observations.find(o => o.step_id === item.step_id);
     const assertion = item.attributed_assertions.find(a => a.status === 'FAILED' && a.actual_present) || item.attributed_assertions.findLast(a => a.actual_present);
@@ -64,11 +64,16 @@ export async function assembleNativeEvidence({ root, result, identity, caseConte
 export function finalizeNativeEvidence(result, identity, observations) {
   result.files = nativeEvidenceFiles(result.artifacts);
   result.window_timeline = windowTimelineFromObservations({ ...result, ...identity, origin: 'NATIVE_DSH' }, observations);
+  if(result.execution_mode === 'BACKGROUND'){
+    const videos=result.files.filter(file=>file.kind==='trial_video');
+    result.page_recording={status:videos.length?'COMPLETE':'UNAVAILABLE',scope:'PAGE',file_ids:videos.map(file=>file.file_id)};
+  }
+  const recordingComplete=result.execution_mode === 'BACKGROUND' ? result.page_recording?.status==='COMPLETE' : result.window_timeline.status === 'VERIFIED';
   const assertions = result.step_replay?.steps?.flatMap(step => step.assertions || []) || [];
   const actual = assertions.filter(a => a.actual_present && a.actual_recorded !== false).length;
   result.assertion_coverage = { total: assertions.length, actual, missing: assertions.length - actual,
     status: assertions.length && actual === assertions.length ? 'COMPLETE' : 'INCOMPLETE' };
-  result.evidence_status = result.step_coverage?.status === 'COMPLETE' && result.window_timeline.status === 'VERIFIED' &&
+  result.evidence_status = result.step_coverage?.status === 'COMPLETE' && recordingComplete &&
     result.step_replay?.status === 'READY' && result.step_replay.evidence_complete && !result.evidence_errors?.length &&
     result.step_replay.steps.every(s => s.actual_present) && result.assertion_coverage.status === 'COMPLETE' ? 'COMPLETE' : 'INCOMPLETE';
 }

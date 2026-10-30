@@ -43,7 +43,7 @@ export function install(api, sourceMapping) {
     page = currentPage; testCount++; active = null; ordinal = 0;
     try { await page.context().addInitScript(installActionHighlight); await page.evaluate(installActionHighlight); highlight = 'INSTALLED'; }
     catch { errors.push('ACTION_HIGHLIGHT_INSTALL_FAILED'); }
-    try { recorder = await startWindowRecording({ page, directory: path.join(config.runDirectory, 'artifacts', 'window-recording'), identity,
+    if(config.executionMode !== 'BACKGROUND') try { recorder = await startWindowRecording({ page, directory: path.join(config.runDirectory, 'artifacts', 'window-recording'), identity,
       maximumDurationMs: config.timeoutMs, prepared: config.recorderPrepared }); }
     catch (error) {
       errors.push('WINDOW_RECORDING_START_FAILED');
