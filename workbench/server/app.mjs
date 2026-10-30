@@ -18,6 +18,7 @@ import { exportCasesWorkbook } from './cases/design.mjs';
 import { importedScriptFile } from './cases/script-package.mjs';
 import { frontendHandoffRoute } from './frontend-handoffs.mjs';
 import { nativeDshRoute } from './native-dsh/routes.mjs';
+import { changeCaseLifecycle } from './cases/lifecycle.mjs';
 
 const defaultWebRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web');
 const defaultWorkspaceRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web-v2');
@@ -58,7 +59,7 @@ async function sendStatic(response, workspaceRoot, pathname) {
     ['/workspace/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ]);
   for (const name of ['backend.js','backend-bulk-review.js','backend.css','script-actions.js','reports.js','history.js','product.css','requirements.js','requirements-api.js','requirements.css','execution-list.js','execution-list.css','project-target-access.js','project-setup.js','project-workflow.js','project-workflow.css','project-setup.css','workspace-v2.css','batch-view.js','execution-notes.js','service-restart.js','demonstrations.js','demonstration-control.js','demonstration-control.css']) workspaceFiles.set('/workspace/'+name,[name,name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8']);
-  for (const name of ['case-assistant.js', 'case-assistant-api.js', 'case-assistant.css', 'case-review.js', 'case-review.css']) workspaceFiles.set('/workspace/' + name, [name, name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8']);
+  for (const name of ['case-assistant.js', 'case-assistant-api.js', 'case-assistant.css', 'case-review.js', 'case-review.css', 'case-lifecycle.js']) workspaceFiles.set('/workspace/' + name, [name, name.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/frontend-handoffs.js', ['frontend-handoffs.js', 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/native-dsh.js', ['native-dsh.js', 'text/javascript; charset=utf-8']);
   workspaceFiles.set('/workspace/native-console-view.js', ['native-console-view.js', 'text/javascript; charset=utf-8']);
@@ -259,6 +260,8 @@ export function createWorkbenchServer(options = {}) {
   const buildAssessmentStore = options.buildAssessmentStore;
   const caseStore = options.caseStore;
   const caseManager = options.caseManager;
+  let caseLifecycleMutation = false;
+  const lifecycleBusy = () => Object.values({manager,buildManager,batchManager,scriptOperations,demonstrations,requirementsManager,caseAssistantManager,backendManager,nativeDsh:options.nativeDshManager}).some(m => m && (m.active || m.starting || m.generationOwner || m.generationStarting || m.generationBatchActive || m.storageFault || m.shutdownRequested));
   const authSessions = options.authSessions;
   const executionNotes=options.executionNotes || (caseStore?.root ? new ExecutionNotes({root:path.join(caseStore.root,'execution-notes'),getRecords:projectId=>projectRecords({buildStore,caseStore,store,buildManager},projectId)}) : null);
   const webRoot = options.webRoot || defaultWebRoot;
@@ -269,6 +272,7 @@ export function createWorkbenchServer(options = {}) {
       const url = new URL(request.url, 'http://127.0.0.1');
       const mutation = !['GET','HEAD','OPTIONS'].includes(request.method);
       const stopping = /\/(?:stop|cancel)$/.test(url.pathname);
+      if (mutation && caseLifecycleMutation) return sendJson(response,409,{error:'CASE_LIFECYCLE_BUSY'});
       if (mutation && serviceState.accepting === false) return sendJson(response,503,{error:'WORKBENCH_SHUTTING_DOWN'});
       if (mutation) {
         serviceState.inFlightMutations = (serviceState.inFlightMutations || 0) + 1;
@@ -462,6 +466,19 @@ export function createWorkbenchServer(options = {}) {
         const body = await readJsonBody(request, 64 * 1024);
         sendJson(response, 200, await caseManager.confirm(decodeURIComponent(projectConfirm[1]), decodeURIComponent(projectConfirm[2]), body.decisions || {}));
         return;
+      }
+      const lifecycle = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/(delete|restore)$/);
+      if (caseStore && caseManager && request.method === 'POST' && lifecycle) {
+        if (!trustedMutation(request)) return sendJson(response,403,{error:'UNTRUSTED_LOCAL_ORIGIN'});
+        const body = await readJsonBody(request,64 * 1024);
+        const projectId = decodeURIComponent(lifecycle[1]);
+        if (!await caseStore.getProject(projectId)) return sendJson(response,404,{error:'CASE_PROJECT_NOT_FOUND'});
+        // Close mutation admission synchronously after the final activity check.
+        if (serviceState.inFlightMutations !== 1 || lifecycleBusy()) return sendJson(response,409,{error:'CASE_LIFECYCLE_BUSY'});
+        caseLifecycleMutation = true;
+        try { return sendJson(response,200,await changeCaseLifecycle(caseStore,projectId,body,{restore:lifecycle[2] === 'restore'})); }
+        catch (error) { return sendJson(response,/CONFLICT/.test(error.message)?409:error.message === 'CASE_LIFECYCLE_NOT_FOUND'?404:400,{error:error.message}); }
+        finally { caseLifecycleMutation = false; }
       }
       const projectContentConfirm = url.pathname.match(/^\/api\/case-library\/projects\/([^/]+)\/cases\/confirm-content$/);
       if (caseManager && request.method === 'POST' && projectContentConfirm) {

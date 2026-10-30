@@ -7,14 +7,15 @@
 
 - 需求状态：已完成
 - 治理分级：G2
-- 当前版本：3
-- 最后更新：2026-09-21
+- 当前版本：4
+- 最后更新：2026-10-30
 
 ## 当前有效用户需求
 
 | UN | 状态 | 内容 |
 |---|---|---|
 | UN-0025-01 | 已确认 | 本地单用户在工作台完成创建项目、多次导入、预览确认、查看维护、选择导出和导入另一个项目的数据闭环。 |
+| UN-0025-02 | 已确认 | 用例库提供删除入口，移到已删除列表并允许恢复；保留版本、脚本和运行记录。 |
 
 ## 当前有效开发需求
 
@@ -25,6 +26,7 @@
 | DR-0025-03 | 已确认 | 使用带schema版本的JSON用例包导出全部或选中用例，并支持向新/已有项目多次导入。 |
 | DR-0025-04 | 已确认 | 导入必须先预览新增、重复、冲突、待澄清和不可导入，确认时重新检查项目修订并保证幂等、原子落盘。 |
 | DR-0025-05 | 已确认 | 中文Web完成真实Excel、JSON下载/上传、跨项目独立修改、冲突和重启闭环，并回归现有工作台页面与媒体读取。 |
+| DR-0025-06 | 已确认 | 新增项目内可恢复删除、已删除列表与恢复操作。 |
 
 ## 当前有效设计
 
@@ -35,6 +37,8 @@
 | DD-0025-03 | DR-0025-03 / DR-0025-04 | 已确认 | 原生包采用workbench/case-package-v1，导出只含业务字段、版本、根来源与逐项目lineage；导入生成新内部ID。 |
 | DD-0025-04 | DR-0025-04 | 已确认 | 预览记录冻结源文件哈希、映射、目标项目revision和每项分类；确认只接受已登记preview_id及显式冲突决策，成功后记录confirmed结果供幂等读回。 |
 | DD-0025-05 | DR-0025-05 | 已确认 | 在现有单页工作台增加紧凑项目/用例表格、按需详情和导入面板；文件上传使用受控二进制端点，下载使用受控JSON响应。 |
+| DD-0025-06 | DR-0025-06 | 已确认 | 完整用例在project.cases与project.deleted_cases之间原子移动，仅增加删除时间元数据。恢复去除删除标记，沿用原case_id、current_version、versions、lineage及关联身份。 |
+| DD-0025-07 | DR-0025-06 | 已确认 | POST cases/delete与cases/restore接受revision、明确确认及case_id/version/hash清单；最后活动检查后同步关闭修改准入，落盘完成后释放。用例列表提供单条/所选删除，确认弹窗和已删除恢复列表。 |
 
 ## 当前有效任务
 
@@ -45,6 +49,8 @@
 | TK-0025-03 | DR-0025-03 / DR-0025-04 / DD-0025-03 / DD-0025-04 | 已完成 | 实现原生包部分/全部导出、多次导入、重复和冲突处理。 |
 | TK-0025-04 | DR-0025-05 / DD-0025-05 | 已完成 | 实现中文项目用例与导入导出页面。 |
 | TK-0025-05 | DR-0025-01 / DR-0025-02 / DR-0025-03 / DR-0025-04 / DR-0025-05 / DD-0025-01 / DD-0025-02 / DD-0025-03 / DD-0025-04 / DD-0025-05 | 已完成 | 完成真实xlsx/浏览器10步验收、旧能力回归、报告和GitHub同步。 |
+| TK-0025-06 | DR-0025-06 / DD-0025-06 / DD-0025-07 | 已完成 | 实现可恢复删除/恢复存储、原子校验、任务期保护和中文入口。 |
+| TK-0025-07 | DR-0025-06 / DD-0025-06 / DD-0025-07 | 已完成 | 验证20项工程检查和正式4322合成删除、取消、恢复与保全；记录实际边界。 |
 
 ## 当前有效验证项
 
@@ -55,6 +61,8 @@
 | VT-0025-03 | DR-0025-03 / DR-0025-04 | 集成测试通过 | 全部/部分JSON包、跨项目独立ID、lineage、重复、冲突和往返一致。 | 命令：npm run test:m3a-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-browser.log |
 | VT-0025-04 | DR-0025-05 | 集成测试通过 | 中文Web项目列表、紧凑用例表格、详情编辑、原值与问题位置预览确认交互。 | 命令：npm run test:m3a-fidelity-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log |
 | VT-0025-05 | DR-0025-05 | 集成测试通过 | 用户指定10步真实Web闭环、Excel保真边界Web复验和重启持久化。 | 命令：npm run test:m3a-fidelity-browser --prefix workbench；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：docs/requirements/REQ-0025-workbench-m3a-case-import-export/evidence/m3a-fidelity-browser.log |
+| VT-0025-06 | DR-0025-06 | 单元测试通过 | 可恢复删除/恢复、持久化、冻结身份、原子拒绝、同源及运行期/并发准入、确认前无写入。 | 命令：node --test workbench/tests/case-lifecycle.test.mjs workbench/tests/case-library.test.mjs workbench/tests/case-content-review.test.mjs workbench/tests/navigation-loading.test.mjs；退出码：0；测试数量：20；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-case-delete/tests.log |
+| VT-0025-07 | DR-0025-06 | 集成测试通过 | 正式4322用例单条/批量删除、取消、已删除列表与恢复，原用例版本/脚本/运行记录保留。 | 命令：Formal 4322 CUA UI: cancel, single delete/restore, bulk delete/restore, reload; read-only API comparison；退出码：0；测试数量：1；失败数量：0；跳过数量：0；证据：workbench/qa/20261030-case-delete/official-result.json |
 
 ## 人工待确认项
 

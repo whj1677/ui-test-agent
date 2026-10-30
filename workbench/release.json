@@ -1,8 +1,8 @@
 {
   "schema": "workbench/release-v1",
-  "version": "0.1.0-native.20261029.office3",
+  "version": "0.1.0-native.20261030.wps1",
   "status": "PENDING_ACCEPTANCE",
-  "requirement": "REQ-0001/v18",
+  "requirement": "REQ-0001/v19",
   "entry": "http://127.0.0.1:4322/workspace/",
   "native_dsh": {
     "version": "0.2.0-rc.2",

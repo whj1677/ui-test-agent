@@ -2,8 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { resolveInside } from '../integrity.mjs';
+import { writeAtomicJsonLine as writeJsonAtomic } from '../atomic-json.mjs';
 
-const RETRYABLE = new Set(['EPERM', 'EACCES', 'EBUSY']);
 const PROJECT_ID = /^project-[a-z0-9-]{8,80}$/;
 const CASE_ID = /^case-[a-z0-9-]{8,80}$/;
 
@@ -12,26 +12,14 @@ async function readJson(file, fallback) {
   catch (error) { if (error.code === 'ENOENT' && fallback !== undefined) return fallback; throw error; }
 }
 
-async function writeJsonAtomic(file, value, io = fs) {
-  await io.mkdir(path.dirname(file), { recursive: true });
-  const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  await io.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' });
-  try {
-    for (let attempt = 0; ; attempt += 1) {
-      try { await io.rename(temporary, file); break; }
-      catch (error) {
-        if (!RETRYABLE.has(error.code) || attempt >= 7) throw error;
-        await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
-      }
-    }
-  } finally { await io.rm(temporary, { force: true }).catch(() => {}); }
-}
-
 function validateProject(project) {
   if (project?.schema !== 'workbench/case-project-v1' || !PROJECT_ID.test(project.project_id) ||
       !Number.isInteger(project.revision) || !Array.isArray(project.cases) || !Array.isArray(project.imports)) {
     throw new Error('CASE_PROJECT_INVALID');
   }
+  if (project.deleted_cases !== undefined && (!Array.isArray(project.deleted_cases) ||
+      project.deleted_cases.some(item => !CASE_ID.test(item?.case_id) || !Number.isFinite(Date.parse(item.deletion?.deleted_at)) || project.cases.some(active => active.case_id === item.case_id)) ||
+      new Set(project.deleted_cases.map(item => item.case_id)).size !== project.deleted_cases.length)) throw new Error('CASE_PROJECT_INVALID');
   return project;
 }
 
