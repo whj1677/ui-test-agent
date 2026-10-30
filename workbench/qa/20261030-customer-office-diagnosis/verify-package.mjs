@@ -4,14 +4,14 @@ import {createHash} from 'node:crypto';
 import unzipper from 'unzipper';
 import {fileURLToPath} from 'node:url';
 const qa=path.dirname(fileURLToPath(import.meta.url));
-const out=path.resolve(qa,'../../../outputs/20261030-现场WPS诊断-v1');
+const out=path.resolve(qa,'../../../outputs/20261030-现场WPS诊断-v2');
 const manifest=JSON.parse(await fs.readFile(path.join(out,'manifest.json'),'utf8'));
 const archive=await fs.readFile(path.join(out,manifest.file));
 const hash=b=>createHash('sha256').update(b).digest('hex');
 if(hash(archive)!==manifest.sha256)throw Error('ARCHIVE_BYTE_VIEW_MISMATCH');
 const zip=await unzipper.Open.buffer(archive);
 if(zip.files.length!==manifest.entries.length)throw Error('ZIP_ENTRY_COUNT_MISMATCH');
-const extract=path.join(qa,'extracted-combined');await fs.mkdir(extract,{recursive:true});
+const extract=path.join(qa,'extracted-v2 中文 空格');await fs.mkdir(extract,{recursive:true});
 for(const entry of zip.files){
  if(entry.type!=='File'||/[\\/:\x00]/.test(entry.path)||entry.path==='..')throw Error('UNEXPECTED_ZIP_ENTRY');
  const expected=manifest.entries.find(row=>row.name===entry.path);if(!expected)throw Error('UNEXPECTED_ZIP_FILE');

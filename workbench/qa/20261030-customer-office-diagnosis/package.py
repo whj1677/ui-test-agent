@@ -6,18 +6,19 @@ import zipfile
 
 qa = Path(__file__).resolve().parent
 root = qa.parents[2]
-out = root / 'outputs' / '20261030-\u73b0\u573aWPS\u8bca\u65ad-v1'
+out = root / 'outputs' / '20261030-\u73b0\u573aWPS\u8bca\u65ad-v2'
 out.mkdir(parents=True, exist_ok=True)
 entries = {
     '\u53cc\u51fb\u8bca\u65ad.cmd': qa / 'Collect-Diagnostics.cmd',
     'collect.ps1': qa / 'collect.ps1',
     'collect-system.ps1': qa / 'collect-system.ps1',
+    'diagnostic-process.ps1': qa / 'diagnostic-process.ps1',
     'collect.mjs': qa / 'collect.mjs',
     'OfficeReaderTrace.exe': qa / 'OfficeReaderTrace.exe',
     'trace-build.json': qa / 'trace-build.json',
     '\u4f7f\u7528\u8bf4\u660e.md': qa / '\u4f7f\u7528\u8bf4\u660e.md',
 }
-archive = out / '\u6d4b\u8bd5Agent-\u73b0\u573a\u8bca\u65ad\u5305-v1.zip'
+archive = out / '\u6d4b\u8bd5Agent-\u73b0\u573a\u8bca\u65ad\u5305-v2.zip'
 data = {name: file.read_bytes() for name, file in entries.items()}
 for name, value in data.items():
     if name.endswith(('.ps1', '.mjs', '.md', '.json', '.cmd')):

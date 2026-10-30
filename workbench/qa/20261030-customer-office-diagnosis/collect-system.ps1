@@ -24,6 +24,8 @@ try {
   [ordered]@{name=$name;status=$kind}
  })
 } catch { $report.environment_error=@{type=$_.Exception.GetType().FullName;id=$_.FullyQualifiedErrorId} }
+$report.event_status='COLLECTING'
+[IO.File]::WriteAllText($Output,($report | ConvertTo-Json -Depth 8),[Text.UTF8Encoding]::new($false))
 try {
  $events=@(Get-WinEvent -FilterHashtable @{LogName='Application';Id=@(1000,1001,26);StartTime=(Get-Date).AddHours(-2)} -MaxEvents 200 -ErrorAction Stop)
  $rows=@(foreach($event in $events) {
