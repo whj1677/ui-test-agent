@@ -1,3 +1,5 @@
+- [REQ-0042 v2 三项继续修复](REQ-0042-architecture-review/current_state.md)：CSP、助手来源核对、宿主锁PID身份已修复；1387工程、32 Harness、正式页面18/18、下载4/4、媒体10/10及UI/HTTP实际执行与零模型复跑通过；来源语义与未覆盖现场边界见[复验报告](REQ-0042-architecture-review/followup-review.md)。
+
 - [REQ-0001 v18 受保护文档真实生成与Excel下载](REQ-0001-release-readiness/current_state.md)：修复生成准备重解析原件ZIP的问题；正式4322真实生成前端6/后端6条并经网页按钮下载，55步骤/75有效引用核对通过，54项相关检查通过。v3完整包包含修复，业务确认和真实WPS仍待验证。见[本轮记录](../../workbench/qa/20261029-protected-document-retest/REPORT.md)。
 
 - [REQ-0001 v17 受保护Word真实复验](REQ-0001-release-readiness/current_state.md)：修复Office制表符空段落误报，正式4322助手读取原件102有效段，普通与受保护上传接口通过，43项工程检查通过；更新完整安装器，真实WPS未验。见[本轮记录](../../workbench/qa/20261029-protected-document-retest/REPORT.md)。
