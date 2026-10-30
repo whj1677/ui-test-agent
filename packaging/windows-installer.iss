@@ -11,6 +11,9 @@ AppVersion=0.1.0
 AppPublisher=Test Workbench
 DefaultDirName={localappdata}\UITestAgent
 DefaultGroupName=测试工作台
+UsePreviousAppDir=yes
+UsePreviousGroup=yes
+UsePreviousTasks=yes
 DisableDirPage=no
 DisableProgramGroupPage=yes
 DisableWelcomePage=no
@@ -41,12 +44,25 @@ Name: "{autodesktop}\启动测试工作台"; Filename: "{app}\program\runtime\no
 Filename: "{app}\program\runtime\node\node.exe"; Parameters: """{app}\program\workbench\scripts\native-entry.mjs"" launch"; WorkingDir: "{app}\program"; Description: "打开测试工作台"; Flags: nowait postinstall skipifsilent runminimized
 [Code]
 function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  Request: Variant;
 begin
   Result := '';
   if Length(ExpandConstant('{app}\program')) + 180 > 240 then
     Result := '安装位置过长，请选择较短的位置，例如 D:\测试工作台。'
   else if FileExists(ExpandConstant('{app}\program\portable-manifest.json')) then
-    Result := '所选位置已有测试工作台，请选择新的安装位置以保留原程序和项目。';
+  begin
+    try
+      { Upgrade the existing program in place; never terminate the workbench. }
+      Request := CreateOleObject('WinHttp.WinHttpRequest.5.1');
+      Request.SetTimeouts(1000, 1000, 1000, 1000);
+      Request.Open('GET', 'http://127.0.0.1:4322/api/health', False);
+      Request.Send();
+      Result := '工作台仍在运行，请先正常关闭再覆盖升级。原项目、记录、附件和模型配置会保留。';
+    except
+      { No responding workbench. Inno still refuses files locked by a process. }
+    end;
+  end;
 end;
 function InitializeUninstall(): Boolean;
 var

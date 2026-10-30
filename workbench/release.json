@@ -1,8 +1,8 @@
 {
   "schema": "workbench/release-v1",
-  "version": "0.1.0-native.20261029.office3",
+  "version": "0.1.0-native.20261030.wps3",
   "status": "PENDING_ACCEPTANCE",
-  "requirement": "REQ-0001/v18",
+  "requirement": "REQ-0001/v20 + REQ-0044/v2 + REQ-0043/v1",
   "entry": "http://127.0.0.1:4322/workspace/",
   "native_dsh": {
     "version": "0.2.0-rc.2",
@@ -34,6 +34,6 @@
       "QA, requirement history and files outside the runtime allowlist",
       "Dependency directories from source ZIP"
     ],
-    "acceptance": "Protected Office sources use frozen text and table segments during assistant generation, with image gaps explicit. Real generation and Excel download are being verified on the official workbench; native WPS remains NOT_RUN."
+    "acceptance": "Independent WPS snapshot reader port; local full regression, real synthetic WPS and official 4322 verification recorded separately. Remote customer and clean Windows acceptance remain NOT_RUN."
   }
 }

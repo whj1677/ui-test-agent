@@ -145,8 +145,8 @@ test('unconfirmed execution retains STOP_UNCONFIRMED lock and login protection',
 });
 
 test('registered evidence remaps file references consistently and rerun routes enforce mutation gate', async () => {
-  const result = registeredRunEvidence({ error: 'video', tests: [{ actual: 'video' }], artifacts: [{ id: 'video', relative_path: 'video.webm' }], files: [{ file_id: 'video' }], window_recording: { file_id: 'video' } }, 'run-owned');
-  assert.equal(result.files[0].file_id, result.artifacts[0].id); assert.equal(result.window_recording.file_id, result.artifacts[0].id);
+  const result = registeredRunEvidence({ error: 'video', tests: [{ actual: 'video' }], artifacts: [{ id: 'video', relative_path: 'video.webm' }], files: [{ file_id: 'video' }], window_recording: { file_id: 'video' },page_recording:{file_ids:['video']} }, 'run-owned');
+  assert.equal(result.files[0].file_id, result.artifacts[0].id); assert.equal(result.window_recording.file_id, result.artifacts[0].id);assert.equal(result.page_recording.file_ids[0],result.artifacts[0].id);
   assert.equal(result.error, 'video'); assert.equal(result.tests[0].actual, 'video');
   for (const [suffix, method] of [['reruns/preflight', 'previewRerun'], ['reruns', 'createRerun']]) {
     let called = false, status;

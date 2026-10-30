@@ -38,10 +38,19 @@ export function bindReportFrame({frame,status,retry,url,isCurrent=()=>true,setTi
       const html=await response.text();
       if(!live()||token!==generation)return;
       const doc=frame.contentDocument;if(!doc)throw Error('REPORT_FRAME_UNAVAILABLE');
-      doc.open();doc.write(html);doc.close();
+      // Saved report-layout snapshots use plain <style> blocks (optionally media).
+      // Extract only that fixed markup before any document parsing; even a detached
+      // DOMParser applies the inherited CSP. Keep all other snapshot bytes intact.
+      const template=doc.createElement('template'),styles=[];
+      const previewHtml=html.replace(/<style(?: media="[^"]*")?>[\s\S]*?<\/style>/g,markup=>{
+        template.innerHTML=markup;const style=template.content.firstElementChild;
+        styles.push({css:style.textContent,media:style.media});return '';
+      });
+      doc.open();doc.write(previewHtml);doc.close();
       if(!doc.body?.childElementCount)throw Error('REPORT_FRAME_EMPTY');
-      const styles=[...doc.querySelectorAll('style')];
-      if(styles.length){const sheet=new frame.contentWindow.CSSStyleSheet();sheet.replaceSync(styles.map(style=>style.textContent).join('\n'));doc.adoptedStyleSheets=[...doc.adoptedStyleSheets,sheet];}
+      doc.adoptedStyleSheets=styles.map(({css,media})=>{
+        const sheet=new frame.contentWindow.CSSStyleSheet({media});sheet.replaceSync(css);return sheet;
+      });
       doc.addEventListener('click',event=>{const link=event.target.closest?.('a[href^="#"]');if(!link)return;const target=doc.getElementById(link.getAttribute('href').slice(1));if(target){event.preventDefault();target.scrollIntoView();}});
       clearTimer(timer);status.textContent='报告预览已加载';retry.hidden=true;
     } catch(error) {if(error.name!=='AbortError'&&token===generation){clearTimer(timer);failed();}}

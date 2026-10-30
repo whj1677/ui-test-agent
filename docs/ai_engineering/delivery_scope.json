@@ -1,687 +1,276 @@
 {
   "schema": "ai-engineering-context/delivery-scope-v1",
   "requirement": "REQ-0001-release-readiness",
-  "baseline": "workbench/qa/20261029-protected-document-retest/delivery-baseline.json",
-  "baseline_sha256": "aaab798623f6a62ca1c25b869db1b126154a42ad03558ef941cca730db8e11da",
+  "baseline": "workbench/qa/20261030-wps-port/delivery-baseline-maintenance.json",
+  "baseline_sha256": "449a35ee293f5312d17f8fd2af24c400c6fa0228063dd44c9978e217329b75e5",
   "files": [
     {
-      "path": "docs/modules/workbench-case-library.md",
-      "before_sha256": "e6e9bb6e512a9bd5894e0e580e9d155132744965cd094ea441dd3d71507d61df",
-      "after_sha256": "0f75b8af69e0d7a13143ea508c1ada1f7c788be8d608735337c17a9704f35725"
+      "path": "docs/modules/test-workbench.md",
+      "before_sha256": "126645c4b23d83f109c6dc8568f05cdafdfb80377cb019570c75ce2093dd0d47",
+      "after_sha256": "0755b0b79bb25a5cea5c7c970580751ded04d35f476f3366f8d1b3f680f0362b"
     },
     {
       "path": "docs/requirements/README.md",
-      "before_sha256": "8544cafb42032d23e0d811e1dbda5f53715ea634ba5058ce42bea8aab5acc33b",
-      "after_sha256": "311c568b3e0ba3b54383e69fd47ef0a59b6b5db4a2d99987db13ffec9045b28d"
+      "before_sha256": "4b92beebfc9f6b61f1aeedaa70f67d9351b36229a66e0f3da43c0f71be080a0f",
+      "after_sha256": "2fec51e0c48112ada19d81b9d872bca9e319ae8ec49a88bbc471fafb33d9dafa"
     },
     {
       "path": "docs/requirements/REQ-0001-release-readiness/requirement.source.json",
-      "before_sha256": "146fc9cf84f3216c227dbda22857d861654421ada451f34747aeae161d1cde9e",
-      "after_sha256": "dcefedc98d6666d35e3f6e8b91822bd884449a5418fcf548856cc69beaecd8f0"
+      "before_sha256": "d6b0486e7b50c9cc8fe46bfdaade687a54df0db0f993a829522bf2df538727c7",
+      "after_sha256": "894a6d9076cc2619d2d7739e8c77838905a3fc8216af9eb9992ce5aa9ded65a2"
     },
     {
-      "path": "outputs/20261028-office-upgrade/测试Agent-Word-WPS助手读取-增量升级-r3.zip",
+      "path": "outputs/20261030-WPS独立读取-v3/SHA256.txt",
       "before_sha256": null,
-      "after_sha256": "e4483bd599f567072440322715ddec3a95bd008e4f519eddbcfb35eb7d8cf1db"
+      "after_sha256": "57966843e564551391e22763a0ce99623dc0470e3bb445f992ace4def3d87df3"
     },
     {
-      "path": "outputs/20261028-office-upgrade/测试Agent-Word-WPS本机读取-增量升级-r2.zip",
+      "path": "outputs/20261030-WPS独立读取-v3/交付收据.json",
       "before_sha256": null,
-      "after_sha256": "21e36028f415800bc3380516017b230cd545f6b2ec09f44f03d1217de06715bd"
+      "after_sha256": "282d5663af47787645c686ec08a4e3b682bdf2bd402ef71cfe51e3494bc30f5f"
     },
     {
-      "path": "outputs/20261028-office-upgrade/测试Agent-Word-WPS本机读取-增量升级.zip",
+      "path": "outputs/20261030-WPS独立读取-v3/使用说明.txt",
       "before_sha256": null,
-      "after_sha256": "96ad64594b8e8e2601a8f8b6b04a10d83ce8eed80d2c713a82a618c95e8a742d"
+      "after_sha256": "65844c985a1ab7dabeefb11f41e993219f7eacf1e6963bac9437a9cf239fd622"
     },
     {
-      "path": "outputs/20261029-Word-WPS完整安装包-r2/使用说明.txt",
+      "path": "outputs/20261030-WPS独立读取-v3/测试Agent-安装器-20261030-wps3.exe",
       "before_sha256": null,
-      "after_sha256": "c55eede2ce6ba8409834f34de807dad63de17d03d0cfd31853491df94fbd2e27"
+      "after_sha256": "b1b56ba2140aa1cd09dceb3fefb0f241e4a2ec7c73967b762b4d82f94b5cafe5"
     },
     {
-      "path": "outputs/20261029-Word-WPS完整安装包-v2/使用说明.txt",
+      "path": "outputs/20261030-WPS独立读取-v3/测试Agent-完整便携包-20261030-wps3.zip",
       "before_sha256": null,
-      "after_sha256": "b920d7b8161b28d09adfb8719ba4a11c1e1dbe6ad34e6d80a6fe17d680663037"
+      "after_sha256": "de6326201515da259420afa851cf5b0a2c8a4fece1aee5b6cf01678554ce807a"
     },
     {
-      "path": "outputs/20261029-Word-WPS完整安装包-v2/测试Agent-完整安装包-20261029-v2.exe",
-      "before_sha256": null,
-      "after_sha256": "9e7d27aaa10ff41660b6f731dccda6fdd058c3a9df8680ec3c62d8fad7781893"
-    },
-    {
-      "path": "outputs/20261029-Word-WPS完整安装包-v3/使用说明.txt",
-      "before_sha256": null,
-      "after_sha256": "7356f8b9ca95fd0f0b87ed84fbee031d5632ff381b3a6f745df5f95924bc3b20"
-    },
-    {
-      "path": "outputs/20261029-Word-WPS完整安装包-v3/测试Agent-完整安装包-20261029-v3.exe",
-      "before_sha256": null,
-      "after_sha256": "3eab3cb4ccba2f2ef4835629213fc737ee67ae3a48019266ab6634f96fbb9432"
-    },
-    {
-      "path": "outputs/20261029-Word-WPS完整安装包/使用说明.txt",
-      "before_sha256": null,
-      "after_sha256": "b9a7e84cabf63e942dc5a44c568c232babd7ee3455b8c1a122ad4f52874f2cce"
-    },
-    {
-      "path": "outputs/20261029-Word-WPS完整安装包/测试Agent-完整安装包-20261029.exe",
-      "before_sha256": null,
-      "after_sha256": "dc7223aea5ac943533a7b2fb40eb7ce43f484001de969cef410358a41e873cf1"
-    },
-    {
-      "path": "outputs/20261029-office-upgrade/测试Agent-Word-WPS功能升级包-20261029.zip",
-      "before_sha256": null,
-      "after_sha256": "ae29366af197c8ee3566175c9bb93c2e28a1072eab14567dfe0bdd9263dfb1c7"
-    },
-    {
-      "path": "workbench/docs/office-upgrade.md",
-      "before_sha256": null,
-      "after_sha256": "29d7e71129836fa54cfca2e721bf8570df890992b9931a023679ec7380995dfe"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/REPORT.md",
-      "before_sha256": null,
-      "after_sha256": "be728f74db51461b61522b7a5ec1de1534e0d14da967d40bad766c6f2a9ce77d"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/assemble-full-installer.mjs",
-      "before_sha256": null,
-      "after_sha256": "f39c15a6b479ceea041cb89f19b9691f68e90d0734309e34e7875cbe226de148"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/assistant-composer-result.json",
-      "before_sha256": null,
-      "after_sha256": "2d61a9c636e5ac6402a78167356695124cf8ac0d11558fa4f22f04e46ca91738"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/assistant-composer.log",
-      "before_sha256": null,
-      "after_sha256": "df0c9729f44be63dfe0c6cb801975e9b50ee43e973e204232cbd2ad3e3d08c2a"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/baseline.json",
-      "before_sha256": null,
-      "after_sha256": "09f055a804d07061e941467a4be0ae934906b049aad007ca81ae3bb459d2e7c5"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build-delivery.log",
-      "before_sha256": null,
-      "after_sha256": "9842680106d5c6200d1833f44d0ee258906b02cd0d6221b9a38946c3ae1d4260"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build-full-installer-r2.log",
-      "before_sha256": null,
-      "after_sha256": "6da5f9924fa31e293d3fb6edd5f00ed1548cddfa6ae82b671958499e46f41eb4"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build-full-installer.log",
-      "before_sha256": null,
-      "after_sha256": "c452c82a37739e11ca5fb75437021d21fc3346d34a36517aa75baa6057f72c01"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build-r2.log",
-      "before_sha256": null,
-      "after_sha256": "edd5bc02769ecb56745b8b50789de43934f368bce60723d01cd04fcf6bba0db5"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build-r3.log",
-      "before_sha256": null,
-      "after_sha256": "9a34bb0de09c6fc374065c7ad9c11fddb11448c0fdbf7602cb852730c25e4177"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/build.log",
-      "before_sha256": null,
-      "after_sha256": "1d5202489e9f34dc4a8d2f8077609c6008bc883fee20f8ef5468fdfa317a6219"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/collector-full-exit.txt",
-      "before_sha256": null,
-      "after_sha256": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/collector-full-first.log",
-      "before_sha256": null,
-      "after_sha256": "1b4e4c3c830798de0bcb1a2dd0ccdad4fc923db4026a53fdb270791f55d9f74c"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/collector-full.log",
-      "before_sha256": null,
-      "after_sha256": "eeac5242ff7c6a839f663075d84e6e3a7bdf0ce8846182c1c18f4ec77a8bd94d"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/context-full-exit.txt",
-      "before_sha256": null,
-      "after_sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/context-full-first.log",
-      "before_sha256": null,
-      "after_sha256": "4ac8a01de2f66be454e77a06bf77fc6e8058b368237a81176dcd7d64a7651d3d"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/context-full.log",
-      "before_sha256": null,
-      "after_sha256": "a861f8c444cfdc5b30d48a198cdea8ddcef63d272ba76855d8b20d4ecbb64326"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-assistant-upload.png",
-      "before_sha256": null,
-      "after_sha256": "2cbc5db01696772f12e8481957d56162c2416e8fc57f0d7529afdd28e910e003"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-baseline-v16-formal.json",
-      "before_sha256": null,
-      "after_sha256": "aaab798623f6a62ca1c25b869db1b126154a42ad03558ef941cca730db8e11da"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-baseline-v16.json",
-      "before_sha256": null,
-      "after_sha256": "cd05323c1cf04f667071248e7d78672427e13b69b8d807741df286c108b65a4b"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-gates.json",
-      "before_sha256": null,
-      "after_sha256": "f5f76de0700cccd289e5ae3d2ea8ba70eba2b5c897717346f7c956ab897a7851"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-package-result.json",
-      "before_sha256": null,
-      "after_sha256": "7699ef0b10753a8dae64ff380ba5a562631d7ce15ce51f979cc239a6fe5da655"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-package.log",
-      "before_sha256": null,
-      "after_sha256": "146452df2ec5a9636e713d3a5fb904392c2cfab7c6cdf489b0f5c70b4db0cc5e"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-ui-first-result.json",
-      "before_sha256": null,
-      "after_sha256": "0adf70980c161f5015b4cac8baf2f11eca6b28f9d186ae940778469d40b70f8a"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-ui-first.log",
-      "before_sha256": null,
-      "after_sha256": "631f0b7c941019faac559d1b4e4f8ad338e1c0bbebf56fd418cc162ac6ef2d71"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-ui-result.json",
-      "before_sha256": null,
-      "after_sha256": "e4963d50cc38830b6991f5661aae54cdf320ab614abe446bfa10141d27075aef"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/delivery-ui.log",
-      "before_sha256": null,
-      "after_sha256": "6db6da6d9bba722694404d6aae22a600ecc07e7a8b18df4688379f1788a20b06"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/final-upgrade-result.json",
-      "before_sha256": null,
-      "after_sha256": "ed19b13605cd073df432c1878225e41915afe505216159f48e4bcc706dbaea3e"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/finalize-full-delivery.py",
-      "before_sha256": null,
-      "after_sha256": "a3caef5d229fc2e3ceb3e0e640f8f357b7286348bc346fc13a8009fa9a78448b"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/formal-before.json",
-      "before_sha256": null,
-      "after_sha256": "2fa4139134a346e7f2a1fa695c9e7f56520d7a5626b18f5ba5fcacafe82419fb"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/formal-final-health.json",
-      "before_sha256": null,
-      "after_sha256": "a1b68dfb783bcf972597103b3ef7400132da2dc496c13145c87a6d525160c955"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/formal-start.log",
-      "before_sha256": null,
-      "after_sha256": "fc0197f9548d94dbe743ccde66fe2f6d79c4a6851509d052582a707a221c8dc4"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-assembly-result.json",
-      "before_sha256": null,
-      "after_sha256": "e7c10cf178903b61ce870f58259364c0c069461b08e7ad7aa2a35d26a8defe7a"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-assembly.log",
-      "before_sha256": null,
-      "after_sha256": "8581e77bdb0419c8e9dab009c20ac905578a37b2c6a107180fe4819d68ed432c"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-delivery-result.json",
-      "before_sha256": null,
-      "after_sha256": "0b1b201112fe7e58a5213b63315e3b3b58b482fad6a3b586558cca98f5bc38dd"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-install-detail-r2.log",
-      "before_sha256": null,
-      "after_sha256": "c8db2dd4110e57bf19574fffa7df92d87501f5e29b896135231efc547965ed98"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-install-detail.log",
-      "before_sha256": null,
-      "after_sha256": "65c4fb4d1170823f2041d7bd841b398356d3f9a40cb5d2c3297d11c738fd0e2b"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-install-r2.log",
-      "before_sha256": null,
-      "after_sha256": "bff16d557cba40aaa4dfe1c3ce946de2d5bf8e77eb94452b608fc945f1a556e5"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-install-result-r2.json",
-      "before_sha256": null,
-      "after_sha256": "f9d915fe7484f5d4724a5b49e17fc7079af72bee530a1768fde07864cb3fbc65"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-install.log",
-      "before_sha256": null,
-      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-installed-bytes-r2.log",
-      "before_sha256": null,
-      "after_sha256": "cc64f9c0fdecc4165ba4820ae4698361fba32850b32b22cb1d05cbd7f9565350"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-installer-tests.log",
-      "before_sha256": null,
-      "after_sha256": "db323902f11800756143d1934da2afa6fdfe6a7721c704a4abc26cd02fe0e823"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-regression.exit.txt",
-      "before_sha256": null,
-      "after_sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-regression.log",
-      "before_sha256": null,
-      "after_sha256": "d11e7336608abdcee10a51dee5262595ec6198e82f74c7204d7025710eaa7147"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/full-stage-relocation.json",
-      "before_sha256": null,
-      "after_sha256": "9e315d64f66a69b8dd5ca74ec74405a66c3615b8901dbb16f671ea0aa97f04b9"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/health-before.json",
-      "before_sha256": null,
-      "after_sha256": "abdfbffecbe18ed94df9829819e596ee285b52a94aa108514452a9121721c789"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/installed-feature-result.json",
-      "before_sha256": null,
-      "after_sha256": "316798c4eb6e3eef34bf1109737b9f791df174ca47593f4d7a882275ef22f9ce"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/installed-feature.log",
-      "before_sha256": null,
-      "after_sha256": "bf293b62d59313085c42f2c903cc16c99a0ff6e4883d18ac7c591d18ef0b46a2"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/installer-registration-before-r2.reg",
-      "before_sha256": null,
-      "after_sha256": "8af531c382bf40b9460043f01ece447c4abfda204cf0cbf63f5c9dfb95106ae9"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/installer-registration-before.reg",
-      "before_sha256": null,
-      "after_sha256": "8af531c382bf40b9460043f01ece447c4abfda204cf0cbf63f5c9dfb95106ae9"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui-final.log",
-      "before_sha256": null,
-      "after_sha256": "c3ee62ad2c3636de18978cf6e5039ffd053ec6ca6201c82a8ab8a04021374db4"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui-interrupted-result.json",
-      "before_sha256": null,
-      "after_sha256": "712ec8beff5db3005feac7c93228ed4d2e8da70fda0256556a2210e8bafffa63"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui-r3.log",
-      "before_sha256": null,
-      "after_sha256": "c3ee62ad2c3636de18978cf6e5039ffd053ec6ca6201c82a8ab8a04021374db4"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui-result.json",
-      "before_sha256": null,
-      "after_sha256": "d29e9f381ffa1309caa3bbce4260288320e43ab495c068370a52569918c095d0"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui-retry.log",
-      "before_sha256": null,
-      "after_sha256": "c3ee62ad2c3636de18978cf6e5039ffd053ec6ca6201c82a8ab8a04021374db4"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/native-ui.log",
-      "before_sha256": null,
-      "after_sha256": "25e664318c793c49fb9450a93d3bd1fd5322e1aa71a02fa0dbfa40a69064b314"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/office-console-probe.exe",
-      "before_sha256": null,
-      "after_sha256": "718ee8f345e537458f00dd5c8ed13ec72e6b552171f68a9b3dee546ae76dc8fe"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/old-install-result.json",
-      "before_sha256": null,
-      "after_sha256": "b29b4bfafff16cb574b0f667d26e13f35917f5a4e63d04175531f465cbcd2593"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/old-install.log",
-      "before_sha256": null,
-      "after_sha256": "ce1d1064d3a17ec1d6823e37d9e693f1a271124c0e70065cad413b479a2e2d87"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/picker-probe.cs",
-      "before_sha256": null,
-      "after_sha256": "e983e6b2e99262c9a36485a8a64bfdb7cf6a8c1511ededd51707dbc376409fec"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/picker-probe.exe",
-      "before_sha256": null,
-      "after_sha256": "cc001a4da75b1b371126205a798eda297d136f4321509fa85955c981f6306d78"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/prepare-word-fixture.mjs",
-      "before_sha256": null,
-      "after_sha256": "e43f9c7827f37db357a5d3fb33dff0e339a62e18112c0f637c10b28350f4c1c2"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/real-office-native-r2.json",
-      "before_sha256": null,
-      "after_sha256": "105a3c73bdc4765848ac5df1e681225fe65ab4636ab9e043622a45f8ea035fa0"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/real-office-native-result.json",
-      "before_sha256": null,
-      "after_sha256": "fdaaf4b00ac6e65db26b4049223460c2eac0553384f2090c145ab84d733cd239"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/real-office-result.json",
-      "before_sha256": null,
-      "after_sha256": "2aac1a54b9a4916272090b8795b5c97fada89e0f3b13a8d2700924d2d0bc4008"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/real-original-word.json",
-      "before_sha256": null,
-      "after_sha256": "34bdff2e64fb299ae77b96f025c8eeabac5a1888e93c9ad28823187290b0e4ff"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/regression-failures-retest.log",
-      "before_sha256": null,
-      "after_sha256": "935ccae4d1d54717f6a02e36816aae4c480573689e519ed050a308c0c139c0b9"
-    },
-    {
-      "path": "workbench/qa/20261028-office-upgrade/restart.log",
-      "before_sha256": null,
-      "after_sha256": "3f8e596679ce6d8c478e016de4fede13f46dedd7f97c7fba9892cabb10771f37"
+      "path": "packaging/windows-installer.iss",
+      "before_sha256": "1dc3bd818532c417bbcb407067646145122c4f56f9074cd5bb89a5e6a3f82d5a",
+      "after_sha256": "10b38611b90e72e502e153ddeb20d030590714c2a81218815a027c140f8bb5e9"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/scope-before-v16.json",
+      "path": "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.html",
       "before_sha256": null,
-      "after_sha256": "ca09f5ba74e0b28c326dafdb7f65cf7433dbb1dbc1377bf3c48ef507c78b7a3b"
+      "after_sha256": "8e511a55a41f4a65e1b37d5babffaac03ed8fe45178159bfbd20d4dc13c13380"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/scope-full-delivery.py",
+      "path": "workbench/qa/20261030-wps-port/execution-report.html",
       "before_sha256": null,
-      "after_sha256": "9fd91a1538cc75dc42bffe3e338a3dbe4b6fb8342a50e86106e9aa607b906310"
+      "after_sha256": "9cfee0cd26373088a8de18eba4f9a4dfbb53398aac5140a90d5c4cbba3bac499"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/scope-full-first.json",
+      "path": "workbench/qa/20261030-wps-port/extract-verified-archive.mjs",
       "before_sha256": null,
-      "after_sha256": "51d403e8f43ef8e6416c65a85dce79cea2604228582852f9ec54a02dcfec1795"
+      "after_sha256": "7d428cb9b596377c5e1570cfe2b214c540a398f89367d3b8acbc0672c5e91e71"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/stage-feature-result.json",
+      "path": "workbench/qa/20261030-wps-port/finalize-delivery.mjs",
       "before_sha256": null,
-      "after_sha256": "d2c6c87e733511615198eef2077275a7df18b10992b9a285725b6508bf865e67"
+      "after_sha256": "73d6c859fdfc188fccdc71c99c592f1f05332537893a60a838ba327c496e897d"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/stage-feature.log",
+      "path": "workbench/qa/20261030-wps-port/model-functional.mjs",
       "before_sha256": null,
-      "after_sha256": "bc54b3f61703c4224a1ef14e96880dae6f8ded0771d38e29a90bbcb85c678e8b"
+      "after_sha256": "342b336c6b58536e9a1241eb2549698fdbbe73fc73f5baaab3222c5d8183f5d3"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/sync-full.log",
+      "path": "workbench/qa/20261030-wps-port/model-lane.mjs",
       "before_sha256": null,
-      "after_sha256": "ead85c9ae7783023f99dd52cdb9e224e083acd4380941d4606429570478c3ddc"
+      "after_sha256": "61e5c389ff1dc7afbf512055c4d0b071818114a46c0ccf226a127d6b0f2ddbe7"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/targeted-composer.log",
+      "path": "workbench/qa/20261030-wps-port/model-run/assistant-BACKEND.xlsx",
       "before_sha256": null,
-      "after_sha256": "16ef125450eb4dd98c0a55eba14bef9cca2fa168be51a865624e696797c4fc88"
+      "after_sha256": "53c0f2f87b5cc5bf9b4ac7c2e06641bf5db42d928dd225ef6355c2aa825acfb2"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/targeted-delivery.log",
+      "path": "workbench/qa/20261030-wps-port/model-run/assistant-UI.xlsx",
       "before_sha256": null,
-      "after_sha256": "a7ab53f727e5bdbb6740bbec697cfada6d1e833d0bd013cb823f01e589bf8904"
+      "after_sha256": "7ca8030c9817a91d1aebdba1681ce727ab07acad596b9508bccf236b45c8799c"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/targeted-final.log",
+      "path": "workbench/qa/20261030-wps-port/model-run/requests.ndjson",
       "before_sha256": null,
-      "after_sha256": "a0d907ce306e32cd2ab6a9906b31ca23ce17b72345ddba29d5b1fa2bfbf61989"
+      "after_sha256": "28e00baf48cf892b29e1cbb106ea1700116ab5826519cac44d3cf6220c88499f"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/targeted-first.log",
+      "path": "workbench/qa/20261030-wps-port/native-file.mjs",
       "before_sha256": null,
-      "after_sha256": "72d493d93dd4590237d90e131f699d6c355696cfdb329790a026b462d169424f"
+      "after_sha256": "18964435682e4f8b599b66b5f6092a9fe5d2b4879d1a09c775a86dd305693e18"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/task-ids.json",
+      "path": "workbench/qa/20261030-wps-port/official-functional.mjs",
       "before_sha256": null,
-      "after_sha256": "acbdda21af5d2b2ce01ceb6925f24c60e089c5a6c352621d75cf8a63b708dace"
+      "after_sha256": "3e7064d1d8d9cae36b510ad0c3b29bd9e3a2da105e0f2a9df6a01d3ac960701c"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-assistant-composer.mjs",
+      "path": "workbench/qa/20261030-wps-port/official-wps-release.mjs",
       "before_sha256": null,
-      "after_sha256": "11fc2621085cdfb372255be72ee4248678fedd393a3609ed8d3fdfb069076b33"
+      "after_sha256": "dd1ac47d1e347c0104cb5e1ba2d24b14617dc02f0c03b4c4e1d8e354055dec70"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-delivery-package.mjs",
+      "path": "workbench/qa/20261030-wps-port/official-wps.mjs",
       "before_sha256": null,
-      "after_sha256": "8cc707101c11bb5b680f46baf88f60142ae06dd56fbb91f720c106313857e7e4"
+      "after_sha256": "a92edd195f2c82503bef03b4086f9274a914eb5ca1b62d2348362edd8ace795b"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-delivery-ui.mjs",
+      "path": "workbench/qa/20261030-wps-port/prepare-delivery.py",
       "before_sha256": null,
-      "after_sha256": "dffc6cdee468f1e2da5be33c137ce6bf1026d4b0ad24abcc1f6725ef0dbba064"
+      "after_sha256": "38ab3c5d23243827399a58a5d296d1281e9042b00e1b167e6754c962e60f12d1"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-full-install.ps1",
+      "path": "workbench/qa/20261030-wps-port/real-wps-release.py",
       "before_sha256": null,
-      "after_sha256": "c8a2beedffff1baee155c231c497c319c2e45e929fae62cd74641ac72c3d3ad1"
+      "after_sha256": "44ef6819608cc7c8e8dab03e398a795e10b46451fed4dfe13ba3eb2e4c850bb2"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-installed-feature.mjs",
+      "path": "workbench/qa/20261030-wps-port/real-wps.py",
       "before_sha256": null,
-      "after_sha256": "30c688f044928a300ef71327d08853cfa5064a01c44013098542f4b594d23fb8"
+      "after_sha256": "d477e43d9f6ac0de5f50ac1980aa1b9efec7838f0206c23d9aa4f0cfef93a163"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-native-ui.mjs",
+      "path": "workbench/qa/20261030-wps-port/synthetic-wps.docx",
       "before_sha256": null,
-      "after_sha256": "53c9eb5ac9b3ce39772867ef1a4b265a3fd9ef3896140d381e46acd7e177c4c5"
+      "after_sha256": "b5db14822e3d56324914d9035204620406e4147529575f090aacf52b75520914"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/verify-old-install.mjs",
+      "path": "workbench/qa/20261030-wps-port/target-fixture.mjs",
       "before_sha256": null,
-      "after_sha256": "54a3da4fe471a3ebd7f75534ea2f3340dcd5e3f9ae59114e273b0e87f4716d32"
+      "after_sha256": "3af55dd5a8d5a260bde6351c616227c3f4d0f599ae5285257325d137cbecd42f"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/word-open-probe.ps1",
+      "path": "workbench/qa/20261030-wps-port/upload-assistant.mjs",
       "before_sha256": null,
-      "after_sha256": "4a76ec7bc8c9c053b4b835c89a73a8b57ee9119df9aaf39a19d90eb1a348c01b"
+      "after_sha256": "8e2957111992c719f71ac5ef12096c68702938d44a61c409d20c41b703bc56eb"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/助手读取合成样例.docx",
+      "path": "workbench/qa/20261030-wps-port/verify-assistant.mjs",
       "before_sha256": null,
-      "after_sha256": "5ceb6d651fc3f6ad1ef89dce6ef8cfafde429ea44600e9881d14f84c1b922f8a"
+      "after_sha256": "01067976de2c20587f12f72b52fb74e830fa6f0bc26d3b643b838c45949d10cf"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/升级测试工作台-r2.exe",
+      "path": "workbench/qa/20261030-wps-port/verify-background-dsh.mjs",
       "before_sha256": null,
-      "after_sha256": "75a2b1e7a88d50d9fc268207b6f4d7f74e39bb0bf518bf074f5d1ed2d4122b71"
+      "after_sha256": "6a12104b3565a7c8457b06e800237b690aa4c553bfffaa05de050ceb8d015570"
     },
     {
-      "path": "workbench/qa/20261028-office-upgrade/升级测试工作台.exe",
+      "path": "workbench/qa/20261030-wps-port/verify-cleanup.mjs",
       "before_sha256": null,
-      "after_sha256": "943874fb3810bdc067cae04638bf66a73a49dbfd5debba30f2813ba160b44d74"
+      "after_sha256": "18e5d9b4436c2e3f008e956add878aa4663051aaaae54afcfe832a9419abe9f3"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/assemble-full-installer.mjs",
+      "path": "workbench/qa/20261030-wps-port/verify-closeout.mjs",
       "before_sha256": null,
-      "after_sha256": "96f0912e16ac0982433025a0de1ef24e6c18e228d07c8aa5f971cac279e08211"
+      "after_sha256": "db7362ec6604a2ae738f87f757e44e296d0e42e1cbbcdc07b47ddb47a2a73b52"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/cleanup-build.ps1",
+      "path": "workbench/qa/20261030-wps-port/verify-frozen-modes.mjs",
       "before_sha256": null,
-      "after_sha256": "2c3c0fff1c41bab51767f20e808b7498535c50c4898eb2d62180eb14931f1277"
+      "after_sha256": "5cf5125645d1c0888790c068bca65b09db8924f5a9d1e772e882e3c291d8f2f1"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/diagnose-reader.mjs",
+      "path": "workbench/qa/20261030-wps-port/verify-installer-upgrade.ps1",
       "before_sha256": null,
-      "after_sha256": "dc77b4dc1e242c5cd4ec330ae9639eaeeca739fa9b06c3aac5d5a3f605ef34ac"
+      "after_sha256": "1e688cdd57fa6420ce4fdffd7d4a39dff4d9e1ac6e155624b792446a37584fa9"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/finalize.py",
+      "path": "workbench/qa/20261030-wps-port/verify-lifecycle.mjs",
       "before_sha256": null,
-      "after_sha256": "9ac413e410cdce557c8416dc247c63b4024f3605201023ef4290b454754879f5"
+      "after_sha256": "a34a72beda178948fa9df858f25623656edcce6d1f3fa34217db08ec7c6eeac2"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/installer-registration-before-office2.reg",
+      "path": "workbench/qa/20261030-wps-port/verify-package-source.mjs",
       "before_sha256": null,
-      "after_sha256": "8af531c382bf40b9460043f01ece447c4abfda204cf0cbf63f5c9dfb95106ae9"
+      "after_sha256": "aa9d669dd4a715cff4884e6d3558e007b768d5a7cdc6e314187b3dd6f2ec604d"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/update-requirement.py",
+      "path": "workbench/qa/20261030-wps-port/verify-report.mjs",
       "before_sha256": null,
-      "after_sha256": "caaf1bf054b829cb49ed2d54df2b552f8650371b4ead91f0e3923c25277a1622"
+      "after_sha256": "80f3d679959e23dfc48c26eba55cc338021222d5ff918d339a076061902739a2"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/update-scope.py",
+      "path": "workbench/qa/20261030-wps-port/verify-restored.mjs",
       "before_sha256": null,
-      "after_sha256": "02b1112cb6dd60d40f5a9318cc005da802a77bbdd91ac66fa485c9742d0df101"
+      "after_sha256": "5c00affa14421fd7fab238e7156d43670967405281898a43cb76f4ba58b0ccea"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/verify-full-install.ps1",
+      "path": "workbench/qa/20261030-wps-port/verify-selection.mjs",
       "before_sha256": null,
-      "after_sha256": "d6ee993ffb0ae7e19bc6bd9e5abff81e4808262931dd6e87a5ff096522ad31df"
+      "after_sha256": "1b737abf45057f4dfd722f6bf312dbc02e2f2ba5b7b6d335fded96e7b6ab00f6"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/verify-installed-reader.mjs",
+      "path": "workbench/qa/20261030-wps-port/wps-assistant-UI.xlsx",
       "before_sha256": null,
-      "after_sha256": "af4a00926f34749f155ea1a9d10c645e0f0279336fc86eb9ef925c32d02ac381"
+      "after_sha256": "a497e5a84bfdd8c3f1b1d921194f915d8a037c0dd01d56c9124e4c2277f762c4"
     },
     {
-      "path": "workbench/qa/20261029-protected-document-retest/verify-persisted.mjs",
-      "before_sha256": null,
-      "after_sha256": "44258376caf3cbd428e61d804877f623a3ecff65ef89a872b8dc4ae593686d76"
-    },
-    {
-      "path": "workbench/qa/20261029-protected-document-retest/verify-upload.mjs",
-      "before_sha256": null,
-      "after_sha256": "57cb26667fb03bfe02f0d35f0cdd7f63c01e913b6ac43934604796b52deb543f"
+      "path": "workbench/qa/20261030-wps-reader/start.log",
+      "before_sha256": "9747d3507d3f81be7a845340bf0e62678c8cae50be7f86e763eecf449edb180b",
+      "after_sha256": "099afa5ce67e50ec305305fe9d657eb87ede93667c847fe8ccb8436511ba7aaf"
     },
     {
       "path": "workbench/release.json",
-      "before_sha256": "35b02fb95baf7f5f1361d885d2dec0ba4ead831720eff3f70eaa031b24ff5705",
-      "after_sha256": "905fb322ec4b1f2bf05dbbb0bfe6765cf1548adaceee9d9420e229866582a7c0"
+      "before_sha256": "e08fa56bde4d88ac7d4048b452faab5bf9dcb9ca4be3cdde960a64e727b93b43",
+      "after_sha256": "a35c350df43dacd7f836948abf6b50527111f278ae158daeb9ce243bfcbcecea"
     },
     {
-      "path": "workbench/scripts/incremental-upgrade.mjs",
+      "path": "workbench/scripts/build-office-reader.mjs",
       "before_sha256": null,
-      "after_sha256": "4e4ff0674fdca64e1a3a3581ba8ab29e3a23864ddbb2d680fa5080e93b309acf"
-    },
-    {
-      "path": "workbench/scripts/package-candidate.py",
-      "before_sha256": "c06f7c832105b18d8eddbf78d7db4636a64e9bee6fd48d8fce5fcdd0ecc63b19",
-      "after_sha256": "0855f40339439e2b31026dd84ee4c3708d8a9a113bd41d0e4b4d0a34ad8bdd25"
-    },
-    {
-      "path": "workbench/scripts/package-office-upgrade.py",
-      "before_sha256": null,
-      "after_sha256": "3e61e9678f457e29cab83f5595b686da7fd71fc7146fb811d00c44f08e875661"
+      "after_sha256": "5488ebf6d7ad7c797429798ede55b118acce4eee942f3f2c833bb96d780d356f"
     },
     {
       "path": "workbench/scripts/test-manifest.json",
-      "before_sha256": "39b4b44b6883aa40a9e36280c8afe46209c02a4f3beee8e613be86d8f60cbd81",
-      "after_sha256": "3ea0681e561035ee1a061a4ce6a46e4d2b42fca57b1787197725075807b6dbb9"
-    },
-    {
-      "path": "workbench/scripts/upgrade-bootstrap.cs",
-      "before_sha256": null,
-      "after_sha256": "01ddce150f3286eaae139571c26e7171e9ade18503b6be0373ed9d4bf00296a9"
-    },
-    {
-      "path": "workbench/server/case-assistant/mcp-session.mjs",
-      "before_sha256": "155d3bdfa590b1e39c62a1394643ec08008b856e1ee3e2abbe6b8d827bfd0a80",
-      "after_sha256": "fe3e4fe83813fcbe83d7c4608726d7d4140b07dd6fedefc1f7db002dcbb0abc1"
-    },
-    {
-      "path": "workbench/server/requirements-routes.mjs",
-      "before_sha256": "a3b4945d4840638246a486cfdcbddafb1d7e8b6a5ca13940c4a153beeb5db8af",
-      "after_sha256": "1eabd14c3c6e6ec386305d89819671ebaa0819f95bf6e6fa69a53c0d80a0162d"
-    },
-    {
-      "path": "workbench/server/requirements/manager.mjs",
-      "before_sha256": "605cbd0b3e50a0349c8b5eb03ff13d117e511c7ef542bc4698374d619530217b",
-      "after_sha256": "a2530f00ff81296e7e099af964fb564f4be592cea55bef558572d2f62835235c"
+      "before_sha256": "d2c1d2c508ca114f5a5be313290c29b420953b8877dcf5265ceb8b20429f5fc6",
+      "after_sha256": "8a09f1dd85ec132c991c0f45afd9e00ffeb2e347947c43ae2471cd16cae96476"
     },
     {
       "path": "workbench/server/requirements/office-reader.mjs",
-      "before_sha256": null,
-      "after_sha256": "7c3fdc1b3ce91c681d9763329bc4adea0ba416af160f02f4e0edf975c234bc5c"
+      "before_sha256": "bc21421e12c185355877a6959dbc5765fa762dbb54be65629426ccf340d3cdd9",
+      "after_sha256": "0f4ad66486ebc2b961da4809ad82668529b8f1eeac8e71331741cbed57b5fb62"
     },
     {
       "path": "workbench/server/requirements/office-word-reader.build.json",
-      "before_sha256": null,
-      "after_sha256": "9cf6a546d0b385f102c8c54beeea5466be0c6cf1edef82628d74a2bd71dee709"
+      "before_sha256": "e5ff1dd84d0bfbc1fd5e161fb76be34d6bec3c4b4537f3de129122451737c095",
+      "after_sha256": "01c502d9fe8122db1992ff00b17801044f723ed6b512292534149275b3da9aca"
     },
     {
       "path": "workbench/server/requirements/office-word-reader.cs",
-      "before_sha256": null,
-      "after_sha256": "db887bae811f7fb5ff14d5dc32e190551f1749e181ce3bba287fdc3e0d4da2b1"
+      "before_sha256": "d55fa34d6d7bf49ef3c941b7e8077c618c76a00f7cd8ec8e6e419e9f503c7b0c",
+      "after_sha256": "e4640c39feea328110cb5a1941c92f023decaabf6c87661e2dd31d66a914c29c"
     },
     {
       "path": "workbench/server/requirements/office-word-reader.exe",
+      "before_sha256": "3c64508cf89b4074ba516a0a540693e1a521faa83d48a0c29f5af09eeb38adb9",
+      "after_sha256": "a1feaf6369b258ad5c67c8c9e9e3da57b5b5d354543cad96f61803c2c7f7308e"
+    },
+    {
+      "path": "workbench/tests/fixtures/OfficeNativeTests.cs",
       "before_sha256": null,
-      "after_sha256": "b4f4d82d1afad798abb8b402a08e404078f243484f4592492d68ef89a688f234"
+      "after_sha256": "7dbd8c8e5e019257e5b94a4edaafdb2164b031d0fedd51e4bda86c92fc2a09bc"
     },
     {
-      "path": "workbench/tests/case-assistant-dsh.test.mjs",
-      "before_sha256": "d250b019683084756006539a6d78fd441384a6d2155938b2866d66877ebbf86b",
-      "after_sha256": "bb22d1ece4623a0314d029b77f22245d0e96acb7e0bed858f7a683186c19fbdf"
-    },
-    {
-      "path": "workbench/tests/case-assistant-view.test.mjs",
-      "before_sha256": "09b58c0f37f2d6533527e41746f2dccb9019f450e72779b993db45a5e91d314a",
-      "after_sha256": "37e0191038373a3ae1492a67c90d5e5abc755b22f7af5d8f0853bcf69051bc63"
-    },
-    {
-      "path": "workbench/tests/incremental-upgrade.test.mjs",
+      "path": "workbench/tests/office-native.test.mjs",
       "before_sha256": null,
-      "after_sha256": "ae966ed9165f20db97f86fbbc1593d400ab2e51b59c915d124316e7992ad9d3e"
+      "after_sha256": "8beeb88160c61e952fb007f689b39a0db917873cf120ef95a22649851108ae69"
     },
     {
       "path": "workbench/tests/office-reader.test.mjs",
+      "before_sha256": "e718b24b47d583db4a0a44f5fadc61bb2ed1941c48c9d33be93258f577cc160c",
+      "after_sha256": "9a12ef86d565a13ee8f77f3c1b5c73ec88282f38140b8cbbe0cf10a0613a8261"
+    },
+    {
+      "path": "workbench/tests/windows-installer.test.mjs",
       "before_sha256": null,
-      "after_sha256": "e718b24b47d583db4a0a44f5fadc61bb2ed1941c48c9d33be93258f577cc160c"
+      "after_sha256": "367b9fee7e76467251e6a2d463c03adae6fa0b9ac92d0b7cd421564758d9bc49"
     },
     {
       "path": "workbench/web-v2/case-assistant.js",
-      "before_sha256": "538671614803d60991d05f2723180bd268e07a65c79c009bdf7e343c49358460",
-      "after_sha256": "d8afd861d60aa2aeb2e803db9285e083562d05ef285c58f93fd67843b91618b4"
-    },
-    {
-      "path": "workbench/web-v2/requirements-api.js",
-      "before_sha256": "98fe97b4ea9b614aa33f7da18e7199e8f337a4ffd49c8eb8de76597314b3da7c",
-      "after_sha256": "4980274be758c7f0ebeec1418c6c078c0cd6daeaaf40adb05eb6c40403a96a6c"
+      "before_sha256": "90ca409ca5308edc24e83ff2623aa1f9db68f0d78d70ddd9206c37c262fe3aa3",
+      "after_sha256": "06e97f64afb196edec4f7371ff5626c2779a4ab122940693fddbecd7c40c1d55"
     }
   ],
   "generated": [
-    "docs/requirements/REQ-0001-release-readiness/current_state.md",
     "docs/requirements/REQ-0001-release-readiness/00_user_requirement.md",
     "docs/requirements/REQ-0001-release-readiness/01_development_requirement.md",
     "docs/requirements/REQ-0001-release-readiness/02_design.md",
@@ -689,65 +278,230 @@
     "docs/requirements/REQ-0001-release-readiness/04_verification.md",
     "docs/requirements/REQ-0001-release-readiness/05_trace.md",
     "docs/requirements/REQ-0001-release-readiness/change_log.md",
+    "docs/requirements/REQ-0001-release-readiness/current_state.md",
     "docs/requirements/REQ-0001-release-readiness/delivery_evidence.md"
   ],
-  "evidence_directory": "workbench/qa/20261029-protected-document-retest",
+  "evidence_directory": "workbench/qa/20261030-wps-port",
   "evidence_files": [
-    "workbench/qa/20261029-protected-document-retest/REPORT.md",
-    "workbench/qa/20261029-protected-document-retest/assembly-resumed.log",
-    "workbench/qa/20261029-protected-document-retest/assembly.log",
-    "workbench/qa/20261029-protected-document-retest/assistant-protected-read.png",
-    "workbench/qa/20261029-protected-document-retest/baseline.json",
-    "workbench/qa/20261029-protected-document-retest/before.json",
-    "workbench/qa/20261029-protected-document-retest/build.log",
-    "workbench/qa/20261029-protected-document-retest/cleanup-result.json",
-    "workbench/qa/20261029-protected-document-retest/cleanup.log",
-    "workbench/qa/20261029-protected-document-retest/collector-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/collector-first.log",
-    "workbench/qa/20261029-protected-document-retest/collector-reg-scope.log",
-    "workbench/qa/20261029-protected-document-retest/collector-tests.log",
-    "workbench/qa/20261029-protected-document-retest/collector.log",
-    "workbench/qa/20261029-protected-document-retest/context-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/context-first.log",
-    "workbench/qa/20261029-protected-document-retest/context.log",
-    "workbench/qa/20261029-protected-document-retest/delivery-baseline.json",
-    "workbench/qa/20261029-protected-document-retest/delivery-gates.json",
-    "workbench/qa/20261029-protected-document-retest/full-assembly-result-v3.json",
-    "workbench/qa/20261029-protected-document-retest/full-assembly-result.json",
-    "workbench/qa/20261029-protected-document-retest/full-delivery-v3.json",
-    "workbench/qa/20261029-protected-document-retest/full-install-detail-office2.log",
-    "workbench/qa/20261029-protected-document-retest/full-install-result-office2.json",
-    "workbench/qa/20261029-protected-document-retest/full-installed-bytes-office2.log",
-    "workbench/qa/20261029-protected-document-retest/generation-build-v3.log",
-    "workbench/qa/20261029-protected-document-retest/generation-cleanup.json",
-    "workbench/qa/20261029-protected-document-retest/generation-collector-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/generation-collector-tests.log",
-    "workbench/qa/20261029-protected-document-retest/generation-collector.log",
-    "workbench/qa/20261029-protected-document-retest/generation-context-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/generation-context.log",
-    "workbench/qa/20261029-protected-document-retest/generation-delivery-gates.json",
-    "workbench/qa/20261029-protected-document-retest/generation-e2e-result.json",
-    "workbench/qa/20261029-protected-document-retest/generation-sync-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/generation-sync.log",
-    "workbench/qa/20261029-protected-document-retest/generation-targeted.log",
-    "workbench/qa/20261029-protected-document-retest/generation-verify.log",
-    "workbench/qa/20261029-protected-document-retest/import-diagnostic-after-fix-copy.json",
-    "workbench/qa/20261029-protected-document-retest/import-diagnostic.json",
-    "workbench/qa/20261029-protected-document-retest/install.log",
-    "workbench/qa/20261029-protected-document-retest/installed-reader-result.json",
-    "workbench/qa/20261029-protected-document-retest/installed-reader.log",
-    "workbench/qa/20261029-protected-document-retest/installer-result.json",
-    "workbench/qa/20261029-protected-document-retest/integration.log",
-    "workbench/qa/20261029-protected-document-retest/office-providers.json",
-    "workbench/qa/20261029-protected-document-retest/persisted-result.json",
-    "workbench/qa/20261029-protected-document-retest/persisted.log",
-    "workbench/qa/20261029-protected-document-retest/reader-diagnostic.json",
-    "workbench/qa/20261029-protected-document-retest/scope-before-v17.json",
-    "workbench/qa/20261029-protected-document-retest/scope-before-v18.json",
-    "workbench/qa/20261029-protected-document-retest/sync-exit.txt",
-    "workbench/qa/20261029-protected-document-retest/sync.log",
-    "workbench/qa/20261029-protected-document-retest/targeted.log",
-    "workbench/qa/20261029-protected-document-retest/upload-result-after-fix.json",
-    "workbench/qa/20261029-protected-document-retest/upload-result.json"
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/exported-cases.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/input-package.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/owned-project.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-assistant.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-batches.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-BACKEND-ARCH-001.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-UI-ARCH-001.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-case-library.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-execution-list.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-generation.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-history.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-import.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-legacy-requirements.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-model-settings.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-native-dsh.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-overview.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-project-index.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-protocol-bindings.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-reports.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/page-setup.png",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/projects-before-hashes.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/requirements-design.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/results.json",
+    "workbench/qa/20261030-wps-port/20261030-wps-port-functional-2026-10-30T06-11-56-114Z-1f3e8801/unexecuted-report.json",
+    "workbench/qa/20261030-wps-port/REPORT.md",
+    "workbench/qa/20261030-wps-port/after-upgrade-health.json",
+    "workbench/qa/20261030-wps-port/after-upgrade-projects.json",
+    "workbench/qa/20261030-wps-port/archive.json",
+    "workbench/qa/20261030-wps-port/assistant-dispatch.log",
+    "workbench/qa/20261030-wps-port/assistant-export.log",
+    "workbench/qa/20261030-wps-port/assistant-progress.log",
+    "workbench/qa/20261030-wps-port/assistant-progress2.log",
+    "workbench/qa/20261030-wps-port/assistant-result.json",
+    "workbench/qa/20261030-wps-port/assistant-verified.log",
+    "workbench/qa/20261030-wps-port/background-read.log",
+    "workbench/qa/20261030-wps-port/background-start.log",
+    "workbench/qa/20261030-wps-port/before-health.json",
+    "workbench/qa/20261030-wps-port/before-upgrade-projects.json",
+    "workbench/qa/20261030-wps-port/before-upgrade-stop-health.json",
+    "workbench/qa/20261030-wps-port/build-installer.log",
+    "workbench/qa/20261030-wps-port/build-portable.log",
+    "workbench/qa/20261030-wps-port/cleanup-verification.log",
+    "workbench/qa/20261030-wps-port/closeout-result.json",
+    "workbench/qa/20261030-wps-port/closeout.log",
+    "workbench/qa/20261030-wps-port/collector-final-console.log",
+    "workbench/qa/20261030-wps-port/collector-final.log",
+    "workbench/qa/20261030-wps-port/collector-initial-console.log",
+    "workbench/qa/20261030-wps-port/collector-maintenance-console.log",
+    "workbench/qa/20261030-wps-port/collector-progress-console.log",
+    "workbench/qa/20261030-wps-port/collector-stable-console.log",
+    "workbench/qa/20261030-wps-port/collector-stable.log",
+    "workbench/qa/20261030-wps-port/compile-final.log",
+    "workbench/qa/20261030-wps-port/compile-release.log",
+    "workbench/qa/20261030-wps-port/compile.log",
+    "workbench/qa/20261030-wps-port/context-final.log",
+    "workbench/qa/20261030-wps-port/delivery-baseline-index.json",
+    "workbench/qa/20261030-wps-port/delivery-baseline-inplace.json",
+    "workbench/qa/20261030-wps-port/delivery-baseline-maintenance.json",
+    "workbench/qa/20261030-wps-port/delivery-baseline.json",
+    "workbench/qa/20261030-wps-port/delivery-receipt.json",
+    "workbench/qa/20261030-wps-port/delivery-scope.json",
+    "workbench/qa/20261030-wps-port/delivery-verified.log",
+    "workbench/qa/20261030-wps-port/diagnostic-export.json",
+    "workbench/qa/20261030-wps-port/extract.log",
+    "workbench/qa/20261030-wps-port/final-diagnostic-export.json",
+    "workbench/qa/20261030-wps-port/foreground-read.log",
+    "workbench/qa/20261030-wps-port/foreground-start.log",
+    "workbench/qa/20261030-wps-port/freeze.log",
+    "workbench/qa/20261030-wps-port/frozen-background-result.json",
+    "workbench/qa/20261030-wps-port/frozen-foreground-result.json",
+    "workbench/qa/20261030-wps-port/frozen-mode-state.json",
+    "workbench/qa/20261030-wps-port/full-regression-release.log",
+    "workbench/qa/20261030-wps-port/full-regression.log",
+    "workbench/qa/20261030-wps-port/http-confirm.log",
+    "workbench/qa/20261030-wps-port/http-dispatch.log",
+    "workbench/qa/20261030-wps-port/http-read.log",
+    "workbench/qa/20261030-wps-port/http-rerun-read.log",
+    "workbench/qa/20261030-wps-port/http-rerun.log",
+    "workbench/qa/20261030-wps-port/http-run-read.log",
+    "workbench/qa/20261030-wps-port/http-run.log",
+    "workbench/qa/20261030-wps-port/install-blocked.log",
+    "workbench/qa/20261030-wps-port/install-prepare.log",
+    "workbench/qa/20261030-wps-port/install-uninstall.log",
+    "workbench/qa/20261030-wps-port/install-upgrade.log",
+    "workbench/qa/20261030-wps-port/installed-office-probe.json",
+    "workbench/qa/20261030-wps-port/installer-blocked.log",
+    "workbench/qa/20261030-wps-port/installer-contract.log",
+    "workbench/qa/20261030-wps-port/installer-install.log",
+    "workbench/qa/20261030-wps-port/installer-state.json",
+    "workbench/qa/20261030-wps-port/installer-uninstall.log",
+    "workbench/qa/20261030-wps-port/installer-upgrade.log",
+    "workbench/qa/20261030-wps-port/lifecycle-final.log",
+    "workbench/qa/20261030-wps-port/lifecycle-result.json",
+    "workbench/qa/20261030-wps-port/lifecycle.log",
+    "workbench/qa/20261030-wps-port/model-lane-prepare.log",
+    "workbench/qa/20261030-wps-port/model-prepare.log",
+    "workbench/qa/20261030-wps-port/model-run/assistant-dispatch.json",
+    "workbench/qa/20261030-wps-port/model-run/assistant-export-result.json",
+    "workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340929365-e0c8fab2.json",
+    "workbench/qa/20261030-wps-port/model-run/assistant-poll-1793340959134-e677ae9a.json",
+    "workbench/qa/20261030-wps-port/model-run/assistant-start.json",
+    "workbench/qa/20261030-wps-port/model-run/design-prepared.json",
+    "workbench/qa/20261030-wps-port/model-run/owned-project.json",
+    "workbench/qa/20261030-wps-port/model-run/prepare-dispatch.json",
+    "workbench/qa/20261030-wps-port/model-run/prepared-before-helper-cleanup-fix.json",
+    "workbench/qa/20261030-wps-port/model-run/prepared.json",
+    "workbench/qa/20261030-wps-port/model-run/requirements-dispatch.json",
+    "workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340781748-fe5a6cab.json",
+    "workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340798486-0a82e5cb.json",
+    "workbench/qa/20261030-wps-port/model-run/requirements-poll-1793340831867-dbefd415.json",
+    "workbench/qa/20261030-wps-port/model-run/requirements-start.json",
+    "workbench/qa/20261030-wps-port/model-run/sources.json",
+    "workbench/qa/20261030-wps-port/official-functional.log",
+    "workbench/qa/20261030-wps-port/official-release.log",
+    "workbench/qa/20261030-wps-port/official-restored.log",
+    "workbench/qa/20261030-wps-port/official-source.log",
+    "workbench/qa/20261030-wps-port/official-wps-release-final.log",
+    "workbench/qa/20261030-wps-port/official-wps-release-result.json",
+    "workbench/qa/20261030-wps-port/official-wps-release.log",
+    "workbench/qa/20261030-wps-port/official-wps-result.json",
+    "workbench/qa/20261030-wps-port/official-wps.log",
+    "workbench/qa/20261030-wps-port/owned-stop.json",
+    "workbench/qa/20261030-wps-port/package-source-verification.json",
+    "workbench/qa/20261030-wps-port/package-source.log",
+    "workbench/qa/20261030-wps-port/real-wps-release.log",
+    "workbench/qa/20261030-wps-port/real-wps-result.json",
+    "workbench/qa/20261030-wps-port/real-wps.log",
+    "workbench/qa/20261030-wps-port/registration-probe.json",
+    "workbench/qa/20261030-wps-port/render-initial.log",
+    "workbench/qa/20261030-wps-port/render-inplace.log",
+    "workbench/qa/20261030-wps-port/report-create.log",
+    "workbench/qa/20261030-wps-port/report-preview.png",
+    "workbench/qa/20261030-wps-port/report-result.json",
+    "workbench/qa/20261030-wps-port/report-verified.log",
+    "workbench/qa/20261030-wps-port/requirements-dispatch.log",
+    "workbench/qa/20261030-wps-port/requirements-progress.log",
+    "workbench/qa/20261030-wps-port/requirements-progress2.log",
+    "workbench/qa/20261030-wps-port/requirements-progress3.log",
+    "workbench/qa/20261030-wps-port/restart-release.log",
+    "workbench/qa/20261030-wps-port/restart.log",
+    "workbench/qa/20261030-wps-port/restoration-final.log",
+    "workbench/qa/20261030-wps-port/restoration-release.log",
+    "workbench/qa/20261030-wps-port/restoration-result.json",
+    "workbench/qa/20261030-wps-port/restoration-verified.log",
+    "workbench/qa/20261030-wps-port/restoration.log",
+    "workbench/qa/20261030-wps-port/scope-final.log",
+    "workbench/qa/20261030-wps-port/scope-initial.log",
+    "workbench/qa/20261030-wps-port/scope-maintenance.log",
+    "workbench/qa/20261030-wps-port/scope-progress.log",
+    "workbench/qa/20261030-wps-port/scope-stable.log",
+    "workbench/qa/20261030-wps-port/selection-final.log",
+    "workbench/qa/20261030-wps-port/selection-result.json",
+    "workbench/qa/20261030-wps-port/selection-retest.log",
+    "workbench/qa/20261030-wps-port/selection-state.json",
+    "workbench/qa/20261030-wps-port/selection.log",
+    "workbench/qa/20261030-wps-port/selection70-export.json",
+    "workbench/qa/20261030-wps-port/selection70.png",
+    "workbench/qa/20261030-wps-port/source-before.json",
+    "workbench/qa/20261030-wps-port/source-node-view.json",
+    "workbench/qa/20261030-wps-port/source-python-view.json",
+    "workbench/qa/20261030-wps-port/start-restored-final.log",
+    "workbench/qa/20261030-wps-port/start-restored.log",
+    "workbench/qa/20261030-wps-port/sync-closeout.log",
+    "workbench/qa/20261030-wps-port/sync-final.log",
+    "workbench/qa/20261030-wps-port/sync-initial.log",
+    "workbench/qa/20261030-wps-port/sync-progress.log",
+    "workbench/qa/20261030-wps-port/synthetic-editor-owner.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-case-package.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-http-preparation.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-14-907Z-5ef98b-prepare.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-16-22-259Z-df61da-start-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-17-38-657Z-3eac96-read-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-13-364Z-7d8dff-read-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-18-50-698Z-9d5330-read-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-20-21-804Z-4c20fc-read-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-22-24-707Z-8b274a-read-ui.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-23-24-601Z-e3045c-start-http.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-25-19-212Z-611554-read-http.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-548Z-78b8b4-confirm-http.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-10-984Z-7c14c0-run-http.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-38-843Z-0375d5-read-http-run.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-39-499Z-62f38f-rerun-http.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-27-46-685Z-40be0f-read-http-rerun.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report-calls.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/2026-10-30T06-32-01-766Z-0c4cb2-report.json",
+    "workbench/qa/20261030-wps-port/synthetic-model-lane/state.json",
+    "workbench/qa/20261030-wps-port/targeted-final.log",
+    "workbench/qa/20261030-wps-port/targeted-initial.log",
+    "workbench/qa/20261030-wps-port/targeted-release.log",
+    "workbench/qa/20261030-wps-port/ui-dispatch.log",
+    "workbench/qa/20261030-wps-port/ui-progress.log",
+    "workbench/qa/20261030-wps-port/ui-progress2.log",
+    "workbench/qa/20261030-wps-port/ui-progress3.log",
+    "workbench/qa/20261030-wps-port/ui-progress4.log",
+    "workbench/qa/20261030-wps-port/ui-progress5.log",
+    "workbench/qa/20261030-wps-port/wps-assistant-dispatch.log",
+    "workbench/qa/20261030-wps-port/wps-assistant-export.json",
+    "workbench/qa/20261030-wps-port/wps-assistant-export.log",
+    "workbench/qa/20261030-wps-port/wps-assistant-final.log",
+    "workbench/qa/20261030-wps-port/wps-assistant-progress.log",
+    "workbench/qa/20261030-wps-port/wps-assistant-result.json",
+    "workbench/qa/20261030-wps-port/wps-assistant-state.json",
+    "workbench/qa/20261030-wps-port/wps-editing.json",
+    "workbench/qa/20261030-wps-port/wps-idle.json",
+    "workbench/qa/20261030-wps-port/wps-upload-final.log",
+    "workbench/qa/20261030-wps-port/wps-upload.log"
   ]
 }
